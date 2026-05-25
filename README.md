@@ -22,6 +22,13 @@ Scope: Front × 1 · Lesson × 6 · Account × 8 · Dashboard × 1 · Content ×
 - `img/` — full-resolution images
 - `img-standalone/` — compressed images for the standalone build
 
+## Project docs
+
+- [`docs/PRD.md`](docs/PRD.md) — product requirements
+- [`docs/CLAUDE.md`](docs/CLAUDE.md) — Claude Code workspace context
+- [`docs/Crystal_Art_School_Proposal.pdf`](docs/Crystal_Art_School_Proposal.pdf) — proposal (PDF)
+- [`docs/Crystal_Art_School_Proposal.docx`](docs/Crystal_Art_School_Proposal.docx) — proposal (DOCX source)
+
 ## Notes
 
 Wireframes only — boxes, type, annotations. No final visual design.

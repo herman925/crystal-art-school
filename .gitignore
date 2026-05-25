@@ -11,7 +11,6 @@ graphify-out/
 
 # GSD / internal planning
 .planning/
-CLAUDE.md
 
 # OS junk
 .DS_Store
