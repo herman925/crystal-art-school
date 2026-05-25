@@ -2,6 +2,9 @@
 styles.css
 app.js
 
+# Local backup of pre-compression originals
+img-original/
+
 # graphify artifacts
 .graphify_*
 graphify-out/
