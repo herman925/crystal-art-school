@@ -1,6 +1,7 @@
-# Superseded versions — index.html uses styles-v5.css and bundle.js
+# Superseded / unused (OD app may regenerate these)
 styles.css
 app.js
+index-print.html
 
 # Local backup of pre-compression originals
 img-original/
