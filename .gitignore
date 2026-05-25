@@ -1,0 +1,30 @@
+# Superseded versions — index.html uses styles-v5.css and bundle.js
+styles.css
+app.js
+
+# graphify artifacts
+.graphify_*
+graphify-out/
+
+# GSD / internal planning
+.planning/
+CLAUDE.md
+
+# OS junk
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*~
+
+# Node / deps (if ever added)
+node_modules/
+npm-debug.log*
+
+# Build output
+dist/
+build/

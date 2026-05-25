@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Crystal's Art School — Wireframes</title>
+
+<!-- Image resources referenced as strings in variants.js — lift for bundler -->
+<meta name="ext-resource-dependency" content="img-standalone/ProfilePic.jpg"        data-resource-id="profile" />
+<meta name="ext-resource-dependency" content="img-standalone/Bannerphoto.jpg"       data-resource-id="banner" />
+<meta name="ext-resource-dependency" content="img-standalone/cover1.jpg"            data-resource-id="cover1" />
+<meta name="ext-resource-dependency" content="img-standalone/cover2.jpg"            data-resource-id="cover2" />
+<meta name="ext-resource-dependency" content="img-standalone/cover3.jpg"            data-resource-id="cover3" />
+<meta name="ext-resource-dependency" content="img-standalone/cover4.jpg"            data-resource-id="cover4" />
+<meta name="ext-resource-dependency" content="img-standalone/BrushA.jpg"            data-resource-id="brushA" />
+<meta name="ext-resource-dependency" content="img-standalone/BrushB.jpg"            data-resource-id="brushB" />
+<meta name="ext-resource-dependency" content="img-standalone/Liquidwatercolor.jpg"  data-resource-id="liquid" />
+<meta name="ext-resource-dependency" content="img-standalone/Postercolor.jpg"       data-resource-id="poster" />
+<meta name="ext-resource-dependency" content="img-standalone/Rubber.jpg"            data-resource-id="rubber" />
+<meta name="ext-resource-dependency" content="img-standalone/Sketchbook.jpg"        data-resource-id="sketch" />
+
+<link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&family=Permanent+Marker&family=Caveat:wght@400;600;700&display=swap" rel="stylesheet" />
+<link rel="stylesheet" href="styles-v5.css" />
+
+<!-- Thumbnail splash (shown while the bundle unpacks; also no-JS fallback) -->
+<template id="__bundler_thumbnail" data-bg-color="#eae5d7">
+  <svg viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+    <rect x="40" y="40" width="320" height="320" rx="12" fill="#FBF9F2" stroke="#15130A" stroke-width="4"/>
+    <rect x="72" y="80" width="200" height="10" fill="#15130A"/>
+    <rect x="72" y="102" width="140" height="6" fill="#15130A" opacity="0.4"/>
+    <rect x="72" y="130" width="256" height="60" fill="#96D3D9" stroke="#15130A" stroke-width="3"/>
+    <rect x="72" y="206" width="80" height="80" fill="#F5DDDA" stroke="#15130A" stroke-width="3"/>
+    <rect x="160" y="206" width="80" height="80" fill="#C5FAEE" stroke="#15130A" stroke-width="3"/>
+    <rect x="248" y="206" width="80" height="80" fill="#FBF9F2" stroke="#15130A" stroke-width="3"/>
+    <rect x="72" y="300" width="256" height="28" fill="#F59595" stroke="#15130A" stroke-width="3"/>
+    <text x="200" y="360" text-anchor="middle" font-family="Georgia, serif" font-size="16" fill="#15130A" font-style="italic">Crystal's Art School · Wireframes</text>
+  </svg>
+</template>
+
+<style>
+  /* PRINT-SPECIFIC OVERRIDES
+     - Each variant becomes its own printed page
+     - Remove all interactive chrome (tabs, thumb strip, controls)
+     - Force colors on (annotations, placeholder tints, brand swatches) */
+  @page { size: A4 landscape; margin: 8mm; }
+
+  html, body {
+    background: #ffffff !important;
+    margin: 0;
+    padding: 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  .print-doc {
+    max-width: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  /* One page per variant */
+  .print-page {
+    page-break-after: always;
+    break-after: page;
+    padding: 6mm 4mm 10mm;
+    position: relative;
+  }
+  .print-page:last-child { page-break-after: auto; break-after: auto; }
+
+  .print-page-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 2px solid var(--line);
+    padding-bottom: 6px;
+    margin-bottom: 10px;
+  }
+  .print-page-header .pp-kicker {
+    font-family: "Quicksand", sans-serif;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .print-page-header .pp-title {
+    font-family: "Permanent Marker", cursive;
+    font-size: 22px;
+    margin: 2px 0 0;
+    line-height: 1.1;
+  }
+  .print-page-header .pp-caption {
+    font-family: "Quicksand", sans-serif;
+    font-size: 11px;
+    max-width: 58%;
+    color: var(--ink);
+    line-height: 1.4;
+    text-align: right;
+  }
+  .print-page-footer {
+    position: absolute;
+    left: 4mm; right: 4mm; bottom: 2mm;
+    display: flex;
+    justify-content: space-between;
+    font-family: "Quicksand", sans-serif;
+    font-size: 9px;
+    color: var(--muted);
+    border-top: 1px dashed var(--line-soft);
+    padding-top: 2px;
+  }
+
+  .print-stage {
+    width: 1200px;
+    transform-origin: top left;
+    transform: scale(0.82);
+    height: auto;
+  }
+  .print-stage .wf {
+    width: 1200px !important;
+    margin: 0 !important;
+    padding: 10px 16px !important;
+    background: var(--paper);
+    border: 1.5px solid var(--line);
+    border-radius: 6px;
+  }
+
+  .print-doc button, .print-doc .controls, .print-doc #tabs,
+  .print-doc .compare-strip, .print-doc .tab-row,
+  .print-doc .wf-footer { display: none !important; }
+
+  .cover-page {
+    page-break-after: always;
+    break-after: page;
+    padding: 30mm 20mm 20mm;
+    font-family: "Quicksand", sans-serif;
+    min-height: 180mm;
+  }
+  .cover-page h1 {
+    font-family: "Permanent Marker", cursive;
+    font-size: 58px;
+    margin: 0 0 6px;
+    line-height: 1;
+  }
+  .cover-page .sub { color: var(--muted); font-size: 14px; margin-bottom: 32px; }
+  .cover-page .toc {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px 28px;
+    margin-top: 24px;
+  }
+  .cover-page .toc-section {
+    border-top: 2px solid var(--line);
+    padding-top: 6px;
+  }
+  .cover-page .toc-section h3 {
+    font-family: "Permanent Marker", cursive;
+    font-size: 18px;
+    margin: 0 0 6px;
+  }
+  .cover-page .toc-section ol {
+    margin: 0; padding-left: 18px;
+    font-size: 12px;
+    line-height: 1.8;
+  }
+  .cover-page .meta {
+    margin-top: 30px;
+    display: flex; justify-content: space-between;
+    font-size: 10px; color: var(--muted);
+    border-top: 1px dashed var(--line-soft);
+    padding-top: 8px;
+  }
+
+  .print-banner {
+    position: fixed;
+    top: 12px; right: 12px;
+    z-index: 1000;
+    background: #15130A;
+    color: #FBF9F2;
+    font-family: "Quicksand", sans-serif;
+    font-size: 12px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  }
+  @media print { .print-banner { display: none !important; } }
+
+  @media screen {
+    body { background: #eae5d7; padding: 20px; }
+    .print-doc { background: white; box-shadow: 0 4px 20px rgba(0,0,0,0.15); max-width: 1280px; margin: 0 auto; }
+    .print-page, .cover-page { border-bottom: 1px dashed #ccc; }
+  }
+</style>
+</head>
+<body data-viewport="desktop" data-annot="on">
+
+<div class="print-banner" onclick="window.print()">🖨 Print / Save as PDF</div>
+
+<div class="print-doc" id="print-doc">
+  <!-- Cover + variant pages injected by JS -->
+</div>
+
+<!-- Load the variant library (defines window.VARIANTS + reads PHOTOS) -->
+<script src="variants.js?v=11"></script>
+
+<script>
+// Run AFTER variants.js has evaluated. When bundled, variants.js loads via a
+// blob URL (async), so poll until it's ready before rewriting paths + building.
+(function () {
+  function ready() {
+    return typeof PHOTOS !== 'undefined' && typeof window.VARIANTS !== 'undefined';
+  }
+  function run() {
+    if (!ready()) { return setTimeout(run, 30); }
+    build();
+  }
+  run();
+
+  function build() {
+  // PHOTOS is defined at top of variants.js referencing "img/*.jpg".
+  // When bundled, those files won't exist at relative paths — rewrite PHOTOS
+  // to point at the blob URLs injected by the bundler via window.__resources.
+  // (In unbundled mode window.__resources is undefined and the original paths work.)
+  if (typeof window.__resources === 'object' && typeof PHOTOS !== 'undefined') {
+    const map = {
+      profile: 'profile', banner: 'banner',
+      cover1: 'cover1', cover2: 'cover2', cover3: 'cover3', cover4: 'cover4',
+      brushA: 'brushA', brushB: 'brushB',
+      liquid: 'liquid', poster: 'poster', rubber: 'rubber', sketch: 'sketch'
+    };
+    Object.keys(map).forEach(k => {
+      const r = window.__resources[map[k]];
+      if (r) PHOTOS[k] = r;
+    });
+    // COVERS was built from the original PHOTOS refs at load time — rebuild it.
+    if (typeof COVERS !== 'undefined') {
+      COVERS.length = 0;
+      [PHOTOS.cover1, PHOTOS.cover2, PHOTOS.cover3, PHOTOS.cover4,
+       PHOTOS.liquid, PHOTOS.poster, PHOTOS.sketch, PHOTOS.brushA]
+        .forEach(p => COVERS.push(p));
+    }
+    // POST_SET[i].src captured the old raw path — remap to the new COVERS.
+    if (typeof POST_SET !== 'undefined') {
+      POST_SET.forEach((p, i) => { p.src = COVERS[i % COVERS.length]; });
+    }
+  }
+
+  const doc = document.getElementById('print-doc');
+
+  const SECTIONS = [
+    { title: "Front Page", prefix: "F", keys: ["F1","F2","F3","F4","F5"] },
+    { title: "Lesson Page", prefix: "L", keys: ["L1","L2","L3","L4"] },
+    { title: "Account & Content", prefix: "A", keys: ["A1","A2","A3","A4","A5","A6","A7"] }
+  ];
+
+  const cover = document.createElement('section');
+  cover.className = 'cover-page';
+  cover.innerHTML = `
+    <h1>Crystal's Art School<br/><span style="font-size:34px;color:var(--muted);">Wireframe Exploration</span></h1>
+    <div class="sub">v0.3 · Apr 2026 · Low-fi structural explorations — Front × 5 · Lesson × 4 · Account × 7</div>
+    <div style="font-size:13px;max-width:720px;line-height:1.55;">
+      Sixteen wireframe variants across three page groups. Every page here is structural only —
+      boxes, type and annotations — no final visual design. Use these as a map of what each screen
+      does and how the sections sit together; the brand-accurate UI comes later.
+    </div>
+    <div class="toc">
+      ${SECTIONS.map(s => `
+        <div class="toc-section">
+          <h3>${s.title}</h3>
+          <ol>
+            ${s.keys.map(k => {
+              const v = window.VARIANTS[k];
+              return `<li><strong>${k}</strong> · ${v ? v.title.replace(/^[^·]+·\s*/, '') : k}</li>`;
+            }).join('')}
+          </ol>
+        </div>
+      `).join('')}
+    </div>
+    <div class="meta">
+      <span>Crystal's Art School · wireframe exploration</span>
+      <span>Fonts: Quicksand + Permanent Marker · Palette: Teal Mist · Forest · Coral · Blush Cream</span>
+    </div>
+  `;
+  doc.appendChild(cover);
+
+  SECTIONS.forEach(section => {
+    section.keys.forEach((key, i) => {
+      const v = window.VARIANTS[key];
+      if (!v) return;
+      const page = document.createElement('section');
+      page.className = 'print-page';
+      page.innerHTML = `
+        <div class="print-page-header">
+          <div>
+            <div class="pp-kicker">${section.title} · variant ${i + 1} of ${section.keys.length} · ${key}</div>
+            <h2 class="pp-title">${v.title}</h2>
+          </div>
+          <div class="pp-caption">${v.caption}</div>
+        </div>
+        <div class="print-stage">${v.desktop()}</div>
+        <div class="print-page-footer">
+          <span>Crystal's Art School · Wireframes v0.3</span>
+          <span>${key} · ${v.title}</span>
+        </div>
+      `;
+      doc.appendChild(page);
+    });
+  });
+  } // end build
+})();
+</script>
+</body>
+</html>
