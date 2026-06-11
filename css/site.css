@@ -1,7 +1,8 @@
 /* ============================================================
-   Crystal's Art School — site.css (Design System v2.0)
+   Crystal's Art School — site.css (Design System v2.1)
    Pastel sketchbook system · Permanent Marker / Italiana / Quicksand
    No black borders anywhere. Radius source of truth: 18px.
+   v2.1: paper-grain canvas overlay (design system §1.1).
    ============================================================ */
 
 :root {
@@ -52,17 +53,46 @@
 
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
+/* LOAD-BEARING: the cream lives on html ONLY. The paint-fx brush canvas sits
+   at z-index:-1 inside body; if body had its own background it would paint
+   OVER negative-z children (CSS paint order) and hide every brushstroke. */
+html { background: var(--cream); }
 html, body {
   margin: 0;
   padding: 0;
-  background: var(--cream);
   color: var(--ink);
   font-family: var(--font-body);
   font-weight: 500;
   line-height: 1.6;
 }
+
+/* site-wide paintbrush cursor (fine pointers only) — links/buttons keep their
+   UA pointer; text fields keep the I-beam. Hotspot = bristle tip. */
+@media (pointer: fine) {
+  body {
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='30' height='30' viewBox='0 0 30 30'%3E%3Cpath d='M17.5 2.5 L27.5 12.5 L23.5 16.5 L13.5 6.5 Z' fill='%23D69C85' stroke='%2315130A' stroke-width='1.2'/%3E%3Cpath d='M13.5 6.5 L23.5 16.5 L19.5 20.5 L9.5 10.5 Z' fill='%2396D3D9' stroke='%2315130A' stroke-width='1.2'/%3E%3Cpath d='M9.5 10.5 L19.5 20.5 C14 26 8.5 27.5 3 27.5 C2.5 22 4 16 9.5 10.5 Z' fill='%23F59595' stroke='%2315130A' stroke-width='1.2'/%3E%3C/svg%3E") 3 27, auto;
+  }
+}
 img { display: block; max-width: 100%; }
 a { color: inherit; text-decoration: none; }
+
+/* ---------- paper grain (design system §1.1 — site-wide canvas feel) ----------
+   Two feTurbulence layers in one tile: low-frequency cold-press mottle +
+   fine tooth. Fixed overlay, multiply-blended over every surface so cards,
+   photos and bands all read as one sheet of paper. Purely visual:
+   pointer-events none, sits above content (z 999) but below nothing
+   interactive. Nav (z 100) and paint-fx (z 90) get grained too — intended. */
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  opacity: .6;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='280'%3E%3Cfilter id='m'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.035' numOctaves='3' seed='9'/%3E%3CfeColorMatrix values='0 0 0 0 0.55 0 0 0 0 0.48 0 0 0 0 0.38 0 0 0 0.05 0'/%3E%3C/filter%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' seed='4'/%3E%3CfeColorMatrix values='0 0 0 0 0.42 0 0 0 0 0.38 0 0 0 0 0.30 0 0 0 0.09 0'/%3E%3C/filter%3E%3Crect width='280' height='280' filter='url(%23m)'/%3E%3Crect width='280' height='280' filter='url(%23f)'/%3E%3C/svg%3E");
+  background-size: 280px 280px;
+}
 
 .container {
   max-width: var(--site-max);

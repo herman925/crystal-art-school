@@ -66,7 +66,15 @@
   color: var(--muted);
 }
 .lesson-cell .price { font-weight: 700; font-size: 15px; }
+.lesson-cell .price.free { color: var(--teal-ink); }
 .lesson-cell.hidden { display: none; }
+.free-flag {
+  position: absolute; top: 12px; left: 12px; z-index: 2;
+  font-size: 10.5px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase;
+  background: var(--coral); color: var(--ink);
+  border-radius: var(--radius-pill); padding: 5px 13px;
+  transform: rotate(-2deg); box-shadow: var(--shadow-soft);
+}
 @media (max-width: 1024px) { .lesson-grid { grid-template-columns: repeat(3, 1fr); } }
 @media (max-width: 860px)  { .lesson-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 480px)  { .lesson-grid { grid-template-columns: 1fr; } }
@@ -129,6 +137,19 @@
     </div>
 
     <div class="lesson-grid reveal" id="lesson-grid">
+      <div class="lesson-cell" data-cat="watercolour">
+        <div class="cover-card">
+          <img src="img/cover3.jpg" alt="Materials and setting up — the free intro lesson"/>
+          <span class="free-flag">Free</span>
+          <div class="scrim"><div class="t">Materials &amp; setting up</div></div>
+          <div class="actions">
+            <a class="cover-btn primary" href="lesson.html">Start free</a>
+            <a class="cover-btn secondary" href="lesson.html">View lesson <span class="arr" aria-hidden="true">→</span></a>
+          </div>
+        </div>
+        <div class="meta"><span class="level">Watercolour · beginner</span><span class="price free">Free</span></div>
+      </div>
+
       <div class="lesson-cell" data-cat="oils">
         <div class="cover-card">
           <img src="img/cover1.jpg" alt="Light and shadow on the head"/>
@@ -253,8 +274,8 @@
       <div class="tier-card">
         <div class="tname">Wanderer</div>
         <div class="tprice">Free</div>
-        <p style="margin:0;font-size:14.5px;color:var(--muted);">Browse the blog and free intro lessons. Sign-up required to view.</p>
-        <a class="btn ghost" href="#" style="margin-top:16px;padding-left:0;">Create free account <span class="arr" aria-hidden="true">→</span></a>
+        <p style="margin:0;font-size:14.5px;color:var(--muted);">Browse the blog and watch <em>Materials &amp; setting up</em> — the full free intro course.</p>
+        <a class="btn ghost" href="lesson.html" style="margin-top:16px;padding-left:0;">Start the free lesson <span class="arr" aria-hidden="true">→</span></a>
       </div>
       <div class="tier-card highlight">
         <div class="tier-pick">most picked ✳</div>
@@ -281,9 +302,9 @@
       <div style="flex:1;">
         <div class="eyebrow"><span class="star">✳</span> Free intro</div>
         <h2 class="marker-title" style="font-size:clamp(24px,2.4vw,34px);">Not sure where to start?</h2>
-        <p style="margin:0;max-width:54ch;">Watch <em>Materials &amp; setting up</em> free, then pick the course that matches where you are.</p>
+        <p style="margin:0;max-width:54ch;">Watch <em>Materials &amp; setting up</em> free — all 6 units, notes and downloads included — then pick the course that matches where you are.</p>
       </div>
-      <a class="btn primary big" href="#" style="flex:none;">Watch free lesson <span class="arr" aria-hidden="true">→</span></a>
+      <a class="btn primary big" href="lesson.html" style="flex:none;">Watch free lesson <span class="arr" aria-hidden="true">→</span></a>
     </div>
   </section>
 </main>
@@ -299,7 +320,7 @@
         <h4>Learn</h4>
         <a href="lessons.html">All lessons</a>
         <a href="lessons.html#membership">Membership</a>
-        <a href="lessons.html">Free intro lesson</a>
+        <a href="lesson.html">Free intro lesson</a>
       </div>
       <div>
         <h4>Explore</h4>
@@ -316,7 +337,7 @@
     </div>
     <div class="footer-meta">
       <span>© 2026 Crystal's Art School</span>
-      <span>v2.0.0</span>
+      <span>v2.6.0</span>
     </div>
   </div>
 </footer>
@@ -324,6 +345,7 @@
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <script src="js/site.js"></script>
+<script src="js/paint-fx.js"></script>
 <script>
 /* category filter — chips drive the catalog grid */
 (function () {

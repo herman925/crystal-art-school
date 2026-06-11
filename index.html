@@ -19,8 +19,10 @@
 <meta name="ext-resource-dependency" content="img/Sketchbook.jpg"/>
 <meta name="ext-resource-dependency" content="css/site.css"/>
 <meta name="ext-resource-dependency" content="js/site.js"/>
+<meta name="ext-resource-dependency" content="js/paint-fx.js"/>
 <meta name="ext-resource-dependency" content="js/gallery3d.js"/>
 <meta name="ext-resource-dependency" content="lessons.html"/>
+<meta name="ext-resource-dependency" content="lesson.html"/>
 <meta name="ext-resource-dependency" content="gallery.html"/>
 <meta name="ext-resource-dependency" content="blog.html"/>
 <meta name="ext-resource-dependency" content="blog-post.html"/>
@@ -60,7 +62,8 @@
   aspect-ratio: 1862 / 1009;
   max-height: calc(100vh - 66px);
   overflow: hidden;
-  background: var(--cream);
+  /* transparent — html cream shows through, so brushstrokes surface here */
+  background: transparent;
 }
 .hero__panel {
   position: absolute;
@@ -269,7 +272,11 @@
 }
 
 /* ——— New Release band ——— */
-.release-band { align-items: stretch; margin-top: 40px; }
+.release-trio { margin-top: 34px; }
+.arch-visit {
+  display: inline-block; margin-top: 6px;
+  font-size: 14px; font-weight: 700; color: var(--ink); text-decoration: none;
+}
 
 /* free-video tile */
 .free-video {
@@ -288,9 +295,16 @@
   position: absolute; inset: 0;
   display: flex; flex-direction: column;
   align-items: center; justify-content: center; gap: 12px;
-  background: linear-gradient(to top, rgba(21,19,10,.52), rgba(21,19,10,.04) 55%);
+  background: linear-gradient(to top, rgba(21,19,10,.62), rgba(21,19,10,.18) 55%, rgba(21,19,10,.28));
   color: var(--paper); text-align: center; padding: 28px;
+  transition: background .45s var(--ease-out);
 }
+.free-video:hover .fv-veil,
+.free-video:focus-within .fv-veil {
+  background: linear-gradient(to top, rgba(21,19,10,.78), rgba(21,19,10,.42) 60%, rgba(21,19,10,.28));
+}
+.free-video img { transition: transform .6s var(--ease-out); }
+.free-video:hover img { transform: scale(1.06); }
 .fv-play {
   width: 64px; height: 64px; border-radius: 50%;
   background: rgba(251,249,242,.92); color: var(--coral-ink);
@@ -299,8 +313,21 @@
   transition: transform var(--dur-fast) var(--ease-out);
 }
 .free-video:hover .fv-play { transform: scale(1.09); }
-.fv-veil strong { font-size: 18px; font-weight: 700; }
-.fv-veil span { font-family: var(--font-hand); font-size: 19px; }
+.fv-veil strong {
+  font-family: var(--font-marker);
+  font-weight: 400;
+  font-size: clamp(26px, 3vw, 40px);
+  line-height: 1.05; letter-spacing: .01em;
+  text-shadow: 0 2px 18px rgba(21,19,10,.55), 0 1px 3px rgba(21,19,10,.4);
+}
+.fv-veil span {
+  font-family: var(--font-hand);
+  font-size: clamp(19px, 1.7vw, 25px);
+  font-weight: 600; color: var(--blush);
+  text-shadow: 0 1px 10px rgba(21,19,10,.5);
+}
+.free-video:hover .fv-veil strong { transform: translateY(-1px); }
+.fv-veil strong { transition: transform var(--dur-fast) var(--ease-out); }
 
 /* newest course card */
 .release-course {
@@ -355,10 +382,10 @@
 .arch-duo > img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .arch-cap { text-align: center; margin-top: 14px; }
 .arch-cap .eyebrow-lbl {
-  font-size: 11px; font-weight: 600; letter-spacing: .18em;
-  text-transform: uppercase; color: var(--muted);
+  font-family: var(--font-display-serif);
+  font-size: 16px; font-weight: 400; letter-spacing: var(--tracking-section);
+  text-transform: uppercase; color: var(--ink);
 }
-.arch-cap .who-lbl { font-family: var(--font-hand); font-size: 24px; margin-top: 4px; }
 
 /* ——— course cards grid (Shop section) ——— */
 .course-grid { margin-top: 36px; }
@@ -489,6 +516,161 @@
 }
 .btn-outline:hover { background: var(--ink); color: var(--paper); }
 
+/* ============================================================
+   cover-card — ported from wireframe .cover-wrap
+   1:1 image · title + 2 buttons sit ON the image (always visible)
+   permanent bottom gradient · hover deepens scrim + zooms image
+   ============================================================ */
+.cover-card {
+  position: relative;
+  aspect-ratio: 1/1;
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  box-shadow: var(--shadow-photo);
+  display: block;
+}
+.cover-card > img {
+  width: 100%; height: 100%; object-fit: cover; display: block;
+  transition: transform .55s var(--ease-out);
+}
+.cover-card:hover > img,
+.cover-card:focus-within > img { transform: scale(1.08); }
+.cover-card::after {
+  content: ""; position: absolute; inset: 0; z-index: 1;
+  background: linear-gradient(to top, rgba(21,19,10,.66) 0%, rgba(21,19,10,.18) 40%, transparent 64%);
+  opacity: .86; transition: opacity .4s var(--ease-out);
+}
+.cover-card:hover::after,
+.cover-card:focus-within::after { opacity: 1; }
+.cc-chip {
+  position: absolute; top: 12px; left: 12px; z-index: 2;
+  font-size: 10px; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
+  background: var(--coral); color: #fff;
+  border-radius: var(--radius-pill); padding: 5px 11px;
+  box-shadow: var(--shadow-sm);
+}
+.cc-title {
+  position: absolute; left: 16px; right: 16px; bottom: 62px; z-index: 2;
+  color: var(--paper); font-weight: 700; font-size: 16px; line-height: 1.26;
+  text-shadow: 0 2px 12px rgba(0,0,0,.55), 0 0 2px rgba(0,0,0,.5);
+}
+.cc-actions {
+  position: absolute; left: 12px; right: 12px; bottom: 12px; z-index: 2;
+  display: flex; gap: 8px;
+}
+.cc-btn {
+  flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 7px;
+  font-family: var(--font-body); font-weight: 600; font-size: 13px; line-height: 1;
+  padding: 11px 12px; border-radius: var(--radius-pill); cursor: pointer;
+  border: 0; text-decoration: none; white-space: nowrap;
+  transition: transform var(--dur-fast) var(--ease-out), background var(--dur-base), color var(--dur-base);
+}
+.cc-btn .arr { transition: transform var(--dur-fast); display: inline-block; }
+.cc-btn.primary { background: var(--ink); color: var(--paper); box-shadow: var(--shadow-sm); }
+.cc-btn.primary:hover { transform: translateY(-1px); background: #2A2620; }
+.cc-btn.secondary { background: var(--cream); color: var(--ink); }
+.cc-btn.secondary:hover { background: var(--surface); }
+.cc-btn.secondary:hover .arr { transform: translateX(3px); }
+.cc-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+
+/* section-title left-aligned variant (sits above one card, not full row) */
+.section-title.is-left {
+  justify-content: flex-start;
+  text-align: left;
+  font-size: clamp(22px, 2.6vw, 30px);
+}
+
+/* ——— New Release trio — client sketch ———
+   3 columns TOP-ALIGNED. Left free-video (A2) + middle course = RECTANGULAR cards
+   (18px radius), TALLER than the profile. Right = twin-arch About Me (A3) — the only
+   odd shape — shorter + slightly narrower, "ABOUT ME" below. "New Release" title sits
+   ABOVE the course card (column 2) per sketch — no extra text beside it. */
+.release-trio { align-items: start; }
+.release-head {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: var(--gutter);
+  margin-bottom: 14px;
+}
+.release-head .section-title { grid-column: 5 / span 4; margin: 0; }
+.release-trio .free-video,
+.release-trio .cover-card {
+  aspect-ratio: 4/5;             /* tall rectangles — taller than the profile arch */
+  height: auto; min-height: 0;
+}
+.release-trio .about-col .arch-duo {
+  max-width: 86%;                /* profile reads smaller/shorter than the two cards */
+  margin: 0 auto;
+}
+.arch-link { display: block; text-decoration: none; }
+.arch-duo > img { transition: transform .6s var(--ease-out); }
+.arch-link:hover .arch-duo > img,
+.arch-link:focus-visible .arch-duo > img { transform: scale(1.05); }
+.about-col .arch-cap { margin-top: 14px; }
+@media (max-width: 860px) {
+  .release-trio > [class*="span-"] {
+    grid-column: span 12;
+    width: 100%; max-width: 420px; margin: 0 auto;
+  }
+  .release-head .section-title { grid-column: 1 / -1; justify-content: center; }
+}
+
+/* ——— Shop carousel (arrows only — no slider) ——— */
+.carousel { position: relative; margin-top: 30px; }
+.carousel-track {
+  display: flex; gap: var(--gutter);
+  overflow-x: auto; scroll-behavior: smooth;
+  scrollbar-width: none; -ms-overflow-style: none;
+  scroll-snap-type: x mandatory;
+  padding: 4px 2px 8px;
+}
+.carousel-track::-webkit-scrollbar { display: none; }
+.carousel-item {
+  flex: 0 0 clamp(220px, 25%, 290px);
+  scroll-snap-align: start;
+}
+@media (max-width: 768px) { .carousel-item { flex-basis: 60%; } }
+@media (max-width: 480px) { .carousel-item { flex-basis: 78%; } }
+.carousel-nav { display: flex; justify-content: flex-end; gap: 10px; margin-bottom: 14px; }
+.car-arrow {
+  width: 44px; height: 44px; border-radius: 50%;
+  background: var(--surface); color: var(--ink); border: 0;
+  box-shadow: var(--shadow-sm); cursor: pointer;
+  display: grid; place-items: center;
+  transition: transform var(--dur-fast) var(--ease-out), background var(--dur-base), color var(--dur-base);
+}
+.car-arrow:hover { background: var(--ink); color: var(--paper); transform: translateY(-1px); }
+.car-arrow:disabled { opacity: .35; cursor: default; transform: none; background: var(--surface); color: var(--ink); }
+.car-arrow svg { width: 20px; height: 20px; }
+
+/* gallery promo tile (eye-catching) */
+.gallery-tile {
+  position: relative; aspect-ratio: 1/1; border-radius: var(--radius-card);
+  overflow: hidden; box-shadow: var(--shadow-photo); display: block;
+  text-decoration: none; color: var(--paper);
+}
+.gallery-tile img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s var(--ease-out); }
+.gallery-tile:hover img { transform: scale(1.07); }
+.gallery-tile .gt-veil {
+  position: absolute; inset: 0; z-index: 2;
+  background: linear-gradient(150deg, rgba(61,97,80,.82), rgba(21,19,10,.62));
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 10px; text-align: center; padding: 24px;
+}
+.gallery-tile .gt-ast { font-size: 26px; color: var(--mint); display: inline-block; animation: ast-spin 9s linear infinite; }
+.gallery-tile .gt-title { font-family: var(--font-marker); font-size: clamp(20px, 2.2vw, 27px); line-height: 1.05; }
+.gallery-tile .gt-sub { font-size: 12.5px; opacity: .9; max-width: 26ch; }
+.gallery-tile .gt-cta {
+  margin-top: 6px; font-weight: 700; font-size: 13px;
+  background: var(--paper); color: var(--ink);
+  border-radius: var(--radius-pill); padding: 9px 18px;
+  transition: transform var(--dur-fast) var(--ease-out);
+}
+.gallery-tile:hover .gt-cta { transform: translateY(-1px); }
+
+/* ——— community band (repurposed forest band) ——— */
+.band-community { background: var(--forest); }
+
 /* ——— reduced motion ——— */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { transition-duration: .01ms !important; animation-duration: .01ms !important; }
@@ -607,52 +789,52 @@
     </div>
   </section>
 
-  <!-- New Release band — 4+4+4: free video (A2) · newest course · twin-arch About Me (A3) -->
+  <!-- New Release — client sketch: rect free video (A2) · rect newest course · twin-arch About Me (A3, shorter) -->
   <section class="pg-section" data-od-id="new-release">
-    <h2 class="section-title">New release</h2>
     <div class="pg-wrap">
-      <div class="grid-12 release-band">
+      <div class="release-head">
+        <h2 class="section-title is-left">New release</h2>
+      </div>
+      <div class="grid-12 release-trio">
 
-        <!-- A2: free video hook -->
+        <!-- A2: free video hook — rectangular card -->
         <div class="span-4 reveal-up" style="--i:0">
-          <a class="free-video" href="lessons.html" aria-label="Watch a free lesson">
-            <img src="img/cover1.jpg" alt="Free watercolour lesson preview"/>
+          <a class="free-video" href="lesson.html" aria-label="Watch the free lesson — Materials and setting up">
+            <img src="img/cover3.jpg" alt="Materials and setting up — free watercolour lesson preview"/>
             <div class="fv-veil">
               <div class="fv-play" aria-hidden="true">▶</div>
               <strong>Watch a free lesson</strong>
-              <span>see how I teach before you buy</span>
+              <span>Materials &amp; setting up — the full course, on us</span>
             </div>
           </a>
         </div>
 
-        <!-- Newest course card -->
+        <!-- Newest course — rectangular card -->
         <div class="span-4 reveal-up" style="--i:1">
-          <div class="release-course">
-            <div class="rc-thumb">
-              <img src="img/cover2.jpg" alt="Blocking in large shapes"/>
-            </div>
-            <div class="rc-pad">
-              <h3>Blocking in large shapes</h3>
-              <p>The fastest way to make a painting feel solid — big shapes, big values, nothing else for the first hour.</p>
-              <div class="btn-row">
-                <button class="rls-btn-primary" type="button" data-add-to-cart>
-                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1.6"/><circle cx="19" cy="21" r="1.6"/><path d="M2 3h3l2.6 12.6a1.8 1.8 0 0 0 1.8 1.4h8.9a1.8 1.8 0 0 0 1.8-1.4L22 7H6"/></svg>
-                  Add to cart
-                </button>
-                <a class="rls-btn-ghost" href="lessons.html">View lesson →</a>
-              </div>
+          <div class="cover-card">
+            <img src="img/cover2.jpg" alt="Blocking in large shapes"/>
+            <span class="cc-chip">Newest</span>
+            <div class="cc-title">Blocking in large shapes</div>
+            <div class="cc-actions">
+              <button class="cc-btn primary" type="button" data-add-to-cart>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1.6"/><circle cx="19" cy="21" r="1.6"/><path d="M2 3h3l2.6 12.6a1.8 1.8 0 0 0 1.8 1.4h8.9a1.8 1.8 0 0 0 1.8-1.4L22 7H6"/></svg>
+                Add to cart
+              </button>
+              <a class="cc-btn secondary" href="lessons.html">View lesson <span class="arr" aria-hidden="true">→</span></a>
             </div>
           </div>
         </div>
 
-        <!-- A3: twin-arch About Me portrait -->
-        <div class="span-4 reveal-up" style="--i:2">
-          <div class="arch-duo">
-            <img src="img/ProfilePic.jpg" alt="Crystal — founder portrait in the twin-arch mask"/>
-          </div>
+        <!-- A3: twin-arch About Me — whole portrait links to About -->
+        <div class="span-4 about-col reveal-up" style="--i:2">
+          <a class="arch-link" href="about.html" aria-label="Meet Crystal — about me">
+            <div class="arch-duo">
+              <img src="img/ProfilePic.jpg" alt="Crystal — founder portrait in the twin-arch mask"/>
+            </div>
+          </a>
           <div class="arch-cap">
             <div class="eyebrow-lbl">About me</div>
-            <div class="who-lbl">Crystal — your art teacher</div>
+            <a class="link-squiggle arch-visit" href="about.html">Meet Crystal →</a>
           </div>
         </div>
 
@@ -660,68 +842,119 @@
     </div>
   </section>
 
-  <!-- ✳ SHOP ALL COURSES -->
+  <!-- ✳ SHOP ALL COURSES — arrows-only carousel -->
   <section class="pg-section" data-od-id="shop">
     <h2 class="section-title">Shop all courses</h2>
     <div class="pg-wrap">
-      <div class="grid-12 course-grid">
+      <div class="carousel" data-carousel>
+        <div class="carousel-nav">
+          <button class="car-arrow" type="button" data-car="prev" aria-label="Previous courses">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"/></svg>
+          </button>
+          <button class="car-arrow" type="button" data-car="next" aria-label="More courses">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"/></svg>
+          </button>
+        </div>
+        <div class="carousel-track" data-car-track>
 
-        <div class="span-3 reveal-up" style="--i:0">
-          <div class="cg-card">
-            <div class="cg-cover">
+          <div class="carousel-item">
+            <div class="cover-card">
               <img src="img/cover1.jpg" alt="Light &amp; shadow on the head"/>
-              <div class="cg-scrim"><div class="cg-title">Light &amp; shadow on the head</div></div>
-            </div>
-            <div class="cg-actions">
-              <button class="cg-btn-primary" type="button" data-add-to-cart>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1.6"/><circle cx="19" cy="21" r="1.6"/><path d="M2 3h3l2.6 12.6a1.8 1.8 0 0 0 1.8 1.4h8.9a1.8 1.8 0 0 0 1.8-1.4L22 7H6"/></svg>
-                Add to cart
-              </button>
-              <a class="cg-btn-secondary" href="lessons.html">View lesson →</a>
+              <div class="cc-title">Light &amp; shadow on the head</div>
+              <div class="cc-actions">
+                <button class="cc-btn primary" type="button" data-add-to-cart>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1.6"/><circle cx="19" cy="21" r="1.6"/><path d="M2 3h3l2.6 12.6a1.8 1.8 0 0 0 1.8 1.4h8.9a1.8 1.8 0 0 0 1.8-1.4L22 7H6"/></svg>
+                  Add to cart
+                </button>
+                <a class="cc-btn secondary" href="lessons.html">View lesson <span class="arr" aria-hidden="true">→</span></a>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="span-3 reveal-up" style="--i:1">
-          <div class="cg-card">
-            <div class="cg-cover">
+          <div class="carousel-item">
+            <div class="cover-card">
               <img src="img/cover3.jpg" alt="Mixing greens from scratch"/>
-              <div class="cg-scrim"><div class="cg-title">Mixing greens from scratch</div></div>
-            </div>
-            <div class="cg-actions">
-              <button class="cg-btn-primary" type="button" data-add-to-cart>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1.6"/><circle cx="19" cy="21" r="1.6"/><path d="M2 3h3l2.6 12.6a1.8 1.8 0 0 0 1.8 1.4h8.9a1.8 1.8 0 0 0 1.8-1.4L22 7H6"/></svg>
-                Add to cart
-              </button>
-              <a class="cg-btn-secondary" href="lessons.html">View lesson →</a>
+              <div class="cc-title">Mixing greens from scratch</div>
+              <div class="cc-actions">
+                <button class="cc-btn primary" type="button" data-add-to-cart>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1.6"/><circle cx="19" cy="21" r="1.6"/><path d="M2 3h3l2.6 12.6a1.8 1.8 0 0 0 1.8 1.4h8.9a1.8 1.8 0 0 0 1.8-1.4L22 7H6"/></svg>
+                  Add to cart
+                </button>
+                <a class="cc-btn secondary" href="lessons.html">View lesson <span class="arr" aria-hidden="true">→</span></a>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="span-3 reveal-up" style="--i:2">
-          <div class="cg-card">
-            <div class="cg-cover">
+          <div class="carousel-item">
+            <div class="cover-card">
               <img src="img/cover4.jpg" alt="Loading a brush properly"/>
-              <div class="cg-scrim"><div class="cg-title">Loading a brush properly</div></div>
-            </div>
-            <div class="cg-actions">
-              <button class="cg-btn-primary" type="button" data-add-to-cart>
-                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1.6"/><circle cx="19" cy="21" r="1.6"/><path d="M2 3h3l2.6 12.6a1.8 1.8 0 0 0 1.8 1.4h8.9a1.8 1.8 0 0 0 1.8-1.4L22 7H6"/></svg>
-                Add to cart
-              </button>
-              <a class="cg-btn-secondary" href="lessons.html">View lesson →</a>
+              <div class="cc-title">Loading a brush properly</div>
+              <div class="cc-actions">
+                <button class="cc-btn primary" type="button" data-add-to-cart>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1.6"/><circle cx="19" cy="21" r="1.6"/><path d="M2 3h3l2.6 12.6a1.8 1.8 0 0 0 1.8 1.4h8.9a1.8 1.8 0 0 0 1.8-1.4L22 7H6"/></svg>
+                  Add to cart
+                </button>
+                <a class="cc-btn secondary" href="lessons.html">View lesson <span class="arr" aria-hidden="true">→</span></a>
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="span-3 reveal-up" style="--i:3">
-          <div class="cg-card" style="background: linear-gradient(160deg, var(--teal) 0%, var(--mint) 100%); display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding: 32px 20px; min-height: 200px; gap:12px;">
-            <div style="font-family:var(--font-marker);font-size:clamp(18px,2vw,24px);color:var(--ink);">Browse the full studio</div>
-            <p style="font-size:13px;color:var(--muted);margin:0;">12 courses · watercolour · acrylic · drawing</p>
-            <a class="rls-btn-ghost" href="lessons.html" style="margin-top:8px;">All lessons →</a>
+          <div class="carousel-item">
+            <div class="cover-card">
+              <img src="img/Liquidwatercolor.jpg" alt="Watercolour: wet-on-wet washes"/>
+              <div class="cc-title">Wet-on-wet washes</div>
+              <div class="cc-actions">
+                <button class="cc-btn primary" type="button" data-add-to-cart>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1.6"/><circle cx="19" cy="21" r="1.6"/><path d="M2 3h3l2.6 12.6a1.8 1.8 0 0 0 1.8 1.4h8.9a1.8 1.8 0 0 0 1.8-1.4L22 7H6"/></svg>
+                  Add to cart
+                </button>
+                <a class="cc-btn secondary" href="lessons.html">View lesson <span class="arr" aria-hidden="true">→</span></a>
+              </div>
+            </div>
           </div>
-        </div>
 
+          <div class="carousel-item">
+            <div class="cover-card">
+              <img src="img/Postercolor.jpg" alt="Poster colour: flat &amp; opaque"/>
+              <div class="cc-title">Flat &amp; opaque in poster colour</div>
+              <div class="cc-actions">
+                <button class="cc-btn primary" type="button" data-add-to-cart>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1.6"/><circle cx="19" cy="21" r="1.6"/><path d="M2 3h3l2.6 12.6a1.8 1.8 0 0 0 1.8 1.4h8.9a1.8 1.8 0 0 0 1.8-1.4L22 7H6"/></svg>
+                  Add to cart
+                </button>
+                <a class="cc-btn secondary" href="lessons.html">View lesson <span class="arr" aria-hidden="true">→</span></a>
+              </div>
+            </div>
+          </div>
+
+          <div class="carousel-item">
+            <div class="cover-card">
+              <img src="img/Sketchbook.jpg" alt="Drawing: filling a sketchbook"/>
+              <div class="cc-title">Fill a sketchbook in 30 days</div>
+              <div class="cc-actions">
+                <button class="cc-btn primary" type="button" data-add-to-cart>
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1.6"/><circle cx="19" cy="21" r="1.6"/><path d="M2 3h3l2.6 12.6a1.8 1.8 0 0 0 1.8 1.4h8.9a1.8 1.8 0 0 0 1.8-1.4L22 7H6"/></svg>
+                  Add to cart
+                </button>
+                <a class="cc-btn secondary" href="lessons.html">View lesson <span class="arr" aria-hidden="true">→</span></a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Gallery promo tile (→ gallery, eye-catching) -->
+          <div class="carousel-item">
+            <a class="gallery-tile" href="gallery.html" aria-label="Walk the 3D gallery">
+              <img src="img/BrushB.jpg" alt="3D exhibition hall"/>
+              <div class="gt-veil">
+                <span class="gt-ast">✳</span>
+                <span class="gt-title">Walk the<br/>3D gallery</span>
+                <span class="gt-sub">Two halls — Art Showcase &amp; Fresh Eyes — hung like a real museum.</span>
+                <span class="gt-cta">Enter the hall →</span>
+              </div>
+            </a>
+          </div>
+
+        </div>
       </div>
     </div>
   </section>
@@ -769,19 +1002,19 @@
     </div>
   </section>
 
-  <!-- Free lesson forest band -->
-  <section class="pg-section" data-od-id="free-lesson">
+  <!-- Community band (repurposed — free lesson now lives in the New Release card) -->
+  <section class="pg-section" data-od-id="community">
     <div class="pg-wrap">
-      <div class="band-forest reveal-up">
+      <div class="band-forest band-community reveal-up">
         <div style="flex:0 0 160px;border-radius:var(--radius-card);overflow:hidden;aspect-ratio:1/1;">
-          <img src="img/cover2.jpg" alt="Free lesson preview" style="width:100%;height:100%;object-fit:cover;"/>
+          <img src="img/Rubber.jpg" alt="Students sharing work in the studio community" style="width:100%;height:100%;object-fit:cover;"/>
         </div>
         <div style="flex:1;min-width:200px;">
-          <div class="eyebrow"><span class="star">✳</span> Free intro</div>
-          <h2>Try a lesson, on me.</h2>
-          <p>One complete lesson — <em>Materials &amp; setting up</em> — completely free. Just make a free account.</p>
+          <div class="eyebrow"><span class="star">✳</span> Fellow tier</div>
+          <h2>Paint alongside others.</h2>
+          <p>Join the studio Discord — share works in progress, get feedback from Crystal, and never paint alone. Open to every Fellow member.</p>
         </div>
-        <a class="btn-big" href="lessons.html" style="flex:none;">Watch free lesson →</a>
+        <a class="btn-big" href="about.html#contact" style="flex:none;">Join the community →</a>
       </div>
     </div>
   </section>
@@ -830,7 +1063,7 @@
         <h4>Learn</h4>
         <a href="lessons.html">All lessons</a>
         <a href="lessons.html#membership">Membership</a>
-        <a href="lessons.html">Free intro lesson</a>
+        <a href="lesson.html">Free intro lesson</a>
       </div>
       <div>
         <h4>Explore</h4>
@@ -847,7 +1080,7 @@
     </div>
     <div class="footer-meta">
       <span>© 2026 Crystal's Art School</span>
-      <span>v2.3.0</span>
+      <span>v2.6.0</span>
     </div>
   </div>
 </footer>
@@ -855,6 +1088,7 @@
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <script src="js/site.js"></script>
+<script src="js/paint-fx.js"></script>
 <script>
 /* hero slide controller — 3 slides, 6s autoplay */
 (function () {
@@ -899,6 +1133,32 @@
   }, { threshold: 0.18 });
   document.querySelectorAll('.reveal-up, .reveal-brush, .section-title, .arch-duo').forEach(function (el) {
     io.observe(el);
+  });
+})();
+
+/* Shop carousel — arrows only, no slider control */
+(function () {
+  document.querySelectorAll('[data-carousel]').forEach(function (root) {
+    var track = root.querySelector('[data-car-track]');
+    var prev = root.querySelector('[data-car="prev"]');
+    var next = root.querySelector('[data-car="next"]');
+    if (!track || !prev || !next) return;
+    function step() {
+      var item = track.querySelector('.carousel-item');
+      var gap = parseFloat(getComputedStyle(track).columnGap || getComputedStyle(track).gap || '24') || 24;
+      var w = item ? item.getBoundingClientRect().width : 260;
+      return Math.round((w + gap) * Math.max(1, Math.floor(track.clientWidth / (w + gap))));
+    }
+    function sync() {
+      var max = track.scrollWidth - track.clientWidth - 2;
+      prev.disabled = track.scrollLeft <= 2;
+      next.disabled = track.scrollLeft >= max;
+    }
+    prev.addEventListener('click', function () { track.scrollBy({ left: -step(), behavior: 'smooth' }); });
+    next.addEventListener('click', function () { track.scrollBy({ left: step(), behavior: 'smooth' }); });
+    track.addEventListener('scroll', function () { window.requestAnimationFrame(sync); }, { passive: true });
+    window.addEventListener('resize', sync);
+    sync();
   });
 })();
 
