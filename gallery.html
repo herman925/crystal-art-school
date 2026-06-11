@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Gallery · Crystal's Art School</title>
+<link rel="icon" href="data:,">
+<meta name="ext-resource-dependency" content="css/site.css"/>
+<meta name="ext-resource-dependency" content="js/site.js"/>
+<meta name="ext-resource-dependency" content="js/gallery3d.js"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Italiana&family=Quicksand:wght@500;600;700&family=Caveat:wght@500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/site.css"/>
+<style>
+/* gallery.html — three.js museum: two wings off a lobby */
+.gallery-stage {
+  position: relative;
+  height: calc(100vh - 66px);
+  min-height: 480px;
+  background: var(--paper-2);
+  overflow: hidden;
+}
+.gallery-stage canvas { display: block; }
+
+/* wayfinding overlay */
+.wayfind {
+  position: absolute;
+  top: 18px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  background: color-mix(in srgb, var(--cream) 88%, transparent);
+  backdrop-filter: blur(8px);
+  border-radius: var(--radius-pill);
+  box-shadow: var(--shadow-soft);
+  padding: 6px;
+}
+.wayfind button {
+  border: 0;
+  background: transparent;
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 13.5px;
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  transition: background .15s;
+}
+.wayfind button:hover { background: var(--warm-white); }
+.wayfind button.here { background: var(--teal); }
+.wayfind .sep { color: var(--muted); font-size: 12px; }
+
+/* hint card */
+.hint-card {
+  position: absolute;
+  bottom: 86px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  background: color-mix(in srgb, var(--cream) 92%, transparent);
+  backdrop-filter: blur(8px);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-lift);
+  padding: 14px 22px;
+  font-size: 13.5px;
+  text-align: center;
+  max-width: 340px;
+}
+.hint-card .hand-note { font-size: 19px; color: var(--ink); }
+
+/* walk controls */
+.walk-controls {
+  position: absolute;
+  bottom: 20px; left: 50%;
+  transform: translateX(-50%);
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+.walk-btns {
+  display: flex;
+  gap: 10px;
+}
+.speed-row {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+  background: color-mix(in srgb, var(--cream) 85%, transparent);
+  backdrop-filter: blur(8px);
+  border-radius: var(--radius-pill);
+  padding: 6px 14px;
+  box-shadow: var(--shadow-soft);
+}
+.speed-row label {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+}
+#speed-slider {
+  width: 90px;
+  accent-color: var(--coral);
+  cursor: pointer;
+}
+.walk-btn {
+  width: 52px; height: 52px;
+  border-radius: 50%;
+  border: 0;
+  background: color-mix(in srgb, var(--cream) 90%, transparent);
+  backdrop-filter: blur(8px);
+  box-shadow: var(--shadow-soft);
+  font-size: 21px;
+  cursor: pointer;
+  color: var(--ink);
+  transition: background .15s, transform .15s var(--ease-pop);
+  touch-action: none;
+}
+.walk-btn:hover { background: var(--teal); transform: translateY(-2px); }
+
+/* artwork info card */
+.art-card {
+  position: absolute;
+  right: 20px; bottom: 20px;
+  z-index: 6;
+  width: min(330px, calc(100vw - 40px));
+  background: var(--cream);
+  border-radius: var(--radius-card);
+  box-shadow: var(--shadow-lift);
+  overflow: hidden;
+  display: none;
+}
+.art-card.open { display: block; animation: card-in .35s var(--ease-pop) both; }
+@keyframes card-in { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; } }
+.art-card .img { aspect-ratio: 16/10; overflow: hidden; }
+.art-card .img img { width: 100%; height: 100%; object-fit: cover; }
+.art-card .body { padding: 16px 18px 18px; }
+.art-card .t { font-family: var(--font-marker); font-size: 20px; }
+.art-card .who { display: flex; gap: 9px; align-items: center; margin: 8px 0 12px; }
+.art-card .who img { width: 32px; height: 32px; border-radius: 50%; object-fit: cover; }
+.art-card .close {
+  position: absolute;
+  top: 10px; right: 10px;
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  border: 0;
+  background: var(--cream);
+  box-shadow: var(--shadow-soft);
+  cursor: pointer;
+  font-size: 15px;
+}
+
+/* hall title chip (current wing) */
+.hall-chip {
+  position: absolute;
+  top: 18px; left: 18px;
+  z-index: 5;
+  background: rgba(21,19,10,.78);
+  color: var(--cream);
+  border-radius: var(--radius-pill);
+  padding: 8px 18px;
+  font-family: var(--font-display);
+  letter-spacing: .16em;
+  text-transform: uppercase;
+  font-size: 13px;
+}
+
+/* 2D fallback (WebGL unavailable) — stable row heights across mixed ratios */
+.fallback { display: none; }
+.fallback.show { display: block; }
+.fb-row { display: flex; gap: 14px; height: 240px; margin-bottom: 14px; }
+.fb-row .work { height: 100%; border-radius: var(--radius-card); overflow: hidden; position: relative; box-shadow: var(--shadow-soft); }
+.fb-row .work img { height: 100%; width: 100%; object-fit: cover; }
+.fb-row .work .scrim {
+  position: absolute; inset: auto 0 0 0;
+  padding: 36px 12px 10px;
+  background: linear-gradient(to top, rgba(21,19,10,.7), transparent);
+  color: var(--cream); font-size: 13px; font-weight: 700;
+}
+@media (max-width: 700px) { .fb-row { height: 160px; } .hint-card { display: none; } }
+</style>
+</head>
+<body>
+
+<nav class="site-nav" aria-label="Main">
+  <div class="inner">
+    <a class="nav-brand" href="index.html">
+      <img src="img/ProfilePic.jpg" alt="Crystal Lau"/>
+      <span class="name">Crystal's Art School</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="lessons.html">Lessons</a></li>
+      <li><a href="gallery.html" class="active">Gallery</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+    <div class="nav-auth">
+      <button class="cart-btn" type="button" aria-label="Shopping cart">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3.2l2.5 12.2a1.5 1.5 0 0 0 1.5 1.2h9a1.5 1.5 0 0 0 1.5-1.2L21.5 7H6.5"/></svg>
+        <span class="cart-badge">0</span>
+      </button>
+      <a class="btn ghost" href="#">Log in</a>
+      <a class="btn primary" href="#">Sign up</a>
+      <button class="nav-burger" type="button" aria-label="Menu" aria-expanded="false">☰</button>
+    </div>
+  </div>
+  <div class="nav-sheet">
+    <a href="index.html">Home</a>
+    <a href="lessons.html">Lessons</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="blog.html">Blog</a>
+    <a href="about.html">About</a>
+    <a href="#">Log in / Sign up</a>
+  </div>
+</nav>
+
+<!-- ================= 3D MUSEUM ================= -->
+<div class="gallery-stage" id="stage" data-cursor="pencil">
+  <div class="hall-chip" id="hall-chip">The Lobby</div>
+
+  <div class="wayfind" role="group" aria-label="Jump to a wing">
+    <button type="button" data-goto="west">⟵ Fresh Eyes</button>
+    <span class="sep">·</span>
+    <button type="button" data-goto="lobby" class="here">Lobby</button>
+    <span class="sep">·</span>
+    <button type="button" data-goto="east">Art Showcase ⟶</button>
+  </div>
+
+  <div class="hint-card" id="hint">
+    <div class="hand-note">Welcome to the gallery ✳</div>
+    Drag to look · <strong>WASD</strong> or arrow keys to walk &amp; turn ·
+    scroll or tap ↑↓ below · <strong>double-click</strong> a painting to jump right in front of it ·
+    single-click for its story.
+    <div style="margin-top:8px;"><button class="btn" type="button" id="hint-ok" style="padding:7px 18px;font-size:13px;">Got it</button></div>
+  </div>
+
+  <div class="walk-controls">
+    <div class="walk-btns">
+      <button class="walk-btn" type="button" id="walk-back" aria-label="Walk backward">↓</button>
+      <button class="walk-btn" type="button" id="walk-fwd" aria-label="Walk forward">↑</button>
+    </div>
+    <div class="speed-row">
+      <label for="speed-slider">Speed</label>
+      <input type="range" id="speed-slider" min="0.4" max="3" step="0.1" value="1.4"/>
+    </div>
+  </div>
+
+  <div class="art-card" id="art-card">
+    <button class="close" type="button" aria-label="Close">✕</button>
+    <div class="img"><img id="ac-img" src="" alt=""/></div>
+    <div class="body">
+      <div class="t" id="ac-title"></div>
+      <div class="who" id="ac-who"></div>
+      <div id="ac-cta"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ================= 2D fallback ================= -->
+<main class="container fallback" id="fallback">
+  <section class="section">
+    <div class="eyebrow"><span class="star">✳</span> Gallery</div>
+    <h1 class="marker-title" style="font-size:clamp(30px,4vw,52px);">Two halls, one school</h1>
+    <p class="lead">Your browser couldn't open the 3D exhibition — here are both halls as a collage instead.</p>
+    <h2 class="section-title" style="font-size:26px;margin-top:30px;">Art Showcase</h2>
+    <div id="fb-east"></div>
+    <h2 class="section-title" style="font-size:26px;margin-top:30px;">Fresh Eyes — student wing</h2>
+    <div id="fb-west"></div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">Crystal<span style="color:var(--coral);">.</span></div>
+        <p style="font-size:14px;opacity:.85;max-width:34ch;margin:0;">Watercolour, acrylic &amp; drawing — taught slowly and carefully from a small UK/HK studio.</p>
+      </div>
+      <div>
+        <h4>Learn</h4>
+        <a href="lessons.html">All lessons</a>
+        <a href="lessons.html#membership">Membership</a>
+        <a href="lessons.html">Free intro lesson</a>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <a href="gallery.html">Gallery — Art Showcase</a>
+        <a href="gallery.html">Gallery — Fresh Eyes</a>
+        <a href="blog.html">Blog</a>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <a href="about.html#contact">hello@crystalsartschool.com</a>
+        <a href="about.html#contact">Discord · Instagram</a>
+        <a href="about.html#terms">Terms &amp; privacy</a>
+      </div>
+    </div>
+    <div class="footer-meta">
+      <span>© 2026 Crystal's Art School</span>
+      <span>v2.1.0</span>
+    </div>
+  </div>
+</footer>
+
+<script src="js/site.js"></script>
+<script type="module" src="js/gallery3d.js"></script>
+<script>
+/* safety net: if the 3D module never boots (blocked CDN, old browser),
+   swap to the 2D collage after 4s */
+setTimeout(function () {
+  if (window.__g3dOK) return;
+  document.getElementById('stage').style.display = 'none';
+  var fb = document.getElementById('fallback');
+  fb.classList.add('show');
+  var IMGS = ['img/cover1.jpg','img/cover2.jpg','img/cover3.jpg','img/cover4.jpg','img/BrushA.jpg','img/BrushB.jpg','img/Liquidwatercolor.jpg','img/Postercolor.jpg','img/Rubber.jpg','img/Sketchbook.jpg','img/Bannerphoto.jpg','img/ProfilePic.jpg'];
+  function fill(id, label, off) {
+    var root = document.getElementById(id), row = null;
+    for (var i = 0; i < 20; i++) {
+      if (i % 4 === 0) { row = document.createElement('div'); row.className = 'fb-row'; root.appendChild(row); }
+      var d = document.createElement('div');
+      d.className = 'work';
+      d.style.flex = '1 1 0';
+      d.innerHTML = '<img src="' + IMGS[(i + off) % IMGS.length] + '" alt=""/><div class="scrim">' + label + '</div>';
+      row.appendChild(d);
+    }
+  }
+  fill('fb-east', 'Crystal Lau · Art Showcase', 0);
+  fill('fb-west', 'Student work · Fresh Eyes', 5);
+}, 4000);
+</script>
+</body>
+</html>

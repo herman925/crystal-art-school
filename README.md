@@ -1,34 +1,45 @@
-# Crystal's Art School — Wireframes
+# Crystal's Art School
 
-Low-fi structural wireframes for Crystal's Art School.
+> Slow down. Draw with care.
 
-**Live**: https://herman925.github.io/crystal-art-school/
+A multi-page website for Crystal's Art School — a small, craft-focused drawing studio.
+Static HTML/CSS/JS, no build step.
 
-Scope: Front × 1 · Lesson × 6 · Account × 8 · Dashboard × 1 · Content × 5.
+## Pages
 
-## Entry points
+| Page | File | Purpose |
+|------|------|---------|
+| Home | `index.html` | Hero, philosophy, featured work |
+| Lessons | `lessons.html` | Classes, curriculum, membership |
+| Gallery | `gallery.html` | Student & studio work (3D gallery via `js/gallery3d.js`) |
+| Blog | `blog.html` | Article index |
+| Blog post | `blog-post.html` | Single article layout |
+| About | `about.html` | Bio, contact, terms |
 
-| File | Purpose |
-|---|---|
-| `index.html` | Main interactive wireframe browser (tabs, viewport switcher, annotations) |
-| `index-standalone.html` | Self-contained variant for bundler/preview environments |
+## Structure
 
-## Files
+```
+.
+├── index.html, about.html, blog.html, blog-post.html, gallery.html, lessons.html
+├── css/site.css          # all styles
+├── js/site.js            # shared interactions
+├── js/gallery3d.js       # 3D gallery
+├── img/                  # site imagery (compressed)
+├── serve.bat             # local dev server (Windows)
+├── docs/                 # PRD, design notes, proposal (PDF/DOCX)
+└── wireframes/           # earlier design wireframes (kept for reference)
+```
 
-- `styles-v5.css` — current stylesheet
-- `bundle.js` — combined app shell + variants (used by `index.html`)
-- `variants.js` — variant library (used by `index-standalone.html`)
-- `img/` — full-resolution images
-- `img-standalone/` — compressed images for the standalone build
+## Run locally
 
-## Project docs
+JavaScript needs a real HTTP origin (not `file://`). On Windows, double-click **`serve.bat`** — it finds a free port in `8080–8084` and serves the folder. Then open the printed `http://localhost:<port>`.
 
-- [`docs/PRD.md`](docs/PRD.md) — product requirements
-- [`docs/CLAUDE.md`](docs/CLAUDE.md) — Claude Code workspace context
-- [`docs/Crystal_Art_School_Proposal.pdf`](docs/Crystal_Art_School_Proposal.pdf) — proposal (PDF)
-- [`docs/Crystal_Art_School_Proposal.docx`](docs/Crystal_Art_School_Proposal.docx) — proposal (DOCX source)
+Any static server works too, e.g.:
 
-## Notes
+```bash
+python -m http.server 8080
+```
 
-Wireframes only — boxes, type, annotations. No final visual design.
-Fonts: Quicksand + Permanent Marker. Caveat for annotations.
+## License
+
+All rights reserved unless stated otherwise.

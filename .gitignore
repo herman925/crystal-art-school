@@ -1,33 +1,10 @@
-# Superseded / unused (OD app may regenerate these)
-styles.css
-app.js
-index-print.html
+# Editor / design-tool metadata
+*.artifact.json
 
-# Local backup of pre-compression originals
-img-original/
-
-# graphify artifacts
-.graphify_*
-graphify-out/
-
-# GSD / internal planning
-.planning/
-
-# OS junk
+# OS / scratch
 .DS_Store
 Thumbs.db
-desktop.ini
+*.tmp
 
-# Editor
-.vscode/
-.idea/
-*.swp
-*~
-
-# Node / deps (if ever added)
-node_modules/
-npm-debug.log*
-
-# Build output
-dist/
-build/
+# Local source uploads & scratch exports (not part of the site)
+/uploads/
