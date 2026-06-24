@@ -52,7 +52,7 @@
       try { const u = JSON.parse(localStorage.getItem('cas-user') || '{}') || {}; u.name = u.name || 'Jane'; u.via = 'google'; localStorage.setItem('cas-user', JSON.stringify(u)); } catch (er) {}
       setTimeout(() => done(userName()), 850);
     });
-    document.getElementById('li-guest').addEventListener('click', () => { window.location.href = 'Gallery.html'; });
+    document.getElementById('li-guest').addEventListener('click', () => { window.location.href = 'gallery.html'; });
 
     /* forgot-password pipeline */
     document.getElementById('li-forgot').addEventListener('click', (e) => {

@@ -223,7 +223,7 @@
     renderCart();
 
     /* ---- New Release: 3 most recent in a mini carousel ---- */
-    const pool = coursePool();
+    const pool = this.coursePool();
     const recent = pool.slice().sort((a, b) => b.date.localeCompare(a.date)).slice(0, 3);
     const relCar = document.getElementById('rel-carousel');
     const relDots = document.getElementById('rel-dots');

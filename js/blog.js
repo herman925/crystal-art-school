@@ -56,7 +56,7 @@
     renderCart();
 
     /* ---- BLOG ---- */
-    const all = posts().slice().sort((a, b) => b.date.localeCompare(a.date)).slice(0, 10);
+    const all = this.posts().slice().sort((a, b) => b.date.localeCompare(a.date)).slice(0, 10);
     const tags = ['All']; all.forEach(p => { if (!tags.includes(p.tag)) tags.push(p.tag); });
     let active = 'All';
     try { const u = new URLSearchParams(location.search); const qt = u.get('tag'); if (qt) { const m = tags.find(t => t.toLowerCase() === qt.toLowerCase()); if (m) active = m; } } catch (e) {}

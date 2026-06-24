@@ -124,48 +124,27 @@ def transform_one(src_name: str, html_out: str, js_out: str) -> tuple[str, str]:
         raise SystemExit(f"{src_name}: Component class missing closing brace")
     inner = inner[:-1].rstrip()
 
-    # The Component class methods use `this.foo()` for sibling helpers and
-    # `this.props.defaultTheme` for the theme prop (always "A" in our pages).
-    # In a plain object literal `this` doesn't have those. Rewrite:
-    #   - this.<methodName>()  -> <methodName>()
-    #   - this.props.<anything> -> defaults from data-theme attr or 'A'
-    # Then invoke componentDidMount / componentWillUnmount via the literal.
-
-    # collect method names declared in the body (both method() { ... } and
-    # static-style shorthand we see: `coursePool() { ... }`)
-    method_names = set(re.findall(r"^\s*([A-Za-z_$][\w$]*)\s*\(", inner, re.MULTILINE))
-    # Build a regex that rewrites this.<methodName> -> <methodName>
-    if method_names:
-        names_alt = "|".join(re.escape(n) for n in sorted(method_names, key=len, reverse=True))
-        inner = re.sub(r"\bthis\.(" + names_alt + r")\b", r"\1", inner)
-
-    # this.props.defaultTheme -> 'A' (no per-page override prop set anywhere)
-    inner = re.sub(r"\bthis\.props\.[A-Za-z_$][\w$]*\b", "'A'", inner)
-    # any other leftover this.props.X.X (e.g. cas-theme key lookups): replace
-    # the entire this.props.* with the literal 'A' fallback (matches the
-    # original intent — empty props passed in)
+    # The class defines methods. We want to invoke componentDidMount on load
+    # and store componentWillUnmount on window. We lift methods into an
+    # object literal. Inside a method body, `this` refers to that object
+    # literal — so `this.coursePool()` (original class) keeps working after
+    # we strip the class wrapper.
+    #
+    # The only thing that BREAKS is `this.props.X` (the class instance never
+    # received props, so `this.props` is undefined). Replace those with
+    # literal 'A' defaults.
+    inner = re.sub(r"\bthis\.props\.[A-Za-z_$][\w$]*(?:\.[A-Za-z_$][\w$]*)*\b", "'A'", inner)
     inner = re.sub(r"\bthis\.props\b", "{}", inner)
 
-    # The class defines methods. We want to invoke componentDidMount on load
-    # and store componentWillUnmount on window. Easiest: wrap methods in a
-    # plain object literal then call its mount() and unmount().
-    # NOTE: in a class body, methods are separated by newlines; in an object
-    # literal they must be comma-separated. Insert commas between top-level
-    # method declarations (a top-level method begins at a line whose first
-    # non-whitespace is a name followed by "(").
-    # Walk through inner line by line. When we see a method declaration
-    # (top-level), insert a comma after the previous method's closing brace.
+    # Insert commas between top-level method declarations.
     lines = inner.split("\n")
     out_lines: list[str] = []
     method_re = re.compile(r"^(\s*)([A-Za-z_$][\w$]*)\s*\(")
     last_was_method_close = False
     for i, line in enumerate(lines):
-        # Detect a method declaration at the top level of the object (column 2)
         m = method_re.match(line)
         is_method_decl = bool(m) and len(m.group(1)) == 2 and not line.lstrip().startswith("//")
         if is_method_decl and out_lines and last_was_method_close:
-            # previous top-level line closed a method -> add comma
-            # find last non-empty line and append "," if missing
             for j in range(len(out_lines) - 1, -1, -1):
                 if out_lines[j].strip() == "":
                     continue
@@ -173,7 +152,6 @@ def transform_one(src_name: str, html_out: str, js_out: str) -> tuple[str, str]:
                     out_lines[j] = out_lines[j].rstrip() + ","
                 break
         out_lines.append(line)
-        # Track method close: a top-level "}" alone on a line
         if line.strip() == "}":
             last_was_method_close = True
         elif line.strip() != "":
