@@ -98,12 +98,12 @@
     /* ---- overview: recommended (focus-matched, not enrolled) ---- */
     const enrolledTitles = enrolled.map(c => c.title);
     const focus = (user.focus || 'Watercolour').toLowerCase();
-    const recs = pool().filter(c => enrolledTitles.indexOf(c.title) < 0)
+    const recs = this.pool().filter(c => enrolledTitles.indexOf(c.title) < 0)
       .sort((a, b) => (b.tag.toLowerCase() === focus ? 1 : 0) - (a.tag.toLowerCase() === focus ? 1 : 0)).slice(0, 3);
     $('recommend-grid').innerHTML = recs.map(c =>
       '<div class="mc-course"><div class="cov"><img src="img/' + esc(c.img) + '" alt=""></div>' +
       '<div class="body"><div class="meta">' + esc(c.tag) + ' · £' + c.price + '</div><h3>' + esc(c.title) + '</h3>' +
-      '<a class="btn ghost" href="Lessons.html" style="margin-top:auto;">View course →</a></div></div>').join('');
+      '<a class="btn ghost" href="lessons.html" style="margin-top:auto;">View course →</a></div></div>').join('');
 
     /* ---- my courses ---- */
     $('courses-note').textContent = enrolled.length + ' enrolled';
@@ -146,7 +146,7 @@
     } else {
       $('discord-slot').innerHTML = '<div class="dash-card discord-card dc-locked">' + dico +
         '<div class="dc-body"><h3>Unlock with a Fellow course</h3><p>The private Discord is part of the Fellow tier. Buy any course at the Fellow tier to join the studio conversation.</p></div>' +
-        '<a class="btn" href="Lessons.html">Browse courses →</a></div>';
+        '<a class="btn" href="lessons.html">Browse courses →</a></div>';
     }
 
     /* ---- settings ---- */

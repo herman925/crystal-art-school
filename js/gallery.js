@@ -72,7 +72,7 @@
     });
 
     /* ---- STORE ---- */
-    const data = pieces();
+    const data = this.pieces();
     const MEDIUMS = ['Oil', 'Watercolour', 'Ink', 'Poster', 'Drawing'];
     const SUBJECTS = ['Landscape', 'Portrait', 'Still life', 'Abstract'];
     const state = { media: [], subjects: [], maxPrice: 400, sort: 'new' };
