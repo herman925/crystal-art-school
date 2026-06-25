@@ -122,7 +122,7 @@
     const rOf = (p) => RATIO[p.img] || 0.8;
     const cardHTML = (p, idx) =>
       '<article class="art-card" data-idx="' + idx + '">' +
-        '<div class="art-frame-wrap"><figure class="art-frame"><div class="art-img" style="--r:' + rOf(p) + '"><img src="img/' + p.img + '" alt="' + esc(p.title) + '"></div></figure></div>' +
+        '<div class="art-frame-wrap"><figure class="art-frame"><div class="art-img" style="--r:' + rOf(p) + '"><img src="img/' + p.img + '" alt="' + esc(p.title) + '"></div><img class="art-ornate" src="img/deer-black.svg" alt="" aria-hidden="true"></figure></div>' +
         '<div class="art-meta">' +
           '<h3 class="art-title">' + esc(p.title) + '</h3>' +
           '<div class="art-sub">' + (p.orig ? 'Original' : 'Limited print') + '</div>' +
