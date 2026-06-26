@@ -767,9 +767,10 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 .art-frame .art-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
 /* Style D — ornate carved frame overlay (replaces the bevel frame) */
 .art-ornate { display: none; }
-[data-theme="D"] .art-frame { background: transparent; border: 0; box-shadow: none; position: relative; aspect-ratio: 18426 / 21301; height: 92cqh; width: auto; max-width: 92cqw; max-height: 92cqh; }
-[data-theme="D"] .art-frame .art-img { position: absolute; top: 7.4%; bottom: 7.4%; left: 9.1%; right: 9.1%; height: auto; aspect-ratio: auto; box-shadow: inset 0 0 0 1px rgba(0,0,0,.45); }
-[data-theme="D"] .art-ornate { display: block; position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; filter: drop-shadow(0 16px 26px rgba(0,0,0,.55)); }
+/* Style D — ornate carved frame via border-image: adapts to ANY picture ratio (corners crisp, molding tiles) */
+[data-theme="D"] .art-frame { background: transparent; border-style: solid; border-color: transparent; box-shadow: none; border-width: 10cqmin; border-image: url("../img/deer-black.svg") 10.44% 11.88% 9.63% 10.93% / 10cqmin / 0 stretch; max-width: 94cqmin; max-height: 94cqmin; filter: drop-shadow(0 14px 24px rgba(0,0,0,.55)); }
+[data-theme="D"] .art-frame .art-img { box-shadow: inset 0 0 0 1px rgba(0,0,0,.45); }
+[data-theme="D"] .art-ornate { display: none; }
 /* Style D — real walnut wood photo (matches design_base): banners + framed wall */
 [data-theme="D"] .site-nav,
 [data-theme="D"] .banner,
@@ -814,9 +815,10 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 .art-modal .am-frame .am-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
 /* Style D — ornate carved frame overlay for the detail modal */
 .am-ornate { display: none; }
-[data-theme="D"] .art-modal .am-frame { background: transparent; border: 0; box-shadow: none; position: relative; aspect-ratio: 18426 / 21301; width: 78%; }
-[data-theme="D"] .art-modal .am-frame .am-img { position: absolute; top: 7.4%; bottom: 7.4%; left: 9.1%; right: 9.1%; aspect-ratio: auto !important; box-shadow: inset 0 0 0 1px rgba(0,0,0,.45); }
-[data-theme="D"] .art-modal .am-ornate { display: block; position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; filter: drop-shadow(0 16px 26px rgba(0,0,0,.55)); }
+/* Style D — detail-modal ornate frame via border-image (adapts to picture ratio) */
+[data-theme="D"] .art-modal .am-frame { background: transparent; border-style: solid; border-color: transparent; box-shadow: none; border-width: clamp(22px, 5.6vw, 50px); border-image: url("../img/deer-black.svg") 10.44% 11.88% 9.63% 10.93% / clamp(22px, 5.6vw, 50px) / 0 stretch; width: min(82%, 330px); filter: drop-shadow(0 16px 26px rgba(0,0,0,.55)); }
+[data-theme="D"] .art-modal .am-frame .am-img { position: static; inset: auto; width: 100%; height: auto; aspect-ratio: auto; box-shadow: inset 0 0 0 1px rgba(0,0,0,.45); }
+[data-theme="D"] .art-modal .am-ornate { display: none; }
 .art-modal .am-body { padding: 30px 30px 28px; display: flex; flex-direction: column; gap: 12px; }
 .art-modal .am-sub { font-family: var(--font-cond); font-size: 11px; letter-spacing: .16em; text-transform: uppercase; color: var(--coral); }
 .art-modal .am-title { font-family: var(--font-marker); font-weight: 600; font-size: 28px; line-height: 1.05; color: var(--ink); margin: 0; }
