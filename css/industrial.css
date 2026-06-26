@@ -774,7 +774,8 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 [data-theme="D"] .site-nav,
 [data-theme="D"] .banner,
 [data-theme="D"] .page-hero,
-[data-theme="D"] .post-banner .chip-inner {
+[data-theme="D"] .post-banner .chip-inner,
+[data-theme="D"] .rel-chip {
   background-color: #1c130b;
   background-image: linear-gradient(180deg, rgba(22,15,9,.40), rgba(22,15,9,.5)), url("../img/wood-plank.jpg");
   background-size: cover;
