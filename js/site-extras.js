@@ -136,7 +136,7 @@
     var c = read();
     if (!c.length) {
       listEl.innerHTML = '<div class="mc-empty"><span class="ast">✦</span><p>Your basket is empty.</p>'
-        + '<a class="mc-btn primary" href="gallery.html">Browse the gallery →</a></div>';
+        + '<a class="mc-btn primary" href="Gallery.dc.html">Browse the gallery →</a></div>';
       footEl.innerHTML = ''; updateBadges(); return;
     }
     listEl.innerHTML = c.map(function (it, i) {
@@ -151,7 +151,7 @@
     var sub = c.reduce(function (a, i) { return a + (i.price || 0) * (i.qty || 1); }, 0);
     footEl.innerHTML = '<div class="mc-foot"><div class="mc-sub">Subtotal<b>' + money(sub) + '</b></div>'
       + '<div class="mc-acts"><button class="mc-btn ghost" type="button" data-keep>Keep shopping</button>'
-      + '<a class="mc-btn primary" href="checkout.html">Go to checkout →</a></div></div>';
+      + '<a class="mc-btn primary" href="Checkout.dc.html">Go to checkout →</a></div></div>';
     footEl.querySelector('[data-keep]').addEventListener('click', close);
     updateBadges();
   }
@@ -293,11 +293,11 @@
     var first = String(u.name).split(' ')[0];
     document.querySelectorAll('.nav-auth').forEach(function (na) {
       if (na.querySelector('.nav-user')) return; // dashboard already has it
-      var login = na.querySelector('a.btn.ghost[href="login.html"]');
-      var signup = na.querySelector('a.btn.primary[href="signup.html"]');
+      var login = na.querySelector('a.btn.ghost[href="Login.dc.html"]');
+      var signup = na.querySelector('a.btn.primary[href="Signup.dc.html"]');
       if (!login && !signup) return;
       var chip = document.createElement('a');
-      chip.className = 'nav-user'; chip.href = 'dashboard.html'; chip.style.textDecoration = 'none';
+      chip.className = 'nav-user'; chip.href = 'Dashboard.dc.html'; chip.style.textDecoration = 'none';
       chip.innerHTML = '<img src="img/ProfilePic.jpg" alt=""><span class="nm">' + first.replace(/[<>&]/g, '') + '</span>';
       var out = document.createElement('a');
       out.className = 'btn ghost'; out.href = 'index.html'; out.textContent = 'Log out';
@@ -306,8 +306,8 @@
       if (login) { login.parentNode.insertBefore(out, login); login.remove(); }
     });
     // mobile sheet
-    document.querySelectorAll('.nav-sheet a[href="login.html"]').forEach(function (a) {
-      a.textContent = 'My dashboard'; a.href = 'dashboard.html';
+    document.querySelectorAll('.nav-sheet a[href="Login.dc.html"]').forEach(function (a) {
+      a.textContent = 'My dashboard'; a.href = 'Dashboard.dc.html';
     });
   }
 

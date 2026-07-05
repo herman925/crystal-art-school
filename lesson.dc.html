@@ -3,64 +3,80 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600;6..96,700&family=Oswald:wght@300;400;500;600&family=Archivo:wght@400;500;600;700&family=Saira+Stencil+One&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/industrial.css">
 <script src="js/site-extras.js"></script>
-</head>
-<body>
-
-
-<div class="cas-root" data-theme="A">
+</helmet>
+<div class="cas-root" data-theme="D">
 <div class="glow-layer" aria-hidden="true"></div>
 
 <nav class="site-nav" aria-label="Main">
-  <div class="inner">
-    <a class="nav-brand" href="index.html">
-      <img src="img/ProfilePic.jpg" alt="Crystal Lau">
-      <span class="name">Crystal's Art School</span>
-    </a>
-    <ul class="nav-links">
-      <li><a href="index.html">Home</a></li>
-      <li><a href="lessons.html" class="active">Lessons</a></li>
-      <li><a href="gallery.html">Gallery</a></li>
-      <li><a href="blog.html">Blog</a></li>
-      <li><a href="about.html">About</a></li>
-    </ul>
-    <div class="nav-auth">
-      <div class="theme-switch">
-        <span class="lbl">Style</span>
-        <div class="seg">
-          <button type="button" data-theme="A">A</button>
-          <button type="button" data-theme="B">B</button>
-          <button type="button" data-theme="C">C</button>
-          <button type="button" data-theme="D">D</button>
-        </div>
-      </div>
-      <a class="cart-btn" href="checkout.html" aria-label="Shopping cart">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M2 3h3.2l2.5 12.2a1.5 1.5 0 0 0 1.5 1.2h9a1.5 1.5 0 0 0 1.5-1.2L21.5 7H6.5"></path></svg>
-        <span class="cart-badge">0</span>
+  <div class="nav-top">
+    <div class="inner">
+      <a class="nav-brand" href="index.html">
+        <img src="img/ProfilePic.jpg" alt="Crystal Lau">
+        <span class="name">Crystal's Art School</span>
       </a>
-      <a class="btn ghost" href="login.html">Log in</a>
-      <a class="btn primary" href="signup.html">Sign up</a>
-      <button class="nav-burger" type="button" aria-label="Menu" aria-expanded="false">☰</button>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="Lessons.dc.html" class="active">Courses</a></li>
+        <li><a href="Gallery.dc.html">Gallery</a></li>
+        <li><a href="Blog.dc.html">Blog</a></li>
+        <li><a href="About.dc.html">About</a></li>
+        <li><a href="lesson.dc.html">Free video</a></li>
+        <li><a href="Blog.dc.html?tag=Tools">Tools</a></li>
+        <li><a href="About.dc.html#faq">FAQ</a></li>
+      </ul>
+      <div class="nav-auth">
+        <a class="cart-btn" href="Checkout.dc.html" aria-label="Shopping cart">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M2 3h3.2l2.5 12.2a1.5 1.5 0 0 0 1.5 1.2h9a1.5 1.5 0 0 0 1.5-1.2L21.5 7H6.5"></path></svg>
+          <span class="cart-badge">0</span>
+        </a>
+        <a class="btn ghost" href="Login.dc.html">Log in</a>
+        <a class="btn primary" href="Signup.dc.html">Sign up</a>
+        <button class="nav-burger" type="button" aria-label="Menu" aria-expanded="false">☰</button>
+      </div>
+    </div>
+  </div>
+  <div class="nav-cats">
+    <div class="inner">
+      <ul class="nav-cat-links">
+        <li><a href="Lessons.dc.html?cat=Watercolour">Watercolour</a></li>
+        <li><a href="Lessons.dc.html?cat=Oil">Oils</a></li>
+        <li><a href="Lessons.dc.html?cat=Drawing">Drawing</a></li>
+        <li><a href="Lessons.dc.html?cat=Painting">Painting</a></li>
+        <li><a href="Lessons.dc.html?cat=Beginners">Beginners</a></li>
+      </ul>
     </div>
   </div>
   <div class="nav-sheet">
     <a href="index.html">Home</a>
-    <a href="lessons.html">Lessons</a>
-    <a href="gallery.html">Gallery</a>
-    <a href="blog.html">Blog</a>
-    <a href="about.html">About</a>
-    <a href="login.html">Log in / Sign up</a>
+    <a href="Lessons.dc.html">Courses</a>
+    <a href="Gallery.dc.html">Gallery</a>
+    <a href="Blog.dc.html">Blog</a>
+    <a href="About.dc.html">About</a>
+    <a href="lesson.dc.html">Free video</a>
+    <a href="Blog.dc.html?tag=Tools">Tools</a>
+    <a href="About.dc.html#faq">FAQ</a>
+    <a href="Lessons.dc.html?cat=Watercolour">Watercolour</a>
+    <a href="Lessons.dc.html?cat=Oil">Oils</a>
+    <a href="Lessons.dc.html?cat=Drawing">Drawing</a>
+    <a href="Lessons.dc.html?cat=Painting">Painting</a>
+    <a href="Lessons.dc.html?cat=Beginners">Beginners</a>
+    <a href="Login.dc.html">Log in / Sign up</a>
   </div>
 </nav>
 
 <header class="page-hero">
   <div class="container">
-    <div class="crumbs"><a href="lessons.html">Lessons</a> <span aria-hidden="true">→</span> Materials &amp; setting up</div>
+    <div class="crumbs"><a href="Lessons.dc.html">Courses</a> <span aria-hidden="true">→</span> Materials &amp; setting up</div>
     <span class="free-pill">Free lesson</span>
     <h1 class="marker-title" style="font-size:clamp(30px,4vw,54px);margin-top:12px;color:var(--banner-ink);">Materials &amp; setting up</h1>
     <p class="lead" style="color:var(--banner-ink);opacity:.85;">Everything you need before your first wash — paper, brushes, a small honest palette, and a workspace that won't fight you. Watch it all free; it's exactly how the paid courses feel.</p>
@@ -110,8 +126,8 @@
           <div class="c3">completed · 6 of 6 units</div>
         </div>
         <div class="fc-btns">
-          <a class="btn primary big" href="lessons.html">Browse all courses <span class="arr" aria-hidden="true">→</span></a>
-          <a class="btn teal" href="about.html#contact">Join the community</a>
+          <a class="btn primary big" href="Lessons.dc.html">Browse all courses <span class="arr" aria-hidden="true">→</span></a>
+          <a class="btn teal" href="About.dc.html#contact">Join the community</a>
           <button class="btn ghost" id="watch-again" type="button">Watch again</button>
         </div>
       </div>
@@ -203,7 +219,7 @@
       </div>
 
       <div class="curr-card">
-        <div class="ch">Curriculum</div>
+        <div class="ch">Lessons</div>
         <button class="unit-row" data-unit="0" type="button"><span class="st">1</span><span class="ut">Welcome &amp; what you'll need <span class="now" hidden>· now playing</span></span><span class="ud">4:12</span></button>
         <button class="unit-row" data-unit="1" type="button"><span class="st">2</span><span class="ut">Choosing paper — weight, texture, sizing <span class="now" hidden>· now playing</span></span><span class="ud">7:48</span></button>
         <button class="unit-row" data-unit="2" type="button"><span class="st">3</span><span class="ut">Brushes that matter <span class="now" hidden>· now playing</span></span><span class="ud">8:05</span></button>
@@ -227,7 +243,7 @@
         <h2 class="marker-title" style="font-size:clamp(22px,2.4vw,32px);">Next up: Loading a brush properly</h2>
         <p style="margin:0;max-width:54ch;">The natural follow-on — everything you just set up, put to work. Watercolour · beginner · £29.</p>
       </div>
-      <a class="btn-big" href="lessons.html" style="flex:none;">View the course →</a>
+      <a class="btn-big" href="Lessons.dc.html" style="flex:none;">View the course →</a>
     </div>
   </section>
 </main>
@@ -245,21 +261,21 @@
       </div>
       <div>
         <h4>Learn</h4>
-        <a href="lessons.html">All lessons</a>
-        <a href="lessons.html#membership">Membership</a>
-        <a href="lesson.html">Free intro lesson</a>
+        <a href="Lessons.dc.html">All lessons</a>
+        <a href="Lessons.dc.html#membership">Membership</a>
+        <a href="lesson.dc.html">Free intro lesson</a>
       </div>
       <div>
         <h4>Explore</h4>
-        <a href="gallery.html">Gallery</a>
-        <a href="blog.html">Blog</a>
-        <a href="about.html">About</a>
+        <a href="Gallery.dc.html">Gallery</a>
+        <a href="Blog.dc.html">Blog</a>
+        <a href="About.dc.html">About</a>
       </div>
       <div>
         <h4>Contact</h4>
-        <a href="about.html#contact">hello@crystalsartschool.com</a>
-        <a href="about.html#contact">Discord · Instagram</a>
-        <a href="about.html#terms">Terms &amp; privacy</a>
+        <a href="About.dc.html#contact">hello@crystalsartschool.com</a>
+        <a href="About.dc.html#contact">Discord · Instagram</a>
+        <a href="About.dc.html#terms">Terms &amp; privacy</a>
       </div>
     </div>
     <div class="footer-meta">
@@ -270,8 +286,149 @@
 </footer>
 
 </div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;defaultTheme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;A&quot;,&quot;B&quot;,&quot;C&quot;,&quot;D&quot;],&quot;default&quot;:&quot;A&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  componentDidMount() {
+    const root = document.querySelector('.cas-root');
+    if (!root) return;
 
+    /* theme switch */
+    const THEME_KEY = 'cas-theme';
+    const valid = ['A','B','C','D'];
+    const applyTheme = (t) => {
+      root.setAttribute('data-theme', t);
+      document.querySelectorAll('.theme-switch button').forEach(b => b.classList.toggle('active', b.dataset.theme === t));
+    };
+    let savedTheme = (valid.includes(this.props.defaultTheme) ? this.props.defaultTheme : 'A');
+    try { const s = localStorage.getItem(THEME_KEY); if (s && valid.includes(s)) savedTheme = s; } catch (e) {}
+    applyTheme('D');
+    document.querySelectorAll('.theme-switch button').forEach(b => {
+      b.addEventListener('click', () => { const t = b.dataset.theme; applyTheme(t); try { localStorage.setItem(THEME_KEY, t); } catch (e) {} });
+    });
 
-<script src="js/lesson.js?v=4" defer></script>
+    /* mobile nav sheet */
+    const burger = document.querySelector('.nav-burger');
+    const sheet = document.querySelector('.nav-sheet');
+    if (burger && sheet) {
+      burger.addEventListener('click', () => { const open = sheet.classList.toggle('open'); burger.setAttribute('aria-expanded', open ? 'true' : 'false'); });
+      sheet.addEventListener('click', (e) => { if (e.target.tagName === 'A') sheet.classList.remove('open'); });
+    }
+    document.querySelectorAll('.cart-badge').forEach(b => { try { const n = JSON.parse(localStorage.getItem('cas-cart') || '[]').reduce((a, i) => a + i.qty, 0); b.textContent = n; b.style.display = n > 0 ? 'grid' : 'none'; } catch (e) {} });
+
+    /* ---- simulated lesson player ---- */
+    const UNITS = [
+      { title: "Welcome & what you'll need", dur: 252, img: 'img/cover3.jpg' },
+      { title: 'Choosing paper', dur: 468, img: 'img/Sketchbook.jpg' },
+      { title: 'Brushes that matter', dur: 485, img: 'img/BrushA.jpg' },
+      { title: 'A starter palette of 8 colours', dur: 572, img: 'img/Postercolor.jpg' },
+      { title: 'Workspace & water', dur: 381, img: 'img/BrushB.jpg' },
+      { title: 'Your first wash', dur: 724, img: 'img/Liquidwatercolor.jpg' }
+    ];
+    const SPEED = 12;
+    const KEY = 'cas-free-lesson-progress';
+
+    let state = { unit: 0, t: 0, done: [false, false, false, false, false, false] };
+    try { const sv = JSON.parse(localStorage.getItem(KEY) || 'null'); if (sv && sv.done && sv.done.length === 6) state = sv; } catch (e) {}
+    const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} };
+
+    const $ = (id) => document.getElementById(id);
+    const stage = $('stage'), poster = $('stage-poster'), flag = $('unit-flag'), veil = $('stage-veil'), playBtn = $('play-btn');
+    const tCur = $('t-cur'), tDur = $('t-dur'), seek = $('seek'), seekFill = $('seek-fill'), seekKnob = $('seek-knob');
+    const toast = $('done-toast'), completeBtn = $('complete-btn'), doneTag = $('done-tag'), finishCard = $('finish-card');
+    const pfill = $('pfill'), doneCount = $('done-count');
+    const rows = document.querySelectorAll('.unit-row'), notes = document.querySelectorAll('.unit-notes');
+
+    let playing = false, raf = null, lastTick = 0;
+    const fmt = (s) => { s = Math.max(0, Math.round(s)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
+    const doneTotal = () => state.done.reduce((n, d) => n + (d ? 1 : 0), 0);
+
+    const renderProgress = () => {
+      const n = doneTotal();
+      doneCount.textContent = n;
+      pfill.style.width = (n / 6 * 100) + '%';
+      rows.forEach((row, i) => {
+        row.classList.toggle('done', state.done[i]);
+        row.classList.toggle('current', i === state.unit);
+        row.querySelector('.st').textContent = state.done[i] ? '✓' : (i + 1);
+        row.querySelector('.now').hidden = i !== state.unit;
+      });
+      doneTag.hidden = !state.done[state.unit];
+      completeBtn.innerHTML = state.unit < 5 ? 'Mark complete &amp; continue <span class="arr" aria-hidden="true">→</span>' : 'Mark complete &amp; finish <span class="arr" aria-hidden="true">→</span>';
+      if (n === 6) finishCard.classList.add('show'); else finishCard.classList.remove('show');
+    };
+
+    const renderTime = () => {
+      const u = UNITS[state.unit];
+      const pct = Math.min(100, state.t / u.dur * 100);
+      tCur.textContent = fmt(state.t);
+      seekFill.style.width = pct + '%';
+      seekKnob.style.left = pct + '%';
+      seek.setAttribute('aria-valuenow', Math.round(pct));
+    };
+
+    const setPlaying = (on) => {
+      playing = on;
+      stage.classList.toggle('is-playing', on);
+      playBtn.textContent = on ? '❚❚' : '▶';
+      playBtn.setAttribute('aria-label', on ? 'Pause' : 'Play');
+      if (on) { lastTick = performance.now(); if (!raf) raf = requestAnimationFrame(tick); }
+    };
+
+    const loadUnit = (i, autoplay) => {
+      state.unit = Math.max(0, Math.min(5, i));
+      state.t = 0;
+      const u = UNITS[state.unit];
+      poster.src = u.img;
+      poster.alt = 'Unit ' + (state.unit + 1) + ' — ' + u.title;
+      flag.textContent = 'Unit ' + (state.unit + 1) + ' — ' + u.title;
+      tDur.textContent = fmt(u.dur);
+      notes.forEach(a => a.classList.toggle('active', parseInt(a.dataset.unit, 10) === state.unit));
+      setPlaying(!!autoplay);
+      renderTime();
+      renderProgress();
+      save();
+    };
+
+    const markDone = (viaVideo) => {
+      if (!state.done[state.unit]) {
+        state.done[state.unit] = true;
+        save();
+        if (viaVideo) { toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 1300); }
+      }
+      renderProgress();
+      if (state.unit < 5) {
+        setTimeout(() => loadUnit(state.unit + 1, viaVideo), viaVideo ? 1450 : 250);
+      } else {
+        setPlaying(false); save(); renderProgress();
+        if (finishCard.scrollIntoView) try { finishCard.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) {}
+      }
+    };
+
+    const tick = (now) => {
+      raf = null;
+      if (!playing) return;
+      const dt = (now - lastTick) / 1000 * SPEED;
+      lastTick = now;
+      state.t += dt;
+      const u = UNITS[state.unit];
+      if (state.t >= u.dur) { state.t = u.dur; renderTime(); setPlaying(false); markDone(true); return; }
+      renderTime();
+      raf = requestAnimationFrame(tick);
+    };
+
+    veil.addEventListener('click', () => setPlaying(true));
+    playBtn.addEventListener('click', () => setPlaying(!playing));
+    const seekTo = (e) => { const r = seek.getBoundingClientRect(); const k = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)); state.t = UNITS[state.unit].dur * k; renderTime(); save(); };
+    seek.addEventListener('click', seekTo);
+    rows.forEach(row => row.addEventListener('click', () => loadUnit(parseInt(row.dataset.unit, 10), true)));
+    completeBtn.addEventListener('click', () => markDone(false));
+    $('reset-btn').addEventListener('click', () => { state = { unit: 0, t: 0, done: [false, false, false, false, false, false] }; save(); loadUnit(0, false); });
+    $('watch-again').addEventListener('click', () => { state = { unit: 0, t: 0, done: [false, false, false, false, false, false] }; save(); loadUnit(0, true); try { stage.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) {} });
+
+    loadUnit(state.unit, false);
+  }
+}
+</script>
 </body>
 </html>
