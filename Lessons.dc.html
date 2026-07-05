@@ -12,7 +12,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600;6..96,700&family=Oswald:wght@300;400;500;600&family=Archivo:wght@400;500;600;700&family=Saira+Stencil+One&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/industrial.css">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <script src="js/site-extras.js"></script>
+<script src="js/motion.js"></script>
 </helmet>
 <div class="cas-root" data-theme="D">
 <div class="glow-layer" aria-hidden="true"></div>
@@ -28,6 +31,7 @@
         <li><a href="index.html">Home</a></li>
         <li><a href="Lessons.dc.html" class="active">Courses</a></li>
         <li><a href="Gallery.dc.html">Gallery</a></li>
+        <li><a href="Showcase.dc.html">Showcase</a></li>
         <li><a href="Blog.dc.html">Blog</a></li>
         <li><a href="About.dc.html">About</a></li>
         <li><a href="lesson.dc.html">Free video</a></li>
@@ -51,7 +55,7 @@
         <li><a href="Lessons.dc.html?cat=Watercolour">Watercolour</a></li>
         <li><a href="Lessons.dc.html?cat=Oil">Oils</a></li>
         <li><a href="Lessons.dc.html?cat=Drawing">Drawing</a></li>
-        <li><a href="Lessons.dc.html?cat=Painting">Painting</a></li>
+        <li><a href="Lessons.dc.html?cat=Ink">Ink</a></li>
         <li><a href="Lessons.dc.html?cat=Beginners">Beginners</a></li>
       </ul>
     </div>
@@ -60,6 +64,7 @@
     <a href="index.html">Home</a>
     <a href="Lessons.dc.html">Courses</a>
     <a href="Gallery.dc.html">Gallery</a>
+    <a href="Showcase.dc.html">Showcase</a>
     <a href="Blog.dc.html">Blog</a>
     <a href="About.dc.html">About</a>
     <a href="lesson.dc.html">Free video</a>
@@ -68,7 +73,7 @@
     <a href="Lessons.dc.html?cat=Watercolour">Watercolour</a>
     <a href="Lessons.dc.html?cat=Oil">Oils</a>
     <a href="Lessons.dc.html?cat=Drawing">Drawing</a>
-    <a href="Lessons.dc.html?cat=Painting">Painting</a>
+    <a href="Lessons.dc.html?cat=Ink">Ink</a>
     <a href="Lessons.dc.html?cat=Beginners">Beginners</a>
     <a href="Login.dc.html">Log in / Sign up</a>
   </div>
@@ -174,7 +179,7 @@
               <div class="scrim"><div class="t">Materials &amp; setting up</div></div>
               <div class="actions">
                 <a class="cover-btn primary" href="lesson.dc.html">Start free</a>
-                <a class="cover-btn secondary" href="lesson.dc.html">View course <span class="arr" aria-hidden="true">→</span></a>
+                <a class="cover-btn secondary" href="course.dc.html?id=materials-setting-up">View course <span class="arr" aria-hidden="true">→</span></a>
               </div>
             </div>
             <div class="meta"><span class="level">Watercolour · beginner · 50 min</span><span class="price free">Free</span></div>
@@ -187,7 +192,7 @@
               <div class="scrim"><div class="t">Light &amp; shadow on the head</div></div>
               <div class="actions">
                 <button class="cover-btn primary" type="button" data-add-to-cart data-tiered><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M2 3h3.2l2.5 12.2a1.5 1.5 0 0 0 1.5 1.2h9a1.5 1.5 0 0 0 1.5-1.2L21.5 7H6.5"></path></svg> Add to cart</button>
-                <a class="cover-btn secondary" href="lesson.dc.html">View course <span class="arr" aria-hidden="true">→</span></a>
+                <a class="cover-btn secondary" href="course.dc.html?id=light-shadow-head">View course <span class="arr" aria-hidden="true">→</span></a>
               </div>
             </div>
             <div class="meta"><span class="level">Oils · intermediate · 2h 20m</span><span class="price"><span class="was">£52</span>£42</span></div>
@@ -199,7 +204,7 @@
               <div class="scrim"><div class="t">Blocking in large shapes</div></div>
               <div class="actions">
                 <button class="cover-btn primary" type="button" data-add-to-cart data-tiered><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M2 3h3.2l2.5 12.2a1.5 1.5 0 0 0 1.5 1.2h9a1.5 1.5 0 0 0 1.5-1.2L21.5 7H6.5"></path></svg> Add to cart</button>
-                <a class="cover-btn secondary" href="lesson.dc.html">View course <span class="arr" aria-hidden="true">→</span></a>
+                <a class="cover-btn secondary" href="course.dc.html?id=blocking-large-shapes">View course <span class="arr" aria-hidden="true">→</span></a>
               </div>
             </div>
             <div class="meta"><span class="level">Oils · beginner · 1h 30m</span><span class="price">£36</span></div>
@@ -212,7 +217,7 @@
               <div class="scrim"><div class="t">Mixing greens from scratch</div></div>
               <div class="actions">
                 <button class="cover-btn primary" type="button" data-add-to-cart data-tiered><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M2 3h3.2l2.5 12.2a1.5 1.5 0 0 0 1.5 1.2h9a1.5 1.5 0 0 0 1.5-1.2L21.5 7H6.5"></path></svg> Add to cart</button>
-                <a class="cover-btn secondary" href="lesson.dc.html">View course <span class="arr" aria-hidden="true">→</span></a>
+                <a class="cover-btn secondary" href="course.dc.html?id=mixing-greens">View course <span class="arr" aria-hidden="true">→</span></a>
               </div>
             </div>
             <div class="meta"><span class="level">Watercolour · all levels · 1h 10m</span><span class="price"><span class="was">£36</span>£29</span></div>
@@ -224,7 +229,7 @@
               <div class="scrim"><div class="t">Soft edges, clean paint</div></div>
               <div class="actions">
                 <button class="cover-btn primary" type="button" data-add-to-cart data-tiered><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M2 3h3.2l2.5 12.2a1.5 1.5 0 0 0 1.5 1.2h9a1.5 1.5 0 0 0 1.5-1.2L21.5 7H6.5"></path></svg> Add to cart</button>
-                <a class="cover-btn secondary" href="lesson.dc.html">View course <span class="arr" aria-hidden="true">→</span></a>
+                <a class="cover-btn secondary" href="course.dc.html?id=soft-edges-clean-paint">View course <span class="arr" aria-hidden="true">→</span></a>
               </div>
             </div>
             <div class="meta"><span class="level">Drawing · beginner · 45 min</span><span class="price">£24</span></div>
@@ -236,7 +241,7 @@
               <div class="scrim"><div class="t">Loading a brush properly</div></div>
               <div class="actions">
                 <button class="cover-btn primary" type="button" data-add-to-cart data-tiered><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M2 3h3.2l2.5 12.2a1.5 1.5 0 0 0 1.5 1.2h9a1.5 1.5 0 0 0 1.5-1.2L21.5 7H6.5"></path></svg> Add to cart</button>
-                <a class="cover-btn secondary" href="lesson.dc.html">View course <span class="arr" aria-hidden="true">→</span></a>
+                <a class="cover-btn secondary" href="course.dc.html?id=loading-a-brush">View course <span class="arr" aria-hidden="true">→</span></a>
               </div>
             </div>
             <div class="meta"><span class="level">Watercolour · beginner · 40 min</span><span class="price">£29</span></div>
@@ -248,7 +253,7 @@
               <div class="scrim"><div class="t">Warm vs cool greys</div></div>
               <div class="actions">
                 <button class="cover-btn primary" type="button" data-add-to-cart data-tiered><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M2 3h3.2l2.5 12.2a1.5 1.5 0 0 0 1.5 1.2h9a1.5 1.5 0 0 0 1.5-1.2L21.5 7H6.5"></path></svg> Add to cart</button>
-                <a class="cover-btn secondary" href="lesson.dc.html">View course <span class="arr" aria-hidden="true">→</span></a>
+                <a class="cover-btn secondary" href="course.dc.html?id=warm-cool-greys">View course <span class="arr" aria-hidden="true">→</span></a>
               </div>
             </div>
             <div class="meta"><span class="level">Acrylic · intermediate · 1h 25m</span><span class="price">£38</span></div>
@@ -261,7 +266,7 @@
               <div class="scrim"><div class="t">Erasing as a drawing tool</div></div>
               <div class="actions">
                 <button class="cover-btn primary" type="button" data-add-to-cart data-tiered><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M2 3h3.2l2.5 12.2a1.5 1.5 0 0 0 1.5 1.2h9a1.5 1.5 0 0 0 1.5-1.2L21.5 7H6.5"></path></svg> Add to cart</button>
-                <a class="cover-btn secondary" href="lesson.dc.html">View course <span class="arr" aria-hidden="true">→</span></a>
+                <a class="cover-btn secondary" href="course.dc.html?id=erasing-drawing-tool">View course <span class="arr" aria-hidden="true">→</span></a>
               </div>
             </div>
             <div class="meta"><span class="level">Drawing · all levels · 55 min</span><span class="price"><span class="was">£30</span>£24</span></div>
@@ -273,7 +278,7 @@
               <div class="scrim"><div class="t">Brush care &amp; studio habits</div></div>
               <div class="actions">
                 <button class="cover-btn primary" type="button" data-add-to-cart data-tiered><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M2 3h3.2l2.5 12.2a1.5 1.5 0 0 0 1.5 1.2h9a1.5 1.5 0 0 0 1.5-1.2L21.5 7H6.5"></path></svg> Add to cart</button>
-                <a class="cover-btn secondary" href="lesson.dc.html">View course <span class="arr" aria-hidden="true">→</span></a>
+                <a class="cover-btn secondary" href="course.dc.html?id=brush-care-habits">View course <span class="arr" aria-hidden="true">→</span></a>
               </div>
             </div>
             <div class="meta"><span class="level">Acrylic · beginner · 35 min</span><span class="price">£19</span></div>
@@ -343,6 +348,7 @@
       <div>
         <h4>Explore</h4>
         <a href="Gallery.dc.html">Gallery</a>
+        <a href="Showcase.dc.html">Student showcase</a>
         <a href="Blog.dc.html">Blog</a>
         <a href="About.dc.html">About</a>
       </div>
@@ -453,8 +459,16 @@ class Component extends DCLogic {
       maxPrice = 999; priceSlider.value = priceSlider.max; priceVal.textContent = 'Any price'; setPct();
       applyFilters();
     });
-    /* deep-link: ?cat=oils etc. */
-    try { const qp = new URLSearchParams(location.search).get('cat'); if (qp) { const btn = document.querySelector('.fgroup[data-group="medium"] .fopt[data-val="' + qp.toLowerCase() + '"]'); if (btn) btn.click(); } } catch (e) {}
+    /* deep-link: ?cat= from the nav category row */
+    try {
+      const qp = (new URLSearchParams(location.search).get('cat') || '').toLowerCase();
+      if (qp) {
+        const CATMAP = { watercolour: ['medium', 'watercolour'], oil: ['medium', 'oil'], oils: ['medium', 'oil'], drawing: ['medium', 'pencils'], pencils: ['medium', 'pencils'], pastel: ['medium', 'pastel'], ink: ['medium', 'ink'], beginners: ['difficulty', 'beginner'], beginner: ['difficulty', 'beginner'] };
+        const m = CATMAP[qp] || ['medium', qp];
+        const btn = document.querySelector('.fgroup[data-group="' + m[0] + '"] .fopt[data-val="' + m[1] + '"]');
+        if (btn) btn.click();
+      }
+    } catch (e) {}
     applyFilters();
 
     /* price slider (dynamic range) */

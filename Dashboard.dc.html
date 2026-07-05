@@ -12,7 +12,10 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600;6..96,700&family=Oswald:wght@300;400;500;600&family=Archivo:wght@400;500;600;700&family=Saira+Stencil+One&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/industrial.css">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <script src="js/site-extras.js"></script>
+<script src="js/motion.js"></script>
 </helmet>
 <div class="cas-root" data-theme="D">
 <div class="glow-layer" aria-hidden="true"></div>
@@ -28,6 +31,7 @@
         <li><a href="index.html">Home</a></li>
         <li><a href="Lessons.dc.html">Courses</a></li>
         <li><a href="Gallery.dc.html">Gallery</a></li>
+        <li><a href="Showcase.dc.html">Showcase</a></li>
         <li><a href="Blog.dc.html">Blog</a></li>
         <li><a href="About.dc.html">About</a></li>
         <li><a href="lesson.dc.html">Free video</a></li>
@@ -51,7 +55,7 @@
         <li><a href="Lessons.dc.html?cat=Watercolour">Watercolour</a></li>
         <li><a href="Lessons.dc.html?cat=Oil">Oils</a></li>
         <li><a href="Lessons.dc.html?cat=Drawing">Drawing</a></li>
-        <li><a href="Lessons.dc.html?cat=Painting">Painting</a></li>
+        <li><a href="Lessons.dc.html?cat=Ink">Ink</a></li>
         <li><a href="Lessons.dc.html?cat=Beginners">Beginners</a></li>
       </ul>
     </div>
@@ -60,6 +64,7 @@
     <a href="index.html">Home</a>
     <a href="Lessons.dc.html">Courses</a>
     <a href="Gallery.dc.html">Gallery</a>
+    <a href="Showcase.dc.html">Showcase</a>
     <a href="Blog.dc.html">Blog</a>
     <a href="About.dc.html">About</a>
     <a href="lesson.dc.html">Free video</a>
@@ -68,7 +73,7 @@
     <a href="Lessons.dc.html?cat=Watercolour">Watercolour</a>
     <a href="Lessons.dc.html?cat=Oil">Oils</a>
     <a href="Lessons.dc.html?cat=Drawing">Drawing</a>
-    <a href="Lessons.dc.html?cat=Painting">Painting</a>
+    <a href="Lessons.dc.html?cat=Ink">Ink</a>
     <a href="Lessons.dc.html?cat=Beginners">Beginners</a>
     <a href="Login.dc.html">Log in / Sign up</a>
   </div>
@@ -194,6 +199,7 @@
       <div>
         <h4>Explore</h4>
         <a href="Gallery.dc.html">Gallery</a>
+        <a href="Showcase.dc.html">Student showcase</a>
         <a href="Blog.dc.html">Blog</a>
         <a href="About.dc.html">About</a>
       </div>
@@ -246,27 +252,33 @@ class Component extends DCLogic {
     const burger = document.querySelector('.nav-burger'), sheet = document.querySelector('.nav-sheet');
     if (burger && sheet) burger.addEventListener('click', () => { const open = sheet.classList.toggle('open'); burger.setAttribute('aria-expanded', open ? 'true' : 'false'); });
 
-    /* ---- user ---- */
-    let user = {};
-    try { user = JSON.parse(localStorage.getItem('cas-user') || '{}') || {}; } catch (e) { user = {}; }
+    /* ---- user (gate: no account -> log in first) ---- */
+    let user = null;
+    try { user = JSON.parse(localStorage.getItem('cas-user') || 'null'); } catch (e) { user = null; }
+    if (!user || !(user.name || user.email)) { window.location.replace('Login.dc.html?next=Dashboard.dc.html'); return; }
     const name = user.name || 'Friend';
     const first = String(name).split(' ')[0];
     const email = user.email || (first.toLowerCase() + '@example.com');
-    $('nav-user-name').textContent = first;
-    $('dash-greeting').textContent = 'Welcome back, ' + first + '.';
+    const nun = $('nav-user-name'); if (nun) nun.textContent = first;
+    const isNew = !!user.newUser;
+    $('dash-greeting').textContent = (isNew ? 'Welcome, ' : 'Welcome back, ') + first + '.';
+    $('dash-sub').textContent = isNew ? 'Your bench is set up and waiting — here\'s how to start.' : 'Pick up where you left off — your bench is just as you left it.';
     $('dash-plan').textContent = (user.plan || 'Wanderer') + ' member';
 
-    /* ---- enrolled courses (seed if empty) ---- */
+    /* ---- enrolled courses ----
+       brand-new accounts start EMPTY (onboarding state);
+       returning demo users get seeded sample data so the design shows populated */
     let enrolled;
     try { enrolled = JSON.parse(localStorage.getItem('cas-enrolled') || 'null'); } catch (e) { enrolled = null; }
-    if (!enrolled || !enrolled.length) {
-      enrolled = [
+    if (!enrolled) {
+      enrolled = isNew ? [] : [
         { img: 'cover3.jpg', title: 'Materials & setting up', tier: 'Apprentice', units: 6, free: true },
         { img: 'cover1.jpg', title: 'Light & shadow on the head', tier: 'Fellow', units: 8, done: 3 },
         { img: 'Sketchbook.jpg', title: 'Fill a sketchbook in 30 days', tier: 'Apprentice', units: 10, done: 10 }
       ];
       try { localStorage.setItem('cas-enrolled', JSON.stringify(enrolled)); } catch (e) {}
     }
+    const empty = !enrolled.length;
     // free-lesson real progress
     let freeDone = 0;
     try { const f = JSON.parse(localStorage.getItem('cas-free-lesson-progress') || 'null'); if (f && f.done) freeDone = f.done.filter(Boolean).length; } catch (e) {}
@@ -276,7 +288,8 @@ class Component extends DCLogic {
     /* ---- orders (seed if empty) ---- */
     let orders;
     try { orders = JSON.parse(localStorage.getItem('cas-orders') || 'null'); } catch (e) { orders = null; }
-    if (!orders || !orders.length) {
+    if (!orders) orders = [];
+    if (!orders.length && !isNew) {
       orders = [
         { id: 'CAS-2041', date: '12 Jun 2026', title: 'Light & shadow on the head', tier: 'Fellow', img: 'cover1.jpg', amount: 76 },
         { id: 'CAS-1990', date: '28 May 2026', title: 'Fill a sketchbook in 30 days', tier: 'Apprentice', img: 'Sketchbook.jpg', amount: 24 }
@@ -288,21 +301,43 @@ class Component extends DCLogic {
     const lessonsDone = enrolled.reduce((a, c) => a + courseDone(c), 0);
     $('stat-courses').textContent = enrolled.length;
     $('stat-lessons').textContent = lessonsDone;
-    $('stat-since').textContent = user.since || 'Apr 2026';
+    $('stat-since').textContent = user.since || (isNew ? 'Jul 2026' : 'Apr 2026');
     $('badge-courses').textContent = enrolled.length;
 
-    /* ---- overview: resume card = lowest-progress in-progress course ---- */
-    const inProg = enrolled.filter(c => coursePct(c) < 100).sort((a, b) => coursePct(b) - coursePct(a));
-    const resume = inProg[0] || enrolled[0];
-    const rp = coursePct(resume);
-    $('resume-card').innerHTML =
-      '<div class="resume-thumb"><img src="img/' + esc(resume.img) + '" alt=""></div>' +
-      '<div class="resume-body"><div class="rk">' + esc(resume.tier) + ' · in progress</div>' +
-      '<h3>' + esc(resume.title) + '</h3>' +
-      '<div class="prog-row"><span>' + courseDone(resume) + ' of ' + resume.units + ' units</span><b>' + rp + '%</b></div>' +
-      '<div class="prog"><i style="width:' + rp + '%"></i></div></div>' +
-      '<a class="btn primary" href="lesson.dc.html" style="flex:none;">Resume →</a>';
+    /* ---- overview: resume card, or onboarding for a fresh account ---- */
+    if (empty) {
+      $('resume-card').innerHTML =
+        '<div class="dash-onboard" style="width:100%;">' +
+          '<div class="ob-hero"><img src="img/cover3.jpg" alt="">' +
+            '<div><h3 style="font-family:var(--font-marker);font-weight:600;font-size:20px;margin:0 0 6px;">Your bench is ready.</h3>' +
+            '<p style="margin:0;font-size:14px;color:var(--muted);max-width:52ch;">Nothing enrolled yet — and that\'s exactly where everyone starts. The free intro course takes under an hour and needs no materials.</p></div></div>' +
+          '<div class="ob-steps">' +
+            '<div class="ob-step"><div class="n">1</div><h4>Watch the free course</h4><p><em>Materials &amp; setting up</em> — all 6 units free.</p></div>' +
+            '<div class="ob-step"><div class="n">2</div><h4>Pick your first course</h4><p>Filter the catalog by medium and level.</p></div>' +
+            '<div class="ob-step"><div class="n">3</div><h4>Paint along</h4><p>Real reference and notes ship with every unit.</p></div>' +
+          '</div>' +
+          '<div style="display:flex;gap:12px;flex-wrap:wrap;">' +
+            '<a class="btn primary" href="lesson.dc.html">Start the free course <span class="arr" aria-hidden="true">→</span></a>' +
+            '<a class="btn ghost" href="Lessons.dc.html">Browse the catalog</a>' +
+          '</div>' +
+        '</div>';
+    } else {
+      const inProg = enrolled.filter(c => coursePct(c) < 100).sort((a, b) => coursePct(b) - coursePct(a));
+      const resume = inProg[0] || enrolled[0];
+      const rp = coursePct(resume);
+      $('resume-card').innerHTML =
+        '<div class="resume-thumb"><img src="img/' + esc(resume.img) + '" alt=""></div>' +
+        '<div class="resume-body"><div class="rk">' + esc(resume.tier) + ' · in progress</div>' +
+        '<h3>' + esc(resume.title) + '</h3>' +
+        '<div class="prog-row"><span>' + courseDone(resume) + ' of ' + resume.units + ' units</span><b>' + rp + '%</b></div>' +
+        '<div class="prog"><i style="width:' + rp + '%"></i></div></div>' +
+        '<a class="btn primary" href="lesson.dc.html" style="flex:none;">Resume →</a>';
+    }
 
+    const courseHref = (title) => {
+      const m = { 'Materials & setting up': 'materials-setting-up', 'Light & shadow on the head': 'light-shadow-head', 'Blocking in large shapes': 'blocking-large-shapes', 'Mixing greens from scratch': 'mixing-greens', 'Soft edges, clean paint': 'soft-edges-clean-paint', 'Loading a brush properly': 'loading-a-brush', 'Warm vs cool greys': 'warm-cool-greys', 'Erasing as a drawing tool': 'erasing-drawing-tool', 'Brush care & studio habits': 'brush-care-habits' };
+      return m[title] ? 'course.dc.html?id=' + m[title] : 'Lessons.dc.html';
+    };
     /* ---- overview: recommended (focus-matched, not enrolled) ---- */
     const enrolledTitles = enrolled.map(c => c.title);
     const focus = (user.focus || 'Watercolour').toLowerCase();
@@ -311,11 +346,12 @@ class Component extends DCLogic {
     $('recommend-grid').innerHTML = recs.map(c =>
       '<div class="mc-course"><div class="cov"><img src="img/' + esc(c.img) + '" alt=""></div>' +
       '<div class="body"><div class="meta">' + esc(c.tag) + ' · £' + c.price + '</div><h3>' + esc(c.title) + '</h3>' +
-      '<a class="btn ghost" href="Lessons.dc.html" style="margin-top:auto;">View course →</a></div></div>').join('');
+      '<a class="btn ghost" href="' + courseHref(c.title) + '" style="margin-top:auto;">View course →</a></div></div>').join('');
 
     /* ---- my courses ---- */
-    $('courses-note').textContent = enrolled.length + ' enrolled';
-    $('mycourse-grid').innerHTML = enrolled.map(c => {
+    $('courses-note').textContent = empty ? 'None yet' : enrolled.length + ' enrolled';
+    if (empty) $('mycourse-grid').innerHTML = '<div class="dash-card" style="grid-column:1/-1;"><p style="margin:0;font-size:14.5px;color:var(--muted);">No courses yet — the <a class="link-squiggle" href="lesson.dc.html" style="font-weight:700;">free intro course</a> is the usual first step, or <a class="link-squiggle" href="Lessons.dc.html" style="font-weight:700;">browse the catalog</a>.</p></div>';
+    else $('mycourse-grid').innerHTML = enrolled.map(c => {
       const p = coursePct(c), tierCls = c.tier === 'Fellow' ? ' fellow' : '';
       const cta = p >= 100 ? 'Review →' : (courseDone(c) > 0 ? 'Continue →' : 'Start →');
       return '<div class="mc-course"><div class="cov"><img src="img/' + esc(c.img) + '" alt=""><span class="mc-tier' + tierCls + '">' + esc(c.tier) + '</span></div>' +
@@ -326,17 +362,19 @@ class Component extends DCLogic {
     }).join('');
 
     /* ---- progress ---- */
-    const overall = Math.round(enrolled.reduce((a, c) => a + coursePct(c), 0) / enrolled.length);
+    const overall = empty ? 0 : Math.round(enrolled.reduce((a, c) => a + coursePct(c), 0) / enrolled.length);
     $('overall-pct').textContent = overall + '%';
     $('overall-bar').style.width = overall + '%';
-    $('progress-list').innerHTML = enrolled.map(c => {
+    if (empty) $('progress-list').innerHTML = '<div class="dash-card" style="margin-top:0;"><p style="margin:0;font-size:14.5px;color:var(--muted);">Progress appears here as you finish units — start with the free course and watch this fill up.</p></div>';
+    else $('progress-list').innerHTML = enrolled.map(c => {
       const p = coursePct(c);
       return '<div class="dash-card" style="margin-top:0;margin-bottom:12px;"><div class="prog-row"><span><b>' + esc(c.title) + '</b> · ' + esc(c.tier) + '</span><b>' + p + '%</b></div><div class="prog"><i style="width:' + p + '%"></i></div></div>';
     }).join('');
 
     /* ---- purchases ---- */
     const money = (n) => '£' + n.toLocaleString();
-    $('orders-body').innerHTML = orders.map(o =>
+    if (!orders.length) $('orders-body').innerHTML = '<tr><td colspan="5" style="padding:18px 14px;color:var(--muted);font-size:14px;">No purchases yet — receipts will appear here.</td></tr>';
+    else $('orders-body').innerHTML = orders.map(o =>
       '<tr><td style="font-family:var(--font-cond);color:var(--muted);">' + esc(o.id) + '</td>' +
       '<td style="color:var(--muted);">' + esc(o.date) + '</td>' +
       '<td><div class="ord-item"><img src="img/' + esc(o.img) + '" alt=""><div><div class="t">' + esc(o.title) + '</div><div class="ord-tier">' + esc(o.tier) + ' tier</div></div></div></td>' +
@@ -377,7 +415,7 @@ class Component extends DCLogic {
 
     /* ---- logout ---- */
     const logout = (e) => { e.preventDefault(); try { localStorage.removeItem('cas-user'); } catch (er) {} window.location.href = 'index.html'; };
-    $('logout-btn').addEventListener('click', logout);
+    const lb = $('logout-btn'); if (lb) lb.addEventListener('click', logout);
     const ls = $('logout-sheet'); if (ls) ls.addEventListener('click', logout);
 
     /* ---- tabs ---- */

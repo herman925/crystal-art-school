@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600;6..96,700&family=Oswald:wght@300;400;500;600&family=Archivo:wght@400;500;600;700&family=Saira+Stencil+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/industrial.css">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="js/site-extras.js"></script>
+<script src="js/motion.js"></script>
+</helmet>
+<div class="cas-root" data-theme="D">
+<div class="glow-layer" aria-hidden="true"></div>
+
+<nav class="site-nav" aria-label="Main">
+  <div class="nav-top">
+    <div class="inner">
+      <a class="nav-brand" href="index.html">
+        <img src="img/ProfilePic.jpg" alt="Crystal Lau">
+        <span class="name">Crystal's Art School</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="Lessons.dc.html" class="active">Courses</a></li>
+        <li><a href="Gallery.dc.html">Gallery</a></li>
+        <li><a href="Showcase.dc.html">Showcase</a></li>
+        <li><a href="Blog.dc.html">Blog</a></li>
+        <li><a href="About.dc.html">About</a></li>
+        <li><a href="lesson.dc.html">Free video</a></li>
+        <li><a href="Blog.dc.html?tag=Tools">Tools</a></li>
+        <li><a href="About.dc.html#faq">FAQ</a></li>
+      </ul>
+      <div class="nav-auth">
+        <a class="cart-btn" href="Checkout.dc.html" aria-label="Shopping cart">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M2 3h3.2l2.5 12.2a1.5 1.5 0 0 0 1.5 1.2h9a1.5 1.5 0 0 0 1.5-1.2L21.5 7H6.5"></path></svg>
+          <span class="cart-badge">0</span>
+        </a>
+        <a class="btn ghost" href="Login.dc.html">Log in</a>
+        <a class="btn primary" href="Signup.dc.html">Sign up</a>
+        <button class="nav-burger" type="button" aria-label="Menu" aria-expanded="false">☰</button>
+      </div>
+    </div>
+  </div>
+  <div class="nav-cats">
+    <div class="inner">
+      <ul class="nav-cat-links">
+        <li><a href="Lessons.dc.html?cat=Watercolour">Watercolour</a></li>
+        <li><a href="Lessons.dc.html?cat=Oil">Oils</a></li>
+        <li><a href="Lessons.dc.html?cat=Drawing">Drawing</a></li>
+        <li><a href="Lessons.dc.html?cat=Ink">Ink</a></li>
+        <li><a href="Lessons.dc.html?cat=Beginners">Beginners</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="nav-sheet">
+    <a href="index.html">Home</a>
+    <a href="Lessons.dc.html">Courses</a>
+    <a href="Gallery.dc.html">Gallery</a>
+    <a href="Showcase.dc.html">Showcase</a>
+    <a href="Blog.dc.html">Blog</a>
+    <a href="About.dc.html">About</a>
+    <a href="lesson.dc.html">Free video</a>
+    <a href="Blog.dc.html?tag=Tools">Tools</a>
+    <a href="About.dc.html#faq">FAQ</a>
+    <a href="Lessons.dc.html?cat=Watercolour">Watercolour</a>
+    <a href="Lessons.dc.html?cat=Oil">Oils</a>
+    <a href="Lessons.dc.html?cat=Drawing">Drawing</a>
+    <a href="Lessons.dc.html?cat=Ink">Ink</a>
+    <a href="Lessons.dc.html?cat=Beginners">Beginners</a>
+    <a href="Login.dc.html">Log in / Sign up</a>
+  </div>
+</nav>
+
+<main class="container" id="content">
+
+  <div class="crumbs" style="padding-top:22px;"><a href="Lessons.dc.html">Courses</a> <span aria-hidden="true">→</span> <span id="crumb-title">Course</span></div>
+
+  <header class="course-hero">
+    <div class="course-cover reveal-one">
+      <img id="co-cover" src="img/cover3.jpg" alt="">
+      <span class="free-flag" id="co-flag-free" style="display:none;">Free</span>
+      <span class="sale-flag" id="co-flag-sale" style="display:none;">Sale</span>
+    </div>
+    <div class="reveal-one">
+      <div class="eyebrow"><span class="star">✦</span> <span id="co-tag">Course</span></div>
+      <h1 class="marker-title" id="co-title" style="font-size:clamp(30px,3.8vw,50px);margin:6px 0 12px;">—</h1>
+      <p class="lead" id="co-blurb" style="font-size:16.5px;"></p>
+      <div class="course-meta-chips" id="co-chips"></div>
+      <div class="course-buy">
+        <div class="course-price" id="co-price"></div>
+        <button class="btn primary" type="button" id="co-buy" data-add-to-cart data-tiered>Add to cart</button>
+        <a class="btn ghost" id="co-preview" href="lesson.dc.html">Watch the free intro course</a>
+      </div>
+      <p class="course-tier-note">Buy at <strong>Apprentice</strong> (course only) or <strong>Fellow</strong> (course + private Discord critique channel) — you'll pick when adding to cart. Lifetime access, 14-day refund.</p>
+    </div>
+  </header>
+
+  <section class="section" id="learn">
+    <div class="section-head reveal-one" style="text-align:center;">
+      <div class="eyebrow" style="justify-content:center;"><span class="star">✦</span> By the end</div>
+      <h2 class="section-title">What you'll learn</h2>
+    </div>
+    <ul class="learn-list" id="co-learn" style="max-width:860px;margin-left:auto;margin-right:auto;"></ul>
+  </section>
+
+  <section class="section" id="syllabus">
+    <div class="section-head reveal-one" style="text-align:center;">
+      <div class="eyebrow" style="justify-content:center;"><span class="star">✦</span> Unit by unit</div>
+      <h2 class="section-title">Syllabus</h2>
+    </div>
+    <div class="syllabus" id="co-syllabus"></div>
+    <div class="course-teacher reveal-one">
+      <img src="img/ProfilePic.jpg" alt="Crystal Lau">
+      <div>
+        <h3 class="marker-title" style="font-size:19px;margin:0 0 6px;">Taught by Crystal Lau</h3>
+        <p style="margin:0;font-size:14px;color:var(--muted);">Hong Kong–based painter and teacher — eight years of small-group classes, now teaching the same slow, value-first way online. <a class="link-squiggle" href="About.dc.html" style="font-weight:700;">More about Crystal →</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="related">
+    <div class="section-head reveal-one">
+      <div class="eyebrow"><span class="star">✦</span> Keep going</div>
+      <h2 class="section-title is-left">Students also study</h2>
+    </div>
+    <div class="lesson-grid reveal" id="co-related" style="margin-top:26px;"></div>
+  </section>
+
+  <section class="section">
+    <div class="band-forest reveal-one">
+      <div style="flex:0 0 180px;border-radius:var(--radius-card);overflow:hidden;aspect-ratio:1/1;position:relative;z-index:1;">
+        <img src="img/cover3.jpg" alt="Free lesson preview" style="width:100%;height:100%;object-fit:cover;">
+      </div>
+      <div style="flex:1;">
+        <div class="eyebrow"><span class="star">✦</span> Not ready to buy?</div>
+        <h2 class="marker-title" style="font-size:clamp(24px,2.4vw,34px);">Try the free course first.</h2>
+        <p style="margin:0;max-width:54ch;">Watch <em>Materials &amp; setting up</em> free — all 6 units, notes and downloads included — and see exactly how the paid courses feel.</p>
+      </div>
+      <a class="btn-big" href="lesson.dc.html" style="flex:none;">Watch free lesson →</a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">CRYSTAL'S</div>
+        <p style="font-size:14px;opacity:.85;max-width:34ch;margin:0;">Watercolour, acrylic &amp; drawing — taught slowly and carefully from a small studio of plaster, wood and iron.</p>
+      </div>
+      <div>
+        <h4>Learn</h4>
+        <a href="Lessons.dc.html">All lessons</a>
+        <a href="Lessons.dc.html#membership">Membership</a>
+        <a href="lesson.dc.html">Free intro lesson</a>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <a href="Gallery.dc.html">Gallery</a>
+        <a href="Showcase.dc.html">Student showcase</a>
+        <a href="Blog.dc.html">Blog</a>
+        <a href="About.dc.html">About</a>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <a href="About.dc.html#contact">hello@crystalsartschool.com</a>
+        <a href="About.dc.html#contact">Discord · Instagram</a>
+        <a href="About.dc.html#terms">Terms &amp; privacy</a>
+      </div>
+    </div>
+    <div class="footer-meta">
+      <span>© 2026 Crystal's Art School</span>
+      <span>工業風畫室 · Industrial v3.0</span>
+    </div>
+  </div>
+</footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;defaultTheme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;A&quot;,&quot;B&quot;,&quot;C&quot;,&quot;D&quot;],&quot;default&quot;:&quot;D&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  courses() {
+    return {
+      'materials-setting-up': {
+        title: 'Materials & setting up', tag: 'Watercolour', level: 'Beginner', len: '50 min', units: 6,
+        img: 'cover3.jpg', price: 0, free: true,
+        blurb: "Everything you need before your first wash — paper, brushes, a small honest palette, and a workspace that won't fight you. The whole course is free; it's exactly how the paid courses feel.",
+        learn: ['Choose paper that forgives beginners', 'Pick the 3 brushes that actually matter', 'Mix from a starter palette of 8 colours', 'Set up water, rags and light properly', 'Lay a flat and a graded wash', 'Know what NOT to buy (most of the shop)'],
+        syllabus: [
+          ['Welcome & what you\'ll need', 'A quick tour of where we\'re going', '4:12'],
+          ['Choosing paper — weight, texture, sizing', 'Why paper matters more than paint', '7:48'],
+          ['Brushes that matter', 'Three brushes, no more', '8:05'],
+          ['A starter palette of 8 colours', 'Warm/cool pairs that mix everything', '9:32'],
+          ['Setting up your workspace & water', 'Two jars, a rag, decent light', '6:21'],
+          ['Your first wash — let\'s test everything', 'Flat wash, graded wash, confidence', '12:04']
+        ]
+      },
+      'light-shadow-head': {
+        title: 'Light & shadow on the head', tag: 'Oils', level: 'Intermediate', len: '2h 20m', units: 8,
+        img: 'cover1.jpg', price: 42, was: 52,
+        blurb: 'The portrait course that ignores likeness — first. Big planes, one light source, and values you can trust before any feature gets drawn.',
+        learn: ['Simplify the head into 5 planes', 'Set up a single-source value structure', 'Mix believable skin greys in oils', 'Keep shadow shapes clean and connected', 'Model the form without chalky highlights', 'Finish edges last — and softly'],
+        syllabus: [
+          ['Seeing the head as planes', 'The 5-plane simplification', '14:20'],
+          ['Value structure before likeness', 'Why values carry the portrait', '16:05'],
+          ['Block-in: shadow shapes first', 'One connected shadow family', '18:40'],
+          ['Mixing skin greys', 'Warm/cool neutrals in oils', '17:15'],
+          ['Halftones and the terminator', 'The turn of the form', '19:30'],
+          ['Modelling the lights', 'Thick paint where the light is', '18:00'],
+          ['Edges: hard, soft, lost', 'Letting the head breathe', '16:45'],
+          ['Demo: full head, start to finish', 'Everything applied, real time', '19:25']
+        ]
+      },
+      'blocking-large-shapes': {
+        title: 'Blocking in large shapes', tag: 'Oils', level: 'Beginner', len: '1h 30m', units: 6,
+        img: 'cover2.jpg', price: 36,
+        blurb: 'The most protective habit in painting: getting the big shapes right before the small ones get a vote. Still-life based, brush-first, no drawing required.',
+        learn: ['See subjects as 4–6 big shapes', 'Block in with a big brush only', 'Compare values across shapes', 'Correct shapes without fiddling', 'Keep early layers lean', 'Decide what detail deserves to exist'],
+        syllabus: [
+          ['Why big before small', 'The order that protects you', '11:10'],
+          ['Squinting and shape-welding', 'Merging what belongs together', '13:30'],
+          ['The 4-value block-in', 'Dark, light, two in between', '15:45'],
+          ['Correcting shapes early', 'Move edges, not details', '14:20'],
+          ['Lean to fat, layer one', 'Paint that stays workable', '16:00'],
+          ['Demo: a still life in shapes', 'From nothing to solid in one sit', '19:15']
+        ]
+      },
+      'mixing-greens': {
+        title: 'Mixing greens from scratch', tag: 'Watercolour', level: 'All levels', len: '1h 10m', units: 5,
+        img: 'Liquidwatercolor.jpg', price: 29, was: 36,
+        blurb: "Landscape greens that don't look like plastic. Mix every green you'll ever need from blues and yellows you already own — and know why each one works.",
+        learn: ['Mix 12 usable greens from 4 pigments', 'Warm a green without killing it', 'Grey a green for distance', 'Match a green from a photo', 'Keep greens luminous in watercolour', 'Build a personal green chart'],
+        syllabus: [
+          ['Why tube greens fail', 'And when they\'re fine', '10:20'],
+          ['Blue + yellow, systematically', 'The mixing grid', '15:30'],
+          ['Warming, cooling, greying', 'Steering a green', '14:10'],
+          ['Greens in space', 'Distance changes everything', '13:45'],
+          ['Demo: a field, three greens only', 'Restraint as a superpower', '16:15']
+        ]
+      },
+      'soft-edges-clean-paint': {
+        title: 'Soft edges, clean paint', tag: 'Drawing', level: 'Beginner', len: '45 min', units: 5,
+        img: 'Sketchbook.jpg', price: 24,
+        blurb: 'A short course on the two things that make drawings look effortless: edge control and keeping your values clean instead of scrubbed.',
+        learn: ['Control edges with pressure, not luck', 'Blend without muddying', 'Protect paper texture', 'Lift cleanly with a kneaded eraser', 'Layer graphite without shine', 'Finish a study without overworking'],
+        syllabus: [
+          ['Edges are decisions', 'Hard, soft, lost — on purpose', '8:10'],
+          ['Pressure scales', 'Your pencil has 10 values', '9:00'],
+          ['Blending that stays clean', 'Stump, finger, nothing', '9:30'],
+          ['Lifting and erasing as drawing', 'The eraser is a pencil', '8:45'],
+          ['Demo: a soft-edge study', 'Everything in one drawing', '9:35']
+        ]
+      },
+      'loading-a-brush': {
+        title: 'Loading a brush properly', tag: 'Watercolour', level: 'Beginner', len: '40 min', units: 5,
+        img: 'cover4.jpg', price: 29,
+        blurb: "The unglamorous skill underneath every good wash: how much water, how much pigment, and how to know before the brush touches paper.",
+        learn: ['Judge water-to-pigment by sight', 'Load for washes vs strokes', 'Keep a bead alive down the page', 'Rescue a drying wash safely', 'Charge colour into wet paint', 'Stop dull, overworked passages'],
+        syllabus: [
+          ['The three loads', 'Tea, coffee, cream', '7:30'],
+          ['The bead', 'Gravity is your assistant', '8:15'],
+          ['Charging and dropping in', 'Colour that mixes on paper', '8:40'],
+          ['Rescues and lifts', 'When to touch, when to leave', '7:20'],
+          ['Demo: one wash, no fear', 'A full sky in one pass', '8:05']
+        ]
+      },
+      'warm-cool-greys': {
+        title: 'Warm vs cool greys', tag: 'Acrylic', level: 'Intermediate', len: '1h 25m', units: 6,
+        img: 'Postercolor.jpg', price: 38,
+        blurb: 'Greys carry a painting; colours just get the credit. Learn to mix, place and tune warm and cool greys in acrylic so your accents finally glow.',
+        learn: ['Mix chromatic greys without black', 'Read temperature in neutral passages', 'Push a grey warm or cool at will', 'Set accents against quiet greys', 'Avoid the chalky acrylic look', 'Build a grey-first study habit'],
+        syllabus: [
+          ['Grey is a colour', 'Chromatic vs dead greys', '13:20'],
+          ['Complement mixing', 'Greys from opposite pairs', '15:10'],
+          ['Temperature drills', 'Warm/cool call-and-response', '14:30'],
+          ['Greys as stage lighting', 'Making accents sing', '13:50'],
+          ['Acrylic-specific handling', 'Fighting the plastic look', '14:00'],
+          ['Demo: a grey-first still life', 'Colour arrives last', '14:10']
+        ]
+      },
+      'erasing-drawing-tool': {
+        title: 'Erasing as a drawing tool', tag: 'Drawing', level: 'All levels', len: '55 min', units: 5,
+        img: 'Rubber.jpg', price: 24, was: 30,
+        blurb: "Stop erasing mistakes and start drawing with light. Subtractive drawing turns your kneaded rubber into your most expressive tool.",
+        learn: ['Draw highlights instead of avoiding them', 'Shape a kneaded eraser for marks', 'Pull light out of a tonal ground', 'Combine additive and subtractive passes', 'Keep grounds even and workable', 'Finish drawings with lifted accents'],
+        syllabus: [
+          ['The subtractive mindset', 'Light as a mark', '10:15'],
+          ['Tools and grounds', 'Kneaded, plastic, tonal fields', '11:30'],
+          ['Lifting drills', 'Crisp vs feathered lights', '10:45'],
+          ['Two-way drawing', 'Add, subtract, repeat', '11:00'],
+          ['Demo: a lit portrait study', 'Drawn almost entirely by eraser', '11:30']
+        ]
+      },
+      'brush-care-habits': {
+        title: 'Brush care & studio habits', tag: 'Acrylic', level: 'Beginner', len: '35 min', units: 4,
+        img: 'BrushB.jpg', price: 19,
+        blurb: "The cheapest upgrade in painting: habits. Keep brushes alive for years, keep paint workable, and keep a tiny studio functional.",
+        learn: ['Wash brushes so they last years', 'Spot a ruined brush before buying', 'Keep acrylics open longer', 'Store work-in-progress safely', 'Set up a 1-square-metre studio', 'Build a 10-minute tidy routine'],
+        syllabus: [
+          ['Brush anatomy & enemies', 'What actually kills brushes', '8:20'],
+          ['The wash routine', 'Sixty seconds that saves £100s', '9:10'],
+          ['Paint management', 'Stay-wet tricks that work', '8:30'],
+          ['The tiny studio', 'One table, everything in reach', '9:00']
+        ]
+      }
+    };
+  }
+
+  componentDidMount() {
+    const root = document.querySelector('.cas-root');
+    if (!root) return;
+    const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    const $ = (id) => document.getElementById(id);
+
+    /* theme */
+    const THEME_KEY = 'cas-theme';
+    const valid = ['A','B','C','D'];
+    const applyTheme = (t) => { root.setAttribute('data-theme', t); document.querySelectorAll('.theme-switch button').forEach(b => b.classList.toggle('active', b.dataset.theme === t)); };
+    applyTheme('D');
+    document.querySelectorAll('.theme-switch button').forEach(b => b.addEventListener('click', () => { const t = b.dataset.theme; applyTheme(t); try { localStorage.setItem(THEME_KEY, t); } catch (e) {} }));
+
+    /* burger */
+    const burger = document.querySelector('.nav-burger'), sheet = document.querySelector('.nav-sheet');
+    if (burger && sheet) {
+      burger.addEventListener('click', () => { const open = sheet.classList.toggle('open'); burger.setAttribute('aria-expanded', open ? 'true' : 'false'); });
+      sheet.addEventListener('click', (e) => { if (e.target.tagName === 'A') sheet.classList.remove('open'); });
+    }
+
+    /* cart badge */
+    const renderCart = () => { let n = 0; try { n = JSON.parse(localStorage.getItem('cas-cart') || '[]').reduce((a, i) => a + (i.qty || 1), 0); } catch (e) {} document.querySelectorAll('.cart-badge').forEach(b => { b.textContent = n; b.style.display = n > 0 ? 'grid' : 'none'; }); };
+    renderCart();
+
+    /* ---- resolve course from ?id= ---- */
+    const all = this.courses();
+    let id = '';
+    try { id = new URLSearchParams(location.search).get('id') || ''; } catch (e) {}
+    if (!all[id]) id = 'materials-setting-up';
+    const c = all[id];
+
+    document.title = c.title + ' · Crystal\'s Art School';
+    $('crumb-title').textContent = c.title;
+    $('co-cover').src = 'img/' + c.img;
+    $('co-cover').alt = c.title;
+    $('co-tag').textContent = c.tag + ' course';
+    $('co-title').textContent = c.title;
+    $('co-blurb').textContent = c.blurb;
+    if (c.free) $('co-flag-free').style.display = '';
+    else if (c.was) $('co-flag-sale').style.display = '';
+
+    $('co-chips').innerHTML =
+      '<span class="cmc">' + esc(c.tag) + '</span>' +
+      '<span class="cmc">' + esc(c.level) + '</span>' +
+      '<span class="cmc">' + c.units + ' units · ' + esc(c.len) + '</span>' +
+      '<span class="cmc">Real reference included</span>';
+
+    /* buy row */
+    if (c.free) {
+      $('co-price').textContent = 'Free';
+      const buy = $('co-buy');
+      const start = document.createElement('a');
+      start.className = 'btn primary'; start.href = 'lesson.dc.html'; start.innerHTML = 'Start the free course <span class="arr" aria-hidden="true">→</span>';
+      buy.replaceWith(start);
+      $('co-preview').style.display = 'none';
+      document.querySelector('.course-tier-note').textContent = 'No account needed — all six units are free, with notes and downloads.';
+    } else {
+      $('co-price').innerHTML = (c.was ? '<span class="was">£' + c.was + '</span>' : '') + '£' + c.price;
+      const buy = $('co-buy');
+      buy.setAttribute('data-title', c.title);
+      buy.setAttribute('data-price', String(c.price));
+      buy.setAttribute('data-img', c.img);
+    }
+
+    /* learn list */
+    $('co-learn').innerHTML = c.learn.map(l => '<li>' + esc(l) + '</li>').join('');
+
+    /* syllabus */
+    $('co-syllabus').innerHTML = c.syllabus.map((u, i) =>
+      '<div class="syl-row">' +
+        '<div class="syl-num">' + (i + 1) + '</div>' +
+        '<div><div class="syl-title">' + esc(u[0]) + (c.free ? '' : (i === 0 ? ' <span style="font-family:var(--font-cond);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal-ink);margin-left:8px;">free preview</span>' : '')) + '</div>' +
+        '<div class="syl-sub">' + esc(u[1]) + '</div></div>' +
+        '<div class="syl-len">' + esc(u[2]) + '</div>' +
+      '</div>').join('');
+
+    /* related: 3 other courses, same tag first */
+    const others = Object.keys(all).filter(k => k !== id)
+      .sort((a, b) => ((all[b].tag === c.tag) ? 1 : 0) - ((all[a].tag === c.tag) ? 1 : 0)).slice(0, 3);
+    $('co-related').innerHTML = others.map(k => {
+      const o = all[k];
+      return '<div class="lesson-cell">' +
+        '<a class="cover-card" href="course.dc.html?id=' + k + '" style="display:block;">' +
+          '<img src="img/' + esc(o.img) + '" alt="' + esc(o.title) + '">' +
+          (o.free ? '<span class="free-flag">Free</span>' : (o.was ? '<span class="sale-flag">Sale</span>' : '')) +
+          '<div class="scrim"><div class="t">' + esc(o.title) + '</div></div>' +
+        '</a>' +
+        '<div class="meta"><span class="level">' + esc(o.tag) + ' · ' + esc(o.level.toLowerCase()) + ' · ' + esc(o.len) + '</span><span class="price' + (o.free ? ' free' : '') + '">' + (o.free ? 'Free' : (o.was ? '<span class="was">£' + o.was + '</span>' : '') + '£' + o.price) + '</span></div>' +
+      '</div>';
+    }).join('');
+  }
+}
+</script>
+</body>
+</html>

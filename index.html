@@ -30,6 +30,7 @@
         <li><a href="index.html" class="active">Home</a></li>
         <li><a href="Lessons.dc.html">Courses</a></li>
         <li><a href="Gallery.dc.html">Gallery</a></li>
+        <li><a href="Showcase.dc.html">Showcase</a></li>
         <li><a href="Blog.dc.html">Blog</a></li>
         <li><a href="About.dc.html">About</a></li>
         <li><a href="lesson.dc.html">Free video</a></li>
@@ -53,7 +54,7 @@
         <li><a href="Lessons.dc.html?cat=Watercolour">Watercolour</a></li>
         <li><a href="Lessons.dc.html?cat=Oils">Oils</a></li>
         <li><a href="Lessons.dc.html?cat=Drawing">Drawing</a></li>
-        <li><a href="Lessons.dc.html?cat=Painting">Painting</a></li>
+        <li><a href="Lessons.dc.html?cat=Ink">Ink</a></li>
         <li><a href="Lessons.dc.html?cat=Beginners">Beginners</a></li>
       </ul>
     </div>
@@ -62,6 +63,7 @@
     <a href="index.html">Home</a>
     <a href="Lessons.dc.html">Courses</a>
     <a href="Gallery.dc.html">Gallery</a>
+    <a href="Showcase.dc.html">Showcase</a>
     <a href="Blog.dc.html">Blog</a>
     <a href="About.dc.html">About</a>
     <a href="lesson.dc.html">Free video</a>
@@ -70,7 +72,7 @@
     <a href="Lessons.dc.html?cat=Watercolour">Watercolour</a>
     <a href="Lessons.dc.html?cat=Oils">Oils</a>
     <a href="Lessons.dc.html?cat=Drawing">Drawing</a>
-    <a href="Lessons.dc.html?cat=Painting">Painting</a>
+    <a href="Lessons.dc.html?cat=Ink">Ink</a>
     <a href="Lessons.dc.html?cat=Beginners">Beginners</a>
     <a href="Login.dc.html">Log in / Sign up</a>
   </div>
@@ -326,6 +328,7 @@
       <div>
         <h4>Explore</h4>
         <a href="Gallery.dc.html">Gallery</a>
+        <a href="Showcase.dc.html">Student showcase</a>
         <a href="Blog.dc.html">Blog</a>
         <a href="About.dc.html">About</a>
       </div>
@@ -364,10 +367,25 @@ class Component extends DCLogic {
     ];
   }
 
+  courseHref(title) {
+    const m = {
+      'Materials & setting up': 'materials-setting-up',
+      'Light & shadow on the head': 'light-shadow-head',
+      'Blocking in large shapes': 'blocking-large-shapes',
+      'Mixing greens from scratch': 'mixing-greens',
+      'Soft edges, clean paint': 'soft-edges-clean-paint',
+      'Loading a brush properly': 'loading-a-brush',
+      'Warm vs cool greys': 'warm-cool-greys',
+      'Erasing as a drawing tool': 'erasing-drawing-tool',
+      'Brush care & studio habits': 'brush-care-habits'
+    };
+    return m[title] ? 'course.dc.html?id=' + m[title] : 'Lessons.dc.html';
+  }
+
   componentDidMount() {
     const root = document.querySelector('.cas-root');
     if (!root) return;
-    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches || navigator.webdriver === true || /Headless/i.test(navigator.userAgent);
 
     /* ---- hero slides (autoplay + arrows + counter) ---- */
     (function () {
@@ -573,7 +591,7 @@ class Component extends DCLogic {
           '<div class="rel-title">' + esc(c.title) + '</div>' +
           '<div class="rel-actions">' +
             '<button class="cc-btn primary" type="button" data-add-to-cart data-tiered data-price="' + c.price + '">' + cartSvg + ' Add to cart</button>' +
-            '<a class="cc-btn secondary" href="lesson.dc.html">View <span class="arr" aria-hidden="true">→</span></a>' +
+            '<a class="cc-btn secondary" href="' + this.courseHref(c.title) + '">View <span class="arr" aria-hidden="true">→</span></a>' +
           '</div>';
         relCar.appendChild(slide);
         const dot = document.createElement('button');
