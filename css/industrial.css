@@ -267,7 +267,7 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
    the exact same axis; the brand is lifted out and spans both rows */
 .nav-top .inner { position: static; display: grid; grid-template-columns: minmax(200px, 1fr) auto minmax(200px, 1fr); align-items: center; gap: 18px; padding: 8px var(--gutter) 4px; }
 .nav-brand { position: absolute; z-index: 6; top: 0; bottom: 0; left: max(var(--gutter), calc((100% - var(--site-max)) / 2 + var(--gutter))); display: flex; align-items: center; gap: 12px; }
-.nav-brand img { width: 54px; height: 54px; border-radius: 50%; object-fit: cover; box-shadow: 0 3px 9px rgba(0,0,0,.38); border: 2px solid color-mix(in srgb, var(--banner-ink) 35%, transparent); }
+.nav-brand img { height: 66px; width: auto; object-fit: contain; filter: drop-shadow(0 2px 6px rgba(0,0,0,.45)); }
 .nav-brand .name { font-family: var(--font-stencil); font-size: 15.5px; line-height: 1.25; letter-spacing: .08em; white-space: normal; max-width: 118px; color: var(--banner-ink); }
 .nav-links { grid-column: 2; display: flex; gap: 4px; list-style: none; margin: 0; padding: 0; }
 .nav-links a { display: block; padding: 8px 13px; font-family: var(--font-cond); font-weight: 500; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; border-radius: var(--radius-pill); color: var(--banner-ink); transition: background .15s; }
@@ -291,7 +291,7 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 
 /* ---------- responsive nav ---------- */
 @media (max-width: 1280px) { .nav-links a { padding: 8px 10px; } }
-@media (max-width: 1180px) { .nav-top .inner, .nav-cats .inner { grid-template-columns: minmax(170px, 1fr) auto minmax(170px, 1fr); gap: 12px; } .nav-links { gap: 2px; } .nav-links a { padding: 8px 8px; font-size: 12.5px; } .nav-brand img { width: 48px; height: 48px; } .nav-brand .name { font-size: 14px; } }
+@media (max-width: 1180px) { .nav-top .inner, .nav-cats .inner { grid-template-columns: minmax(170px, 1fr) auto minmax(170px, 1fr); gap: 12px; } .nav-links { gap: 2px; } .nav-links a { padding: 8px 8px; font-size: 12.5px; } .nav-brand img { height: 56px; } .nav-brand .name { font-size: 14px; } }
 @media (max-width: 1080px) { .nav-auth .btn { display: none; } }
 @media (max-width: 920px) { .theme-switch .lbl { display: none; } }
 @media (max-width: 860px) {
@@ -1309,7 +1309,7 @@ img, svg, video { max-width: 100%; }
   .nav-top .inner { gap: 12px; padding: 10px var(--gutter); }
   /* drop the brand wordmark, keep the logo — frees room for the switch */
   .nav-brand .name { display: none; }
-  .nav-brand img { width: 42px; height: 42px; }
+  .nav-brand img { height: 42px; }
   .theme-switch .seg { border-radius: 6px; }
   .theme-switch button { min-width: 24px; font-size: 10.5px; padding: 6px 0; }
   .cart-btn { width: 38px; height: 38px; }
@@ -1357,7 +1357,7 @@ img, svg, video { max-width: 100%; }
    ============================================================ */
 
 /* ---------- handwritten signature (About hero) ---------- */
-.sig-script { font-family: 'Mrs Saint Delafield', 'Segoe Script', cursive; font-size: clamp(46px, 5.4vw, 72px); line-height: .85; color: var(--teal-ink); transform: rotate(-4deg); transform-origin: left bottom; margin: 0 0 4px 2px; user-select: none; }
+.sig-script { font-family: 'Mrs Saint Delafield', 'Segoe Script', cursive; font-size: clamp(44px, 5vw, 66px); line-height: 1.18; color: var(--teal-ink); transform: rotate(-3deg); transform-origin: left center; margin: -6px 0 10px 2px; padding: 2px 0; user-select: none; display: inline-block; }
 
 /* ---------- accordion (FAQ + terms) ---------- */
 .acc-list { display: grid; gap: 12px; max-width: 860px; margin: 28px auto 0; }
@@ -1444,3 +1444,14 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
 .ob-step h4 { font-family: var(--font-marker); font-weight: 600; font-size: 15.5px; margin: 6px 0 4px; color: var(--ink); }
 .ob-step p { margin: 0; font-size: 13px; color: var(--muted); }
 @media (max-width: 760px) { .ob-steps { grid-template-columns: 1fr; } .dash-onboard .ob-hero { flex-direction: column; align-items: flex-start; } }
+
+/* ---------- bio credentials (polaroids inside Artist biography) ---------- */
+.bio-certs { margin-top: 26px; }
+.bc-head { display: flex; align-items: center; gap: 8px; font-family: var(--font-cond); font-weight: 600; font-size: 12px; letter-spacing: .2em; text-transform: uppercase; color: var(--coral-ink); margin-bottom: 14px; }
+.bc-head .star { color: var(--teal-ink); font-size: 11px; }
+.bc-row { display: flex; gap: 18px; flex-wrap: wrap; }
+.bc-card { margin: 0; background: var(--paper); padding: 10px 10px 12px; border-radius: 6px; box-shadow: var(--shadow-md); transform: rotate(-2deg); transition: transform .3s var(--ease-pop), box-shadow .3s; max-width: 200px; }
+.bc-card + .bc-card { transform: rotate(1.6deg); }
+.bc-card:hover { transform: rotate(0) translateY(-4px) scale(1.03); box-shadow: var(--shadow-lift); z-index: 2; position: relative; }
+.bc-card img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 3px; display: block; }
+.bc-card figcaption { font-family: var(--font-cond); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: #474138; margin-top: 8px; text-align: center; }
