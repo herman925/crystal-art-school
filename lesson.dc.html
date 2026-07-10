@@ -15,7 +15,24 @@
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <script src="js/site-extras.js"></script>
+<script src="js/site-nav.js"></script>
 <script src="js/motion.js"></script>
+<style>
+/* "now playing" must only show on the active lesson (the .now rule in the
+   design css overrides the hidden attribute, so re-assert it) */
+.unit-row .now[hidden] { display: none; }
+/* emulated fullscreen for the demo player */
+.player.fs { position: fixed; inset: 0; z-index: 600; margin: 0; border-radius: 0; background: #0d0b08; display: flex; flex-direction: column; }
+.player.fs .stage { flex: 1; min-height: 0; border-radius: 0; aspect-ratio: auto; }
+.player.fs .stage .poster { width: 100%; height: 100%; object-fit: contain; background: #000; }
+.player.fs .controls { border-radius: 0; }
+/* small screens */
+@media (max-width: 640px) {
+  .player .controls { flex-wrap: wrap; row-gap: 6px; }
+  .lesson-meta-row { font-size: 11px; gap: 6px 12px; }
+  .page-hero .crumbs { font-size: 11px; }
+}
+</style>
 </helmet>
 <div class="cas-root" data-theme="D">
 <div class="glow-layer" aria-hidden="true"></div>
@@ -24,39 +41,18 @@
   <div class="nav-top">
     <div class="inner">
       <a class="nav-brand" href="index.html">
-        <img src="img/LAULogoFinal.png" alt="Lau. — Crystal's Art School">
+        <img src="img/lau-logo.png" alt="Lau. — Crystal's Art School">
         <span class="name">Crystal's Art School</span>
       </a>
       <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
-        <li class="nav-item has-mega is-active">
-          <a href="Lessons.dc.html" class="nav-mega-trigger active" aria-haspopup="true" aria-expanded="false">Courses <span class="nav-caret" aria-hidden="true">▾</span></a>
-          <div class="nav-mega" role="menu" aria-label="Courses">
-            <div class="nav-mega-inner">
-              <div class="nm-col nm-start">
-                <div class="nm-kicker"><span class="star">✦</span> Start here</div>
-                <a class="nm-item" role="menuitem" href="lesson.dc.html"><span class="nm-t">Free courses</span><span class="nm-d">Watch a full course, on us</span></a>
-                <a class="nm-item nm-feature" role="menuitem" href="Lessons.dc.html"><span class="nm-t">Shop all courses <span class="nm-arr" aria-hidden="true">→</span></span><span class="nm-d">Browse everything by medium</span></a>
-                <a class="nm-item" role="menuitem" href="Blog.dc.html?tag=Tools"><span class="nm-t">Tools &amp; materials</span><span class="nm-d">Kit guides and honest reviews</span></a>
-              </div>
-              <div class="nm-col nm-medium">
-                <div class="nm-kicker">By medium · from your course tags</div>
-                <div class="nm-tags">
-                  <a role="menuitem" href="Lessons.dc.html?cat=Watercolour">Watercolour</a>
-                  <a role="menuitem" href="Lessons.dc.html?cat=Oil">Oils</a>
-                  <a role="menuitem" href="Lessons.dc.html?cat=Drawing">Drawing</a>
-                  <a role="menuitem" href="Lessons.dc.html?cat=Ink">Ink</a>
-                  <a role="menuitem" href="Lessons.dc.html?cat=Beginners">Beginners</a>
-                </div>
-                <p class="nm-note">These appear automatically from the tags on your courses — add a tag and a category shows up, remove it and it's gone.</p>
-              </div>
-            </div>
-          </div>
-        </li>
+        <li><a href="Lessons.dc.html" class="active">Courses</a></li>
         <li><a href="Gallery.dc.html">Gallery</a></li>
         <li><a href="Showcase.dc.html">Showcase</a></li>
         <li><a href="Blog.dc.html">Blog</a></li>
         <li><a href="About.dc.html">About</a></li>
+        <li><a href="FreeVideos.dc.html">Free video</a></li>
+        <li><a href="Blog.dc.html?tag=Tools">Tools</a></li>
         <li><a href="FAQ.dc.html">FAQ</a></li>
       </ul>
       <div class="nav-auth">
@@ -70,6 +66,17 @@
       </div>
     </div>
   </div>
+  <div class="nav-cats">
+    <div class="inner">
+      <ul class="nav-cat-links">
+        <li><a href="Lessons.dc.html?cat=Watercolour">Watercolour</a></li>
+        <li><a href="Lessons.dc.html?cat=Oil">Oils</a></li>
+        <li><a href="Lessons.dc.html?cat=Drawing">Drawing</a></li>
+        <li><a href="Lessons.dc.html?cat=Ink">Ink</a></li>
+        <li><a href="Lessons.dc.html?cat=Beginners">Beginners</a></li>
+      </ul>
+    </div>
+  </div>
   <div class="nav-sheet">
     <a href="index.html">Home</a>
     <a href="Lessons.dc.html">Courses</a>
@@ -77,7 +84,7 @@
     <a href="Showcase.dc.html">Showcase</a>
     <a href="Blog.dc.html">Blog</a>
     <a href="About.dc.html">About</a>
-    <a href="lesson.dc.html">Free video</a>
+    <a href="FreeVideos.dc.html">Free video</a>
     <a href="Blog.dc.html?tag=Tools">Tools</a>
     <a href="FAQ.dc.html">FAQ</a>
     <a href="Lessons.dc.html?cat=Watercolour">Watercolour</a>
@@ -91,14 +98,13 @@
 
 <header class="page-hero">
   <div class="container">
-    <div class="crumbs"><a href="Lessons.dc.html">Courses</a> <span aria-hidden="true">→</span> Materials &amp; setting up</div>
-    <span class="free-pill">Free lesson</span>
-    <h1 class="marker-title" style="font-size:clamp(30px,4vw,54px);margin-top:12px;color:var(--banner-ink);">Materials &amp; setting up</h1>
-    <p class="lead" style="color:var(--banner-ink);opacity:.85;">Everything you need before your first wash — paper, brushes, a small honest palette, and a workspace that won't fight you. Watch it all free; it's exactly how the paid courses feel.</p>
+    <div class="crumbs"><a href="Lessons.dc.html">Courses</a> <span aria-hidden="true">→</span> <a href="course.dc.html?id=cloud-painting">Introduction to Cloud Painting</a></div>
+    <h1 class="marker-title" style="font-size:clamp(30px,4vw,54px);margin-top:12px;color:var(--banner-ink);">Introduction to Cloud Painting</h1>
+    <p class="lead" style="color:var(--banner-ink);opacity:.85;">Clouds are the sky's expressions — ever-changing, moody, breathtaking. Twenty-four lessons, from the first pencil stroke to your final gallery-worthy sky.</p>
     <div class="lesson-meta-row">
       <span>Watercolour</span><span class="dot">✦</span>
       <span>Beginner</span><span class="dot">✦</span>
-      <span>6 units · 48 min</span><span class="dot">✦</span>
+      <span>24 lessons · ~6h</span><span class="dot">✦</span>
       <span>Taught by Crystal Lau</span>
     </div>
   </div>
@@ -110,13 +116,13 @@
     <div>
       <div class="player">
         <div class="stage" id="stage">
-          <img class="poster" id="stage-poster" src="img/cover3.jpg" alt="Lesson video">
+          <img class="poster" id="stage-poster" src="img/cover2.jpg" alt="Lesson video">
           <div class="sheen" aria-hidden="true"></div>
-          <span class="unit-flag" id="unit-flag">Unit 1 — Welcome</span>
+          <span class="unit-flag" id="unit-flag">Lesson 1</span>
           <div class="veil" id="stage-veil">
             <button class="big-play" id="big-play" type="button" aria-label="Play video">▶</button>
           </div>
-          <div class="done-toast" id="done-toast">Unit complete ✓</div>
+          <div class="done-toast" id="done-toast">Lesson complete ✓</div>
         </div>
         <div class="controls">
           <button class="ctl-btn" id="play-btn" type="button" aria-label="Play / pause">▶</button>
@@ -126,19 +132,19 @@
             <div class="knob" id="seek-knob"></div>
           </div>
           <span class="spd">demo ×12</span>
-          <button class="ctl-btn" type="button" aria-label="Fullscreen (demo)" title="Demo player — fullscreen disabled">⛶</button>
+          <button class="ctl-btn" id="fs-btn" type="button" aria-label="Toggle fullscreen" title="Fullscreen">⛶</button>
         </div>
       </div>
       <p class="demo-note">(prototype — the video is simulated and plays at 12× speed, so you can feel the whole journey in a few minutes)</p>
 
       <div class="finish-card" id="finish-card">
         <span class="fc-star">✦</span>
-        <h2>You finished your first course!</h2>
-        <p>That's the whole journey — watch, paint along, download the notes, move on. Every paid course works exactly like this, just deeper.</p>
+        <h2>You painted the whole sky!</h2>
+        <p>Twenty-four lessons, six modules, two finished scenes — that's the full course. Share your final piece in the community; the best skies land on the showcase wall.</p>
         <div class="cert">
           <div class="c1">Crystal's Art School</div>
-          <div class="c2">Materials &amp; setting up</div>
-          <div class="c3">completed · 6 of 6 units</div>
+          <div class="c2">Introduction to Cloud Painting</div>
+          <div class="c3">completed · 24 of 24 lessons</div>
         </div>
         <div class="fc-btns">
           <a class="btn primary big" href="Lessons.dc.html">Browse all courses <span class="arr" aria-hidden="true">→</span></a>
@@ -148,73 +154,7 @@
       </div>
 
       <div class="unit-panel">
-        <article class="unit-notes active" data-unit="0">
-          <h2>Welcome &amp; what you'll need</h2>
-          <p>Before we touch paint, a quick tour of where we're going. This course exists so your first proper painting session doesn't start with an hour of confusion in an art shop. By the end you'll own fewer than ten things, and every one of them will earn its place.</p>
-          <p>Don't buy anything yet — watch the whole course first, then use the checklist below. Most students already own half of it.</p>
-          <div class="tip-card"><span class="hand-note">Crystal's note ✦</span>Cheap paint on good paper beats good paint on cheap paper. Every single time. If you only upgrade one thing, upgrade the paper.</div>
-          <h3 class="res-title">Unit resources</h3>
-          <div class="res-list">
-            <a class="res-item" download="supply-checklist.txt" href="data:text/plain;charset=utf-8,CRYSTAL'S%20ART%20SCHOOL%20WATERCOLOUR%20SUPPLY%20CHECKLIST"><span class="res-ico" aria-hidden="true">📋</span><span class="res-body"><span class="nm">Printable supply checklist</span><br><span class="sz">TXT · 1 KB</span></span><span class="res-get">Download ↓</span></a>
-            <a class="res-item" download="course-overview.txt" href="data:text/plain;charset=utf-8,MATERIALS%20%26%20SETTING%20UP%20COURSE%20OVERVIEW"><span class="res-ico" aria-hidden="true">🗺️</span><span class="res-body"><span class="nm">Course overview &amp; pacing guide</span><br><span class="sz">TXT · 1 KB</span></span><span class="res-get">Download ↓</span></a>
-          </div>
-        </article>
-
-        <article class="unit-notes" data-unit="1">
-          <h2>Choosing paper — weight, texture, sizing</h2>
-          <p>Paper is the instrument; paint is just the breath. We look at why 300gsm cold-press is the safe default, what "sizing" actually does, and how to spot a pad that will buckle the moment it sees water.</p>
-          <p>We test three papers on camera — supermarket cartridge, student cold-press, and one expensive sheet — so you can see exactly what the extra money buys (and when it buys nothing).</p>
-          <div class="tip-card"><span class="hand-note">Crystal's note ✦</span>Tape your paper down on all four sides before wetting it. The 30 seconds of taping saves the whole painting later.</div>
-          <h3 class="res-title">Unit resources</h3>
-          <div class="res-list">
-            <a class="res-item" download="paper-cheat-sheet.txt" href="data:text/plain;charset=utf-8,PAPER%20CHEAT%20SHEET"><span class="res-ico" aria-hidden="true">📄</span><span class="res-body"><span class="nm">Paper cheat sheet</span><br><span class="sz">TXT · 1 KB</span></span><span class="res-get">Download ↓</span></a>
-          </div>
-        </article>
-
-        <article class="unit-notes" data-unit="2">
-          <h2>Brushes that matter (and ones that don't)</h2>
-          <p>You need three brushes. The art shop will sell you thirty. We cover what a round no.8 can do on its own — lines, washes, dry-brush — and why a good point matters more than natural hair at this stage.</p>
-          <p>Also: how to murder a brush (leaving it tip-down in the jar), and how to make a £6 synthetic last three years.</p>
-          <div class="tip-card"><span class="hand-note">Crystal's note ✦</span>Test a round brush before buying: wet it, flick it once. If it snaps back to a point, it's yours. If it splays, walk away.</div>
-          <h3 class="res-title">Unit resources</h3>
-          <div class="res-list">
-            <a class="res-item" download="brush-care-card.txt" href="data:text/plain;charset=utf-8,BRUSH%20CARE%20CARD"><span class="res-ico" aria-hidden="true">🖌️</span><span class="res-body"><span class="nm">Brush care card</span><br><span class="sz">TXT · 1 KB</span></span><span class="res-get">Download ↓</span></a>
-          </div>
-        </article>
-
-        <article class="unit-notes" data-unit="3">
-          <h2>A starter palette of 8 colours</h2>
-          <p>Eight tubes mix almost everything you'll paint in your first year: two blues, two yellows, two reds, two earths. We swatch all eight, then mix greens, greys, and skin tones live so you see the range hiding in so few colours.</p>
-          <p>Why no black and no white? Because mixing your darks teaches colour faster than any exercise I know — and the paper is your white.</p>
-          <div class="tip-card"><span class="hand-note">Crystal's note ✦</span>Buy artist quality for the two blues if you can stretch — blue does the most lifting in watercolour, and the cheap ones go chalky.</div>
-          <h3 class="res-title">Unit resources</h3>
-          <div class="res-list">
-            <a class="res-item" download="palette-mixing-chart.txt" href="data:text/plain;charset=utf-8,THE%20HONEST%20EIGHT%20MIXING%20CHART"><span class="res-ico" aria-hidden="true">🎨</span><span class="res-body"><span class="nm">Palette mixing chart</span><br><span class="sz">TXT · 1 KB</span></span><span class="res-get">Download ↓</span></a>
-          </div>
-        </article>
-
-        <article class="unit-notes" data-unit="4">
-          <h2>Setting up your workspace &amp; water</h2>
-          <p>A kitchen table is a perfectly good studio. We set one up from scratch: board angle (about 15°), light from the non-dominant side, the two-jar water system, and where the kitchen roll lives so your reflex reaches it without looking.</p>
-          <p>Small rituals matter — a tidy setup means the moment inspiration arrives, nothing stands between you and the first wash.</p>
-          <div class="tip-card"><span class="hand-note">Crystal's note ✦</span>Two jars, always: one "wash" jar for dirty rinsing, one "clean" jar for picking up fresh water. Muddy water makes muddy paintings.</div>
-          <h3 class="res-title">Unit resources</h3>
-          <div class="res-list">
-            <a class="res-item" download="workspace-setup-map.txt" href="data:text/plain;charset=utf-8,WORKSPACE%20SETUP%20MAP"><span class="res-ico" aria-hidden="true">🪑</span><span class="res-body"><span class="nm">Workspace setup map</span><br><span class="sz">TXT · 1 KB</span></span><span class="res-get">Download ↓</span></a>
-          </div>
-        </article>
-
-        <article class="unit-notes" data-unit="5">
-          <h2>Your first wash — let's test everything</h2>
-          <p>The graduation piece: a flat wash, a graded wash, and a simple two-colour sky. Nothing to frame — everything to learn. You'll feel how much water the brush holds, how the paper drinks, how the bead of paint travels.</p>
-          <p>Paint along with me in real time. When your sky dries with a soft gradient and no cauliflower blooms, you're ready for any beginner course in the catalog.</p>
-          <div class="tip-card"><span class="hand-note">Crystal's note ✦</span>Mix more paint than you think you need. Running out mid-wash is the most common beginner heartbreak — and the easiest to avoid.</div>
-          <h3 class="res-title">Unit resources</h3>
-          <div class="res-list">
-            <a class="res-item" download="first-wash-exercises.txt" href="data:text/plain;charset=utf-8,FIRST%20WASH%20PRACTICE%20SHEET"><span class="res-ico" aria-hidden="true">🌊</span><span class="res-body"><span class="nm">First-wash practice sheet</span><br><span class="sz">TXT · 1 KB</span></span><span class="res-get">Download ↓</span></a>
-            <a class="res-item" download="whats-next.txt" href="data:text/plain;charset=utf-8,WHAT'S%20NEXT%20COURSE%20PICKER"><span class="res-ico" aria-hidden="true">🧭</span><span class="res-body"><span class="nm">What's next — course picker</span><br><span class="sz">TXT · 1 KB</span></span><span class="res-get">Download ↓</span></a>
-          </div>
-        </article>
+        <div id="notes-holder"></div>
 
         <div class="complete-row">
           <button class="btn primary big" id="complete-btn" type="button">Mark complete &amp; continue <span class="arr" aria-hidden="true">→</span></button>
@@ -227,20 +167,24 @@
       <div class="progress-card">
         <div class="pc-top">
           <span class="pc-label">Your progress</span>
-          <span class="pc-count"><span id="done-count">0</span> of 6</span>
+          <span class="pc-count"><span id="done-count">0</span> of 24</span>
         </div>
         <div class="pbar"><div class="pfill" id="pfill"></div></div>
         <button class="pc-reset" id="reset-btn" type="button">restart course</button>
       </div>
 
       <div class="curr-card">
-        <div class="ch">Lessons</div>
-        <button class="unit-row" data-unit="0" type="button"><span class="st">1</span><span class="ut">Welcome &amp; what you'll need <span class="now" hidden>· now playing</span></span><span class="ud">4:12</span></button>
-        <button class="unit-row" data-unit="1" type="button"><span class="st">2</span><span class="ut">Choosing paper — weight, texture, sizing <span class="now" hidden>· now playing</span></span><span class="ud">7:48</span></button>
-        <button class="unit-row" data-unit="2" type="button"><span class="st">3</span><span class="ut">Brushes that matter <span class="now" hidden>· now playing</span></span><span class="ud">8:05</span></button>
-        <button class="unit-row" data-unit="3" type="button"><span class="st">4</span><span class="ut">A starter palette of 8 colours <span class="now" hidden>· now playing</span></span><span class="ud">9:32</span></button>
-        <button class="unit-row" data-unit="4" type="button"><span class="st">5</span><span class="ut">Setting up your workspace &amp; water <span class="now" hidden>· now playing</span></span><span class="ud">6:21</span></button>
-        <button class="unit-row" data-unit="5" type="button"><span class="st">6</span><span class="ut">Your first wash — let's test everything <span class="now" hidden>· now playing</span></span><span class="ud">12:04</span></button>
+        <div class="ch">Course materials</div>
+        <div class="res-list" style="padding:0 4px 8px;">
+          <a class="res-item" download="cloud-course-supply-list.txt" href="data:text/plain;charset=utf-8,INTRODUCTION%20TO%20CLOUD%20PAINTING%20%E2%80%94%20SUPPLY%20LIST"><span class="res-ico" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"></rect><path d="M9 8h6M9 12h6M9 16h4"></path></svg></span><span class="res-body"><span class="nm">Supply list</span><br><span class="sz">TXT · 1 KB</span></span><span class="res-get">Download ↓</span></a>
+          <a class="res-item" download="cloud-reference-photo-pack.txt" href="data:text/plain;charset=utf-8,CLOUD%20REFERENCE%20PHOTO%20PACK%20—%20PLACEHOLDER%20FOR%20THE%20REAL%20ZIP"><span class="res-ico" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><circle cx="8.5" cy="10" r="1.5"></circle><path d="M21 16l-5-5-9 8"></path></svg></span><span class="res-body"><span class="nm">Cloud reference photo pack</span><br><span class="sz">24 photos · placeholder</span></span><span class="res-get">Download ↓</span></a>
+          <a class="res-item" download="value-scale-card.txt" href="data:text/plain;charset=utf-8,PRINTABLE%20VALUE%20SCALE%20CARD"><span class="res-ico" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="8" width="18" height="8" rx="1.5"></rect><path d="M8 8v8M13 8v8M17 8v8"></path><path d="M3.8 8.8h4v6.4h-4z" fill="currentColor" stroke="none"></path></svg></span><span class="res-body"><span class="nm">Printable value-scale card</span><br><span class="sz">TXT · 1 KB</span></span><span class="res-get">Download ↓</span></a>
+          <a class="res-item" download="sky-palette-mixing-chart.txt" href="data:text/plain;charset=utf-8,SKY%20PALETTE%20MIXING%20CHART%20—%20DAYLIGHT%20%C2%B7%20GOLDEN%20HOUR%20%C2%B7%20PASTEL"><span class="res-ico" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 0 18c1.4 0 2-.8 2-1.8 0-.9-.6-1.4-.6-2.2 0-1 .8-1.8 2-1.8H17a4.5 4.5 0 0 0 4.5-4.5C21.5 6.4 17.2 3 12 3z"></path><circle cx="7.8" cy="10.2" r="1" fill="currentColor" stroke="none"></circle><circle cx="11.2" cy="7.4" r="1" fill="currentColor" stroke="none"></circle><circle cx="15.4" cy="7.8" r="1" fill="currentColor" stroke="none"></circle></svg></span><span class="res-body"><span class="nm">Sky palette mixing chart</span><br><span class="sz">TXT · 1 KB</span></span><span class="res-get">Download ↓</span></a>
+        </div>
+      </div>
+
+      <div class="curr-card">
+        <div id="rows-holder"></div>
       </div>
 
       <div class="teach-card">
@@ -254,11 +198,11 @@
     <div class="band-forest">
       <div class="thumb"><img src="img/cover4.jpg" alt="Loading a brush properly — course cover"></div>
       <div style="flex:1;min-width:200px;">
-        <div class="eyebrow"><span class="star">✦</span> Ready for more?</div>
-        <h2 class="marker-title" style="font-size:clamp(22px,2.4vw,32px);">Next up: Loading a brush properly</h2>
-        <p style="margin:0;max-width:54ch;">The natural follow-on — everything you just set up, put to work. Watercolour · beginner · £29.</p>
+        <div class="eyebrow"><span class="star">✦</span> Paint along</div>
+        <h2 class="marker-title" style="font-size:clamp(22px,2.4vw,32px);">Share your skies with the studio</h2>
+        <p style="margin:0;max-width:54ch;">Post your cloud studies in the community — the best of each month's critique lands on the student showcase wall.</p>
       </div>
-      <a class="btn-big" href="Lessons.dc.html" style="flex:none;">View the course →</a>
+      <a class="btn-big" href="Showcase.dc.html" style="flex:none;">Visit the showcase →</a>
     </div>
   </section>
 </main>
@@ -278,7 +222,7 @@
         <h4>Learn</h4>
         <a href="Lessons.dc.html">All lessons</a>
         <a href="Lessons.dc.html#membership">Membership</a>
-        <a href="lesson.dc.html">Free intro lesson</a>
+        <a href="FreeVideos.dc.html">Free videos</a>
       </div>
       <div>
         <h4>Explore</h4>
@@ -289,7 +233,7 @@
       </div>
       <div>
         <h4>Contact</h4>
-        <a href="About.dc.html#contact">hello@crystalsartschool.com</a>
+        <a href="About.dc.html#contact">crystalau430@gmail.com</a>
         <a href="About.dc.html#contact">Discord · Instagram</a>
         <a href="About.dc.html#terms">Terms &amp; privacy</a>
       </div>
@@ -317,35 +261,67 @@ class Component extends DCLogic {
     };
     let savedTheme = (valid.includes(this.props.defaultTheme) ? this.props.defaultTheme : 'A');
     try { const s = localStorage.getItem(THEME_KEY); if (s && valid.includes(s)) savedTheme = s; } catch (e) {}
-    applyTheme('D');
+    let __theme = 'D';
+    try { const __s = localStorage.getItem(THEME_KEY); if (__s && ['A','B','C','D'].indexOf(__s) >= 0) __theme = __s; } catch (e) {}
+    try { const __q = (new URLSearchParams(location.search).get('theme') || '').toUpperCase(); if (['A','B','C','D'].indexOf(__q) >= 0) { __theme = __q; localStorage.setItem(THEME_KEY, __q); } } catch (e) {}
+    applyTheme(__theme);
     document.querySelectorAll('.theme-switch button').forEach(b => {
       b.addEventListener('click', () => { const t = b.dataset.theme; applyTheme(t); try { localStorage.setItem(THEME_KEY, t); } catch (e) {} });
     });
 
     /* mobile nav sheet */
-    const burger = document.querySelector('.nav-burger');
-    const sheet = document.querySelector('.nav-sheet');
-    if (burger && sheet) {
-      burger.addEventListener('click', () => { const open = sheet.classList.toggle('open'); burger.setAttribute('aria-expanded', open ? 'true' : 'false'); });
-      sheet.addEventListener('click', (e) => { if (e.target.tagName === 'A') sheet.classList.remove('open'); });
-    }
+    /* burger handled by js/site-nav.js */
     document.querySelectorAll('.cart-badge').forEach(b => { try { const n = JSON.parse(localStorage.getItem('cas-cart') || '[]').reduce((a, i) => a + i.qty, 0); b.textContent = n; b.style.display = n > 0 ? 'grid' : 'none'; } catch (e) {} });
 
     /* ---- simulated lesson player ---- */
+    const IMGS = ['cover2.jpg', 'cover3.jpg', 'Liquidwatercolor.jpg', 'cover4.jpg', 'Postercolor.jpg', 'cover1.jpg', 'Sketchbook.jpg', 'BrushA.jpg'];
+    const MODS = ['Building the foundation', 'Mastering the values', 'A sky for every mood', "The artist's palette", 'Essential techniques', 'From study to scenery'];
     const UNITS = [
-      { title: "Welcome & what you'll need", dur: 252, img: 'img/cover3.jpg' },
-      { title: 'Choosing paper', dur: 468, img: 'img/Sketchbook.jpg' },
-      { title: 'Brushes that matter', dur: 485, img: 'img/BrushA.jpg' },
-      { title: 'A starter palette of 8 colours', dur: 572, img: 'img/Postercolor.jpg' },
-      { title: 'Workspace & water', dur: 381, img: 'img/BrushB.jpg' },
-      { title: 'Your first wash', dur: 724, img: 'img/Liquidwatercolor.jpg' }
+      { title: 'Welcome & materials for skies', dur: 492, note: 'Welcome to the course. We tour the small kit — one round brush, one flat, three tubes and decent paper — and set up the desk so nothing fights you later.', tip: 'Cheap paint on good paper beats good paint on cheap paper — if you upgrade one thing, upgrade the paper.' },
+      { title: 'Seeing clouds as simple shapes', dur: 665, note: "Clouds look chaotic until you draw the geometry underneath. We map cumulus volumes with overlapping circles, the way you'd construct a figure." },
+      { title: 'Pencil sketching & hatching volume', dur: 820, note: 'Pencil first: hatching establishes the weight and form of each cloud, so the brush already knows where the shadow lives before any paint arrives.' },
+      { title: 'Mapping a cloudscape', dur: 742, note: 'We compose a full cloudscape from thumbnails — horizon low, masses balanced — before any water touches paper.', tip: 'Three thumbnails, two minutes each. The best composition is almost never the first one.' },
+      { title: 'Reading light–grey–dark', dur: 648, note: 'The secret to "fluffy" is dimension: every cloud passage is light, grey or dark. We sort a reference photo into just those three families.' },
+      { title: 'Where the sun hits', dur: 735, note: 'Where the sun sits decides everything. We practise placing the lit face of a cloud and making every other cloud in the sky agree with it.' },
+      { title: 'Shadow shapes that stay soft', dur: 843, note: 'Cloud shadows are warm-grey and soft. We mix them so undersides glow instead of going muddy.' },
+      { title: 'A three-value cloud study', dur: 930, note: 'The graduation study for this module: one cumulus, three values, twenty minutes. Flat shapes become a 3D object that pops off the page.', tip: "Squint. If the study still reads at arm's length with your eyes half-closed, the values are right." },
+      { title: 'Cumulus — bold & puffy', dur: 984, note: 'Cumulus: bold, puffy, full of volume. Big shapes first, crisp sunlit tops, soft shadowed bellies.' },
+      { title: 'Stratus — streaks on the horizon', dur: 776, note: 'Stratus: soft horizontal streaks that calm a scene. One well-loaded stroke, pulled sideways, does most of the work.' },
+      { title: 'Wispy cirrus edges', dur: 678, note: 'Cirrus is the dry-brush lesson: barely-there wisps with a thirsty brush and a light hand.' },
+      { title: 'Mixing cloud types in one sky', dur: 947, note: 'Real skies mix families. We layer cumulus over stratus without the sky turning busy.' },
+      { title: 'Daylight brilliance', dur: 814, note: 'Crisp white clouds against deep blue — and how to keep the blue from swallowing the cloud.', tip: 'Mix two blues: one for the zenith, a greyer one near the horizon. The sky is a gradient, not a wall.' },
+      { title: 'Golden hour', dur: 962, note: 'The fiery oranges, yellows and reds of a setting sun — and the discipline of letting them stay clean instead of blending to brown.' },
+      { title: 'Dreamlike pastels', dur: 866, note: 'Ethereal purples, pinks and soft yellows for the quiet, magical skies.' },
+      { title: 'Layering atmospheric tones', dur: 911, note: 'The module capstone: the same sky at three times of day, painted side by side.' },
+      { title: 'Wet-on-wet cloud edges', dur: 892, note: 'Wet-on-wet: soft, seamless transitions and bleeding cloud edges. We control the chaos with timing, not fiddling.', tip: "Watch the shine. When the paper turns from glossy to satin, that's your wet-on-wet window." },
+      { title: 'Gradient washes for skies', dur: 788, note: 'The perfectly smooth backdrop every cloud needs: load a bead, tilt the board, walk away.' },
+      { title: 'Negative painting & hard edges', dur: 936, note: 'The brightest highlight is paper you never touched. We plan the whites in advance and guard them to the end.' },
+      { title: 'Lifting & softening', dur: 764, note: 'The rescue kit: a damp brush, clean tissue, and knowing when to stop.' },
+      { title: 'Storm clouds over the ocean', dur: 1095, note: 'First full scene: dramatic storm clouds over water — everything from the values module, at full volume.', tip: 'Mix a big well of your dark before you start — running out mid-storm is how storms go muddy.' },
+      { title: 'Evening silhouettes & power lines', dur: 1048, note: 'Second scene: a peaceful dusk silhouette with power lines — quiet, graphic, and much easier than it looks.' },
+      { title: 'Composing a full cloudscape', dur: 1000, note: 'You design your own cloudscape — reference, thumbnails, value plan, palette — and I paint alongside you.' },
+      { title: 'Final piece — your gallery sky', dur: 1192, note: 'The final piece: a gallery-worthy sky, start to finish, using every technique in the course.', tip: 'Frame this one. You earned it.' }
     ];
+    UNITS.forEach((u, i) => { u.img = 'img/' + IMGS[i % IMGS.length]; });
     const SPEED = 12;
-    const KEY = 'cas-free-lesson-progress';
+    const KEY = 'cas-cloud-progress';
 
-    let state = { unit: 0, t: 0, done: [false, false, false, false, false, false] };
-    try { const sv = JSON.parse(localStorage.getItem(KEY) || 'null'); if (sv && sv.done && sv.done.length === 6) state = sv; } catch (e) {}
+    let state = { unit: 0, t: 0, done: new Array(24).fill(false) };
+    try { const sv = JSON.parse(localStorage.getItem(KEY) || 'null'); if (sv && sv.done && sv.done.length === 24) state = sv; } catch (e) {}
     const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} };
+
+    /* build the 24 lesson notes + sidebar rows */
+    const escl = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+    const fmt0 = (s) => Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+    document.getElementById('notes-holder').innerHTML = UNITS.map((u, i) =>
+      '<article class="unit-notes' + (i === 0 ? ' active' : '') + '" data-unit="' + i + '">' +
+        '<div style="font-family:var(--font-cond);font-weight:600;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--coral);margin-bottom:8px;">Module ' + (Math.floor(i / 4) + 1) + ' · ' + escl(MODS[Math.floor(i / 4)]) + '</div>' +
+        '<h2>' + escl(u.title) + '</h2><p>' + escl(u.note) + '</p>' +
+        (u.tip ? '<div class="tip-card"><span class="hand-note">Crystal' + String.fromCharCode(39) + 's note ✦</span>' + escl(u.tip) + '</div>' : '') +
+      '</article>').join('');
+    document.getElementById('rows-holder').innerHTML = UNITS.map((u, i) =>
+      (i % 4 === 0 ? '<div class="ch"' + (i ? ' style="margin-top:16px;"' : '') + '>Module ' + (i / 4 + 1) + ' — ' + escl(MODS[i / 4]) + '</div>' : '') +
+      '<button class="unit-row" data-unit="' + i + '" type="button"><span class="st">' + (i + 1) + '</span><span class="ut">' + escl(u.title) + ' <span class="now" hidden>· now playing</span></span><span class="ud">' + fmt0(u.dur) + '</span></button>').join('');
 
     const $ = (id) => document.getElementById(id);
     const stage = $('stage'), poster = $('stage-poster'), flag = $('unit-flag'), veil = $('stage-veil'), playBtn = $('play-btn');
@@ -361,7 +337,7 @@ class Component extends DCLogic {
     const renderProgress = () => {
       const n = doneTotal();
       doneCount.textContent = n;
-      pfill.style.width = (n / 6 * 100) + '%';
+      pfill.style.width = (n / 24 * 100) + '%';
       rows.forEach((row, i) => {
         row.classList.toggle('done', state.done[i]);
         row.classList.toggle('current', i === state.unit);
@@ -369,8 +345,8 @@ class Component extends DCLogic {
         row.querySelector('.now').hidden = i !== state.unit;
       });
       doneTag.hidden = !state.done[state.unit];
-      completeBtn.innerHTML = state.unit < 5 ? 'Mark complete &amp; continue <span class="arr" aria-hidden="true">→</span>' : 'Mark complete &amp; finish <span class="arr" aria-hidden="true">→</span>';
-      if (n === 6) finishCard.classList.add('show'); else finishCard.classList.remove('show');
+      completeBtn.innerHTML = state.unit < 23 ? 'Mark complete &amp; continue <span class="arr" aria-hidden="true">→</span>' : 'Mark complete &amp; finish <span class="arr" aria-hidden="true">→</span>';
+      if (n === 24) finishCard.classList.add('show'); else finishCard.classList.remove('show');
     };
 
     const renderTime = () => {
@@ -391,12 +367,12 @@ class Component extends DCLogic {
     };
 
     const loadUnit = (i, autoplay) => {
-      state.unit = Math.max(0, Math.min(5, i));
+      state.unit = Math.max(0, Math.min(23, i));
       state.t = 0;
       const u = UNITS[state.unit];
       poster.src = u.img;
-      poster.alt = 'Unit ' + (state.unit + 1) + ' — ' + u.title;
-      flag.textContent = 'Unit ' + (state.unit + 1) + ' — ' + u.title;
+      poster.alt = 'Lesson ' + (state.unit + 1) + ' — ' + u.title;
+      flag.textContent = 'Lesson ' + (state.unit + 1) + ' — ' + u.title;
       tDur.textContent = fmt(u.dur);
       notes.forEach(a => a.classList.toggle('active', parseInt(a.dataset.unit, 10) === state.unit));
       setPlaying(!!autoplay);
@@ -412,12 +388,12 @@ class Component extends DCLogic {
         if (viaVideo) { toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 1300); }
       }
       renderProgress();
-      if (state.unit < 5) {
-        setTimeout(() => loadUnit(state.unit + 1, viaVideo), viaVideo ? 1450 : 250);
-      } else {
-        setPlaying(false); save(); renderProgress();
-        if (finishCard.scrollIntoView) try { finishCard.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) {}
+      /* no auto-advance: a finished video stays put; "Mark complete & continue"
+         moves to the next lesson but never autoplays it */
+      if (!viaVideo && state.unit < 23) {
+        setTimeout(() => loadUnit(state.unit + 1, false), 250);
       }
+      if (doneTotal() === 24) { setPlaying(false); save(); renderProgress(); }
     };
 
     const tick = (now) => {
@@ -436,12 +412,23 @@ class Component extends DCLogic {
     playBtn.addEventListener('click', () => setPlaying(!playing));
     const seekTo = (e) => { const r = seek.getBoundingClientRect(); const k = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)); state.t = UNITS[state.unit].dur * k; renderTime(); save(); };
     seek.addEventListener('click', seekTo);
-    rows.forEach(row => row.addEventListener('click', () => loadUnit(parseInt(row.dataset.unit, 10), true)));
+    rows.forEach(row => row.addEventListener('click', () => loadUnit(parseInt(row.dataset.unit, 10), false)));
     completeBtn.addEventListener('click', () => markDone(false));
-    $('reset-btn').addEventListener('click', () => { state = { unit: 0, t: 0, done: [false, false, false, false, false, false] }; save(); loadUnit(0, false); });
-    $('watch-again').addEventListener('click', () => { state = { unit: 0, t: 0, done: [false, false, false, false, false, false] }; save(); loadUnit(0, true); try { stage.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) {} });
+    $('reset-btn').addEventListener('click', () => { state = { unit: 0, t: 0, done: new Array(24).fill(false) }; save(); loadUnit(0, false); });
+    $('watch-again').addEventListener('click', () => { state = { unit: 0, t: 0, done: new Array(24).fill(false) }; save(); loadUnit(0, false); try { stage.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) {} });
 
-    loadUnit(state.unit, false);
+    /* emulated fullscreen */
+    const player = document.querySelector('.player');
+    const fsBtn = $('fs-btn');
+    const setFs = (on) => { player.classList.toggle('fs', on); document.body.style.overflow = on ? 'hidden' : ''; fsBtn.textContent = on ? '✕' : '⛶'; fsBtn.setAttribute('aria-label', on ? 'Exit fullscreen' : 'Toggle fullscreen'); };
+    if (fsBtn && player) {
+      fsBtn.addEventListener('click', () => setFs(!player.classList.contains('fs')));
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && player.classList.contains('fs')) setFs(false); });
+    }
+
+    let startAt = state.unit;
+    try { const uq = parseInt(new URLSearchParams(location.search).get('u'), 10); if (!isNaN(uq) && uq >= 0 && uq < 24) startAt = uq; } catch (e) {}
+    loadUnit(startAt, false);
   }
 }
 </script>

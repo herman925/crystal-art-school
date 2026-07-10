@@ -12,7 +12,13 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600;6..96,700&family=Oswald:wght@300;400;500;600&family=Archivo:wght@400;500;600;700&family=Saira+Stencil+One&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/industrial.css">
+<style>
+/* gallery tile: scrim so the veil text stays readable on light artwork */
+.shop-gallery .gt-veil { background: linear-gradient(180deg, rgba(28,22,16,.18) 0%, rgba(28,22,16,.34) 55%, rgba(28,22,16,.66) 100%); text-shadow: 0 2px 12px rgba(0,0,0,.6); }
+</style>
+
 <script src="js/site-extras.js"></script>
+<script src="js/site-nav.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <script src="js/motion.js"></script>
@@ -24,39 +30,33 @@
   <div class="nav-top">
     <div class="inner">
       <a class="nav-brand" href="index.html">
-        <img src="img/LAULogoFinal.png" alt="Lau. — Crystal's Art School">
+        <img src="img/lau-logo.png" alt="Lau. — Crystal's Art School">
         <span class="name">Crystal's Art School</span>
       </a>
       <ul class="nav-links">
         <li><a href="index.html" class="active">Home</a></li>
-        <li class="nav-item has-mega">
-          <a href="Lessons.dc.html" class="nav-mega-trigger" aria-haspopup="true" aria-expanded="false">Courses <span class="nav-caret" aria-hidden="true">▾</span></a>
-          <div class="nav-mega" role="menu" aria-label="Courses">
-            <div class="nav-mega-inner">
-              <div class="nm-col nm-start">
-                <div class="nm-kicker"><span class="star">✦</span> Start here</div>
-                <a class="nm-item" role="menuitem" href="lesson.dc.html"><span class="nm-t">Free courses</span><span class="nm-d">Watch a full course, on us</span></a>
-                <a class="nm-item nm-feature" role="menuitem" href="Lessons.dc.html"><span class="nm-t">Shop all courses <span class="nm-arr" aria-hidden="true">→</span></span><span class="nm-d">Browse everything by medium</span></a>
-                <a class="nm-item" role="menuitem" href="Blog.dc.html?tag=Tools"><span class="nm-t">Tools &amp; materials</span><span class="nm-d">Kit guides and honest reviews</span></a>
-              </div>
-              <div class="nm-col nm-medium">
-                <div class="nm-kicker">By medium · from your course tags</div>
-                <div class="nm-tags">
-                  <a role="menuitem" href="Lessons.dc.html?cat=Watercolour">Watercolour</a>
-                  <a role="menuitem" href="Lessons.dc.html?cat=Oil">Oils</a>
-                  <a role="menuitem" href="Lessons.dc.html?cat=Drawing">Drawing</a>
-                  <a role="menuitem" href="Lessons.dc.html?cat=Ink">Ink</a>
-                  <a role="menuitem" href="Lessons.dc.html?cat=Beginners">Beginners</a>
-                </div>
-                <p class="nm-note">These appear automatically from the tags on your courses — add a tag and a category shows up, remove it and it's gone.</p>
-              </div>
+        <li class="nav-drop" data-nav-drop>
+          <a href="Lessons.dc.html" class="nav-trigger">Courses
+            <svg class="nav-caret" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 4.5 6 8.5 10 4.5"></path></svg>
+          </a>
+          <div class="nav-mega" role="menu">
+            <span class="mega-eyebrow">By medium <em>· most popular first</em></span>
+            <div class="mega-cats">
+              <a class="mega-cat is-all" href="Lessons.dc.html" role="menuitem"><span>All courses</span><span class="mc-pop">everything</span></a>
+              <a class="mega-cat" href="Lessons.dc.html?cat=Watercolour" role="menuitem"><span>Watercolour</span></a>
+              <a class="mega-cat" href="Lessons.dc.html?cat=Oil" role="menuitem"><span>Oils</span></a>
+              <a class="mega-cat" href="Lessons.dc.html?cat=Drawing" role="menuitem"><span>Drawing</span></a>
+              <a class="mega-cat" href="Lessons.dc.html?cat=Ink" role="menuitem"><span>Ink</span></a>
+              <a class="mega-cat" href="Lessons.dc.html?cat=Beginners" role="menuitem"><span>Beginners</span></a>
             </div>
+            <p class="mega-note">Sorted by course popularity. Categories appear automatically from the tags on your courses — add a tag and a category shows up.</p>
           </div>
         </li>
         <li><a href="Gallery.dc.html">Gallery</a></li>
         <li><a href="Showcase.dc.html">Showcase</a></li>
         <li><a href="Blog.dc.html">Blog</a></li>
         <li><a href="About.dc.html">About</a></li>
+        <li><a href="FreeVideos.dc.html">Free videos</a></li>
         <li><a href="FAQ.dc.html">FAQ</a></li>
       </ul>
       <div class="nav-auth">
@@ -72,19 +72,18 @@
   </div>
   <div class="nav-sheet">
     <a href="index.html">Home</a>
-    <a href="Lessons.dc.html">Courses</a>
+    <a href="Lessons.dc.html">Courses — all</a>
+    <a href="Lessons.dc.html?cat=Watercolour">· Watercolour</a>
+    <a href="Lessons.dc.html?cat=Oil">· Oils</a>
+    <a href="Lessons.dc.html?cat=Drawing">· Drawing</a>
+    <a href="Lessons.dc.html?cat=Ink">· Ink</a>
+    <a href="Lessons.dc.html?cat=Beginners">· Beginners</a>
     <a href="Gallery.dc.html">Gallery</a>
     <a href="Showcase.dc.html">Showcase</a>
     <a href="Blog.dc.html">Blog</a>
     <a href="About.dc.html">About</a>
-    <a href="lesson.dc.html">Free video</a>
-    <a href="Blog.dc.html?tag=Tools">Tools</a>
+    <a href="FreeVideos.dc.html">Free videos</a>
     <a href="FAQ.dc.html">FAQ</a>
-    <a href="Lessons.dc.html?cat=Watercolour">Watercolour</a>
-    <a href="Lessons.dc.html?cat=Oil">Oils</a>
-    <a href="Lessons.dc.html?cat=Drawing">Drawing</a>
-    <a href="Lessons.dc.html?cat=Ink">Ink</a>
-    <a href="Lessons.dc.html?cat=Beginners">Beginners</a>
     <a href="Login.dc.html">Log in / Sign up</a>
   </div>
 </nav>
@@ -107,7 +106,7 @@
             <a class="hero__cta" href="Lessons.dc.html">View courses <span aria-hidden="true">→</span></a>
           </div>
           <div class="hero__media">
-            <figure class="hero__img hero__img--large"><img src="img/cover1.jpg" alt="Portrait study in oils"></figure>
+            <figure class="hero__img hero__img--large"><img src="img/A1.jpeg" alt="Watercolour palette and brushes in the studio"></figure>
             <figure class="hero__img hero__img--small"><img src="img/BrushA.jpg" alt="Brushes in the studio"></figure>
           </div>
         </article>
@@ -150,12 +149,12 @@
       <div class="grid-12 release-trio">
 
         <div class="span-4 reveal-up" style="--i:0">
-          <a class="free-video" href="lesson.dc.html" aria-label="Watch the free lesson — Materials and setting up">
-            <img src="img/cover3.jpg" alt="Materials and setting up — free watercolour lesson preview">
+          <a class="free-video" href="FreeVideos.dc.html" aria-label="Watch the free videos — Materials and setting up">
+            <img src="img/A2.jpeg" alt="Watercolour sketchbook — free videos preview">
             <div class="fv-veil">
               <div class="fv-play" aria-hidden="true">▶</div>
-              <strong>Watch a free lesson</strong>
-              <span>Materials &amp; setting up — the full course, on us</span>
+              <strong>Watch the free videos</strong>
+              <span>Full tutorials, on us — skies, colour mixing &amp; more</span>
             </div>
           </a>
         </div>
@@ -170,7 +169,7 @@
         <div class="span-4 about-col reveal-up" style="--i:2">
           <a class="arch-link" href="About.dc.html" aria-label="Meet Crystal — about me">
             <div class="arch-duo">
-              <img src="img/ProfilePic.jpg" alt="Crystal — founder portrait in the twin-arch mask">
+              <img src="img/A3.jpeg" alt="Crystal — founder portrait in the twin-arch mask" style="object-position:50% 100%;">
             </div>
           </a>
           <div class="arch-cap">
@@ -199,7 +198,7 @@
           </div>
         </div>
         <a class="gallery-tile shop-gallery" href="Gallery.dc.html" aria-label="Browse the art gallery">
-          <img src="img/cover4.jpg" alt="Art gallery">
+          <img src="img/A4.jpeg" alt="Art gallery">
           <div class="gt-veil">
             <span class="gt-ast">✦</span>
             <span class="gt-title">Art<br>Gallery</span>
@@ -218,26 +217,26 @@
           <button class="share-arrow" type="button" data-share="prev" aria-label="Previous posts"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6"></path></svg></button>
           <button class="share-arrow" type="button" data-share="next" aria-label="More posts"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18l6-6-6-6"></path></svg></button>
           <div class="share-viewport"><div class="share-rail" id="share-rail">
-            <a class="share-card" href="blog-post.dc.html">
-              <div class="sc-img"><img src="img/cover1.jpg" alt="Portrait block-in"></div>
-              <div class="sc-body"><span class="sc-kind">Lesson</span><h3>How to block in a portrait — value first</h3><p>Big shapes, big values, nothing else — the fastest way to make a portrait feel solid.</p></div>
+            <a class="share-card" href="blog-post.dc.html?id=block-in-portrait">
+              <div class="sc-img"><img src="img/A7.jpeg" alt="How to block in a portrait"></div>
+              <div class="sc-body"><span class="sc-kind">Blog · 24.1k reads</span><h3>How to block in a portrait — value first</h3><p>Ignore the features for the first hour. Big shapes, three values — the shortcut that looks like a delay.</p></div>
             </a>
-            <a class="share-card" href="blog-post.dc.html">
-              <div class="sc-img"><img src="img/Sketchbook.jpg" alt="Colour journal"></div>
-              <div class="sc-body"><span class="sc-kind">Blog</span><h3>Why I keep a colour journal</h3><p>A little notebook of mixes I've tried — not for anyone else, just for me.</p></div>
+            <a class="share-card" href="blog-post.dc.html?id=beginner-mistakes">
+              <div class="sc-img"><img src="img/Postercolor.jpg" alt="Beginner mistakes"></div>
+              <div class="sc-body"><span class="sc-kind">Blog · 21.7k reads</span><h3>Five things I wish I'd known as a beginner</h3><p>The little habits that would have saved me a year of muddy paintings.</p></div>
             </a>
-            <a class="share-card" href="Gallery.dc.html">
-              <div class="sc-img"><img src="img/BrushA.jpg" alt="Student showcase"></div>
-              <div class="sc-body"><span class="sc-kind">Gallery</span><h3>Student showcase — April 2026</h3><p>A handful of pieces from students this month. Browse the exhibition.</p></div>
+            <a class="share-card" href="blog-post.dc.html?id=five-brushes">
+              <div class="sc-img"><img src="img/BrushA.jpg" alt="Five brushes worth owning"></div>
+              <div class="sc-body"><span class="sc-kind">Blog · 18.3k reads</span><h3>Five brushes worth owning</h3><p>The short list of tools that actually change how you paint — and which ones to skip.</p></div>
             </a>
-            <a class="share-card" href="blog-post.dc.html">
-              <div class="sc-img"><img src="img/Liquidwatercolor.jpg" alt="Wet washes"></div>
-              <div class="sc-body"><span class="sc-kind">Lesson</span><h3>Wet-on-wet, without the mud</h3><p>Water control and timing, demystified — the cleanest washes you've made.</p></div>
+            <a class="share-card" href="blog-post.dc.html?id=three-greys">
+              <div class="sc-img"><img src="img/BrushB.jpg" alt="Three greys, endless range"></div>
+              <div class="sc-body"><span class="sc-kind">Blog · 15.2k reads</span><h3>Three greys, endless range</h3><p>Warm and cool greys, and the quiet power of a limited value palette.</p></div>
             </a>
           </div></div>
         </div>
         <a class="tools-btn" href="Blog.dc.html?tag=Tools" aria-label="Filter the journal by Tools">
-          <img src="img/BrushA.jpg" alt="" class="tb-photo">
+          <img src="img/A6.jpeg" alt="" class="tb-photo">
           <div class="tb-in">
             <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--band-eyebrow)" stroke-width="1.6" style="margin:0 auto 8px"><path d="M14.7 6.3a4 4 0 0 0-5.2 5.2L3 18v3h3l6.5-6.5a4 4 0 0 0 5.2-5.2l-2.6 2.6-2.1-.5-.5-2.1z"></path></svg>
             <div class="tb-title">TOOLS</div>
@@ -299,7 +298,7 @@
           <a class="ss-btn" href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 9h3V6h-3c-1.7 0-3 1.3-3 3v2H9v3h2v6h3v-6h2.5l.5-3H14v-1.5c0-.3.2-.5.5-.5z"></path></svg>
           </a>
-          <a class="ss-btn" href="mailto:hello@crystalsartschool.com" aria-label="Email">
+          <a class="ss-btn" href="mailto:crystalau430@gmail.com" aria-label="Email">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 7l9 6 9-6"></path></svg>
           </a>
         </div>
@@ -325,7 +324,7 @@
           <a class="social-btn" href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook">
             <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 9h3V6h-3c-1.7 0-3 1.3-3 3v2H9v3h2v6h3v-6h2.5l.5-3H14v-1.5c0-.3.2-.5.5-.5z"></path></svg>
           </a>
-          <a class="social-btn" href="mailto:hello@crystalsartschool.com" aria-label="Email">
+          <a class="social-btn" href="mailto:crystalau430@gmail.com" aria-label="Email">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 7l9 6 9-6"></path></svg>
           </a>
         </div>
@@ -334,7 +333,7 @@
         <h4>Learn</h4>
         <a href="Lessons.dc.html">All lessons</a>
         <a href="Lessons.dc.html#membership">Membership</a>
-        <a href="lesson.dc.html">Free intro lesson</a>
+        <a href="FreeVideos.dc.html">Free videos</a>
       </div>
       <div>
         <h4>Explore</h4>
@@ -345,7 +344,7 @@
       </div>
       <div>
         <h4>Contact</h4>
-        <a href="About.dc.html#contact">hello@crystalsartschool.com</a>
+        <a href="About.dc.html#contact">crystalau430@gmail.com</a>
         <a href="About.dc.html#contact">Discord · Instagram</a>
         <a href="About.dc.html#terms">Terms &amp; privacy</a>
       </div>
@@ -361,35 +360,14 @@
 <script type="text/x-dc" data-dc-script data-props="{&quot;defaultTheme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;A&quot;,&quot;B&quot;,&quot;C&quot;,&quot;D&quot;],&quot;default&quot;:&quot;A&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
 class Component extends DCLogic {
   coursePool() {
+    /* single live course for now — Introduction to Cloud Painting */
     return [
-      { img: 'cover1.jpg', title: 'Light & shadow on the head', tag: 'Oils', date: '2026-06-19', price: 42 },
-      { img: 'cover2.jpg', title: 'Blocking in large shapes', tag: 'Oils', date: '2026-06-12', price: 36 },
-      { img: 'cover3.jpg', title: 'Mixing greens from scratch', tag: 'Watercolour', date: '2026-06-05', price: 29 },
-      { img: 'cover4.jpg', title: 'Loading a brush properly', tag: 'Watercolour', date: '2026-05-22', price: 29 },
-      { img: 'Liquidwatercolor.jpg', title: 'Wet-on-wet washes', tag: 'Watercolour', date: '2026-05-10', price: 34 },
-      { img: 'Postercolor.jpg', title: 'Flat & opaque in poster colour', tag: 'Poster', date: '2026-04-28', price: 38 },
-      { img: 'Sketchbook.jpg', title: 'Fill a sketchbook in 30 days', tag: 'Drawing', date: '2026-04-15', price: 24 },
-      { img: 'BrushA.jpg', title: 'Brush & ink studies', tag: 'Ink', date: '2026-04-02', price: 44 },
-      { img: 'BrushB.jpg', title: 'Brush care & studio habits', tag: 'Acrylic', date: '2026-03-20', price: 19 },
-      { img: 'Rubber.jpg', title: 'Erasing as a drawing tool', tag: 'Drawing', date: '2026-03-08', price: 24 },
-      { img: 'cover1.jpg', title: 'Portrait value structure', tag: 'Oils', date: '2026-02-24', price: 46 },
-      { img: 'cover3.jpg', title: 'Skies in loose watercolour', tag: 'Watercolour', date: '2026-02-10', price: 32 }
+      { img: 'cover2.jpg', title: 'Introduction to Cloud Painting', tag: 'Watercolour', date: '2026-07-01', price: 58 }
     ];
   }
 
   courseHref(title) {
-    const m = {
-      'Materials & setting up': 'materials-setting-up',
-      'Light & shadow on the head': 'light-shadow-head',
-      'Blocking in large shapes': 'blocking-large-shapes',
-      'Mixing greens from scratch': 'mixing-greens',
-      'Soft edges, clean paint': 'soft-edges-clean-paint',
-      'Loading a brush properly': 'loading-a-brush',
-      'Warm vs cool greys': 'warm-cool-greys',
-      'Erasing as a drawing tool': 'erasing-drawing-tool',
-      'Brush care & studio habits': 'brush-care-habits'
-    };
-    return m[title] ? 'course.dc.html?id=' + m[title] : 'Lessons.dc.html';
+    return 'course.dc.html?id=cloud-painting';
   }
 
   componentDidMount() {
@@ -570,18 +548,19 @@ class Component extends DCLogic {
       root.setAttribute('data-theme', t);
       document.querySelectorAll('.theme-switch button').forEach(b => b.classList.toggle('active', b.dataset.theme === t));
     };
-    applyTheme('D');
+    let __theme = 'D';
+    try { const __s = localStorage.getItem(THEME_KEY); if (__s && ['A','B','C','D'].indexOf(__s) >= 0) __theme = __s; } catch (e) {}
+    try { const __q = (new URLSearchParams(location.search).get('theme') || '').toUpperCase(); if (['A','B','C','D'].indexOf(__q) >= 0) { __theme = __q; localStorage.setItem(THEME_KEY, __q); } } catch (e) {}
+    applyTheme(__theme);
     document.querySelectorAll('.theme-switch button').forEach(b => {
       b.addEventListener('click', () => { const t = b.dataset.theme; applyTheme(t); try { localStorage.setItem(THEME_KEY, t); } catch (e) {} });
     });
 
     /* ---- mobile nav sheet ---- */
-    const burger = document.querySelector('.nav-burger');
-    const sheet = document.querySelector('.nav-sheet');
-    if (burger && sheet) {
-      burger.addEventListener('click', () => { const open = sheet.classList.toggle('open'); burger.setAttribute('aria-expanded', open ? 'true' : 'false'); });
-      sheet.addEventListener('click', (e) => { if (e.target.tagName === 'A') sheet.classList.remove('open'); });
-    }
+    /* burger handled by js/site-nav.js */
+
+    /* ---- cascading Courses menu: click pins it open (hover handled by CSS) ---- */
+    /* drawer handled by js/site-nav.js */
 
     /* ---- cart badge (reads shared cas-cart array; tier add handled by site-extras) ---- */
     const cartCount = () => { try { return (JSON.parse(localStorage.getItem('cas-cart') || '[]')).reduce((a, i) => a + (i.qty || 1), 0); } catch (er) { return 0; } };
@@ -637,7 +616,7 @@ class Component extends DCLogic {
           '<div class="cc-pad"><div class="cc-meta">' + esc(c.tag) + '</div><h3>' + esc(c.title) + '</h3>' +
           '<div class="cc-row"><span class="cc-price">£' + c.price + '</span>' +
           '<button class="cc-btn primary" type="button" data-add-to-cart data-tiered data-title="' + esc(c.title) + '" data-price="' + c.price + '" data-img="' + c.img + '">' + cartSvg + ' Add</button></div></div>' +
-          '<div class="cc-photo"><img src="img/' + ph.img + '" alt=""></div>';
+          '<div class="cc-photo"><img src="img/A5.jpeg" alt=""></div>';
         shopRail.appendChild(card);
       });
       const galTile = document.querySelector('.shop-gallery');

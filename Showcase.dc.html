@@ -15,7 +15,47 @@
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <script src="js/site-extras.js"></script>
+<script src="js/site-nav.js"></script>
+<script src="js/filter-tags.js"></script>
 <script src="js/motion.js"></script>
+<style>
+/* ---- "instant photo" wall (client-approved concept) ----
+   Desktop: prints pinned to a cork board (水松板), loosely overlapping, coloured pins.
+   Phone: one vertical strip, taped down. Motion = tiny pendulum physics in JS. */
+.pol-wall { display:flex; flex-direction:column; gap:38px; padding: 48px 34px 44px;
+  background-color:#c9aa7d;
+  background-image:
+    radial-gradient(120% 90% at 50% 0%, rgba(255,244,222,.16), transparent 60%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='c'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.55' numOctaves='3' seed='7'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.42 0 0 0 0 0.30 0 0 0 0 0.16 0 0 0 0.5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23c)'/%3E%3C/svg%3E"),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='d'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.12' numOctaves='2' seed='3'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.72 0 0 0 0 0.58 0 0 0 0 0.38 0 0 0 0.35 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23d)'/%3E%3C/svg%3E");
+  border-radius: 10px;
+  border: 10px solid #8a6a44;
+  box-shadow: inset 0 3px 22px rgba(60,40,16,.35), inset 0 -2px 12px rgba(60,40,16,.2), 0 10px 30px rgba(0,0,0,.25); }
+.pol-row { display:flex; flex-wrap:wrap; justify-content:center; gap: 28px 14px; }
+.pol-tile { position:relative; display:block; border:0; cursor:pointer; background:#f6f1e6; padding:11px 11px 48px; width:216px;
+  margin: var(--mt, 0) var(--mx, 0) 0; z-index: var(--z, 1);
+  box-shadow: 0 22px 34px rgba(40,26,12,.42), 0 6px 12px rgba(40,26,12,.28);
+  transform: rotate(var(--rot, 0deg)); transform-origin: var(--pinx, 50%) -6px; transition: box-shadow .25s ease; text-align:left; }
+.pol-tile:hover, .pol-tile:focus-visible { box-shadow: 0 30px 52px rgba(40,26,12,.55); z-index: 30; }
+.pol-nopin::before { display: none !important; }
+.pol-photo { display:block; position:relative; width:194px; height:194px; overflow:hidden; background:#2b2823; }
+.pol-photo img { width:100%; height:100%; object-fit:cover; display:block; filter: saturate(.94) contrast(1.02); }
+.pol-med { position:absolute; left:8px; bottom:8px; font-family:var(--font-cond); font-size:10px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:#f3ede1; background:rgba(43,40,35,.72); padding:4px 9px; border-radius:2px; }
+.pol-cap { position:absolute; left:13px; right:13px; bottom:10px; display:flex; flex-direction:column; gap:1px; }
+.pol-cap em { font-family:var(--font-marker); font-style:italic; font-weight:600; font-size:14.5px; color:#474138; line-height:1.18; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.pol-cap span { font-family:var(--font-cond); font-size:10.5px; font-weight:500; letter-spacing:.14em; text-transform:uppercase; color:rgba(71,65,56,.62); }
+.pol-tile::before { content:""; position:absolute; top:-8px; left: var(--pinx, 50%); margin-left:-8px; width:16px; height:16px; border-radius:50%;
+  background: radial-gradient(circle at 35% 30%, color-mix(in srgb, var(--pin, #9a6436) 45%, white), var(--pin, #9a6436) 55%, color-mix(in srgb, var(--pin, #9a6436) 55%, black) 95%);
+  box-shadow: 0 3px 5px rgba(0,0,0,.45); z-index:3; }
+@media (max-width: 700px) {
+  .pol-wall { gap: 26px; padding: 36px 20px 34px; }
+  .pol-row { flex-direction: column; align-items: center; gap: 26px; }
+  .pol-tile { width: min(76vw, 300px); padding: 12px 12px 54px; margin: var(--mt, 0) 0 0; }
+  .pol-photo { width: 100%; height: auto; aspect-ratio: 1 / 1; }
+  .pol-cap em { font-size: 16px; }
+  .pol-tile::before { border-radius: 1px; width: 88px; height: 26px; top: -14px; margin-left: -44px; transform: rotate(-2deg); background: linear-gradient(180deg, rgba(226,209,172,.88), rgba(206,186,146,.82)); box-shadow: 0 2px 5px rgba(0,0,0,.25); border-left: 1px dashed rgba(120,100,70,.35); border-right: 1px dashed rgba(120,100,70,.35); }
+}
+</style>
 </helmet>
 <div class="cas-root" data-theme="D">
 <div class="glow-layer" aria-hidden="true"></div>
@@ -24,39 +64,18 @@
   <div class="nav-top">
     <div class="inner">
       <a class="nav-brand" href="index.html">
-        <img src="img/LAULogoFinal.png" alt="Lau. — Crystal's Art School">
+        <img src="img/lau-logo.png" alt="Lau. — Crystal's Art School">
         <span class="name">Crystal's Art School</span>
       </a>
       <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
-        <li class="nav-item has-mega">
-          <a href="Lessons.dc.html" class="nav-mega-trigger" aria-haspopup="true" aria-expanded="false">Courses <span class="nav-caret" aria-hidden="true">▾</span></a>
-          <div class="nav-mega" role="menu" aria-label="Courses">
-            <div class="nav-mega-inner">
-              <div class="nm-col nm-start">
-                <div class="nm-kicker"><span class="star">✦</span> Start here</div>
-                <a class="nm-item" role="menuitem" href="lesson.dc.html"><span class="nm-t">Free courses</span><span class="nm-d">Watch a full course, on us</span></a>
-                <a class="nm-item nm-feature" role="menuitem" href="Lessons.dc.html"><span class="nm-t">Shop all courses <span class="nm-arr" aria-hidden="true">→</span></span><span class="nm-d">Browse everything by medium</span></a>
-                <a class="nm-item" role="menuitem" href="Blog.dc.html?tag=Tools"><span class="nm-t">Tools &amp; materials</span><span class="nm-d">Kit guides and honest reviews</span></a>
-              </div>
-              <div class="nm-col nm-medium">
-                <div class="nm-kicker">By medium · from your course tags</div>
-                <div class="nm-tags">
-                  <a role="menuitem" href="Lessons.dc.html?cat=Watercolour">Watercolour</a>
-                  <a role="menuitem" href="Lessons.dc.html?cat=Oil">Oils</a>
-                  <a role="menuitem" href="Lessons.dc.html?cat=Drawing">Drawing</a>
-                  <a role="menuitem" href="Lessons.dc.html?cat=Ink">Ink</a>
-                  <a role="menuitem" href="Lessons.dc.html?cat=Beginners">Beginners</a>
-                </div>
-                <p class="nm-note">These appear automatically from the tags on your courses — add a tag and a category shows up, remove it and it's gone.</p>
-              </div>
-            </div>
-          </div>
-        </li>
+        <li><a href="Lessons.dc.html">Courses</a></li>
         <li><a href="Gallery.dc.html">Gallery</a></li>
         <li><a href="Showcase.dc.html" class="active">Showcase</a></li>
         <li><a href="Blog.dc.html">Blog</a></li>
         <li><a href="About.dc.html">About</a></li>
+        <li><a href="FreeVideos.dc.html">Free video</a></li>
+        <li><a href="Blog.dc.html?tag=Tools">Tools</a></li>
         <li><a href="FAQ.dc.html">FAQ</a></li>
       </ul>
       <div class="nav-auth">
@@ -70,6 +89,17 @@
       </div>
     </div>
   </div>
+  <div class="nav-cats">
+    <div class="inner">
+      <ul class="nav-cat-links">
+        <li><a href="Lessons.dc.html?cat=Watercolour">Watercolour</a></li>
+        <li><a href="Lessons.dc.html?cat=Oil">Oils</a></li>
+        <li><a href="Lessons.dc.html?cat=Drawing">Drawing</a></li>
+        <li><a href="Lessons.dc.html?cat=Ink">Ink</a></li>
+        <li><a href="Lessons.dc.html?cat=Beginners">Beginners</a></li>
+      </ul>
+    </div>
+  </div>
   <div class="nav-sheet">
     <a href="index.html">Home</a>
     <a href="Lessons.dc.html">Courses</a>
@@ -77,7 +107,7 @@
     <a href="Showcase.dc.html">Showcase</a>
     <a href="Blog.dc.html">Blog</a>
     <a href="About.dc.html">About</a>
-    <a href="lesson.dc.html">Free video</a>
+    <a href="FreeVideos.dc.html">Free video</a>
     <a href="Blog.dc.html?tag=Tools">Tools</a>
     <a href="FAQ.dc.html">FAQ</a>
     <a href="Lessons.dc.html?cat=Watercolour">Watercolour</a>
@@ -94,7 +124,7 @@
   <div class="container">
     <div class="eyebrow reveal-one"><span class="star">✦</span> Student showcase</div>
     <h1 class="marker-title reveal-one" style="font-size:clamp(34px,4.6vw,62px);">Look what the studio painted.</h1>
-    <p class="lead reveal-one">Work from students painting along with the courses — every ratio welcome, every stage of the journey. Hover any piece to meet the painter.</p>
+    <p class="lead reveal-one">Work from students painting along with the courses — pinned up like instant photos, fresh from the studio. Tap any print to see it big.</p>
   </div>
 </header>
 
@@ -102,15 +132,9 @@
 
   <section class="section" style="padding-top:18px;">
     <div class="filter-rail reveal-one" style="margin-bottom:18px;">
-      <div class="fg-opts" id="sw-filter">
-        <button class="fopt active" type="button" data-val="all">All</button>
-        <button class="fopt" type="button" data-val="Watercolour">Watercolour</button>
-        <button class="fopt" type="button" data-val="Oils">Oils</button>
-        <button class="fopt" type="button" data-val="Drawing">Drawing</button>
-        <button class="fopt" type="button" data-val="Acrylic">Acrylic</button>
-      </div>
+      <div class="fg-opts" id="sw-filter"></div>
     </div>
-    <div class="sw-grid reveal" id="sw-grid" aria-label="Student artwork gallery"></div>
+    <div class="pol-wall reveal" id="sw-grid" aria-label="Student artwork wall"></div>
     <div class="no-results" id="sw-empty" style="display:none;">Nothing in this medium yet — check back after the next critique night.</div>
   </section>
 
@@ -129,7 +153,7 @@
 <div class="sw-modal" id="sw-modal" aria-hidden="true" role="dialog" aria-modal="true">
   <button class="sw-close" type="button" aria-label="Close">✕</button>
   <figure>
-    <img id="swm-img" src="" alt="">
+    <img id="swm-img" alt="">
     <figcaption><span class="sw-ava" id="swm-ava"></span><span id="swm-cap"></span></figcaption>
   </figure>
 </div>
@@ -145,7 +169,7 @@
         <h4>Learn</h4>
         <a href="Lessons.dc.html">All lessons</a>
         <a href="Lessons.dc.html#membership">Membership</a>
-        <a href="lesson.dc.html">Free intro lesson</a>
+        <a href="FreeVideos.dc.html">Free videos</a>
       </div>
       <div>
         <h4>Explore</h4>
@@ -156,7 +180,7 @@
       </div>
       <div>
         <h4>Contact</h4>
-        <a href="About.dc.html#contact">hello@crystalsartschool.com</a>
+        <a href="About.dc.html#contact">crystalau430@gmail.com</a>
         <a href="About.dc.html#contact">Discord · Instagram</a>
         <a href="About.dc.html#terms">Terms &amp; privacy</a>
       </div>
@@ -205,15 +229,14 @@ class Component extends DCLogic {
     /* theme */
     const THEME_KEY = 'cas-theme';
     const applyTheme = (t) => { root.setAttribute('data-theme', t); document.querySelectorAll('.theme-switch button').forEach(b => b.classList.toggle('active', b.dataset.theme === t)); };
-    applyTheme('D');
+    let __theme = 'D';
+    try { const __s = localStorage.getItem(THEME_KEY); if (__s && ['A','B','C','D'].indexOf(__s) >= 0) __theme = __s; } catch (e) {}
+    try { const __q = (new URLSearchParams(location.search).get('theme') || '').toUpperCase(); if (['A','B','C','D'].indexOf(__q) >= 0) { __theme = __q; localStorage.setItem(THEME_KEY, __q); } } catch (e) {}
+    applyTheme(__theme);
     document.querySelectorAll('.theme-switch button').forEach(b => b.addEventListener('click', () => { const t = b.dataset.theme; applyTheme(t); try { localStorage.setItem(THEME_KEY, t); } catch (e) {} }));
 
     /* burger */
-    const burger = document.querySelector('.nav-burger'), sheet = document.querySelector('.nav-sheet');
-    if (burger && sheet) {
-      burger.addEventListener('click', () => { const open = sheet.classList.toggle('open'); burger.setAttribute('aria-expanded', open ? 'true' : 'false'); });
-      sheet.addEventListener('click', (e) => { if (e.target.tagName === 'A') sheet.classList.remove('open'); });
-    }
+    /* burger handled by js/site-nav.js */
 
     /* cart badge */
     const renderCart = () => { let n = 0; try { n = JSON.parse(localStorage.getItem('cas-cart') || '[]').reduce((a, i) => a + (i.qty || 1), 0); } catch (e) {} document.querySelectorAll('.cart-badge').forEach(b => { b.textContent = n; b.style.display = n > 0 ? 'grid' : 'none'; }); };
@@ -225,27 +248,137 @@ class Component extends DCLogic {
     const pieces = this.pieces();
     const grid = $('sw-grid');
 
-    grid.innerHTML = pieces.map((p, i) =>
-      '<button class="sw-tile" type="button" style="--ar:' + p.ar + ';" data-i="' + i + '" data-med="' + esc(p.med) + '" aria-label="' + esc(p.title) + ' by ' + esc(p.name) + '">' +
-        '<img src="img/' + esc(p.img) + '" alt="' + esc(p.title) + ' — student work by ' + esc(p.name) + '" loading="lazy">' +
-        '<span class="sw-medium">' + esc(p.med) + '</span>' +
-        '<span class="sw-owner"><span class="sw-ava" style="background:' + avaColor(p.name) + ';">' + esc(p.name[0]) + '</span><span class="sw-name">' + esc(p.name) + '</span></span>' +
-      '</button>').join('');
+    /* random layout — max 10 prints, two rows of 5. Pins at random x positions;
+       one pair per wall is corner-pinned together (one pin through both top corners,
+       so almost all of each print stays exposed). */
+    const PINS = ['#4d6625', '#a13d2d', '#2f4c6b', '#c9992e'];
+    const rnd = (a, b) => a + Math.random() * (b - a);
+    const wallPieces = pieces.slice(0, 10);
+    /* the pair: j hangs from its top-RIGHT corner, j+1 from its top-LEFT — same pin */
+    const pairLead = 1 + Math.floor(Math.random() * 3);
+    const tilesHtml = wallPieces.map((p, i) => {
+      const isLead = i === pairLead, isMate = i === pairLead + 1;
+      let rot, mx, pinx, extra = '';
+      if (isLead) { rot = rnd(-7, -4); pinx = '94%'; mx = rnd(-8, -2); }
+      else if (isMate) { rot = rnd(4, 7); pinx = '6%'; mx = -26; extra = ' pol-nopin'; }
+      else { rot = rnd(-3.5, 3.5); pinx = rnd(25, 75).toFixed(0) + '%'; mx = rnd(-14, 0); }
+      const mt = rnd(-10, 22);
+      const z = isMate ? 0 : 1 + Math.floor(Math.random() * 9);
+      const pin = PINS[Math.floor(Math.random() * PINS.length)];
+      return '<button class="pol-tile' + extra + '" type="button" style="--rot:' + rot.toFixed(2) + 'deg;--mx:' + (+mx).toFixed(0) + 'px;--mt:' + mt.toFixed(0) + 'px;--z:' + z + ';--pinx:' + pinx + ';--pin:' + pin + ';" data-i="' + i + '" data-med="' + esc(p.med) + '" aria-label="' + esc(p.title) + ' by ' + esc(p.name) + '">' +
+        '<span class="pol-photo"><img src="img/' + esc(p.img) + '" alt="' + esc(p.title) + ' — student work by ' + esc(p.name) + '" loading="lazy">' +
+        '<span class="pol-med">' + esc(p.med) + '</span></span>' +
+        '<span class="pol-cap"><em>' + esc(p.title) + '</em><span>' + esc(p.name) + '</span></span>' +
+      '</button>';
+    });
+    grid.innerHTML =
+      '<div class="pol-row">' + tilesHtml.slice(0, 5).join('') + '</div>' +
+      '<div class="pol-row">' + tilesHtml.slice(5).join('') + '</div>';
 
-    /* medium filter */
+    /* ---- scroll-driven physics — the wall is STILL at rest. Scrolling shakes it:
+       · scroll down = a moment of lost gravity — prints float up and flip a little,
+         randomly clockwise / anticlockwise, faster scroll = faster sway
+       · scroll up = a stronger downward tug — everything gets pulled down a touch
+       · overlapping prints rub (friction couples their swing)
+       Hover never interferes with the motion. ---- */
+    const reduceM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (!reduceM) {
+      const tiles = Array.from(grid.querySelectorAll('.pol-tile'));
+      const sim = tiles.map((el) => ({
+        el,
+        base: parseFloat(el.style.getPropertyValue('--rot')) || 0,
+        th: 0, w: 0, y: 0, vy: 0,
+        k: rnd(7, 12),            /* rotational spring (back to rest) */
+        c: rnd(1.1, 1.8),         /* rotational damping — settles in a couple of seconds */
+        ky: rnd(55, 85), cy: rnd(6, 9),  /* vertical spring/damping */
+        dir: Math.random() < 0.5 ? -1 : 1, /* preferred flip direction */
+        m: rnd(0.7, 1.4)          /* "mass" — lighter prints react more */
+      }));
+      let pairs = [];
+      const findPairs = () => {
+        pairs = [];
+        const boxes = tiles.map(t => t.getBoundingClientRect());
+        for (let a = 0; a < boxes.length; a++) {
+          for (let b = a + 1; b < boxes.length; b++) {
+            const A = boxes[a], B = boxes[b];
+            if (A.width && A.left < B.right - 8 && B.left < A.right - 8 && A.top < B.bottom - 8 && B.top < A.bottom - 8) pairs.push([a, b]);
+          }
+        }
+      };
+      setTimeout(findPairs, 450);
+      window.addEventListener('resize', () => setTimeout(findPairs, 350));
+
+      /* scroll + wheel feed the impulse for the next frame */
+      let pending = 0;
+      let lastScrollY = window.pageYOffset || 0;
+      window.addEventListener('scroll', () => {
+        const yNow = window.pageYOffset || document.documentElement.scrollTop || 0;
+        pending += yNow - lastScrollY;
+        lastScrollY = yNow;
+      }, { passive: true });
+      window.addEventListener('wheel', (e) => { pending += e.deltaY * 0.35; }, { passive: true });
+
+      let last = performance.now();
+      const step = (now) => {
+        const dt = Math.min(0.05, (now - last) / 1000);
+        last = now;
+
+        const kick = Math.max(-60, Math.min(60, pending));
+        pending = 0;
+        if (kick) {
+          sim.forEach(s => {
+            /* very subtle: a light flip, random cw/ccw, scaled by scroll speed */
+            s.w += s.dir * (0.5 + Math.random()) * kick * 0.045 / s.m;
+            /* down-scroll = faint weightless lift; up-scroll = slightly stronger pull down */
+            s.vy += (kick > 0 ? -0.22 : 0.45) * Math.abs(kick) / s.m;
+          });
+          if (Math.random() < 0.25) sim[(Math.random() * sim.length) | 0].dir *= -1;
+        }
+
+        sim.forEach(s => {
+          s.w += (-s.k * s.th - s.c * s.w) * dt;
+          s.vy += (-s.ky * s.y - s.cy * s.vy) * dt;
+        });
+        /* friction where papers overlap: drag velocities toward each other */
+        const mu = Math.min(1, 5 * dt);
+        pairs.forEach(pr => {
+          const a = sim[pr[0]], b = sim[pr[1]];
+          const d = (b.w - a.w) * 0.5 * mu;
+          a.w += d; b.w -= d;
+          const dy = (b.vy - a.vy) * 0.3 * mu;
+          a.vy += dy; b.vy -= dy;
+        });
+        sim.forEach(s => {
+          s.th += s.w * dt * 3;
+          s.y = Math.max(-6, Math.min(6, s.y + s.vy * dt));
+          if (Math.abs(s.th) < 0.02 && Math.abs(s.w) < 0.02 && Math.abs(s.y) < 0.1 && Math.abs(s.vy) < 0.1) {
+            s.th = 0; s.w = 0; s.y = 0; s.vy = 0;
+            s.el.style.transform = 'rotate(' + s.base + 'deg)';
+          } else {
+            s.el.style.transform = 'translateY(' + s.y.toFixed(2) + 'px) rotate(' + (s.base + s.th).toFixed(3) + 'deg)';
+          }
+        });
+        requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    }
+
+    /* medium filter — chips built from the pieces' own tags (shared js/filter-tags.js) */
     const filter = $('sw-filter');
+    if (window.CasFilters) window.CasFilters.populate(filter, pieces, p => p.med, { allLabel: 'All' });
     filter.addEventListener('click', (e) => {
       const btn = e.target.closest('.fopt');
       if (!btn) return;
       filter.querySelectorAll('.fopt').forEach(b => b.classList.toggle('active', b === btn));
       const val = btn.dataset.val;
       let shown = 0;
-      grid.querySelectorAll('.sw-tile').forEach(t => {
+      grid.querySelectorAll('.pol-tile').forEach(t => {
         const show = val === 'all' || t.dataset.med === val;
         t.style.display = show ? '' : 'none';
         if (show) shown++;
       });
       $('sw-empty').style.display = shown ? 'none' : 'block';
+      try { window.dispatchEvent(new Event('resize')); } catch (er) {} /* re-find overlaps for the physics */
     });
 
     /* lightbox */
@@ -262,7 +395,7 @@ class Component extends DCLogic {
       document.body.style.overflow = 'hidden';
     };
     const close = () => { modal.classList.remove('show'); modal.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; };
-    grid.addEventListener('click', (e) => { const t = e.target.closest('.sw-tile'); if (t) open(+t.dataset.i); });
+    grid.addEventListener('click', (e) => { const t = e.target.closest('.pol-tile'); if (t) open(+t.dataset.i); });
     modal.addEventListener('click', (e) => { if (e.target === modal || e.target.closest('.sw-close')) close(); });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.classList.contains('show')) close(); });
 

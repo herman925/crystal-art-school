@@ -15,7 +15,31 @@
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <script src="js/site-extras.js"></script>
+<script src="js/site-nav.js"></script>
 <script src="js/motion.js"></script>
+<script src="js/blog-data.js"></script>
+<style>
+/* ---- article layout variants (essay / list / steps / photo / qa) ---- */
+.bp-lede { font-size: 19px; line-height: 1.65; }
+.bp-item { display: flex; gap: 20px; margin: 30px 0; }
+.bp-item .bp-num { font-family: var(--font-marker); font-weight: 600; font-size: 46px; line-height: 1; color: var(--coral); flex: none; width: 66px; padding-top: 2px; }
+.bp-item h2 { margin: 0 0 8px; font-size: 24px; }
+.bp-item p { margin: 0; }
+.bp-steps { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 28px 0; }
+.bp-step { background: var(--surface); border: 1px solid color-mix(in srgb, var(--ink) 14%, transparent); border-radius: var(--radius-card); padding: 18px 20px 20px; }
+.bp-step .bp-step-n { font-family: var(--font-cond); font-size: 11px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--coral); }
+.bp-step h2 { font-size: 20px; margin: 8px 0; }
+.bp-step p { margin: 0; font-size: 15px; }
+.bp-materials { background: color-mix(in srgb, var(--sand) 24%, var(--surface)); border-radius: var(--radius-card); padding: 14px 20px; margin: 20px 0 6px; }
+.bp-materials strong { font-family: var(--font-cond); font-size: 11px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--ink); display: block; margin-bottom: 4px; }
+.bp-materials p { margin: 0; font-size: 14.5px; }
+.bp-qa { margin: 30px 0; }
+.bp-qa .bp-q { font-family: var(--font-cond); font-weight: 600; font-size: 15px; letter-spacing: .1em; text-transform: uppercase; color: var(--teal-ink); margin-bottom: 8px; display: flex; gap: 10px; }
+.bp-qa .bp-q::before { content: "Q"; font-family: var(--font-marker); color: var(--coral); font-size: 18px; line-height: 1.1; }
+.bp-qa p { margin: 0; }
+.bp-reads { display: inline-flex; align-items: center; gap: 5px; }
+@media (max-width: 640px) { .bp-steps { grid-template-columns: 1fr; } .bp-item { gap: 14px; } .bp-item .bp-num { width: 48px; font-size: 36px; } }
+</style>
 </helmet>
 <div class="cas-root" data-theme="D">
 <div class="glow-layer" aria-hidden="true"></div>
@@ -24,39 +48,18 @@
   <div class="nav-top">
     <div class="inner">
       <a class="nav-brand" href="index.html">
-        <img src="img/LAULogoFinal.png" alt="Lau. — Crystal's Art School">
+        <img src="img/lau-logo.png" alt="Lau. — Crystal's Art School">
         <span class="name">Crystal's Art School</span>
       </a>
       <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
-        <li class="nav-item has-mega">
-          <a href="Lessons.dc.html" class="nav-mega-trigger" aria-haspopup="true" aria-expanded="false">Courses <span class="nav-caret" aria-hidden="true">▾</span></a>
-          <div class="nav-mega" role="menu" aria-label="Courses">
-            <div class="nav-mega-inner">
-              <div class="nm-col nm-start">
-                <div class="nm-kicker"><span class="star">✦</span> Start here</div>
-                <a class="nm-item" role="menuitem" href="lesson.dc.html"><span class="nm-t">Free courses</span><span class="nm-d">Watch a full course, on us</span></a>
-                <a class="nm-item nm-feature" role="menuitem" href="Lessons.dc.html"><span class="nm-t">Shop all courses <span class="nm-arr" aria-hidden="true">→</span></span><span class="nm-d">Browse everything by medium</span></a>
-                <a class="nm-item" role="menuitem" href="Blog.dc.html?tag=Tools"><span class="nm-t">Tools &amp; materials</span><span class="nm-d">Kit guides and honest reviews</span></a>
-              </div>
-              <div class="nm-col nm-medium">
-                <div class="nm-kicker">By medium · from your course tags</div>
-                <div class="nm-tags">
-                  <a role="menuitem" href="Lessons.dc.html?cat=Watercolour">Watercolour</a>
-                  <a role="menuitem" href="Lessons.dc.html?cat=Oil">Oils</a>
-                  <a role="menuitem" href="Lessons.dc.html?cat=Drawing">Drawing</a>
-                  <a role="menuitem" href="Lessons.dc.html?cat=Ink">Ink</a>
-                  <a role="menuitem" href="Lessons.dc.html?cat=Beginners">Beginners</a>
-                </div>
-                <p class="nm-note">These appear automatically from the tags on your courses — add a tag and a category shows up, remove it and it's gone.</p>
-              </div>
-            </div>
-          </div>
-        </li>
+        <li><a href="Lessons.dc.html">Courses</a></li>
         <li><a href="Gallery.dc.html">Gallery</a></li>
         <li><a href="Showcase.dc.html">Showcase</a></li>
         <li><a href="Blog.dc.html" class="active">Blog</a></li>
         <li><a href="About.dc.html">About</a></li>
+        <li><a href="FreeVideos.dc.html">Free video</a></li>
+        <li><a href="Blog.dc.html?tag=Tools">Tools</a></li>
         <li><a href="FAQ.dc.html">FAQ</a></li>
       </ul>
       <div class="nav-auth">
@@ -70,6 +73,17 @@
       </div>
     </div>
   </div>
+  <div class="nav-cats">
+    <div class="inner">
+      <ul class="nav-cat-links">
+        <li><a href="Lessons.dc.html?cat=Watercolour">Watercolour</a></li>
+        <li><a href="Lessons.dc.html?cat=Oil">Oils</a></li>
+        <li><a href="Lessons.dc.html?cat=Drawing">Drawing</a></li>
+        <li><a href="Lessons.dc.html?cat=Ink">Ink</a></li>
+        <li><a href="Lessons.dc.html?cat=Beginners">Beginners</a></li>
+      </ul>
+    </div>
+  </div>
   <div class="nav-sheet">
     <a href="index.html">Home</a>
     <a href="Lessons.dc.html">Courses</a>
@@ -77,7 +91,7 @@
     <a href="Showcase.dc.html">Showcase</a>
     <a href="Blog.dc.html">Blog</a>
     <a href="About.dc.html">About</a>
-    <a href="lesson.dc.html">Free video</a>
+    <a href="FreeVideos.dc.html">Free video</a>
     <a href="Blog.dc.html?tag=Tools">Tools</a>
     <a href="FAQ.dc.html">FAQ</a>
     <a href="Lessons.dc.html?cat=Watercolour">Watercolour</a>
@@ -102,7 +116,7 @@
     <div class="byline">
       <img src="img/ProfilePic.jpg" alt="Crystal Lau">
       <strong>Crystal Lau</strong>
-      <span class="hand-note">8 June 2026 · 6 min read · Lesson notes</span>
+      <span class="hand-note">8 June 2026 · 6 min read · Practice · 24.1k reads</span>
     </div>
 
     <nav class="toc" aria-label="Contents">
@@ -196,8 +210,8 @@
     </section>
 
     <div class="prevnext">
-      <a class="btn ghost" href="Blog.dc.html">← Why I keep a colour journal</a>
-      <a class="btn ghost" href="Blog.dc.html">Soft edges without muddying your paint →</a>
+      <a class="btn ghost" href="blog-post.dc.html?id=colour-journal">← Why I keep a colour journal</a>
+      <a class="btn ghost" href="blog-post.dc.html?id=five-brushes">Five brushes worth owning →</a>
     </div>
   </div>
 
@@ -206,7 +220,7 @@
       <div class="eyebrow" style="justify-content:center;"><span class="star">✦</span> Keep reading</div>
       <h2 class="section-title">More from Crystal</h2>
     </div>
-    <div class="related-rail" style="margin-top:30px;">
+    <div class="related-rail" id="related-rail" style="margin-top:30px;">
       <a class="cover-card" href="Blog.dc.html" style="aspect-ratio:4/3;">
         <img src="img/cover2.jpg" alt="">
         <div class="scrim"><div class="t">Why I keep a colour journal</div></div>
@@ -238,7 +252,7 @@
         <h4>Learn</h4>
         <a href="Lessons.dc.html">All lessons</a>
         <a href="Lessons.dc.html#membership">Membership</a>
-        <a href="lesson.dc.html">Free intro lesson</a>
+        <a href="FreeVideos.dc.html">Free videos</a>
       </div>
       <div>
         <h4>Explore</h4>
@@ -249,7 +263,7 @@
       </div>
       <div>
         <h4>Contact</h4>
-        <a href="About.dc.html#contact">hello@crystalsartschool.com</a>
+        <a href="About.dc.html#contact">crystalau430@gmail.com</a>
         <a href="About.dc.html#contact">Discord · Instagram</a>
         <a href="About.dc.html#terms">Terms &amp; privacy</a>
       </div>
@@ -268,6 +282,86 @@ class Component extends DCLogic {
     const root = document.querySelector('.cas-root');
     if (!root) return;
 
+    /* ---- multi-article: render from CAS_BLOG when ?id= names another post ---- */
+    const POSTS = window.CAS_BLOG || [];
+    const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+    const em = (s) => esc(s).replace(/\*(.+?)\*/g, '<em>$1</em>');
+    const rf = (n) => n >= 1000 ? ((n / 1000).toFixed(1).replace(/\.0$/, '') + 'k') : String(n);
+    let pid = 'block-in-portrait';
+    try { const q = new URLSearchParams(location.search).get('id'); if (q && POSTS.some(p => p.id === q)) pid = q; } catch (e) {}
+    const post = POSTS.find(p => p.id === pid);
+
+    if (post && pid !== 'block-in-portrait') {
+      const bannerImg = document.querySelector('.post-banner img');
+      if (bannerImg) { bannerImg.src = 'img/' + (post.banner || post.img); bannerImg.alt = post.title; }
+      const h1 = document.querySelector('.post-banner h1');
+      if (h1) h1.textContent = post.title;
+      document.title = post.title + ' — Crystal\'s Art School';
+
+      let body = '';
+      if (post.layout === 'list') {
+        body = '<p class="bp-lede" style="margin-top:26px;">' + esc(post.intro) + '</p>' +
+          post.items.map((it, i) =>
+            '<div class="bp-item"><div class="bp-num">' + String(i + 1).padStart(2, '0') + '</div><div><h2>' + esc(it.t) + '</h2><p>' + esc(it.d) + '</p></div></div>').join('');
+      } else if (post.layout === 'steps') {
+        body = '<p class="bp-lede" style="margin-top:26px;">' + esc(post.intro) + '</p>' +
+          (post.materials ? '<div class="bp-materials"><strong>On the desk</strong><p>' + esc(post.materials) + '</p></div>' : '') +
+          '<div class="bp-steps">' + post.items.map((it, i) =>
+            '<div class="bp-step"><span class="bp-step-n">Step ' + (i + 1) + '</span><h2>' + esc(it.t) + '</h2><p>' + esc(it.d) + '</p></div>').join('') + '</div>';
+      } else if (post.layout === 'photo') {
+        body = '<p class="bp-lede" style="margin-top:26px;">' + esc(post.intro) + '</p>' +
+          post.items.map(it =>
+            '<figure><img src="img/' + esc(it.src) + '" alt="' + esc(it.cap) + '"><figcaption>' + em(it.cap) + '</figcaption></figure>').join('') +
+          (post.outro ? '<p>' + esc(post.outro) + '</p>' : '');
+      } else if (post.layout === 'qa') {
+        body = '<p class="bp-lede" style="margin-top:26px;">' + esc(post.intro) + '</p>' +
+          post.items.map(it =>
+            '<div class="bp-qa"><div class="bp-q">' + esc(it.q) + '</div><p>' + esc(it.a) + '</p></div>').join('');
+      } else { /* essay */
+        const ps = (post.body || [post.excerpt]);
+        body = ps.map((p, i) =>
+          (i === 0 ? '<p class="bp-lede" style="margin-top:26px;">' : '<p>') + esc(p) + '</p>' +
+          (i === 0 && post.quote ? '<div class="pull-quote">“' + esc(post.quote) + '”</div>' : '')).join('');
+      }
+
+      const idx = POSTS.slice().sort((a, b) => b.date.localeCompare(a.date));
+      const at = idx.findIndex(p => p.id === pid);
+      const newer = at > 0 ? idx[at - 1] : null;
+      const older = at < idx.length - 1 ? idx[at + 1] : null;
+
+      const article = document.querySelector('.article');
+      article.innerHTML =
+        '<div class="byline"><img src="img/ProfilePic.jpg" alt="Crystal Lau"><strong>Crystal Lau</strong>' +
+        '<span class="hand-note">' + esc(post.d) + ' 2026 · ' + (post.mins || 4) + ' min read · ' + esc(post.tag) + ' · ' + rf(post.reads) + ' reads</span></div>' +
+        body +
+        '<div class="card blush" style="display:flex;gap:16px;align-items:center;margin:40px 0;">' +
+          '<img src="img/ProfilePic.jpg" alt="Crystal Lau" style="width:72px;height:72px;border-radius:50%;object-fit:cover;flex:none;">' +
+          '<div><strong>Crystal Lau</strong><p style="margin:4px 0 0;font-size:14px;color:#5e4a3d;">Oils &amp; drawing teacher. Small studio in Hong Kong, eight years of small-group classes. <a class="link-squiggle" href="About.dc.html" style="font-weight:700;">More about me →</a></p></div></div>' +
+        '<section><h2 style="margin-top:8px;">Comments</h2>' +
+          '<form class="card" id="comment-form" style="margin-top:8px;">' +
+            '<label for="comment-box" style="font-family:var(--font-cond);font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:13px;display:block;margin-bottom:8px;color:var(--ink);">Join the conversation</label>' +
+            '<textarea id="comment-box" class="post-field" required rows="3" placeholder="Be kind, be curious…"></textarea>' +
+            '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;flex-wrap:wrap;gap:8px;">' +
+              '<span class="hand-note" style="font-family:var(--font-cond);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);">Log in to post — Wanderer tier is free.</span>' +
+              '<button class="btn primary" type="submit">Post comment</button></div>' +
+            '<div class="sent hand-note" style="display:none;color:var(--teal-ink);margin-top:8px;">Thanks! Your comment is waiting for review. ✦</div>' +
+          '</form></section>' +
+        '<div class="prevnext">' +
+          (older ? '<a class="btn ghost" href="blog-post.dc.html?id=' + esc(older.id) + '">← ' + esc(older.title) + '</a>' : '<span></span>') +
+          (newer ? '<a class="btn ghost" href="blog-post.dc.html?id=' + esc(newer.id) + '">' + esc(newer.title) + ' →</a>' : '') +
+        '</div>';
+    }
+
+    /* "Keep reading" rail = 3 most-read posts, excluding the one on screen */
+    const rail = document.getElementById('related-rail');
+    if (rail && POSTS.length) {
+      const top3 = POSTS.slice().sort((a, b) => b.reads - a.reads).filter(p => p.id !== pid).slice(0, 3);
+      rail.innerHTML = top3.map(p =>
+        '<a class="cover-card" href="blog-post.dc.html?id=' + esc(p.id) + '" style="aspect-ratio:4/3;">' +
+          '<img src="img/' + esc(p.img) + '" alt="' + esc(p.title) + '">' +
+          '<div class="scrim"><div class="t">' + esc(p.title) + '</div></div></a>').join('');
+    }
+
     /* theme switch */
     const THEME_KEY = 'cas-theme';
     const valid = ['A','B','C','D'];
@@ -277,18 +371,16 @@ class Component extends DCLogic {
     };
     let saved = (valid.includes(this.props.defaultTheme) ? this.props.defaultTheme : 'A');
     try { const s = localStorage.getItem(THEME_KEY); if (s && valid.includes(s)) saved = s; } catch (e) {}
-    applyTheme('D');
+    let __theme = 'D';
+    try { const __s = localStorage.getItem(THEME_KEY); if (__s && ['A','B','C','D'].indexOf(__s) >= 0) __theme = __s; } catch (e) {}
+    try { const __q = (new URLSearchParams(location.search).get('theme') || '').toUpperCase(); if (['A','B','C','D'].indexOf(__q) >= 0) { __theme = __q; localStorage.setItem(THEME_KEY, __q); } } catch (e) {}
+    applyTheme(__theme);
     document.querySelectorAll('.theme-switch button').forEach(b => {
       b.addEventListener('click', () => { const t = b.dataset.theme; applyTheme(t); try { localStorage.setItem(THEME_KEY, t); } catch (e) {} });
     });
 
     /* mobile nav sheet */
-    const burger = document.querySelector('.nav-burger');
-    const sheet = document.querySelector('.nav-sheet');
-    if (burger && sheet) {
-      burger.addEventListener('click', () => { const open = sheet.classList.toggle('open'); burger.setAttribute('aria-expanded', open ? 'true' : 'false'); });
-      sheet.addEventListener('click', (e) => { if (e.target.tagName === 'A') sheet.classList.remove('open'); });
-    }
+    /* burger handled by js/site-nav.js */
     document.querySelectorAll('.cart-badge').forEach(b => { try { const n = JSON.parse(localStorage.getItem('cas-cart') || '[]').reduce((a, i) => a + i.qty, 0); b.textContent = n; b.style.display = n > 0 ? 'grid' : 'none'; } catch (e) {} });
 
     /* smooth-scroll TOC */
