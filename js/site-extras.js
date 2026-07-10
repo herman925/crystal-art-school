@@ -373,7 +373,38 @@
     document.querySelectorAll('.cart-btn').forEach(function (b) { b.style.transition = 'transform .18s'; b.style.transform = 'translateY(-3px) rotate(-8deg)'; setTimeout(function () { b.style.transform = ''; }, 220); });
   }
 
-  function init() { injectStyles(); build(); buildCookie(); buildTierPicker(); applyAuthNav(); syncTheme(); updateBadges();
+  function initMegaNav() {
+    var coarse = false;
+    try { coarse = window.matchMedia('(hover: none), (pointer: coarse)').matches; } catch (e) {}
+    var closeAll = function (except) {
+      document.querySelectorAll('.nav-item.has-mega.open').forEach(function (it) {
+        if (it === except) return;
+        it.classList.remove('open');
+        var t = it.querySelector('.nav-mega-trigger'); if (t) t.setAttribute('aria-expanded', 'false');
+      });
+    };
+    document.querySelectorAll('.nav-item.has-mega').forEach(function (item) {
+      var trig = item.querySelector('.nav-mega-trigger');
+      if (!trig) return;
+      var setExp = function (o) { trig.setAttribute('aria-expanded', o ? 'true' : 'false'); };
+      trig.addEventListener('click', function (e) {
+        // On touch / coarse pointers the first tap opens the drawer instead of navigating.
+        if (coarse && !item.classList.contains('open')) { e.preventDefault(); closeAll(item); item.classList.add('open'); setExp(true); }
+      });
+      item.addEventListener('mouseenter', function () { setExp(true); });
+      item.addEventListener('mouseleave', function () { item.classList.remove('open'); setExp(false); });
+      item.addEventListener('focusin', function () { setExp(true); });
+      item.addEventListener('focusout', function () { if (!item.contains(document.activeElement)) { item.classList.remove('open'); setExp(false); } });
+    });
+    document.addEventListener('click', function (e) {
+      document.querySelectorAll('.nav-item.has-mega.open').forEach(function (item) {
+        if (!item.contains(e.target)) { item.classList.remove('open'); var t = item.querySelector('.nav-mega-trigger'); if (t) t.setAttribute('aria-expanded', 'false'); }
+      });
+    });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeAll(null); });
+  }
+
+  function init() { injectStyles(); build(); buildCookie(); buildTierPicker(); applyAuthNav(); initMegaNav(); syncTheme(); updateBadges();
     window.addEventListener('scroll', function () { if (tpPop && tpPop.classList.contains('show')) closeTierPop(); }, { passive: true });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && tpPop && tpPop.classList.contains('show')) closeTierPop(); });
     // keep badge fresh when theme/cart changes elsewhere

@@ -289,6 +289,65 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 .nav-burger { display: none; width: 42px; height: 42px; border: 0; border-radius: 50%; background: var(--surface); box-shadow: var(--shadow-sm); cursor: pointer; font-size: 20px; line-height: 1; color: var(--ink); }
 .nav-sheet { display: none; }
 
+/* ---------- Courses mega-dropdown (cascade drawer) ---------- */
+.nav-links .nav-item { position: relative; }
+.nav-mega-trigger { cursor: pointer; }
+.nav-mega-trigger .nav-caret { display: inline-block; font-size: .68em; margin-left: 1px; opacity: .8; transition: transform .25s var(--ease-pop); }
+.nav-item.has-mega:hover > .nav-mega-trigger .nav-caret,
+.nav-item.has-mega:focus-within > .nav-mega-trigger .nav-caret,
+.nav-item.has-mega.open > .nav-mega-trigger .nav-caret { transform: rotate(180deg); }
+
+.nav-mega {
+  position: absolute; top: calc(100% + 11px); left: 0; z-index: 200;
+  width: min(660px, 92vw);
+  background: var(--cream); color: var(--ink);
+  border: 1px solid var(--line); border-radius: var(--radius-card);
+  box-shadow: var(--shadow-lift);
+  opacity: 0; visibility: hidden; pointer-events: none;
+  transform: translateY(-10px);
+  transition: opacity .22s var(--ease-out), transform .3s var(--ease-pop), visibility 0s linear .3s;
+}
+/* hover bridge so the gap between trigger and panel doesn't drop the hover */
+.nav-mega::before { content: ""; position: absolute; left: 0; right: 0; top: -13px; height: 13px; }
+/* little pointer under the Courses trigger */
+.nav-mega::after { content: ""; position: absolute; top: -7px; left: 30px; width: 14px; height: 14px; transform: rotate(45deg); background: var(--cream); border-left: 1px solid var(--line); border-top: 1px solid var(--line); }
+.nav-item.has-mega:hover > .nav-mega,
+.nav-item.has-mega:focus-within > .nav-mega,
+.nav-item.has-mega.open > .nav-mega {
+  opacity: 1; visibility: visible; pointer-events: auto; transform: translateY(0);
+  transition: opacity .22s var(--ease-out), transform .3s var(--ease-pop);
+}
+.nav-mega-inner { position: relative; z-index: 1; display: grid; grid-template-columns: 1.05fr 1fr; gap: 4px; padding: 18px; }
+.nm-col { padding: 6px 8px; }
+.nm-col.nm-medium { border-left: 1px solid var(--line); padding-left: 22px; }
+.nm-kicker { display: flex; align-items: center; gap: 6px; font-family: var(--font-cond); font-weight: 600; font-size: 10.5px; letter-spacing: .2em; text-transform: uppercase; color: var(--coral); margin-bottom: 11px; }
+.nm-kicker .star { color: var(--coral); font-size: 12px; }
+.nav-mega .nm-item { display: flex; flex-direction: column; gap: 2px; padding: 11px 13px; border-radius: 12px; transition: background .16s; opacity: 0; transform: translateY(9px); }
+.nm-item .nm-t { font-family: var(--font-cond); font-weight: 600; font-size: 14px; letter-spacing: .04em; text-transform: uppercase; color: var(--ink); }
+.nm-item .nm-d { font-size: 12.5px; color: var(--muted); }
+.nm-item .nm-arr { display: inline-block; transition: transform .18s; }
+.nm-item:hover { background: color-mix(in srgb, var(--coral) 12%, transparent); }
+.nm-item:hover .nm-arr { transform: translateX(4px); }
+.nm-item.nm-feature { background: color-mix(in srgb, var(--coral) 9%, transparent); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--coral) 22%, transparent); }
+.nm-tags { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 2px; }
+.nav-mega .nm-tags a { display: inline-block; font-family: var(--font-cond); font-weight: 500; font-size: 11.5px; letter-spacing: .14em; text-transform: uppercase; padding: 8px 14px; border-radius: var(--radius-pill); color: var(--ink); background: var(--surface); box-shadow: inset 0 0 0 1px var(--line); transition: background .15s, color .15s, transform .15s; opacity: 0; transform: translateY(9px); }
+.nav-mega .nm-tags a:hover { background: var(--coral); color: var(--paper); transform: translateY(-2px); }
+.nm-note { margin: 14px 0 0; font-size: 11.5px; line-height: 1.5; color: var(--muted); }
+
+/* cascade — stagger the children in as the panel opens */
+.nav-item.has-mega:hover .nm-item, .nav-item.has-mega:focus-within .nm-item, .nav-item.has-mega.open .nm-item,
+.nav-item.has-mega:hover .nm-tags a, .nav-item.has-mega:focus-within .nm-tags a, .nav-item.has-mega.open .nm-tags a {
+  opacity: 1; transform: none;
+  transition: opacity .3s var(--ease-out), transform .34s var(--ease-pop), background .16s, color .15s;
+}
+.nm-item:nth-child(2) { transition-delay: .04s; }
+.nm-item:nth-child(3) { transition-delay: .08s; }
+.nm-item:nth-child(4) { transition-delay: .12s; }
+.nm-tags a:nth-child(1) { transition-delay: .06s; } .nm-tags a:nth-child(2) { transition-delay: .10s; }
+.nm-tags a:nth-child(3) { transition-delay: .14s; } .nm-tags a:nth-child(4) { transition-delay: .18s; }
+.nm-tags a:nth-child(5) { transition-delay: .22s; }
+@media (max-width: 860px) { .nav-mega { display: none; } }
+
 /* ---------- responsive nav ---------- */
 @media (max-width: 1280px) { .nav-links a { padding: 8px 10px; } }
 @media (max-width: 1180px) { .nav-top .inner, .nav-cats .inner { grid-template-columns: minmax(170px, 1fr) auto minmax(170px, 1fr); gap: 12px; } .nav-links { gap: 2px; } .nav-links a { padding: 8px 8px; font-size: 12.5px; } .nav-brand img { height: 56px; } .nav-brand .name { font-size: 14px; } }
