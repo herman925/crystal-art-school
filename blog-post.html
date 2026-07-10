@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>How to block in a portrait — value first · Blog · Crystal's Art School</title>
+<link rel="icon" href="data:,">
+<meta name="ext-resource-dependency" content="css/site.css"/>
+<meta name="ext-resource-dependency" content="js/site.js"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Permanent+Marker&family=Italiana&family=Quicksand:wght@500;600;700&family=Caveat:wght@500;600&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/site.css"/>
+<style>
+/* blog-post.html — C5 lineage: 64:9 banner, F1-matching typography,
+   rich inline TOC, NO side panels (client decision). */
+.post-banner {
+  position: relative;
+  aspect-ratio: 64 / 9;           /* matches F1 banner ratio */
+  min-height: 190px;
+  overflow: hidden;
+}
+.post-banner img { width: 100%; height: 100%; object-fit: cover; }
+.post-banner .chip-h1 {
+  position: absolute;
+  left: 5%;
+  bottom: 16%;
+  background: rgba(21, 19, 10, .82);
+  color: var(--cream);
+  border-radius: var(--radius-card);
+  padding: 14px 26px;
+  max-width: 62%;
+}
+.post-banner h1 {
+  font-family: var(--font-marker);
+  font-weight: 400;
+  font-size: clamp(20px, 2.6vw, 40px);
+  line-height: 1.12;
+  margin: 0;
+}
+.byline {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 18px;
+  background: #fff;
+  border-radius: var(--radius-pill);
+  padding: 8px 18px 8px 8px;
+  box-shadow: var(--shadow-soft);
+}
+.byline img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
+.byline .hand-note { font-size: 16px; }
+
+/* article — typography mirrors F1 hierarchy */
+.article { max-width: 760px; margin: 0 auto; }
+.article h2 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(24px, 2.6vw, 34px);
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  margin: 44px 0 14px;
+}
+.article h3 {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 20px;
+  margin: 30px 0 10px;
+}
+.article p { font-size: 16.5px; line-height: 1.75; margin: 0 0 18px; }
+.article figure { margin: 30px 0; }
+.article figure img { border-radius: var(--radius-card); width: 100%; }
+.article figcaption { font-family: var(--font-hand); font-size: 17px; color: var(--muted); padding-top: 8px; }
+.pull-quote {
+  font-family: var(--font-marker);
+  font-size: clamp(20px, 2.2vw, 28px);
+  line-height: 1.4;
+  padding: 26px 30px;
+  margin: 34px 0;
+  background: var(--warm-white);
+  border-radius: var(--radius-card);
+  position: relative;
+}
+.pull-quote::before {
+  content: "✳";
+  position: absolute;
+  top: -14px; left: 24px;
+  color: var(--coral);
+  font-size: 26px;
+}
+
+/* table of contents — must READ as a hierarchical TOC (≥2 levels) */
+.toc {
+  background: var(--paper-2);
+  border-radius: var(--radius-card);
+  padding: 24px 28px;
+  margin: 30px 0 8px;
+}
+.toc .toc-title {
+  font-family: var(--font-display);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+  font-size: 18px;
+  margin: 0 0 12px;
+}
+.toc ol { margin: 0; padding-left: 22px; font-size: 15px; }
+.toc > ol > li { font-weight: 700; padding: 4px 0; }
+.toc ol ol { padding-left: 20px; padding-top: 4px; }
+.toc ol ol li { font-weight: 500; padding: 2.5px 0; color: var(--muted); }
+.toc a:hover { color: var(--teal-ink); }
+
+/* comments + related */
+.comment { display: flex; gap: 14px; margin-bottom: 20px; }
+.comment img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; flex: none; }
+.comment .bubble { background: #fff; border-radius: var(--radius-card); box-shadow: var(--shadow-soft); padding: 14px 18px; font-size: 14.5px; }
+.related-rail { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.prevnext { display: flex; justify-content: space-between; gap: 14px; margin: 44px 0 0; flex-wrap: wrap; }
+@media (max-width: 700px) {
+  .post-banner { aspect-ratio: auto; height: 220px; }
+  .post-banner .chip-h1 { max-width: 88%; left: 6%; }
+  .related-rail { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<nav class="site-nav" aria-label="Main">
+  <div class="inner">
+    <a class="nav-brand" href="index.html">
+      <img src="img/ProfilePic.jpg" alt="Crystal Lau"/>
+      <span class="name">Crystal's Art School</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="lessons.html">Lessons</a></li>
+      <li><a href="gallery.html">Gallery</a></li>
+      <li><a href="blog.html" class="active">Blog</a></li>
+      <li><a href="about.html">About</a></li>
+    </ul>
+    <div class="nav-auth">
+      <button class="cart-btn" type="button" aria-label="Shopping cart">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"/><circle cx="18" cy="20" r="1.4"/><path d="M2 3h3.2l2.5 12.2a1.5 1.5 0 0 0 1.5 1.2h9a1.5 1.5 0 0 0 1.5-1.2L21.5 7H6.5"/></svg>
+        <span class="cart-badge">0</span>
+      </button>
+      <a class="btn ghost" href="#">Log in</a>
+      <a class="btn primary" href="#">Sign up</a>
+      <button class="nav-burger" type="button" aria-label="Menu" aria-expanded="false">☰</button>
+    </div>
+  </div>
+  <div class="nav-sheet">
+    <a href="index.html">Home</a>
+    <a href="lessons.html">Lessons</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="blog.html">Blog</a>
+    <a href="about.html">About</a>
+    <a href="#">Log in / Sign up</a>
+  </div>
+</nav>
+
+<!-- 64:9 banner with marker H1 in dark chip (F1-matching treatment) -->
+<header class="post-banner">
+  <img src="img/Bannerphoto.jpg" alt="Crystal's worktable, paints and brushes"/>
+  <div class="chip-h1">
+    <h1>How to block in a portrait — value first</h1>
+  </div>
+</header>
+
+<main class="container" id="content">
+  <div class="article">
+
+    <div class="byline reveal-one">
+      <img src="img/ProfilePic.jpg" alt="Crystal Lau"/>
+      <strong style="font-size:14.5px;">Crystal Lau</strong>
+      <span class="hand-note">8 June 2026 · 6 min read · Lesson notes</span>
+    </div>
+
+    <!-- rich TOC: 2 levels, real hierarchy -->
+    <nav class="toc reveal-one" aria-label="Contents">
+      <div class="toc-title">Contents</div>
+      <ol>
+        <li><a href="#why-values">Why values come first</a>
+          <ol>
+            <li><a href="#squint">The squint test</a></li>
+            <li><a href="#three-values">Three values are enough</a></li>
+          </ol>
+        </li>
+        <li><a href="#block-in">The block-in, step by step</a>
+          <ol>
+            <li><a href="#big-shapes">Big shapes before features</a></li>
+            <li><a href="#shadow-line">Finding the shadow line</a></li>
+            <li><a href="#background">Tying in the background</a></li>
+          </ol>
+        </li>
+        <li><a href="#mistakes">Common mistakes</a>
+          <ol>
+            <li><a href="#too-early">Detail too early</a></li>
+            <li><a href="#chalky">Chalky halftones</a></li>
+          </ol>
+        </li>
+        <li><a href="#homework">Homework</a></li>
+      </ol>
+    </nav>
+
+    <p style="margin-top:26px;">The fastest way to make a portrait feel solid is to ignore the features for the first hour. No eyes, no nostrils, no eyelashes — just big shapes and big values. It sounds like a delay. It's actually the shortcut.</p>
+
+    <h2 id="why-values">Why values come first</h2>
+    <p>A portrait reads from across the room because of its value structure, not its details. If the light side and shadow side are correctly grouped, the likeness survives almost any amount of clumsy drawing. If they're muddled, no amount of careful rendering will save it.</p>
+
+    <h3 id="squint">The squint test</h3>
+    <p>Squint at your subject until your eyes water. What survives? Two or three big shapes. That's your painting for the first hour — those shapes and nothing else.</p>
+
+    <figure class="brush-wipe">
+      <img src="img/cover1.jpg" alt="Portrait block-in showing grouped light and shadow shapes"/>
+      <figcaption>The first hour: light group, shadow group, background. No features yet.</figcaption>
+    </figure>
+
+    <h3 id="three-values">Three values are enough</h3>
+    <p>Mix one light, one halftone, one shadow. Resist the urge to make more. When every part of the head belongs clearly to one of the three, you've earned the right to subdivide.</p>
+
+    <div class="pull-quote">"If the big shapes are right, the small shapes forgive you."</div>
+
+    <h2 id="block-in">The block-in, step by step</h2>
+    <h3 id="big-shapes">Big shapes before features</h3>
+    <p>Start with the outer envelope of the head — the tilt of the skull, the angle of the jaw. Check it twice against your reference before touching anything inside it.</p>
+    <h3 id="shadow-line">Finding the shadow line</h3>
+    <p>Trace the terminator — the line where light turns into shadow — around the whole head as one continuous path. Everything on one side is light; everything on the other is shadow. Keep them grouped.</p>
+    <h3 id="background">Tying in the background</h3>
+    <p>Paint the background up to the head early. The edge between head and background is half the likeness — leaving it for last means painting blind all session.</p>
+
+    <h2 id="mistakes">Common mistakes</h2>
+    <h3 id="too-early">Detail too early</h3>
+    <p>An eye painted in the first hour is a magnet — you'll keep adjusting everything around it to protect it. Don't give yourself the magnet.</p>
+    <h3 id="chalky">Chalky halftones</h3>
+    <p>Halftones go chalky when you lighten them with white alone. Warm them as you lighten — a touch of yellow ochre keeps the skin alive.</p>
+
+    <h2 id="homework">Homework</h2>
+    <p>One head, three values, ninety minutes, no features. Post it in the Discord channel — I look at every block-in students share.</p>
+
+    <!-- author bio -->
+    <div class="card blush" style="display:flex;gap:16px;align-items:center;margin:40px 0;">
+      <img src="img/ProfilePic.jpg" alt="Crystal Lau" style="width:72px;height:72px;border-radius:50%;object-fit:cover;flex:none;"/>
+      <div>
+        <strong>Crystal Lau</strong>
+        <p style="margin:4px 0 0;font-size:14px;color:var(--muted);">Oils &amp; drawing teacher. Small studio in Hong Kong, eight years of small-group classes. <a class="squiggle" href="about.html" style="font-weight:700;">More about me →</a></p>
+      </div>
+    </div>
+
+    <!-- comments -->
+    <section data-od-id="comments">
+      <h2 style="margin-top:8px;">Comments</h2>
+      <div class="comment">
+        <img src="img/Postercolor.jpg" alt=""/>
+        <div class="bubble"><strong>Alex W.</strong> · 9 June<br/>Tried the ninety-minute version last night — first time a block-in ever looked like the sitter. The shadow-line tip did it.</div>
+      </div>
+      <div class="comment">
+        <img src="img/Sketchbook.jpg" alt=""/>
+        <div class="bubble"><strong>Priya M.</strong> · 9 June<br/>Could you do a follow-up on backgrounds for portraits? Mine always end up as an afterthought.</div>
+      </div>
+      <form class="card" style="margin-top:8px;" onsubmit="event.preventDefault(); this.querySelector('.sent').style.display='block'; this.reset();">
+        <label for="comment-box" style="font-weight:700;font-size:14px;display:block;margin-bottom:8px;">Join the conversation</label>
+        <textarea id="comment-box" required rows="3" placeholder="Be kind, be curious…" style="width:100%;border:0;border-radius:12px;background:var(--paper-2);padding:12px 14px;font-family:var(--font-body);font-size:14.5px;resize:vertical;"></textarea>
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;flex-wrap:wrap;gap:8px;">
+          <span class="hand-note">Log in to post — Wanderer tier is free.</span>
+          <button class="btn primary" type="submit">Post comment</button>
+        </div>
+        <div class="sent hand-note" style="display:none;color:var(--teal-ink);margin-top:8px;">Thanks! Your comment is waiting for review. ✳</div>
+      </form>
+    </section>
+
+    <!-- prev / next -->
+    <div class="prevnext">
+      <a class="btn" href="blog.html">← Why I keep a colour journal</a>
+      <a class="btn" href="blog.html">Soft edges without muddying your paint →</a>
+    </div>
+  </div>
+
+  <!-- related, image-heavy -->
+  <section class="section" data-od-id="related">
+    <div class="section-head reveal-one">
+      <div class="eyebrow"><span class="star">✳</span> Keep reading</div>
+      <h2 class="section-title">More from Crystal</h2>
+    </div>
+    <div class="related-rail reveal">
+      <a class="cover-card" href="blog.html" style="aspect-ratio:4/3;">
+        <img src="img/cover2.jpg" alt=""/>
+        <div class="scrim"><div class="t">Why I keep a colour journal</div></div>
+      </a>
+      <a class="cover-card" href="blog.html" style="aspect-ratio:4/3;">
+        <img src="img/cover3.jpg" alt=""/>
+        <div class="scrim"><div class="t">Soft edges without muddying your paint</div></div>
+      </a>
+      <a class="cover-card" href="gallery.html" style="aspect-ratio:4/3;">
+        <img src="img/cover4.jpg" alt=""/>
+        <div class="scrim"><div class="t">Student showcase — walk the gallery</div></div>
+      </a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">Crystal<span style="color:var(--coral);">.</span></div>
+        <p style="font-size:14px;opacity:.85;max-width:34ch;margin:0;">Watercolour, acrylic &amp; drawing — taught slowly and carefully from a small UK/HK studio.</p>
+      </div>
+      <div>
+        <h4>Learn</h4>
+        <a href="lessons.html">All lessons</a>
+        <a href="lessons.html#membership">Membership</a>
+        <a href="lesson.html">Free intro lesson</a>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <a href="gallery.html">Gallery — Art Showcase</a>
+        <a href="gallery.html">Gallery — Fresh Eyes</a>
+        <a href="blog.html">Blog</a>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <a href="about.html#contact">hello@crystalsartschool.com</a>
+        <a href="about.html#contact">Discord · Instagram</a>
+        <a href="about.html#terms">Terms &amp; privacy</a>
+      </div>
+    </div>
+    <div class="footer-meta">
+      <span>© 2026 Crystal's Art School</span>
+      <span>v2.5.0</span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="js/site.js"></script>
+<script src="js/paint-fx.js"></script>
+</body>
+</html>
