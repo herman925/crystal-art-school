@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600;6..96,700&family=Oswald:wght@300;400;500;600&family=Archivo:wght@400;500;600;700&family=Saira+Stencil+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/industrial.css">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="js/site-extras.js"></script>
+<script src="js/motion.js"></script>
+</helmet>
+<div class="cas-root" data-theme="D">
+<div class="glow-layer" aria-hidden="true"></div>
+
+<nav class="site-nav" aria-label="Main">
+  <div class="nav-top">
+    <div class="inner">
+      <a class="nav-brand" href="index.html">
+        <img src="img/LAULogoFinal.png" alt="Lau. — Crystal's Art School">
+        <span class="name">Crystal's Art School</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li class="nav-item has-mega is-active">
+          <a href="Lessons.dc.html" class="nav-mega-trigger active" aria-haspopup="true" aria-expanded="false">Courses <span class="nav-caret" aria-hidden="true">▾</span></a>
+          <div class="nav-mega" role="menu" aria-label="Courses">
+            <div class="nav-mega-inner">
+              <div class="nm-col nm-start">
+                <div class="nm-kicker"><span class="star">✦</span> Start here</div>
+                <a class="nm-item" role="menuitem" href="lesson.dc.html"><span class="nm-t">Free courses</span><span class="nm-d">Watch a full course, on us</span></a>
+                <a class="nm-item nm-feature" role="menuitem" href="Lessons.dc.html"><span class="nm-t">Shop all courses <span class="nm-arr" aria-hidden="true">→</span></span><span class="nm-d">Browse everything by medium</span></a>
+                <a class="nm-item" role="menuitem" href="Blog.dc.html?tag=Tools"><span class="nm-t">Tools &amp; materials</span><span class="nm-d">Kit guides and honest reviews</span></a>
+              </div>
+              <div class="nm-col nm-medium">
+                <div class="nm-kicker">By medium · from your course tags</div>
+                <div class="nm-tags">
+                  <a role="menuitem" href="Lessons.dc.html?cat=Watercolour">Watercolour</a>
+                  <a role="menuitem" href="Lessons.dc.html?cat=Oil">Oils</a>
+                  <a role="menuitem" href="Lessons.dc.html?cat=Drawing">Drawing</a>
+                  <a role="menuitem" href="Lessons.dc.html?cat=Ink">Ink</a>
+                  <a role="menuitem" href="Lessons.dc.html?cat=Beginners">Beginners</a>
+                </div>
+                <p class="nm-note">These appear automatically from the tags on your courses — add a tag and a category shows up, remove it and it's gone.</p>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li><a href="Gallery.dc.html">Gallery</a></li>
+        <li><a href="Showcase.dc.html">Showcase</a></li>
+        <li><a href="Blog.dc.html">Blog</a></li>
+        <li><a href="About.dc.html">About</a></li>
+        <li><a href="FAQ.dc.html">FAQ</a></li>
+      </ul>
+      <div class="nav-auth">
+        <a class="cart-btn" href="Checkout.dc.html" aria-label="Shopping cart">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M2 3h3.2l2.5 12.2a1.5 1.5 0 0 0 1.5 1.2h9a1.5 1.5 0 0 0 1.5-1.2L21.5 7H6.5"></path></svg>
+          <span class="cart-badge">0</span>
+        </a>
+        <a class="btn ghost" href="Login.dc.html">Log in</a>
+        <a class="btn primary" href="Signup.dc.html">Sign up</a>
+        <button class="nav-burger" type="button" aria-label="Menu" aria-expanded="false">☰</button>
+      </div>
+    </div>
+  </div>
+  <div class="nav-sheet">
+    <a href="index.html">Home</a>
+    <a href="Lessons.dc.html">Courses</a>
+    <a href="Gallery.dc.html">Gallery</a>
+    <a href="Showcase.dc.html">Showcase</a>
+    <a href="Blog.dc.html">Blog</a>
+    <a href="About.dc.html">About</a>
+    <a href="lesson.dc.html">Free video</a>
+    <a href="Blog.dc.html?tag=Tools">Tools</a>
+    <a href="FAQ.dc.html">FAQ</a>
+    <a href="Lessons.dc.html?cat=Watercolour">Watercolour</a>
+    <a href="Lessons.dc.html?cat=Oil">Oils</a>
+    <a href="Lessons.dc.html?cat=Drawing">Drawing</a>
+    <a href="Lessons.dc.html?cat=Ink">Ink</a>
+    <a href="Lessons.dc.html?cat=Beginners">Beginners</a>
+    <a href="Login.dc.html">Log in / Sign up</a>
+  </div>
+</nav>
+
+<header class="page-hero">
+  <div class="wash" aria-hidden="true"></div>
+  <div class="container">
+    <div class="eyebrow reveal-one"><span class="star">✦</span> Course catalog</div>
+    <h1 class="marker-title reveal-one" style="font-size:clamp(34px,4.6vw,62px);">Pick up a brush.</h1>
+    <p class="lead reveal-one">Every course is a complete, slow-paced series — real reference material, downloadable notes, and room for questions.</p>
+  </div>
+</header>
+
+<main class="container" id="content">
+
+  <section class="section" style="padding-top:6px;">
+    <div class="catalog-layout">
+      <div class="filter-col reveal-one">
+      <aside class="filter-panel sort-panel" aria-label="Sort lessons">
+        <div class="fp-head"><span class="fp-title">Sort by</span></div>
+        <div class="fg-opts" id="lesson-sort">
+          <button class="fopt active" type="button" data-val="featured">Featured</button>
+          <button class="fopt" type="button" data-val="price-asc">Price ↑</button>
+          <button class="fopt" type="button" data-val="price-desc">Price ↓</button>
+        </div>
+      </aside>
+      <aside class="filter-panel" aria-label="Filter lessons">
+        <div class="fp-head"><span class="fp-title">Filter</span><button class="fp-clear" type="button" id="fp-clear">Clear all</button></div>
+        <div class="fgroup" data-group="medium">
+          <div class="fg-title">Medium</div>
+          <div class="fg-opts">
+            <button class="fopt active" type="button" data-val="all">Any</button>
+            <button class="fopt" type="button" data-val="watercolour">Watercolour</button>
+            <button class="fopt" type="button" data-val="oil">Oil</button>
+            <button class="fopt" type="button" data-val="pencils">Pencils</button>
+            <button class="fopt" type="button" data-val="pastel">Pastel</button>
+            <button class="fopt" type="button" data-val="ink">Ink</button>
+          </div>
+        </div>
+        <div class="fgroup" data-group="theme">
+          <div class="fg-title">Theme</div>
+          <div class="fg-opts">
+            <button class="fopt active" type="button" data-val="all">Any</button>
+            <button class="fopt" type="button" data-val="landscape">Landscape</button>
+            <button class="fopt" type="button" data-val="cityscape">Cityscape</button>
+            <button class="fopt" type="button" data-val="still-life">Still life</button>
+            <button class="fopt" type="button" data-val="portrait">Portrait</button>
+            <button class="fopt" type="button" data-val="animal">Animal</button>
+            <button class="fopt" type="button" data-val="illustration">Illustration</button>
+            <button class="fopt" type="button" data-val="perspective">Perspective</button>
+          </div>
+        </div>
+        <div class="fgroup" data-group="difficulty">
+          <div class="fg-title">Difficulty</div>
+          <div class="fg-opts">
+            <button class="fopt active" type="button" data-val="all">Any</button>
+            <button class="fopt" type="button" data-val="beginner">Beginner</button>
+            <button class="fopt" type="button" data-val="intermediate">Intermediate</button>
+            <button class="fopt" type="button" data-val="advanced">Advanced</button>
+            <button class="fopt" type="button" data-val="all-levels">All levels</button>
+          </div>
+        </div>
+        <div class="fgroup">
+          <div class="fg-title">Max price</div>
+          <div class="price-val" id="lesson-price-val">Any price</div>
+          <div class="slider-wrap">
+            <div class="slider-ui">
+              <div class="slider-track"></div>
+              <div class="slider-fill"></div>
+              <input class="price-slider" id="lesson-price-slider" type="range" min="0" max="60" step="5" value="60">
+              <div class="slider-knob"></div>
+            </div>
+            <div class="price-scale"><span>Free</span><span>£60+</span></div>
+          </div>
+        </div>
+        <div class="fgroup" data-group="duration">
+          <div class="fg-title">Length</div>
+          <div class="fg-opts">
+            <button class="fopt active" type="button" data-val="all">Any</button>
+            <button class="fopt" type="button" data-val="short">Under 1h</button>
+            <button class="fopt" type="button" data-val="medium">1–2h</button>
+            <button class="fopt" type="button" data-val="long">2h+</button>
+          </div>
+        </div>
+        <div class="fgroup" data-group="offer">
+          <div class="fg-title">Offers</div>
+          <div class="fg-opts">
+            <button class="fopt active" type="button" data-val="all">All</button>
+            <button class="fopt" type="button" data-val="sale">On sale</button>
+          </div>
+        </div>
+      </aside>
+      </div>
+
+      <div>
+        <div class="lesson-meta-bar"><span class="lesson-count" id="lesson-count"></span></div>
+        <div class="lesson-grid reveal" id="lesson-grid">
+          <div class="lesson-cell" data-cat="watercolour" data-theme="landscape" data-difficulty="beginner" data-price="0" data-duration="short">
+            <div class="cover-card">
+              <img src="img/cover3.jpg" alt="Materials and setting up — the free intro lesson">
+              <span class="free-flag">Free</span>
+              <div class="scrim"><div class="t">Materials &amp; setting up</div></div>
+              <div class="actions">
+                <a class="cover-btn primary" href="lesson.dc.html">Start free</a>
+                <a class="cover-btn secondary" href="course.dc.html?id=materials-setting-up">View course <span class="arr" aria-hidden="true">→</span></a>
+              </div>
+            </div>
+            <div class="meta"><span class="level">Watercolour · beginner · 50 min</span><span class="price free">Free</span></div>
+          </div>
+
+          <div class="lesson-cell" data-cat="oil" data-theme="portrait" data-difficulty="advanced" data-price="42" data-duration="long" data-sale="1">
+            <div class="cover-card">
+              <img src="img/cover1.jpg" alt="Light and shadow on the head">
+              <span class="sale-flag">Sale</span>
+              <div class="scrim"><div class="t">Light &amp; shadow on the head</div></div>
+              <div class="actions">
+                <button class="cover-btn primary" type="button" data-add-to-cart data-tiered><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M2 3h3.2l2.5 12.2a1.5 1.5 0 0 0 1.5 1.2h9a1.5 1.5 0 0 0 1.5-1.2L21.5 7H6.5"></path></svg> Add to cart</button>
+                <a class="cover-btn secondary" href="course.dc.html?id=light-shadow-head">View course <span class="arr" aria-hidden="true">→</span></a>
+              </div>
+            </div>
+            <div class="meta"><span class="level">Oils · intermediate · 2h 20m</span><span class="price"><span class="was">£52</span>£42</span></div>
+          </div>
+
+          <div class="lesson-cell" data-cat="oil" data-theme="still-life" data-difficulty="beginner" data-price="36" data-duration="medium">
+            <div class="cover-card">
+              <img src="img/cover2.jpg" alt="Blocking in large shapes">
+              <div class="scrim"><div class="t">Blocking in large shapes</div></div>
+              <div class="actions">
+                <button class="cover-btn primary" type="button" data-add-to-cart data-tiered><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M2 3h3.2l2.5 12.2a1.5 1.5 0 0 0 1.5 1.2h9a1.5 1.5 0 0 0 1.5-1.2L21.5 7H6.5"></path></svg> Add to cart</button>
+                <a class="cover-btn secondary" href="course.dc.html?id=blocking-large-shapes">View course <span class="arr" aria-hidden="true">→</span></a>
+              </div>
+            </div>
+            <div class="meta"><span class="level">Oils · beginner · 1h 30m</span><span class="price">£36</span></div>
+          </div>
+
+          <div class="lesson-cell" data-cat="watercolour" data-theme="cityscape" data-difficulty="all-levels" data-price="29" data-duration="medium" data-sale="1">
+            <div class="cover-card">
+              <img src="img/Liquidwatercolor.jpg" alt="Mixing greens from scratch">
+              <span class="sale-flag">Sale</span>
+              <div class="scrim"><div class="t">Mixing greens from scratch</div></div>
+              <div class="actions">
+                <button class="cover-btn primary" type="button" data-add-to-cart data-tiered><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M2 3h3.2l2.5 12.2a1.5 1.5 0 0 0 1.5 1.2h9a1.5 1.5 0 0 0 1.5-1.2L21.5 7H6.5"></path></svg> Add to cart</button>
+                <a class="cover-btn secondary" href="course.dc.html?id=mixing-greens">View course <span class="arr" aria-hidden="true">→</span></a>
+              </div>
+            </div>
+            <div class="meta"><span class="level">Watercolour · all levels · 1h 10m</span><span class="price"><span class="was">£36</span>£29</span></div>
+          </div>
+
+          <div class="lesson-cell" data-cat="pencils" data-theme="illustration" data-difficulty="beginner" data-price="24" data-duration="short">
+            <div class="cover-card">
+              <img src="img/Sketchbook.jpg" alt="Soft edges, clean paint">
+              <div class="scrim"><div class="t">Soft edges, clean paint</div></div>
+              <div class="actions">
+                <button class="cover-btn primary" type="button" data-add-to-cart data-tiered><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M2 3h3.2l2.5 12.2a1.5 1.5 0 0 0 1.5 1.2h9a1.5 1.5 0 0 0 1.5-1.2L21.5 7H6.5"></path></svg> Add to cart</button>
+                <a class="cover-btn secondary" href="course.dc.html?id=soft-edges-clean-paint">View course <span class="arr" aria-hidden="true">→</span></a>
+              </div>
+            </div>
+            <div class="meta"><span class="level">Drawing · beginner · 45 min</span><span class="price">£24</span></div>
+          </div>
+
+          <div class="lesson-cell" data-cat="watercolour" data-theme="perspective" data-difficulty="beginner" data-price="29" data-duration="short">
+            <div class="cover-card">
+              <img src="img/cover4.jpg" alt="Loading a brush properly">
+              <div class="scrim"><div class="t">Loading a brush properly</div></div>
+              <div class="actions">
+                <button class="cover-btn primary" type="button" data-add-to-cart data-tiered><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M2 3h3.2l2.5 12.2a1.5 1.5 0 0 0 1.5 1.2h9a1.5 1.5 0 0 0 1.5-1.2L21.5 7H6.5"></path></svg> Add to cart</button>
+                <a class="cover-btn secondary" href="course.dc.html?id=loading-a-brush">View course <span class="arr" aria-hidden="true">→</span></a>
+              </div>
+            </div>
+            <div class="meta"><span class="level">Watercolour · beginner · 40 min</span><span class="price">£29</span></div>
+          </div>
+
+          <div class="lesson-cell" data-cat="pastel" data-theme="portrait" data-difficulty="intermediate" data-price="38" data-duration="medium">
+            <div class="cover-card">
+              <img src="img/Postercolor.jpg" alt="Warm vs cool greys">
+              <div class="scrim"><div class="t">Warm vs cool greys</div></div>
+              <div class="actions">
+                <button class="cover-btn primary" type="button" data-add-to-cart data-tiered><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M2 3h3.2l2.5 12.2a1.5 1.5 0 0 0 1.5 1.2h9a1.5 1.5 0 0 0 1.5-1.2L21.5 7H6.5"></path></svg> Add to cart</button>
+                <a class="cover-btn secondary" href="course.dc.html?id=warm-cool-greys">View course <span class="arr" aria-hidden="true">→</span></a>
+              </div>
+            </div>
+            <div class="meta"><span class="level">Acrylic · intermediate · 1h 25m</span><span class="price">£38</span></div>
+          </div>
+
+          <div class="lesson-cell" data-cat="pencils" data-theme="animal" data-difficulty="all-levels" data-price="24" data-duration="short" data-sale="1">
+            <div class="cover-card">
+              <img src="img/Rubber.jpg" alt="Erasing as a drawing tool">
+              <span class="sale-flag">Sale</span>
+              <div class="scrim"><div class="t">Erasing as a drawing tool</div></div>
+              <div class="actions">
+                <button class="cover-btn primary" type="button" data-add-to-cart data-tiered><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M2 3h3.2l2.5 12.2a1.5 1.5 0 0 0 1.5 1.2h9a1.5 1.5 0 0 0 1.5-1.2L21.5 7H6.5"></path></svg> Add to cart</button>
+                <a class="cover-btn secondary" href="course.dc.html?id=erasing-drawing-tool">View course <span class="arr" aria-hidden="true">→</span></a>
+              </div>
+            </div>
+            <div class="meta"><span class="level">Drawing · all levels · 55 min</span><span class="price"><span class="was">£30</span>£24</span></div>
+          </div>
+
+          <div class="lesson-cell" data-cat="ink" data-theme="still-life" data-difficulty="beginner" data-price="19" data-duration="short">
+            <div class="cover-card">
+              <img src="img/BrushB.jpg" alt="Brush care and studio habits">
+              <div class="scrim"><div class="t">Brush care &amp; studio habits</div></div>
+              <div class="actions">
+                <button class="cover-btn primary" type="button" data-add-to-cart data-tiered><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M2 3h3.2l2.5 12.2a1.5 1.5 0 0 0 1.5 1.2h9a1.5 1.5 0 0 0 1.5-1.2L21.5 7H6.5"></path></svg> Add to cart</button>
+                <a class="cover-btn secondary" href="course.dc.html?id=brush-care-habits">View course <span class="arr" aria-hidden="true">→</span></a>
+              </div>
+            </div>
+            <div class="meta"><span class="level">Acrylic · beginner · 35 min</span><span class="price">£19</span></div>
+          </div>
+        </div>
+        <div class="no-results" id="no-results">No lessons match these filters — try clearing a few.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="membership">
+    <div class="section-head reveal-one">
+      <div class="eyebrow"><span class="star">✦</span> Membership</div>
+      <h2 class="section-title is-left">Three ways to study</h2>
+    </div>
+    <div class="tier-grid reveal">
+      <div class="tier-card">
+        <div class="tname">Wanderer</div>
+        <div class="tprice">Free</div>
+        <p style="margin:0;font-size:14.5px;color:var(--muted);">Browse the blog and watch <em>Materials &amp; setting up</em> — the full free intro course.</p>
+        <a class="btn ghost" href="lesson.dc.html" style="margin-top:16px;">Start the free lesson <span class="arr" aria-hidden="true">→</span></a>
+      </div>
+      <div class="tier-card highlight">
+        <div class="tier-pick">most picked ✦</div>
+        <div class="tname">Apprentice</div>
+        <div class="tprice">Per-course purchase</div>
+        <p style="margin:0;font-size:14.5px;">Full video access, downloadable materials, resume from anywhere.</p>
+        <a class="btn" href="Signup.dc.html" style="margin-top:16px;">Browse courses</a>
+      </div>
+      <div class="tier-card fellow">
+        <div class="tname">Fellow</div>
+        <div class="tprice">Per-course + Discord</div>
+        <p style="margin:0;font-size:14.5px;">Everything in Apprentice, plus teacher Q&amp;A in a private Discord channel.</p>
+        <a class="btn" href="Signup.dc.html" style="margin-top:16px;">Browse courses</a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="band-forest reveal-one">
+      <div style="flex:0 0 180px;border-radius:var(--radius-card);overflow:hidden;aspect-ratio:1/1;position:relative;z-index:1;">
+        <img src="img/cover3.jpg" alt="Free lesson preview" style="width:100%;height:100%;object-fit:cover;">
+      </div>
+      <div style="flex:1;">
+        <div class="eyebrow"><span class="star">✦</span> Free intro</div>
+        <h2 class="marker-title" style="font-size:clamp(24px,2.4vw,34px);">Not sure where to start?</h2>
+        <p style="margin:0;max-width:54ch;">Watch <em>Materials &amp; setting up</em> free — all 6 units, notes and downloads included — then pick the course that matches where you are.</p>
+      </div>
+      <a class="btn-big" href="lesson.dc.html" style="flex:none;">Watch free lesson →</a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">CRYSTAL'S</div>
+        <p style="font-size:14px;opacity:.85;max-width:34ch;margin:0;">Watercolour, acrylic &amp; drawing — taught slowly and carefully from a small studio of plaster, wood and iron.</p>
+      </div>
+      <div>
+        <h4>Learn</h4>
+        <a href="Lessons.dc.html">All lessons</a>
+        <a href="Lessons.dc.html#membership">Membership</a>
+        <a href="lesson.dc.html">Free intro lesson</a>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <a href="Gallery.dc.html">Gallery</a>
+        <a href="Showcase.dc.html">Student showcase</a>
+        <a href="Blog.dc.html">Blog</a>
+        <a href="About.dc.html">About</a>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <a href="About.dc.html#contact">hello@crystalsartschool.com</a>
+        <a href="About.dc.html#contact">Discord · Instagram</a>
+        <a href="About.dc.html#terms">Terms &amp; privacy</a>
+      </div>
+    </div>
+    <div class="footer-meta">
+      <span>© 2026 Crystal's Art School</span>
+    </div>
+  </div>
+</footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;defaultTheme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;A&quot;,&quot;B&quot;,&quot;C&quot;,&quot;D&quot;],&quot;default&quot;:&quot;D&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  componentDidMount() {
+    const root = document.querySelector('.cas-root');
+    if (!root) return;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* theme switch */
+    const THEME_KEY = 'cas-theme';
+    const valid = ['A','B','C','D'];
+    const applyTheme = (t) => {
+      root.setAttribute('data-theme', t);
+      document.querySelectorAll('.theme-switch button').forEach(b => b.classList.toggle('active', b.dataset.theme === t));
+    };
+    let saved = (valid.includes(this.props.defaultTheme) ? this.props.defaultTheme : 'A');
+    try { const s = localStorage.getItem(THEME_KEY); if (s && valid.includes(s)) saved = s; } catch (e) {}
+    applyTheme('D');
+    document.querySelectorAll('.theme-switch button').forEach(b => {
+      b.addEventListener('click', () => { const t = b.dataset.theme; applyTheme(t); try { localStorage.setItem(THEME_KEY, t); } catch (e) {} });
+    });
+
+    /* mobile nav sheet */
+    const burger = document.querySelector('.nav-burger');
+    const sheet = document.querySelector('.nav-sheet');
+    if (burger && sheet) {
+      burger.addEventListener('click', () => { const open = sheet.classList.toggle('open'); burger.setAttribute('aria-expanded', open ? 'true' : 'false'); });
+      sheet.addEventListener('click', (e) => { if (e.target.tagName === 'A') sheet.classList.remove('open'); });
+    }
+
+    /* cart */
+    const CART = 'cas-cart';
+    const readCart = () => { try { return JSON.parse(localStorage.getItem(CART) || '[]'); } catch (e) { return []; } };
+    const writeCart = (c) => { try { localStorage.setItem(CART, JSON.stringify(c)); } catch (e) {} };
+    const renderCart = () => { const n = readCart().reduce((a, i) => a + i.qty, 0); document.querySelectorAll('.cart-badge').forEach(b => { b.textContent = n; b.style.display = n > 0 ? 'grid' : 'none'; }); };
+    renderCart();
+    document.addEventListener('click', (e) => {
+      const add = e.target.closest('[data-add-to-cart]');
+      if (!add) return;
+      e.preventDefault();
+      const cell = add.closest('.lesson-cell');
+      const title = cell ? (cell.querySelector('.scrim .t') || {}).textContent || 'Course' : 'Course';
+      const priceTxt = cell ? ((cell.querySelector('.price') || {}).textContent || '') : '';
+      const price = parseInt((priceTxt.match(/\d+/) || [0])[0], 10);
+      const img = cell ? ((cell.querySelector('.cover-card img') || {}).getAttribute('src') || '').replace('img/', '') : '';
+      const c = readCart();
+      const ex = c.find(x => x.title === title);
+      if (ex) ex.qty++; else c.push({ title, price, img, kind: 'Course', qty: 1 });
+      writeCart(c); renderCart();
+      const o = add.innerHTML; add.innerHTML = 'Added ✓'; add.disabled = true; setTimeout(() => { add.innerHTML = o; add.disabled = false; }, 1100);
+      document.querySelectorAll('.cart-btn').forEach(btn => { btn.style.transition = 'transform .18s'; btn.style.transform = 'translateY(-3px) rotate(-8deg)'; setTimeout(() => { btn.style.transform = ''; }, 220); });
+    });
+
+    /* multi-group filter panel */
+    const cells = Array.from(document.querySelectorAll('.lesson-cell'));
+    const groupEls = Array.from(document.querySelectorAll('.fgroup'));
+    const sel = {};
+    groupEls.forEach(g => { sel[g.dataset.group] = 'all'; });
+    let maxPrice = 999;
+    const countEl = document.getElementById('lesson-count');
+    const noRes = document.getElementById('no-results');
+
+    const matches = (cell) => {
+      if (sel.medium !== 'all' && cell.dataset.cat !== sel.medium) return false;
+      if (sel.theme && sel.theme !== 'all' && cell.dataset.theme !== sel.theme) return false;
+      if (sel.difficulty !== 'all' && cell.dataset.difficulty !== sel.difficulty) return false;
+      if (sel.duration !== 'all' && cell.dataset.duration !== sel.duration) return false;
+      if (sel.offer === 'sale' && cell.dataset.sale !== '1') return false;
+      if (cell.dataset.price && (+cell.dataset.price) > maxPrice) return false;
+      return true;
+    };
+    const applyFilters = () => {
+      let n = 0;
+      cells.forEach(c => { const ok = matches(c); c.classList.toggle('hidden', !ok); if (ok) n++; });
+      if (countEl) countEl.textContent = n + (n === 1 ? ' course' : ' courses');
+      if (noRes) noRes.style.display = n ? 'none' : 'block';
+    };
+    groupEls.forEach(g => {
+      const opts = g.querySelectorAll('.fopt');
+      opts.forEach(o => o.addEventListener('click', () => {
+        opts.forEach(x => x.classList.remove('active'));
+        o.classList.add('active');
+        sel[g.dataset.group] = o.dataset.val;
+        applyFilters();
+      }));
+    });
+    const clearBtn = document.getElementById('fp-clear');
+    if (clearBtn) clearBtn.addEventListener('click', () => {
+      groupEls.forEach(g => { sel[g.dataset.group] = 'all'; g.querySelectorAll('.fopt').forEach((o, i) => o.classList.toggle('active', i === 0)); });
+      maxPrice = 999; priceSlider.value = priceSlider.max; priceVal.textContent = 'Any price'; setPct();
+      applyFilters();
+    });
+    /* deep-link: ?cat= from the nav category row */
+    try {
+      const qp = (new URLSearchParams(location.search).get('cat') || '').toLowerCase();
+      if (qp) {
+        const CATMAP = { watercolour: ['medium', 'watercolour'], oil: ['medium', 'oil'], oils: ['medium', 'oil'], drawing: ['medium', 'pencils'], pencils: ['medium', 'pencils'], pastel: ['medium', 'pastel'], ink: ['medium', 'ink'], beginners: ['difficulty', 'beginner'], beginner: ['difficulty', 'beginner'] };
+        const m = CATMAP[qp] || ['medium', qp];
+        const btn = document.querySelector('.fgroup[data-group="' + m[0] + '"] .fopt[data-val="' + m[1] + '"]');
+        if (btn) btn.click();
+      }
+    } catch (e) {}
+    applyFilters();
+
+    /* price slider (dynamic range) */
+    const priceSlider = document.getElementById('lesson-price-slider');
+    const priceVal = document.getElementById('lesson-price-val');
+    const niceRange = (lo, hi) => {
+      const span = Math.max(hi - lo, 1);
+      const steps = [1, 2, 5, 10, 20, 25, 50, 100, 200];
+      let step = steps.find(s => span / s <= 20) || 200;
+      while (step > 1 && span / step < 5) step = steps[steps.indexOf(step) - 1];
+      return { min: Math.floor(lo / step) * step, max: Math.ceil(hi / step) * step, step };
+    };
+    const lessonPrices = cells.map(c => +c.dataset.price).filter(n => !isNaN(n));
+    const pr = niceRange(Math.min(...lessonPrices), Math.max(...lessonPrices));
+    priceSlider.min = pr.min; priceSlider.max = pr.max; priceSlider.step = pr.step; priceSlider.value = pr.max;
+    const lScale = priceSlider.closest('.slider-wrap').querySelector('.price-scale');
+    if (lScale) lScale.innerHTML = '<span>' + (pr.min === 0 ? 'Free' : '£' + pr.min) + '</span><span>£' + pr.max + '+</span>';
+    const setPct = () => {
+      const pct = ((+priceSlider.value - +priceSlider.min) / (+priceSlider.max - +priceSlider.min)) * 100;
+      priceSlider.closest('.slider-ui').style.setProperty('--pct', pct + '%');
+    };
+    const onSlide = () => {
+      const v = +priceSlider.value;
+      priceVal.textContent = (v >= +priceSlider.max) ? 'Any price' : (v === 0 ? 'Free only' : ('Up to £' + v));
+      setPct();
+      maxPrice = (v >= +priceSlider.max) ? 999 : v;
+      applyFilters();
+    };
+    priceSlider.addEventListener('input', onSlide);
+    priceSlider.addEventListener('change', onSlide);
+    setPct();
+
+    /* sort (own card) */
+    const lessonGrid = document.getElementById('lesson-grid');
+    const lessonSort = document.getElementById('lesson-sort');
+    const origOrder = cells.slice();
+    if (lessonSort) lessonSort.querySelectorAll('.fopt').forEach(chip => chip.addEventListener('click', () => {
+      lessonSort.querySelectorAll('.fopt').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      const v = chip.dataset.val;
+      let arr = origOrder.slice();
+      if (v === 'price-asc') arr.sort((a, b) => (+a.dataset.price) - (+b.dataset.price));
+      else if (v === 'price-desc') arr.sort((a, b) => (+b.dataset.price) - (+a.dataset.price));
+      arr.forEach(c => lessonGrid.appendChild(c));
+    }));
+
+    /* scroll reveals (rect-based; IO is unreliable in the preview) */
+    document.querySelectorAll('.reveal > *').forEach((el, i) => { el.style.setProperty('--i', i % 8); el.classList.add('reveal-up'); });
+    const revealEls = Array.from(document.querySelectorAll('.reveal-up, .reveal-one, .reveal-brush, .section-title'));
+    if (reduce) {
+      revealEls.forEach(el => el.classList.add('in-view'));
+    } else {
+      const checkReveal = () => {
+        const vh = window.innerHeight || document.documentElement.clientHeight;
+        for (const el of revealEls) {
+          if (el.classList.contains('in-view')) continue;
+          const r = el.getBoundingClientRect();
+          if (r.top < vh * 0.92 && r.bottom > 0) {
+            el.classList.add('in-view');
+            const t = el;
+            setTimeout(() => { if (getComputedStyle(t).opacity !== '1') { t.style.transition = 'none'; t.style.opacity = '1'; t.style.transform = 'none'; } }, 1200);
+          }
+        }
+      };
+      checkReveal();
+      window.addEventListener('scroll', checkReveal, { passive: true });
+      window.addEventListener('resize', checkReveal);
+      setTimeout(checkReveal, 120);
+    }
+  }
+}
+</script>
+</body>
+</html>

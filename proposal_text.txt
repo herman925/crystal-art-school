@@ -1,0 +1,266 @@
+Crystal Art School
+Website Development Proposal
+Prepared: April 22 2026
+
+IMPORTANT: This proposal is a working draft. All details are tentative and subject to change as information is gathered and scope is refined. Prices and timelines are estimates based on current information.
+
+1. Project Overview
+Crystal Art School is a project to build a professional website that serves two purposes:
+A personal profile for the art teacher with a warm, artistic feel
+An online course platform where students can browse, purchase, and watch art lessons
+This proposal is for building a new website at crystalau.com — a modern, responsive platform built on WordPress. The new site will support course sales, student accounts, video lessons, and a blog.
+Target audience: Hong Kong and UK students interested in art education. Year 1 target: 0 to 50 enrolled students.
+
+2. What's Included (In Scope)
+The following items are included in the development fee of HK$15,000:
+Feature
+Details
+UI / UX Design
+Pencil sketches and prototypes for main pages, with up to 3 rounds of revisions
+Responsive Website
+Works on mobile phones, tablets, and desktop computers
+Blog System
+Basic blog with article pages for art tips and updates
+Course Management System
+Built using Tutor LMS (free plugin). Allows creating courses, lessons, quizzes, and tracking student progress.
+Student Accounts
+Students can register, log in, view enrolled courses, and track their progress
+Course Purchase
+Students can buy individual courses using Stripe or PayPal via WooCommerce
+Video Lessons
+Videos hosted on Bunny.net with protection against unauthorised sharing. Free preview lessons available.
+Student Dashboard
+Each student has a personal area showing their courses, progress, purchase history, and account settings
+Search Engine Optimisation
+Basic setup to help the site appear on Google (XML sitemap, page titles, descriptions)
+Content Upload
+First 5 courses uploaded and tested on the platform
+Admin Manual
+Documentation explaining how to manage the website after launch
+GDPR Compliance (UK)
+Cookie consent popup and data rights tool for UK GDPR compliance
+Support
+1 month of technical support after the site goes live
+
+
+3. What's NOT Included (Out of Scope)
+The following are not included in this proposal and can be considered for a later phase:
+Feature
+Reason / Alternative
+Course Bundles
+Selling multiple courses as one package requires a paid upgrade. Individual courses can be purchased at launch.
+Painting / Equipment Sales
+Separate e-commerce flow, not part of course platform
+Monthly / Annual Subscription
+Not requested at this stage
+Advanced Video Protection (DRM)
+Budget constraint. Standard HLS + domain lock is included.
+Newsletter / Mass Email System
+Not needed per client request
+Discussion Forum
+Discord will be used for community discussion instead
+Automated Discord Bot
+Discord invites for course purchasers are handled manually at launch. Automated bot can be added later.
+Multi-Language Support
+English only at launch
+Mobile App
+Responsive website covers mobile browsers
+Advanced Analytics
+Out of scope, can be added later
+
+
+4. Key Decisions Explained
+Why WordPress?
+WordPress is the most widely-used website platform in the world. It gives full control over the site, is easy to find developers for in the future, and has thousands of plugins for added features. It is not tied to any specific hosting company.
+Why Tutor LMS for the course platform?
+Tutor LMS is a purpose-built plugin for online courses on WordPress. It handles student accounts, course progress tracking, quizzes, and works directly with WooCommerce for payments. The free version covers all core needs for launch.
+Why Bunny.net for video hosting?
+Bunny.net charges only for what is used. At the expected scale (0-50 students in Year 1), costs are estimated at approximately HK$25-55 per year. This is much cheaper than fixed monthly plans, and the service includes video protection features.
+Why Elementor Pro for building pages?
+Elementor Pro is the industry-standard page builder for WordPress. It allows fast creation of custom page layouts without needing to write code. The 'One' plan (approximately HK$1,300 per year) includes all features needed for this project.
+Why manual Discord invites for Fellows?
+Students who purchase a 'Fellow' tier course will see a Discord invite link on their dashboard after purchase. The teacher approves the invite manually in Discord. This is simple, reliable, and does not require custom development. An automated bot can be added later if desired.
+Why a single launch instead of a soft launch?
+The site will be built on a password-protected staging environment until fully ready. Only when everything is tested and approved will the site go live publicly. This avoids exposing unfinished work to potential customers.
+
+5. Student Membership Tiers
+The website will have 3 tiers of membership access:
+Tier
+Access Level
+Price Model
+Wanderer
+Can browse the site further than the main page, read blog articles
+Free
+Apprentice
+Purchase individual courses, access video lessons and materials
+Pay per course
+Fellow
+Purchase courses plus access to the teacher's Discord channel for interaction
+Pay per course (premium)
+Course pricing and individual course details will be provided and entered into the platform before launch.
+
+6. Project Timeline
+Estimated timeline: 15 weeks from start to full public launch. Weeks 1-14 are spent building on a private staging site. Week 15 is when the site goes live publicly.
+Phase
+What Happens
+Weeks 1-3
+Design: Logo and branding review, prototype sketches for home page, courses page, and about page. Setup of hosting and WordPress.
+Weeks 4-6
+Frontend: Building all website pages with Elementor Pro. Making pages work on mobile. Blog and contact pages.
+Weeks 7-9
+Core Systems: Installing and setting up Tutor LMS, connecting WooCommerce for payments, testing Stripe and PayPal checkout.
+Weeks 10-12
+Content + Protection: Setting up Bunny.net video hosting, uploading first 5 courses, configuring video protection, setting up Discord integration.
+Weeks 13-14
+Polish: Testing everything, fixing bugs, setting up SEO, final checks.
+Week 15
+FULL PUBLIC LAUNCH: Switching the domain to the new site and announcing the launch.
+Note: The timeline assumes all needed materials (logo, course descriptions, videos, photos) are provided in a timely manner. Delays in material provision will push the timeline.
+
+7. Development Fee
+Item
+Cost (HK$)
+UI / UX Design (3 revision rounds)
+2,000
+Responsive Website (mobile / tablet / desktop)
+2,500
+LMS Backend Setup (Tutor LMS)
+4,000
+Membership + Payment System (WooCommerce)
+4,000
+Video Security + Basic SEO
+1,000
+Content Upload (5 courses) + Admin Manual
+1,500
+TOTAL
+15,000
+Additional revisions beyond 3 rounds: HK$500 per round (if needed). Scope changes: quoted separately.
+
+8. Payment Terms
+Milestone
+Amount
+50% deposit - upon project start
+HK$7,500
+50% balance - after final acceptance
+HK$7,500
+
+
+9. Ongoing Costs (Paid Directly by Client)
+These are annual running costs that the client pays separately. They are not included in the development fee:
+Service
+Recommended Provider
+Est. Annual Cost
+Domain Name (crystalau.com)
+Namecheap or similar
+~HK$100-150
+Website Hosting
+Hostinger (WordPress plan)
+~HK$500-700
+Course Platform (Tutor LMS)
+Tutor LMS Pro Individual
+~HK$1,550
+Video Hosting (Bunny.net)
+Bunny.net Stream
+~HK$25-55
+Page Builder (Elementor Pro)
+Elementor Pro One Plan
+~HK$1,300
+Payment Processing
+Stripe / PayPal
+~2-3% per transaction
+Community (Discord)
+Discord Free Tier
+HK$0
+TOTAL ESTIMATED (Year 1)
+<w:tcPr><w:tcW w:w="2698" w:type="dxa"/><w:tcBorders><w:top w:val="single" w:sz="1" w:space="0" w:color="999999"/><w:left w:val="single" w:sz="1" w:space="0" w:color="999999"/><w:bottom w:val="single" w:sz="1" w:space="0" w:color="999999"/><w:right w:val="single" w:sz="1" w:space="0" w:color="999999"/></w:tcBorders><w:tcMar><w:top w:w="80" w:type="dxa"/><w:left w:w="120" w:type="dxa"/><w:bottom w:w="80" w:type="dxa"/><w:right w:w="120" w:type="dxa"/></w:tcMar></w:tcPr><w:p w14:paraId="03BEBD72" w14:textId="77777777" w:rsidR="00B7398A" w:rsidRDefault="00000000"><w:r><w:rPr><w:rFonts w:eastAsia="Times New Roman"/><w:b/><w:bCs/><w:color w:val="000000"/><w:sz w:val="22"/><w:szCs w:val="22"/></w:rPr><w:t>~HK$3,500-4,500
+Note: Year 1 costs include domain and hosting setup. Tutor LMS and Elementor are annual subscriptions. Prices in HKD are approximate and based on current exchange rates.
+
+10. What the Client Needs to Provide
+The following items are needed from the client to make this project work:
+Logo or design brief for the brand
+Course details: course names, descriptions, categories, and pricing
+Free course selection: which courses serve as free preview lessons
+Cover photos (1:1 aspect ratio) and course video files
+
+Domain registrar login credentials
+Google account access (for Search Console SEO data, if available)
+
+Answers to the open questions listed in this proposal
+
+A Google Sheet will be created in Week 1 to help organise all of the above content.
+
+11. Key Assumptions and Open Questions
+This proposal is based on the following assumptions. Please confirm or correct if needed:
+Question
+Status
+Logo and brand identity
+Awaiting from client
+Exact course catalogue and pricing
+To be provided via Google Sheet
+Which courses are free previews
+To be confirmed
+Course access duration (lifetime or time-limited)
+Client to decide
+Video resolution (720p or 1080p or both)
+Client to decide
+Domain registrar access for DNS setup
+URGENT - needed by Week 1-2
+
+
+
+
+12. Common Questions
+Answers to questions that clients often ask:
+Question
+Answer
+Can I sell course bundles?
+Yes, the paid LMS version will support bundles. It will be added later with a paid upgrade.
+Can students pay with PayPal?
+Yes. Both Stripe (card payments) and PayPal are included.
+Can I change course prices after launch?
+Yes. Prices can be updated at any time through the WordPress dashboard.
+What happens if a student asks for a refund?
+Refunds are handled manually by the site administrator. The platform will allow for submission of refund request.
+Can I add more courses after launch?
+Yes. The platform supports unlimited courses. Adding courses after launch has no extra development cost.
+Do I need to buy the Tutor LMS or Elementor plans right away?
+Tutor LMS free version and Elementor free version can be used initially. Paid plans unlock more features and are in scope.
+What if I want to change website developers later?
+WordPress is the world's most common website platform. Any WordPress developer can take over from this one.
+How do students access my Discord channel?
+After purchasing a Fellow-tier course, students see a Discord invite link on their dashboard. The teacher approves each invite manually.
+Can I use my own domain name?
+Yes. crystalau.com will be registered (given if it’s not used) and set up for the new site. crystalauart.com will remain on its current platform — this is a brand-new build, not a migration.
+Is the website mobile-friendly?
+Yes. All pages are built to work on mobile phones, tablets, and desktop computers.
+What if I need help after the site launches?
+One month of technical support is included after launch. After that, support can be quoted separately.
+
+
+13. Next Steps
+To proceed, the client is invited to:
+Review this proposal and note any questions or concerns
+Confirm the scope, timeline, and payment terms
+Provide the items listed in Section 10 (logo, course details, domain registrar access)
+Answer the open questions listed above
+Once confirmed, Week 1 of the project can begin.
+</w:pBdr><w:spacing w:before="200" w:after="120"/></w:pPr><w:r><w:rPr><w:rFonts w:eastAsia="Times New Roman"/><w:i/><w:iCs/><w:color w:val="666666"/><w:sz w:val="20"/><w:szCs w:val="20"/></w:rPr><w:t>This proposal is valid for 30 days from the date above and may be subject to amendment based on further discussions.
+
+14. Payment Details
+Payment can be made via FPS (Faster Payment System):
+Name:<w:tab/><w:t>Herman Chan
+FPS ID:<w:t>97278202
+Please use your name as the payment reference.
+
+
+Agreement and Signature
+By signing below, the client confirms acceptance of this proposal and authorises the work to begin.
+
+
+Client Name (Print): _______________________________________________
+
+
+Signature: _______________________________________________
+
+
+Date: _______________________________________________

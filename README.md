@@ -1,26 +1,61 @@
 # Crystal's Art School
 
-Production prototype (v2.x) — multi-page static site, no build step.
-Live: https://herman925.github.io/crystal-art-school/
+> Slow down. Draw with care.
+
+A multi-page website for Crystal's Art School — a small, craft-focused drawing studio.
+Static HTML/CSS/JS, no build step. Industrial design system (v3.0) with four
+swappable themes (A: Oak Atelier · B: Walnut · C: Concrete & Iron · D: Moody Loft).
 
 ## Pages
 
-| File | Purpose |
-|---|---|
-| `index.html` | Front page — hero, new releases, teacher intro |
-| `lessons.html` | Catalog + membership tiers |
-| `lesson.html` | Lesson detail |
-| `gallery.html` | three.js 3D museum — "Art Showcase" (Crystal) + "Fresh Eyes" (students), 2D collage fallback |
-| `blog.html` / `blog-post.html` | Blog index + post detail |
-| `about.html` | About + contact + T&C |
+| Page | File | Purpose |
+|------|------|---------|
+| Home | `index.html` | Hero carousel, new release, course shop, journal, community band, testimonials |
+| Lessons | `lessons.html` | Curriculum grid, filters, membership tiers |
+| Lesson (single) | `lesson.html` | Single course / video page |
+| Gallery | `gallery.html` | Studio and student work |
+| Blog | `blog.html` | Article index |
+| Blog post | `blog-post.html` | Single article layout |
+| About | `about.html` | Bio, contact, terms |
+| Login | `login.html` | Sign-in + forgot password |
+| Signup | `signup.html` | Account creation |
+| Dashboard | `dashboard.html` | Member home (enrolled, recommendations) |
+| Checkout | `checkout.html` | Cart → details → confirmation |
 
-## Stack
+## Structure
 
-- Vanilla HTML/CSS/JS, GSAP 3 + ScrollTrigger (CDN) for scroll motion, three.js (CDN) for the gallery
-- Design system: `DESIGN.md` (pastel sketchbook — Quicksand · Permanent Marker · Italiana · Caveat)
-- `PRD.md` — production addendum; authoritative Phase-1 PRD in `docs/PRD-phase1.md`
-- Wireframe exploration phase lives in this repo's git history (pre-v2 commits); local `wireframes/` clone is not tracked
+```
+.
+├── index.html, about.html, blog.html, blog-post.html,
+│   gallery.html, lessons.html, lesson.html,
+│   login.html, signup.html, dashboard.html, checkout.html
+├── css/industrial.css     # all styles (tokenized, theme A/B/C/D)
+├── js/site-extras.js      # shared: cart drawer, cookie consent, tier picker, auth nav
+├── js/<page>.js           # per-page init (was embedded Component class)
+├── img/                   # site imagery
+├── serve.bat              # local dev server (Windows)
+└── transform.py           # one-shot script used to port from the
+                            Claude Design handoff bundle (kept for reference)
+```
 
-## Local dev
+## Run locally
 
-Run `serve.bat` (or any static server) and open `index.html`. All paths are relative, so the site also works from a subpath (GitHub Pages project site).
+JavaScript needs a real HTTP origin (not `file://`). On Windows, double-click
+**`serve.bat`** — it finds a free port in `8080–8084` and serves the folder.
+Then open the printed `http://localhost:<port>`.
+
+Any static server works too, e.g.:
+
+```bash
+python -m http.server 8080
+```
+
+## Themes
+
+Click the **A · B · C · D** buttons in the nav. Choice persists across pages
+via `localStorage`. All visual surfaces (banner, gallery tile, panels,
+buttons, footer) reskin from token overrides in `css/industrial.css`.
+
+## License
+
+All rights reserved unless stated otherwise.

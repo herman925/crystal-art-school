@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600;6..96,700&family=Oswald:wght@300;400;500;600&family=Archivo:wght@400;500;600;700&family=Saira+Stencil+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/industrial.css">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="js/site-extras.js"></script>
+<script src="js/motion.js"></script>
+</helmet>
+<div class="cas-root" data-theme="D">
+<div class="glow-layer" aria-hidden="true"></div>
+
+<nav class="site-nav" aria-label="Main">
+  <div class="nav-top">
+    <div class="inner">
+      <a class="nav-brand" href="index.html">
+        <img src="img/LAULogoFinal.png" alt="Lau. — Crystal's Art School">
+        <span class="name">Crystal's Art School</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li class="nav-item has-mega">
+          <a href="Lessons.dc.html" class="nav-mega-trigger" aria-haspopup="true" aria-expanded="false">Courses <span class="nav-caret" aria-hidden="true">▾</span></a>
+          <div class="nav-mega" role="menu" aria-label="Courses">
+            <div class="nav-mega-inner">
+              <div class="nm-col nm-start">
+                <div class="nm-kicker"><span class="star">✦</span> Start here</div>
+                <a class="nm-item" role="menuitem" href="lesson.dc.html"><span class="nm-t">Free courses</span><span class="nm-d">Watch a full course, on us</span></a>
+                <a class="nm-item nm-feature" role="menuitem" href="Lessons.dc.html"><span class="nm-t">Shop all courses <span class="nm-arr" aria-hidden="true">→</span></span><span class="nm-d">Browse everything by medium</span></a>
+                <a class="nm-item" role="menuitem" href="Blog.dc.html?tag=Tools"><span class="nm-t">Tools &amp; materials</span><span class="nm-d">Kit guides and honest reviews</span></a>
+              </div>
+              <div class="nm-col nm-medium">
+                <div class="nm-kicker">By medium · from your course tags</div>
+                <div class="nm-tags">
+                  <a role="menuitem" href="Lessons.dc.html?cat=Watercolour">Watercolour</a>
+                  <a role="menuitem" href="Lessons.dc.html?cat=Oil">Oils</a>
+                  <a role="menuitem" href="Lessons.dc.html?cat=Drawing">Drawing</a>
+                  <a role="menuitem" href="Lessons.dc.html?cat=Ink">Ink</a>
+                  <a role="menuitem" href="Lessons.dc.html?cat=Beginners">Beginners</a>
+                </div>
+                <p class="nm-note">These appear automatically from the tags on your courses — add a tag and a category shows up, remove it and it's gone.</p>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li><a href="Gallery.dc.html">Gallery</a></li>
+        <li><a href="Showcase.dc.html">Showcase</a></li>
+        <li><a href="Blog.dc.html">Blog</a></li>
+        <li><a href="About.dc.html">About</a></li>
+        <li><a href="FAQ.dc.html">FAQ</a></li>
+      </ul>
+      <div class="nav-auth">
+        <a class="cart-btn" href="Checkout.dc.html" aria-label="Shopping cart">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M2 3h3.2l2.5 12.2a1.5 1.5 0 0 0 1.5 1.2h9a1.5 1.5 0 0 0 1.5-1.2L21.5 7H6.5"></path></svg>
+          <span class="cart-badge">0</span>
+        </a>
+        <a class="btn ghost" href="Login.dc.html">Log in</a>
+        <a class="btn primary" href="Signup.dc.html">Sign up</a>
+        <button class="nav-burger" type="button" aria-label="Menu" aria-expanded="false">☰</button>
+      </div>
+    </div>
+  </div>
+  <div class="nav-sheet">
+    <a href="index.html">Home</a>
+    <a href="Lessons.dc.html">Courses</a>
+    <a href="Gallery.dc.html">Gallery</a>
+    <a href="Showcase.dc.html">Showcase</a>
+    <a href="Blog.dc.html">Blog</a>
+    <a href="About.dc.html">About</a>
+    <a href="lesson.dc.html">Free video</a>
+    <a href="Blog.dc.html?tag=Tools">Tools</a>
+    <a href="FAQ.dc.html">FAQ</a>
+    <a href="Lessons.dc.html?cat=Watercolour">Watercolour</a>
+    <a href="Lessons.dc.html?cat=Oil">Oils</a>
+    <a href="Lessons.dc.html?cat=Drawing">Drawing</a>
+    <a href="Lessons.dc.html?cat=Ink">Ink</a>
+    <a href="Lessons.dc.html?cat=Beginners">Beginners</a>
+    <a href="Login.dc.html">Log in / Sign up</a>
+  </div>
+</nav>
+
+<main id="content">
+  <div class="auth-wrap">
+    <div class="auth-card">
+      <div class="auth-head">
+        <div class="eyebrow"><span class="star">✦</span> Join the studio</div>
+        <h1 id="su-heading">Create your account</h1>
+        <p id="su-sub">Step 1 of 3 — the basics</p>
+      </div>
+      <div class="auth-steps"><div class="as on" data-as="1"></div><div class="as" data-as="2"></div><div class="as" data-as="3"></div></div>
+
+      <form id="su-form">
+        <!-- stage 1: account -->
+        <div class="auth-stage active" data-su="1">
+          <button class="btn social-google full" type="button" id="su-google">
+            <svg viewBox="0 0 18 18" width="18" height="18" aria-hidden="true"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.17-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.91c1.7-1.57 2.69-3.88 2.69-6.62z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.91-2.26c-.81.54-1.84.86-3.05.86-2.35 0-4.34-1.58-5.05-3.71H.96v2.33A9 9 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.95 10.71a5.41 5.41 0 0 1 0-3.42V4.96H.96a9 9 0 0 0 0 8.08l2.99-2.33z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0A9 9 0 0 0 .96 4.96l2.99 2.33C4.66 5.16 6.65 3.58 9 3.58z"/></svg>
+            Sign up with Google
+          </button>
+          <div class="auth-or"><span style="flex:1;height:1px;background:var(--line);"></span> or <span style="flex:1;height:1px;background:var(--line);"></span></div>
+          <div class="co-field"><label for="su-name">Your name</label><input id="su-name" required placeholder="First &amp; last name"></div>
+          <div class="co-field"><label for="su-email">Email</label><input id="su-email" type="email" required placeholder="you@example.com"></div>
+          <div class="co-field"><label for="su-pass">Password</label><input id="su-pass" type="password" required placeholder="At least 8 characters" minlength="8"></div>
+          <button class="btn primary big full" type="button" data-next="1" style="margin-top:8px;">Continue →</button>
+        </div>
+
+        <!-- stage 2: focus -->
+        <div class="auth-stage" data-su="2">
+          <p style="font-size:14px;color:var(--muted);margin:0 0 14px;">What do you most want to work on? (we'll tailor your first lessons)</p>
+          <div class="plan-opt sel" data-focus="Watercolour"><div class="po-radio"></div><div><div class="po-name">Watercolour</div><div class="po-desc">Washes, water control, loose botanicals</div></div></div>
+          <div class="plan-opt" data-focus="Oils"><div class="po-radio"></div><div><div class="po-name">Oils</div><div class="po-desc">Portraits, still life, block-ins</div></div></div>
+          <div class="plan-opt" data-focus="Drawing"><div class="po-radio"></div><div><div class="po-name">Drawing</div><div class="po-desc">Sketchbook habit, value, line</div></div></div>
+          <div style="display:flex;gap:10px;margin-top:8px;">
+            <button class="btn ghost" type="button" data-back="2">← Back</button>
+            <button class="btn primary big full" type="button" data-next="2">Continue →</button>
+          </div>
+        </div>
+
+        <!-- stage 3: plan -->
+        <div class="auth-stage" data-su="3">
+          <p style="font-size:14px;color:var(--muted);margin:0 0 14px;">Pick a plan — you can change it anytime.</p>
+          <div class="plan-opt sel" data-plan="Wanderer" data-price="Free"><div class="po-radio"></div><div><div class="po-name">Wanderer</div><div class="po-desc">Browse the site &amp; read the journal</div></div><div class="po-price">Free</div></div>
+          <div class="plan-opt" data-plan="Apprentice" data-price="Pay per course"><div class="po-radio"></div><div><div class="po-name">Apprentice</div><div class="po-desc">Buy courses — video lessons &amp; materials</div></div><div class="po-price">Per course</div></div>
+          <div class="plan-opt" data-plan="Fellow" data-price="Pay per course + Discord"><div class="po-radio"></div><div><div class="po-name">Fellow</div><div class="po-desc">Courses plus the teacher's Discord channel</div></div><div class="po-price">Per course +</div></div>
+          <div style="display:flex;gap:10px;margin-top:8px;">
+            <button class="btn ghost" type="button" data-back="3">← Back</button>
+            <button class="btn primary big full" type="submit">Create account →</button>
+          </div>
+        </div>
+
+        <!-- success -->
+        <div class="auth-stage" data-su="4">
+          <div class="auth-success">
+            <div class="as-check">✓</div>
+            <h2 style="font-family:var(--font-marker);font-weight:600;font-size:26px;color:var(--ink);margin:0 0 8px;">Welcome, <span id="su-welcome">friend</span>!</h2>
+            <p style="color:var(--muted);margin:0 0 6px;">Your <strong id="su-plan-name">Wanderer</strong> account is ready, tuned for <strong id="su-focus-name">Watercolour</strong>.</p>
+            <p style="color:var(--muted);margin:0 0 20px;font-size:13.5px;">Check your inbox to verify your email.</p>
+            <div class="fc-btns" style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
+              <a class="btn primary big" href="Dashboard.dc.html">Go to my dashboard →</a>
+              <a class="btn ghost" href="Lessons.dc.html">Browse courses</a>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <div class="auth-foot" id="su-foot">Already have an account? <a href="Login.dc.html">Log in</a></div>
+    </div>
+  </div>
+</main>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;defaultTheme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;A&quot;,&quot;B&quot;,&quot;C&quot;,&quot;D&quot;],&quot;default&quot;:&quot;A&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  componentDidMount() {
+    const root = document.querySelector('.cas-root');
+    if (!root) return;
+
+    const THEME_KEY = 'cas-theme';
+    const valid = ['A','B','C','D'];
+    const applyTheme = (t) => { root.setAttribute('data-theme', t); document.querySelectorAll('.theme-switch button').forEach(b => b.classList.toggle('active', b.dataset.theme === t)); };
+    let saved = (valid.includes(this.props.defaultTheme) ? this.props.defaultTheme : 'A');
+    try { const s = localStorage.getItem(THEME_KEY); if (s && valid.includes(s)) saved = s; } catch (e) {}
+    applyTheme('D');
+    document.querySelectorAll('.theme-switch button').forEach(b => b.addEventListener('click', () => { const t = b.dataset.theme; applyTheme(t); try { localStorage.setItem(THEME_KEY, t); } catch (e) {} }));
+
+    const burger = document.querySelector('.nav-burger'), sheet = document.querySelector('.nav-sheet');
+    if (burger && sheet) { burger.addEventListener('click', () => { const o = sheet.classList.toggle('open'); burger.setAttribute('aria-expanded', o ? 'true' : 'false'); }); sheet.addEventListener('click', (e) => { if (e.target.tagName === 'A') sheet.classList.remove('open'); }); }
+    document.querySelectorAll('.cart-badge').forEach(b => { try { const n = JSON.parse(localStorage.getItem('cas-cart') || '[]').reduce((a, i) => a + i.qty, 0); b.textContent = n; b.style.display = n > 0 ? 'grid' : 'none'; } catch (e) {} });
+
+    /* ---- signup pipeline ---- */
+    const stages = Array.from(document.querySelectorAll('.auth-stage'));
+    const bars = document.querySelectorAll('.auth-steps .as');
+    const heading = document.getElementById('su-heading');
+    const sub = document.getElementById('su-sub');
+    const titles = { 1: ['Create your account', 'Step 1 of 3 — the basics'], 2: ['What brings you here?', 'Step 2 of 3 — your focus'], 3: ['Choose a plan', 'Step 3 of 3 — pick a tier'] };
+    const show = (n) => {
+      stages.forEach(s => s.classList.toggle('active', +s.dataset.su === n));
+      bars.forEach(b => b.classList.toggle('on', +b.dataset.as <= n));
+      if (titles[n]) { heading.textContent = titles[n][0]; sub.textContent = titles[n][1]; }
+      if (n === 4) { document.getElementById('su-foot').style.display = 'none'; sub.style.display = 'none'; heading.style.display = 'none'; document.querySelector('.auth-steps').style.display = 'none'; document.querySelector('.auth-head .eyebrow').style.display = 'none'; }
+    };
+
+    // radio-group behaviour
+    const groupSel = (attr) => document.querySelectorAll('[' + attr + ']').forEach(el => el.addEventListener('click', () => {
+      document.querySelectorAll('[' + attr + ']').forEach(x => x.classList.remove('sel')); el.classList.add('sel');
+    }));
+    groupSel('data-focus'); groupSel('data-plan');
+
+    const form = document.getElementById('su-form');
+    const gbtn = document.getElementById('su-google');
+    if (gbtn) gbtn.addEventListener('click', () => {
+      gbtn.disabled = true; gbtn.style.opacity = '.7';
+      gbtn.innerHTML = gbtn.innerHTML.replace('Sign up with Google', 'Connecting to Google…');
+      setTimeout(() => {
+        document.getElementById('su-name').value = 'Jane Doe';
+        document.getElementById('su-email').value = 'jane@gmail.com';
+        document.getElementById('su-pass').value = 'google-oauth';
+        gbtn.disabled = false; gbtn.style.opacity = '';
+        gbtn.innerHTML = gbtn.innerHTML.replace('Connecting to Google…', 'Sign up with Google');
+        show(2); /* skip basics — Google provided them — go to focus */
+      }, 850);
+    });
+    document.querySelectorAll('[data-next]').forEach(b => b.addEventListener('click', () => {
+      const n = +b.dataset.next;
+      if (n === 1) { const a = ['su-name', 'su-email', 'su-pass'].map(id => document.getElementById(id)); if (!a.every(i => i.reportValidity())) return; }
+      show(n + 1);
+    }));
+    document.querySelectorAll('[data-back]').forEach(b => b.addEventListener('click', () => show(+b.dataset.back - 1)));
+
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = (document.getElementById('su-name').value || 'friend').split(' ')[0];
+      const focus = (document.querySelector('[data-focus].sel') || {}).getAttribute ? document.querySelector('[data-focus].sel').dataset.focus : 'Watercolour';
+      const plan = (document.querySelector('[data-plan].sel') || {}).getAttribute ? document.querySelector('[data-plan].sel').dataset.plan : 'Wanderer';
+      document.getElementById('su-welcome').textContent = name;
+      document.getElementById('su-focus-name').textContent = focus;
+      document.getElementById('su-plan-name').textContent = plan;
+      try { localStorage.setItem('cas-user', JSON.stringify({ name, plan, focus, newUser: true, since: 'Jul 2026' })); } catch (er) {}
+      show(4);
+    });
+  }
+}
+</script>
+</body>
+</html>

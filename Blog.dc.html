@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600;6..96,700&family=Oswald:wght@300;400;500;600&family=Archivo:wght@400;500;600;700&family=Saira+Stencil+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/industrial.css">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="js/site-extras.js"></script>
+<script src="js/motion.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+</helmet>
+<div class="cas-root" data-theme="D">
+<div class="glow-layer" aria-hidden="true"></div>
+
+<nav class="site-nav" aria-label="Main">
+  <div class="nav-top">
+    <div class="inner">
+      <a class="nav-brand" href="index.html">
+        <img src="img/LAULogoFinal.png" alt="Lau. — Crystal's Art School">
+        <span class="name">Crystal's Art School</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li class="nav-item has-mega">
+          <a href="Lessons.dc.html" class="nav-mega-trigger" aria-haspopup="true" aria-expanded="false">Courses <span class="nav-caret" aria-hidden="true">▾</span></a>
+          <div class="nav-mega" role="menu" aria-label="Courses">
+            <div class="nav-mega-inner">
+              <div class="nm-col nm-start">
+                <div class="nm-kicker"><span class="star">✦</span> Start here</div>
+                <a class="nm-item" role="menuitem" href="lesson.dc.html"><span class="nm-t">Free courses</span><span class="nm-d">Watch a full course, on us</span></a>
+                <a class="nm-item nm-feature" role="menuitem" href="Lessons.dc.html"><span class="nm-t">Shop all courses <span class="nm-arr" aria-hidden="true">→</span></span><span class="nm-d">Browse everything by medium</span></a>
+                <a class="nm-item" role="menuitem" href="Blog.dc.html?tag=Tools"><span class="nm-t">Tools &amp; materials</span><span class="nm-d">Kit guides and honest reviews</span></a>
+              </div>
+              <div class="nm-col nm-medium">
+                <div class="nm-kicker">By medium · from your course tags</div>
+                <div class="nm-tags">
+                  <a role="menuitem" href="Lessons.dc.html?cat=Watercolour">Watercolour</a>
+                  <a role="menuitem" href="Lessons.dc.html?cat=Oil">Oils</a>
+                  <a role="menuitem" href="Lessons.dc.html?cat=Drawing">Drawing</a>
+                  <a role="menuitem" href="Lessons.dc.html?cat=Ink">Ink</a>
+                  <a role="menuitem" href="Lessons.dc.html?cat=Beginners">Beginners</a>
+                </div>
+                <p class="nm-note">These appear automatically from the tags on your courses — add a tag and a category shows up, remove it and it's gone.</p>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li><a href="Gallery.dc.html">Gallery</a></li>
+        <li><a href="Showcase.dc.html">Showcase</a></li>
+        <li><a href="Blog.dc.html" class="active">Blog</a></li>
+        <li><a href="About.dc.html">About</a></li>
+        <li><a href="FAQ.dc.html">FAQ</a></li>
+      </ul>
+      <div class="nav-auth">
+        <a class="cart-btn" href="Checkout.dc.html" aria-label="Shopping cart">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M2 3h3.2l2.5 12.2a1.5 1.5 0 0 0 1.5 1.2h9a1.5 1.5 0 0 0 1.5-1.2L21.5 7H6.5"></path></svg>
+          <span class="cart-badge">0</span>
+        </a>
+        <a class="btn ghost" href="Login.dc.html">Log in</a>
+        <a class="btn primary" href="Signup.dc.html">Sign up</a>
+        <button class="nav-burger" type="button" aria-label="Menu" aria-expanded="false">☰</button>
+      </div>
+    </div>
+  </div>
+  <div class="nav-sheet">
+    <a href="index.html">Home</a>
+    <a href="Lessons.dc.html">Courses</a>
+    <a href="Gallery.dc.html">Gallery</a>
+    <a href="Showcase.dc.html">Showcase</a>
+    <a href="Blog.dc.html">Blog</a>
+    <a href="About.dc.html">About</a>
+    <a href="lesson.dc.html">Free video</a>
+    <a href="Blog.dc.html?tag=Tools">Tools</a>
+    <a href="FAQ.dc.html">FAQ</a>
+    <a href="Lessons.dc.html?cat=Watercolour">Watercolour</a>
+    <a href="Lessons.dc.html?cat=Oil">Oils</a>
+    <a href="Lessons.dc.html?cat=Drawing">Drawing</a>
+    <a href="Lessons.dc.html?cat=Ink">Ink</a>
+    <a href="Lessons.dc.html?cat=Beginners">Beginners</a>
+    <a href="Login.dc.html">Log in / Sign up</a>
+  </div>
+</nav>
+
+<header class="page-hero">
+  <div class="container">
+    <div class="eyebrow reveal-one"><span class="star">✦</span> From the studio</div>
+    <h1 class="marker-title reveal-one" style="font-size:clamp(34px,4.6vw,62px);">The journal.</h1>
+    <p class="lead reveal-one">Notes on materials, technique and the slow practice of drawing — the latest ten, filterable by topic.</p>
+  </div>
+</header>
+
+<main class="container" id="content" style="padding-bottom:70px;">
+  <section class="section" style="padding-top:24px;">
+    <div class="filter-row" id="blog-filters" role="group" aria-label="Filter posts"></div>
+    <div class="blog-feature" id="blog-feature"></div>
+    <div class="blog-grid" id="blog-grid"></div>
+    <div class="store-empty" id="blog-empty" style="display:none;">No posts under that topic yet — pick another.</div>
+  </section>
+</main>
+
+<footer class="site-footer">
+  <div class="inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">CRYSTAL'S</div>
+        <p style="font-size:14px;opacity:.85;max-width:34ch;margin:0;">Watercolour, acrylic &amp; drawing — taught slowly and carefully from a small studio of plaster, wood and iron.</p>
+        <div class="social-row">
+          <a class="social-btn" href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" stroke="none"></circle></svg></a>
+          <a class="social-btn" href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 9h3V6h-3c-1.7 0-3 1.3-3 3v2H9v3h2v6h3v-6h2.5l.5-3H14v-1.5c0-.3.2-.5.5-.5z"></path></svg></a>
+        </div>
+      </div>
+      <div>
+        <h4>Learn</h4>
+        <a href="Lessons.dc.html">All lessons</a>
+        <a href="Lessons.dc.html#membership">Membership</a>
+        <a href="lesson.dc.html">Free intro lesson</a>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <a href="Gallery.dc.html">Gallery</a>
+        <a href="Showcase.dc.html">Student showcase</a>
+        <a href="Blog.dc.html">Blog</a>
+        <a href="About.dc.html">About</a>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <a href="About.dc.html#contact">hello@crystalsartschool.com</a>
+        <a href="About.dc.html#contact">Discord · Instagram</a>
+        <a href="About.dc.html#terms">Terms &amp; privacy</a>
+      </div>
+    </div>
+    <div class="footer-meta">
+      <span>© 2026 Crystal's Art School</span>
+    </div>
+  </div>
+</footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;defaultTheme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;A&quot;,&quot;B&quot;,&quot;C&quot;,&quot;D&quot;],&quot;default&quot;:&quot;A&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  posts() {
+    return [
+      { title: 'Five brushes worth owning', excerpt: 'The short list of tools that actually change how you paint — and which ones to skip.', img: 'BrushA.jpg', tag: 'Tools', date: '2026-06-19', d: 'Jun 19' },
+      { title: 'Slow looking: a warm-up', excerpt: 'Ten quiet minutes before you draw anything at all. A small ritual that pays off.', img: 'Sketchbook.jpg', tag: 'Practice', date: '2026-06-12', d: 'Jun 12' },
+      { title: 'Mixing earthy neutrals', excerpt: 'Walnut, oak, iron — building the warm-neutral palette of a workshop from three tubes.', img: 'Liquidwatercolor.jpg', tag: 'Colour', date: '2026-06-04', d: 'Jun 04' },
+      { title: 'Caring for your paper', excerpt: 'Storage, tooth, and why cold-press matters more than the brand on the block.', img: 'Postercolor.jpg', tag: 'Tools', date: '2026-05-27', d: 'May 27' },
+      { title: 'The unhurried sketchbook', excerpt: 'Building a daily habit without the pressure of making anything good.', img: 'cover3.jpg', tag: 'Practice', date: '2026-05-18', d: 'May 18' },
+      { title: 'Framing student work', excerpt: 'How we hang the studio wall — mats, bevels and the small mistakes to avoid.', img: 'cover1.jpg', tag: 'Studio', date: '2026-05-09', d: 'May 09' },
+      { title: 'Reading light in a room', excerpt: 'Notes from late evenings by the window, and what shadows tell you about form.', img: 'studio.jpg', tag: 'Practice', date: '2026-04-30', d: 'Apr 30' },
+      { title: 'Sharpening, the right way', excerpt: 'A knife, a block, and two minutes — the only pencil-point method you need.', img: 'cover4.jpg', tag: 'Tools', date: '2026-04-21', d: 'Apr 21' },
+      { title: 'Oil vs poster colour', excerpt: 'Which to start with, and why it barely matters as much as you think.', img: 'cover2.jpg', tag: 'Colour', date: '2026-04-12', d: 'Apr 12' },
+      { title: 'A studio worth returning to', excerpt: 'Concrete, plants, lamplight — designing a calm room you actually want to work in.', img: 'ProfilePic.jpg', tag: 'Studio', date: '2026-04-02', d: 'Apr 02' },
+      { title: 'Three greys, endless range', excerpt: 'Warm and cool greys, and the quiet power of a limited value palette.', img: 'BrushB.jpg', tag: 'Colour', date: '2026-03-24', d: 'Mar 24' },
+      { title: 'The eraser as a brush', excerpt: 'Subtractive drawing: lifting light back out of a toned ground.', img: 'Rubber.jpg', tag: 'Tools', date: '2026-03-11', d: 'Mar 11' }
+    ];
+  }
+
+  componentDidMount() {
+    const root = document.querySelector('.cas-root');
+    if (!root) return;
+    const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+
+    /* theme switch */
+    const THEME_KEY = 'cas-theme';
+    const valid = ['A','B','C','D'];
+    const applyTheme = (t) => {
+      root.setAttribute('data-theme', t);
+      document.querySelectorAll('.theme-switch button').forEach(b => b.classList.toggle('active', b.dataset.theme === t));
+    };
+    let saved = (valid.includes(this.props.defaultTheme) ? this.props.defaultTheme : 'A');
+    try { const s = localStorage.getItem(THEME_KEY); if (s && valid.includes(s)) saved = s; } catch (e) {}
+    applyTheme('D');
+    document.querySelectorAll('.theme-switch button').forEach(b => {
+      b.addEventListener('click', () => { const t = b.dataset.theme; applyTheme(t); try { localStorage.setItem(THEME_KEY, t); } catch (e) {} });
+    });
+
+    /* mobile nav sheet */
+    const burger = document.querySelector('.nav-burger');
+    const sheet = document.querySelector('.nav-sheet');
+    if (burger && sheet) {
+      burger.addEventListener('click', () => { const open = sheet.classList.toggle('open'); burger.setAttribute('aria-expanded', open ? 'true' : 'false'); });
+      sheet.addEventListener('click', (e) => { if (e.target.tagName === 'A') sheet.classList.remove('open'); });
+    }
+
+    /* cart */
+    const renderCart = () => { const n = (()=>{try{return JSON.parse(localStorage.getItem('cas-cart')||'[]').reduce((a,i)=>a+i.qty,0)}catch(e){return 0}})(); document.querySelectorAll('.cart-badge').forEach(b => { b.textContent = n; b.style.display = n > 0 ? 'grid' : 'none'; }); };
+    renderCart();
+
+    /* ---- BLOG ---- */
+    const all = this.posts().slice().sort((a, b) => b.date.localeCompare(a.date)).slice(0, 10);
+    const tags = ['All']; all.forEach(p => { if (!tags.includes(p.tag)) tags.push(p.tag); });
+    let active = 'All';
+    try { const u = new URLSearchParams(location.search); const qt = u.get('tag'); if (qt) { const m = tags.find(t => t.toLowerCase() === qt.toLowerCase()); if (m) active = m; } } catch (e) {}
+
+    const filters = document.getElementById('blog-filters');
+    const feature = document.getElementById('blog-feature');
+    const grid = document.getElementById('blog-grid');
+    const empty = document.getElementById('blog-empty');
+
+    filters.innerHTML = tags.map(t => '<button class="chip' + (t === active ? ' active' : '') + '" type="button" data-tag="' + esc(t) + '">' + esc(t) + '</button>').join('');
+
+    const render = () => {
+      const list = active === 'All' ? all : all.filter(p => p.tag === active);
+      empty.style.display = list.length ? 'none' : 'block';
+
+      if (list.length) {
+        const f = list[0];
+        feature.style.display = 'grid';
+        feature.innerHTML =
+          '<a class="bf-img" href="blog-post.dc.html" aria-label="' + esc(f.title) + '"><img src="img/' + f.img + '" alt="' + esc(f.title) + '"></a>' +
+          '<div class="bf-body"><span class="bf-kicker">Latest · ' + esc(f.tag) + ' · ' + esc(f.d) + '</span>' +
+          '<h2>' + esc(f.title) + '</h2><p>' + esc(f.excerpt) + '</p>' +
+          '<a class="link-squiggle" href="blog-post.dc.html" style="align-self:flex-start;">Read the post →</a></div>';
+      } else {
+        feature.style.display = 'none';
+      }
+
+      const rest = list.slice(1);
+      grid.innerHTML = rest.map(p =>
+        '<a class="blog-card" href="blog-post.dc.html">' +
+          '<div class="bc-img"><img src="img/' + p.img + '" alt="' + esc(p.title) + '"></div>' +
+          '<div class="bc-body"><span class="bc-tag">' + esc(p.tag) + '</span>' +
+          '<h3>' + esc(p.title) + '</h3><p>' + esc(p.excerpt) + '</p>' +
+          '<span class="bc-date">' + esc(p.d) + '</span></div>' +
+        '</a>'
+      ).join('');
+    };
+
+    filters.querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => {
+      filters.querySelectorAll('.chip').forEach(x => x.classList.remove('active'));
+      c.classList.add('active');
+      active = c.dataset.tag;
+      render();
+    }));
+
+    render();
+    document.querySelectorAll('.reveal-one').forEach(el => el.classList.add('in-view'));
+
+    /* ---- GSAP: roll posts in one-by-one as they scroll into view ---- */
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const rollIn = () => {
+      const g = window.gsap;
+      const cards = Array.from(grid.querySelectorAll('.blog-card'));
+      const feat = feature.style.display !== 'none' ? [feature] : [];
+      const items = feat.concat(cards);
+      if (!items.length) return;
+      if (!g || reduce) { items.forEach(el => { el.style.opacity = '1'; el.style.transform = 'none'; }); return; }
+      g.set(items, { opacity: 0 });
+      const watch = items.map(el => ({ el, done: false }));
+      const drive = () => {
+        const vh = window.innerHeight || document.documentElement.clientHeight;
+        watch.forEach((w, i) => {
+          if (w.done) return;
+          const r = w.el.getBoundingClientRect();
+          if (r.top < vh * 0.9 && r.bottom > 20) {
+            w.done = true;
+            const fromLeft = i % 2 === 0;
+            g.fromTo(w.el,
+              { opacity: 0, x: fromLeft ? -60 : 60, y: 28, rotateZ: fromLeft ? -3 : 3, transformOrigin: 'center top' },
+              { opacity: 1, x: 0, y: 0, rotateZ: 0, duration: .7, ease: 'power3.out' });
+          }
+        });
+      };
+      drive();
+      grid._blogDrive && window.removeEventListener('scroll', grid._blogDrive);
+      document._blogDrive && document.removeEventListener('scroll', document._blogDrive, true);
+      grid._blogDrive = drive;
+      window.addEventListener('scroll', drive, { passive: true });
+      document.addEventListener('scroll', drive, true);
+      window.addEventListener('resize', drive);
+      setTimeout(drive, 180);
+    };
+    rollIn();
+
+    /* re-arm the roll-in after any filter change */
+    const origRender = render;
+    filters.querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => { setTimeout(rollIn, 20); }));
+  }
+}
+</script>
+</body>
+</html>

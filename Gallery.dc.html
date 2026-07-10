@@ -1,0 +1,451 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600;6..96,700&family=Oswald:wght@300;400;500;600&family=Archivo:wght@400;500;600;700&family=Saira+Stencil+One&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/industrial.css">
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="js/site-extras.js"></script>
+<script src="js/motion.js"></script>
+</helmet>
+<div class="cas-root" data-theme="D">
+<div class="glow-layer" aria-hidden="true"></div>
+
+<nav class="site-nav" aria-label="Main">
+  <div class="nav-top">
+    <div class="inner">
+      <a class="nav-brand" href="index.html">
+        <img src="img/LAULogoFinal.png" alt="Lau. — Crystal's Art School">
+        <span class="name">Crystal's Art School</span>
+      </a>
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li class="nav-item has-mega">
+          <a href="Lessons.dc.html" class="nav-mega-trigger" aria-haspopup="true" aria-expanded="false">Courses <span class="nav-caret" aria-hidden="true">▾</span></a>
+          <div class="nav-mega" role="menu" aria-label="Courses">
+            <div class="nav-mega-inner">
+              <div class="nm-col nm-start">
+                <div class="nm-kicker"><span class="star">✦</span> Start here</div>
+                <a class="nm-item" role="menuitem" href="lesson.dc.html"><span class="nm-t">Free courses</span><span class="nm-d">Watch a full course, on us</span></a>
+                <a class="nm-item nm-feature" role="menuitem" href="Lessons.dc.html"><span class="nm-t">Shop all courses <span class="nm-arr" aria-hidden="true">→</span></span><span class="nm-d">Browse everything by medium</span></a>
+                <a class="nm-item" role="menuitem" href="Blog.dc.html?tag=Tools"><span class="nm-t">Tools &amp; materials</span><span class="nm-d">Kit guides and honest reviews</span></a>
+              </div>
+              <div class="nm-col nm-medium">
+                <div class="nm-kicker">By medium · from your course tags</div>
+                <div class="nm-tags">
+                  <a role="menuitem" href="Lessons.dc.html?cat=Watercolour">Watercolour</a>
+                  <a role="menuitem" href="Lessons.dc.html?cat=Oil">Oils</a>
+                  <a role="menuitem" href="Lessons.dc.html?cat=Drawing">Drawing</a>
+                  <a role="menuitem" href="Lessons.dc.html?cat=Ink">Ink</a>
+                  <a role="menuitem" href="Lessons.dc.html?cat=Beginners">Beginners</a>
+                </div>
+                <p class="nm-note">These appear automatically from the tags on your courses — add a tag and a category shows up, remove it and it's gone.</p>
+              </div>
+            </div>
+          </div>
+        </li>
+        <li><a href="Gallery.dc.html" class="active">Gallery</a></li>
+        <li><a href="Showcase.dc.html">Showcase</a></li>
+        <li><a href="Blog.dc.html">Blog</a></li>
+        <li><a href="About.dc.html">About</a></li>
+        <li><a href="FAQ.dc.html">FAQ</a></li>
+      </ul>
+      <div class="nav-auth">
+        <a class="cart-btn" href="Checkout.dc.html" aria-label="Shopping cart">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M2 3h3.2l2.5 12.2a1.5 1.5 0 0 0 1.5 1.2h9a1.5 1.5 0 0 0 1.5-1.2L21.5 7H6.5"></path></svg>
+          <span class="cart-badge">0</span>
+        </a>
+        <a class="btn ghost" href="Login.dc.html">Log in</a>
+        <a class="btn primary" href="Signup.dc.html">Sign up</a>
+        <button class="nav-burger" type="button" aria-label="Menu" aria-expanded="false">☰</button>
+      </div>
+    </div>
+  </div>
+  <div class="nav-sheet">
+    <a href="index.html">Home</a>
+    <a href="Lessons.dc.html">Courses</a>
+    <a href="Gallery.dc.html">Gallery</a>
+    <a href="Showcase.dc.html">Showcase</a>
+    <a href="Blog.dc.html">Blog</a>
+    <a href="About.dc.html">About</a>
+    <a href="lesson.dc.html">Free video</a>
+    <a href="Blog.dc.html?tag=Tools">Tools</a>
+    <a href="FAQ.dc.html">FAQ</a>
+    <a href="Lessons.dc.html?cat=Watercolour">Watercolour</a>
+    <a href="Lessons.dc.html?cat=Oil">Oils</a>
+    <a href="Lessons.dc.html?cat=Drawing">Drawing</a>
+    <a href="Lessons.dc.html?cat=Ink">Ink</a>
+    <a href="Lessons.dc.html?cat=Beginners">Beginners</a>
+    <a href="Login.dc.html">Log in / Sign up</a>
+  </div>
+</nav>
+
+<header class="page-hero">
+  <div class="container">
+    <div class="eyebrow reveal-one"><span class="star">✦</span> The gallery shop</div>
+    <h1 class="marker-title reveal-one" style="font-size:clamp(34px,4.6vw,62px);">Take a piece home.</h1>
+    <p class="lead reveal-one">Originals and limited prints from the studio — each one framed and ready to hang. Filter by medium, price or freshness, then buy on Etsy.</p>
+  </div>
+</header>
+
+<main class="container store-head" id="content">
+  <div class="store-layout">
+
+    <div class="filter-col">
+    <aside class="filter-panel sort-panel" aria-label="Sort artwork">
+      <div class="fp-head"><span class="fp-title">Sort by</span></div>
+      <div class="fg-opts" id="sort-list">
+        <button class="fopt active" type="button" data-val="new">Newest</button>
+        <button class="fopt" type="button" data-val="old">Oldest</button>
+        <button class="fopt" type="button" data-val="price-asc">Price ↑</button>
+        <button class="fopt" type="button" data-val="price-desc">Price ↓</button>
+      </div>
+    </aside>
+    <aside class="filter-panel" id="filter-rail" aria-label="Filter artwork">
+      <div class="fp-head"><span class="fp-title">Filter</span><button class="fp-clear" id="filter-clear" type="button">Clear all</button></div>
+      <div class="fgroup">
+        <div class="fg-title">Medium</div>
+        <div class="fg-opts" id="medium-list"></div>
+      </div>
+      <div class="fgroup">
+        <div class="fg-title">Subject</div>
+        <div class="fg-opts" id="subject-list"></div>
+      </div>
+      <div class="fgroup">
+        <div class="fg-title">Max price</div>
+        <div class="price-val" id="price-val">Up to £400+</div>
+        <div class="slider-wrap">
+          <div class="slider-ui">
+            <div class="slider-track"></div>
+            <div class="slider-fill"></div>
+            <input class="price-slider" id="price-slider" type="range" min="40" max="400" step="10" value="400">
+            <div class="slider-knob"></div>
+          </div>
+          <div class="price-scale"><span>£40</span><span>£400+</span></div>
+        </div>
+      </div>
+    </aside>
+    </div>
+
+    <section class="store-main">
+      <div class="store-bar">
+        <span class="store-count" id="store-count">Loading…</span>
+        <div class="active-tags" id="active-tags"></div>
+      </div>
+      <div class="store-grid" id="store-grid"></div>
+      <div class="store-empty" id="store-empty" style="display:none;">No pieces match those filters — try widening your search.</div>
+    </section>
+
+  </div>
+</main>
+
+<div class="art-modal" id="art-modal" aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="am-backdrop" data-close></div>
+  <div class="am-panel">
+    <button class="am-close" type="button" aria-label="Close" data-close>✕</button>
+    <div class="am-frame-wrap"><figure class="am-frame"><div class="am-img"><img id="am-img" alt=""></div><img class="am-ornate" src="img/deer-black.svg" alt="" aria-hidden="true"></figure></div>
+    <div class="am-body">
+      <span class="am-sub" id="am-sub">Original</span>
+      <h2 class="am-title" id="am-title">—</h2>
+      <div class="am-tags" id="am-tags"></div>
+      <p class="am-desc" id="am-desc"></p>
+      <dl class="am-spec" id="am-spec"></dl>
+      <div class="am-price" id="am-price">£0</div>
+      <div class="am-actions">
+        <a class="art-btn etsy" id="am-buy" href="#" target="_blank" rel="noopener" style="padding:12px 18px;">Buy on Etsy</a>
+        <button class="art-btn detail" id="am-cart" type="button" style="padding:12px 18px;" data-add-to-cart>Add to cart</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="site-footer">
+  <div class="inner">
+    <div class="footer-grid">
+      <div>
+        <div class="footer-brand">CRYSTAL'S</div>
+        <p style="font-size:14px;opacity:.85;max-width:34ch;margin:0;">Watercolour, acrylic &amp; drawing — taught slowly and carefully from a small studio of plaster, wood and iron.</p>
+        <div class="social-row">
+          <a class="social-btn" href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" stroke="none"></circle></svg></a>
+          <a class="social-btn" href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 9h3V6h-3c-1.7 0-3 1.3-3 3v2H9v3h2v6h3v-6h2.5l.5-3H14v-1.5c0-.3.2-.5.5-.5z"></path></svg></a>
+        </div>
+      </div>
+      <div>
+        <h4>Learn</h4>
+        <a href="Lessons.dc.html">All lessons</a>
+        <a href="Lessons.dc.html#membership">Membership</a>
+        <a href="lesson.dc.html">Free intro lesson</a>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <a href="Gallery.dc.html">Gallery</a>
+        <a href="Showcase.dc.html">Student showcase</a>
+        <a href="Blog.dc.html">Blog</a>
+        <a href="About.dc.html">About</a>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <a href="About.dc.html#contact">hello@crystalsartschool.com</a>
+        <a href="About.dc.html#contact">Discord · Instagram</a>
+        <a href="About.dc.html#terms">Terms &amp; privacy</a>
+      </div>
+    </div>
+    <div class="footer-meta">
+      <span>© 2026 Crystal's Art School</span>
+    </div>
+  </div>
+</footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;defaultTheme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;A&quot;,&quot;B&quot;,&quot;C&quot;,&quot;D&quot;],&quot;default&quot;:&quot;A&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  pieces() {
+    return [
+      { title: 'Harbour at Dusk', img: 'cover1.jpg', tags: ['Oil', 'Landscape'], price: 320, date: '2026-06-18', orig: true, size: '40 × 50 cm', desc: 'Oil on canvas — a working harbour as the light drops, painted on location over three evenings. Warm coppers held against a cooling sky.' },
+      { title: 'Liquid Sky', img: 'Liquidwatercolor.jpg', tags: ['Watercolour', 'Abstract'], price: 180, date: '2026-06-09', orig: false, size: 'A3 print', desc: 'Giclée print of a loose wet-on-wet study. Limited run of 40, signed and numbered on archival cotton rag.' },
+      { title: 'Studio Brushes', img: 'BrushA.jpg', tags: ['Ink', 'Still life'], price: 95, date: '2026-05-30', orig: false, size: 'A4 print', desc: 'Pen and wash study of well-worn studio brushes. A quiet object portrait — the tools that do the work.' },
+      { title: 'Quiet Shore', img: 'cover3.jpg', tags: ['Watercolour', 'Landscape'], price: 240, date: '2026-05-21', orig: true, size: '30 × 40 cm', desc: 'Original watercolour on 300gsm cold-press. A single graded wash sky over a low tide, painted in one sitting.' },
+      { title: 'Poster Study No.4', img: 'Postercolor.jpg', tags: ['Poster', 'Abstract'], price: 120, date: '2026-05-08', orig: false, size: 'A3 print', desc: 'Flat, opaque poster-colour shapes — a teaching piece on simplifying a subject to its honest blocks.' },
+      { title: 'Open Sketchbook', img: 'Sketchbook.jpg', tags: ['Drawing', 'Still life'], price: 80, date: '2026-04-26', orig: false, size: 'A4 print', desc: 'A page from a daily sketchbook, reproduced full-size. Graphite and a touch of wash.' },
+      { title: 'Block-in Head', img: 'cover4.jpg', tags: ['Oil', 'Portrait'], price: 360, date: '2026-04-12', orig: true, size: '35 × 45 cm', desc: 'Original alla-prima portrait block-in. Big shapes, honest values — left deliberately unfinished where the light lands.' },
+      { title: 'Field Greens', img: 'cover2.jpg', tags: ['Oil', 'Landscape'], price: 280, date: '2026-03-29', orig: true, size: '40 × 40 cm', desc: 'Oil on board. An exercise in mixing greens from a limited palette — no tube green anywhere in it.' },
+      { title: 'Worn Eraser', img: 'Rubber.jpg', tags: ['Drawing', 'Still life'], price: 70, date: '2026-03-15', orig: false, size: 'A5 print', desc: 'A small, fond study of a kneaded eraser at the end of its life. Subtractive drawing about a subtractive tool.' },
+      { title: 'Two Brushes', img: 'BrushB.jpg', tags: ['Ink', 'Still life'], price: 110, date: '2026-02-28', orig: false, size: 'A4 print', desc: 'Ink line and wash. Two rounds, crossed — the workhorse and the detail brush.' },
+      { title: 'Morning Wash', img: 'cover3.jpg', tags: ['Watercolour', 'Landscape'], price: 200, date: '2026-02-14', orig: false, size: 'A3 print', desc: 'Print of a calm morning estuary. The kind of soft gradient the free lesson teaches you to lay down.' },
+      { title: 'Portrait in Umber', img: 'ProfilePic.jpg', tags: ['Oil', 'Portrait'], price: 340, date: '2026-01-30', orig: true, size: '35 × 45 cm', desc: 'Original monochrome oil portrait in burnt umber — a study in pure value before any colour enters.' }
+    ];
+  }
+
+  componentDidMount() {
+    const root = document.querySelector('.cas-root');
+    if (!root) return;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+
+    /* theme switch */
+    const THEME_KEY = 'cas-theme';
+    const valid = ['A','B','C','D'];
+    const applyTheme = (t) => {
+      root.setAttribute('data-theme', t);
+      document.querySelectorAll('.theme-switch button').forEach(b => b.classList.toggle('active', b.dataset.theme === t));
+    };
+    let saved = (valid.includes(this.props.defaultTheme) ? this.props.defaultTheme : 'A');
+    try { const s = localStorage.getItem(THEME_KEY); if (s && valid.includes(s)) saved = s; } catch (e) {}
+    applyTheme('D');
+    document.querySelectorAll('.theme-switch button').forEach(b => {
+      b.addEventListener('click', () => { const t = b.dataset.theme; applyTheme(t); try { localStorage.setItem(THEME_KEY, t); } catch (e) {} });
+    });
+
+    /* mobile nav sheet */
+    const burger = document.querySelector('.nav-burger');
+    const sheet = document.querySelector('.nav-sheet');
+    if (burger && sheet) {
+      burger.addEventListener('click', () => { const open = sheet.classList.toggle('open'); burger.setAttribute('aria-expanded', open ? 'true' : 'false'); });
+      sheet.addEventListener('click', (e) => { if (e.target.tagName === 'A') sheet.classList.remove('open'); });
+    }
+
+    /* cart (array of items in localStorage) */
+    const CART = 'cas-cart';
+    const readCart = () => { try { return JSON.parse(localStorage.getItem(CART) || '[]'); } catch (e) { return []; } };
+    const writeCart = (c) => { try { localStorage.setItem(CART, JSON.stringify(c)); } catch (e) {} };
+    const renderCart = () => { const n = readCart().reduce((a, i) => a + i.qty, 0); document.querySelectorAll('.cart-badge').forEach(b => { b.textContent = n; b.style.display = n > 0 ? 'grid' : 'none'; }); };
+    renderCart();
+    document.addEventListener('click', (e) => {
+      const add = e.target.closest('[data-add-to-cart]');
+      if (!add) return;
+      e.preventDefault();
+      const c = readCart();
+      const title = add.dataset.cartTitle || 'Item';
+      const ex = c.find(x => x.title === title);
+      if (ex) ex.qty++; else c.push({ title, price: +(add.dataset.cartPrice || 0), img: add.dataset.cartImg || '', kind: add.dataset.cartKind || 'Artwork', qty: 1 });
+      writeCart(c); renderCart();
+      if (add.tagName === 'BUTTON') { const o = add.textContent; add.textContent = 'Added ✓'; add.disabled = true; setTimeout(() => { add.textContent = o; add.disabled = false; }, 1100); }
+      document.querySelectorAll('.cart-btn').forEach(btn => { btn.style.transition = 'transform .18s'; btn.style.transform = 'translateY(-3px) rotate(-8deg)'; setTimeout(() => { btn.style.transform = ''; }, 220); });
+    });
+
+    /* ---- STORE ---- */
+    const data = this.pieces();
+    const MEDIUMS = ['Oil', 'Watercolour', 'Ink', 'Poster', 'Drawing'];
+    const SUBJECTS = ['Landscape', 'Portrait', 'Still life', 'Abstract'];
+    const state = { media: [], subjects: [], maxPrice: 400, sort: 'new' };
+
+    // read ?tag= from URL (deep-link a medium or subject)
+    try {
+      const qt = new URLSearchParams(location.search).get('tag');
+      if (qt) {
+        const m = MEDIUMS.find(t => t.toLowerCase() === qt.toLowerCase());
+        const s = SUBJECTS.find(t => t.toLowerCase() === qt.toLowerCase());
+        if (m) state.media.push(m); else if (s) state.subjects.push(s);
+      }
+    } catch (e) {}
+
+    const mediumList = document.getElementById('medium-list');
+    const subjectList = document.getElementById('subject-list');
+    const chipsHTML = (arr, sel) => arr.map(t => '<button class="fopt' + (sel.includes(t) ? ' active' : '') + '" type="button" data-val="' + esc(t) + '">' + esc(t) + '</button>').join('');
+    mediumList.innerHTML = chipsHTML(MEDIUMS, state.media);
+    subjectList.innerHTML = chipsHTML(SUBJECTS, state.subjects);
+
+    const grid = document.getElementById('store-grid');
+    const empty = document.getElementById('store-empty');
+    const countEl = document.getElementById('store-count');
+    const activeWrap = document.getElementById('active-tags');
+    const priceSlider = document.getElementById('price-slider');
+    const priceVal = document.getElementById('price-val');
+    const niceRange = (lo, hi) => {
+      const span = Math.max(hi - lo, 1);
+      const steps = [1, 2, 5, 10, 20, 25, 50, 100, 200];
+      let step = steps.find(s => span / s <= 20) || 200;
+      while (step > 1 && span / step < 5) step = steps[steps.indexOf(step) - 1];
+      return { min: Math.floor(lo / step) * step, max: Math.ceil(hi / step) * step, step };
+    };
+    const galPrices = data.map(p => +p.price);
+    const pr = niceRange(Math.min(...galPrices), Math.max(...galPrices));
+    const sliderMax = pr.max;
+    priceSlider.min = pr.min; priceSlider.max = pr.max; priceSlider.step = pr.step; priceSlider.value = pr.max;
+    state.maxPrice = pr.max;
+    const galScale = priceSlider.closest('.slider-wrap').querySelector('.price-scale');
+    if (galScale) galScale.innerHTML = '<span>' + (pr.min === 0 ? 'Free' : '£' + pr.min) + '</span><span>£' + pr.max + '+</span>';
+    priceVal.textContent = 'Up to £' + pr.max + '+';
+
+    const cartSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1.6"></circle><circle cx="19" cy="21" r="1.6"></circle><path d="M2 3h3l2.6 12.6a1.8 1.8 0 0 0 1.8 1.4h8.9a1.8 1.8 0 0 0 1.8-1.4L22 7H6"></path></svg>';
+
+    const etsyUrl = (p) => 'https://www.etsy.com/search?q=' + encodeURIComponent("Crystal's Art School " + p.title);
+    const RATIO = { 'cover1.jpg': 0.8, 'Liquidwatercolor.jpg': 1, 'BrushA.jpg': 0.75, 'cover3.jpg': 1.5, 'Postercolor.jpg': 0.8, 'Sketchbook.jpg': 1.33, 'cover4.jpg': 0.8, 'cover2.jpg': 1, 'Rubber.jpg': 1, 'BrushB.jpg': 0.72, 'ProfilePic.jpg': 0.82 };
+    const rOf = (p) => RATIO[p.img] || 0.8;
+    const cardHTML = (p, idx) =>
+      '<article class="art-card" data-idx="' + idx + '">' +
+        '<div class="art-frame-wrap"><figure class="art-frame"><div class="art-img" style="--r:' + rOf(p) + '"><img src="img/' + p.img + '" alt="' + esc(p.title) + '"></div><img class="art-ornate" src="img/deer-black.svg" alt="" aria-hidden="true"></figure></div>' +
+        '<div class="art-meta">' +
+          '<h3 class="art-title">' + esc(p.title) + '</h3>' +
+          '<div class="art-sub">' + (p.orig ? 'Original' : 'Limited print') + '</div>' +
+          '<div class="art-size">' + esc(p.size) + '</div>' +
+          '<div class="art-tagrow">' + p.tags.map(t => '<span class="art-tagchip">' + esc(t) + '</span>').join('') + '</div>' +
+          '<div class="art-row"><span class="art-price">£' + p.price + '</span>' +
+          '<div class="art-actions">' +
+            '<a class="art-btn etsy" href="' + etsyUrl(p) + '" target="_blank" rel="noopener">Buy on Etsy</a>' +
+            '<button class="art-btn detail" type="button" data-detail="' + idx + '">View details</button>' +
+          '</div></div>' +
+        '</div>' +
+      '</article>';
+
+    const setPct = () => {
+      const pct = ((+priceSlider.value - +priceSlider.min) / (+priceSlider.max - +priceSlider.min)) * 100;
+      priceSlider.closest('.slider-ui').style.setProperty('--pct', pct + '%');
+    };
+
+    const render = () => {
+      let list = data.filter(p =>
+        p.price <= state.maxPrice &&
+        (state.media.length === 0 || state.media.some(t => p.tags.includes(t))) &&
+        (state.subjects.length === 0 || state.subjects.some(t => p.tags.includes(t)))
+      );
+      if (state.sort === 'new') list.sort((a, b) => b.date.localeCompare(a.date));
+      else if (state.sort === 'old') list.sort((a, b) => a.date.localeCompare(b.date));
+      else if (state.sort === 'price-asc') list.sort((a, b) => a.price - b.price);
+      else if (state.sort === 'price-desc') list.sort((a, b) => b.price - a.price);
+
+      grid.innerHTML = list.map(p => cardHTML(p, data.indexOf(p))).join('');
+      empty.style.display = list.length ? 'none' : 'block';
+      countEl.textContent = list.length + (list.length === 1 ? ' piece' : ' pieces');
+      grid.querySelectorAll('[data-detail]').forEach(b => b.addEventListener('click', () => openModal(data[+b.dataset.detail])));
+
+      const active = state.media.concat(state.subjects);
+      activeWrap.innerHTML = active.map(t => '<span class="active-tag" data-tag="' + esc(t) + '">' + esc(t) + '</span>').join('');
+      activeWrap.querySelectorAll('.active-tag').forEach(el => el.addEventListener('click', () => {
+        const t = el.dataset.tag;
+        state.media = state.media.filter(x => x !== t);
+        state.subjects = state.subjects.filter(x => x !== t);
+        [mediumList, subjectList].forEach(l => l.querySelectorAll('.fopt').forEach(c => { if (c.dataset.val === t) c.classList.remove('active'); }));
+        render();
+      }));
+
+      if (!reduce) {
+        grid.querySelectorAll('.art-card').forEach((c, i) => { c.style.animation = 'rise-in .55s var(--ease-out) ' + (i * 0.04) + 's'; });
+      }
+    };
+
+    /* medium + subject chip toggles (multi-select) */
+    const wireChips = (listEl, bucket) => listEl.querySelectorAll('.fopt').forEach(chip => chip.addEventListener('click', () => {
+      const v = chip.dataset.val;
+      const i = state[bucket].indexOf(v);
+      if (i >= 0) { state[bucket].splice(i, 1); chip.classList.remove('active'); }
+      else { state[bucket].push(v); chip.classList.add('active'); }
+      render();
+    }));
+    wireChips(mediumList, 'media');
+    wireChips(subjectList, 'subjects');
+
+    /* price slider — live label + fill while dragging; filter only on release */
+    const onSlide = () => {
+      const v = +priceSlider.value;
+      priceVal.textContent = (v >= sliderMax) ? ('Up to £' + sliderMax + '+') : ('Up to £' + v);
+      setPct();
+      state.maxPrice = v;
+      render();
+    };
+    priceSlider.addEventListener('input', onSlide);
+    priceSlider.addEventListener('change', onSlide);
+    setPct();
+
+    /* sort chips (single-select) */
+    const sortList = document.getElementById('sort-list');
+    sortList.querySelectorAll('.fopt').forEach(chip => chip.addEventListener('click', () => {
+      sortList.querySelectorAll('.fopt').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      state.sort = chip.dataset.val;
+      render();
+    }));
+
+    /* clear all */
+    document.getElementById('filter-clear').addEventListener('click', () => {
+      state.media = []; state.subjects = []; state.maxPrice = sliderMax; state.sort = 'new';
+      [mediumList, subjectList].forEach(l => l.querySelectorAll('.fopt').forEach(c => c.classList.remove('active')));
+      sortList.querySelectorAll('.fopt').forEach((c, i) => c.classList.toggle('active', i === 0));
+      priceSlider.value = sliderMax; priceVal.textContent = 'Up to £' + sliderMax + '+'; setPct();
+      render();
+    });
+
+    /* ---- quick-view modal ---- */
+    const modal = document.getElementById('art-modal');
+    const mImg = document.getElementById('am-img');
+    const openModal = (p) => {
+      mImg.src = 'img/' + p.img; mImg.alt = p.title;
+      document.querySelector('.am-frame .am-img').style.aspectRatio = (RATIO[p.img] || 0.8);
+      document.getElementById('am-sub').textContent = p.orig ? 'Original artwork' : 'Limited-edition print';
+      document.getElementById('am-title').textContent = p.title;
+      document.getElementById('am-tags').innerHTML = p.tags.map(t => '<span class="art-tagchip">' + esc(t) + '</span>').join('');
+      document.getElementById('am-desc').textContent = p.desc;
+      document.getElementById('am-spec').innerHTML =
+        '<dt>Type</dt><dd>' + (p.orig ? 'Original, one of a kind' : 'Signed limited print') + '</dd>' +
+        '<dt>Size</dt><dd>' + esc(p.size) + '</dd>' +
+        '<dt>Ships</dt><dd>Framed, 5–7 days</dd>';
+      document.getElementById('am-price').textContent = '£' + p.price;
+      document.getElementById('am-buy').href = etsyUrl(p);
+      const amCart = document.getElementById('am-cart');
+      amCart.dataset.cartTitle = p.title; amCart.dataset.cartPrice = p.price; amCart.dataset.cartImg = p.img; amCart.dataset.cartKind = p.orig ? 'Original' : 'Limited print';
+      modal.classList.add('open');
+      modal.setAttribute('aria-hidden', 'false');
+    };
+    const closeModal = () => { modal.classList.remove('open'); modal.setAttribute('aria-hidden', 'true'); };
+    modal.querySelectorAll('[data-close]').forEach(el => el.addEventListener('click', closeModal));
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+
+    render();
+
+    /* reveals for header */
+    document.querySelectorAll('.reveal-one').forEach(el => el.classList.add('in-view'));
+  }
+}
+</script>
+</body>
+</html>

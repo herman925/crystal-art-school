@@ -1,12 +1,10 @@
-# Open Design workspace internals
-.gstack/
-.od-skills/
-.planning/
+# Editor / design-tool metadata
 *.artifact.json
 
-# OS noise
-Thumbs.db
+# OS / scratch
 .DS_Store
+Thumbs.db
+*.tmp
 
-# local publish clone (own git repo; archive lives in git history)
-wireframes/
+# Local source uploads & scratch exports (not part of the site)
+/uploads/
