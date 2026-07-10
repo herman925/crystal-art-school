@@ -13,7 +13,3 @@ Thumbs.db
 *.drawio
 .$*.bkp
 
-# unused css design variants (kept local)
-css/industrial-1.css
-css/industrial-2.css
-css/industrial-3.css
