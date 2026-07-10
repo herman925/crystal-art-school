@@ -78,17 +78,18 @@
     '.nav-drop { position: relative; }' +
     '.nav-drop > .nav-trigger { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }' +
     '.nav-caret { width: 8px; height: 8px; opacity: .6; transition: transform .25s ease; }' +
-    '.nav-drop:hover .nav-caret, .nav-drop.open .nav-caret { transform: rotate(180deg); }' +
-    '.nav-mega { position: absolute; top: calc(100% + 12px); left: -8px; min-width: 248px;' +
+    '.nav-drop.open .nav-caret { transform: rotate(180deg); }' +
+    '.nav-mega { position: absolute; top: calc(100% + 10px); left: -8px; width: 340px;' +
     '  background: #26221e; border: 1px solid rgba(237,225,208,.14); border-radius: 14px;' +
     '  box-shadow: 0 26px 64px rgba(0,0,0,.55); padding: 8px;' +
     '  opacity: 0; visibility: hidden; transform: translateY(-8px);' +
     '  transition: opacity .2s ease, transform .2s ease, visibility .2s; z-index: 300; }' +
-    '.nav-drop:hover .nav-mega, .nav-drop.open .nav-mega { opacity: 1; visibility: visible; transform: translateY(0); }' +
-    '.nav-mega::before { content:""; position:absolute; top:-14px; left:0; right:0; height:14px; }' +
+    '.nav-drop.open .nav-mega { opacity: 1; visibility: visible; transform: translateY(0); }' +
+    '.nav-mega::before { content:""; position:absolute; top:-12px; left:0; right:0; height:12px; }' +
     '.mega-eyebrow { display:block; font-family: var(--font-cond); font-size: 10px; letter-spacing: .24em; text-transform: uppercase; color: #cf9457; padding: 8px 12px 8px; }' +
     '.mega-eyebrow em { font-style: normal; opacity: .8; }' +
-    '.mega-cats { display:flex; flex-direction:column; gap:7px; padding: 2px 8px 12px; min-width: 216px; }' +
+    '.mega-cats { display:grid; grid-template-columns: 1fr 1fr; gap:7px; padding: 2px 8px 12px; }' +
+    '.mega-cat.is-all { grid-column: 1 / -1; }' +
     '.nav-links a.mega-cat, .mega-cat { display:flex; align-items:center; justify-content:space-between; gap:12px;' +
     '  font-family: var(--font-cond); font-weight:600; font-size:13px; letter-spacing:.14em; text-transform:uppercase;' +
     '  color:#ede1d0; padding: 9px 16px; border-radius: 999px; border:1px solid rgba(237,225,208,.28);' +
@@ -156,13 +157,31 @@
     }
 
     var trig = t.closest && t.closest('[data-nav-drop] .nav-trigger');
-    if (trig && window.matchMedia('(hover: hover)').matches) {
-      e.preventDefault();
-      trig.closest('[data-nav-drop]').classList.toggle('open');
+    if (trig && !window.matchMedia('(hover: hover)').matches) {
+      /* touch: first tap opens the drawer instead of navigating */
+      var td = trig.closest('[data-nav-drop]');
+      if (!td.classList.contains('open')) { e.preventDefault(); td.classList.add('open'); }
       return;
     }
     var drop = document.querySelector('[data-nav-drop].open');
     if (drop && !(t.closest && t.closest('[data-nav-drop]'))) drop.classList.remove('open');
+  });
+
+  /* Hover-intent for the Courses drawer: open on enter, close only after a
+     grace delay so the cursor can cross the gap (or slip out briefly)
+     without the panel vanishing mid-travel. */
+  var hoverCloseTimer = null;
+  document.addEventListener('mouseover', function (e) {
+    var d = e.target.closest && e.target.closest('[data-nav-drop]');
+    if (!d || !window.matchMedia('(hover: hover)').matches) return;
+    clearTimeout(hoverCloseTimer);
+    d.classList.add('open');
+  });
+  document.addEventListener('mouseout', function (e) {
+    var d = e.target.closest && e.target.closest('[data-nav-drop]');
+    if (!d || (e.relatedTarget && d.contains(e.relatedTarget))) return;
+    clearTimeout(hoverCloseTimer);
+    hoverCloseTimer = setTimeout(function () { d.classList.remove('open'); }, 320);
   });
 
   window.addEventListener('storage', renderCart);
