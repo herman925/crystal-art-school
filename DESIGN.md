@@ -193,7 +193,7 @@ All photos live in `img/`, ~1.5 MB total, 1920 px wide, `background-size: cover`
 | `wood-rustic.jpg` | dark-mode (D) nav/headers (dark overlay, cream ink), B banner, gallery wall (B/D), cert card, blog feature, footer fallback |
 | `wood-natural.jpg` | light-mode (A) bands (`.band-forest`, `.signup-band`, `.dash-hero`, `.tier-card.fellow`) + footer — **band ink flips dark** (`#4a3a26`), scoped per-component so the shared `--band-ink` token stays cream elsewhere |
 | `wood-black.jpg` | dark-mode (D) bands + footer — cream ink |
-| `corkboard.jpg` | Showcase pin board (both modes), framed by a CSS maple bevel (`.pol-wall::before`: 145° light-to-dark gradient + oak grain + top-lit inset shadows) |
+| `corkboard.jpg` | Showcase pin board (both modes), framed by a CSS maple bevel (`.pol-frame` wrapper: 145° light-to-dark gradient + oak grain + top-lit inset shadows) |
 | `marble-wall.jpg` | **light-mode (A) framed-gallery wall** (`--wall`) — white marble/concrete |
 
 Mechanics:
