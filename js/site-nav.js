@@ -79,17 +79,16 @@
     '.nav-drop > .nav-trigger { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }' +
     '.nav-caret { width: 8px; height: 8px; opacity: .6; transition: transform .25s ease; }' +
     '.nav-drop.open .nav-caret { transform: rotate(180deg); }' +
-    '.nav-mega { position: absolute; top: calc(100% + 10px); left: -8px; width: 340px;' +
+    '.nav-mega { position: absolute; top: calc(100% + 10px); left: -8px; width: max-content; min-width: 248px;' +
     '  background: #26221e; border: 1px solid rgba(237,225,208,.14); border-radius: 14px;' +
     '  box-shadow: 0 26px 64px rgba(0,0,0,.55); padding: 8px;' +
     '  opacity: 0; visibility: hidden; transform: translateY(-8px);' +
     '  transition: opacity .2s ease, transform .2s ease, visibility .2s; z-index: 300; }' +
     '.nav-drop.open .nav-mega { opacity: 1; visibility: visible; transform: translateY(0); }' +
     '.nav-mega::before { content:""; position:absolute; top:-12px; left:0; right:0; height:12px; }' +
-    '.mega-eyebrow { display:block; font-family: var(--font-cond); font-size: 10px; letter-spacing: .24em; text-transform: uppercase; color: #cf9457; padding: 8px 12px 8px; }' +
+    '.mega-eyebrow { display:block; white-space: nowrap; font-family: var(--font-cond); font-size: 10px; letter-spacing: .24em; text-transform: uppercase; color: #cf9457; padding: 8px 12px 8px; }' +
     '.mega-eyebrow em { font-style: normal; opacity: .8; }' +
-    '.mega-cats { display:grid; grid-template-columns: 1fr 1fr; gap:7px; padding: 2px 8px 12px; }' +
-    '.mega-cat.is-all { grid-column: 1 / -1; }' +
+    '.mega-cats { display:flex; flex-direction:column; gap:7px; padding: 2px 8px 12px; }' +
     '.nav-links a.mega-cat, .mega-cat { display:flex; align-items:center; justify-content:space-between; gap:12px;' +
     '  font-family: var(--font-cond); font-weight:600; font-size:13px; letter-spacing:.14em; text-transform:uppercase;' +
     '  color:#ede1d0; padding: 9px 16px; border-radius: 999px; border:1px solid rgba(237,225,208,.28);' +
