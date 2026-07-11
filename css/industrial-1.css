@@ -68,6 +68,7 @@
   --blacksteel: linear-gradient(180deg,#3c372f,#26231d 55%,#19160f);
   --copper-metal: linear-gradient(180deg,#b67c46 0%,#9a6436 46%,#7c4a26 100%);
   --olive-metal: linear-gradient(180deg,#5d7733 0%,#4d6625 50%,#3c511c 100%);
+  --iron: #2b2823;
 
   /* twin-arch portrait mask — the "butterfly": two round-top columns (kept 1:1) */
   --shape-arch-duo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 240'%3E%3Crect x='0' y='0' width='104' height='240' rx='52'/%3E%3Crect x='96' y='0' width='104' height='240' rx='52'/%3E%3C/svg%3E");
@@ -81,16 +82,16 @@
 
 /* A — Light Oak Atelier (default) */
 [data-theme="A"] {
-  --cream:#ede1d0; --paper-2:#cdc7bd; --paper:#f3ede1; --surface:#f6f0e4; --warm-white:#e3dac9;
+  --cream:#f8f3e9; --paper-2:#cdc7bd; --paper:#f3ede1; --surface:#f6f0e4; --warm-white:#e3dac9;
   --blush:#d8c39c; --sand:#cab389;
   --teal:#8a9a6b; --teal-ink:#4d6625; --mint:#cdd9b0;
   --coral:#9a6436; --coral-deep:#7e4c27; --coral-ink:#7e4c27;
   --ink:#474138; --muted:#6f6757; --forest:#5e4a3d;
-  --banner-bg:#cab389; --banner-grain:var(--oak-grain); --banner-ink:#474138; --banner-bracket:#2b2823;
-  --wall:#cdc7bd; --wall-grain:var(--concrete-grain); --wall-size:160px 160px;
+  --banner-bg:#e6d6b8; --banner-grain:url("../img/wood-creamy.jpg"); --banner-size:cover; --banner-ink:#474138; --banner-bracket:#2b2823;
+  --wall:#dfdedb; --wall-grain:url("../img/marble-wall.jpg"); --wall-size:cover;
   --frame-base:#f3ede1; --frame-tl:#d8c39c; --frame-br:#a3895f;
   --band-bg:#5e4a3d; --band-grain:var(--walnut-grain); --band-ink:#f4e7cf; --band-eyebrow:#cab389;
-  --nav-bg:rgba(237,225,208,.86); --line:rgba(71,65,56,.16);
+  --nav-bg:rgba(248,243,233,.86); --line:rgba(71,65,56,.16);
   --shadow:6px 11px 22px rgba(20,17,13,.16); --glow-op:0;
 }
 /* B — Walnut Workshop */
@@ -100,8 +101,8 @@
   --teal:#8a9a6b; --teal-ink:#4d6625; --mint:#cdd9b0;
   --coral:#9a6436; --coral-deep:#7e4c27; --coral-ink:#7e4c27;
   --ink:#3f3930; --muted:#5f594c; --forest:#23201a;
-  --banner-bg:#876d5c; --banner-grain:var(--walnut-grain); --banner-ink:#f4e7cf; --banner-bracket:#d8c39c;
-  --wall:#876d5c; --wall-grain:var(--walnut-grain); --wall-size:240px 150px;
+  --banner-bg:#876d5c; --banner-grain:linear-gradient(180deg, rgba(30,20,12,.30), rgba(30,20,12,.38)), url("../img/wood-rustic.jpg"); --banner-size:cover; --banner-ink:#f4e7cf; --banner-bracket:#d8c39c;
+  --wall:#876d5c; --wall-grain:url("../img/wood-rustic.jpg"); --wall-size:cover;
   --frame-base:#efe6d6; --frame-tl:#9c8270; --frame-br:#5e4a3d;
   --band-bg:#23201a; --band-grain:var(--iron-grain); --band-ink:#ede1d0; --band-eyebrow:#cab389;
   --nav-bg:rgba(205,199,189,.9); --line:rgba(71,65,56,.2);
@@ -128,8 +129,8 @@
   --teal:#8a9a6b; --teal-ink:#cab389; --mint:#cab389;
   --coral:#a96b38; --coral-deep:#7e4c27; --coral-ink:#cab389;
   --ink:#ede1d0; --muted:#b6ab97; --forest:#23201a;
-  --banner-bg:#876d5c; --banner-grain:var(--walnut-grain); --banner-ink:#f4e7cf; --banner-bracket:#2b2823;
-  --wall:#876d5c; --wall-grain:var(--walnut-grain); --wall-size:300px 120px;
+  --banner-bg:#5a4433; --banner-grain:linear-gradient(180deg, rgba(22,15,9,.40), rgba(22,15,9,.5)), url("../img/wood-rustic.jpg"); --banner-size:cover; --banner-ink:#f4e7cf; --banner-bracket:#2b2823;
+  --wall:#5a4433; --wall-grain:linear-gradient(180deg, rgba(28,18,10,.1), rgba(16,10,6,.42)), url("../img/wood-rustic.jpg"); --wall-size:cover;
   --frame-base:#efe6d6; --frame-tl:#36322b; --frame-br:#0e0c08;
   --band-bg:#23201a; --band-grain:var(--iron-grain); --band-ink:#ede1d0; --band-eyebrow:#cab389;
   --nav-bg:rgba(33,30,26,.9); --line:rgba(231,221,203,.16);
@@ -152,7 +153,7 @@ html, body {
 img { display: block; max-width: 100%; }
 a { color: inherit; text-decoration: none; }
 a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !important; }
-.site-nav a.btn.ghost { color: var(--banner-ink) !important; -webkit-text-fill-color: var(--banner-ink) !important; }
+.site-nav a.btn.ghost { color: #3f3930 !important; -webkit-text-fill-color: #3f3930 !important; }
 .tier-card.highlight a.btn { color: var(--coral-deep) !important; -webkit-text-fill-color: var(--coral-deep) !important; }
 .cc-btn.primary, .cover-btn.primary { -webkit-text-fill-color: #f4e7cf; }
 .cc-btn.secondary, .cover-btn.secondary { -webkit-text-fill-color: #474138; }
@@ -193,7 +194,7 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
   display: flex; align-items: center; justify-content: center; gap: .45em;
   width: fit-content; max-width: 100%; margin: 0 auto;
   padding: 12px 28px; border-radius: 14px;
-  background-color: var(--banner-bg); background-image: var(--banner-grain); background-size: 300px 120px;
+  background-color: var(--banner-bg); background-image: var(--banner-grain); background-size: var(--banner-size, 300px 120px);
   box-shadow: var(--shadow); position: relative;
 }
 .section-title::before { content: '✦'; font-size: .56em; color: #7e9b46; display: inline-block; }
@@ -223,22 +224,19 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
   transition: transform .18s var(--ease-pop), box-shadow .18s, background .18s, color .18s;
 }
 .btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+/* primary = brushed copper (design_base: "copper acts") — all themes */
 .btn.primary, a.btn.primary {
-  background-color: var(--coral);
-  background-image: linear-gradient(118deg, rgba(255,236,210,.30), transparent 44%), repeating-linear-gradient(95deg, rgba(0,0,0,.10) 0 1px, transparent 1px 3px), linear-gradient(180deg, color-mix(in srgb, var(--coral) 86%, #fff), var(--coral) 52%, var(--coral-deep));
-  color: #f4e7cf !important; -webkit-text-fill-color: #f4e7cf !important;
-  box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(255,236,210,.30);
+  background-color: #9a6436;
+  background-image: linear-gradient(118deg, rgba(255,236,210,.40), transparent 42%), repeating-linear-gradient(95deg, rgba(0,0,0,.12) 0 1px, transparent 1px 3px), var(--copper-metal);
+  color: #f8ecd8 !important; -webkit-text-fill-color: #f8ecd8 !important;
+  box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(255,236,210,.45), inset 0 -1px 0 rgba(60,30,10,.4);
 }
 .btn.primary:hover { filter: brightness(1.06); }
-[data-theme="D"] .btn.primary, [data-theme="D"] a.btn.primary {
-  background-color: #876d5c;
-  background-image: linear-gradient(118deg, rgba(231,221,203,.18), transparent 44%), var(--walnut-grain);
-  background-size: 100% 100%, 300px 120px;
-  box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(231,221,203,.22), inset 0 0 0 1px rgba(0,0,0,.35);
-}
-.btn.teal { background: #4d6625; color: #f1f3e6; }
-.btn.teal:hover { background: var(--iron); color: #ede1d0; }
-.btn.ghost { background: transparent; box-shadow: inset 0 0 0 1px var(--line); }
+/* olive metal (design_base "BOOK" green machined finish) */
+.btn.teal { background-color: #4d6625; background-image: linear-gradient(118deg, rgba(240,245,220,.30), transparent 42%), repeating-linear-gradient(95deg, rgba(0,0,0,.10) 0 1px, transparent 1px 3px), var(--olive-metal); color: #f1f3e6; box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(240,245,220,.35), inset 0 -1px 0 rgba(20,30,8,.4); }
+.btn.teal:hover { filter: brightness(1.07); }
+/* ghost = iron outline (design_base supporting control) */
+.btn.ghost { background: transparent; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 45%, transparent); }
 .btn.ghost:hover { background: var(--ink); color: var(--paper); transform: none; box-shadow: none; }
 .btn.big { font-size: 14px; padding: 14px 28px; }
 .btn .arr { transition: transform .18s; }
@@ -247,8 +245,11 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 .btn-big {
   display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-cond);
   font-weight: 500; font-size: 13px; letter-spacing: .14em; text-transform: uppercase;
-  padding: 14px 28px; border-radius: var(--radius-pill); background: var(--coral); color: var(--paper);
-  border: 0; box-shadow: var(--shadow-sm); cursor: pointer; transition: transform var(--dur-fast), box-shadow var(--dur-base);
+  padding: 14px 28px; border-radius: var(--radius-pill);
+  background-color: #9a6436;
+  background-image: linear-gradient(118deg, rgba(255,236,210,.40), transparent 42%), repeating-linear-gradient(95deg, rgba(0,0,0,.12) 0 1px, transparent 1px 3px), var(--copper-metal);
+  color: #f8ecd8;
+  border: 0; box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(255,236,210,.45), inset 0 -1px 0 rgba(60,30,10,.4); cursor: pointer; transition: transform var(--dur-fast), box-shadow var(--dur-base);
 }
 .btn-big:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
 .btn-outline {
@@ -260,21 +261,29 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 .btn-outline:hover { background: var(--ink); color: var(--paper); }
 
 /* ---------- top nav ---------- */
-.site-nav { position: sticky; top: 0; z-index: 100; background-color: var(--banner-bg); background-image: var(--banner-grain); background-size: 380px 150px; border-bottom: 2px solid color-mix(in srgb, var(--banner-bracket) 45%, transparent); box-shadow: var(--shadow-sm); }
+.site-nav { position: sticky; top: 0; z-index: 100; background-color: var(--banner-bg); background-image: var(--banner-grain); background-size: var(--banner-size, 380px 150px); background-attachment: fixed; background-position: center top; box-shadow: var(--shadow-sm); }
 .site-nav::before { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent 0 30px, color-mix(in srgb, var(--banner-bracket) 12%, transparent) 30px 31px); pointer-events: none; }
 .site-nav .inner { position: relative; z-index: 1; max-width: var(--site-max); margin: 0 auto; }
 /* rows 1 + 2 share the same 3-column grid, so their centred link groups sit on
    the exact same axis; the brand is lifted out and spans both rows */
-.nav-top .inner { position: static; display: grid; grid-template-columns: minmax(200px, 1fr) auto minmax(200px, 1fr); align-items: center; gap: 18px; padding: 8px var(--gutter) 4px; }
+.nav-top .inner { position: static; display: grid; grid-template-columns: minmax(200px, 1fr) auto minmax(200px, 1fr); align-items: center; gap: 18px; padding: 16px var(--gutter) 10px; }
 .nav-brand { position: absolute; z-index: 6; top: 0; bottom: 0; left: max(var(--gutter), calc((100% - var(--site-max)) / 2 + var(--gutter))); display: flex; align-items: center; gap: 12px; }
 .nav-brand img { height: 66px; width: auto; object-fit: contain; filter: drop-shadow(0 2px 6px rgba(0,0,0,.45)); }
+/* signature reads black on the light woods (A/C); stays cream on dark walnut (B/D) */
+[data-theme="A"] .nav-brand img, [data-theme="C"] .nav-brand img { filter: brightness(0) opacity(.85) drop-shadow(0 1px 2px rgba(255,255,255,.25)); }
 .nav-brand .name { font-family: var(--font-stencil); font-size: 15.5px; line-height: 1.25; letter-spacing: .08em; white-space: normal; max-width: 118px; color: var(--banner-ink); }
 .nav-links { grid-column: 2; display: flex; gap: 4px; list-style: none; margin: 0; padding: 0; }
 .nav-links a { display: block; padding: 8px 13px; font-family: var(--font-cond); font-weight: 500; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; border-radius: var(--radius-pill); color: var(--banner-ink); transition: background .15s; }
 .nav-links a:hover { background: color-mix(in srgb, var(--banner-bracket) 16%, transparent); }
 .nav-links a.active { background: color-mix(in srgb, var(--banner-ink) 16%, transparent); }
-.site-nav .btn.ghost { color: var(--banner-ink); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--banner-ink) 40%, transparent); }
-.site-nav .btn.ghost:hover { background: var(--banner-ink); color: var(--banner-bg); }
+/* nav Log in = raw-wood pill (design_base "FREE LESSON" finish) — solid in both modes */
+.site-nav .btn.ghost {
+  background-color: #efe6d2;
+  background-image: linear-gradient(180deg, rgba(255,255,255,.42), transparent 55%), var(--oak-grain);
+  background-size: 100% 100%, 200px 90px;
+  color: #3f3930; box-shadow: inset 0 0 0 1px rgba(71,65,56,.32), inset 0 1px 0 rgba(255,255,255,.4), var(--shadow-sm);
+}
+.site-nav .btn.ghost:hover { background-color: #f6efdd; color: #3f3930; transform: translateY(-2px); box-shadow: inset 0 0 0 1px rgba(71,65,56,.32), inset 0 1px 0 rgba(255,255,255,.4), var(--shadow-md); }
 .nav-auth { grid-column: 3; justify-self: end; display: flex; align-items: center; gap: 12px; flex: none; }
 .nav-auth .btn { white-space: nowrap; }
 .theme-switch { display: flex; align-items: center; gap: 7px; }
@@ -282,7 +291,7 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 .theme-switch .seg { display: flex; border: 1px solid color-mix(in srgb, var(--banner-ink) 55%, transparent); border-radius: 7px; overflow: hidden; }
 .theme-switch button { border: 0; cursor: pointer; font-family: var(--font-cond); font-weight: 600; font-size: 11px; padding: 6px 0; min-width: 28px; text-align: center; background: transparent; color: var(--banner-ink); transition: background .15s, color .15s; }
 .theme-switch button.active { background: var(--coral); color: var(--paper); }
-.cart-btn { position: relative; width: 40px; height: 40px; border-radius: 50%; border: 0; background: var(--surface); box-shadow: var(--shadow-sm); cursor: pointer; display: grid; place-items: center; transition: transform .18s var(--ease-pop); color: var(--ink); }
+.cart-btn { position: relative; width: 40px; height: 40px; border-radius: 50%; border: 0; background-color: #c9c4bc; background-image: linear-gradient(180deg, rgba(255,255,255,.30), transparent 55%), var(--steel); box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(255,255,255,.5), inset 0 -1px 0 rgba(0,0,0,.22); cursor: pointer; display: grid; place-items: center; transition: transform .18s var(--ease-pop); color: #2b2823; }
 .cart-btn:hover { transform: translateY(-2px) rotate(-4deg); }
 .cart-btn svg { width: 19px; height: 19px; }
 .cart-badge { position: absolute; top: -4px; right: -5px; min-width: 18px; height: 18px; border-radius: var(--radius-pill); background: var(--coral); color: var(--paper); font-family: var(--font-cond); font-size: 11px; font-weight: 600; display: grid; place-items: center; padding: 0 4px; }
@@ -326,7 +335,7 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 .hero__panel {
   position: absolute; top: 0; right: 0; bottom: 0; width: 52%; z-index: 1;
   background-color: var(--banner-bg);
-  background-image: var(--banner-grain); background-size: 300px 120px;
+  background-image: var(--banner-grain); background-size: var(--banner-size, 300px 120px);
   border-left: 1px solid var(--line);
 }
 .hero__swirl { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none; }
@@ -491,7 +500,7 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 .squiggle-links { display: flex; justify-content: center; flex-wrap: wrap; gap: 40px; margin-top: 36px; padding: 16px 0 8px; }
 
 /* ---------- wood / dark band (the "wooden banner" accent) ---------- */
-.band-forest { position: relative; overflow: hidden; background-color: var(--band-bg); background-image: var(--band-grain); background-size: 380px 150px; color: var(--band-ink); border-radius: var(--radius-card); padding: 36px 40px; display: flex; align-items: center; gap: 32px; flex-wrap: wrap; box-shadow: var(--shadow); }
+.band-forest { position: relative; overflow: hidden; background-color: var(--band-bg); background-image: var(--band-grain); background-size: var(--band-size, 380px 150px); color: var(--band-ink); border-radius: var(--radius-card); padding: 36px 40px; display: flex; align-items: center; gap: 32px; flex-wrap: wrap; box-shadow: var(--shadow); }
 .band-forest::before { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent 0 52px, rgba(0,0,0,.12) 52px 53px); pointer-events: none; }
 .band-forest > * { position: relative; }
 .band-forest .eyebrow { color: var(--band-eyebrow); }

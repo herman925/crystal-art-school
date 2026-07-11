@@ -10,7 +10,10 @@
 .testi-card .q { font-style: italic; font-size: 14.5px; color: var(--muted); line-height: 1.6; }
 
 /* ---------- footer (walnut planks) ---------- */
-.site-footer { position: relative; overflow: hidden; margin-top: 70px; background-color: #4a3a2f; background-image: var(--walnut-grain); background-size: 360px 140px; color: var(--band-ink); }
+.site-footer { position: relative; overflow: hidden; margin-top: 70px; background-color: #4a3a2f; background-image: linear-gradient(180deg, rgba(30,20,12,.48), rgba(24,16,10,.58)), url("../img/wood-rustic.jpg"); background-size: cover; color: var(--band-ink); }
+[data-theme="A"] .site-footer { --band-ink:#4a3a26; --band-eyebrow:#7e4c27; background-color: #e3d2ac; background-image: linear-gradient(180deg, rgba(255,248,232,.10), rgba(120,90,50,.18)), url("../img/wood-natural.jpg"); background-size: cover; color: #4a3a26; }
+[data-theme="A"] .site-footer .footer-meta { border-top-color: rgba(74,58,38,.28); }
+[data-theme="D"] .site-footer { background-color: #17130e; background-image: url("../img/wood-black.jpg"); background-size: cover; }
 .site-footer::before { content: ""; position: absolute; inset: 0; z-index: 0; background: repeating-linear-gradient(0deg, transparent 0 62px, rgba(0,0,0,.17) 62px 63px), linear-gradient(180deg, rgba(231,221,203,.05), transparent 18%); pointer-events: none; }
 .site-footer .inner { position: relative; z-index: 1; max-width: var(--site-max); margin: 0 auto; padding: 46px var(--gutter) 26px; }
 
@@ -38,7 +41,7 @@
    LESSONS PAGE
    ============================================================ */
 /* wooden header banner (oak) — the client's "wood accent for headers" */
-.page-hero { position: relative; overflow: hidden; padding: 52px 0 46px; margin-top: 0; background-color: var(--banner-bg); background-image: var(--banner-grain); background-size: 400px 150px; box-shadow: var(--shadow); }
+.page-hero { position: relative; overflow: hidden; padding: 28px 0 26px; margin-top: 0; background-color: var(--banner-bg); background-image: var(--banner-grain); background-size: var(--banner-size, 400px 150px); background-attachment: fixed; background-position: center top; box-shadow: var(--shadow); }
 .page-hero::before { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent 0 56px, rgba(43,40,35,.1) 56px 57px); pointer-events: none; }
 .page-hero .container { position: relative; }
 .page-hero .eyebrow { color: var(--banner-ink); opacity: .85; }
@@ -50,7 +53,7 @@
 .filter-row { display: flex; flex-wrap: wrap; gap: 10px; margin: 26px 0 8px; }
 .chip { font-family: var(--font-cond); font-weight: 500; font-size: 12.5px; letter-spacing: .12em; text-transform: uppercase; padding: 9px 18px; border-radius: var(--radius-pill); border: 1px solid var(--line); background: var(--surface); color: var(--ink); box-shadow: var(--shadow-sm); cursor: pointer; transition: background .15s, color .15s, transform .15s var(--ease-pop); }
 .chip:hover { background: var(--warm-white); }
-.chip.active { background: var(--coral); color: var(--paper); border-color: transparent; }
+.chip.active { background-color: #c9c4bc; background-image: linear-gradient(180deg, rgba(255,255,255,.28), transparent 55%), var(--steel); color: #2b2823; border-color: transparent; box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(255,255,255,.5), inset 0 -1px 0 rgba(0,0,0,.18); }
 .lesson-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; margin-top: 22px; }
 .lesson-cell .meta { display: flex; justify-content: space-between; align-items: baseline; padding: 10px 6px 0; }
 .lesson-cell .level { font-family: var(--font-cond); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
@@ -78,7 +81,7 @@
 .fg-opts { display: flex; flex-wrap: wrap; gap: 7px; }
 .fopt { font-family: var(--font-cond); font-weight: 500; font-size: 12px; letter-spacing: .05em; padding: 7px 13px; border-radius: var(--radius-pill); border: 1px solid var(--line); background: transparent; color: var(--ink); -webkit-text-fill-color: var(--ink); cursor: pointer; transition: background .15s, color .15s, border-color .15s; }
 .fopt:hover { background: var(--warm-white); }
-.fopt.active { background: var(--coral); color: var(--paper); -webkit-text-fill-color: var(--paper); border-color: transparent; }
+.fopt.active { background-color: #c9c4bc; background-image: linear-gradient(180deg, rgba(255,255,255,.28), transparent 55%), var(--steel); color: #2b2823; -webkit-text-fill-color: #2b2823; border-color: transparent; box-shadow: inset 0 1px 0 rgba(255,255,255,.5), inset 0 -1px 0 rgba(0,0,0,.18); }
 .catalog-layout .lesson-grid { grid-template-columns: repeat(3,1fr); margin-top: 0; }
 .lesson-meta-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; min-height: 18px; }
 .lesson-count { font-family: var(--font-cond); font-size: 13px; letter-spacing: .04em; color: var(--muted); }
@@ -95,7 +98,7 @@
 .tier-card { position: relative; padding: 28px 26px; border-radius: var(--radius-card); box-shadow: var(--shadow-sm); background: var(--surface); }
 .tier-card.highlight { background: var(--coral); color: var(--paper); }
 .tier-card.highlight p { color: rgba(244,231,207,.85) !important; }
-.tier-card.fellow { position: relative; overflow: hidden; background-color: var(--band-bg); background-image: var(--band-grain); background-size: 300px 150px; color: var(--band-ink); }
+.tier-card.fellow { position: relative; overflow: hidden; background-color: var(--band-bg); background-image: var(--band-grain); background-size: var(--band-size, 300px 150px); color: var(--band-ink); }
 .tier-card.fellow p { color: rgba(231,221,203,.8) !important; }
 .tier-card .tname { font-family: var(--font-stencil); font-size: 18px; letter-spacing: .1em; }
 .tier-card .tprice { font-family: var(--font-cond); font-weight: 600; letter-spacing: .04em; color: var(--coral-ink); margin: 6px 0 10px; }
@@ -230,11 +233,11 @@
 .story-copy p { color: var(--muted); font-size: 15.5px; line-height: 1.78; margin: 0 0 14px; }
 
 .cert-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 30px; }
-.cert-card { margin: 0; background-color: #1c130b; background-image: linear-gradient(180deg, rgba(22,15,9,.4), rgba(22,15,9,.5)), url("../img/wood-plank.jpg"); background-size: cover; background-position: center; border-radius: var(--radius-card); padding: 16px; box-shadow: var(--shadow); }
+.cert-card { margin: 0; background-color: #1c130b; background-image: linear-gradient(180deg, rgba(22,15,9,.4), rgba(22,15,9,.5)), url("../img/wood-rustic.jpg"); background-size: cover; background-position: center; border-radius: var(--radius-card); padding: 16px; box-shadow: var(--shadow); }
 .cert-card img { width: 100%; display: block; aspect-ratio: 4/3; object-fit: cover; border-radius: 8px; }
 .cert-card figcaption { font-family: var(--font-cond); font-size: 13px; letter-spacing: .06em; color: var(--band-ink); text-align: center; padding-top: 12px; }
 
-.signup-band { position: relative; overflow: hidden; background-color: var(--band-bg); background-image: var(--band-grain); background-size: 380px 150px; color: var(--band-ink); border-radius: var(--radius-card); padding: 40px 44px; display: grid; grid-template-columns: auto 1fr; gap: 40px; align-items: center; box-shadow: var(--shadow); }
+.signup-band { position: relative; overflow: hidden; background-color: var(--band-bg); background-image: var(--band-grain); background-size: var(--band-size, 380px 150px); color: var(--band-ink); border-radius: var(--radius-card); padding: 40px 44px; display: grid; grid-template-columns: auto 1fr; gap: 40px; align-items: center; box-shadow: var(--shadow); }
 .signup-band::before { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent 0 52px, rgba(0,0,0,.12) 52px 53px); pointer-events: none; }
 .signup-band > * { position: relative; }
 .signup-logo { display: flex; align-items: center; gap: 14px; padding-right: 40px; border-right: 1px solid rgba(244,231,207,.2); }
@@ -343,14 +346,14 @@
 [data-theme="D"] .page-hero,
 [data-theme="D"] .post-banner .chip-inner {
   background-color: #1c130b;
-  background-image: linear-gradient(180deg, rgba(22,15,9,.40), rgba(22,15,9,.5)), url("../img/wood-plank.jpg");
+  background-image: linear-gradient(180deg, rgba(22,15,9,.40), rgba(22,15,9,.5)), url("../img/wood-rustic.jpg");
   background-size: cover;
   background-position: center 38%;
 }
 [data-theme="D"] .art-frame-wrap,
 [data-theme="D"] .art-modal .am-frame-wrap {
   background-color: #1c130b;
-  background-image: radial-gradient(130% 95% at 70% 0%, rgba(231,221,203,.14), transparent 55%), linear-gradient(180deg, rgba(28,18,10,.1), rgba(16,10,6,.42)), url("../img/wood-plank.jpg");
+  background-image: radial-gradient(130% 95% at 70% 0%, rgba(231,221,203,.14), transparent 55%), linear-gradient(180deg, rgba(28,18,10,.1), rgba(16,10,6,.42)), url("../img/wood-rustic.jpg");
   background-size: cover;
   background-position: center;
 }
@@ -405,7 +408,33 @@
 .blog-feature .bf-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s var(--ease-out); }
 .blog-feature:hover .bf-img img { transform: scale(1.04); }
 .blog-feature .bf-body { padding: 20px 26px; display: flex; flex-direction: column; gap: 12px; justify-content: center; }
-[data-theme="D"] .blog-feature { background-color: #1c130b; background-image: linear-gradient(180deg, rgba(22,15,9,.40), rgba(22,15,9,.5)), url("../img/wood-plank.jpg"); background-size: cover; background-position: center; }
+[data-theme="D"] .blog-feature { background-color: #1c130b; background-image: linear-gradient(180deg, rgba(22,15,9,.40), rgba(22,15,9,.5)), url("../img/wood-rustic.jpg"); background-size: cover; background-position: center; }
+
+/* ---------- real wood photos on the dark/wood bands (2026-07) ----------
+   Light (A): natural pale wood — band text flips DARK so it stays readable.
+   Dark (D): near-black wood — keeps the cream band ink.
+   Scoped to the band components so the footer (fixed dark) keeps cream text. */
+[data-theme="A"] .band-forest,
+[data-theme="A"] .signup-band,
+[data-theme="A"] .dash-hero,
+[data-theme="A"] .tier-card.fellow {
+  --band-ink:#4a3a26; --band-eyebrow:#7e4c27; --band-bg:#dcc79e;
+  background-color: #dcc79e;
+  background-image: linear-gradient(180deg, rgba(255,248,232,.08), rgba(120,90,50,.16)), url("../img/wood-natural.jpg");
+  background-size: cover;
+  background-position: center;
+  color: #4a3a26;
+}
+[data-theme="D"] .band-forest,
+[data-theme="D"] .signup-band,
+[data-theme="D"] .dash-hero,
+[data-theme="D"] .tier-card.fellow {
+  --band-bg:#17130e;
+  background-color: #17130e;
+  background-image: url("../img/wood-black.jpg");
+  background-size: cover;
+  background-position: center;
+}
 .blog-feature .bf-kicker { font-family: var(--font-cond); font-size: 11px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--coral); }
 .blog-feature h2 { font-family: var(--font-marker); font-weight: 600; font-size: clamp(24px,2.8vw,34px); line-height: 1.08; margin: 0; color: var(--ink); }
 .blog-feature p { font-size: 14.5px; line-height: 1.6; color: var(--muted); margin: 0; }

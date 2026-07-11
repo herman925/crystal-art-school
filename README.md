@@ -3,39 +3,45 @@
 > Slow down. Draw with care.
 
 A multi-page website for Crystal's Art School — a small, craft-focused drawing studio.
-Static HTML/CSS/JS, no build step. Industrial design system (v3.0) with four
-swappable themes (A: Oak Atelier · B: Walnut · C: Concrete & Iron · D: Moody Loft).
+Static HTML/CSS/JS, no build step. Industrial design system (v3.1) with four
+swappable themes (A: Oak Atelier · B: Walnut · C: Concrete & Iron · D: Moody Loft)
+and photographic wood / cork / marble textures on the large surfaces.
+
+Live: https://herman925.github.io/crystal-art-school/
 
 ## Pages
 
 | Page | File | Purpose |
 |------|------|---------|
 | Home | `index.html` | Hero carousel, new release, course shop, journal, community band, testimonials |
-| Lessons | `lessons.html` | Curriculum grid, filters, membership tiers |
-| Lesson (single) | `lesson.html` | Single course / video page |
-| Gallery | `gallery.html` | Studio and student work |
-| Blog | `blog.html` | Article index |
-| Blog post | `blog-post.html` | Single article layout |
-| About | `about.html` | Bio, contact, terms |
-| Login | `login.html` | Sign-in + forgot password |
-| Signup | `signup.html` | Account creation |
-| Dashboard | `dashboard.html` | Member home (enrolled, recommendations) |
-| Checkout | `checkout.html` | Cart → details → confirmation |
+| Courses | `Lessons.dc.html` | Curriculum grid, filters, membership tiers |
+| Course (single) | `course.dc.html` | Course overview / syllabus |
+| Lesson player | `lesson.dc.html` | Single lesson / video page |
+| Gallery shop | `Gallery.dc.html` | Framed originals & prints, filter + Etsy links |
+| Student showcase | `Showcase.dc.html` | Cork pin-board of student work (physics on scroll) |
+| Blog | `Blog.dc.html` | Article index |
+| Blog post | `blog-post.dc.html` | Single article layout |
+| About | `About.dc.html` | Bio, contact, terms |
+| Free videos | `FreeVideos.dc.html` | Free tutorial index |
+| FAQ | `FAQ.dc.html` | Accordion FAQ |
+| Login / Signup | `Login.dc.html` / `Signup.dc.html` | Auth pages |
+| Dashboard | `Dashboard.dc.html` | Member home (enrolled, recommendations) |
+| Checkout | `Checkout.dc.html` | Cart → details → confirmation |
 
 ## Structure
 
 ```
 .
-├── index.html, about.html, blog.html, blog-post.html,
-│   gallery.html, lessons.html, lesson.html,
-│   login.html, signup.html, dashboard.html, checkout.html
-├── css/industrial.css     # all styles (tokenized, theme A/B/C/D)
-├── js/site-extras.js      # shared: cart drawer, cookie consent, tier picker, auth nav
-├── js/<page>.js           # per-page init (was embedded Component class)
-├── img/                   # site imagery
-├── serve.bat              # local dev server (Windows)
-└── transform.py           # one-shot script used to port from the
-                            Claude Design handoff bundle (kept for reference)
+├── index.html + *.dc.html      # pages (Claude Design runtime via support.js)
+├── css/industrial.css          # entry — imports industrial-1/2/3.css
+│   ├── industrial-1.css        # tokens, themes A–D, base components, nav
+│   ├── industrial-2.css        # page components, footer, theme D photo overrides
+│   └── industrial-3.css        # dashboard, showcase, course page, 2026-07 additions
+├── js/site-nav.js, motion.js   # shared nav + GSAP scroll motion
+├── js/<page>.js                # per-page init
+├── img/                        # site imagery + texture photos (wood-*, corkboard, marble-wall)
+├── DESIGN.md                   # design system v3.1 (source of visual truth)
+└── serve.bat                   # local dev server (Windows)
 ```
 
 ## Run locally
@@ -50,11 +56,16 @@ Any static server works too, e.g.:
 python -m http.server 8080
 ```
 
-## Themes
+## Themes & textures
 
-Click the **A · B · C · D** buttons in the nav. Choice persists across pages
-via `localStorage`. All visual surfaces (banner, gallery tile, panels,
-buttons, footer) reskin from token overrides in `css/industrial.css`.
+The nav theme switch sets `data-theme` on `.cas-root`; choice persists across
+pages via `localStorage('cas-theme')`. All visual surfaces reskin from token
+overrides in `css/industrial-1.css`.
+
+Since v3.1 the large surfaces use real photos (see `DESIGN.md` §12): creamy
+wood headers + white-marble gallery wall in light mode, rustic/black wood in
+dark mode, a maple-framed cork board on the showcase, and metal button
+finishes (copper primaries, olive metal, brushed steel, iron outlines).
 
 ## License
 

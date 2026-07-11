@@ -22,15 +22,26 @@
 /* ---- "instant photo" wall (client-approved concept) ----
    Desktop: prints pinned to a cork board (水松板), loosely overlapping, coloured pins.
    Phone: one vertical strip, taped down. Motion = tiny pendulum physics in JS. */
-.pol-wall { display:flex; flex-direction:column; gap:38px; padding: 48px 34px 44px;
+/* maple frame around the cork: real wrapper, top-lit bevel + oak grain */
+.pol-frame { padding: 18px; border-radius: 12px;
+  background-color:#c99a55;
+  background-image: var(--oak-grain), linear-gradient(145deg, #e8c489 0%, #d0a35e 32%, #b0813f 64%, #8a6230 100%);
+  background-size: 300px 120px, 100% 100%;
+  box-shadow:
+    inset 0 2px 3px rgba(255,238,205,.6),      /* top-lit lip */
+    inset 0 -3px 6px rgba(70,45,15,.55),        /* bottom shade */
+    inset 3px 0 4px rgba(255,238,205,.25), inset -3px 0 5px rgba(70,45,15,.35),
+    0 16px 36px rgba(0,0,0,.35), 0 4px 10px rgba(0,0,0,.22); }
+.pol-wall { position:relative; display:flex; flex-direction:column; gap:38px; padding: 48px 34px 44px;
   background-color:#c9aa7d;
   background-image:
     radial-gradient(120% 90% at 50% 0%, rgba(255,244,222,.16), transparent 60%),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='260' height='260'%3E%3Cfilter id='c'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.55' numOctaves='3' seed='7'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.42 0 0 0 0 0.30 0 0 0 0 0.16 0 0 0 0.5 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23c)'/%3E%3C/svg%3E"),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='d'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.12' numOctaves='2' seed='3'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0.72 0 0 0 0 0.58 0 0 0 0 0.38 0 0 0 0.35 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23d)'/%3E%3C/svg%3E");
-  border-radius: 10px;
-  border: 10px solid #8a6a44;
-  box-shadow: inset 0 3px 22px rgba(60,40,16,.35), inset 0 -2px 12px rgba(60,40,16,.2), 0 10px 30px rgba(0,0,0,.25); }
+    url("img/corkboard.jpg");
+  background-size: cover;
+  background-position: center;
+  border-radius: 5px;
+  /* dark seam where cork meets the frame + soft cork inset */
+  box-shadow: 0 0 0 2px rgba(84,56,22,.6), inset 0 3px 22px rgba(60,40,16,.35), inset 0 -2px 12px rgba(60,40,16,.2); }
 .pol-row { display:flex; flex-wrap:wrap; justify-content:center; gap: 28px 14px; }
 .pol-tile { position:relative; display:block; border:0; cursor:pointer; background:#f6f1e6; padding:11px 11px 48px; width:216px;
   margin: var(--mt, 0) var(--mx, 0) 0; z-index: var(--z, 1);
@@ -134,7 +145,7 @@
     <div class="filter-rail reveal-one" style="margin-bottom:18px;">
       <div class="fg-opts" id="sw-filter"></div>
     </div>
-    <div class="pol-wall reveal" id="sw-grid" aria-label="Student artwork wall"></div>
+    <div class="pol-frame reveal"><div class="pol-wall" id="sw-grid" aria-label="Student artwork wall"></div></div>
     <div class="no-results" id="sw-empty" style="display:none;">Nothing in this medium yet — check back after the next critique night.</div>
   </section>
 
@@ -287,10 +298,9 @@ class Component extends DCLogic {
       const sim = tiles.map((el) => ({
         el,
         base: parseFloat(el.style.getPropertyValue('--rot')) || 0,
-        th: 0, w: 0, y: 0, vy: 0,
+        th: 0, w: 0,
         k: rnd(7, 12),            /* rotational spring (back to rest) */
-        c: rnd(1.1, 1.8),         /* rotational damping — settles in a couple of seconds */
-        ky: rnd(55, 85), cy: rnd(6, 9),  /* vertical spring/damping */
+        c: rnd(1.6, 2.4),         /* rotational damping — settles quickly */
         dir: Math.random() < 0.5 ? -1 : 1, /* preferred flip direction */
         m: rnd(0.7, 1.4)          /* "mass" — lighter prints react more */
       }));
@@ -323,39 +333,35 @@ class Component extends DCLogic {
         const dt = Math.min(0.05, (now - last) / 1000);
         last = now;
 
-        const kick = Math.max(-60, Math.min(60, pending));
+        const kick = Math.max(-36, Math.min(36, pending));
         pending = 0;
         if (kick) {
           sim.forEach(s => {
-            /* very subtle: a light flip, random cw/ccw, scaled by scroll speed */
-            s.w += s.dir * (0.5 + Math.random()) * kick * 0.045 / s.m;
-            /* down-scroll = faint weightless lift; up-scroll = slightly stronger pull down */
-            s.vy += (kick > 0 ? -0.22 : 0.45) * Math.abs(kick) / s.m;
+            /* very subtle: a light swing around the pin, random cw/ccw, scaled by scroll speed */
+            s.w += s.dir * (0.5 + Math.random()) * kick * 0.018 / s.m;
           });
           if (Math.random() < 0.25) sim[(Math.random() * sim.length) | 0].dir *= -1;
         }
 
         sim.forEach(s => {
           s.w += (-s.k * s.th - s.c * s.w) * dt;
-          s.vy += (-s.ky * s.y - s.cy * s.vy) * dt;
         });
-        /* friction where papers overlap: drag velocities toward each other */
+        /* friction where papers overlap: drag swing velocities toward each other */
         const mu = Math.min(1, 5 * dt);
         pairs.forEach(pr => {
           const a = sim[pr[0]], b = sim[pr[1]];
           const d = (b.w - a.w) * 0.5 * mu;
           a.w += d; b.w -= d;
-          const dy = (b.vy - a.vy) * 0.3 * mu;
-          a.vy += dy; b.vy -= dy;
         });
+        /* rotation ONLY, pivoting at the pin (transform-origin = --pinx / -6px),
+           so the pin stays anchored to the board while the print swings */
         sim.forEach(s => {
-          s.th += s.w * dt * 3;
-          s.y = Math.max(-6, Math.min(6, s.y + s.vy * dt));
-          if (Math.abs(s.th) < 0.02 && Math.abs(s.w) < 0.02 && Math.abs(s.y) < 0.1 && Math.abs(s.vy) < 0.1) {
-            s.th = 0; s.w = 0; s.y = 0; s.vy = 0;
+          s.th += s.w * dt * 2;
+          if (Math.abs(s.th) < 0.02 && Math.abs(s.w) < 0.02) {
+            s.th = 0; s.w = 0;
             s.el.style.transform = 'rotate(' + s.base + 'deg)';
           } else {
-            s.el.style.transform = 'translateY(' + s.y.toFixed(2) + 'px) rotate(' + (s.base + s.th).toFixed(3) + 'deg)';
+            s.el.style.transform = 'rotate(' + (s.base + s.th).toFixed(3) + 'deg)';
           }
         });
         requestAnimationFrame(step);

@@ -162,7 +162,7 @@
 .auth-success .as-check { width: 64px; height: 64px; border-radius: 50%; background: #4d6625; color: #f1f3e6; display: grid; place-items: center; margin: 0 auto 16px; font-size: 30px; }
 
 /* ============ student dashboard ============ */
-.dash-hero { position: relative; overflow: hidden; border-radius: var(--radius-card); background-color: var(--band-bg); background-image: var(--band-grain); background-size: 380px 150px; color: var(--band-ink); box-shadow: var(--shadow); padding: 30px 34px; display: flex; align-items: center; gap: 26px; flex-wrap: wrap; }
+.dash-hero { position: relative; overflow: hidden; border-radius: var(--radius-card); background-color: var(--band-bg); background-image: var(--band-grain); background-size: var(--band-size, 380px 150px); color: var(--band-ink); box-shadow: var(--shadow); padding: 30px 34px; display: flex; align-items: center; gap: 26px; flex-wrap: wrap; }
 .dash-hero::before { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent 0 52px, rgba(0,0,0,.12) 52px 53px); pointer-events: none; }
 .dash-hero > * { position: relative; z-index: 1; }
 .dash-avatar { width: 84px; height: 84px; border-radius: 50%; overflow: hidden; flex: none; border: 3px solid color-mix(in srgb, var(--band-ink) 30%, transparent); box-shadow: 0 6px 18px rgba(0,0,0,.3); }

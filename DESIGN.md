@@ -54,9 +54,12 @@ the visitor across pages. End-user facing; all four available everywhere.
 | **C** | Concrete & Iron | grey concrete | concrete | iron | **olive** | cool, line-work |
 | **D** | Moody Loft | dark iron + daylight glow | walnut | walnut | copper (primary = **walnut wood**) | dark, light text |
 
-**Button material per theme** (from `design_base.html`): primary `.btn.primary` is
-brushed **copper** (A, B), brushed **olive** (C), **walnut wood** (D); framed-gallery
-wall is concrete (A) / walnut (B) / iron (C) / **walnut wood** (D).
+**Button material per theme** (v3.1): primary `.btn.primary` is brushed **copper in
+every theme** (design_base "copper acts"); `.btn.teal` is machined **olive metal**;
+ghosts are **iron outlines**; active filter chips + the cart button are **brushed
+steel**; the nav *Log in* is a solid **raw-wood pill** (design_base "FREE LESSON").
+Framed-gallery wall is **white marble** (A) / rustic wood photo (B, D) / iron (C).
+Full texture-photo details: §12.
 
 Theme D flips `--ink` to light and `--cream`/`--surface` to dark, so the whole
 site inverts cleanly. `--glow-op` adds the daylight wash (D only).
@@ -175,3 +178,37 @@ Behaviour is vanilla JS in each component's `componentDidMount`.
 
 All repo pages ported and reskinned: index, lessons, gallery (re-imagined as the
 Etsy store, replacing the 3D museum), blog, blog-post, about, lesson player.
+
+---
+
+## 12. Real texture photos (v3.1, 2026-07-11)
+
+The procedural SVG grains on the LARGE surfaces were replaced with photographic
+textures (small accents — chips, wood buttons, plaques — keep the SVG grains).
+All photos live in `img/`, ~1.5 MB total, 1920 px wide, `background-size: cover`.
+
+| File | Used for |
+|---|---|
+| `wood-creamy.jpg` | light-mode (A) nav + page headers + section-title plaques — dark ink |
+| `wood-rustic.jpg` | dark-mode (D) nav/headers (dark overlay, cream ink), B banner, gallery wall (B/D), cert card, blog feature, footer fallback |
+| `wood-natural.jpg` | light-mode (A) bands (`.band-forest`, `.signup-band`, `.dash-hero`, `.tier-card.fellow`) + footer — **band ink flips dark** (`#4a3a26`), scoped per-component so the shared `--band-ink` token stays cream elsewhere |
+| `wood-black.jpg` | dark-mode (D) bands + footer — cream ink |
+| `corkboard.jpg` | Showcase pin board (both modes), framed by a CSS maple bevel (`.pol-wall::before`: 145° light-to-dark gradient + oak grain + top-lit inset shadows) |
+| `marble-wall.jpg` | **light-mode (A) framed-gallery wall** (`--wall`) — white marble/concrete |
+
+Mechanics:
+
+- New per-theme tokens `--banner-size` / `--band-size` (default keeps the old
+  tile sizes, photo themes set `cover`). Components read
+  `background-size: var(--banner-size, <old tile size>)`.
+- `.site-nav` + `.page-hero` use `background-attachment: fixed` so both sample
+  one viewport-anchored copy of the texture — they merge into a single
+  continuous slab on every page with no per-page markup. The nav's old
+  `border-bottom` was removed (it drew a hairline across the seam).
+- Header rhythm: `.page-hero` padding tightened to `28px 0 26px`; the nav's
+  `.nav-top .inner` padding increased to `16px … 10px` so the logo breathes.
+- The signature logo (`.nav-brand img`) is filtered to **black** on light woods
+  (`[data-theme="A"]`, `"C"`), stays cream on B/D.
+- Showcase pin physics: prints rotate ONLY around the pin
+  (`transform-origin: var(--pinx) -6px`), no vertical drift; impulse 0.018,
+  kick cap ±36, damping 1.6–2.4 — a calm settle, not a shake.
