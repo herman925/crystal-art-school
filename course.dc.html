@@ -82,7 +82,10 @@
 
 <main class="container" id="content">
 
-  <div class="crumbs" style="padding-top:22px;"><a href="Lessons.dc.html">Courses</a> <span aria-hidden="true">→</span> <span id="crumb-title">Course</span></div>
+  <!-- JS-filled nodes start EMPTY: the dc-runtime (React) owns template children,
+       and replacing them via textContent/innerHTML makes a later React re-render
+       crash with removeChild-of-missing-node (seen in the Claude Design editor). -->
+  <div class="crumbs" style="padding-top:22px;"><a href="Lessons.dc.html">Courses</a> <span aria-hidden="true">→</span> <span id="crumb-title"></span></div>
 
   <header class="course-hero">
     <div class="course-cover reveal-one">
@@ -91,16 +94,16 @@
       <span class="sale-flag" id="co-flag-sale" style="display:none;">Sale</span>
     </div>
     <div class="reveal-one">
-      <div class="eyebrow"><span class="star">✦</span> <span id="co-tag">Course</span></div>
-      <h1 class="marker-title" id="co-title" style="font-size:clamp(30px,3.8vw,50px);margin:6px 0 12px;">—</h1>
+      <div class="eyebrow"><span class="star">✦</span> <span id="co-tag"></span></div>
+      <h1 class="marker-title" id="co-title" style="font-size:clamp(30px,3.8vw,50px);margin:6px 0 12px;"></h1>
       <p class="lead" id="co-blurb" style="font-size:16.5px;"></p>
       <div class="course-meta-chips" id="co-chips"></div>
       <div class="course-buy">
         <div class="course-price" id="co-price"></div>
         <button class="btn primary" type="button" id="co-buy" data-add-to-cart data-tiered>Add to cart</button>
-        <a class="btn primary" id="co-continue" href="lesson.dc.html" style="display:none;">Continue learning <span class="arr" aria-hidden="true">→</span></a>
+        <a class="btn primary" id="co-continue" href="lesson.dc.html" style="display:none;"></a>
       </div>
-      <p class="course-tier-note">Buy at <strong>Apprentice</strong> (course only) or <strong>Fellow</strong> (course + private Discord critique channel) — you'll pick when adding to cart. Lifetime access, 14-day refund.</p>
+      <p class="course-tier-note"></p>
       <div class="own-test" style="margin-top:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
         <span style="font-family:var(--font-cond);font-size:10.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);">Client testing — view as</span>
         <div class="fg-opts" id="own-toggle" style="display:inline-flex;gap:6px;">
