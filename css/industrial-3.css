@@ -415,7 +415,7 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
 .course-hero { display: grid; grid-template-columns: minmax(300px, 460px) 1fr; gap: 46px; align-items: start; padding: 46px 0 10px; }
 .course-cover { position: relative; border-radius: var(--r-promo); overflow: hidden; box-shadow: var(--shadow-lift); aspect-ratio: 4/3; }
 .course-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.course-cover .free-flag, .course-cover .sale-flag { position: absolute; top: 14px; left: 14px; }
+.course-cover .free-flag, .course-cover .sale-flag { position: absolute; top: 14px; left: 14px; right: auto; }
 .course-meta-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 4px; }
 .cmc { font-family: var(--font-cond); font-weight: 500; font-size: 11.5px; letter-spacing: .14em; text-transform: uppercase; padding: 6px 14px; border-radius: var(--radius-pill); background: color-mix(in srgb, var(--ink) 8%, transparent); color: var(--ink); }
 .course-buy { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 20px; }
