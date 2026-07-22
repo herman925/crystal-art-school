@@ -61,7 +61,7 @@ window.CAS_COURSES = [
         "subtitle": "The small kit — one round brush, one flat, three tubes and decent paper.",
         "dur": 733,
         "poster": "img/courses/clouds-beginner/l01.jpg",
-        "video": "https://drive.google.com/file/d/1SOx1FGG_JrtNSDBOlQkdUBfJSMQF1gtA/preview",
+        "video": "https://drive.google.com/file/d/1-o2mN5kKzpOQdbol0iAE-ueHY9YPPSsB/preview",
         "free": true,
         "src": "CloudsLesson3.mp4",
         "srcFolder": "Lesson 01"
@@ -72,7 +72,7 @@ window.CAS_COURSES = [
         "subtitle": "Map cumulus volumes with overlapping circles, the way you would construct a figure.",
         "dur": 364,
         "poster": "img/courses/clouds-beginner/l02.jpg",
-        "video": "https://drive.google.com/file/d/1ZKGCN0_wZjIYR31SZPp2VI_yra1Sl1Jn/preview",
+        "video": "https://drive.google.com/file/d/1lQOdvQw6LELsE5d8IUsd3FozY2XITBQN/preview",
         "free": false,
         "src": "CloudsLesson4.mp4",
         "srcFolder": "Lesson 02"
@@ -94,7 +94,7 @@ window.CAS_COURSES = [
         "subtitle": "Thumbnails first — horizon low, masses balanced, nothing wasted.",
         "dur": 874,
         "poster": "img/courses/clouds-beginner/l04.jpg",
-        "video": "https://drive.google.com/file/d/1lbzMyopzSVtdDj0zY1VsqAdo2bIFJO4V/preview",
+        "video": "https://drive.google.com/file/d/1l_5WGjmOlKGJtxZv6q9I_I7txs6SX8ea/preview",
         "free": false,
         "src": "CloudsLesson6.mp4",
         "srcFolder": "Lesson 04"
@@ -105,7 +105,7 @@ window.CAS_COURSES = [
         "subtitle": "Sort a reference photo into just three value families.",
         "dur": 183,
         "poster": "img/courses/clouds-beginner/l05.jpg",
-        "video": "https://drive.google.com/file/d/1cLbvrWfRUJBgrut8DNiXtf4mdI6ety5H/preview",
+        "video": "https://drive.google.com/file/d/1xTnEpG9NWwojihu6KnUf1xuDz_OTdPnx/preview",
         "free": false,
         "src": "CloudsLesson7.mp4",
         "srcFolder": "Lesson 05"
@@ -116,7 +116,7 @@ window.CAS_COURSES = [
         "subtitle": "Place the lit face of one cloud, then make every other cloud agree.",
         "dur": 468,
         "poster": "img/courses/clouds-beginner/l06.jpg",
-        "video": "https://drive.google.com/file/d/1fsEkKFXw2ThFu3QUW6qkIB-cBj3Jpv-s/preview",
+        "video": "https://drive.google.com/file/d/1lseQKpbLuJKhQRE7iyOUKK6KxkL0yGRN/preview",
         "free": false,
         "src": "CloudsLesson8.mp4",
         "srcFolder": "Lesson 06"
@@ -127,7 +127,7 @@ window.CAS_COURSES = [
         "subtitle": "Warm-grey undersides that glow instead of going muddy.",
         "dur": 484,
         "poster": "img/courses/clouds-beginner/l07.jpg",
-        "video": "https://drive.google.com/file/d/1CwogrP0QGyk6Jad5eLOk6rkxe9SnOaKg/preview",
+        "video": "https://drive.google.com/file/d/14ubQngPhSnR6CChge2pnaQrwm-7UHRyA/preview",
         "free": false,
         "src": "CloudsLesson9.mp4",
         "srcFolder": "Lesson 07"
@@ -138,7 +138,7 @@ window.CAS_COURSES = [
         "subtitle": "One cumulus, three values, twenty minutes — flat shapes become an object.",
         "dur": 885,
         "poster": "img/courses/clouds-beginner/l08.jpg",
-        "video": "https://drive.google.com/file/d/1AjriRi68Y8-M9Lj9zSmjp46euCXCGRBM/preview",
+        "video": "https://drive.google.com/file/d/1UYPChtWNQu5GsrmRiUdJJjIO9kghXQWF/preview",
         "free": false,
         "src": "CloudsLesson10.mp4",
         "srcFolder": "Lesson 08"
@@ -149,7 +149,7 @@ window.CAS_COURSES = [
         "subtitle": "Big shapes first, crisp sunlit tops, soft shadowed bellies.",
         "dur": 558,
         "poster": "img/courses/clouds-beginner/l09.jpg",
-        "video": "https://drive.google.com/file/d/1nsIMQc2kUjTEHIG2ThRoZKonk2y3dOP6/preview",
+        "video": "https://drive.google.com/file/d/1Pj0poOAZhswLxvBCRjWuk99bvA5cAsS3/preview",
         "free": false,
         "src": "CloudsLesson11.mp4",
         "srcFolder": "Lesson 09"
@@ -352,7 +352,7 @@ window.CAS_COURSES = [
         "subtitle": "A full watercolour study from pencil sketch to final wash.",
         "dur": 483,
         "poster": "img/courses/little-house/l01.jpg",
-        "video": "https://drive.google.com/file/d/1s3Vn3YxGEfyzhwfI4ns7ivuUbyjvjWw9/preview",
+        "video": "https://drive.google.com/file/d/19BRSCNxYz6Krw1vfRoyIUVLVv5c-HSe-/preview",
         "free": true,
         "src": "LittleHouse.mov",
         "srcFolder": "Course 02"
@@ -396,7 +396,7 @@ window.CAS_COURSES = [
         "subtitle": "Line and wash on location: buildings, street and figures.",
         "dur": 673,
         "poster": "img/courses/urban-sketch/l01.jpg",
-        "video": "https://drive.google.com/file/d/1MQti8rAmZ7-Rr43YwB0th9H0cpWEMmdc/preview",
+        "video": "https://drive.google.com/file/d/1gDt04JlLUi0j831dvN4CJGauRnF8pcrj/preview",
         "free": true,
         "src": "Urban.mov",
         "srcFolder": "Course 03"
