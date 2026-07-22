@@ -106,7 +106,7 @@
 
 <div class="container" style="padding-top:28px;">
   <header class="post-banner">
-    <img src="img/Bannerphoto.jpg" alt="Crystal's worktable, paints and brushes">
+    <img src="img/Bannerphoto.jpg" alt="Crystal's worktable, paints and brushes" loading="lazy" decoding="async">
     <div class="chip-h1"><div class="chip-inner"><h1>How to block in a portrait — value first</h1></div></div>
   </header>
 </div>
@@ -115,7 +115,7 @@
   <div class="article">
 
     <div class="byline">
-      <img src="img/ProfilePic.jpg" alt="Crystal Lau">
+      <img src="img/ProfilePic.jpg" alt="Crystal Lau" loading="lazy" decoding="async">
       <strong>Crystal Lau</strong>
       <span class="hand-note">8 June 2026 · 6 min read · Practice · 24.1k reads</span>
     </div>
@@ -155,7 +155,7 @@
     <p>Squint at your subject until your eyes water. What survives? Two or three big shapes. That's your painting for the first hour — those shapes and nothing else.</p>
 
     <figure>
-      <img src="img/cover1.jpg" alt="Portrait block-in showing grouped light and shadow shapes">
+      <img src="img/cover1.jpg" alt="Portrait block-in showing grouped light and shadow shapes" loading="lazy" decoding="async">
       <figcaption>The first hour: light group, shadow group, background. No features yet.</figcaption>
     </figure>
 
@@ -182,7 +182,7 @@
     <p>One head, three values, ninety minutes, no features. Post it in the Discord channel — I look at every block-in students share.</p>
 
     <div class="card blush" style="display:flex;gap:16px;align-items:center;margin:40px 0;">
-      <img src="img/ProfilePic.jpg" alt="Crystal Lau" style="width:72px;height:72px;border-radius:50%;object-fit:cover;flex:none;">
+      <img src="img/ProfilePic.jpg" alt="Crystal Lau" style="width:72px;height:72px;border-radius:50%;object-fit:cover;flex:none;" loading="lazy" decoding="async">
       <div>
         <strong>Crystal Lau</strong>
         <p style="margin:4px 0 0;font-size:14px;color:#5e4a3d;">Oils &amp; drawing teacher. Small studio in Hong Kong, eight years of small-group classes. <a class="link-squiggle" href="About.dc.html" style="font-weight:700;">More about me →</a></p>
@@ -192,11 +192,11 @@
     <section>
       <h2 style="margin-top:8px;">Comments</h2>
       <div class="comment">
-        <img src="img/Postercolor.jpg" alt="">
+        <img src="img/Postercolor.jpg" alt="" loading="lazy" decoding="async">
         <div class="bubble"><strong>Alex W.</strong> · 9 June<br>Tried the ninety-minute version last night — first time a block-in ever looked like the sitter. The shadow-line tip did it.</div>
       </div>
       <div class="comment">
-        <img src="img/Sketchbook.jpg" alt="">
+        <img src="img/Sketchbook.jpg" alt="" loading="lazy" decoding="async">
         <div class="bubble"><strong>Priya M.</strong> · 9 June<br>Could you do a follow-up on backgrounds for portraits? Mine always end up as an afterthought.</div>
       </div>
       <form class="card" id="comment-form" style="margin-top:8px;">
@@ -223,15 +223,15 @@
     </div>
     <div class="related-rail" id="related-rail" style="margin-top:30px;">
       <a class="cover-card" href="Blog.dc.html" style="aspect-ratio:4/3;">
-        <img src="img/cover2.jpg" alt="">
+        <img src="img/cover2.jpg" alt="" loading="lazy" decoding="async">
         <div class="scrim"><div class="t">Why I keep a colour journal</div></div>
       </a>
       <a class="cover-card" href="Blog.dc.html" style="aspect-ratio:4/3;">
-        <img src="img/cover3.jpg" alt="">
+        <img src="img/cover3.jpg" alt="" loading="lazy" decoding="async">
         <div class="scrim"><div class="t">Soft edges without muddying your paint</div></div>
       </a>
       <a class="cover-card" href="Gallery.dc.html" style="aspect-ratio:4/3;">
-        <img src="img/cover4.jpg" alt="">
+        <img src="img/cover4.jpg" alt="" loading="lazy" decoding="async">
         <div class="scrim"><div class="t">Student showcase — walk the gallery</div></div>
       </a>
     </div>
@@ -298,11 +298,11 @@ class Component extends DCLogic {
 
       const article = document.querySelector('.article');
       article.innerHTML =
-        '<div class="byline"><img src="img/ProfilePic.jpg" alt="Crystal Lau"><strong>Crystal Lau</strong>' +
+        '<div class="byline"><img src="img/ProfilePic.jpg" alt="Crystal Lau" loading="lazy" decoding="async"><strong>Crystal Lau</strong>' +
         '<span class="hand-note">' + esc(post.d) + ' 2026 · ' + (post.mins || 4) + ' min read · ' + esc(post.tag) + ' · ' + rf(post.reads) + ' reads</span></div>' +
         body +
         '<div class="card blush" style="display:flex;gap:16px;align-items:center;margin:40px 0;">' +
-          '<img src="img/ProfilePic.jpg" alt="Crystal Lau" style="width:72px;height:72px;border-radius:50%;object-fit:cover;flex:none;">' +
+          '<img src="img/ProfilePic.jpg" alt="Crystal Lau" style="width:72px;height:72px;border-radius:50%;object-fit:cover;flex:none;" loading="lazy" decoding="async">' +
           '<div><strong>Crystal Lau</strong><p style="margin:4px 0 0;font-size:14px;color:#5e4a3d;">Oils &amp; drawing teacher. Small studio in Hong Kong, eight years of small-group classes. <a class="link-squiggle" href="About.dc.html" style="font-weight:700;">More about me →</a></p></div></div>' +
         '<section><h2 style="margin-top:8px;">Comments</h2>' +
           '<form class="card" id="comment-form" style="margin-top:8px;">' +

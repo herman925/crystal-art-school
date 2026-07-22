@@ -84,7 +84,7 @@
 <main class="container" id="content" style="padding-top:26px;padding-bottom:60px;">
 
   <section class="dash-hero">
-    <div class="dash-avatar"><img src="img/ProfilePic.jpg" alt=""></div>
+    <div class="dash-avatar"><img src="img/ProfilePic.jpg" alt="" loading="lazy" decoding="async"></div>
     <div class="dash-hi">
       <div class="eyebrow"><span class="star">✦</span> Your studio</div>
       <h1 id="dash-greeting">Welcome back.</h1>
@@ -280,7 +280,7 @@ class Component extends DCLogic {
     if (empty) {
       $('resume-card').innerHTML =
         '<div class="dash-onboard" style="width:100%;">' +
-          '<div class="ob-hero"><img src="img/cover3.jpg" alt="">' +
+          '<div class="ob-hero"><img src="img/cover3.jpg" alt="" loading="lazy" decoding="async">' +
             '<div><h3 style="font-family:var(--font-marker);font-weight:600;font-size:20px;margin:0 0 6px;">Your bench is ready.</h3>' +
             '<p style="margin:0;font-size:14px;color:var(--muted);max-width:52ch;">Nothing enrolled yet — and that\'s exactly where everyone starts. The free intro course takes under an hour and needs no materials.</p></div></div>' +
           '<div class="ob-steps">' +

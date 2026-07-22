@@ -177,7 +177,7 @@
   <div class="am-backdrop" data-close></div>
   <div class="am-panel">
     <button class="am-close" type="button" aria-label="Close" data-close>✕</button>
-    <div class="am-frame-wrap"><figure class="am-frame"><div class="am-img"><img id="am-img" alt=""></div><img class="am-ornate" src="img/deer-black.svg" alt="" aria-hidden="true"></figure></div>
+    <div class="am-frame-wrap"><figure class="am-frame"><div class="am-img"><img id="am-img" alt=""></div><img class="am-ornate" src="img/deer-black.svg" alt="" aria-hidden="true" loading="lazy" decoding="async"></figure></div>
     <div class="am-body">
       <span class="am-sub" id="am-sub">Original</span>
       <h2 class="am-title" id="am-title">—</h2>
@@ -310,7 +310,7 @@ class Component extends DCLogic {
     const fsOf = (p) => /A5/.test(p.size) ? 0.62 : /A4/.test(p.size) ? 0.74 : /A3/.test(p.size) ? 0.86 : 1;
     const cardHTML = (p, idx) =>
       '<article class="art-card" data-idx="' + idx + '">' +
-        '<div class="art-frame-wrap"><figure class="art-frame' + (rOf(p) > 1.15 ? ' land' : '') + '" style="--fs:' + fsOf(p) + ';"><div class="art-img" style="--r:' + rOf(p) + '"><img src="img/' + p.img + '" alt="' + esc(p.title) + '"></div><img class="art-ornate" src="img/deer-black.svg" alt="" aria-hidden="true"></figure></div>' +
+        '<div class="art-frame-wrap"><figure class="art-frame' + (rOf(p) > 1.15 ? ' land' : '') + '" style="--fs:' + fsOf(p) + ';"><div class="art-img" style="--r:' + rOf(p) + '"><img src="img/' + p.img + '" alt="' + esc(p.title) + '" loading="lazy" decoding="async"></div><img class="art-ornate" src="img/deer-black.svg" alt="" aria-hidden="true" loading="lazy"></figure></div>' +
         '<div class="art-meta">' +
           '<h3 class="art-title">' + esc(p.title) + '</h3>' +
           '<div class="art-sub">' + (p.orig ? 'Original' : 'Limited print') + '</div>' +
