@@ -260,7 +260,13 @@ class Component extends DCLogic {
         if (gframe.getAttribute('src') !== want) gframe.setAttribute('src', want);
       }
       if (ctrlRow) ctrlRow.style.display = 'none';
-      if (noteEl) noteEl.textContent = real ? 'streams from Google Drive' : 'video not uploaded yet';
+      if (noteEl) {
+        if (real) {
+          noteEl.innerHTML = 'streams from Google Drive · <a href="' + rec.video.replace('/preview', '/view') + '" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;">trouble playing? open in a new tab ↗</a>';
+        } else {
+          noteEl.textContent = 'video not uploaded yet';
+        }
+      }
 
       const dtext = (card.querySelector('.fv-dur') || {}).textContent || '';
       const m = dtext.match(/(\d+)\s*min/i);

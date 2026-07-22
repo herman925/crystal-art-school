@@ -392,9 +392,18 @@ class Component extends DCLogic {
         const want = real ? u.video : 'about:blank';
         if (gframe.getAttribute('src') !== want) gframe.setAttribute('src', want);
       }
-      if (demoNote) demoNote.textContent = real
-        ? '(video streams from Google Drive — use the player’s own controls, then press “Mark complete & continue” below)'
-        : '(this lesson’s video hasn’t been uploaded yet — the cover is shown as a placeholder; you can still mark the lesson complete below)';
+      /* Drive's embedded player needs third-party cookies; Incognito, Safari,
+         Brave and strict-privacy Chrome show "Unable to load video" instead.
+         Always offer a first-party escape hatch: opening the file directly on
+         drive.google.com plays for everyone. */
+      if (demoNote) {
+        if (real) {
+          demoNote.innerHTML = '(video streams from Google Drive — if it says “Unable to load video”, your browser is blocking third-party cookies: '
+            + '<a href="' + u.video.replace('/preview', '/view') + '" target="_blank" rel="noopener" style="color:inherit;font-weight:700;text-decoration:underline;">watch it in a new tab ↗</a>)';
+        } else {
+          demoNote.textContent = '(this lesson’s video hasn’t been uploaded yet — the cover is shown as a placeholder; you can still mark the lesson complete below)';
+        }
+      }
     };
 
     const loadUnit = (i, autoplay) => {
