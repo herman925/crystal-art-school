@@ -83,9 +83,9 @@ window.CAS_COURSES = [
         "subtitle": "Hatching sets the weight and form before any paint arrives.",
         "dur": 1421,
         "poster": "img/courses/clouds-beginner/l03.jpg",
-        "video": "https://drive.google.com/file/d/1ipPkizliP0go8QDh8DgqZOG_6cWC5Mnm/preview",
+        "video": "https://drive.google.com/file/d/1dIVNNFUxZDxTAoAKAF7q9vbXxoGgPPmu/preview",
         "free": false,
-        "src": "CloudsLesson5.mp4",
+        "src": "CloudsLesson5A.mp4",
         "srcFolder": "Lesson 03"
       },
       {

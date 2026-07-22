@@ -14,7 +14,9 @@
           "posterH": 1280,
           "dur": 733,
           "srcVideo": "CloudsLesson3.mp4",
-          "altVideos": []
+          "altVideos": [
+            "CloudsLesson2.mp4"
+          ]
         },
         {
           "n": 2,
@@ -33,9 +35,8 @@
           "posterW": 1280,
           "posterH": 1280,
           "dur": 1421,
-          "srcVideo": "CloudsLesson5.mp4",
+          "srcVideo": "CloudsLesson5A.mp4",
           "altVideos": [
-            "CloudsLesson5A.mp4",
             "CloudsLesson5B.mp4"
           ]
         },
@@ -411,7 +412,8 @@
     }
   ],
   "warnings": [
-    "clouds-beginner/Lesson 03 has 3 videos: CloudsLesson5.mp4, CloudsLesson5A.mp4, CloudsLesson5B.mp4 — using the first",
+    "clouds-beginner/Lesson 01 has 2 videos (CloudsLesson3.mp4=733s, CloudsLesson2.mp4=48s) — primary = longest: CloudsLesson3.mp4",
+    "clouds-beginner/Lesson 03 has 2 videos (CloudsLesson5A.mp4=1421s, CloudsLesson5B.mp4=1337s) — primary = longest: CloudsLesson5A.mp4",
     "free video not on disk (Drive sync?): Watercolor Airport 2.mov"
   ]
 }

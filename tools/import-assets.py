@@ -204,13 +204,20 @@ def import_courses(force):
             meta = encode_image(os.path.join(folder, images[0]),
                                 os.path.join(SITE_DIR, rel), MAX_EDGE_POSTER, force)
 
-            # Lesson 03 of the beginner course ships CloudsLesson5 / 5A / 5B.
-            # Report every candidate so the ambiguity stays visible (spec Q2).
-            if len(videos) > 1:
-                warn("%s/%s has %d videos: %s — using the first"
-                     % (course["slug"], sub or ".", len(videos), ", ".join(videos)))
+            # A lesson folder may hold several videos (e.g. Beginner Lesson 01
+            # ships the sub-minute CloudsLesson2 intro next to the real
+            # CloudsLesson3; Lesson 03 is a two-part 5A/5B). The player has one
+            # slot, so the LONGEST video is the primary and the rest are
+            # recorded as altVideos — never dropped silently.
+            durations = {v: probe_duration(os.path.join(folder, v)) for v in videos}
+            ordered = sorted(videos, key=lambda v: durations[v] or 0, reverse=True)
+            if len(ordered) > 1:
+                warn("%s/%s has %d videos (%s) — primary = longest: %s"
+                     % (course["slug"], sub or ".", len(ordered),
+                        ", ".join("%s=%ss" % (v, durations[v]) for v in ordered), ordered[0]))
 
-            dur = probe_duration(os.path.join(folder, videos[0])) if videos else None
+            primary = ordered[0] if ordered else None
+            dur = durations.get(primary) if primary else None
             if dur is None and videos:
                 warn("no duration for %s/%s" % (course["slug"], sub or "."))
 
@@ -220,8 +227,8 @@ def import_courses(force):
                 "poster": rel,
                 "posterW": meta["w"], "posterH": meta["h"],
                 "dur": dur,
-                "srcVideo": videos[0] if videos else None,
-                "altVideos": videos[1:],
+                "srcVideo": primary,
+                "altVideos": [v for v in ordered[1:]],
             })
             print("   l%02d  %-22s %s" % (n, images[0], ("%ds" % dur) if dur else "no video"))
 
