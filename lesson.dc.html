@@ -29,6 +29,9 @@
 .stage.has-video .gdrive-frame { display: block; }
 .stage.has-video .veil, .stage.has-video .sheen { display: none; }
 .stage .unit-flag { pointer-events: none; z-index: 7; }
+.stage-missing { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); z-index: 6; display: none; font-family: var(--font-cond); font-size: 11px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: #f3ede1; background: rgba(20,17,13,.72); border-radius: 999px; padding: 7px 16px; backdrop-filter: blur(3px); white-space: nowrap; }
+.stage.is-missing .stage-missing { display: block; }
+.stage.is-missing .veil, .stage.is-missing .sheen { display: none; }
 /* emulated fullscreen for the demo player */
 .player.fs { position: fixed; inset: 0; z-index: 600; margin: 0; border-radius: 0; background: #0d0b08; display: flex; flex-direction: column; }
 .player.fs .stage { flex: 1; min-height: 0; border-radius: 0; aspect-ratio: auto; }
@@ -122,6 +125,7 @@
         <div class="stage" id="stage">
           <img class="poster" id="stage-poster" src="img/cover2.jpg" alt="Lesson video">
           <iframe class="gdrive-frame" id="gdrive-frame" title="Lesson video player" allow="autoplay; fullscreen" allowfullscreen loading="lazy"></iframe>
+          <div class="stage-missing" id="stage-missing">Video coming soon</div>
           <div class="sheen" aria-hidden="true"></div>
           <span class="unit-flag" id="unit-flag">Lesson 1</span>
           <div class="veil" id="stage-veil">
@@ -377,16 +381,20 @@ class Component extends DCLogic {
     const controlsRow = document.querySelector('.player .controls');
     const demoNote = $('demo-note');
     const setVideoMode = (u) => {
+      /* real -> Drive iframe; missing -> the lesson's cover photo stays up as
+         a static placeholder with a "coming soon" chip. The old simulated
+         demo player is retired: no fake clock, no fake seek bar. */
       const real = !!u.video;
       stage.classList.toggle('has-video', real);
-      if (controlsRow) controlsRow.style.display = real ? 'none' : '';
+      stage.classList.toggle('is-missing', !real);
+      if (controlsRow) controlsRow.style.display = 'none';
       if (gframe) {
         const want = real ? u.video : 'about:blank';
         if (gframe.getAttribute('src') !== want) gframe.setAttribute('src', want);
       }
       if (demoNote) demoNote.textContent = real
         ? '(video streams from Google Drive — use the player’s own controls, then press “Mark complete & continue” below)'
-        : '(prototype — the video is simulated and plays at 12× speed, so you can feel the whole journey in a few minutes)';
+        : '(this lesson’s video hasn’t been uploaded yet — the cover is shown as a placeholder; you can still mark the lesson complete below)';
     };
 
     const loadUnit = (i, autoplay) => {
@@ -399,7 +407,7 @@ class Component extends DCLogic {
       tDur.textContent = fmt(u.dur);
       notes.forEach(a => a.classList.toggle('active', parseInt(a.dataset.unit, 10) === state.unit));
       setVideoMode(u);
-      setPlaying(!!autoplay && !u.video);
+      setPlaying(false);
       renderTime();
       renderProgress();
       save();

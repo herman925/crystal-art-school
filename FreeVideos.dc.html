@@ -45,6 +45,9 @@
 .fvm-stage .gdrive-frame { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: none; z-index: 5; background: #000; }
 .fvm-stage.has-video .gdrive-frame { display: block; }
 .fvm-stage.has-video .fvm-veil { display: none; }
+.fvm-stage.is-missing .fvm-veil { display: none; }
+.fvm-missing { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); z-index: 6; display: none; font-family: var(--font-cond); font-size: 11px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: #f3ede1; background: rgba(20,17,13,.72); border-radius: 999px; padding: 7px 16px; backdrop-filter: blur(3px); white-space: nowrap; }
+.fvm-stage.is-missing .fvm-missing { display: block; }
 .fv-modal.open { display: flex; }
 .fvm-backdrop { position: absolute; inset: 0; background: rgba(15,12,9,.78); backdrop-filter: blur(4px); }
 .fvm-panel { position: relative; z-index: 1; width: min(880px, 100%); background: #181410; border-radius: 16px; overflow: hidden; box-shadow: 0 40px 90px rgba(0,0,0,.6); }
@@ -164,6 +167,7 @@
     <div class="fvm-stage" id="fvm-stage">
       <img id="fvm-poster" alt="">
       <iframe class="gdrive-frame" id="fvm-frame" title="Video player" allow="autoplay; fullscreen" allowfullscreen loading="lazy"></iframe>
+      <div class="fvm-missing" id="fvm-missing">Video coming soon</div>
       <div class="fvm-veil" id="fvm-veil"><button class="fvm-big" id="fvm-big" type="button" aria-label="Play">▶</button></div>
     </div>
     <div class="fvm-controls">
@@ -245,15 +249,18 @@ class Component extends DCLogic {
       $id('fvm-desc').textContent = p ? p.textContent : '';
 
       /* real video? look the card up in the data by slug */
+      /* real -> Drive iframe; missing -> the poster stays as a static
+         placeholder with a "coming soon" chip. No simulated playback. */
       const rec = (window.CAS_FREE_VIDEOS || []).find((v) => v.slug === card.dataset.slug);
       const real = !!(rec && rec.video);
       stage.classList.toggle('has-video', real);
+      stage.classList.toggle('is-missing', !real);
       if (gframe) {
         const want = real ? rec.video : 'about:blank';
         if (gframe.getAttribute('src') !== want) gframe.setAttribute('src', want);
       }
-      if (ctrlRow) ctrlRow.style.display = real ? 'none' : '';
-      if (noteEl) noteEl.textContent = real ? 'streams from Google Drive' : 'demo player · final site: YouTube embed';
+      if (ctrlRow) ctrlRow.style.display = 'none';
+      if (noteEl) noteEl.textContent = real ? 'streams from Google Drive' : 'video not uploaded yet';
 
       const dtext = (card.querySelector('.fv-dur') || {}).textContent || '';
       const m = dtext.match(/(\d+)\s*min/i);
@@ -264,7 +271,7 @@ class Component extends DCLogic {
       modal.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
     };
-    const closeV = () => { setPlaying(false); stage.classList.remove('has-video'); if (gframe) gframe.setAttribute('src', 'about:blank'); modal.classList.remove('open'); modal.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; };
+    const closeV = () => { setPlaying(false); stage.classList.remove('has-video'); stage.classList.remove('is-missing'); if (gframe) gframe.setAttribute('src', 'about:blank'); modal.classList.remove('open'); modal.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; };
     /* ---- cards from the generated data ----
        Duration badges are only emitted as "N min" because the modal parses
        them with /(\d+)\s*min/i and silently falls back to 900s otherwise. */
@@ -278,7 +285,7 @@ class Component extends DCLogic {
         return '<a class="fv-card" href="#" data-slug="' + fvEsc(v.slug) + '">' +
           '<span class="fv-thumb"><img src="' + fvEsc(v.poster) + '" alt="' + fvEsc(v.title) + '" loading="lazy">' +
             '<span class="fv-playbtn"><span>▶</span></span>' +
-            (mins ? '<span class="fv-dur">' + mins + ' min</span>' : '') +
+            (mins ? '<span class="fv-dur">' + mins + ' min</span>' : '<span class="fv-dur">Coming soon</span>') +
           '</span>' +
           '<h3>' + fvEsc(v.title) + '</h3>' +
           '<p>' + fvEsc(v.desc) + '</p>' +
