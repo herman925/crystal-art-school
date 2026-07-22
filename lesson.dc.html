@@ -16,11 +16,19 @@
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <script src="js/site-extras.js"></script>
 <script src="js/site-nav.js"></script>
+<script src="js/site-footer.js"></script>
+<script src="js/course-data.js"></script>
 <script src="js/motion.js"></script>
 <style>
 /* "now playing" must only show on the active lesson (the .now rule in the
    design css overrides the hidden attribute, so re-assert it) */
 .unit-row .now[hidden] { display: none; }
+/* real video: Google Drive preview iframe fills the stage above the poster.
+   The unit-flag stays visible but must not steal clicks from the player UI. */
+.stage .gdrive-frame { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: none; z-index: 6; background: #000; }
+.stage.has-video .gdrive-frame { display: block; }
+.stage.has-video .veil, .stage.has-video .sheen { display: none; }
+.stage .unit-flag { pointer-events: none; z-index: 7; }
 /* emulated fullscreen for the demo player */
 .player.fs { position: fixed; inset: 0; z-index: 600; margin: 0; border-radius: 0; background: #0d0b08; display: flex; flex-direction: column; }
 .player.fs .stage { flex: 1; min-height: 0; border-radius: 0; aspect-ratio: auto; }
@@ -98,15 +106,11 @@
 
 <header class="page-hero">
   <div class="container">
-    <div class="crumbs"><a href="Lessons.dc.html">Courses</a> <span aria-hidden="true">→</span> <a href="course.dc.html?id=cloud-painting">Introduction to Cloud Painting</a></div>
-    <h1 class="marker-title" style="font-size:clamp(30px,4vw,54px);margin-top:12px;color:var(--banner-ink);">Introduction to Cloud Painting</h1>
-    <p class="lead" style="color:var(--banner-ink);opacity:.85;">Clouds are the sky's expressions — ever-changing, moody, breathtaking. Twenty-four lessons, from the first pencil stroke to your final gallery-worthy sky.</p>
-    <div class="lesson-meta-row">
-      <span>Watercolour</span><span class="dot">✦</span>
-      <span>Beginner</span><span class="dot">✦</span>
-      <span>24 lessons · ~6h</span><span class="dot">✦</span>
-      <span>Taught by Crystal Lau</span>
-    </div>
+    <!-- filled from window.CAS_COURSES for the course named by ?c= -->
+    <div class="crumbs"><a href="Lessons.dc.html">Courses</a> <span aria-hidden="true">→</span> <a id="lx-course-link" href="course.dc.html"></a></div>
+    <h1 class="marker-title" id="lx-title" style="font-size:clamp(30px,4vw,54px);margin-top:12px;color:var(--banner-ink);"></h1>
+    <p class="lead" id="lx-blurb" style="color:var(--banner-ink);opacity:.85;"></p>
+    <div class="lesson-meta-row" id="lx-meta"></div>
   </div>
 </header>
 
@@ -117,6 +121,7 @@
       <div class="player">
         <div class="stage" id="stage">
           <img class="poster" id="stage-poster" src="img/cover2.jpg" alt="Lesson video">
+          <iframe class="gdrive-frame" id="gdrive-frame" title="Lesson video player" allow="autoplay; fullscreen" allowfullscreen loading="lazy"></iframe>
           <div class="sheen" aria-hidden="true"></div>
           <span class="unit-flag" id="unit-flag">Lesson 1</span>
           <div class="veil" id="stage-veil">
@@ -135,16 +140,16 @@
           <button class="ctl-btn" id="fs-btn" type="button" aria-label="Toggle fullscreen" title="Fullscreen">⛶</button>
         </div>
       </div>
-      <p class="demo-note">(prototype — the video is simulated and plays at 12× speed, so you can feel the whole journey in a few minutes)</p>
+      <p class="demo-note" id="demo-note">(prototype — the video is simulated and plays at 12× speed, so you can feel the whole journey in a few minutes)</p>
 
       <div class="finish-card" id="finish-card">
         <span class="fc-star">✦</span>
         <h2>You painted the whole sky!</h2>
-        <p>Twenty-four lessons, six modules, two finished scenes — that's the full course. Share your final piece in the community; the best skies land on the showcase wall.</p>
+        <p id="fc-blurb"></p>
         <div class="cert">
           <div class="c1">Crystal's Art School</div>
-          <div class="c2">Introduction to Cloud Painting</div>
-          <div class="c3">completed · 24 of 24 lessons</div>
+          <div class="c2" id="fc-course"></div>
+          <div class="c3" id="fc-count"></div>
         </div>
         <div class="fc-btns">
           <a class="btn primary big" href="Lessons.dc.html">Browse all courses <span class="arr" aria-hidden="true">→</span></a>
@@ -167,7 +172,7 @@
       <div class="progress-card">
         <div class="pc-top">
           <span class="pc-label">Your progress</span>
-          <span class="pc-count"><span id="done-count">0</span> of 24</span>
+          <span class="pc-count"><span id="done-count">0</span> of <span id="lx-total">0</span></span>
         </div>
         <div class="pbar"><div class="pfill" id="pfill"></div></div>
         <button class="pc-reset" id="reset-btn" type="button">restart course</button>
@@ -207,42 +212,8 @@
   </section>
 </main>
 
-<footer class="site-footer">
-  <div class="inner">
-    <div class="footer-grid">
-      <div>
-        <div class="footer-brand">CRYSTAL'S</div>
-        <p style="font-size:14px;opacity:.85;max-width:34ch;margin:0;">Watercolour, acrylic &amp; drawing — taught slowly and carefully from a small studio of plaster, wood and iron.</p>
-        <div class="social-row">
-          <a class="social-btn" href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" stroke="none"></circle></svg></a>
-          <a class="social-btn" href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 9h3V6h-3c-1.7 0-3 1.3-3 3v2H9v3h2v6h3v-6h2.5l.5-3H14v-1.5c0-.3.2-.5.5-.5z"></path></svg></a>
-        </div>
-      </div>
-      <div>
-        <h4>Learn</h4>
-        <a href="Lessons.dc.html">All lessons</a>
-        <a href="Lessons.dc.html#membership">Membership</a>
-        <a href="FreeVideos.dc.html">Free videos</a>
-      </div>
-      <div>
-        <h4>Explore</h4>
-        <a href="Gallery.dc.html">Gallery</a>
-        <a href="Showcase.dc.html">Student showcase</a>
-        <a href="Blog.dc.html">Blog</a>
-        <a href="About.dc.html">About</a>
-      </div>
-      <div>
-        <h4>Contact</h4>
-        <a href="About.dc.html#contact">crystalau430@gmail.com</a>
-        <a href="About.dc.html#contact">Discord · Instagram</a>
-        <a href="About.dc.html#terms">Terms &amp; privacy</a>
-      </div>
-    </div>
-    <div class="footer-meta">
-      <span>© 2026 Crystal's Art School</span>
-    </div>
-  </div>
-</footer>
+<!-- footer markup lives in js/site-footer.js — single source of truth -->
+<footer class="site-footer" aria-label="Site footer"></footer>
 
 </div>
 </x-dc>
@@ -273,54 +244,87 @@ class Component extends DCLogic {
     /* burger handled by js/site-nav.js */
     document.querySelectorAll('.cart-badge').forEach(b => { try { const n = JSON.parse(localStorage.getItem('cas-cart') || '[]').reduce((a, i) => a + i.qty, 0); b.textContent = n; b.style.display = n > 0 ? 'grid' : 'none'; } catch (e) {} });
 
-    /* ---- simulated lesson player ---- */
-    const IMGS = ['cover2.jpg', 'cover3.jpg', 'Liquidwatercolor.jpg', 'cover4.jpg', 'Postercolor.jpg', 'cover1.jpg', 'Sketchbook.jpg', 'BrushA.jpg'];
-    const MODS = ['Building the foundation', 'Mastering the values', 'A sky for every mood', "The artist's palette", 'Essential techniques', 'From study to scenery'];
-    const UNITS = [
-      { title: 'Welcome & materials for skies', dur: 492, note: 'Welcome to the course. We tour the small kit — one round brush, one flat, three tubes and decent paper — and set up the desk so nothing fights you later.', tip: 'Cheap paint on good paper beats good paint on cheap paper — if you upgrade one thing, upgrade the paper.' },
-      { title: 'Seeing clouds as simple shapes', dur: 665, note: "Clouds look chaotic until you draw the geometry underneath. We map cumulus volumes with overlapping circles, the way you'd construct a figure." },
-      { title: 'Pencil sketching & hatching volume', dur: 820, note: 'Pencil first: hatching establishes the weight and form of each cloud, so the brush already knows where the shadow lives before any paint arrives.' },
-      { title: 'Mapping a cloudscape', dur: 742, note: 'We compose a full cloudscape from thumbnails — horizon low, masses balanced — before any water touches paper.', tip: 'Three thumbnails, two minutes each. The best composition is almost never the first one.' },
-      { title: 'Reading light–grey–dark', dur: 648, note: 'The secret to "fluffy" is dimension: every cloud passage is light, grey or dark. We sort a reference photo into just those three families.' },
-      { title: 'Where the sun hits', dur: 735, note: 'Where the sun sits decides everything. We practise placing the lit face of a cloud and making every other cloud in the sky agree with it.' },
-      { title: 'Shadow shapes that stay soft', dur: 843, note: 'Cloud shadows are warm-grey and soft. We mix them so undersides glow instead of going muddy.' },
-      { title: 'A three-value cloud study', dur: 930, note: 'The graduation study for this module: one cumulus, three values, twenty minutes. Flat shapes become a 3D object that pops off the page.', tip: "Squint. If the study still reads at arm's length with your eyes half-closed, the values are right." },
-      { title: 'Cumulus — bold & puffy', dur: 984, note: 'Cumulus: bold, puffy, full of volume. Big shapes first, crisp sunlit tops, soft shadowed bellies.' },
-      { title: 'Stratus — streaks on the horizon', dur: 776, note: 'Stratus: soft horizontal streaks that calm a scene. One well-loaded stroke, pulled sideways, does most of the work.' },
-      { title: 'Wispy cirrus edges', dur: 678, note: 'Cirrus is the dry-brush lesson: barely-there wisps with a thirsty brush and a light hand.' },
-      { title: 'Mixing cloud types in one sky', dur: 947, note: 'Real skies mix families. We layer cumulus over stratus without the sky turning busy.' },
-      { title: 'Daylight brilliance', dur: 814, note: 'Crisp white clouds against deep blue — and how to keep the blue from swallowing the cloud.', tip: 'Mix two blues: one for the zenith, a greyer one near the horizon. The sky is a gradient, not a wall.' },
-      { title: 'Golden hour', dur: 962, note: 'The fiery oranges, yellows and reds of a setting sun — and the discipline of letting them stay clean instead of blending to brown.' },
-      { title: 'Dreamlike pastels', dur: 866, note: 'Ethereal purples, pinks and soft yellows for the quiet, magical skies.' },
-      { title: 'Layering atmospheric tones', dur: 911, note: 'The module capstone: the same sky at three times of day, painted side by side.' },
-      { title: 'Wet-on-wet cloud edges', dur: 892, note: 'Wet-on-wet: soft, seamless transitions and bleeding cloud edges. We control the chaos with timing, not fiddling.', tip: "Watch the shine. When the paper turns from glossy to satin, that's your wet-on-wet window." },
-      { title: 'Gradient washes for skies', dur: 788, note: 'The perfectly smooth backdrop every cloud needs: load a bead, tilt the board, walk away.' },
-      { title: 'Negative painting & hard edges', dur: 936, note: 'The brightest highlight is paper you never touched. We plan the whites in advance and guard them to the end.' },
-      { title: 'Lifting & softening', dur: 764, note: 'The rescue kit: a damp brush, clean tissue, and knowing when to stop.' },
-      { title: 'Storm clouds over the ocean', dur: 1095, note: 'First full scene: dramatic storm clouds over water — everything from the values module, at full volume.', tip: 'Mix a big well of your dark before you start — running out mid-storm is how storms go muddy.' },
-      { title: 'Evening silhouettes & power lines', dur: 1048, note: 'Second scene: a peaceful dusk silhouette with power lines — quiet, graphic, and much easier than it looks.' },
-      { title: 'Composing a full cloudscape', dur: 1000, note: 'You design your own cloudscape — reference, thumbnails, value plan, palette — and I paint alongside you.' },
-      { title: 'Final piece — your gallery sky', dur: 1192, note: 'The final piece: a gallery-worthy sky, start to finish, using every technique in the course.', tip: 'Frame this one. You earned it.' }
-    ];
-    UNITS.forEach((u, i) => { u.img = 'img/' + IMGS[i % IMGS.length]; });
-    const SPEED = 12;
-    const KEY = 'cas-cloud-progress';
+    /* ---- simulated lesson player, driven by window.CAS_COURSES ----
+       Which course is decided by ?c=<id>, which lesson by ?u=<index>.
+       Posters are per-lesson cover photos imported from the client's assets
+       folder — the old build cycled 8 stock images with IMGS[i % 8], so three
+       different lessons could show the same still. */
+    let COURSE = null;
+    try {
+      const q = new URLSearchParams(location.search);
+      COURSE = (window.CAS_COURSE_BY_ID && window.CAS_COURSE_BY_ID(q.get('c') || '')) || null;
+    } catch (e) {}
+    if (!COURSE && window.CAS_COURSE_BY_ID) COURSE = window.CAS_COURSE_BY_ID(window.CAS_DEFAULT_COURSE);
+    if (!COURSE) return;
 
-    let state = { unit: 0, t: 0, done: new Array(24).fill(false) };
-    try { const sv = JSON.parse(localStorage.getItem(KEY) || 'null'); if (sv && sv.done && sv.done.length === 24) state = sv; } catch (e) {}
+    const UNITS = (COURSE.lessons || []).map((l) => ({
+      title: l.title,
+      dur: l.dur || 60,
+      note: l.subtitle,
+      img: l.poster,
+      video: l.video || null   // Google Drive preview URL, or null = simulated
+    }));
+    const N = UNITS.length;
+    if (!N) return;
+
+    /* module lookup: data stores 1-based inclusive ranges, not fixed blocks */
+    const MODULES = COURSE.modules || [];
+    const moduleOf = (i) => {
+      for (let m = 0; m < MODULES.length; m++) {
+        if (i + 1 >= MODULES[m].from && i + 1 <= MODULES[m].to) return { i: m, name: MODULES[m].name };
+      }
+      return null;
+    };
+
+    const runtimeStr = (secs) => {
+      const h = Math.floor(secs / 3600), m = Math.round((secs % 3600) / 60);
+      return h ? (m ? h + 'h ' + m + 'm' : h + 'h') : m + 'm';
+    };
+    const courseHref = 'course.dc.html?id=' + encodeURIComponent(COURSE.id);
+    document.title = COURSE.title + " · Crystal's Art School";
+    const link = document.getElementById('lx-course-link');
+    if (link) { link.href = courseHref; link.textContent = COURSE.title; }
+    const setText = (id, txt) => { const el = document.getElementById(id); if (el) el.textContent = txt; };
+    setText('lx-title', COURSE.title);
+    setText('lx-blurb', COURSE.blurb);
+    setText('lx-total', String(N));
+    setText('fc-course', COURSE.title);
+    setText('fc-count', 'completed · ' + N + ' of ' + N + (N === 1 ? ' lesson' : ' lessons'));
+    setText('fc-blurb', N + (N === 1 ? ' lesson' : ' lessons')
+      + (MODULES.length ? ', ' + MODULES.length + ' modules' : '')
+      + " — that's the full course. Share your final piece in the community; the best skies land on the showcase wall.");
+    const metaRow = document.getElementById('lx-meta');
+    if (metaRow) {
+      const lvl = COURSE.difficulty.charAt(0).toUpperCase() + COURSE.difficulty.slice(1).replace('-', ' ');
+      metaRow.innerHTML =
+        '<span>' + COURSE.tag + '</span><span class="dot">✦</span>' +
+        '<span>' + lvl + '</span><span class="dot">✦</span>' +
+        '<span>' + N + (N === 1 ? ' lesson · ~' : ' lessons · ~') + runtimeStr(COURSE.totalSeconds) + '</span>' +
+        '<span class="dot">✦</span><span>Taught by Crystal Lau</span>';
+    }
+
+    const SPEED = 12;
+    /* progress is namespaced per course — a shared key made lesson 3 of every
+       course go green as soon as lesson 3 of one course was finished */
+    const KEY = 'cas-progress-' + COURSE.id;
+
+    const blankState = () => ({ unit: 0, t: 0, done: new Array(N).fill(false) });
+    let state = blankState();
+    try { const sv = JSON.parse(localStorage.getItem(KEY) || 'null'); if (sv && sv.done && sv.done.length === N) state = sv; } catch (e) {}
     const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} };
 
-    /* build the 24 lesson notes + sidebar rows */
+    /* build the lesson notes + sidebar rows */
     const escl = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
     const fmt0 = (s) => Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
     document.getElementById('notes-holder').innerHTML = UNITS.map((u, i) =>
       '<article class="unit-notes' + (i === 0 ? ' active' : '') + '" data-unit="' + i + '">' +
-        '<div style="font-family:var(--font-cond);font-weight:600;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--coral);margin-bottom:8px;">Module ' + (Math.floor(i / 4) + 1) + ' · ' + escl(MODS[Math.floor(i / 4)]) + '</div>' +
+        (moduleOf(i) ? '<div style="font-family:var(--font-cond);font-weight:600;font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--coral);margin-bottom:8px;">Module ' + (moduleOf(i).i + 1) + ' · ' + escl(moduleOf(i).name) + '</div>' : '') +
         '<h2>' + escl(u.title) + '</h2><p>' + escl(u.note) + '</p>' +
         (u.tip ? '<div class="tip-card"><span class="hand-note">Crystal' + String.fromCharCode(39) + 's note ✦</span>' + escl(u.tip) + '</div>' : '') +
       '</article>').join('');
     document.getElementById('rows-holder').innerHTML = UNITS.map((u, i) =>
-      (i % 4 === 0 ? '<div class="ch"' + (i ? ' style="margin-top:16px;"' : '') + '>Module ' + (i / 4 + 1) + ' — ' + escl(MODS[i / 4]) + '</div>' : '') +
+      ((moduleOf(i) && (i === 0 || !moduleOf(i - 1) || moduleOf(i - 1).i !== moduleOf(i).i))
+        ? '<div class="ch"' + (i ? ' style="margin-top:16px;"' : '') + '>Module ' + (moduleOf(i).i + 1) + ' — ' + escl(moduleOf(i).name) + '</div>' : '') +
       '<button class="unit-row" data-unit="' + i + '" type="button"><span class="st">' + (i + 1) + '</span><span class="ut">' + escl(u.title) + ' <span class="now" hidden>· now playing</span></span><span class="ud">' + fmt0(u.dur) + '</span></button>').join('');
 
     const $ = (id) => document.getElementById(id);
@@ -337,7 +341,7 @@ class Component extends DCLogic {
     const renderProgress = () => {
       const n = doneTotal();
       doneCount.textContent = n;
-      pfill.style.width = (n / 24 * 100) + '%';
+      pfill.style.width = (n / N * 100) + '%';
       rows.forEach((row, i) => {
         row.classList.toggle('done', state.done[i]);
         row.classList.toggle('current', i === state.unit);
@@ -345,8 +349,8 @@ class Component extends DCLogic {
         row.querySelector('.now').hidden = i !== state.unit;
       });
       doneTag.hidden = !state.done[state.unit];
-      completeBtn.innerHTML = state.unit < 23 ? 'Mark complete &amp; continue <span class="arr" aria-hidden="true">→</span>' : 'Mark complete &amp; finish <span class="arr" aria-hidden="true">→</span>';
-      if (n === 24) finishCard.classList.add('show'); else finishCard.classList.remove('show');
+      completeBtn.innerHTML = state.unit < N - 1 ? 'Mark complete &amp; continue <span class="arr" aria-hidden="true">→</span>' : 'Mark complete &amp; finish <span class="arr" aria-hidden="true">→</span>';
+      if (n === N) finishCard.classList.add('show'); else finishCard.classList.remove('show');
     };
 
     const renderTime = () => {
@@ -366,8 +370,27 @@ class Component extends DCLogic {
       if (on) { lastTick = performance.now(); if (!raf) raf = requestAnimationFrame(tick); }
     };
 
+    /* Real videos stream from Google Drive in an iframe. The Drive player
+       exposes no JS API, so the simulated clock/seek bar is hidden for those
+       units and progress is driven by "Mark complete & continue" alone. */
+    const gframe = $('gdrive-frame');
+    const controlsRow = document.querySelector('.player .controls');
+    const demoNote = $('demo-note');
+    const setVideoMode = (u) => {
+      const real = !!u.video;
+      stage.classList.toggle('has-video', real);
+      if (controlsRow) controlsRow.style.display = real ? 'none' : '';
+      if (gframe) {
+        const want = real ? u.video : 'about:blank';
+        if (gframe.getAttribute('src') !== want) gframe.setAttribute('src', want);
+      }
+      if (demoNote) demoNote.textContent = real
+        ? '(video streams from Google Drive — use the player’s own controls, then press “Mark complete & continue” below)'
+        : '(prototype — the video is simulated and plays at 12× speed, so you can feel the whole journey in a few minutes)';
+    };
+
     const loadUnit = (i, autoplay) => {
-      state.unit = Math.max(0, Math.min(23, i));
+      state.unit = Math.max(0, Math.min(N - 1, i));
       state.t = 0;
       const u = UNITS[state.unit];
       poster.src = u.img;
@@ -375,7 +398,8 @@ class Component extends DCLogic {
       flag.textContent = 'Lesson ' + (state.unit + 1) + ' — ' + u.title;
       tDur.textContent = fmt(u.dur);
       notes.forEach(a => a.classList.toggle('active', parseInt(a.dataset.unit, 10) === state.unit));
-      setPlaying(!!autoplay);
+      setVideoMode(u);
+      setPlaying(!!autoplay && !u.video);
       renderTime();
       renderProgress();
       save();
@@ -390,10 +414,10 @@ class Component extends DCLogic {
       renderProgress();
       /* no auto-advance: a finished video stays put; "Mark complete & continue"
          moves to the next lesson but never autoplays it */
-      if (!viaVideo && state.unit < 23) {
+      if (!viaVideo && state.unit < N - 1) {
         setTimeout(() => loadUnit(state.unit + 1, false), 250);
       }
-      if (doneTotal() === 24) { setPlaying(false); save(); renderProgress(); }
+      if (doneTotal() === N) { setPlaying(false); save(); renderProgress(); }
     };
 
     const tick = (now) => {
@@ -414,8 +438,8 @@ class Component extends DCLogic {
     seek.addEventListener('click', seekTo);
     rows.forEach(row => row.addEventListener('click', () => loadUnit(parseInt(row.dataset.unit, 10), false)));
     completeBtn.addEventListener('click', () => markDone(false));
-    $('reset-btn').addEventListener('click', () => { state = { unit: 0, t: 0, done: new Array(24).fill(false) }; save(); loadUnit(0, false); });
-    $('watch-again').addEventListener('click', () => { state = { unit: 0, t: 0, done: new Array(24).fill(false) }; save(); loadUnit(0, false); try { stage.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) {} });
+    $('reset-btn').addEventListener('click', () => { state = blankState(); save(); loadUnit(0, false); });
+    $('watch-again').addEventListener('click', () => { state = blankState(); save(); loadUnit(0, false); try { stage.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) {} });
 
     /* emulated fullscreen */
     const player = document.querySelector('.player');
@@ -427,7 +451,7 @@ class Component extends DCLogic {
     }
 
     let startAt = state.unit;
-    try { const uq = parseInt(new URLSearchParams(location.search).get('u'), 10); if (!isNaN(uq) && uq >= 0 && uq < 24) startAt = uq; } catch (e) {}
+    try { const uq = parseInt(new URLSearchParams(location.search).get('u'), 10); if (!isNaN(uq)) startAt = Math.max(0, Math.min(N - 1, uq)); } catch (e) {}
     loadUnit(startAt, false);
   }
 }

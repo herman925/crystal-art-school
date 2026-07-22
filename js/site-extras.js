@@ -178,14 +178,10 @@
     if (tBtn) { e.preventDefault(); e.stopPropagation(); openTierPop(tBtn); return; }
     // outside-click closes the tier popover
     if (tpPop && tpPop.classList.contains('show') && !e.target.closest('.tp-pop')) closeTierPop();
-    var soc = e.target.closest('.social-btn');
-    if (soc && (soc.getAttribute('href') === '#' || !soc.getAttribute('href'))) {
-      e.preventDefault();
-      var lbl = (soc.getAttribute('aria-label') || '').toLowerCase();
-      var url = lbl.indexOf('face') >= 0 ? 'https://facebook.com/' : lbl.indexOf('insta') >= 0 ? 'https://instagram.com/' : null;
-      if (url) window.open(url, '_blank', 'noopener');
-      return;
-    }
+    /* (removed) placeholder href="#" social buttons used to be intercepted here
+       and sent to bare facebook.com / instagram.com. Every social link is now a
+       real URL emitted by js/site-footer.js, so the hijack would only mask a
+       broken link. */
     var btn = e.target.closest('.cart-btn'); if (!btn) return;
     e.preventDefault(); e.stopPropagation();
     if (!drawer) return;

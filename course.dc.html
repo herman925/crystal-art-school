@@ -16,6 +16,8 @@
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <script src="js/site-extras.js"></script>
 <script src="js/site-nav.js"></script>
+<script src="js/site-footer.js"></script>
+<script src="js/course-data.js"></script>
 <script src="js/motion.js"></script>
 </helmet>
 <div class="cas-root" data-theme="D">
@@ -160,102 +162,22 @@
   </section>
 </main>
 
-<footer class="site-footer">
-  <div class="inner">
-    <div class="footer-grid">
-      <div>
-        <div class="footer-brand">CRYSTAL'S</div>
-        <p style="font-size:14px;opacity:.85;max-width:34ch;margin:0;">Watercolour, acrylic &amp; drawing — taught slowly and carefully from a small studio of plaster, wood and iron.</p>
-      </div>
-      <div>
-        <h4>Learn</h4>
-        <a href="Lessons.dc.html">All lessons</a>
-        <a href="Lessons.dc.html#membership">Membership</a>
-        <a href="FreeVideos.dc.html">Free videos</a>
-      </div>
-      <div>
-        <h4>Explore</h4>
-        <a href="Gallery.dc.html">Gallery</a>
-        <a href="Showcase.dc.html">Student showcase</a>
-        <a href="Blog.dc.html">Blog</a>
-        <a href="About.dc.html">About</a>
-      </div>
-      <div>
-        <h4>Contact</h4>
-        <a href="About.dc.html#contact">crystalau430@gmail.com</a>
-        <a href="About.dc.html#contact">Discord · Instagram</a>
-        <a href="About.dc.html#terms">Terms &amp; privacy</a>
-      </div>
-    </div>
-    <div class="footer-meta">
-      <span>© 2026 Crystal's Art School</span>
-    </div>
-  </div>
-</footer>
+<!-- footer markup lives in js/site-footer.js — single source of truth -->
+<footer class="site-footer" aria-label="Site footer"></footer>
 
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;defaultTheme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;A&quot;,&quot;B&quot;,&quot;C&quot;,&quot;D&quot;],&quot;default&quot;:&quot;D&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
 class Component extends DCLogic {
+  /* The course shown is chosen by ?id=. Content itself lives in
+     js/course-data.js (window.CAS_COURSES) — the single source of truth
+     shared with Lessons.dc.html, lesson.dc.html and index.html. */
   course() {
-    return {
-      id: 'cloud-painting',
-      title: 'Introduction to Cloud Painting',
-      tag: 'Watercolour', level: 'Beginner', len: '~6h', lessons: 24,
-      img: 'cover2.jpg', price: 58, was: 72,
-      blurb: "Clouds are the sky's expressions — ever-changing, moody, breathtaking. This course breaks them into simple, actionable steps: from the first pencil stroke to the final vibrant wash, you'll learn to paint the atmosphere itself.",
-      learn: [
-        'Map cloud volumes with simple geometric shapes',
-        'Read light–grey–dark values so clouds turn 3D',
-        'Paint cumulus, stratus and wispy cirrus skies',
-        'Mix daylight, golden-hour and pastel palettes',
-        'Master wet-on-wet, gradient washes and negative painting',
-        'Finish two full scenes — storm sea and evening silhouettes'
-      ],
-      who: [
-        ['Beginners', 'A structured, step-by-step approach to watercolour — no experience assumed.'],
-        ['Hobbyists', 'Move past "flat" paintings and add real depth and drama to your skies.'],
-        ['Nature lovers', 'Capture the tranquility of the horizon in your own sketchbook.']
-      ],
-      modules: [
-        { name: 'Building the foundation — sketching & geometry', lessons: [
-          ['Welcome & materials for skies', "What's on the desk, kept simple", '8:12'],
-          ['Seeing clouds as simple shapes', 'Circles before contours', '11:05'],
-          ['Pencil sketching & hatching volume', 'Weight and form before paint', '13:40'],
-          ['Mapping a cloudscape', 'Composing with geometry', '12:22']
-        ]},
-        { name: 'Mastering the values — light, grey & dark', lessons: [
-          ['Reading light–grey–dark', 'The three-value habit', '10:48'],
-          ['Where the sun hits', 'Placing the light source', '12:15'],
-          ['Shadow shapes that stay soft', 'Undersides without mud', '14:03'],
-          ['A three-value cloud study', 'Flat shapes go 3D', '15:30']
-        ]},
-        { name: 'A sky for every mood — cloud forms', lessons: [
-          ['Cumulus — bold & puffy', 'Volume you can almost hold', '16:24'],
-          ['Stratus — streaks on the horizon', 'Soft horizontal bands', '12:56'],
-          ['Wispy cirrus edges', 'Dry brush, light touch', '11:18'],
-          ['Mixing cloud types in one sky', 'A believable, busy sky', '15:47']
-        ]},
-        { name: "The artist's palette — atmospheric colour", lessons: [
-          ['Daylight brilliance', 'Crisp whites on deep blue', '13:34'],
-          ['Golden hour', 'Fiery oranges, yellows, reds', '16:02'],
-          ['Dreamlike pastels', 'Purples, pinks, soft yellows', '14:26'],
-          ['Layering atmospheric tones', 'Times of day, side by side', '15:11']
-        ]},
-        { name: 'Essential watercolour techniques', lessons: [
-          ['Wet-on-wet cloud edges', 'Seamless, bleeding transitions', '14:52'],
-          ['Gradient washes for skies', 'Perfectly smooth backdrops', '13:08'],
-          ['Negative painting & hard edges', 'Leaving the paper white', '15:36'],
-          ['Lifting & softening', 'Rescue and refine', '12:44']
-        ]},
-        { name: 'From study to scenery', lessons: [
-          ['Storm clouds over the ocean', 'Drama in three values', '18:15'],
-          ['Evening silhouettes & power lines', 'A peaceful dusk scene', '17:28'],
-          ['Composing a full cloudscape', 'Your own sky, planned', '16:40'],
-          ['Final piece — your gallery sky', 'Everything, applied', '19:52']
-        ]}
-      ]
-    };
+    let id = '';
+    try { id = new URLSearchParams(location.search).get('id') || ''; } catch (e) {}
+    return (window.CAS_COURSE_BY_ID && window.CAS_COURSE_BY_ID(id))
+        || (window.CAS_COURSE_BY_ID && window.CAS_COURSE_BY_ID(window.CAS_DEFAULT_COURSE))
+        || null;
   }
 
   componentDidMount() {
@@ -281,27 +203,43 @@ class Component extends DCLogic {
     const renderCart = () => { let n = 0; try { n = JSON.parse(localStorage.getItem('cas-cart') || '[]').reduce((a, i) => a + (i.qty || 1), 0); } catch (e) {} document.querySelectorAll('.cart-badge').forEach(b => { b.textContent = n; b.style.display = n > 0 ? 'grid' : 'none'; }); };
     renderCart();
 
-    /* ---- single course: Introduction to Cloud Painting ---- */
+    /* ---- the course named by ?id= (falls back, never throws) ---- */
     const c = this.course();
+    if (!c) { $('crumb-title').textContent = 'Course not found'; return; }
+
+    const LESSONS = c.lessons || [];
+    const nLessons = LESSONS.length;
+    const clock = (secs) => {
+      if (secs == null) return '—';
+      const m = Math.floor(secs / 60), s = Math.floor(secs % 60);
+      return m + ':' + (s < 10 ? '0' : '') + s;
+    };
+    const runtime = (secs) => {
+      const h = Math.floor(secs / 3600), m = Math.round((secs % 3600) / 60);
+      return h ? (m ? h + 'h ' + m + 'm' : h + 'h') : m + 'm';
+    };
+    const levelLabel = c.difficulty.charAt(0).toUpperCase() + c.difficulty.slice(1).replace('-', ' ');
+
     document.title = c.title + " · Crystal's Art School";
     $('crumb-title').textContent = c.title;
-    $('co-cover').src = 'img/' + c.img;
+    $('co-cover').src = c.cover;
     $('co-cover').alt = c.title;
     $('co-tag').textContent = c.tag + ' course';
     $('co-title').textContent = c.title;
     $('co-blurb').textContent = c.blurb;
-    if (c.was) $('co-flag-sale').style.display = '';
+    if (c.sale && c.was) $('co-flag-sale').style.display = '';
 
     $('co-chips').innerHTML =
       '<span class="cmc">' + esc(c.tag) + '</span>' +
-      '<span class="cmc">' + esc(c.level) + '</span>' +
-      '<span class="cmc">' + c.lessons + ' lessons · ' + esc(c.len) + '</span>' +
+      '<span class="cmc">' + esc(levelLabel) + '</span>' +
+      '<span class="cmc">' + nLessons + (nLessons === 1 ? ' lesson · ' : ' lessons · ')
+        + esc(runtime(c.totalSeconds)) + '</span>' +
       '<span class="cmc">Real reference included</span>';
 
     const buy = $('co-buy');
     buy.setAttribute('data-title', c.title);
     buy.setAttribute('data-price', String(c.price));
-    buy.setAttribute('data-img', c.img);
+    buy.setAttribute('data-img', c.cover.replace(/^img\//, ''));
 
     $('co-learn').innerHTML = c.learn.map(l => '<li>' + esc(l) + '</li>').join('');
     $('co-who').innerHTML = c.who.map(w =>
@@ -311,49 +249,69 @@ class Component extends DCLogic {
       '</div>').join('');
 
     /* ---- bought / unbought views (the switch is for client testing) ---- */
-    const OWN_KEY = 'cas-owned-cloud';
+    /* Storage is namespaced per course, otherwise finishing a Beginner lesson
+       would mark the same index done in every other course. */
+    const OWN_KEY = 'cas-owned-' + c.id;
+    const PROGRESS_KEY = 'cas-progress-' + c.id;
     let owned = false;
     try { owned = localStorage.getItem(OWN_KEY) === '1'; } catch (e) {}
     try { const q = new URLSearchParams(location.search).get('owned'); if (q === '1') owned = true; if (q === '0') owned = false; } catch (e) {}
 
-    const doneArr = () => { try { const p = JSON.parse(localStorage.getItem('cas-cloud-progress') || 'null'); return (p && p.done) ? p.done : []; } catch (e) { return []; } };
+    const doneArr = () => { try { const p = JSON.parse(localStorage.getItem(PROGRESS_KEY) || 'null'); return (p && p.done) ? p.done : []; } catch (e) { return []; } };
     const LOCK = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="opacity:.55;"><rect x="4" y="10" width="16" height="11" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg>';
     const PLAY = '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"></path></svg>';
 
+    const lessonRow = (u, i, done) => {
+      const isDone = owned && done[i];
+      const open = owned || u.free;
+      const inner =
+        '<div class="syl-num">' + (isDone ? '✓' : (i + 1)) + '</div>' +
+        '<div><div class="syl-title">' + esc(u.title) +
+          (!owned && u.free ? ' <span style="font-family:var(--font-cond);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal-ink);margin-left:8px;">free preview</span>' : '') +
+        '</div><div class="syl-sub">' + esc(u.subtitle) + '</div></div>' +
+        '<div class="syl-len" style="display:inline-flex;align-items:center;gap:7px;">' + (open ? PLAY : LOCK) + ' ' + esc(clock(u.dur)) + '</div>';
+      return open
+        ? '<a class="syl-row" href="lesson.dc.html?c=' + encodeURIComponent(c.id) + '&u=' + i + '" style="text-decoration:none;color:inherit;">' + inner + '</a>'
+        : '<div class="syl-row" style="opacity:.72;">' + inner + '</div>';
+    };
+
     const renderSyllabus = () => {
       const done = doneArr();
-      let n = 0, html = '';
-      c.modules.forEach((m, mi) => {
-        html += '<div style="font-family:var(--font-cond);font-weight:600;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--coral);margin:' + (mi ? '30px' : '4px') + ' 0 10px;">Module ' + (mi + 1) + ' · ' + esc(m.name) + '</div>';
-        m.lessons.forEach((u) => {
-          const i = n++;
-          const isDone = owned && done[i];
-          const inner =
-            '<div class="syl-num">' + (isDone ? '✓' : (i + 1)) + '</div>' +
-            '<div><div class="syl-title">' + esc(u[0]) +
-              (!owned && i === 0 ? ' <span style="font-family:var(--font-cond);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal-ink);margin-left:8px;">free preview</span>' : '') +
-            '</div><div class="syl-sub">' + esc(u[1]) + '</div></div>' +
-            '<div class="syl-len" style="display:inline-flex;align-items:center;gap:7px;">' + (owned || i === 0 ? PLAY : LOCK) + ' ' + esc(u[2]) + '</div>';
-          if (owned || i === 0) {
-            html += '<a class="syl-row" href="lesson.dc.html?u=' + i + '" style="text-decoration:none;color:inherit;">' + inner + '</a>';
-          } else {
-            html += '<div class="syl-row" style="opacity:.72;">' + inner + '</div>';
+      const mods = c.modules || [];
+      let html = '';
+      if (!mods.length) {
+        /* Single-lesson / unmodularised courses get a flat list — a lone
+           "Module 1" header over one row reads as a mistake. */
+        html = LESSONS.map((u, i) => lessonRow(u, i, done)).join('');
+      } else {
+        mods.forEach((m, mi) => {
+          html += '<div style="font-family:var(--font-cond);font-weight:600;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--coral);margin:' + (mi ? '30px' : '4px') + ' 0 10px;">Module ' + (mi + 1) + ' · ' + esc(m.name) + '</div>';
+          for (let i = m.from - 1; i <= m.to - 1 && i < LESSONS.length; i++) {
+            html += lessonRow(LESSONS[i], i, done);
           }
         });
-      });
+      }
       $('co-syllabus').innerHTML = html;
     };
 
     const renderState = () => {
       const cont = $('co-continue');
       const note = document.querySelector('.course-tier-note');
-      const dn = doneArr().filter(Boolean).length;
+      const done = doneArr();
+      const dn = done.filter(Boolean).length;
       if (owned) {
+        /* resume at the first unfinished lesson, not always lesson 1 */
+        let next = 0;
+        while (next < nLessons && done[next]) next++;
+        if (next >= nLessons) next = nLessons - 1;
+        cont.href = 'lesson.dc.html?c=' + encodeURIComponent(c.id) + '&u=' + next;
         $('co-price').innerHTML = '<span style="font-size:16px;letter-spacing:.06em;">Purchased ✓</span>';
         buy.style.display = 'none';
         cont.style.display = '';
         cont.innerHTML = (dn ? 'Continue learning' : 'Start the course') + ' <span class="arr" aria-hidden="true">→</span>';
-        note.innerHTML = '<strong>' + dn + ' of ' + c.lessons + '</strong> lessons complete — your progress is saved automatically.';
+        note.innerHTML = '<strong>' + dn + ' of ' + nLessons + '</strong> '
+          + (nLessons === 1 ? 'lesson' : 'lessons')
+          + ' complete — your progress is saved automatically.';
       } else {
         $('co-price').innerHTML = (c.was ? '<span class="was">£' + c.was + '</span>' : '') + '£' + c.price;
         buy.style.display = '';

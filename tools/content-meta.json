@@ -1,0 +1,299 @@
+{
+  "_note": "Human-authored copy. Merged with tools/asset-manifest.json by tools/build-data.py to produce js/course-data.js + js/gallery-data.js. PLACEHOLDER copy — not client-approved (spec Q1, Q3, Q4, Q5).",
+  "courses": {
+    "clouds-beginner": {
+      "title": "Painting Clouds — Beginner",
+      "tag": "Watercolour",
+      "cat": "watercolour",
+      "theme": "landscape",
+      "difficulty": "beginner",
+      "price": 58,
+      "was": 72,
+      "sale": true,
+      "blurb": "Start from nothing. Twelve lessons that take you from an empty page to a cloud that reads as a solid, sunlit object — the drawing underneath, the three values that make it fluffy, and the four cloud families you will paint for the rest of your life.",
+      "learn": [
+        "Set up a small, honest kit and a desk that does not fight you",
+        "Draw the geometry underneath a cloud before any water touches paper",
+        "Sort any sky into light, grey and dark — the whole trick behind “fluffy”",
+        "Paint cumulus, stratus and cirrus, then mix them in one sky"
+      ],
+      "who": [
+        [
+          "Complete beginners",
+          "No drawing experience assumed — the first lesson starts at the shopping list."
+        ],
+        [
+          "Photo copiers",
+          "You can copy a reference but cannot invent a sky from nothing."
+        ],
+        [
+          "Flat-sky painters",
+          "Your clouds keep going flat, grey or muddy and you cannot see why."
+        ]
+      ],
+      "modules": [
+        {
+          "name": "Building the foundation",
+          "from": 1,
+          "to": 4
+        },
+        {
+          "name": "Mastering the values",
+          "from": 5,
+          "to": 8
+        },
+        {
+          "name": "Cloud families",
+          "from": 9,
+          "to": 12
+        }
+      ],
+      "lessons": [
+        {
+          "title": "Welcome & materials for skies",
+          "subtitle": "The small kit — one round brush, one flat, three tubes and decent paper."
+        },
+        {
+          "title": "Seeing clouds as simple shapes",
+          "subtitle": "Map cumulus volumes with overlapping circles, the way you would construct a figure."
+        },
+        {
+          "title": "Pencil sketching & hatching volume",
+          "subtitle": "Hatching sets the weight and form before any paint arrives."
+        },
+        {
+          "title": "Mapping a cloudscape",
+          "subtitle": "Thumbnails first — horizon low, masses balanced, nothing wasted."
+        },
+        {
+          "title": "Reading light, grey and dark",
+          "subtitle": "Sort a reference photo into just three value families."
+        },
+        {
+          "title": "Where the sun hits",
+          "subtitle": "Place the lit face of one cloud, then make every other cloud agree."
+        },
+        {
+          "title": "Shadow shapes that stay soft",
+          "subtitle": "Warm-grey undersides that glow instead of going muddy."
+        },
+        {
+          "title": "A three-value cloud study",
+          "subtitle": "One cumulus, three values, twenty minutes — flat shapes become an object."
+        },
+        {
+          "title": "Cumulus — bold & puffy",
+          "subtitle": "Big shapes first, crisp sunlit tops, soft shadowed bellies."
+        },
+        {
+          "title": "Stratus — streaks on the horizon",
+          "subtitle": "One well-loaded stroke, pulled sideways, does most of the work."
+        },
+        {
+          "title": "Wispy cirrus edges",
+          "subtitle": "Barely-there wisps with a thirsty brush and a light hand."
+        },
+        {
+          "title": "Mixing cloud types in one sky",
+          "subtitle": "Layer cumulus over stratus without the sky turning busy."
+        }
+      ]
+    },
+    "clouds-intermediate": {
+      "title": "Painting Clouds — Intermediate",
+      "tag": "Watercolour",
+      "cat": "watercolour",
+      "theme": "landscape",
+      "difficulty": "intermediate",
+      "price": 68,
+      "was": null,
+      "sale": false,
+      "blurb": "The techniques that separate a study from a painting. Wet-on-wet edges, gradient washes, guarded whites — then three full scenes where all of it runs at once.",
+      "learn": [
+        "Time a wet-on-wet edge by the shine on the paper, not by fiddling",
+        "Lay a smooth gradient wash that a cloud can actually sit on",
+        "Plan and guard your whites instead of rescuing them later",
+        "Take a sky from reference to finished scene on your own"
+      ],
+      "who": [
+        [
+          "Beginner graduates",
+          "You have finished the Beginner course and want control, not luck."
+        ],
+        [
+          "Comfortable with washes",
+          "You can lay a wash but the edges and whites still get away from you."
+        ],
+        [
+          "Scene painters",
+          "Your subject is fine but the sky behind it lets the painting down."
+        ]
+      ],
+      "modules": [
+        {
+          "name": "Essential techniques",
+          "from": 1,
+          "to": 4
+        },
+        {
+          "name": "From study to scenery",
+          "from": 5,
+          "to": 7
+        }
+      ],
+      "lessons": [
+        {
+          "title": "Wet-on-wet cloud edges",
+          "subtitle": "Soft, seamless transitions — control the chaos with timing, not fiddling."
+        },
+        {
+          "title": "Gradient washes for skies",
+          "subtitle": "Load a bead, tilt the board, walk away."
+        },
+        {
+          "title": "Negative painting & hard edges",
+          "subtitle": "The brightest highlight is paper you never touched."
+        },
+        {
+          "title": "Lifting & softening",
+          "subtitle": "The rescue kit — a damp brush, clean tissue, and knowing when to stop."
+        },
+        {
+          "title": "Storm clouds over the ocean",
+          "subtitle": "First full scene: everything from the values module, at full volume."
+        },
+        {
+          "title": "Evening silhouettes & power lines",
+          "subtitle": "A peaceful dusk silhouette — quiet, graphic, easier than it looks."
+        },
+        {
+          "title": "Composing a full cloudscape",
+          "subtitle": "Reference, thumbnails, value plan, palette — and I paint alongside you."
+        }
+      ]
+    },
+    "little-house": {
+      "title": "Little House in Watercolour",
+      "tag": "Watercolour",
+      "cat": "watercolour",
+      "theme": "landscape",
+      "difficulty": "all-levels",
+      "price": 24,
+      "was": null,
+      "sale": false,
+      "blurb": "A single, self-contained study: one small house, start to finish, in one sitting.",
+      "learn": [
+        "Block in a simple building without a ruler",
+        "Keep a roof, a wall and a shadow reading as three different values",
+        "Finish a small painting in one sitting"
+      ],
+      "who": [
+        [
+          "Short-project painters",
+          "You want something complete in one sitting."
+        ],
+        [
+          "Between courses",
+          "A small, self-contained study to keep the brush moving."
+        ]
+      ],
+      "modules": [],
+      "lessons": [
+        {
+          "title": "Painting a little house",
+          "subtitle": "A full watercolour study from pencil sketch to final wash."
+        }
+      ]
+    },
+    "urban-sketch": {
+      "title": "Urban Sketching in Watercolour",
+      "tag": "Watercolour",
+      "cat": "watercolour",
+      "theme": "cityscape",
+      "difficulty": "all-levels",
+      "price": 24,
+      "was": null,
+      "sale": false,
+      "blurb": "Line and wash on location — buildings, street and figures, painted quickly and loosely.",
+      "learn": [
+        "Draw a street scene fast, in ink, without measuring",
+        "Drop colour over line without losing the drawing",
+        "Suggest figures and cars with three strokes each"
+      ],
+      "who": [
+        [
+          "Sketchbook painters",
+          "You draw on the move and want colour without slowing down."
+        ],
+        [
+          "Outdoor painters",
+          "You want to paint on location without carrying a studio."
+        ]
+      ],
+      "modules": [],
+      "lessons": [
+        {
+          "title": "Urban sketching in watercolour",
+          "subtitle": "Line and wash on location: buildings, street and figures."
+        }
+      ]
+    }
+  },
+  "freeVideos": {
+    "mountain": {
+      "title": "Mountains in watercolour",
+      "desc": "A full mountain study, wet-on-wet from the sky down — the same value thinking as the cloud course, applied to rock.",
+      "section": "Landscape"
+    },
+    "pink-floral": {
+      "title": "Loose pink florals",
+      "desc": "Petals in three strokes. A short, forgiving demo for anyone nervous about painting flowers.",
+      "section": "Landscape"
+    },
+    "watercolor-airport": {
+      "title": "Watercolour airport sketch",
+      "desc": "An on-location sketch from an airport window — line and wash, thirty minutes, nothing precious.",
+      "section": "Landscape"
+    }
+  },
+  "gallery": {
+    "_note": "Client-supplied placeholder metadata, used only to judge layout (spec §0.2).",
+    "medium": "Watercolour",
+    "desc": "Watercolor on paper",
+    "subjects": [
+      "Original painting",
+      "Art print",
+      "Pet drawing"
+    ],
+    "sizes": [
+      "30 × 40 cm",
+      "40 × 60 cm"
+    ],
+    "prices": {
+      "Original painting": [
+        320,
+        340,
+        300,
+        360,
+        280,
+        330
+      ],
+      "Art print": [
+        120,
+        140,
+        160,
+        130,
+        150,
+        170
+      ],
+      "Pet drawing": [
+        200,
+        220,
+        180,
+        240,
+        210,
+        190
+      ]
+    }
+  }
+}

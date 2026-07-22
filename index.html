@@ -19,6 +19,8 @@
 
 <script src="js/site-extras.js"></script>
 <script src="js/site-nav.js"></script>
+<script src="js/site-footer.js"></script>
+<script src="js/course-data.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <script src="js/motion.js"></script>
@@ -175,10 +177,7 @@
           <div class="arch-cap">
             <div class="eyebrow-lbl">About</div>
             <a class="link-squiggle arch-visit" href="About.dc.html">Meet Crystal →</a>
-            <div class="social-row">
-              <a class="social-btn" href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" stroke="none"></circle></svg></a>
-              <a class="social-btn" href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 9h3V6h-3c-1.7 0-3 1.3-3 3v2H9v3h2v6h3v-6h2.5l.5-3H14v-1.5c0-.3.2-.5.5-.5z"></path></svg></a>
-            </div>
+            <div class="social-row" data-cas-social="social-btn"></div>
           </div>
         </div>
 
@@ -288,86 +287,38 @@
     <div class="pg-wrap">
       <div class="social-strip">
         <span class="ss-label">Follow along</span>
-        <div class="ss-icons">
-          <a class="ss-btn" href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" stroke="none"></circle></svg>
-          </a>
-          <a class="ss-btn" href="https://youtube.com" target="_blank" rel="noopener" aria-label="YouTube">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23 12s0-3.2-.4-4.7a2.5 2.5 0 0 0-1.8-1.8C19.3 5 12 5 12 5s-7.3 0-8.8.5A2.5 2.5 0 0 0 1.4 7.3C1 8.8 1 12 1 12s0 3.2.4 4.7a2.5 2.5 0 0 0 1.8 1.8C4.7 19 12 19 12 19s7.3 0 8.8-.5a2.5 2.5 0 0 0 1.8-1.8C23 15.2 23 12 23 12zM9.8 15.3V8.7l6 3.3-6 3.3z"></path></svg>
-          </a>
-          <a class="ss-btn" href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 9h3V6h-3c-1.7 0-3 1.3-3 3v2H9v3h2v6h3v-6h2.5l.5-3H14v-1.5c0-.3.2-.5.5-.5z"></path></svg>
-          </a>
-          <a class="ss-btn" href="mailto:crystalau430@gmail.com" aria-label="Email">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 7l9 6 9-6"></path></svg>
-          </a>
-        </div>
+        <div class="ss-icons" data-cas-social="ss-btn"></div>
       </div>
     </div>
   </section>
 
 </main>
 
-<footer class="site-footer">
-  <div class="inner">
-    <div class="footer-grid">
-      <div>
-        <div class="footer-brand">CRYSTAL'S</div>
-        <p style="font-size:14px;opacity:.85;max-width:34ch;margin:0;">Watercolour, acrylic &amp; drawing — taught slowly and carefully from a small studio of plaster, wood and iron.</p>
-        <div class="social-row">
-          <a class="social-btn" href="https://instagram.com" target="_blank" rel="noopener" aria-label="Instagram">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" stroke="none"></circle></svg>
-          </a>
-          <a class="social-btn" href="https://youtube.com" target="_blank" rel="noopener" aria-label="YouTube">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23 12s0-3.2-.4-4.7a2.5 2.5 0 0 0-1.8-1.8C19.3 5 12 5 12 5s-7.3 0-8.8.5A2.5 2.5 0 0 0 1.4 7.3C1 8.8 1 12 1 12s0 3.2.4 4.7a2.5 2.5 0 0 0 1.8 1.8C4.7 19 12 19 12 19s7.3 0 8.8-.5a2.5 2.5 0 0 0 1.8-1.8C23 15.2 23 12 23 12zM9.8 15.3V8.7l6 3.3-6 3.3z"></path></svg>
-          </a>
-          <a class="social-btn" href="https://facebook.com" target="_blank" rel="noopener" aria-label="Facebook">
-            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 9h3V6h-3c-1.7 0-3 1.3-3 3v2H9v3h2v6h3v-6h2.5l.5-3H14v-1.5c0-.3.2-.5.5-.5z"></path></svg>
-          </a>
-          <a class="social-btn" href="mailto:crystalau430@gmail.com" aria-label="Email">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 7l9 6 9-6"></path></svg>
-          </a>
-        </div>
-      </div>
-      <div>
-        <h4>Learn</h4>
-        <a href="Lessons.dc.html">All lessons</a>
-        <a href="Lessons.dc.html#membership">Membership</a>
-        <a href="FreeVideos.dc.html">Free videos</a>
-      </div>
-      <div>
-        <h4>Explore</h4>
-        <a href="Gallery.dc.html">Gallery</a>
-        <a href="Showcase.dc.html">Student showcase</a>
-        <a href="Blog.dc.html">Blog</a>
-        <a href="About.dc.html">About</a>
-      </div>
-      <div>
-        <h4>Contact</h4>
-        <a href="About.dc.html#contact">crystalau430@gmail.com</a>
-        <a href="About.dc.html#contact">Discord · Instagram</a>
-        <a href="About.dc.html#terms">Terms &amp; privacy</a>
-      </div>
-    </div>
-    <div class="footer-meta">
-      <span>© 2026 Crystal's Art School</span>
-    </div>
-  </div>
-</footer>
+<!-- footer markup lives in js/site-footer.js — single source of truth -->
+<footer class="site-footer" aria-label="Site footer"></footer>
 
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;defaultTheme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;A&quot;,&quot;B&quot;,&quot;C&quot;,&quot;D&quot;],&quot;default&quot;:&quot;A&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
 class Component extends DCLogic {
+  /* Courses come from js/course-data.js (window.CAS_COURSES) — the same data
+     the catalogue, course page and player read. `img` is relative to img/
+     because the rail markup prefixes it. */
   coursePool() {
-    /* single live course for now — Introduction to Cloud Painting */
-    return [
-      { img: 'cover2.jpg', title: 'Introduction to Cloud Painting', tag: 'Watercolour', date: '2026-07-01', price: 58 }
-    ];
+    return (window.CAS_COURSES || []).map((c, i) => ({
+      id: c.id,
+      img: String(c.cover || '').replace(/^img\//, ''),
+      title: c.title,
+      tag: c.tag,
+      date: c.date || ('2026-07-' + String(28 - i * 3).padStart(2, '0')),
+      price: c.price
+    }));
   }
 
-  courseHref(title) {
-    return 'course.dc.html?id=cloud-painting';
+  courseHref(idOrTitle) {
+    const list = window.CAS_COURSES || [];
+    const hit = list.find((c) => c.id === idOrTitle || c.title === idOrTitle);
+    return 'course.dc.html?id=' + encodeURIComponent(hit ? hit.id : (window.CAS_DEFAULT_COURSE || ''));
   }
 
   componentDidMount() {
@@ -580,7 +531,7 @@ class Component extends DCLogic {
           '<div class="rel-title">' + esc(c.title) + '</div>' +
           '<div class="rel-actions">' +
             '<button class="cc-btn primary" type="button" data-add-to-cart data-tiered data-price="' + c.price + '">' + cartSvg + ' Add to cart</button>' +
-            '<a class="cc-btn secondary" href="' + this.courseHref(c.title) + '">View <span class="arr" aria-hidden="true">→</span></a>' +
+            '<a class="cc-btn secondary" href="' + this.courseHref(c.id) + '">View <span class="arr" aria-hidden="true">→</span></a>' +
           '</div>';
         relCar.appendChild(slide);
         const dot = document.createElement('button');
@@ -613,7 +564,8 @@ class Component extends DCLogic {
         const card = document.createElement('div');
         card.className = 'course-card';
         card.innerHTML = '<div class="cc-cover"><img src="img/' + c.img + '" alt="' + esc(c.title) + '"></div>' +
-          '<div class="cc-pad"><div class="cc-meta">' + esc(c.tag) + '</div><h3>' + esc(c.title) + '</h3>' +
+          '<div class="cc-pad"><div class="cc-meta">' + esc(c.tag) + '</div>' +
+          '<h3><a href="' + this.courseHref(c.id) + '" style="color:inherit;text-decoration:none;">' + esc(c.title) + '</a></h3>' +
           '<div class="cc-row"><span class="cc-price">£' + c.price + '</span>' +
           '<button class="cc-btn primary" type="button" data-add-to-cart data-tiered data-title="' + esc(c.title) + '" data-price="' + c.price + '" data-img="' + c.img + '">' + cartSvg + ' Add</button></div></div>' +
           '<div class="cc-photo"><img src="img/A5.jpeg" alt=""></div>';

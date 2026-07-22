@@ -16,6 +16,8 @@
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <script src="js/site-extras.js"></script>
 <script src="js/site-nav.js"></script>
+<script src="js/site-footer.js"></script>
+<script src="js/free-videos-data.js"></script>
 <script src="js/motion.js"></script>
 <style>
 /* ---- Free videos (Will Kemp-style tutorial index) ---- */
@@ -40,6 +42,9 @@
 @media (max-width: 620px) { .fv-grid { grid-template-columns: 1fr; } }
 /* ---- lightbox video player (stand-in for the YouTube / backend embeds) ---- */
 .fv-modal { position: fixed; inset: 0; z-index: 400; display: none; align-items: center; justify-content: center; padding: 22px; }
+.fvm-stage .gdrive-frame { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: none; z-index: 5; background: #000; }
+.fvm-stage.has-video .gdrive-frame { display: block; }
+.fvm-stage.has-video .fvm-veil { display: none; }
 .fv-modal.open { display: flex; }
 .fvm-backdrop { position: absolute; inset: 0; background: rgba(15,12,9,.78); backdrop-filter: blur(4px); }
 .fvm-panel { position: relative; z-index: 1; width: min(880px, 100%); background: #181410; border-radius: 16px; overflow: hidden; box-shadow: 0 40px 90px rgba(0,0,0,.6); }
@@ -124,99 +129,19 @@
   <div class="container">
     <div class="eyebrow reveal-one"><span class="star">✦</span> Watch, then paint along</div>
     <h1 class="marker-title fv-title-script reveal-one" style="font-size:clamp(38px,5vw,68px);">Free videos</h1>
-    <p class="lead reveal-one" style="max-width:74ch;">Over eight hours of free painting lessons — real, complete tutorials, not previews. Pick a subject below, press play, and paint along at your own pace. When you're ready for the full slow-paced series, the <a class="link-squiggle" href="Lessons.dc.html">step-by-step courses</a> pick up where these leave off.</p>
+    <p class="lead reveal-one" style="max-width:74ch;">Free painting lessons — real, complete tutorials, not previews. Press play and paint along at your own pace. When you're ready for the full slow-paced series, the <a class="link-squiggle" href="Lessons.dc.html">step-by-step courses</a> pick up where these leave off.</p>
     <p class="lead reveal-one" style="margin-top:10px;">Let's feel the fear… and paint it anyway.</p>
   </div>
 </header>
 
 <main class="container" id="content" style="padding-bottom:70px;">
 
+  <!-- cards are rendered from window.CAS_FREE_VIDEOS (js/free-videos-data.js) -->
   <section class="fv-sec" style="margin-top:26px;">
-    <h2>Still life tutorials</h2>
-    <p class="fv-sec-intro">Still life is where the fundamentals live — balancing colours, building a painting in layers, working from a coloured ground. One object on a table can teach you most of what a landscape will ask of you later.</p>
-    <div class="fv-grid">
-      <a class="fv-card" href="lesson.dc.html">
-        <span class="fv-thumb"><img src="img/cover2.jpg" alt="A single apple, four washes"><span class="fv-playbtn"><span>▶</span></span><span class="fv-dur">Part 1 of 4</span></span>
-        <h3>A single apple, four washes</h3>
-        <p>The first still life I give every beginner — one object, four layers, and all the fundamentals of watercolour glazing.</p>
-      </a>
-      <a class="fv-card" href="lesson.dc.html">
-        <span class="fv-thumb"><img src="img/Postercolor.jpg" alt="Light and shadow on simple forms"><span class="fv-playbtn"><span>▶</span></span><span class="fv-dur">2 parts</span></span>
-        <h3>Light &amp; shadow on simple forms</h3>
-        <p>Making any object feel solid before you touch a single detail — the principles of form and realism, demonstrated slowly.</p>
-      </a>
-      <a class="fv-card" href="lesson.dc.html">
-        <span class="fv-thumb"><img src="img/BrushB.jpg" alt="A copper pot in poster colour"><span class="fv-playbtn"><span>▶</span></span><span class="fv-dur">21 min</span></span>
-        <h3>A copper pot in poster colour</h3>
-        <p>Capturing the brilliant reflections of metal with three values and a steady hand.</p>
-      </a>
-    </div>
-  </section>
-
-  <section class="fv-sec">
-    <h2>Landscape tutorials</h2>
-    <p class="fv-sec-intro">Ever wondered how to paint rain, or balance vivid greens in a scene? These lessons work with a muted palette to capture the changing moods of the seasons.</p>
-    <div class="fv-grid">
-      <a class="fv-card" href="lesson.dc.html">
-        <span class="fv-thumb"><img src="img/cover3.jpg" alt="A muted field, wet-on-wet"><span class="fv-playbtn"><span>▶</span></span><span class="fv-dur">17 min</span></span>
-        <h3>A muted field, wet-on-wet</h3>
-        <p>Controlling soft edges in a simple field study — where to let the water do the work, and where to stop it.</p>
-      </a>
-      <a class="fv-card" href="lesson.dc.html">
-        <span class="fv-thumb"><img src="img/cover4.jpg" alt="Rain over the harbour"><span class="fv-playbtn"><span>▶</span></span><span class="fv-dur">Part 1 of 3</span></span>
-        <h3>Rain over the harbour</h3>
-        <p>Value relationships in a grey-day scene — proof that a "dull" subject makes the strongest painting.</p>
-      </a>
-      <a class="fv-card" href="lesson.dc.html">
-        <span class="fv-thumb"><img src="img/Liquidwatercolor.jpg" alt="Skies in loose watercolour"><span class="fv-playbtn"><span>▶</span></span><span class="fv-dur">3 studies</span></span>
-        <h3>Skies in loose watercolour</h3>
-        <p>Three sky studies in thirty minutes — clouds are the best teacher of confident, unfussy washes.</p>
-      </a>
-    </div>
-  </section>
-
-  <section class="fv-sec">
-    <h2>Colour mixing tutorials</h2>
-    <p class="fv-sec-intro">Many things in nature are far more muted than the tube suggests. These lessons look at light against dark and warm against cool — the differences that matter more than bright colour.</p>
-    <div class="fv-grid">
-      <a class="fv-card" href="lesson.dc.html">
-        <span class="fv-thumb"><img src="img/Liquidwatercolor.jpg" alt="Mixing greens from scratch"><span class="fv-playbtn"><span>▶</span></span><span class="fv-dur">14 min</span></span>
-        <h3>Mixing greens from scratch</h3>
-        <p>Why tube green fails you outdoors, and the two-pigment fix that never does.</p>
-      </a>
-      <a class="fv-card" href="lesson.dc.html">
-        <span class="fv-thumb"><img src="img/Postercolor.jpg" alt="Warm vs cool greys"><span class="fv-playbtn"><span>▶</span></span><span class="fv-dur">12 min</span></span>
-        <h3>Warm vs cool greys</h3>
-        <p>The quiet power of a limited value palette, mixed live on the desk.</p>
-      </a>
-      <a class="fv-card" href="lesson.dc.html">
-        <span class="fv-thumb"><img src="img/BrushA.jpg" alt="A chromatic black"><span class="fv-playbtn"><span>▶</span></span><span class="fv-dur">9 min</span></span>
-        <h3>Mixing a chromatic black</h3>
-        <p>Don't buy black — mix a richer, livelier one from two tubes you already own.</p>
-      </a>
-    </div>
-  </section>
-
-  <section class="fv-sec">
-    <h2>Materials &amp; setup tutorials</h2>
-    <p class="fv-sec-intro">Before we get started it helps to know what's on the desk and why. When you're starting out, begin with a few materials and keep it really simple.</p>
-    <div class="fv-grid">
-      <a class="fv-card" href="lesson.dc.html">
-        <span class="fv-thumb"><img src="img/Bannerphoto.jpg" alt="Materials and setting up"><span class="fv-playbtn"><span>▶</span></span><span class="fv-dur">Full course</span></span>
-        <h3>Materials &amp; setting up</h3>
-        <p>The complete free intro course — everything on the desk before lesson one, kept deliberately simple.</p>
-      </a>
-      <a class="fv-card" href="lesson.dc.html">
-        <span class="fv-thumb"><img src="img/BrushB.jpg" alt="Brush care and studio habits"><span class="fv-playbtn"><span>▶</span></span><span class="fv-dur">11 min</span></span>
-        <h3>Brush care &amp; studio habits</h3>
-        <p>Make cheap brushes last years — the Friday ritual that saves you a fortune.</p>
-      </a>
-      <a class="fv-card" href="lesson.dc.html">
-        <span class="fv-thumb"><img src="img/Sketchbook.jpg" alt="Choosing your first paper"><span class="fv-playbtn"><span>▶</span></span><span class="fv-dur">8 min</span></span>
-        <h3>Choosing your first paper</h3>
-        <p>Cold-press, rough or hot-press — one small test tells you which painter you are.</p>
-      </a>
-    </div>
+    <h2>Free demos</h2>
+    <p class="fv-sec-intro">Complete tutorials, free to watch — no sign-up, no preview cut short. Paint along at your own pace, then pick up the <a class="link-squiggle" href="Lessons.dc.html">step-by-step courses</a> when you want the slow version.</p>
+    <div class="fv-grid" id="fv-grid"></div>
+    <p class="fv-sec-intro" id="fv-empty" style="display:none;">No free videos are published yet — check back soon.</p>
   </section>
 
   <section class="section" style="margin-top:54px;">
@@ -238,6 +163,7 @@
     <button class="fvm-close" type="button" data-close aria-label="Close">✕</button>
     <div class="fvm-stage" id="fvm-stage">
       <img id="fvm-poster" alt="">
+      <iframe class="gdrive-frame" id="fvm-frame" title="Video player" allow="autoplay; fullscreen" allowfullscreen loading="lazy"></iframe>
       <div class="fvm-veil" id="fvm-veil"><button class="fvm-big" id="fvm-big" type="button" aria-label="Play">▶</button></div>
     </div>
     <div class="fvm-controls">
@@ -250,38 +176,8 @@
   </div>
 </div>
 
-<footer class="site-footer">
-  <div class="inner">
-    <div class="footer-grid">
-      <div>
-        <div class="footer-brand">CRYSTAL'S</div>
-        <p style="font-size:14px;opacity:.85;max-width:34ch;margin:0;">Watercolour, acrylic &amp; drawing — taught slowly and carefully from a small studio of plaster, wood and iron.</p>
-      </div>
-      <div>
-        <h4>Learn</h4>
-        <a href="Lessons.dc.html">All lessons</a>
-        <a href="Lessons.dc.html#membership">Membership</a>
-        <a href="FreeVideos.dc.html">Free videos</a>
-      </div>
-      <div>
-        <h4>Explore</h4>
-        <a href="Gallery.dc.html">Gallery</a>
-        <a href="Showcase.dc.html">Student showcase</a>
-        <a href="Blog.dc.html">Blog</a>
-        <a href="About.dc.html">About</a>
-      </div>
-      <div>
-        <h4>Contact</h4>
-        <a href="About.dc.html#contact">crystalau430@gmail.com</a>
-        <a href="About.dc.html#contact">Discord · Instagram</a>
-        <a href="About.dc.html#terms">Terms &amp; privacy</a>
-      </div>
-    </div>
-    <div class="footer-meta">
-      <span>© 2026 Crystal's Art School</span>
-    </div>
-  </div>
-</footer>
+<!-- footer markup lives in js/site-footer.js — single source of truth -->
+<footer class="site-footer" aria-label="Site footer"></footer>
 
 </div>
 </x-dc>
@@ -337,6 +233,9 @@ class Component extends DCLogic {
       playBtn.textContent = on ? '❚❚' : '▶';
       if (on) { lastT = performance.now(); if (!raf) raf = requestAnimationFrame(tick); }
     };
+    const gframe = $id('fvm-frame');
+    const ctrlRow = document.querySelector('.fvm-controls');
+    const noteEl = document.querySelector('.fvm-note');
     const openV = (card) => {
       const img = card.querySelector('.fv-thumb img');
       poster.src = img ? img.src : '';
@@ -344,6 +243,18 @@ class Component extends DCLogic {
       $id('fvm-title').textContent = card.querySelector('h3').textContent;
       const p = card.querySelector('p');
       $id('fvm-desc').textContent = p ? p.textContent : '';
+
+      /* real video? look the card up in the data by slug */
+      const rec = (window.CAS_FREE_VIDEOS || []).find((v) => v.slug === card.dataset.slug);
+      const real = !!(rec && rec.video);
+      stage.classList.toggle('has-video', real);
+      if (gframe) {
+        const want = real ? rec.video : 'about:blank';
+        if (gframe.getAttribute('src') !== want) gframe.setAttribute('src', want);
+      }
+      if (ctrlRow) ctrlRow.style.display = real ? 'none' : '';
+      if (noteEl) noteEl.textContent = real ? 'streams from Google Drive' : 'demo player · final site: YouTube embed';
+
       const dtext = (card.querySelector('.fv-dur') || {}).textContent || '';
       const m = dtext.match(/(\d+)\s*min/i);
       dur = m ? (+m[1]) * 60 : 900;
@@ -353,7 +264,30 @@ class Component extends DCLogic {
       modal.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
     };
-    const closeV = () => { setPlaying(false); modal.classList.remove('open'); modal.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; };
+    const closeV = () => { setPlaying(false); stage.classList.remove('has-video'); if (gframe) gframe.setAttribute('src', 'about:blank'); modal.classList.remove('open'); modal.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; };
+    /* ---- cards from the generated data ----
+       Duration badges are only emitted as "N min" because the modal parses
+       them with /(\d+)\s*min/i and silently falls back to 900s otherwise. */
+    const fvEsc = (t) => String(t == null ? '' : t).replace(/[&<>"']/g, (ch) => (
+      { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+    const fvGrid = document.getElementById('fv-grid');
+    const FV = window.CAS_FREE_VIDEOS || [];
+    if (fvGrid) {
+      fvGrid.innerHTML = FV.map((v) => {
+        const mins = v.dur ? Math.max(1, Math.round(v.dur / 60)) : null;
+        return '<a class="fv-card" href="#" data-slug="' + fvEsc(v.slug) + '">' +
+          '<span class="fv-thumb"><img src="' + fvEsc(v.poster) + '" alt="' + fvEsc(v.title) + '" loading="lazy">' +
+            '<span class="fv-playbtn"><span>▶</span></span>' +
+            (mins ? '<span class="fv-dur">' + mins + ' min</span>' : '') +
+          '</span>' +
+          '<h3>' + fvEsc(v.title) + '</h3>' +
+          '<p>' + fvEsc(v.desc) + '</p>' +
+        '</a>';
+      }).join('');
+      const empty = document.getElementById('fv-empty');
+      if (empty) empty.style.display = FV.length ? 'none' : '';
+    }
+
     document.querySelectorAll('.fv-card').forEach(c => c.addEventListener('click', (e) => { e.preventDefault(); openV(c); }));
     $id('fvm-veil').addEventListener('click', () => setPlaying(true));
     playBtn.addEventListener('click', () => setPlaying(!playing));

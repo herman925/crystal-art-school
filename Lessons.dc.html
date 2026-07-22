@@ -16,7 +16,9 @@
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <script src="js/site-extras.js"></script>
 <script src="js/site-nav.js"></script>
+<script src="js/site-footer.js"></script>
 <script src="js/filter-tags.js"></script>
+<script src="js/course-data.js"></script>
 <script src="js/motion.js"></script>
 </helmet>
 <div class="cas-root" data-theme="D">
@@ -173,19 +175,8 @@
 
       <div>
         <div class="lesson-meta-bar"><span class="lesson-count" id="lesson-count"></span></div>
-        <div class="lesson-grid reveal" id="lesson-grid">
-          <div class="lesson-cell" data-cat="watercolour" data-theme="landscape" data-difficulty="beginner" data-price="58" data-duration="long">
-            <div class="cover-card">
-              <img src="img/cover2.jpg" alt="Introduction to Cloud Painting — watercolour course">
-              <div class="scrim"><div class="t">Introduction to Cloud Painting</div></div>
-              <div class="actions">
-                <button class="cover-btn primary" type="button" data-add-to-cart data-tiered data-title="Introduction to Cloud Painting" data-price="58" data-img="cover2.jpg"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M2 3h3.2l2.5 12.2a1.5 1.5 0 0 0 1.5 1.2h9a1.5 1.5 0 0 0 1.5-1.2L21.5 7H6.5"></path></svg> Add to cart</button>
-                <a class="cover-btn secondary" href="course.dc.html?id=cloud-painting">View course <span class="arr" aria-hidden="true">→</span></a>
-              </div>
-            </div>
-            <div class="meta"><span class="level">Watercolour · beginner · 24 lessons · ~6h</span><span class="price">£58</span></div>
-          </div>
-        </div>
+        <!-- cards are rendered from window.CAS_COURSES (js/course-data.js) -->
+        <div class="lesson-grid reveal" id="lesson-grid"></div>
         <div class="no-results" id="no-results">No lessons match these filters — try clearing a few.</div>
       </div>
     </div>
@@ -234,38 +225,8 @@
   </section>
 </main>
 
-<footer class="site-footer">
-  <div class="inner">
-    <div class="footer-grid">
-      <div>
-        <div class="footer-brand">CRYSTAL'S</div>
-        <p style="font-size:14px;opacity:.85;max-width:34ch;margin:0;">Watercolour, acrylic &amp; drawing — taught slowly and carefully from a small studio of plaster, wood and iron.</p>
-      </div>
-      <div>
-        <h4>Learn</h4>
-        <a href="Lessons.dc.html">All lessons</a>
-        <a href="Lessons.dc.html#membership">Membership</a>
-        <a href="FreeVideos.dc.html">Free videos</a>
-      </div>
-      <div>
-        <h4>Explore</h4>
-        <a href="Gallery.dc.html">Gallery</a>
-        <a href="Showcase.dc.html">Student showcase</a>
-        <a href="Blog.dc.html">Blog</a>
-        <a href="About.dc.html">About</a>
-      </div>
-      <div>
-        <h4>Contact</h4>
-        <a href="About.dc.html#contact">crystalau430@gmail.com</a>
-        <a href="About.dc.html#contact">Discord · Instagram</a>
-        <a href="About.dc.html#terms">Terms &amp; privacy</a>
-      </div>
-    </div>
-    <div class="footer-meta">
-      <span>© 2026 Crystal's Art School</span>
-    </div>
-  </div>
-</footer>
+<!-- footer markup lives in js/site-footer.js — single source of truth -->
+<footer class="site-footer" aria-label="Site footer"></footer>
 
 </div>
 </x-dc>
@@ -318,6 +279,48 @@ class Component extends DCLogic {
       const o = add.innerHTML; add.innerHTML = 'Added ✓'; add.disabled = true; setTimeout(() => { add.innerHTML = o; add.disabled = false; }, 1100);
       document.querySelectorAll('.cart-btn').forEach(btn => { btn.style.transition = 'transform .18s'; btn.style.transform = 'translateY(-3px) rotate(-8deg)'; setTimeout(() => { btn.style.transform = ''; }, 220); });
     });
+
+    /* ---- catalogue cards, rendered from window.CAS_COURSES ----
+       Single source of truth is js/course-data.js. Nothing about a course is
+       written into this page's markup, so adding a course is a data change. */
+    const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (ch) => (
+      { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+    const runtime = (secs) => {
+      const h = Math.floor(secs / 3600), m = Math.round((secs % 3600) / 60);
+      return h ? (m ? h + 'h ' + m + 'm' : h + 'h') : m + 'm';
+    };
+    const CART_ICO = '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M2 3h3.2l2.5 12.2a1.5 1.5 0 0 0 1.5 1.2h9a1.5 1.5 0 0 0 1.5-1.2L21.5 7H6.5"></path></svg>';
+
+    const courseCard = (c) => {
+      const n = c.lessons.length;
+      const meta = [c.tag, c.difficulty.replace('-', ' '),
+                    n + (n === 1 ? ' lesson' : ' lessons'),
+                    '~' + runtime(c.totalSeconds)].join(' · ');
+      return '' +
+        '<div class="lesson-cell" data-id="' + esc(c.id) + '" data-cat="' + esc(c.cat) + '"' +
+             ' data-theme="' + esc(c.theme) + '" data-difficulty="' + esc(c.difficulty) + '"' +
+             ' data-price="' + c.price + '" data-duration="' + esc(c.durationBucket) + '"' +
+             (c.sale ? ' data-sale="1"' : '') + '>' +
+          '<div class="cover-card">' +
+            '<img src="' + esc(c.cover) + '" alt="' + esc(c.title) + ' — ' + esc(c.tag) + ' course" loading="lazy">' +
+            (c.sale ? '<div class="cc-chip">Sale</div>' : '') +
+            '<div class="scrim"><div class="t">' + esc(c.title) + '</div></div>' +
+            '<div class="actions">' +
+              '<button class="cover-btn primary" type="button" data-add-to-cart data-tiered' +
+                ' data-title="' + esc(c.title) + '" data-price="' + c.price + '"' +
+                ' data-img="' + esc(c.cover.replace(/^img\//, '')) + '">' + CART_ICO + ' Add to cart</button>' +
+              '<a class="cover-btn secondary" href="course.dc.html?id=' + encodeURIComponent(c.id) + '">' +
+                'View course <span class="arr" aria-hidden="true">→</span></a>' +
+            '</div>' +
+          '</div>' +
+          '<div class="meta"><span class="level">' + esc(meta) + '</span>' +
+            '<span class="price">' + (c.was ? '<s>£' + c.was + '</s> ' : '') + '£' + c.price + '</span></div>' +
+        '</div>';
+    };
+
+    const grid = document.getElementById('lesson-grid');
+    const COURSES = window.CAS_COURSES || [];
+    if (grid) grid.innerHTML = COURSES.map(courseCard).join('');
 
     /* multi-group filter panel — options are built dynamically from the
        tags on the courses actually in the grid (shared js/filter-tags.js) */

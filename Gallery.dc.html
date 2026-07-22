@@ -16,6 +16,8 @@
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
 <script src="js/site-extras.js"></script>
 <script src="js/site-nav.js"></script>
+<script src="js/site-footer.js"></script>
+<script src="js/gallery-data.js"></script>
 <script src="js/filter-tags.js"></script>
 <script src="js/motion.js"></script>
 <style>
@@ -191,62 +193,19 @@
   </div>
 </div>
 
-<footer class="site-footer">
-  <div class="inner">
-    <div class="footer-grid">
-      <div>
-        <div class="footer-brand">CRYSTAL'S</div>
-        <p style="font-size:14px;opacity:.85;max-width:34ch;margin:0;">Watercolour, acrylic &amp; drawing — taught slowly and carefully from a small studio of plaster, wood and iron.</p>
-        <div class="social-row">
-          <a class="social-btn" href="#" aria-label="Instagram"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="5"></rect><circle cx="12" cy="12" r="4"></circle><circle cx="17.5" cy="6.5" r="1.1" fill="currentColor" stroke="none"></circle></svg></a>
-          <a class="social-btn" href="#" aria-label="Facebook"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M14 9h3V6h-3c-1.7 0-3 1.3-3 3v2H9v3h2v6h3v-6h2.5l.5-3H14v-1.5c0-.3.2-.5.5-.5z"></path></svg></a>
-        </div>
-      </div>
-      <div>
-        <h4>Learn</h4>
-        <a href="Lessons.dc.html">All lessons</a>
-        <a href="Lessons.dc.html#membership">Membership</a>
-        <a href="FreeVideos.dc.html">Free videos</a>
-      </div>
-      <div>
-        <h4>Explore</h4>
-        <a href="Gallery.dc.html">Gallery</a>
-        <a href="Showcase.dc.html">Student showcase</a>
-        <a href="Blog.dc.html">Blog</a>
-        <a href="About.dc.html">About</a>
-      </div>
-      <div>
-        <h4>Contact</h4>
-        <a href="About.dc.html#contact">crystalau430@gmail.com</a>
-        <a href="About.dc.html#contact">Discord · Instagram</a>
-        <a href="About.dc.html#terms">Terms &amp; privacy</a>
-      </div>
-    </div>
-    <div class="footer-meta">
-      <span>© 2026 Crystal's Art School</span>
-    </div>
-  </div>
-</footer>
+<!-- footer markup lives in js/site-footer.js — single source of truth -->
+<footer class="site-footer" aria-label="Site footer"></footer>
 
 </div>
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;defaultTheme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;A&quot;,&quot;B&quot;,&quot;C&quot;,&quot;D&quot;],&quot;default&quot;:&quot;A&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
 class Component extends DCLogic {
+  /* Artwork data lives in js/gallery-data.js (window.CAS_GALLERY), generated
+     from the client's photos by tools/import-assets.py + tools/build-data.py.
+     Metadata (medium, subject, size, price) is CLIENT-SUPPLIED PLACEHOLDER
+     copy, provided only so the layout can be judged. */
   pieces() {
-    return [
-      { title: 'Harbour at Dusk', img: 'cover1.jpg', tags: ['Oil', 'Landscape'], price: 320, date: '2026-06-18', orig: true, size: '40 × 50 cm', desc: 'Oil on canvas — a working harbour as the light drops, painted on location over three evenings. Warm coppers held against a cooling sky.' },
-      { title: 'Liquid Sky', img: 'Liquidwatercolor.jpg', tags: ['Watercolour', 'Abstract'], price: 180, date: '2026-06-09', orig: false, size: 'A3 print', desc: 'Giclée print of a loose wet-on-wet study. Limited run of 40, signed and numbered on archival cotton rag.' },
-      { title: 'Studio Brushes', img: 'BrushA.jpg', tags: ['Ink', 'Still life'], price: 95, date: '2026-05-30', orig: false, size: 'A4 print', desc: 'Pen and wash study of well-worn studio brushes. A quiet object portrait — the tools that do the work.' },
-      { title: 'Quiet Shore', img: 'cover3.jpg', tags: ['Watercolour', 'Landscape'], price: 240, date: '2026-05-21', orig: true, size: '30 × 40 cm', desc: 'Original watercolour on 300gsm cold-press. A single graded wash sky over a low tide, painted in one sitting.' },
-      { title: 'Poster Study No.4', img: 'Postercolor.jpg', tags: ['Poster', 'Abstract'], price: 120, date: '2026-05-08', orig: false, size: 'A3 print', desc: 'Flat, opaque poster-colour shapes — a teaching piece on simplifying a subject to its honest blocks.' },
-      { title: 'Open Sketchbook', img: 'Sketchbook.jpg', tags: ['Drawing', 'Still life'], price: 80, date: '2026-04-26', orig: false, size: 'A4 print', desc: 'A page from a daily sketchbook, reproduced full-size. Graphite and a touch of wash.' },
-      { title: 'Block-in Head', img: 'cover4.jpg', tags: ['Oil', 'Portrait'], price: 360, date: '2026-04-12', orig: true, size: '35 × 45 cm', desc: 'Original alla-prima portrait block-in. Big shapes, honest values — left deliberately unfinished where the light lands.' },
-      { title: 'Field Greens', img: 'cover2.jpg', tags: ['Oil', 'Landscape'], price: 280, date: '2026-03-29', orig: true, size: '40 × 40 cm', desc: 'Oil on board. An exercise in mixing greens from a limited palette — no tube green anywhere in it.' },
-      { title: 'Worn Eraser', img: 'Rubber.jpg', tags: ['Drawing', 'Still life'], price: 70, date: '2026-03-15', orig: false, size: 'A5 print', desc: 'A small, fond study of a kneaded eraser at the end of its life. Subtractive drawing about a subtractive tool.' },
-      { title: 'Two Brushes', img: 'BrushB.jpg', tags: ['Ink', 'Still life'], price: 110, date: '2026-02-28', orig: false, size: 'A4 print', desc: 'Ink line and wash. Two rounds, crossed — the workhorse and the detail brush.' },
-      { title: 'Morning Wash', img: 'cover3.jpg', tags: ['Watercolour', 'Landscape'], price: 200, date: '2026-02-14', orig: false, size: 'A3 print', desc: 'Print of a calm morning estuary. The kind of soft gradient the free lesson teaches you to lay down.' },
-      { title: 'Portrait in Umber', img: 'ProfilePic.jpg', tags: ['Oil', 'Portrait'], price: 340, date: '2026-01-30', orig: true, size: '35 × 45 cm', desc: 'Original monochrome oil portrait in burnt umber — a study in pure value before any colour enters.' }
-    ];
+    return (window.CAS_GALLERY || []).slice();
   }
 
   componentDidMount() {
@@ -343,8 +302,11 @@ class Component extends DCLogic {
     const cartSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1.6"></circle><circle cx="19" cy="21" r="1.6"></circle><path d="M2 3h3l2.6 12.6a1.8 1.8 0 0 0 1.8 1.4h8.9a1.8 1.8 0 0 0 1.8-1.4L22 7H6"></path></svg>';
 
     const etsyUrl = (p) => 'https://www.etsy.com/search?q=' + encodeURIComponent("Crystal's Art School " + p.title);
-    const RATIO = { 'cover1.jpg': 0.8, 'Liquidwatercolor.jpg': 1.35, 'BrushA.jpg': 0.75, 'cover3.jpg': 1.5, 'Postercolor.jpg': 0.8, 'Sketchbook.jpg': 1.33, 'cover4.jpg': 0.8, 'cover2.jpg': 1, 'Rubber.jpg': 1, 'BrushB.jpg': 0.72, 'ProfilePic.jpg': 0.82 };
-    const rOf = (p) => RATIO[p.img] || 0.8;
+    /* --r is a CSS aspect-ratio, i.e. width / height, and it also decides the
+       .land (rotated) frame. Every piece carries a ratio measured from the
+       real file by tools/import-assets.py; the old lookup table was keyed by
+       filename and silently fell back to 0.8, which squashed the artwork. */
+    const rOf = (p) => (typeof p.ratio === 'number' && p.ratio > 0) ? p.ratio : 0.8;
     const fsOf = (p) => /A5/.test(p.size) ? 0.62 : /A4/.test(p.size) ? 0.74 : /A3/.test(p.size) ? 0.86 : 1;
     const cardHTML = (p, idx) =>
       '<article class="art-card" data-idx="' + idx + '">' +
@@ -444,7 +406,7 @@ class Component extends DCLogic {
     const mImg = document.getElementById('am-img');
     const openModal = (p) => {
       mImg.src = 'img/' + p.img; mImg.alt = p.title;
-      document.querySelector('.am-frame .am-img').style.aspectRatio = (RATIO[p.img] || 0.8);
+      document.querySelector('.am-frame .am-img').style.aspectRatio = rOf(p);
       const amFrame = document.querySelector('.am-frame');
       amFrame.classList.toggle('land', rOf(p) > 1.15);
       document.getElementById('am-sub').textContent = p.orig ? 'Original artwork' : 'Limited-edition print';

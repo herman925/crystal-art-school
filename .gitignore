@@ -13,3 +13,5 @@ Thumbs.db
 *.drawio
 .$*.bkp
 
+.gstack/
+__pycache__/

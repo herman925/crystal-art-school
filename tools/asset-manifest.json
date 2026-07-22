@@ -1,0 +1,417 @@
+{
+  "generatedFrom": "assets",
+  "courses": [
+    {
+      "slug": "clouds-beginner",
+      "folder": "01 - Courses/Course 01-Beginner",
+      "cover": "img/courses/clouds-beginner/cover.jpg",
+      "lessons": [
+        {
+          "n": 1,
+          "srcFolder": "Lesson 01",
+          "poster": "img/courses/clouds-beginner/l01.jpg",
+          "posterW": 1280,
+          "posterH": 1280,
+          "dur": 733,
+          "srcVideo": "CloudsLesson3.mp4",
+          "altVideos": []
+        },
+        {
+          "n": 2,
+          "srcFolder": "Lesson 02",
+          "poster": "img/courses/clouds-beginner/l02.jpg",
+          "posterW": 1280,
+          "posterH": 1280,
+          "dur": 364,
+          "srcVideo": "CloudsLesson4.mp4",
+          "altVideos": []
+        },
+        {
+          "n": 3,
+          "srcFolder": "Lesson 03",
+          "poster": "img/courses/clouds-beginner/l03.jpg",
+          "posterW": 1280,
+          "posterH": 1280,
+          "dur": 1421,
+          "srcVideo": "CloudsLesson5.mp4",
+          "altVideos": [
+            "CloudsLesson5A.mp4",
+            "CloudsLesson5B.mp4"
+          ]
+        },
+        {
+          "n": 4,
+          "srcFolder": "Lesson 04",
+          "poster": "img/courses/clouds-beginner/l04.jpg",
+          "posterW": 1280,
+          "posterH": 1280,
+          "dur": 874,
+          "srcVideo": "CloudsLesson6.mp4",
+          "altVideos": []
+        },
+        {
+          "n": 5,
+          "srcFolder": "Lesson 05",
+          "poster": "img/courses/clouds-beginner/l05.jpg",
+          "posterW": 1280,
+          "posterH": 1280,
+          "dur": 183,
+          "srcVideo": "CloudsLesson7.mp4",
+          "altVideos": []
+        },
+        {
+          "n": 6,
+          "srcFolder": "Lesson 06",
+          "poster": "img/courses/clouds-beginner/l06.jpg",
+          "posterW": 915,
+          "posterH": 1280,
+          "dur": 468,
+          "srcVideo": "CloudsLesson8.mp4",
+          "altVideos": []
+        },
+        {
+          "n": 7,
+          "srcFolder": "Lesson 07",
+          "poster": "img/courses/clouds-beginner/l07.jpg",
+          "posterW": 945,
+          "posterH": 1280,
+          "dur": 484,
+          "srcVideo": "CloudsLesson9.mp4",
+          "altVideos": []
+        },
+        {
+          "n": 8,
+          "srcFolder": "Lesson 08",
+          "poster": "img/courses/clouds-beginner/l08.jpg",
+          "posterW": 1280,
+          "posterH": 1280,
+          "dur": 885,
+          "srcVideo": "CloudsLesson10.mp4",
+          "altVideos": []
+        },
+        {
+          "n": 9,
+          "srcFolder": "Lesson 09",
+          "poster": "img/courses/clouds-beginner/l09.jpg",
+          "posterW": 1280,
+          "posterH": 1280,
+          "dur": 558,
+          "srcVideo": "CloudsLesson11.mp4",
+          "altVideos": []
+        },
+        {
+          "n": 10,
+          "srcFolder": "Lesson 10",
+          "poster": "img/courses/clouds-beginner/l10.jpg",
+          "posterW": 1280,
+          "posterH": 1280,
+          "dur": 400,
+          "srcVideo": "CloudsLesson12.mp4",
+          "altVideos": []
+        },
+        {
+          "n": 11,
+          "srcFolder": "Lesson 11",
+          "poster": "img/courses/clouds-beginner/l11.jpg",
+          "posterW": 1280,
+          "posterH": 1280,
+          "dur": 619,
+          "srcVideo": "CloudsLesson13.mp4",
+          "altVideos": []
+        },
+        {
+          "n": 12,
+          "srcFolder": "Lesson 12",
+          "poster": "img/courses/clouds-beginner/l12.jpg",
+          "posterW": 1280,
+          "posterH": 1280,
+          "dur": 461,
+          "srcVideo": "CloudsLesson14.mp4",
+          "altVideos": []
+        }
+      ]
+    },
+    {
+      "slug": "clouds-intermediate",
+      "folder": "01 - Courses/Course 01-Intermediate",
+      "cover": "img/courses/clouds-intermediate/cover.jpg",
+      "lessons": [
+        {
+          "n": 1,
+          "srcFolder": "Lesson 13",
+          "poster": "img/courses/clouds-intermediate/l01.jpg",
+          "posterW": 1280,
+          "posterH": 1280,
+          "dur": 301,
+          "srcVideo": "CloudsLesson15.mp4",
+          "altVideos": []
+        },
+        {
+          "n": 2,
+          "srcFolder": "Lesson 14",
+          "poster": "img/courses/clouds-intermediate/l02.jpg",
+          "posterW": 1280,
+          "posterH": 1280,
+          "dur": 721,
+          "srcVideo": "CloudsLesson16.mp4",
+          "altVideos": []
+        },
+        {
+          "n": 3,
+          "srcFolder": "Lesson 15",
+          "poster": "img/courses/clouds-intermediate/l03.jpg",
+          "posterW": 1280,
+          "posterH": 1280,
+          "dur": 365,
+          "srcVideo": "CloudsLesson17.mp4",
+          "altVideos": []
+        },
+        {
+          "n": 4,
+          "srcFolder": "Lesson 16",
+          "poster": "img/courses/clouds-intermediate/l04.jpg",
+          "posterW": 1280,
+          "posterH": 1280,
+          "dur": 646,
+          "srcVideo": "CloudsLesson18.mp4",
+          "altVideos": []
+        },
+        {
+          "n": 5,
+          "srcFolder": "Lesson 17",
+          "poster": "img/courses/clouds-intermediate/l05.jpg",
+          "posterW": 1280,
+          "posterH": 1280,
+          "dur": 452,
+          "srcVideo": "CloudsLesson19.mp4",
+          "altVideos": []
+        },
+        {
+          "n": 6,
+          "srcFolder": "Lesson 18",
+          "poster": "img/courses/clouds-intermediate/l06.jpg",
+          "posterW": 1280,
+          "posterH": 1280,
+          "dur": 752,
+          "srcVideo": "CloudsLesson20.mp4",
+          "altVideos": []
+        },
+        {
+          "n": 7,
+          "srcFolder": "Lesson 19",
+          "poster": "img/courses/clouds-intermediate/l07.jpg",
+          "posterW": 1280,
+          "posterH": 1280,
+          "dur": 850,
+          "srcVideo": "CloudsLesson21.mp4",
+          "altVideos": []
+        }
+      ]
+    },
+    {
+      "slug": "little-house",
+      "folder": "01 - Courses/Course 02",
+      "cover": "img/courses/little-house/cover.jpg",
+      "lessons": [
+        {
+          "n": 1,
+          "srcFolder": "Course 02",
+          "poster": "img/courses/little-house/l01.jpg",
+          "posterW": 540,
+          "posterH": 540,
+          "dur": 483,
+          "srcVideo": "LittleHouse.mov",
+          "altVideos": []
+        }
+      ]
+    },
+    {
+      "slug": "urban-sketch",
+      "folder": "01 - Courses/Course 03",
+      "cover": "img/courses/urban-sketch/cover.jpg",
+      "lessons": [
+        {
+          "n": 1,
+          "srcFolder": "Course 03",
+          "poster": "img/courses/urban-sketch/l01.jpg",
+          "posterW": 1280,
+          "posterH": 1280,
+          "dur": 673,
+          "srcVideo": "Urban.mov",
+          "altVideos": []
+        }
+      ]
+    }
+  ],
+  "gallery": [
+    {
+      "img": "g01.jpg",
+      "src": "IMG_6942 2.JPG",
+      "path": "img/gallery/g01.jpg",
+      "w": 1161,
+      "h": 1600,
+      "ratio": 1.3781
+    },
+    {
+      "img": "g02.jpg",
+      "src": "IMG_7511 2.jpg",
+      "path": "img/gallery/g02.jpg",
+      "w": 1029,
+      "h": 1600,
+      "ratio": 1.5549
+    },
+    {
+      "img": "g03.jpg",
+      "src": "IMG_7512 3.jpg",
+      "path": "img/gallery/g03.jpg",
+      "w": 1153,
+      "h": 1600,
+      "ratio": 1.3877
+    },
+    {
+      "img": "g04.jpg",
+      "src": "IMG_7514 2.jpg",
+      "path": "img/gallery/g04.jpg",
+      "w": 1600,
+      "h": 1208,
+      "ratio": 0.755
+    },
+    {
+      "img": "g05.jpg",
+      "src": "IMG_7559 2.jpg",
+      "path": "img/gallery/g05.jpg",
+      "w": 1062,
+      "h": 1600,
+      "ratio": 1.5066
+    },
+    {
+      "img": "g06.jpg",
+      "src": "IMG_8183 2.jpg",
+      "path": "img/gallery/g06.jpg",
+      "w": 1214,
+      "h": 1600,
+      "ratio": 1.318
+    },
+    {
+      "img": "g07.jpg",
+      "src": "IMG_8186 2.jpg",
+      "path": "img/gallery/g07.jpg",
+      "w": 1168,
+      "h": 1600,
+      "ratio": 1.3699
+    },
+    {
+      "img": "g08.jpg",
+      "src": "IMG_8187 2.jpg",
+      "path": "img/gallery/g08.jpg",
+      "w": 1157,
+      "h": 1600,
+      "ratio": 1.3829
+    },
+    {
+      "img": "g09.jpg",
+      "src": "IMG_8188 2.jpg",
+      "path": "img/gallery/g09.jpg",
+      "w": 1149,
+      "h": 1600,
+      "ratio": 1.3925
+    },
+    {
+      "img": "g10.jpg",
+      "src": "IMG_8191.jpg",
+      "path": "img/gallery/g10.jpg",
+      "w": 1600,
+      "h": 1193,
+      "ratio": 0.7456
+    },
+    {
+      "img": "g11.jpg",
+      "src": "IMG_8193.JPG",
+      "path": "img/gallery/g11.jpg",
+      "w": 1600,
+      "h": 1075,
+      "ratio": 0.6719
+    },
+    {
+      "img": "g12.jpg",
+      "src": "IMG_8194.JPG",
+      "path": "img/gallery/g12.jpg",
+      "w": 1203,
+      "h": 1600,
+      "ratio": 1.33
+    },
+    {
+      "img": "g13.jpg",
+      "src": "IMG_8195.jpg",
+      "path": "img/gallery/g13.jpg",
+      "w": 1206,
+      "h": 1515,
+      "ratio": 1.2562
+    },
+    {
+      "img": "g14.jpg",
+      "src": "IMG_8201.jpg",
+      "path": "img/gallery/g14.jpg",
+      "w": 1600,
+      "h": 1187,
+      "ratio": 0.7419
+    },
+    {
+      "img": "g15.jpg",
+      "src": "IMG_8203.jpg",
+      "path": "img/gallery/g15.jpg",
+      "w": 1206,
+      "h": 1335,
+      "ratio": 1.107
+    },
+    {
+      "img": "g16.jpg",
+      "src": "IMG_8209 2.JPG",
+      "path": "img/gallery/g16.jpg",
+      "w": 1600,
+      "h": 1230,
+      "ratio": 0.7688
+    },
+    {
+      "img": "g17.jpg",
+      "src": "IMG_8213.jpg",
+      "path": "img/gallery/g17.jpg",
+      "w": 1166,
+      "h": 1600,
+      "ratio": 1.3722
+    }
+  ],
+  "freeVideos": [
+    {
+      "slug": "mountain",
+      "poster": "img/free/mountain.jpg",
+      "posterW": 960,
+      "posterH": 636,
+      "srcVideo": "Mountain.MOV",
+      "videoPresent": true,
+      "dur": 1093
+    },
+    {
+      "slug": "pink-floral",
+      "poster": "img/free/pink-floral.jpg",
+      "posterW": 720,
+      "posterH": 960,
+      "srcVideo": "PinkFloral.MOV",
+      "videoPresent": true,
+      "dur": 437
+    },
+    {
+      "slug": "watercolor-airport",
+      "poster": "img/free/watercolor-airport.jpg",
+      "posterW": 1600,
+      "posterH": 1200,
+      "srcVideo": "Watercolor Airport 2.mov",
+      "videoPresent": false,
+      "dur": null
+    }
+  ],
+  "warnings": [
+    "clouds-beginner/Lesson 03 has 3 videos: CloudsLesson5.mp4, CloudsLesson5A.mp4, CloudsLesson5B.mp4 — using the first",
+    "free video not on disk (Drive sync?): Watercolor Airport 2.mov"
+  ]
+}

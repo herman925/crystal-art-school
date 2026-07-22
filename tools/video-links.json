@@ -1,0 +1,40 @@
+{
+  "_note": "Google Drive file IDs for the course/free videos, looked up via the Drive API on 2026-07-22. Keyed by SOURCE filename (matches lessons[].src / freeVideos[].srcVideo in asset-manifest.json). build-data.py turns each ID into https://drive.google.com/file/d/<id>/preview for the iframe player. The video files themselves are NEVER copied into this repo. If Crystal re-uploads a video, the ID changes — update it here and re-run tools/build-data.py.",
+  "_sharing": "Embeds only play for site visitors if the file is shared 'Anyone with the link'. As of 2026-07-22 the checked files are 'anyone: WRITER' — over-permissive (anyone can edit/delete). Should be downgraded to 'anyone: viewer' in Drive; playback works either way.",
+
+  "files": {
+    "CloudsLesson3.mp4":  "1SOx1FGG_JrtNSDBOlQkdUBfJSMQF1gtA",
+    "CloudsLesson4.mp4":  "1ZKGCN0_wZjIYR31SZPp2VI_yra1Sl1Jn",
+    "CloudsLesson5.mp4":  "1ipPkizliP0go8QDh8DgqZOG_6cWC5Mnm",
+    "CloudsLesson6.mp4":  "1lbzMyopzSVtdDj0zY1VsqAdo2bIFJO4V",
+    "CloudsLesson7.mp4":  "1cLbvrWfRUJBgrut8DNiXtf4mdI6ety5H",
+    "CloudsLesson8.mp4":  "1fsEkKFXw2ThFu3QUW6qkIB-cBj3Jpv-s",
+    "CloudsLesson9.mp4":  "1CwogrP0QGyk6Jad5eLOk6rkxe9SnOaKg",
+    "CloudsLesson10.mp4": "1AjriRi68Y8-M9Lj9zSmjp46euCXCGRBM",
+    "CloudsLesson11.mp4": "1nsIMQc2kUjTEHIG2ThRoZKonk2y3dOP6",
+    "CloudsLesson12.mp4": "1yLMxmEUBDVC5SqbCGYYTdtZYN1zT6Xkp",
+    "CloudsLesson13.mp4": "1Xf71RtpLMkzJ-xhBeAjybOCV6TXAoM9x",
+    "CloudsLesson14.mp4": "1t3J2MC6Bl1NwyvTfsh3DfQiSs5qu2fiT",
+    "CloudsLesson15.mp4": "1SsVDR8Kn7MEtyNXgU-DSdPTVh1wxkAJa",
+    "CloudsLesson16.mp4": "1n7k3LlemHsaQbNGV0hRx0fjP7xxmIX_z",
+    "CloudsLesson17.mp4": "1SnEHnnYRcmTCLDCbzUVdZb7gAbxSsWY0",
+    "CloudsLesson18.mp4": "1iXqHjjeKh1FWrJDHc3Hm5VbKnVGJy31A",
+    "CloudsLesson19.mp4": "1qYaf9cK8bsPuQF-idvoxNZcohgmTKnhh",
+    "CloudsLesson20.mp4": "1u8earc4u0TgOGYd3vzRa0gijtnR6udda",
+    "CloudsLesson21.mp4": "1uHPUE-DuaokulQ4_r251EbSoCKLaDfzS",
+    "LittleHouse.mov":    "1s3Vn3YxGEfyzhwfI4ns7ivuUbyjvjWw9",
+    "Urban.mov":          "1MQti8rAmZ7-Rr43YwB0th9H0cpWEMmdc",
+    "Mountain.MOV":       "13O8fcaJTVxsmrqsKel-rSsVUwryh24MV",
+    "PinkFloral.MOV":     "1REomVIrmofLdOVb96yFZT1pfoWcB7p3_"
+  },
+
+  "unused": {
+    "_note": "Present in Drive but deliberately not wired to any lesson (spec Q2: is Beginner Lesson 03 a two-part lesson?)",
+    "CloudsLesson5A.mp4": "1dIVNNFUxZDxTAoAKAF7q9vbXxoGgPPmu",
+    "CloudsLesson5B.mp4": "1s9BVmNv3l5o8_yusiTIYP8KHMvHZtzvq"
+  },
+
+  "missing": {
+    "Watercolor Airport 2.mov": "NOT IN DRIVE as of 2026-07-22 — only the poster JPG exists. Card ships poster-only."
+  }
+}
