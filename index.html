@@ -15,6 +15,13 @@
 <style>
 /* gallery tile: scrim so the veil text stays readable on light artwork */
 .shop-gallery .gt-veil { background: linear-gradient(180deg, rgba(28,22,16,.18) 0%, rgba(28,22,16,.34) 55%, rgba(28,22,16,.66) 100%); text-shadow: 0 2px 12px rgba(0,0,0,.6); }
+/* course-card bottom strip: crossfading slideshow of the course's lesson
+   covers. The container keeps its 16/9 aspect-ratio height, so the slides
+   can stack absolutely inside it. Hover-zoom from the design css still
+   applies to the visible slide. */
+.course-card .cc-photo { position: relative; }
+.course-card .cc-photo img { position: absolute; inset: 0; opacity: 0; transition: opacity .9s ease, transform .5s var(--ease-out); }
+.course-card .cc-photo img.on { opacity: 1; }
 </style>
 
 <script src="js/site-extras.js"></script>
@@ -308,6 +315,8 @@ class Component extends DCLogic {
     return (window.CAS_COURSES || []).map((c, i) => ({
       id: c.id,
       img: String(c.cover || '').replace(/^img\//, ''),
+      /* every lesson's cover photo, for the card's bottom photo strip */
+      posters: (c.lessons || []).map((l) => String(l.poster || '').replace(/^img\//, '')),
       title: c.title,
       tag: c.tag,
       date: c.date || ('2026-07-' + String(28 - i * 3).padStart(2, '0')),
@@ -560,7 +569,15 @@ class Component extends DCLogic {
     if (shopRail) {
       const courses = shuffle(pool).slice(0, 10);
       courses.forEach((c, idx) => {
-        const ph = courses[(idx + 1) % courses.length];
+        /* Bottom photo strip: a slideshow of the course's lesson covers,
+           skipping lesson 1 (it already IS the top cover). Single-lesson
+           courses have nothing extra to show, so they keep the old palette
+           photo as a static strip. */
+        const slides = (c.posters || []).slice(1);
+        if (!slides.length) slides.push('A5.jpeg');
+        const stripImgs = slides.map((p, si) =>
+          '<img src="img/' + p + '" alt="' + esc(c.title) + ' — lesson cover"' +
+          (si === 0 ? ' class="on"' : ' loading="lazy"') + '>').join('');
         const card = document.createElement('div');
         card.className = 'course-card';
         card.innerHTML = '<div class="cc-cover"><img src="img/' + c.img + '" alt="' + esc(c.title) + '"></div>' +
@@ -568,9 +585,28 @@ class Component extends DCLogic {
           '<h3><a href="' + this.courseHref(c.id) + '" style="color:inherit;text-decoration:none;">' + esc(c.title) + '</a></h3>' +
           '<div class="cc-row"><span class="cc-price">£' + c.price + '</span>' +
           '<button class="cc-btn primary" type="button" data-add-to-cart data-tiered data-title="' + esc(c.title) + '" data-price="' + c.price + '" data-img="' + c.img + '">' + cartSvg + ' Add</button></div></div>' +
-          '<div class="cc-photo"><img src="img/A5.jpeg" alt=""></div>';
+          '<div class="cc-photo" data-slides="' + slides.length + '">' + stripImgs + '</div>';
         shopRail.appendChild(card);
       });
+
+      /* one shared clock drives every strip; each card is offset by its
+         position so they don't all flip in unison. Static under
+         prefers-reduced-motion. */
+      if (!reduce) {
+        let tick = 0;
+        setInterval(() => {
+          tick++;
+          shopRail.querySelectorAll('.cc-photo[data-slides]').forEach((s, si) => {
+            const imgs = s.querySelectorAll('img');
+            if (imgs.length < 2 || (tick + si) % 2 === 0) return; /* half-beat stagger */
+            let i = parseInt(s.dataset.i || '0', 10);
+            imgs[i].classList.remove('on');
+            i = (i + 1) % imgs.length;
+            imgs[i].classList.add('on');
+            s.dataset.i = i;
+          });
+        }, 1700);
+      }
       const galTile = document.querySelector('.shop-gallery');
       const firstCard = shopRail.querySelector('.course-card');
       if (galTile && firstCard) {
