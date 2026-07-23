@@ -73,17 +73,34 @@ def build_courses(manifest, meta, links):
         for i, (al, cl) in enumerate(zip(a_lessons, c_lessons)):
             if al["dur"] is None:
                 print("  ! %s lesson %d has no duration" % (slug, i + 1))
+            # A lesson may be multi-part (several videos in its folder).
+            # Every part gets its own Drive URL; the player shows part pills
+            # when there is more than one. "video" stays as part 1's URL so
+            # older readers keep working.
+            raw_parts = al.get("videos") or (
+                [{"file": al["srcVideo"], "dur": al["dur"]}] if al.get("srcVideo") else [])
+            parts = []
+            for j, pt in enumerate(raw_parts):
+                url = links.get(pt["file"])
+                if not url:
+                    print("  ! %s lesson %d part %s has no Drive link — part dropped"
+                          % (slug, i + 1, pt["file"]))
+                    continue
+                parts.append({"label": "Part %d" % (j + 1), "dur": pt["dur"],
+                              "url": url, "src": pt["file"]})
+            if len(parts) == 1:
+                parts[0]["label"] = ""
+
             lessons.append({
                 "n": i + 1,
                 "title": cl["title"],
                 "subtitle": cl["subtitle"],
-                "dur": al["dur"],                 # seconds, from ffprobe
+                "dur": al["dur"],                 # seconds, ffprobe; sum of parts
                 "poster": al["poster"],
-                # Google Drive preview URL when the source file is mapped in
-                # tools/video-links.json; null keeps the simulated demo player
-                "video": links.get(al["srcVideo"]) if al["srcVideo"] else None,
+                "video": parts[0]["url"] if parts else None,
+                "videos": parts if len(parts) > 1 else [],
                 "free": i == 0,                   # lesson 1 is the free preview
-                "src": al["srcVideo"],            # provenance only, never fetched
+                "src": al.get("srcVideo"),        # provenance only, never fetched
                 "srcFolder": al["srcFolder"],
             })
 

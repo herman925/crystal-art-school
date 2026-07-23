@@ -33,6 +33,10 @@
 .stage-missing { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); z-index: 6; display: none; font-family: var(--font-cond); font-size: 11px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; color: #f3ede1; background: rgba(20,17,13,.72); border-radius: 999px; padding: 7px 16px; backdrop-filter: blur(3px); white-space: nowrap; }
 .stage.is-missing .stage-missing { display: block; }
 .stage.is-missing .veil, .stage.is-missing .sheen { display: none; }
+/* multi-part lessons: part selector pills under the player */
+.part-bar { display: none; gap: 8px; margin: 12px 0 0; flex-wrap: wrap; align-items: center; }
+.part-bar.show { display: flex; }
+.part-bar .pb-label { font-family: var(--font-cond); font-size: 10.5px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); margin-right: 2px; }
 /* emulated fullscreen for the demo player */
 .player.fs { position: fixed; inset: 0; z-index: 600; margin: 0; border-radius: 0; background: #0d0b08; display: flex; flex-direction: column; }
 .player.fs .stage { flex: 1; min-height: 0; border-radius: 0; aspect-ratio: auto; }
@@ -145,6 +149,7 @@
           <button class="ctl-btn" id="fs-btn" type="button" aria-label="Toggle fullscreen" title="Fullscreen">⛶</button>
         </div>
       </div>
+      <div class="part-bar" id="part-bar" aria-label="Lesson parts"><span class="pb-label">Parts</span></div>
       <p class="demo-note" id="demo-note">(prototype — the video is simulated and plays at 12× speed, so you can feel the whole journey in a few minutes)</p>
 
       <div class="finish-card" id="finish-card">
@@ -267,7 +272,8 @@ class Component extends DCLogic {
       dur: l.dur || 60,
       note: l.subtitle,
       img: l.poster,
-      video: l.video || null   // Google Drive preview URL, or null = simulated
+      video: l.video || null,  // part 1's Drive preview URL, or null = missing
+      parts: (l.videos && l.videos.length > 1) ? l.videos : null
     }));
     const N = UNITS.length;
     if (!N) return;
@@ -381,26 +387,59 @@ class Component extends DCLogic {
     const gframe = $('gdrive-frame');
     const controlsRow = document.querySelector('.player .controls');
     const demoNote = $('demo-note');
-    const setVideoMode = (u) => {
-      /* real -> Drive iframe; missing -> the lesson's cover photo stays up as
-         a static placeholder with a "coming soon" chip. The old simulated
-         demo player is retired: no fake clock, no fake seek bar. */
-      const real = !!u.video;
+    const partBar = $('part-bar');
+    let curPart = 0;
+
+    /* Multi-part lessons (several videos filed in one lesson folder) get a
+       row of Part pills; each pill swaps the Drive iframe. Progress stays
+       per-lesson - "Mark complete" covers all parts. */
+    const renderPartBar = (u) => {
+      if (!partBar) return;
+      partBar.classList.toggle('show', !!u.parts);
+      partBar.querySelectorAll('.fopt').forEach((b) => b.remove());
+      if (!u.parts) return;
+      u.parts.forEach((pt, j) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'fopt' + (j === curPart ? ' active' : '');
+        const m = Math.floor((pt.dur || 0) / 60), sec = Math.floor((pt.dur || 0) % 60);
+        b.textContent = (pt.label || ('Part ' + (j + 1))) + ' · ' + m + ':' + String(sec).padStart(2, '0');
+        b.addEventListener('click', () => { if (curPart !== j) { curPart = j; applyVideo(UNITS[state.unit]); } });
+        partBar.appendChild(b);
+      });
+    };
+
+    const applyVideo = (u) => {
+      const src = u.parts ? (u.parts[curPart] && u.parts[curPart].url) : u.video;
+      const real = !!src;
       stage.classList.toggle('has-video', real);
       stage.classList.toggle('is-missing', !real);
-      if (controlsRow) controlsRow.style.display = 'none';
       if (gframe) {
-        const want = real ? u.video : 'about:blank';
+        const want = real ? src : 'about:blank';
         if (gframe.getAttribute('src') !== want) gframe.setAttribute('src', want);
       }
+      const partDur = u.parts ? ((u.parts[curPart] && u.parts[curPart].dur) || 0) : u.dur;
+      tDur.textContent = fmt(partDur);
+      flag.textContent = 'Lesson ' + (state.unit + 1) + ' — ' + u.title
+        + (u.parts ? ' · Part ' + (curPart + 1) + ' of ' + u.parts.length : '');
+      if (partBar) partBar.querySelectorAll('.fopt').forEach((b, j) => b.classList.toggle('active', j === curPart));
+    };
+
+    const setVideoMode = (u) => {
+      /* real -> Drive iframe (part-aware); missing -> cover photo with a
+         "coming soon" chip. The old simulated demo player is retired. */
+      if (controlsRow) controlsRow.style.display = 'none';
+      renderPartBar(u);
+      applyVideo(u);
       /* Drive's embedded player needs third-party cookies; Incognito, Safari,
          Brave and strict-privacy Chrome show "Unable to load video" instead.
          Always offer a first-party escape hatch: opening the file directly on
          drive.google.com plays for everyone. */
+      const noteSrc = u.parts ? (u.parts[curPart] && u.parts[curPart].url) : u.video;
       if (demoNote) {
-        if (real) {
+        if (noteSrc) {
           demoNote.innerHTML = '(video streams from Google Drive — if it says “Unable to load video”, your browser is blocking third-party cookies: '
-            + '<a href="' + u.video.replace('/preview', '/view') + '" target="_blank" rel="noopener" style="color:inherit;font-weight:700;text-decoration:underline;">watch it in a new tab ↗</a>)';
+            + '<a href="' + noteSrc.replace('/preview', '/view') + '" target="_blank" rel="noopener" style="color:inherit;font-weight:700;text-decoration:underline;">watch it in a new tab ↗</a>)';
         } else {
           demoNote.textContent = '(this lesson’s video hasn’t been uploaded yet — the cover is shown as a placeholder; you can still mark the lesson complete below)';
         }
@@ -411,10 +450,9 @@ class Component extends DCLogic {
       state.unit = Math.max(0, Math.min(N - 1, i));
       state.t = 0;
       const u = UNITS[state.unit];
+      curPart = 0;
       poster.src = u.img;
       poster.alt = 'Lesson ' + (state.unit + 1) + ' — ' + u.title;
-      flag.textContent = 'Lesson ' + (state.unit + 1) + ' — ' + u.title;
-      tDur.textContent = fmt(u.dur);
       notes.forEach(a => a.classList.toggle('active', parseInt(a.dataset.unit, 10) === state.unit));
       setVideoMode(u);
       setPlaying(false);

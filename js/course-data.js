@@ -11,7 +11,7 @@ window.CAS_COURSES = [
     "theme": "landscape",
     "difficulty": "beginner",
     "durationBucket": "long",
-    "totalSeconds": 7450,
+    "totalSeconds": 8835,
     "price": 58,
     "was": 72,
     "sale": true,
@@ -59,11 +59,25 @@ window.CAS_COURSES = [
         "n": 1,
         "title": "Welcome & materials for skies",
         "subtitle": "The small kit — one round brush, one flat, three tubes and decent paper.",
-        "dur": 733,
+        "dur": 781,
         "poster": "img/courses/clouds-beginner/l01.jpg",
-        "video": "https://drive.google.com/file/d/1-o2mN5kKzpOQdbol0iAE-ueHY9YPPSsB/preview",
+        "video": "https://drive.google.com/file/d/1PGmnGOnCC-0u3RZqlZzedqi-Y8z6GuUP/preview",
+        "videos": [
+          {
+            "label": "Part 1",
+            "dur": 48,
+            "url": "https://drive.google.com/file/d/1PGmnGOnCC-0u3RZqlZzedqi-Y8z6GuUP/preview",
+            "src": "CloudsLesson2.mp4"
+          },
+          {
+            "label": "Part 2",
+            "dur": 733,
+            "url": "https://drive.google.com/file/d/1Xt7U18j3bfSLMy4bRyuLSARRUHcIw9iI/preview",
+            "src": "CloudsLesson3.mp4"
+          }
+        ],
         "free": true,
-        "src": "CloudsLesson3.mp4",
+        "src": "CloudsLesson2.mp4",
         "srcFolder": "Lesson 01"
       },
       {
@@ -72,7 +86,8 @@ window.CAS_COURSES = [
         "subtitle": "Map cumulus volumes with overlapping circles, the way you would construct a figure.",
         "dur": 364,
         "poster": "img/courses/clouds-beginner/l02.jpg",
-        "video": "https://drive.google.com/file/d/1lQOdvQw6LELsE5d8IUsd3FozY2XITBQN/preview",
+        "video": "https://drive.google.com/file/d/1d5XfiwqAcu-XuooPpqCfwpL7hOKRQj76/preview",
+        "videos": [],
         "free": false,
         "src": "CloudsLesson4.mp4",
         "srcFolder": "Lesson 02"
@@ -81,9 +96,23 @@ window.CAS_COURSES = [
         "n": 3,
         "title": "Pencil sketching & hatching volume",
         "subtitle": "Hatching sets the weight and form before any paint arrives.",
-        "dur": 1421,
+        "dur": 2758,
         "poster": "img/courses/clouds-beginner/l03.jpg",
-        "video": "https://drive.google.com/file/d/1dIVNNFUxZDxTAoAKAF7q9vbXxoGgPPmu/preview",
+        "video": "https://drive.google.com/file/d/1vU9au1R7PiJMQvQtHr1Utjj4j2RyArOu/preview",
+        "videos": [
+          {
+            "label": "Part 1",
+            "dur": 1421,
+            "url": "https://drive.google.com/file/d/1vU9au1R7PiJMQvQtHr1Utjj4j2RyArOu/preview",
+            "src": "CloudsLesson5A.mp4"
+          },
+          {
+            "label": "Part 2",
+            "dur": 1337,
+            "url": "https://drive.google.com/file/d/1SAtL4v8DQ6qPYajYlS0mkAaBxTloD-Qe/preview",
+            "src": "CloudsLesson5B.mp4"
+          }
+        ],
         "free": false,
         "src": "CloudsLesson5A.mp4",
         "srcFolder": "Lesson 03"
@@ -94,7 +123,8 @@ window.CAS_COURSES = [
         "subtitle": "Thumbnails first — horizon low, masses balanced, nothing wasted.",
         "dur": 874,
         "poster": "img/courses/clouds-beginner/l04.jpg",
-        "video": "https://drive.google.com/file/d/1l_5WGjmOlKGJtxZv6q9I_I7txs6SX8ea/preview",
+        "video": "https://drive.google.com/file/d/1cbc7pio64kcPw7Mk9sA09SjB5VB_kdAR/preview",
+        "videos": [],
         "free": false,
         "src": "CloudsLesson6.mp4",
         "srcFolder": "Lesson 04"
@@ -105,7 +135,8 @@ window.CAS_COURSES = [
         "subtitle": "Sort a reference photo into just three value families.",
         "dur": 183,
         "poster": "img/courses/clouds-beginner/l05.jpg",
-        "video": "https://drive.google.com/file/d/1xTnEpG9NWwojihu6KnUf1xuDz_OTdPnx/preview",
+        "video": "https://drive.google.com/file/d/10WeLqB9-9N5KOPLOxcVgZfU8k8rX2E7c/preview",
+        "videos": [],
         "free": false,
         "src": "CloudsLesson7.mp4",
         "srcFolder": "Lesson 05"
@@ -116,7 +147,8 @@ window.CAS_COURSES = [
         "subtitle": "Place the lit face of one cloud, then make every other cloud agree.",
         "dur": 468,
         "poster": "img/courses/clouds-beginner/l06.jpg",
-        "video": "https://drive.google.com/file/d/1lseQKpbLuJKhQRE7iyOUKK6KxkL0yGRN/preview",
+        "video": "https://drive.google.com/file/d/1Oe7UdcM-N2f_ABVBVKNuWN-fyMCuNCjm/preview",
+        "videos": [],
         "free": false,
         "src": "CloudsLesson8.mp4",
         "srcFolder": "Lesson 06"
@@ -127,7 +159,8 @@ window.CAS_COURSES = [
         "subtitle": "Warm-grey undersides that glow instead of going muddy.",
         "dur": 484,
         "poster": "img/courses/clouds-beginner/l07.jpg",
-        "video": "https://drive.google.com/file/d/14ubQngPhSnR6CChge2pnaQrwm-7UHRyA/preview",
+        "video": "https://drive.google.com/file/d/1sR_hLffoqULu9C0XQ48M6b0PxqYL-rE7/preview",
+        "videos": [],
         "free": false,
         "src": "CloudsLesson9.mp4",
         "srcFolder": "Lesson 07"
@@ -138,7 +171,8 @@ window.CAS_COURSES = [
         "subtitle": "One cumulus, three values, twenty minutes — flat shapes become an object.",
         "dur": 885,
         "poster": "img/courses/clouds-beginner/l08.jpg",
-        "video": "https://drive.google.com/file/d/1UYPChtWNQu5GsrmRiUdJJjIO9kghXQWF/preview",
+        "video": "https://drive.google.com/file/d/1JzfJHtbqbDzHdY8orsPapDeXLOI5amiz/preview",
+        "videos": [],
         "free": false,
         "src": "CloudsLesson10.mp4",
         "srcFolder": "Lesson 08"
@@ -149,7 +183,8 @@ window.CAS_COURSES = [
         "subtitle": "Big shapes first, crisp sunlit tops, soft shadowed bellies.",
         "dur": 558,
         "poster": "img/courses/clouds-beginner/l09.jpg",
-        "video": "https://drive.google.com/file/d/1Pj0poOAZhswLxvBCRjWuk99bvA5cAsS3/preview",
+        "video": "https://drive.google.com/file/d/1LHV-m6C0F6ki26k7jgcZF8mkdNxVyH6V/preview",
+        "videos": [],
         "free": false,
         "src": "CloudsLesson11.mp4",
         "srcFolder": "Lesson 09"
@@ -160,7 +195,8 @@ window.CAS_COURSES = [
         "subtitle": "One well-loaded stroke, pulled sideways, does most of the work.",
         "dur": 400,
         "poster": "img/courses/clouds-beginner/l10.jpg",
-        "video": "https://drive.google.com/file/d/1yLMxmEUBDVC5SqbCGYYTdtZYN1zT6Xkp/preview",
+        "video": "https://drive.google.com/file/d/1sfIshdgUwgFFsHw0y_VEK1-2Sy8ozXIi/preview",
+        "videos": [],
         "free": false,
         "src": "CloudsLesson12.mp4",
         "srcFolder": "Lesson 10"
@@ -171,7 +207,8 @@ window.CAS_COURSES = [
         "subtitle": "Barely-there wisps with a thirsty brush and a light hand.",
         "dur": 619,
         "poster": "img/courses/clouds-beginner/l11.jpg",
-        "video": "https://drive.google.com/file/d/1Xf71RtpLMkzJ-xhBeAjybOCV6TXAoM9x/preview",
+        "video": "https://drive.google.com/file/d/1X3VNcm7ISo3Kl-RQdpVIUFIXVOz9nhOR/preview",
+        "videos": [],
         "free": false,
         "src": "CloudsLesson13.mp4",
         "srcFolder": "Lesson 11"
@@ -182,7 +219,8 @@ window.CAS_COURSES = [
         "subtitle": "Layer cumulus over stratus without the sky turning busy.",
         "dur": 461,
         "poster": "img/courses/clouds-beginner/l12.jpg",
-        "video": "https://drive.google.com/file/d/1t3J2MC6Bl1NwyvTfsh3DfQiSs5qu2fiT/preview",
+        "video": "https://drive.google.com/file/d/1J2FErduGBuXT28Pjrpk4q4cR2bNJk7KW/preview",
+        "videos": [],
         "free": false,
         "src": "CloudsLesson14.mp4",
         "srcFolder": "Lesson 12"
@@ -242,7 +280,8 @@ window.CAS_COURSES = [
         "subtitle": "Soft, seamless transitions — control the chaos with timing, not fiddling.",
         "dur": 301,
         "poster": "img/courses/clouds-intermediate/l01.jpg",
-        "video": "https://drive.google.com/file/d/1SsVDR8Kn7MEtyNXgU-DSdPTVh1wxkAJa/preview",
+        "video": "https://drive.google.com/file/d/1eFPmktMVG8fIkiVSbWyZmggVteg5jC3T/preview",
+        "videos": [],
         "free": true,
         "src": "CloudsLesson15.mp4",
         "srcFolder": "Lesson 13"
@@ -253,7 +292,8 @@ window.CAS_COURSES = [
         "subtitle": "Load a bead, tilt the board, walk away.",
         "dur": 721,
         "poster": "img/courses/clouds-intermediate/l02.jpg",
-        "video": "https://drive.google.com/file/d/1n7k3LlemHsaQbNGV0hRx0fjP7xxmIX_z/preview",
+        "video": "https://drive.google.com/file/d/13z7hg--pE6KH86rQlM1sSzPDgDeuOBJ0/preview",
+        "videos": [],
         "free": false,
         "src": "CloudsLesson16.mp4",
         "srcFolder": "Lesson 14"
@@ -264,7 +304,8 @@ window.CAS_COURSES = [
         "subtitle": "The brightest highlight is paper you never touched.",
         "dur": 365,
         "poster": "img/courses/clouds-intermediate/l03.jpg",
-        "video": "https://drive.google.com/file/d/1SnEHnnYRcmTCLDCbzUVdZb7gAbxSsWY0/preview",
+        "video": "https://drive.google.com/file/d/1z_hWBZRbqbXSoCgG_ukg8X6pe22DIvdE/preview",
+        "videos": [],
         "free": false,
         "src": "CloudsLesson17.mp4",
         "srcFolder": "Lesson 15"
@@ -275,7 +316,8 @@ window.CAS_COURSES = [
         "subtitle": "The rescue kit — a damp brush, clean tissue, and knowing when to stop.",
         "dur": 646,
         "poster": "img/courses/clouds-intermediate/l04.jpg",
-        "video": "https://drive.google.com/file/d/1iXqHjjeKh1FWrJDHc3Hm5VbKnVGJy31A/preview",
+        "video": "https://drive.google.com/file/d/1e970EeC_5gW5AcG-4hbCndSwmK7qOJGe/preview",
+        "videos": [],
         "free": false,
         "src": "CloudsLesson18.mp4",
         "srcFolder": "Lesson 16"
@@ -286,7 +328,8 @@ window.CAS_COURSES = [
         "subtitle": "First full scene: everything from the values module, at full volume.",
         "dur": 452,
         "poster": "img/courses/clouds-intermediate/l05.jpg",
-        "video": "https://drive.google.com/file/d/1qYaf9cK8bsPuQF-idvoxNZcohgmTKnhh/preview",
+        "video": "https://drive.google.com/file/d/1Vi3NdvAymd4y8QUKRyH-SiP5lm2Ynl6k/preview",
+        "videos": [],
         "free": false,
         "src": "CloudsLesson19.mp4",
         "srcFolder": "Lesson 17"
@@ -297,7 +340,8 @@ window.CAS_COURSES = [
         "subtitle": "A peaceful dusk silhouette — quiet, graphic, easier than it looks.",
         "dur": 752,
         "poster": "img/courses/clouds-intermediate/l06.jpg",
-        "video": "https://drive.google.com/file/d/1u8earc4u0TgOGYd3vzRa0gijtnR6udda/preview",
+        "video": "https://drive.google.com/file/d/1nLsTY2HX2QX0Mn7DPCkX7N-_0a-D1s1T/preview",
+        "videos": [],
         "free": false,
         "src": "CloudsLesson20.mp4",
         "srcFolder": "Lesson 18"
@@ -308,7 +352,8 @@ window.CAS_COURSES = [
         "subtitle": "Reference, thumbnails, value plan, palette — and I paint alongside you.",
         "dur": 850,
         "poster": "img/courses/clouds-intermediate/l07.jpg",
-        "video": "https://drive.google.com/file/d/1uHPUE-DuaokulQ4_r251EbSoCKLaDfzS/preview",
+        "video": "https://drive.google.com/file/d/1JKOkG3Bn6C4xzyr0lr-5jlIqtVcgmiM5/preview",
+        "videos": [],
         "free": false,
         "src": "CloudsLesson21.mp4",
         "srcFolder": "Lesson 19"
@@ -352,7 +397,8 @@ window.CAS_COURSES = [
         "subtitle": "A full watercolour study from pencil sketch to final wash.",
         "dur": 483,
         "poster": "img/courses/little-house/l01.jpg",
-        "video": "https://drive.google.com/file/d/19BRSCNxYz6Krw1vfRoyIUVLVv5c-HSe-/preview",
+        "video": "https://drive.google.com/file/d/1byvLcH8lucvUHCpseMbOd9noxGRk65wc/preview",
+        "videos": [],
         "free": true,
         "src": "LittleHouse.mov",
         "srcFolder": "Course 02"
@@ -396,7 +442,8 @@ window.CAS_COURSES = [
         "subtitle": "Line and wash on location: buildings, street and figures.",
         "dur": 673,
         "poster": "img/courses/urban-sketch/l01.jpg",
-        "video": "https://drive.google.com/file/d/1gDt04JlLUi0j831dvN4CJGauRnF8pcrj/preview",
+        "video": "https://drive.google.com/file/d/1gFYWF1Pxm9HsajRZVEaWhzLfY0PBq6KR/preview",
+        "videos": [],
         "free": true,
         "src": "Urban.mov",
         "srcFolder": "Course 03"

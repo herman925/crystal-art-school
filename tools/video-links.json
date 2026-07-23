@@ -1,37 +1,42 @@
 {
-  "_note": "Google Drive file IDs for the course/free videos. ALL files are owned by hermanchan925@gmail.com as of 2026-07-23 (crystal-owned originals were replaced by server-side copies; copies inherit folder sharing 'anyone with link: viewer'). Keyed by SOURCE filename. build-data.py turns each ID into a /preview URL. Videos are NEVER in this repo.",
-  "_sharing": "Copies inherit 'anyone: reader' from folder-level sharing — correct and safer than the old per-file 'anyone: writer'. Old crystal-owned originals may still carry writer; they are being retired from the tree.",
+  "_note": "Google Drive file IDs for the course/free videos, re-looked-up 2026-07-23 after the full re-upload (the whole assets tree was recreated in Drive, so every ID changed). ALL files owned by hermanchan925@gmail.com. Keyed by SOURCE filename (matches the manifest). build-data.py turns each ID into a /preview URL. Video files are NEVER committed to this repo. If a video is re-uploaded again, its ID changes - update here and re-run tools/build-data.py.",
+  "_sharing": "IMPORTANT: the re-uploaded tree starts PRIVATE. The assets folder must be shared 'Anyone with the link - Viewer' (cascades to children) or embeds will not play for visitors. Verify with the Drive API before deploying an ID swap.",
+  "_filenames": "Filenames are historical and possibly misleading (client confirmed LOCATIONS are correct, 2026-07-23). Do NOT rename files - the lesson folder decides which lesson a video belongs to, not the name.",
+
   "files": {
-    "CloudsLesson3.mp4": "1-o2mN5kKzpOQdbol0iAE-ueHY9YPPSsB",
-    "CloudsLesson4.mp4": "1lQOdvQw6LELsE5d8IUsd3FozY2XITBQN",
-    "CloudsLesson6.mp4": "1l_5WGjmOlKGJtxZv6q9I_I7txs6SX8ea",
-    "CloudsLesson7.mp4": "1xTnEpG9NWwojihu6KnUf1xuDz_OTdPnx",
-    "CloudsLesson8.mp4": "1lseQKpbLuJKhQRE7iyOUKK6KxkL0yGRN",
-    "CloudsLesson9.mp4": "14ubQngPhSnR6CChge2pnaQrwm-7UHRyA",
-    "CloudsLesson10.mp4": "1UYPChtWNQu5GsrmRiUdJJjIO9kghXQWF",
-    "CloudsLesson11.mp4": "1Pj0poOAZhswLxvBCRjWuk99bvA5cAsS3",
-    "CloudsLesson12.mp4": "1yLMxmEUBDVC5SqbCGYYTdtZYN1zT6Xkp",
-    "CloudsLesson13.mp4": "1Xf71RtpLMkzJ-xhBeAjybOCV6TXAoM9x",
-    "CloudsLesson14.mp4": "1t3J2MC6Bl1NwyvTfsh3DfQiSs5qu2fiT",
-    "CloudsLesson15.mp4": "1SsVDR8Kn7MEtyNXgU-DSdPTVh1wxkAJa",
-    "CloudsLesson16.mp4": "1n7k3LlemHsaQbNGV0hRx0fjP7xxmIX_z",
-    "CloudsLesson17.mp4": "1SnEHnnYRcmTCLDCbzUVdZb7gAbxSsWY0",
-    "CloudsLesson18.mp4": "1iXqHjjeKh1FWrJDHc3Hm5VbKnVGJy31A",
-    "CloudsLesson19.mp4": "1qYaf9cK8bsPuQF-idvoxNZcohgmTKnhh",
-    "CloudsLesson20.mp4": "1u8earc4u0TgOGYd3vzRa0gijtnR6udda",
-    "CloudsLesson21.mp4": "1uHPUE-DuaokulQ4_r251EbSoCKLaDfzS",
-    "LittleHouse.mov": "19BRSCNxYz6Krw1vfRoyIUVLVv5c-HSe-",
-    "Urban.mov": "1gDt04JlLUi0j831dvN4CJGauRnF8pcrj",
-    "Mountain.MOV": "13O8fcaJTVxsmrqsKel-rSsVUwryh24MV",
-    "PinkFloral.MOV": "1REomVIrmofLdOVb96yFZT1pfoWcB7p3_",
-    "CloudsLesson5A.mp4": "1dIVNNFUxZDxTAoAKAF7q9vbXxoGgPPmu"
+    "CloudsLesson2.mp4":  "1PGmnGOnCC-0u3RZqlZzedqi-Y8z6GuUP",
+    "CloudsLesson3.mp4":  "1Xt7U18j3bfSLMy4bRyuLSARRUHcIw9iI",
+    "CloudsLesson4.mp4":  "1d5XfiwqAcu-XuooPpqCfwpL7hOKRQj76",
+    "CloudsLesson5A.mp4": "1vU9au1R7PiJMQvQtHr1Utjj4j2RyArOu",
+    "CloudsLesson5B.mp4": "1SAtL4v8DQ6qPYajYlS0mkAaBxTloD-Qe",
+    "CloudsLesson6.mp4":  "1cbc7pio64kcPw7Mk9sA09SjB5VB_kdAR",
+    "CloudsLesson7.mp4":  "10WeLqB9-9N5KOPLOxcVgZfU8k8rX2E7c",
+    "CloudsLesson8.mp4":  "1Oe7UdcM-N2f_ABVBVKNuWN-fyMCuNCjm",
+    "CloudsLesson9.mp4":  "1sR_hLffoqULu9C0XQ48M6b0PxqYL-rE7",
+    "CloudsLesson10.mp4": "1JzfJHtbqbDzHdY8orsPapDeXLOI5amiz",
+    "CloudsLesson11.mp4": "1LHV-m6C0F6ki26k7jgcZF8mkdNxVyH6V",
+    "CloudsLesson12.mp4": "1sfIshdgUwgFFsHw0y_VEK1-2Sy8ozXIi",
+    "CloudsLesson13.mp4": "1X3VNcm7ISo3Kl-RQdpVIUFIXVOz9nhOR",
+    "CloudsLesson14.mp4": "1J2FErduGBuXT28Pjrpk4q4cR2bNJk7KW",
+    "CloudsLesson15.mp4": "1eFPmktMVG8fIkiVSbWyZmggVteg5jC3T",
+    "CloudsLesson16.mp4": "13z7hg--pE6KH86rQlM1sSzPDgDeuOBJ0",
+    "CloudsLesson17.mp4": "1z_hWBZRbqbXSoCgG_ukg8X6pe22DIvdE",
+    "CloudsLesson18.mp4": "1e970EeC_5gW5AcG-4hbCndSwmK7qOJGe",
+    "CloudsLesson19.mp4": "1Vi3NdvAymd4y8QUKRyH-SiP5lm2Ynl6k",
+    "CloudsLesson20.mp4": "1nLsTY2HX2QX0Mn7DPCkX7N-_0a-D1s1T",
+    "CloudsLesson21.mp4": "1JKOkG3Bn6C4xzyr0lr-5jlIqtVcgmiM5",
+    "LittleHouse.mov":    "1byvLcH8lucvUHCpseMbOd9noxGRk65wc",
+    "Urban.mov":          "1gFYWF1Pxm9HsajRZVEaWhzLfY0PBq6KR",
+    "Mountain.MOV":       "19gim-YbmRfvOiaSkOCIUNubtv_D2GFBm",
+    "PinkFloral.MOV":     "1aMfibqZAB38cuNw7qkPIrnhP4nlk8hQe"
   },
-  "unused": {
-    "_note": "Present in Drive but not wired as a PRIMARY lesson video. CloudsLesson5B is Lesson 03 part 2 (altVideos) — wire it if the client wants two-part playback.",
-    "CloudsLesson5B.mp4": "1s9BVmNv3l5o8_yusiTIYP8KHMvHZtzvq"
+
+  "retired": {
+    "_note": "Previous generation of IDs (Herman's 2026-07-23 server-side copies, now orphaned in Drive, and older uploads). Kept for reference; safe to delete the Drive files once the new tree is confirmed streaming.",
+    "copies-2026-07-23": ["1-o2mN5kKzpOQdbol0iAE-ueHY9YPPSsB", "1lQOdvQw6LELsE5d8IUsd3FozY2XITBQN", "1l_5WGjmOlKGJtxZv6q9I_I7txs6SX8ea", "1xTnEpG9NWwojihu6KnUf1xuDz_OTdPnx", "1lseQKpbLuJKhQRE7iyOUKK6KxkL0yGRN", "14ubQngPhSnR6CChge2pnaQrwm-7UHRyA", "1UYPChtWNQu5GsrmRiUdJJjIO9kghXQWF", "1Pj0poOAZhswLxvBCRjWuk99bvA5cAsS3", "19BRSCNxYz6Krw1vfRoyIUVLVv5c-HSe-", "1gDt04JlLUi0j831dvN4CJGauRnF8pcrj"]
   },
+
   "missing": {
-    "Watercolor Airport 2.mov": "NOT IN DRIVE as of 2026-07-22 — only the poster JPG exists. Card ships poster-only.",
-    "CloudsLesson2.mp4": "In the re-filed local assets (Beginner Lesson 01, sub-minute intro clip) but NOT uploaded to Drive as of 2026-07-23. Recorded as an altVideo; nothing streams it."
+    "Watercolor Airport 2.mov": "STILL NOT IN DRIVE as of 2026-07-23 (failed in the client's export too - _Error.txt in the zip). Card ships poster-only. Crystal needs to re-export the file."
   }
 }

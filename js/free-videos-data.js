@@ -10,7 +10,7 @@ window.CAS_FREE_VIDEOS = [
     "section": "Landscape",
     "poster": "img/free/mountain.jpg",
     "dur": 1093,
-    "video": "https://drive.google.com/file/d/13O8fcaJTVxsmrqsKel-rSsVUwryh24MV/preview"
+    "video": "https://drive.google.com/file/d/19gim-YbmRfvOiaSkOCIUNubtv_D2GFBm/preview"
   },
   {
     "slug": "pink-floral",
@@ -19,7 +19,7 @@ window.CAS_FREE_VIDEOS = [
     "section": "Landscape",
     "poster": "img/free/pink-floral.jpg",
     "dur": 437,
-    "video": "https://drive.google.com/file/d/1REomVIrmofLdOVb96yFZT1pfoWcB7p3_/preview"
+    "video": "https://drive.google.com/file/d/1aMfibqZAB38cuNw7qkPIrnhP4nlk8hQe/preview"
   },
   {
     "slug": "watercolor-airport",

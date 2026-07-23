@@ -204,33 +204,31 @@ def import_courses(force):
             meta = encode_image(os.path.join(folder, images[0]),
                                 os.path.join(SITE_DIR, rel), MAX_EDGE_POSTER, force)
 
-            # A lesson folder may hold several videos (e.g. Beginner Lesson 01
-            # ships the sub-minute CloudsLesson2 intro next to the real
-            # CloudsLesson3; Lesson 03 is a two-part 5A/5B). The player has one
-            # slot, so the LONGEST video is the primary and the rest are
-            # recorded as altVideos — never dropped silently.
-            durations = {v: probe_duration(os.path.join(folder, v)) for v in videos}
-            ordered = sorted(videos, key=lambda v: durations[v] or 0, reverse=True)
-            if len(ordered) > 1:
-                warn("%s/%s has %d videos (%s) — primary = longest: %s"
-                     % (course["slug"], sub or ".", len(ordered),
-                        ", ".join("%s=%ss" % (v, durations[v]) for v in ordered), ordered[0]))
-
-            primary = ordered[0] if ordered else None
-            dur = durations.get(primary) if primary else None
-            if dur is None and videos:
+            # A lesson folder may hold several videos: they are PARTS of one
+            # lesson, played in natural filename order (client confirmed the
+            # folder placement is authoritative, 2026-07-23 — e.g. Lesson 01 =
+            # the short CloudsLesson2 intro then CloudsLesson3; Lesson 03 =
+            # 5A then 5B). Lesson duration = sum of parts.
+            parts = [{"file": v, "dur": probe_duration(os.path.join(folder, v))}
+                     for v in videos]
+            if any(pt["dur"] is None for pt in parts):
                 warn("no duration for %s/%s" % (course["slug"], sub or "."))
+            if len(parts) > 1:
+                warn("%s/%s is multi-part: %s"
+                     % (course["slug"], sub or ".",
+                        ", ".join("%s=%ss" % (pt["file"], pt["dur"]) for pt in parts)))
+            total = sum(pt["dur"] or 0 for pt in parts) or None
 
             lessons.append({
                 "n": n,
                 "srcFolder": sub or os.path.basename(root),
                 "poster": rel,
                 "posterW": meta["w"], "posterH": meta["h"],
-                "dur": dur,
-                "srcVideo": primary,
-                "altVideos": [v for v in ordered[1:]],
+                "dur": total,
+                "videos": parts,
+                "srcVideo": parts[0]["file"] if parts else None,
             })
-            print("   l%02d  %-22s %s" % (n, images[0], ("%ds" % dur) if dur else "no video"))
+            print("   l%02d  %-22s %s%s" % (n, images[0], ("%ds" % total) if total else "no video", " (%d parts)" % len(parts) if len(parts) > 1 else ""))
 
         if not lessons:
             warn("%s produced no lessons" % course["slug"])

@@ -12,11 +12,18 @@
           "poster": "img/courses/clouds-beginner/l01.jpg",
           "posterW": 1280,
           "posterH": 1280,
-          "dur": 733,
-          "srcVideo": "CloudsLesson3.mp4",
-          "altVideos": [
-            "CloudsLesson2.mp4"
-          ]
+          "dur": 781,
+          "videos": [
+            {
+              "file": "CloudsLesson2.mp4",
+              "dur": 48
+            },
+            {
+              "file": "CloudsLesson3.mp4",
+              "dur": 733
+            }
+          ],
+          "srcVideo": "CloudsLesson2.mp4"
         },
         {
           "n": 2,
@@ -25,8 +32,13 @@
           "posterW": 1280,
           "posterH": 1280,
           "dur": 364,
-          "srcVideo": "CloudsLesson4.mp4",
-          "altVideos": []
+          "videos": [
+            {
+              "file": "CloudsLesson4.mp4",
+              "dur": 364
+            }
+          ],
+          "srcVideo": "CloudsLesson4.mp4"
         },
         {
           "n": 3,
@@ -34,11 +46,18 @@
           "poster": "img/courses/clouds-beginner/l03.jpg",
           "posterW": 1280,
           "posterH": 1280,
-          "dur": 1421,
-          "srcVideo": "CloudsLesson5A.mp4",
-          "altVideos": [
-            "CloudsLesson5B.mp4"
-          ]
+          "dur": 2758,
+          "videos": [
+            {
+              "file": "CloudsLesson5A.mp4",
+              "dur": 1421
+            },
+            {
+              "file": "CloudsLesson5B.mp4",
+              "dur": 1337
+            }
+          ],
+          "srcVideo": "CloudsLesson5A.mp4"
         },
         {
           "n": 4,
@@ -47,8 +66,13 @@
           "posterW": 1280,
           "posterH": 1280,
           "dur": 874,
-          "srcVideo": "CloudsLesson6.mp4",
-          "altVideos": []
+          "videos": [
+            {
+              "file": "CloudsLesson6.mp4",
+              "dur": 874
+            }
+          ],
+          "srcVideo": "CloudsLesson6.mp4"
         },
         {
           "n": 5,
@@ -57,8 +81,13 @@
           "posterW": 1280,
           "posterH": 1280,
           "dur": 183,
-          "srcVideo": "CloudsLesson7.mp4",
-          "altVideos": []
+          "videos": [
+            {
+              "file": "CloudsLesson7.mp4",
+              "dur": 183
+            }
+          ],
+          "srcVideo": "CloudsLesson7.mp4"
         },
         {
           "n": 6,
@@ -67,8 +96,13 @@
           "posterW": 915,
           "posterH": 1280,
           "dur": 468,
-          "srcVideo": "CloudsLesson8.mp4",
-          "altVideos": []
+          "videos": [
+            {
+              "file": "CloudsLesson8.mp4",
+              "dur": 468
+            }
+          ],
+          "srcVideo": "CloudsLesson8.mp4"
         },
         {
           "n": 7,
@@ -77,8 +111,13 @@
           "posterW": 945,
           "posterH": 1280,
           "dur": 484,
-          "srcVideo": "CloudsLesson9.mp4",
-          "altVideos": []
+          "videos": [
+            {
+              "file": "CloudsLesson9.mp4",
+              "dur": 484
+            }
+          ],
+          "srcVideo": "CloudsLesson9.mp4"
         },
         {
           "n": 8,
@@ -87,8 +126,13 @@
           "posterW": 1280,
           "posterH": 1280,
           "dur": 885,
-          "srcVideo": "CloudsLesson10.mp4",
-          "altVideos": []
+          "videos": [
+            {
+              "file": "CloudsLesson10.mp4",
+              "dur": 885
+            }
+          ],
+          "srcVideo": "CloudsLesson10.mp4"
         },
         {
           "n": 9,
@@ -97,8 +141,13 @@
           "posterW": 1280,
           "posterH": 1280,
           "dur": 558,
-          "srcVideo": "CloudsLesson11.mp4",
-          "altVideos": []
+          "videos": [
+            {
+              "file": "CloudsLesson11.mp4",
+              "dur": 558
+            }
+          ],
+          "srcVideo": "CloudsLesson11.mp4"
         },
         {
           "n": 10,
@@ -107,8 +156,13 @@
           "posterW": 1280,
           "posterH": 1280,
           "dur": 400,
-          "srcVideo": "CloudsLesson12.mp4",
-          "altVideos": []
+          "videos": [
+            {
+              "file": "CloudsLesson12.mp4",
+              "dur": 400
+            }
+          ],
+          "srcVideo": "CloudsLesson12.mp4"
         },
         {
           "n": 11,
@@ -117,8 +171,13 @@
           "posterW": 1280,
           "posterH": 1280,
           "dur": 619,
-          "srcVideo": "CloudsLesson13.mp4",
-          "altVideos": []
+          "videos": [
+            {
+              "file": "CloudsLesson13.mp4",
+              "dur": 619
+            }
+          ],
+          "srcVideo": "CloudsLesson13.mp4"
         },
         {
           "n": 12,
@@ -127,8 +186,13 @@
           "posterW": 1280,
           "posterH": 1280,
           "dur": 461,
-          "srcVideo": "CloudsLesson14.mp4",
-          "altVideos": []
+          "videos": [
+            {
+              "file": "CloudsLesson14.mp4",
+              "dur": 461
+            }
+          ],
+          "srcVideo": "CloudsLesson14.mp4"
         }
       ]
     },
@@ -144,8 +208,13 @@
           "posterW": 1280,
           "posterH": 1280,
           "dur": 301,
-          "srcVideo": "CloudsLesson15.mp4",
-          "altVideos": []
+          "videos": [
+            {
+              "file": "CloudsLesson15.mp4",
+              "dur": 301
+            }
+          ],
+          "srcVideo": "CloudsLesson15.mp4"
         },
         {
           "n": 2,
@@ -154,8 +223,13 @@
           "posterW": 1280,
           "posterH": 1280,
           "dur": 721,
-          "srcVideo": "CloudsLesson16.mp4",
-          "altVideos": []
+          "videos": [
+            {
+              "file": "CloudsLesson16.mp4",
+              "dur": 721
+            }
+          ],
+          "srcVideo": "CloudsLesson16.mp4"
         },
         {
           "n": 3,
@@ -164,8 +238,13 @@
           "posterW": 1280,
           "posterH": 1280,
           "dur": 365,
-          "srcVideo": "CloudsLesson17.mp4",
-          "altVideos": []
+          "videos": [
+            {
+              "file": "CloudsLesson17.mp4",
+              "dur": 365
+            }
+          ],
+          "srcVideo": "CloudsLesson17.mp4"
         },
         {
           "n": 4,
@@ -174,8 +253,13 @@
           "posterW": 1280,
           "posterH": 1280,
           "dur": 646,
-          "srcVideo": "CloudsLesson18.mp4",
-          "altVideos": []
+          "videos": [
+            {
+              "file": "CloudsLesson18.mp4",
+              "dur": 646
+            }
+          ],
+          "srcVideo": "CloudsLesson18.mp4"
         },
         {
           "n": 5,
@@ -184,8 +268,13 @@
           "posterW": 1280,
           "posterH": 1280,
           "dur": 452,
-          "srcVideo": "CloudsLesson19.mp4",
-          "altVideos": []
+          "videos": [
+            {
+              "file": "CloudsLesson19.mp4",
+              "dur": 452
+            }
+          ],
+          "srcVideo": "CloudsLesson19.mp4"
         },
         {
           "n": 6,
@@ -194,8 +283,13 @@
           "posterW": 1280,
           "posterH": 1280,
           "dur": 752,
-          "srcVideo": "CloudsLesson20.mp4",
-          "altVideos": []
+          "videos": [
+            {
+              "file": "CloudsLesson20.mp4",
+              "dur": 752
+            }
+          ],
+          "srcVideo": "CloudsLesson20.mp4"
         },
         {
           "n": 7,
@@ -204,8 +298,13 @@
           "posterW": 1280,
           "posterH": 1280,
           "dur": 850,
-          "srcVideo": "CloudsLesson21.mp4",
-          "altVideos": []
+          "videos": [
+            {
+              "file": "CloudsLesson21.mp4",
+              "dur": 850
+            }
+          ],
+          "srcVideo": "CloudsLesson21.mp4"
         }
       ]
     },
@@ -221,8 +320,13 @@
           "posterW": 540,
           "posterH": 540,
           "dur": 483,
-          "srcVideo": "LittleHouse.mov",
-          "altVideos": []
+          "videos": [
+            {
+              "file": "LittleHouse.mov",
+              "dur": 483
+            }
+          ],
+          "srcVideo": "LittleHouse.mov"
         }
       ]
     },
@@ -238,8 +342,13 @@
           "posterW": 1280,
           "posterH": 1280,
           "dur": 673,
-          "srcVideo": "Urban.mov",
-          "altVideos": []
+          "videos": [
+            {
+              "file": "Urban.mov",
+              "dur": 673
+            }
+          ],
+          "srcVideo": "Urban.mov"
         }
       ]
     }
@@ -412,8 +521,8 @@
     }
   ],
   "warnings": [
-    "clouds-beginner/Lesson 01 has 2 videos (CloudsLesson3.mp4=733s, CloudsLesson2.mp4=48s) — primary = longest: CloudsLesson3.mp4",
-    "clouds-beginner/Lesson 03 has 2 videos (CloudsLesson5A.mp4=1421s, CloudsLesson5B.mp4=1337s) — primary = longest: CloudsLesson5A.mp4",
+    "clouds-beginner/Lesson 01 is multi-part: CloudsLesson2.mp4=48s, CloudsLesson3.mp4=733s",
+    "clouds-beginner/Lesson 03 is multi-part: CloudsLesson5A.mp4=1421s, CloudsLesson5B.mp4=1337s",
     "free video not on disk (Drive sync?): Watercolor Airport 2.mov"
   ]
 }
