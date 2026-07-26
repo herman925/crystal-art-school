@@ -408,7 +408,11 @@
 .blog-feature .bf-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s var(--ease-out); }
 .blog-feature:hover .bf-img img { transform: scale(1.04); }
 .blog-feature .bf-body { padding: 20px 26px; display: flex; flex-direction: column; gap: 12px; justify-content: center; }
-[data-theme="D"] .blog-feature { background-color: #1c130b; background-image: linear-gradient(180deg, rgba(22,15,9,.40), rgba(22,15,9,.5)), url("../img/wood-rustic.jpg"); background-size: cover; background-position: center; }
+/* 2026-07-26: the dark-theme wood-rustic texture that used to sit here was
+   removed. It was the only card-level wood background on the site (bands and
+   the footer are a different thing), and the clay/coral kicker + meta text
+   were unreadable against the grain in theme D. The feature card now uses
+   var(--surface) in every theme, matching .blog-card below it. */
 
 /* ---------- real wood photos on the dark/wood bands (2026-07) ----------
    Light (A): natural pale wood — band text flips DARK so it stays readable.
