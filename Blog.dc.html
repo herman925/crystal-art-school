@@ -170,7 +170,7 @@ class Component extends DCLogic {
           '<a class="bf-img" href="blog-post.dc.html?id=' + esc(f.id) + '" aria-label="' + esc(f.title) + '"><img src="img/' + f.img + '" alt="' + esc(f.title) + '" loading="lazy" decoding="async"></a>' +
           '<div class="bf-body"><span class="bf-kicker">Latest · ' + esc(f.tag) + ' · ' + esc(f.d) + '</span>' +
           '<h2>' + esc(f.title) + '</h2><p>' + esc(f.excerpt) + '</p>' +
-          '<span class="bf-reads">' + eye + ' ' + rf(f.reads) + ' reads</span>' +
+          '<span class="bf-reads">' + (f.mins || 4) + ' min read</span>' +
           '<a class="link-squiggle" href="blog-post.dc.html?id=' + esc(f.id) + '" style="align-self:flex-start;">Read the post →</a></div>';
       } else {
         feature.style.display = 'none';
@@ -182,7 +182,7 @@ class Component extends DCLogic {
           '<div class="bc-img"><img src="img/' + p.img + '" alt="' + esc(p.title) + '" loading="lazy" decoding="async"></div>' +
           '<div class="bc-body"><span class="bc-tag">' + esc(p.tag) + '</span>' +
           '<h3>' + esc(p.title) + '</h3><p>' + esc(p.excerpt) + '</p>' +
-          '<span class="bc-date">' + esc(p.d) + ' · <span class="bc-reads">' + eye + ' ' + rf(p.reads) + '</span></span></div>' +
+          '<span class="bc-date">' + esc(p.d) + ' · <span class="bc-reads">' + (p.mins || 4) + ' min</span></span></div>' +
         '</a>'
       ).join('');
     };
