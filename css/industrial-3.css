@@ -467,4 +467,8 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
 .bc-card + .bc-card { transform: rotate(1.6deg); }
 .bc-card:hover { transform: rotate(0) translateY(-4px) scale(1.03); box-shadow: var(--shadow-lift); z-index: 2; position: relative; }
 .bc-card img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 3px; display: block; }
+/* Award certificates are A4 portrait; the 4/3 landscape crop would cut the
+   awarding body off the top and the signatures off the bottom. */
+.bc-card--cert { max-width: 230px; }
+.bc-card--cert img { aspect-ratio: 5/7; }
 .bc-card figcaption { font-family: var(--font-cond); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: #474138; margin-top: 8px; text-align: center; }

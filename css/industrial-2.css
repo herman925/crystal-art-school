@@ -476,11 +476,12 @@
 .field input, .field textarea { width: 100%; border: 1px solid var(--line); border-radius: var(--r-sharp); background: var(--cream); color: #2b2823; -webkit-text-fill-color: #2b2823; padding: 13px 15px; font-family: var(--font-body); font-size: 14.5px; color: var(--ink); }
 .field input:focus, .field textarea:focus { outline: 2px solid var(--coral); border-color: transparent; }
 .tc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.about-tri { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
 .approach-num { font-family: var(--font-stencil); font-size: 22px; color: var(--coral); margin-bottom: 6px; }
 @media (max-width: 900px) {
   .about-hero { grid-template-columns: 1fr; gap: 30px; }
   .about-hero .portrait-wrap { max-width: 380px; }
-  .approach-grid, .contact-grid, .tc-grid { grid-template-columns: 1fr; }
+  .approach-grid, .contact-grid, .tc-grid, .about-tri { grid-template-columns: 1fr; }
 }
 
 /* ============================================================

@@ -84,6 +84,42 @@
 
 <main class="container" id="content">
 
+<!-- ===========================================================================
+     DEV NOTE — About page copy provenance (2026-07-26)
+
+     SOURCE OF TRUTH: assets/06 - About/AboutMe.docx (client-written) plus the
+     two certificate scans in the same folder. Everything on this page below the
+     nav is either her words or a caption describing an image she supplied. Only
+     the spelling was localised (color -> colour, watercolor -> watercolour) to
+     match the rest of the site; no wording was rewritten.
+
+     WHAT WAS REMOVED, AND WHY IT MATTERS: the previous version of this page was
+     placeholder copy that read as fact — "eight years" of teaching (she has over
+     ten), a studio "of plaster, wood and iron", exhibitions "across the city",
+     a daily Instagram habit, a two-day reply promise, and two invented
+     credentials ("Diploma in Fine Art 2014", "Watercolour Society Member 2019")
+     illustrated with unrelated stock-ish photos from img/. None of that came
+     from the client. Do not reintroduce invented biography here; if a section
+     feels thin, ask her for copy rather than filling it in.
+
+     OPEN DISCREPANCIES — flagged to the client, not resolved in code:
+
+       1. JIWI year/edition. Her doc says "2025: Selected, 25th International
+          Watercolor Spring Exhibition". The certificate she supplied reads
+          "26th JIWI Online Spring Exhibition 2026". The honours list below uses
+          HER wording; the certificate caption uses the CERTIFICATE's wording, so
+          the page currently states both. Fix once she confirms which is right.
+
+       2. Name on Certificate 1. It is made out to "Siu Fung Lau", not "Crystal
+          Lau". Presumably her name on formal documents, but it is published on a
+          public page — confirm before launch.
+
+       3. Not a bio issue, but visible on this page: prices are GBP, the cookie
+          banner says "You're in the UK" and the terms below cite UK GDPR, for a
+          Hong Kong-based artist. Site-wide legal scaffolding, left alone here
+          because changing it is a business decision, not a copy fix.
+     =========================================================================== -->
+
   <header class="about-hero">
     <div class="portrait-wrap reveal-one">
       <div class="arch-duo in-view"><img src="img/ProfilePic.jpg" alt="Crystal Lau in her studio"></div>
@@ -92,11 +128,10 @@
     <div>
       <div class="sig-script reveal-one" aria-hidden="true">Crystal</div>
       <div class="eyebrow reveal-one"><span class="star">✦</span> About</div>
-      <h1 class="marker-title reveal-one" style="font-size:clamp(34px,4.4vw,58px);">Hi, I'm Crystal.</h1>
+      <h1 class="marker-title reveal-one" style="font-size:clamp(34px,4.4vw,58px);">Hi, I'm Crystal!<br>Welcome to my studio.</h1>
       <div class="reveal-one">
-        <p class="lead" style="font-size:17px;">I've taught small-group painting classes in Hong Kong for eight years, and this school is the online version of that same room — one lesson at a time, real reference material, and all the time in the world to get the big shapes right before the small ones.</p>
-        <p class="lead" style="font-size:17px;">Between lessons I share a study nearly every day on <a class="link-squiggle" href="https://www.instagram.com/crystalauart" target="_blank" rel="noopener" style="font-weight:700;">Instagram</a>, and post the longer demonstrations in <a class="link-squiggle" href="FreeVideos.dc.html" style="font-weight:700;">free videos</a> — come see how slowly I really paint.</p>
-        <p style="font-family:var(--font-marker);font-weight:600;font-size:24px;color:var(--teal-ink);">Come paint with me.</p>
+        <p class="lead" style="font-size:17px;">I'm Crystal Lau, a contemporary artist specialising in watercolour and oil painting, and the founder of SKY GALLERY.</p>
+        <blockquote class="pull-quote" style="margin:22px 0 24px;">Art is not merely colour on paper; it is an observation of the world and a timeless extension of one's emotions.</blockquote>
         <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:6px;">
           <a class="btn primary" href="Lessons.dc.html">Browse courses <span class="arr" aria-hidden="true">→</span></a>
           <a class="btn ghost" href="Gallery.dc.html">Walk the gallery</a>
@@ -109,38 +144,118 @@
     <div class="bio-layout reveal">
       <div class="bio-photos">
         <figure class="bio-frame">
-          <img src="img/ProfilePic.jpg" alt="Crystal Lau in her studio" loading="lazy" decoding="async">
-          <figcaption>Crystal in the studio · Hong Kong</figcaption>
+          <img src="img/ProfilePic.jpg" alt="Crystal Lau painting at an easel in her studio" loading="lazy" decoding="async">
+          <figcaption>Crystal in the studio</figcaption>
         </figure>
         <figure class="bio-frame">
-          <img src="img/cover2.jpg" alt="A recent oil painting by Crystal Lau" loading="lazy" decoding="async">
-          <figcaption>Recent work · oil on board</figcaption>
+          <img src="img/cover2.jpg" alt="A watercolour sky over open fields at sunset" loading="lazy" decoding="async">
+          <figcaption>Watercolour study</figcaption>
         </figure>
       </div>
       <div class="bio-copy">
-        <div class="eyebrow"><span class="star">✦</span> Artist biography</div>
-        <h2 class="marker-title" style="font-size:clamp(26px,3vw,40px);margin:6px 0 14px;">Crystal Lau</h2>
-        <p>Crystal Lau is a Hong Kong–based painter and teacher working primarily in oils and watercolour. Her work lingers on quiet, everyday subjects — harbour light, studio corners, the worn tools on a working table — painted with a patient, value-first approach.</p>
-        <p>She studied fine art before spending eight years running small-group classes from a compact studio of plaster, wood and iron. Her paintings have shown in group exhibitions across the city, and her studies now reach a wider audience online.</p>
+        <div class="eyebrow"><span class="star">✦</span> About me</div>
+        <h2 class="marker-title" style="font-size:clamp(26px,3vw,40px);margin:6px 0 14px;">My artistic journey</h2>
+        <p>For over a decade, my greatest joy has been stepping outdoors with my easel in hand — embracing the practice of <em>plein air</em> painting. There is something magical about chasing the light, capturing the subtle breeze, and transforming fleeting natural moments into lasting visual stories.</p>
+        <p>While painting is a personal form of expression, I believe art becomes truly powerful when shared. Over the years, my work has been featured in mainstream media, published in art collections, and acquired by institutional permanent collections, such as the Sun Museum. In 2018, I launched my YouTube channel, <strong>Crystal Lau Art</strong>, to share the joys of plein air sketching and art history with a broader audience. It showed me how art can bridge distances and connect people anywhere in the world.</p>
         <ul class="bio-facts">
           <li><strong>Based in</strong> Hong Kong</li>
-          <li><strong>Media</strong> Oil · Watercolour · Drawing</li>
-          <li><strong>Teaching</strong> 8 years, small-group</li>
+          <li><strong>Media</strong> Watercolour · Oil</li>
+          <li><strong>Studio</strong> Founder of SKY GALLERY</li>
+          <li><strong>Teaching</strong> Over 10 years</li>
         </ul>
-        <div class="bio-certs">
-          <div class="bc-head"><span class="star">✦</span> Training &amp; credentials</div>
-          <div class="bc-row">
-            <figure class="bc-card">
-              <img src="img/Sketchbook.jpg" alt="Diploma in Fine Art certificate" loading="lazy" decoding="async">
-              <figcaption>Diploma in Fine Art · 2014</figcaption>
-            </figure>
-            <figure class="bc-card">
-              <img src="img/Postercolor.jpg" alt="Watercolour Society membership certificate" loading="lazy" decoding="async">
-              <figcaption>Watercolour Society · Member 2019</figcaption>
-            </figure>
-          </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="philosophy">
+    <div class="section-head reveal-one" style="text-align:center;">
+      <div class="eyebrow" style="justify-content:center;"><span class="star">✦</span> My teaching philosophy</div>
+      <h2 class="section-title">Demystifying the process</h2>
+    </div>
+    <div class="reveal" style="max-width:760px;margin:0 auto 26px;">
+      <p style="color:var(--muted);font-size:15.5px;line-height:1.72;margin:0 0 14px;">Many people want to paint, but stop themselves before they even begin. They worry about "lacking natural talent," struggle with controlling unruly watercolours, or feel overwhelmed by the layers of oil painting.</p>
+      <p style="color:var(--muted);font-size:15.5px;line-height:1.72;margin:0 0 14px;">Here is the truth: <strong style="color:var(--ink);">painting is not an exclusive privilege for a gifted few — it is a learnable, structured skill.</strong></p>
+      <p style="color:var(--muted);font-size:15.5px;line-height:1.72;margin:0;">In my courses, you won't find overly academic jargon or intimidating rules. Instead, I focus on warm, practical, step-by-step guidance:</p>
+    </div>
+    <div class="about-tri reveal">
+      <div class="card">
+        <h3 class="marker-title" style="font-size:19px;margin:0 0 8px;">Developing an artist's eye</h3>
+        <p style="margin:0;font-size:14.5px;color:var(--muted);line-height:1.7;">Learn to see the world differently by understanding light, proportion, structure, and atmospheric depth.</p>
+      </div>
+      <div class="card">
+        <h3 class="marker-title" style="font-size:19px;margin:0 0 8px;">Mastering your medium</h3>
+        <p style="margin:0;font-size:14.5px;color:var(--muted);line-height:1.7;">Gain full control over watercolour transparency and oil layering rules so your materials work <em>with</em> you, not against you.</p>
+      </div>
+      <div class="card">
+        <h3 class="marker-title" style="font-size:19px;margin:0 0 8px;">Finding your own visual voice</h3>
+        <p style="margin:0;font-size:14.5px;color:var(--muted);line-height:1.7;">My goal isn't to teach you how to copy my style, but to help you build the confidence to paint what speaks to <em>your</em> heart.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="highlights">
+    <div class="section-head reveal-one" style="text-align:center;">
+      <div class="eyebrow" style="justify-content:center;"><span class="star">✦</span> Highlights &amp; professional background</div>
+      <h2 class="section-title">A glimpse into the journey</h2>
+      <p class="lead" style="font-size:16px;max-width:620px;margin:12px auto 0;">To give you complete confidence in learning with me, here is a glimpse into my journey as an artist and educator.</p>
+    </div>
+    <div class="tc-grid reveal">
+      <div class="card">
+        <h3 class="marker-title" style="font-size:19px;margin:0 0 8px;">Art education &amp; outreach</h3>
+        <p style="margin:0;font-size:14.5px;color:var(--muted);line-height:1.7;">Founder of SKY GALLERY with over 10 years of teaching experience; recipient of the Outstanding Art Education Award; invited artist exchange at the Repin Academy of Fine Arts in Russia.</p>
+      </div>
+      <div class="card">
+        <h3 class="marker-title" style="font-size:19px;margin:0 0 8px;">Collections &amp; media features</h3>
+        <p style="margin:0;font-size:14.5px;color:var(--muted);line-height:1.7;">Permanent collection at the Sun Museum; work featured on local magazine cover stories and dedicated art publications.</p>
+      </div>
+    </div>
+    <div class="card reveal" style="margin-top:18px;">
+      <h3 class="marker-title" style="font-size:19px;margin:0 0 4px;">International honours &amp; exhibitions</h3>
+      <!-- Verbatim from AboutMe.docx. The 2025 line conflicts with the JIWI
+           certificate below, which reads 26th edition / 2026 — see DEV NOTE. -->
+      <ul class="bio-facts" style="margin-top:8px;">
+        <li><strong>2026</strong> Top 18 Finalist, International Watercolor Academy Award (Accademia Internazionale dell'Acquarello, Italy)</li>
+        <li><strong>2025</strong> Selected, 25th International Watercolor Spring Exhibition (Japan International Watercolour Institute)</li>
+        <li><strong>2017</strong> Selected, Fabriano in Acquarello (Italy)</li>
+        <li><strong>2016</strong> Selected, 1st Hong Kong International Biennial Exhibition</li>
+      </ul>
+      <div class="bio-certs">
+        <div class="bc-head"><span class="star">✦</span> Certificates</div>
+        <!-- Captions describe what each scan actually says, so they cannot be
+             edited to match the honours list above without misrepresenting the
+             image. Cert 1 is made out to "Siu Fung Lau" — see DEV NOTE. -->
+        <div class="bc-row">
+          <figure class="bc-card bc-card--cert">
+            <img src="img/about/cert-accademia-2026.jpg" alt="Official Finalist certificate, International Watercolor Academy Award 2026, Accademia Internazionale dell'Acquarello, Italy" loading="lazy" decoding="async">
+            <figcaption>Official Finalist · International Watercolor Academy Award 2026 · Italy</figcaption>
+          </figure>
+          <figure class="bc-card bc-card--cert">
+            <img src="img/about/cert-jiwi-2026.jpg" alt="Winning Work certificate, 26th JIWI Online Spring Exhibition, Japan International Watercolour Institute, for the painting City of Japan" loading="lazy" decoding="async">
+            <figcaption>Winning Work · 26th JIWI Online Spring Exhibition · 《City of Japan》</figcaption>
+          </figure>
         </div>
       </div>
+    </div>
+  </section>
+
+  <section class="section" id="welcome">
+    <div class="section-head reveal-one" style="text-align:center;">
+      <div class="eyebrow" style="justify-content:center;"><span class="star">✦</span> Whoever you are</div>
+      <h2 class="section-title">Beginner or experienced artist</h2>
+    </div>
+    <div class="tc-grid reveal">
+      <div class="card">
+        <h3 class="marker-title" style="font-size:19px;margin:0 0 8px;">Stepping into art for the very first time</h3>
+        <p style="margin:0;font-size:14.5px;color:var(--muted);line-height:1.7;">Welcome! Consider this studio your safe space to explore, experiment, and have fun without any pressure.</p>
+      </div>
+      <div class="card">
+        <h3 class="marker-title" style="font-size:19px;margin:0 0 8px;">An experienced painter</h3>
+        <p style="margin:0;font-size:14.5px;color:var(--muted);line-height:1.7;">Looking to refine your brushwork, master light and shadow, or deepen your plein air skills? You'll find structured, practical insights to help you break through to the next level.</p>
+      </div>
+    </div>
+    <div class="reveal" style="text-align:center;margin-top:30px;">
+      <p style="font-family:var(--font-marker);font-weight:600;font-size:clamp(20px,2.2vw,26px);color:var(--teal-ink);margin:0;">Grab a cup of tea, set up your brushes, and let's enjoy the process of bringing colour to life!</p>
+      <div class="sig-script" aria-hidden="true" style="margin-top:10px;">Crystal Lau</div>
     </div>
   </section>
 
@@ -149,7 +264,7 @@
       <div class="contact-intro">
         <div class="eyebrow"><span class="star">✦</span> Say hello</div>
         <h2 class="marker-title" style="font-size:clamp(26px,3vw,40px);margin:6px 0 12px;">Write to the studio.</h2>
-        <p class="lead" style="font-size:16px;">A question about a course, a commission, or just to show me what you're painting this week — I read every message myself, usually with a brush still in one hand.</p>
+        <p class="lead" style="font-size:16px;">A question about a course, a commission, or just to show me what you're painting this week — write to the studio and it comes straight to me.</p>
         <ul class="contact-channels">
           <li>
             <span class="ch-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><path d="M3 7l9 6 9-6"></path></svg></span>
@@ -172,7 +287,6 @@
             <span><strong>Originals</strong><em>Gallery pieces ship worldwide via my <a class="link-squiggle" href="Gallery.dc.html" style="font-weight:700;">Etsy shop</a></em></span>
           </li>
         </ul>
-        <p class="contact-note" aria-hidden="true">I usually reply within two days ✦</p>
       </div>
       <form class="contact-card" id="contact-form">
         <div class="field">
@@ -188,11 +302,14 @@
           <textarea id="c-msg" rows="6" required placeholder="A question about a course, a commission, anything…"></textarea>
         </div>
         <button class="btn primary" type="submit">Send message <span class="arr" aria-hidden="true">→</span></button>
-        <div class="sent hand-note" style="display:none;color:var(--teal-ink);margin-top:10px;">Sent! I usually reply within two days. ✦</div>
+        <div class="sent hand-note" style="display:none;color:var(--teal-ink);margin-top:10px;">Sent — thank you! ✦</div>
       </form>
     </div>
   </section>
 
+  <!-- Placeholder legal copy, NOT client-supplied: GBP pricing, VAT, UK GDPR and
+       a UK cookie banner, for a Hong Kong-based artist. Needs a real decision on
+       trading jurisdiction before launch — see DEV NOTE at the top. -->
   <section class="section" id="terms" style="padding-bottom:80px;">
     <div class="section-head reveal-one" style="text-align:center;">
       <div class="eyebrow" style="justify-content:center;"><span class="star">✦</span> The small print</div>

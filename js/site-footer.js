@@ -59,7 +59,11 @@
         '<div class="footer-grid">' +
           '<div>' +
             '<div class="footer-brand">CRYSTAL\'S</div>' +
-            '<p style="font-size:14px;opacity:.85;max-width:34ch;margin:0;">Watercolour, acrylic &amp; drawing — taught slowly and carefully from a small studio of plaster, wood and iron.</p>' +
+            /* Facts here come from assets/06 - About/AboutMe.docx. The previous
+               line ("watercolour, acrylic & drawing … a small studio of plaster,
+               wood and iron") was invented placeholder copy — she works in
+               watercolour and oil, and runs SKY GALLERY. */
+            '<p style="font-size:14px;opacity:.85;max-width:34ch;margin:0;">Watercolour &amp; oil painting, taught step by step by Crystal Lau — artist and founder of SKY GALLERY.</p>' +
             '<div class="social-row">' + socialLinks('social-btn') + '</div>' +
           '</div>' +
           '<div>' +
