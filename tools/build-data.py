@@ -91,10 +91,16 @@ def build_courses(manifest, meta, links):
             if len(parts) == 1:
                 parts[0]["label"] = ""
 
+            # Focus / tools / outcome come from the client's course introduction
+            # docs. Optional: a lesson without them renders no detail panel
+            # rather than three empty rows.
+            detail = {k: cl[k] for k in ("focus", "tools", "outcome") if cl.get(k)}
+
             lessons.append({
                 "n": i + 1,
                 "title": cl["title"],
                 "subtitle": cl["subtitle"],
+                "detail": detail,
                 "dur": al["dur"],                 # seconds, ffprobe; sum of parts
                 "poster": al["poster"],
                 "video": parts[0]["url"] if parts else None,

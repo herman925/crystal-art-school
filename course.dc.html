@@ -262,18 +262,35 @@ class Component extends DCLogic {
     const LOCK = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="opacity:.55;"><rect x="4" y="10" width="16" height="11" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg>';
     const PLAY = '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"></path></svg>';
 
+    /* Focus / tools / outcome, straight from the client's course introduction
+       doc. Not every lesson has them, so the toggle only exists where there is
+       something to show. The panel is a sibling of the row, never a child —
+       the row is an <a>, and a button inside a link is not operable. */
+    const DETAIL_LABELS = { focus: 'Focus', tools: 'Tools & techniques', outcome: 'Learning outcome' };
+    const CHEV = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>';
+
     const lessonRow = (u, i, done) => {
       const isDone = owned && done[i];
       const open = owned || u.free;
+      const keys = Object.keys(u.detail || {}).filter(k => DETAIL_LABELS[k]);
       const inner =
         '<div class="syl-num">' + (isDone ? '✓' : (i + 1)) + '</div>' +
         '<div><div class="syl-title">' + esc(u.title) +
           (!owned && u.free ? ' <span style="font-family:var(--font-cond);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal-ink);margin-left:8px;">free preview</span>' : '') +
         '</div><div class="syl-sub">' + esc(u.subtitle) + '</div></div>' +
         '<div class="syl-len" style="display:inline-flex;align-items:center;gap:7px;">' + (open ? PLAY : LOCK) + ' ' + esc(clock(u.dur)) + '</div>';
-      return open
+      const row = open
         ? '<a class="syl-row" href="lesson.dc.html?c=' + encodeURIComponent(c.id) + '&u=' + i + '" style="text-decoration:none;color:inherit;">' + inner + '</a>'
         : '<div class="syl-row" style="opacity:.72;">' + inner + '</div>';
+      if (!keys.length) return '<div class="syl-item">' + row + '</div>';
+
+      const panelId = 'syld-' + c.id + '-' + i;
+      const panel = '<dl class="syl-detail" id="' + panelId + '" hidden>' +
+        keys.map(k => '<dt>' + esc(DETAIL_LABELS[k]) + '</dt><dd>' + esc(u.detail[k]) + '</dd>').join('') +
+        '</dl>';
+      const toggle = '<button class="syl-more" type="button" aria-expanded="false" aria-controls="' + panelId + '">' +
+        '<span>What you will cover</span>' + CHEV + '</button>';
+      return '<div class="syl-item has-detail">' + row + toggle + panel + '</div>';
     };
 
     const renderSyllabus = () => {
@@ -294,6 +311,17 @@ class Component extends DCLogic {
       }
       $('co-syllabus').innerHTML = html;
     };
+
+    /* Delegated, so it survives every renderSyllabus() re-render. */
+    $('co-syllabus').addEventListener('click', (ev) => {
+      const btn = ev.target.closest('.syl-more');
+      if (!btn) return;
+      const panel = document.getElementById(btn.getAttribute('aria-controls'));
+      if (!panel) return;
+      const openNow = btn.getAttribute('aria-expanded') !== 'true';
+      btn.setAttribute('aria-expanded', String(openNow));
+      panel.hidden = !openNow;
+    });
 
     const renderState = () => {
       const cont = $('co-continue');

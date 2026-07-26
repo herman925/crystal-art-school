@@ -5,8 +5,8 @@
 window.CAS_COURSES = [
   {
     "id": "clouds-beginner",
-    "title": "Painting Clouds — Beginner",
-    "tag": "Watercolour",
+    "title": "Beginner’s Guide to Drawing & Painting Clouds",
+    "tag": "Sketching & Watercolour",
     "cat": "watercolour",
     "theme": "landscape",
     "difficulty": "beginner",
@@ -16,12 +16,12 @@ window.CAS_COURSES = [
     "was": 72,
     "sale": true,
     "cover": "img/courses/clouds-beginner/cover.jpg",
-    "blurb": "Start from nothing. Twelve lessons that take you from an empty page to a cloud that reads as a solid, sunlit object — the drawing underneath, the three values that make it fluffy, and the four cloud families you will paint for the rest of your life.",
+    "blurb": "A structured masterclass for aspiring artists and complete beginners. It starts at foundational pencil sketching and simple perspective — enough to grasp the three-dimensional volume of a cloud — then works through line, composition, light and shadow placement, colour mixing and water control before moving into watercolour proper: flat washes, blending, wet-on-wet, dry-on-dry and negative space painting.",
     "learn": [
-      "Set up a small, honest kit and a desk that does not fight you",
-      "Draw the geometry underneath a cloud before any water touches paper",
-      "Sort any sky into light, grey and dark — the whole trick behind “fluffy”",
-      "Paint cumulus, stratus and cirrus, then mix them in one sky"
+      "Simplify fluffy cloud contours in pencil and hatch them into three-dimensional form",
+      "Arrange clouds on a perspective grid so the sky reads with real foreground-to-horizon depth",
+      "Mix colour and control your water — flat washes, graded washes, wet-on-wet and dry-on-dry",
+      "Guard the whites with negative space painting and carry the atmosphere of a real sky"
     ],
     "who": [
       [
@@ -39,26 +39,26 @@ window.CAS_COURSES = [
     ],
     "modules": [
       {
-        "name": "Building the foundation",
+        "name": "Perspective, form & pencil shading",
         "from": 1,
         "to": 4
       },
       {
-        "name": "Mastering the values",
+        "name": "Watercolour fundamentals & colouring",
         "from": 5,
-        "to": 8
-      },
-      {
-        "name": "Cloud families",
-        "from": 9,
         "to": 12
       }
     ],
     "lessons": [
       {
         "n": 1,
-        "title": "Welcome & materials for skies",
-        "subtitle": "The small kit — one round brush, one flat, three tubes and decent paper.",
+        "title": "Pencil cloud form & basic hatching",
+        "subtitle": "Simplify fluffy cloud contours in pencil, then hatch to set light, shadow and first volume.",
+        "detail": {
+          "focus": "Learn to use pencil lines to simplify fluffy cloud contours and apply basic hatching to establish light, shadow, and initial 3D volume.",
+          "tools": "Sketching pencils, curved contouring, parallel and cross-hatching.",
+          "outcome": "Master cloud structure observation, create quick, fluid rough sketches, and establish clear basic light and shadow values."
+        },
         "dur": 781,
         "poster": "img/courses/clouds-beginner/l01.jpg",
         "video": "https://drive.google.com/file/d/1PGmnGOnCC-0u3RZqlZzedqi-Y8z6GuUP/preview",
@@ -82,8 +82,13 @@ window.CAS_COURSES = [
       },
       {
         "n": 2,
-        "title": "Seeing clouds as simple shapes",
-        "subtitle": "Map cumulus volumes with overlapping circles, the way you would construct a figure.",
+        "title": "Marker perspective grid & spatial depth",
+        "subtitle": "Arrange clouds from foreground to horizon on a perspective grid, varying stroke weight for depth.",
+        "detail": {
+          "focus": "Use perspective grid lines to arrange clouds from foreground to horizon, using varied marker stroke weights to create strong spatial depth.",
+          "tools": "Markers / fine-liners, perspective grid lines, line weight dynamics, spatial perspective.",
+          "outcome": "Understand sky perspective principles, master foreground-to-background scale rules, and construct crisp marker compositions with expansive depth."
+        },
         "dur": 364,
         "poster": "img/courses/clouds-beginner/l02.jpg",
         "video": "https://drive.google.com/file/d/1d5XfiwqAcu-XuooPpqCfwpL7hOKRQj76/preview",
@@ -94,8 +99,13 @@ window.CAS_COURSES = [
       },
       {
         "n": 3,
-        "title": "Pencil sketching & hatching volume",
-        "subtitle": "Hatching sets the weight and form before any paint arrives.",
+        "title": "Detailed graphite shading & soft edges",
+        "subtitle": "Break cumulus into simple spheres, then push graphite and a kneaded eraser for real texture.",
+        "detail": {
+          "focus": "Deconstruct complex cumulus clouds into simple spherical units and establish basic shading with pencil hatching. Render hyper-realistic cloud textures and high-contrast volumetric light using graphite pencils and kneaded erasers.",
+          "tools": "A detailed sketching lesson covering fundamental geometric concepts. You will explore tonal values — from highlights and mid-tones to shadows — and the interplay of space, light and shadow, while learning step by step how to render abstract cloud formations.",
+          "outcome": "Use deep shadows and subtle tonal gradations to turn flat outlines into three-dimensional cloud forms with tangible volume. Capture the interplay of light and shadow on the clouds, and employ a variety of sketching pencils — hard through soft — for diverse line qualities and blending textures."
+        },
         "dur": 2758,
         "poster": "img/courses/clouds-beginner/l03.jpg",
         "video": "https://drive.google.com/file/d/1vU9au1R7PiJMQvQtHr1Utjj4j2RyArOu/preview",
@@ -119,8 +129,13 @@ window.CAS_COURSES = [
       },
       {
         "n": 4,
-        "title": "Mapping a cloudscape",
-        "subtitle": "Thumbnails first — horizon low, masses balanced, nothing wasted.",
+        "title": "Marker block-in & value distribution",
+        "subtitle": "Dual-tone markers block sky and cloud shadow fast, so composition is planned before paint.",
+        "detail": {
+          "focus": "Use dual-tone markers to quickly block in sky and cloud shadows, strengthening your sense of light values.",
+          "tools": "Art markers, tonal value blocking.",
+          "outcome": "Master fast value-study techniques to plan composition and light intensity before painting."
+        },
         "dur": 874,
         "poster": "img/courses/clouds-beginner/l04.jpg",
         "video": "https://drive.google.com/file/d/1cbc7pio64kcPw7Mk9sA09SjB5VB_kdAR/preview",
@@ -131,8 +146,13 @@ window.CAS_COURSES = [
       },
       {
         "n": 5,
-        "title": "Reading light, grey and dark",
-        "subtitle": "Sort a reference photo into just three value families.",
+        "title": "Perfect sky gradient & water control",
+        "subtitle": "Control the water-to-paint ratio for smooth, brushstroke-free sky gradients — no backruns.",
+        "detail": {
+          "focus": "Control water-to-paint ratios to create smooth, brushstroke-free sky background gradients.",
+          "tools": "Flat / round watercolour brushes, graded wash technique.",
+          "outcome": "Master seamless colour transitions from dark blue to soft sunset hues without backruns or hard lines."
+        },
         "dur": 183,
         "poster": "img/courses/clouds-beginner/l05.jpg",
         "video": "https://drive.google.com/file/d/10WeLqB9-9N5KOPLOxcVgZfU8k8rX2E7c/preview",
@@ -143,8 +163,13 @@ window.CAS_COURSES = [
       },
       {
         "n": 6,
-        "title": "Where the sun hits",
-        "subtitle": "Place the lit face of one cloud, then make every other cloud agree.",
+        "title": "Cloud volume, light & layered shading",
+        "subtitle": "Warm sunset light against cool purple-grey shadow, built up in multiple washes.",
+        "detail": {
+          "focus": "Explore contrast using warm light (sunset yellow) and cool shadows (purple-grey) through multi-layered washes to create rich cloud volume.",
+          "tools": "Round watercolour brushes, colour blending, combined wet-on-wet and wet-on-dry techniques.",
+          "outcome": "Learn to represent light and shadow with distinct colour temperatures, master pigment-to-water ratios, and render three-dimensional clouds with warm sunlight."
+        },
         "dur": 468,
         "poster": "img/courses/clouds-beginner/l06.jpg",
         "video": "https://drive.google.com/file/d/1Oe7UdcM-N2f_ABVBVKNuWN-fyMCuNCjm/preview",
@@ -157,6 +182,7 @@ window.CAS_COURSES = [
         "n": 7,
         "title": "Shadow shapes that stay soft",
         "subtitle": "Warm-grey undersides that glow instead of going muddy.",
+        "detail": {},
         "dur": 484,
         "poster": "img/courses/clouds-beginner/l07.jpg",
         "video": "https://drive.google.com/file/d/1sR_hLffoqULu9C0XQ48M6b0PxqYL-rE7/preview",
@@ -169,6 +195,7 @@ window.CAS_COURSES = [
         "n": 8,
         "title": "A three-value cloud study",
         "subtitle": "One cumulus, three values, twenty minutes — flat shapes become an object.",
+        "detail": {},
         "dur": 885,
         "poster": "img/courses/clouds-beginner/l08.jpg",
         "video": "https://drive.google.com/file/d/1JzfJHtbqbDzHdY8orsPapDeXLOI5amiz/preview",
@@ -181,6 +208,7 @@ window.CAS_COURSES = [
         "n": 9,
         "title": "Cumulus — bold & puffy",
         "subtitle": "Big shapes first, crisp sunlit tops, soft shadowed bellies.",
+        "detail": {},
         "dur": 558,
         "poster": "img/courses/clouds-beginner/l09.jpg",
         "video": "https://drive.google.com/file/d/1LHV-m6C0F6ki26k7jgcZF8mkdNxVyH6V/preview",
@@ -193,6 +221,7 @@ window.CAS_COURSES = [
         "n": 10,
         "title": "Stratus — streaks on the horizon",
         "subtitle": "One well-loaded stroke, pulled sideways, does most of the work.",
+        "detail": {},
         "dur": 400,
         "poster": "img/courses/clouds-beginner/l10.jpg",
         "video": "https://drive.google.com/file/d/1sfIshdgUwgFFsHw0y_VEK1-2Sy8ozXIi/preview",
@@ -205,6 +234,7 @@ window.CAS_COURSES = [
         "n": 11,
         "title": "Wispy cirrus edges",
         "subtitle": "Barely-there wisps with a thirsty brush and a light hand.",
+        "detail": {},
         "dur": 619,
         "poster": "img/courses/clouds-beginner/l11.jpg",
         "video": "https://drive.google.com/file/d/1X3VNcm7ISo3Kl-RQdpVIUFIXVOz9nhOR/preview",
@@ -217,6 +247,7 @@ window.CAS_COURSES = [
         "n": 12,
         "title": "Mixing cloud types in one sky",
         "subtitle": "Layer cumulus over stratus without the sky turning busy.",
+        "detail": {},
         "dur": 461,
         "poster": "img/courses/clouds-beginner/l12.jpg",
         "video": "https://drive.google.com/file/d/1J2FErduGBuXT28Pjrpk4q4cR2bNJk7KW/preview",
@@ -229,7 +260,7 @@ window.CAS_COURSES = [
   },
   {
     "id": "clouds-intermediate",
-    "title": "Painting Clouds — Intermediate",
+    "title": "Intermediate Guide to Drawing & Painting Clouds",
     "tag": "Watercolour",
     "cat": "watercolour",
     "theme": "landscape",
@@ -278,6 +309,7 @@ window.CAS_COURSES = [
         "n": 1,
         "title": "Wet-on-wet cloud edges",
         "subtitle": "Soft, seamless transitions — control the chaos with timing, not fiddling.",
+        "detail": {},
         "dur": 301,
         "poster": "img/courses/clouds-intermediate/l01.jpg",
         "video": "https://drive.google.com/file/d/1eFPmktMVG8fIkiVSbWyZmggVteg5jC3T/preview",
@@ -290,6 +322,7 @@ window.CAS_COURSES = [
         "n": 2,
         "title": "Gradient washes for skies",
         "subtitle": "Load a bead, tilt the board, walk away.",
+        "detail": {},
         "dur": 721,
         "poster": "img/courses/clouds-intermediate/l02.jpg",
         "video": "https://drive.google.com/file/d/13z7hg--pE6KH86rQlM1sSzPDgDeuOBJ0/preview",
@@ -302,6 +335,7 @@ window.CAS_COURSES = [
         "n": 3,
         "title": "Negative painting & hard edges",
         "subtitle": "The brightest highlight is paper you never touched.",
+        "detail": {},
         "dur": 365,
         "poster": "img/courses/clouds-intermediate/l03.jpg",
         "video": "https://drive.google.com/file/d/1z_hWBZRbqbXSoCgG_ukg8X6pe22DIvdE/preview",
@@ -314,6 +348,7 @@ window.CAS_COURSES = [
         "n": 4,
         "title": "Lifting & softening",
         "subtitle": "The rescue kit — a damp brush, clean tissue, and knowing when to stop.",
+        "detail": {},
         "dur": 646,
         "poster": "img/courses/clouds-intermediate/l04.jpg",
         "video": "https://drive.google.com/file/d/1e970EeC_5gW5AcG-4hbCndSwmK7qOJGe/preview",
@@ -326,6 +361,7 @@ window.CAS_COURSES = [
         "n": 5,
         "title": "Storm clouds over the ocean",
         "subtitle": "First full scene: everything from the values module, at full volume.",
+        "detail": {},
         "dur": 452,
         "poster": "img/courses/clouds-intermediate/l05.jpg",
         "video": "https://drive.google.com/file/d/1Vi3NdvAymd4y8QUKRyH-SiP5lm2Ynl6k/preview",
@@ -338,6 +374,7 @@ window.CAS_COURSES = [
         "n": 6,
         "title": "Evening silhouettes & power lines",
         "subtitle": "A peaceful dusk silhouette — quiet, graphic, easier than it looks.",
+        "detail": {},
         "dur": 752,
         "poster": "img/courses/clouds-intermediate/l06.jpg",
         "video": "https://drive.google.com/file/d/1nLsTY2HX2QX0Mn7DPCkX7N-_0a-D1s1T/preview",
@@ -350,6 +387,7 @@ window.CAS_COURSES = [
         "n": 7,
         "title": "Composing a full cloudscape",
         "subtitle": "Reference, thumbnails, value plan, palette — and I paint alongside you.",
+        "detail": {},
         "dur": 850,
         "poster": "img/courses/clouds-intermediate/l07.jpg",
         "video": "https://drive.google.com/file/d/1JKOkG3Bn6C4xzyr0lr-5jlIqtVcgmiM5/preview",
@@ -395,6 +433,7 @@ window.CAS_COURSES = [
         "n": 1,
         "title": "Painting a little house",
         "subtitle": "A full watercolour study from pencil sketch to final wash.",
+        "detail": {},
         "dur": 483,
         "poster": "img/courses/little-house/l01.jpg",
         "video": "https://drive.google.com/file/d/1byvLcH8lucvUHCpseMbOd9noxGRk65wc/preview",
@@ -440,6 +479,7 @@ window.CAS_COURSES = [
         "n": 1,
         "title": "Urban sketching in watercolour",
         "subtitle": "Line and wash on location: buildings, street and figures.",
+        "detail": {},
         "dur": 673,
         "poster": "img/courses/urban-sketch/l01.jpg",
         "video": "https://drive.google.com/file/d/1gFYWF1Pxm9HsajRZVEaWhzLfY0PBq6KR/preview",

@@ -177,7 +177,7 @@
         '.lesson-grid .lesson-cell', '.tier-grid .tier-card',
         '.blog-grid .blog-card', '.store-grid .art-card', '.sw-grid .sw-tile',
         '.acc-list .acc-item', '.contact-intro > *', '.bio-copy > *',
-        '.syllabus .syl-row', '.mycourse-grid .mc-course', '.res-list .res-item',
+        '.syllabus .syl-item', '.mycourse-grid .mc-course', '.res-list .res-item',
         '.tc-grid .card', '.learn-list li', '.bc-row .bc-card', '.contact-channels li'
       ];
       GROUPS.forEach(function (sel, gi) {
