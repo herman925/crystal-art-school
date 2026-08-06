@@ -405,8 +405,8 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 .hero__img--small { right: 34%; bottom: 16%; width: 24%; height: 50%; z-index: 2; border-radius: 4px 4px 26px 4px; box-shadow: var(--shadow-lift); }
 @keyframes hero-wipe { from { clip-path: inset(0 100% 0 0); transform: skewX(3deg); } to { clip-path: inset(0 0% 0 0); transform: skewX(0); } }
 @keyframes hero-up { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
-.hero__cta { display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-cond); font-weight: 500; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; padding: 13px 26px; border-radius: var(--radius-pill); background: var(--coral); color: var(--paper); box-shadow: var(--shadow-sm); transition: transform .18s var(--ease-pop), background .18s; }
-.hero__cta:hover { transform: translateY(-2px); background: var(--coral-deep); }
+.hero__cta { display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-cond); font-weight: 500; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; padding: 13px 26px; border-radius: var(--radius-pill); background: var(--marine); color: var(--marine-ink); box-shadow: var(--shadow-sm); transition: transform .18s var(--ease-pop), filter .18s; }
+.hero__cta:hover { transform: translateY(-2px); filter: brightness(1.08); }
 .hero__scroll { position: absolute; left: 4.2%; bottom: 7%; z-index: 6; display: flex; align-items: center; gap: 9px; background: none; border: 0; color: var(--ink); font-family: var(--font-cond); font-weight: 600; font-size: 12px; letter-spacing: .18em; text-transform: uppercase; cursor: pointer; }
 .hero__scroll .ast { color: var(--coral); font-size: 17px; display: inline-block; animation: ast-spin 9s linear infinite; }
 @keyframes ast-spin { to { transform: rotate(360deg); } }
@@ -455,7 +455,13 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 .fv-play { width: 62px; height: 62px; border-radius: 50%; background: var(--coral); color: #f3ede1; display: grid; place-items: center; font-size: 20px; box-shadow: var(--shadow-md); transition: transform var(--dur-fast) var(--ease-out); }
 .free-video:hover .fv-play { transform: scale(1.09); }
 .fv-veil strong { font-family: var(--font-marker); font-weight: 600; font-size: clamp(24px,3vw,38px); line-height: 1.05; text-shadow: 0 2px 18px rgba(20,17,13,.55); }
-.fv-veil span { font-family: var(--font-cond); font-weight: 500; font-size: clamp(13px,1.2vw,15px); letter-spacing: .12em; text-transform: uppercase; color: #e7d6c4; }
+.fv-veil span { font-family: var(--font-body); font-weight: 500; font-size: clamp(13px,1.15vw,15px); line-height: 1.5; letter-spacing: .01em; color: #efe3d4;
+  max-width: 34ch; text-align: center; text-shadow: 0 1px 10px rgba(20,17,13,.7);
+  /* 3.3: at rest the card shows only the title. Hidden with opacity and a small
+     rise rather than display:none so it stays in the accessibility tree. */
+  opacity: 0; transform: translateY(6px); transition: opacity .3s var(--ease-out), transform .3s var(--ease-out); }
+.free-video:hover .fv-veil span, .free-video:focus-visible .fv-veil span { opacity: 1; transform: none; }
+@media (hover: none) { .fv-veil span { opacity: 1; transform: none; } }
 
 /* cover-card (base) */
 .cover-card { position: relative; aspect-ratio: 1/1; border-radius: var(--radius-card); overflow: hidden; box-shadow: var(--shadow); display: block; background: var(--paper-2); }
@@ -533,8 +539,12 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 .gallery-tile .gt-veil { position: absolute; inset: 0; z-index: 2; background: linear-gradient(150deg, rgba(77,102,37,.42), rgba(20,17,13,.34)); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; text-align: center; padding: 24px; transition: background .35s var(--ease-out); }
 .gallery-tile:hover .gt-veil, .gallery-tile:focus-within .gt-veil { background: linear-gradient(150deg, rgba(77,102,37,.82), rgba(20,17,13,.74)); }
 .gallery-tile .gt-ast { font-size: 24px; color: var(--mint); display: inline-block; animation: ast-spin 9s linear infinite; }
-.gallery-tile .gt-title { font-family: var(--font-marker); font-weight: 600; font-size: clamp(20px,2.2vw,27px); line-height: 1.05; }
-.gallery-tile .gt-sub { font-family: var(--font-body); font-size: 12.5px; opacity: .92; max-width: 26ch; }
+.gallery-tile .gt-title { font-family: var(--font-marker); font-weight: 600; font-size: clamp(28px,3.1vw,40px); line-height: 1.05; }
+.gallery-tile .gt-sub { font-family: var(--font-body); font-size: 14px; line-height: 1.5; max-width: 26ch;
+  /* 3.6: revealed on hover, over the darker gradient, with the title still visible. */
+  opacity: 0; transform: translateY(6px); transition: opacity .3s var(--ease-out), transform .3s var(--ease-out); }
+.gallery-tile:hover .gt-sub, .gallery-tile:focus-within .gt-sub { opacity: .96; transform: none; }
+@media (hover: none) { .gallery-tile .gt-sub { opacity: .96; transform: none; } }
 .gallery-tile .gt-cta { margin-top: 6px; font-family: var(--font-cond); font-weight: 600; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; background: #f3ede1; color: #2b2823; border-radius: var(--radius-pill); padding: 10px 20px; transition: transform var(--dur-fast) var(--ease-out); }
 .gallery-tile:hover .gt-cta { transform: translateY(-1px); }
 
