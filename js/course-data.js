@@ -360,7 +360,7 @@ window.CAS_COURSES = [
       {
         "n": 5,
         "title": "Storm clouds over the ocean",
-        "subtitle": "First full scene: everything from the values module, at full volume.",
+        "subtitle": "First full scene: everything from the values phase, at full volume.",
         "detail": {},
         "dur": 452,
         "poster": "img/courses/clouds-intermediate/l05.jpg",

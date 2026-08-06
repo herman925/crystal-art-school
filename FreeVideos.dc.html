@@ -23,7 +23,27 @@
 <style>
 /* ---- Free videos (Will Kemp-style tutorial index) ---- */
 .fv-sec { margin-top: 54px; }
+/* 15: the page title and all four block titles are Font A. The .font-a rule in
+   industrial-3.css sets the family; the size is set here because this page's
+   headings run larger than the site default. */
 .fv-sec h2 { font-family: var(--font-marker); font-weight: 600; font-size: clamp(24px, 2.6vw, 32px); color: var(--ink); margin: 0 0 10px; }
+.cas-root .fv-sec h2.font-a { font-size: clamp(31px, 3.4vw, 46px); line-height: 1.16; margin-bottom: 12px; }
+
+/* 15: the featured Studio Notes block, 16:9, with its own dots. */
+.fv-featured .fv-feat-stage { margin-top: 20px; max-width: 760px; }
+.fv-featured .fv-feat-stage .fv-thumb { aspect-ratio: 16 / 9; }
+.fv-feat-empty { aspect-ratio: 16 / 9; max-width: 760px; display: grid; place-items: center; border-radius: var(--radius-card);
+  background: var(--surface); box-shadow: var(--shadow-sm); color: var(--muted);
+  font-family: var(--font-cond); font-size: 15px; letter-spacing: .16em; text-transform: uppercase; }
+.fv-feat-dots { display: flex; gap: 8px; margin: 14px 0 6px; }
+.fv-feat-dots button { width: 9px; height: 9px; padding: 0; border: 0; border-radius: 50%; cursor: pointer; background: color-mix(in srgb, var(--ink) 26%, transparent); }
+.fv-feat-dots button.active { background: var(--marine); }
+
+/* 1.4.12: section three is vertical. Same card, 9:16 container — one player,
+   two ratios, rather than a second component. */
+.fv-grid.is-vertical { grid-template-columns: repeat(4, 1fr); }
+.fv-grid.is-vertical .fv-thumb { aspect-ratio: 9 / 16; }
+@media (max-width: 900px) { .fv-grid.is-vertical { grid-template-columns: repeat(2, 1fr); } }
 .fv-sec .fv-sec-intro { max-width: 72ch; margin: 0; color: var(--muted); }
 .fv-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px 24px; margin-top: 26px; align-items: stretch; }
 .fv-card { display: flex; flex-direction: column; }
@@ -53,6 +73,12 @@
 .fvm-panel { position: relative; z-index: 1; width: min(880px, 100%); background: #181410; border-radius: 16px; overflow: hidden; box-shadow: 0 40px 90px rgba(0,0,0,.6); }
 .fvm-close { position: absolute; top: 10px; right: 10px; z-index: 3; width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(243,237,225,.3); background: rgba(24,20,16,.6); color: #f3ede1; cursor: pointer; font-size: 14px; }
 .fvm-stage { position: relative; aspect-ratio: 16 / 9; background: #000; }
+/* 1.4.12: a 9:16 film keeps the same stage height and is pillarboxed — flat
+   dark fill either side — so the modal does not change size between a
+   landscape and a portrait video. Full screen is the embedded player's job. */
+.fvm-stage.is-vertical { display: grid; place-items: center; }
+.fvm-stage.is-vertical .gdrive-frame,
+.fvm-stage.is-vertical img { position: relative; inset: auto; width: auto; height: 100%; aspect-ratio: 9 / 16; margin: 0 auto; }
 .fvm-stage img { width: 100%; height: 100%; object-fit: cover; display: block; opacity: .92; }
 .fvm-veil { position: absolute; inset: 0; display: grid; place-items: center; background: linear-gradient(180deg, rgba(0,0,0,.12), rgba(0,0,0,.38)); cursor: pointer; transition: opacity .25s ease; }
 .fvm-stage.playing .fvm-veil { opacity: 0; pointer-events: none; }
@@ -131,20 +157,51 @@
   <div class="container">
     <div class="eyebrow reveal-one"><span class="star">✦</span> Watch, then paint along</div>
     <h1 class="marker-title font-a reveal-one" style="font-size:clamp(49px,6.5vw,88px);">Free videos</h1>
-    <p class="lead reveal-one" style="max-width:74ch;">Free painting lessons — real, complete tutorials, not previews. Press play and paint along at your own pace. When you're ready for the full slow-paced series, the <a class="link-squiggle" href="Lessons.dc.html">step-by-step courses</a> pick up where these leave off.</p>
-    <p class="lead reveal-one" style="margin-top:10px;">Let's feel the fear… and paint it anyway.</p>
+    <!-- 15: the first line of FREE VIDEOS.docx. It is one sentence built round a
+         colon, so the phrase before it is the title above and the rest is this
+         lede. Crystal's words either way. -->
+    <p class="lead reveal-one" style="max-width:74ch;">Including short Reels, lessons, tutorials and painting tips.</p>
     <div class="logo2"><img src="img/logo2.png" alt="Crystal Lau Art" loading="lazy" decoding="async"></div>
   </div>
 </header>
 
 <main class="container" id="content" style="padding-bottom:70px;">
 
-  <!-- cards are rendered from window.CAS_FREE_VIDEOS (js/free-videos-data.js) -->
-  <section class="fv-sec" style="margin-top:26px;">
-    <h2>Free demos</h2>
+  <!-- 15: one featured block and three sections. Cards render from
+       window.CAS_FREE_VIDEOS (js/free-videos-data.js), grouped by section. -->
+
+  <!-- Featured: the latest Studio Note, 16:9, with carousel dots. -->
+  <section class="fv-sec fv-featured" style="margin-top:26px;">
+    <h2 class="font-a">Studio notes from Crystal Lau</h2>
+    <div class="fv-feat-stage" id="fv-feat"></div>
+    <div class="fv-feat-dots" id="fv-feat-dots"></div>
+    <p class="asset-pending">Placeholder &mdash; the Studio Notes films and Crystal&rsquo;s photograph for this block are still to be supplied.</p>
+  </section>
+
+  <section class="fv-sec" data-section="Step-by-Step Demos">
+    <h2 class="font-a">Step-by-step demos</h2>
     <p class="fv-sec-intro">Complete tutorials, free to watch — no sign-up, no preview cut short. Paint along at your own pace, then pick up the <a class="link-squiggle" href="Lessons.dc.html">step-by-step courses</a> when you want the slow version.</p>
-    <div class="fv-grid" id="fv-grid"></div>
-    <p class="fv-sec-intro" id="fv-empty" style="display:none;">No free videos are published yet — check back soon.</p>
+    <div class="fv-grid" data-grid="Step-by-Step Demos"></div>
+    <p class="fv-sec-intro fv-empty" data-empty="Step-by-Step Demos" style="display:none;">Nothing published in this section yet.</p>
+    <p class="asset-pending">All three published films sit here for now. Which section each belongs to is Crystal&rsquo;s call.</p>
+  </section>
+
+  <section class="fv-sec" data-section="Quick Inspiration">
+    <h2 class="font-a">Quick inspiration &amp; bite-sized tips</h2>
+    <p class="fv-sec-intro">Short on time? Browse our collection of quick painting tips, colour-mixing secrets, and plein air mini-demos. Perfect for a daily dose of creative inspiration or a quick refresh between paintings — 100% free, no sign-up needed.</p>
+    <div class="fv-grid" data-grid="Quick Inspiration"></div>
+    <p class="fv-sec-intro fv-empty" data-empty="Quick Inspiration" style="display:none;">Nothing published in this section yet.</p>
+  </section>
+
+  <!-- 15: section three is vertical. It was never drawn on the board — it came
+       up in the meeting and has no agreed name yet. Same card layout as the
+       section above it, only the container ratio changes (1.4.12). -->
+  <section class="fv-sec" data-section="Shorts">
+    <h2 class="font-a">Shorts</h2>
+    <p class="fv-sec-intro">Quick vertical clips from the studio and from location, the same ones that go out on Instagram and YouTube Shorts.</p>
+    <div class="fv-grid is-vertical" data-grid="Shorts"></div>
+    <p class="fv-sec-intro fv-empty" data-empty="Shorts" style="display:none;">Nothing published in this section yet.</p>
+    <p class="asset-pending">Section name is a developer suggestion, not Crystal&rsquo;s &mdash; Reels, Sketchbook Moments and In the Studio are the alternatives. The clips themselves are YouTube links still to be supplied.</p>
   </section>
 
   <section class="section" style="margin-top:54px;">
@@ -252,6 +309,10 @@ class Component extends DCLogic {
       const real = !!(rec && rec.video);
       stage.classList.toggle('has-video', real);
       stage.classList.toggle('is-missing', !real);
+      /* 1.4.12: one player, two container ratios. A vertical film keeps the
+         stage height and is pillarboxed rather than letterboxed, so the modal
+         does not jump size between a landscape and a portrait video. */
+      stage.classList.toggle('is-vertical', !!(rec && (rec.ratio === '9:16' || rec.section === 'Shorts')));
       if (gframe) {
         const want = real ? rec.video : 'about:blank';
         if (gframe.getAttribute('src') !== want) gframe.setAttribute('src', want);
@@ -280,22 +341,52 @@ class Component extends DCLogic {
        them with /(\d+)\s*min/i and silently falls back to 900s otherwise. */
     const fvEsc = (t) => String(t == null ? '' : t).replace(/[&<>"']/g, (ch) => (
       { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
-    const fvGrid = document.getElementById('fv-grid');
     const FV = window.CAS_FREE_VIDEOS || [];
-    if (fvGrid) {
-      fvGrid.innerHTML = FV.map((v) => {
-        const mins = v.dur ? Math.max(1, Math.round(v.dur / 60)) : null;
-        return '<a class="fv-card" href="#" data-slug="' + fvEsc(v.slug) + '">' +
-          '<span class="fv-thumb"><img src="' + fvEsc(v.poster) + '" alt="' + fvEsc(v.title) + '" loading="lazy">' +
-            '<span class="fv-playbtn"><span>▶</span></span>' +
-            (mins ? '<span class="fv-dur">' + mins + ' min</span>' : '<span class="fv-dur">Coming soon</span>') +
-          '</span>' +
-          '<h3>' + fvEsc(v.title) + '</h3>' +
-          '<p>' + fvEsc(v.desc) + '</p>' +
-        '</a>';
-      }).join('');
-      const empty = document.getElementById('fv-empty');
-      if (empty) empty.style.display = FV.length ? 'none' : '';
+    const fvCard = (v) => {
+      const mins = v.dur ? Math.max(1, Math.round(v.dur / 60)) : null;
+      return '<a class="fv-card" href="#" data-slug="' + fvEsc(v.slug) + '">' +
+        '<span class="fv-thumb"><img src="' + fvEsc(v.poster) + '" alt="' + fvEsc(v.title) + '" loading="lazy">' +
+          '<span class="fv-playbtn"><span>▶</span></span>' +
+          (mins ? '<span class="fv-dur">' + mins + ' min</span>' : '<span class="fv-dur">Coming soon</span>') +
+        '</span>' +
+        '<h3>' + fvEsc(v.title) + '</h3>' +
+        '<p>' + fvEsc(v.desc) + '</p>' +
+      '</a>';
+    };
+
+    /* 15: one grid per section, filled from the video's own section field.
+       A section with nothing in it says so rather than collapsing away — the
+       three sections are the page's structure, not a function of the data. */
+    document.querySelectorAll('.fv-grid[data-grid]').forEach((grid) => {
+      const name = grid.getAttribute('data-grid');
+      const list = FV.filter((v) => v.section === name);
+      grid.innerHTML = list.map(fvCard).join('');
+      const empty = document.querySelector('.fv-empty[data-empty="' + name + '"]');
+      if (empty) empty.style.display = list.length ? 'none' : '';
+    });
+
+    /* 15: the featured Studio Notes block — latest first, with dots. Nothing
+       has been supplied for it yet, so it renders its own placeholder rather
+       than borrowing a film from a section below. */
+    const feat = document.getElementById('fv-feat');
+    const featDots = document.getElementById('fv-feat-dots');
+    if (feat) {
+      const notes = FV.filter((v) => v.section === 'Studio Notes');
+      if (!notes.length) {
+        feat.innerHTML = '<div class="fv-feat-empty">Studio notes to come</div>';
+        if (featDots) featDots.style.display = 'none';
+      } else {
+        let fi = 0;
+        const draw = () => {
+          feat.innerHTML = fvCard(notes[fi]);
+          if (featDots) featDots.innerHTML = notes.map((_, i) =>
+            '<button type="button" class="' + (i === fi ? 'active' : '') + '" aria-label="Show note ' + (i + 1) + '"></button>').join('');
+          feat.querySelectorAll('.fv-card').forEach((c) => c.addEventListener('click', (e) => { e.preventDefault(); openV(c); }));
+          if (featDots) featDots.querySelectorAll('button').forEach((btn, i) =>
+            btn.addEventListener('click', () => { fi = i; draw(); }));
+        };
+        draw();
+      }
     }
 
     document.querySelectorAll('.fv-card').forEach(c => c.addEventListener('click', (e) => { e.preventDefault(); openV(c); }));

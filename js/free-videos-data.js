@@ -7,7 +7,7 @@ window.CAS_FREE_VIDEOS = [
     "slug": "mountain",
     "title": "Mountains in watercolour",
     "desc": "A full mountain study, wet-on-wet from the sky down — the same value thinking as the cloud course, applied to rock.",
-    "section": "Landscape",
+    "section": "Step-by-Step Demos",
     "poster": "img/free/mountain.jpg",
     "dur": 1093,
     "video": "https://drive.google.com/file/d/19gim-YbmRfvOiaSkOCIUNubtv_D2GFBm/preview"
@@ -16,7 +16,7 @@ window.CAS_FREE_VIDEOS = [
     "slug": "pink-floral",
     "title": "Loose pink florals",
     "desc": "Petals in three strokes. A short, forgiving demo for anyone nervous about painting flowers.",
-    "section": "Landscape",
+    "section": "Step-by-Step Demos",
     "poster": "img/free/pink-floral.jpg",
     "dur": 437,
     "video": "https://drive.google.com/file/d/1aMfibqZAB38cuNw7qkPIrnhP4nlk8hQe/preview"
@@ -25,7 +25,7 @@ window.CAS_FREE_VIDEOS = [
     "slug": "watercolor-airport",
     "title": "Watercolour airport sketch",
     "desc": "An on-location sketch from an airport window — line and wash, thirty minutes, nothing precious.",
-    "section": "Landscape",
+    "section": "Step-by-Step Demos",
     "poster": "img/free/watercolor-airport.jpg",
     "dur": null,
     "video": null
