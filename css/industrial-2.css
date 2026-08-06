@@ -69,6 +69,9 @@
 .lesson-cell .level { font-family: var(--font-cond); font-size: 12px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
 .lesson-cell .price { font-family: var(--font-cond); font-weight: 600; font-size: 15px; }
 .lesson-cell .price.free { color: var(--teal-ink); }
+/* 6 / 1.4.3: the reduced price is the only part that changes colour. */
+.lesson-cell .price .now { color: var(--marine); font-weight: 600; }
+.lesson-cell .price s { opacity: .72; }
 .lesson-cell.hidden { display: none; }
 /* 4.3: media tag, top-left on the cover, in the client's marine. */
 .cover-card .media-tag { position: absolute; top: 12px; left: 12px; z-index: 3; font-family: var(--font-cond); font-weight: 600; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; background: var(--marine); color: var(--marine-ink); border-radius: var(--r-sharp); padding: 5px 12px; box-shadow: var(--shadow-sm); }
@@ -121,6 +124,32 @@
 .asset-pending { font-family: var(--font-cond); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); border: 1px dashed color-mix(in srgb, var(--muted) 55%, transparent); border-radius: var(--r-sharp); padding: 8px 14px; margin: 0 0 16px; display: inline-block; }
 /* the lede sits centred under a centred section title, so its note follows it */
 .shop-lede-note { display: block; width: fit-content; max-width: 60ch; text-align: center; margin: 12px auto 0; }
+/* 4.1: the most-popular row. Five square covers with the title over a scrim —
+   the same treatment the catalogue cards use, at a smaller size, so the row
+   reads as a shortcut into the grid below rather than a second catalogue. */
+.popular-rail { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-top: 4px; }
+@media (max-width: 1080px) { .popular-rail { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 640px) { .popular-rail { grid-template-columns: repeat(2, 1fr); } }
+.pop-card { position: relative; display: block; aspect-ratio: 1/1; border-radius: var(--radius-card); overflow: hidden; box-shadow: var(--shadow-sm); background: var(--paper-2); transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-base); }
+.pop-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.pop-card img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .55s var(--ease-out); }
+.pop-card:hover img { transform: scale(1.06); }
+.pop-scrim { position: absolute; inset: auto 0 0 0; height: 62%; background: linear-gradient(to top, rgba(20,17,13,.88) 0%, rgba(20,17,13,.42) 46%, transparent 100%); pointer-events: none; }
+.pop-t { position: absolute; left: 12px; right: 12px; bottom: 11px; font-family: var(--font-marker); font-weight: 600; font-size: 14.5px; line-height: 1.22; color: #f3ede1; }
+
+/* 4.2: page-level description, part shown with the rest behind Read More. */
+.cat-intro-body { max-width: 74ch; }
+.cat-intro-rest { display: none; }
+.cat-intro-rest.is-open { display: block; }
+.cat-intro-body p { font-size: 17px; line-height: 1.65; color: var(--muted); margin: 0 0 12px; }
+.cat-intro-body ul { margin: 0 0 12px; padding-left: 20px; color: var(--muted); font-size: 17px; line-height: 1.65; }
+.cat-intro-body strong { color: var(--ink); }
+.read-more { display: inline-flex; align-items: center; gap: 7px; background: none; border: 0; padding: 2px 0; cursor: pointer;
+  font-family: var(--font-cond); font-size: 14px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: var(--marine); }
+.read-more:hover { filter: brightness(1.15); }
+.read-more .arr { transition: transform var(--dur-fast) var(--ease-out); }
+.read-more:hover .arr { transform: translateY(2px); }
+
 .tier-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
 @media (max-width: 860px) { .tier-grid { grid-template-columns: 1fr; } }
 /* 1.4.8: every card carries a photograph behind it. The scrim has to hold up for

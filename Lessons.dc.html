@@ -88,12 +88,42 @@
   <div class="container">
     <div class="eyebrow reveal-one"><span class="star">✦</span> Course catalog</div>
     <h1 class="marker-title font-a reveal-one" style="font-size:clamp(44px,6vw,80px);">Pick up a brush.</h1>
-    <p class="lead reveal-one">Every course is a complete, slow-paced series — real reference material, downloadable notes, and room for questions.</p>
     <div class="logo2"><img src="img/logo2.png" alt="Crystal Lau Art" loading="lazy" decoding="async"></div>
   </div>
 </header>
 
 <main class="container" id="content">
+
+  <!-- 4.1: five most popular courses, ordered by how many people have bought
+       them. There is no commerce backend yet, so the order below is not a
+       ranking and says so. -->
+  <section class="section" id="popular" style="padding-top:18px;">
+    <div class="section-head reveal-one">
+      <div class="eyebrow"><span class="star">✦</span> Most popular</div>
+      <h2 class="section-title is-left">What people are buying</h2>
+    </div>
+    <p class="asset-pending">Not a ranking &mdash; &sect;4.1 orders these five by number of purchases, which needs sales data the prototype has no source for. All four published courses are shown.</p>
+    <div class="popular-rail" id="popular-rail"></div>
+  </section>
+
+  <!-- 4.2: page-level description, part shown and the rest behind Read More.
+       Copy is Crystal's own Course Overview; she still has to mark where the
+       fold falls. -->
+  <section class="section" id="cat-intro" style="padding-top:6px;">
+    <div class="cat-intro-body">
+      <p>Each module features both Beginner and Advanced levels. The Beginner courses are clear and easy to follow, and every lesson includes clear English voiceovers and subtitles.</p>
+      <div class="cat-intro-rest" id="cat-intro-rest">
+        <p>Designed for both beginners and experienced painters, this self-paced video curriculum guides you through colour mixing, essential tools, and refined techniques. It offers a comprehensive, step-by-step framework built on my years of experience as a student, artist, and instructor.</p>
+        <p>Inside the studio, you will explore a single subject from multiple angles and perspectives, mastering every stage of the painting process from initial sketch to final touch.</p>
+        <ul>
+          <li><strong>Step-by-step curriculum</strong> &mdash; learn comfortably at your own pace.</li>
+          <li><strong>Flexible stage-by-stage steps</strong> &mdash; break complex paintings into approachable, manageable phases.</li>
+        </ul>
+      </div>
+      <button class="read-more" type="button" id="cat-intro-more" aria-expanded="false" aria-controls="cat-intro-rest">Read more <span class="arr" aria-hidden="true">↓</span></button>
+    </div>
+    <p class="asset-pending">Crystal&rsquo;s copy from <em>Under_Shopallcourses.docx</em>. Two things still need her: where the fold falls (&sect;4.2 says she marks it, not the system), and the &ldquo;lifetime access&rdquo; clause, which &sect;7.4 holds back until she confirms the term.</p>
+  </section>
 
   <section class="section" style="padding-top:6px;">
     <div class="catalog-layout">
@@ -312,13 +342,43 @@ class Component extends DCLogic {
             '</div>' +
           '</div>' +
           '<div class="meta"><span class="level">' + esc(meta) + '</span>' +
-            '<span class="price">' + (c.was ? '<s>£' + c.was + '</s> ' : '') + '£' + c.price + '</span></div>' +
+            /* 6: on sale the old price keeps its colour and gains a rule
+               through it; only the new price turns marine. */
+            '<span class="price">' + (c.was ? '<s>£' + c.was + '</s> <b class="now">£' + c.price + '</b>' : '£' + c.price) + '</span></div>' +
         '</div>';
     };
 
     const grid = document.getElementById('lesson-grid');
     const COURSES = window.CAS_COURSES || [];
     if (grid) grid.innerHTML = COURSES.map(courseCard).join('');
+
+    /* 4.1: the five best-selling courses. Sorting by purchases needs a sales
+       figure per course, and nothing in the data carries one — the catalogue
+       order stands in until it does, which the note above the rail states.
+       Capped at five so the layout is the one the section describes. */
+    const popRail = document.getElementById('popular-rail');
+    if (popRail) {
+      popRail.innerHTML = COURSES.slice(0, 5).map((c) =>
+        '<a class="pop-card" href="course.dc.html?id=' + encodeURIComponent(c.id) + '">' +
+          '<img src="' + esc(c.cover) + '" alt="' + esc(c.title) + '" loading="lazy" decoding="async">' +
+          '<span class="pop-scrim"></span>' +
+          '<span class="pop-t">' + esc(c.title) + '</span>' +
+        '</a>').join('');
+    }
+
+    /* 4.2: part of the description shows, Read More opens the rest. */
+    const introBtn = document.getElementById('cat-intro-more');
+    const introRest = document.getElementById('cat-intro-rest');
+    if (introBtn && introRest) {
+      /* a class rather than the hidden attribute: the dc runtime re-renders this
+         markup and drops valueless attributes, which left the fold open. */
+      introBtn.addEventListener('click', () => {
+        const open = !introRest.classList.contains('is-open');
+        introRest.classList.toggle('is-open', open);
+        introBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+        introBtn.innerHTML = (open ? 'Read less' : 'Read more') + ' <span class="arr" aria-hidden="true">' + (open ? '↑' : '↓') + '</span>';
+      });
+    }
 
     /* multi-group filter panel — options are built dynamically from the
        tags on the courses actually in the grid (shared js/filter-tags.js) */

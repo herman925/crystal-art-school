@@ -406,7 +406,12 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 .hero__swirl path { fill: none; stroke: var(--ink); stroke-opacity: .1; stroke-width: 1.6; }
 .hero__slide { position: absolute; inset: 0; z-index: 4; opacity: 0; pointer-events: none; transition: opacity .6s ease; }
 .hero__slide.is-active { opacity: 1; pointer-events: auto; }
-.hero__text { position: absolute; left: 4.2%; top: 15%; width: 38%; z-index: 5; }
+/* The hero is a fixed-ratio box that clips its overflow, and Font A runs much
+   taller than the face this block was measured against — at 1440 the title,
+   subtitle and CTA came to 427px inside 416px of room, so the bottom of the
+   CTA pill was cut off. Centring on the box instead of pinning to a percentage
+   from the top keeps the column inside the frame whatever the title height. */
+.hero__text { position: absolute; left: 4.2%; top: 50%; transform: translateY(-50%); width: 38%; z-index: 5; }
 .hero__title { font-family: var(--font-marker); font-weight: 600; font-size: clamp(30px,4.4vw,72px); line-height: 1.02; margin: 0 0 12px; color: var(--ink); }
 .hero__subtitle { font-family: var(--font-body); font-size: clamp(14px,1.15vw,18px); color: var(--muted); margin: 0 0 18px; max-width: 38ch; }
 .hero__img { position: absolute; margin: 0; overflow: hidden; background: var(--paper-2); }
@@ -430,7 +435,7 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 @media (max-width: 860px) {
   .hero { aspect-ratio: auto; min-height: 540px; max-height: none; }
   .hero__panel { width: 100%; opacity: .55; }
-  .hero__text { width: 86%; top: 12%; left: 7%; }
+  .hero__text { width: 86%; top: 12%; left: 7%; transform: none; }
   .hero__img--large { width: 70%; height: 38%; top: auto; bottom: 4%; right: -6%; }
   .hero__img--small { width: 38%; height: 30%; right: 56%; bottom: 9%; }
   .hero__scroll { display: none; }
