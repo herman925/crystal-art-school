@@ -10,7 +10,7 @@
 <helmet>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600;6..96,700&family=Oswald:wght@300;400;500;600&family=Archivo:wght@400;500;600;700&family=Saira+Stencil+One&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600;6..96,700&family=Oswald:wght@300;400;500;600&family=Archivo:wght@400;500;600;700&family=Saira+Stencil+One&family=Arizonia&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/industrial.css">
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
@@ -29,7 +29,6 @@
     <div class="inner">
       <a class="nav-brand" href="index.html">
         <img src="img/lau-logo.png" alt="Lau. — Crystal's Art School">
-        <span class="name">Crystal's Art School</span>
       </a>
       <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
@@ -88,7 +87,8 @@
   <!-- JS-filled nodes start EMPTY: the dc-runtime (React) owns template children,
        and replacing them via textContent/innerHTML makes a later React re-render
        crash with removeChild-of-missing-node (seen in the Claude Design editor). -->
-  <div class="crumbs" style="padding-top:22px;"><a href="Lessons.dc.html">Courses</a> <span aria-hidden="true">→</span> <span id="crumb-title"></span></div>
+  <div class="logo2 is-center"><img src="img/logo2.png" alt="Crystal Lau Art"></div>
+  <div class="crumbs" style="padding-top:6px;"><a href="Lessons.dc.html">Courses</a> <span aria-hidden="true">→</span> <span id="crumb-title"></span></div>
 
   <header class="course-hero">
     <div class="course-cover reveal-one">
@@ -98,7 +98,7 @@
     </div>
     <div class="reveal-one">
       <div class="eyebrow"><span class="star">✦</span> <span id="co-tag"></span></div>
-      <h1 class="marker-title" id="co-title" style="font-size:clamp(30px,3.8vw,50px);margin:6px 0 12px;"></h1>
+      <h1 class="marker-title font-a" id="co-title" style="font-size:clamp(39px,4.9vw,65px);margin:6px 0 12px;"></h1>
       <p class="lead" id="co-blurb" style="font-size:16.5px;"></p>
       <div class="course-meta-chips" id="co-chips"></div>
       <div class="course-buy">
@@ -108,7 +108,7 @@
       </div>
       <p class="course-tier-note"></p>
       <div class="own-test" style="margin-top:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-        <span style="font-family:var(--font-cond);font-size:10.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);">Client testing — view as</span>
+        <span style="font-family:var(--font-cond);font-size:12.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);">Client testing — view as</span>
         <div class="fg-opts" id="own-toggle" style="display:inline-flex;gap:6px;">
           <button class="fopt" type="button" data-own="0">Not purchased</button>
           <button class="fopt" type="button" data-own="1">Purchased</button>
@@ -127,7 +127,7 @@
 
   <section class="section" id="syllabus">
     <div class="section-head reveal-one" style="text-align:center;">
-      <div class="eyebrow" style="justify-content:center;"><span class="star">✦</span> Module by module, lesson by lesson</div>
+      <div class="eyebrow" style="justify-content:center;"><span class="star">✦</span> Phase by phase, lesson by lesson</div>
       <h2 class="section-title">Syllabus</h2>
     </div>
     <div class="syllabus" id="co-syllabus"></div>
@@ -187,15 +187,14 @@ class Component extends DCLogic {
     const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     const $ = (id) => document.getElementById(id);
 
-    /* theme */
+    /* theme — Light (A) / Dark (D) only. The toggle itself lives in js/site-nav.js.
+       A stored or ?theme= value outside A|D is ignored and falls back to the default. */
     const THEME_KEY = 'cas-theme';
-    const valid = ['A','B','C','D'];
-    const applyTheme = (t) => { root.setAttribute('data-theme', t); document.querySelectorAll('.theme-switch button').forEach(b => b.classList.toggle('active', b.dataset.theme === t)); };
+    const valid = ['A','D'];
     let __theme = 'D';
-    try { const __s = localStorage.getItem(THEME_KEY); if (__s && ['A','B','C','D'].indexOf(__s) >= 0) __theme = __s; } catch (e) {}
-    try { const __q = (new URLSearchParams(location.search).get('theme') || '').toUpperCase(); if (['A','B','C','D'].indexOf(__q) >= 0) { __theme = __q; localStorage.setItem(THEME_KEY, __q); } } catch (e) {}
-    applyTheme(__theme);
-    document.querySelectorAll('.theme-switch button').forEach(b => b.addEventListener('click', () => { const t = b.dataset.theme; applyTheme(t); try { localStorage.setItem(THEME_KEY, t); } catch (e) {} }));
+    try { const __s = localStorage.getItem(THEME_KEY); if (valid.indexOf(__s) >= 0) __theme = __s; } catch (e) {}
+    try { const __q = (new URLSearchParams(location.search).get('theme') || '').toUpperCase(); if (valid.indexOf(__q) >= 0) { __theme = __q; localStorage.setItem(THEME_KEY, __q); } } catch (e) {}
+    root.setAttribute('data-theme', __theme);
 
     /* burger */
     /* burger handled by js/site-nav.js */
@@ -276,7 +275,7 @@ class Component extends DCLogic {
       const inner =
         '<div class="syl-num">' + (isDone ? '✓' : (i + 1)) + '</div>' +
         '<div><div class="syl-title">' + esc(u.title) +
-          (!owned && u.free ? ' <span style="font-family:var(--font-cond);font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal-ink);margin-left:8px;">free preview</span>' : '') +
+          (!owned && u.free ? ' <span style="font-family:var(--font-cond);font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal-ink);margin-left:8px;">free preview</span>' : '') +
         '</div><div class="syl-sub">' + esc(u.subtitle) + '</div></div>' +
         '<div class="syl-len" style="display:inline-flex;align-items:center;gap:7px;">' + (open ? PLAY : LOCK) + ' ' + esc(clock(u.dur)) + '</div>';
       const row = open
@@ -299,11 +298,11 @@ class Component extends DCLogic {
       let html = '';
       if (!mods.length) {
         /* Single-lesson / unmodularised courses get a flat list — a lone
-           "Module 1" header over one row reads as a mistake. */
+           "Phase 1" header over one row reads as a mistake. */
         html = LESSONS.map((u, i) => lessonRow(u, i, done)).join('');
       } else {
         mods.forEach((m, mi) => {
-          html += '<div style="font-family:var(--font-cond);font-weight:600;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--coral);margin:' + (mi ? '30px' : '4px') + ' 0 10px;">Module ' + (mi + 1) + ' · ' + esc(m.name) + '</div>';
+          html += '<div style="font-family:var(--font-cond);font-weight:600;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--coral);margin:' + (mi ? '30px' : '4px') + ' 0 10px;">Phase ' + (mi + 1) + ' · ' + esc(m.name) + '</div>';
           for (let i = m.from - 1; i <= m.to - 1 && i < LESSONS.length; i++) {
             html += lessonRow(LESSONS[i], i, done);
           }

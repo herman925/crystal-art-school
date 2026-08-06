@@ -15,3 +15,15 @@ Thumbs.db
 
 .gstack/
 __pycache__/
+
+# Client working material — this repo is PUBLIC (serves GitHub Pages).
+# Meeting recordings, the client's handwritten feedback boards, and the internal
+# design/spec documents must not be published. Keep them local.
+/docs/*Design Discussion Minutes*
+/docs/*_Design_Direction*
+/docs/*_SPEC_*
+/docs/*_Coverage_Audit*
+/docs/*_Letter_Spacing_*
+/docs/*頁面*.jpg
+/docs/*解說*.jpg
+/.scratch/

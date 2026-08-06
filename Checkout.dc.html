@@ -10,7 +10,7 @@
 <helmet>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600;6..96,700&family=Oswald:wght@300;400;500;600&family=Archivo:wght@400;500;600;700&family=Saira+Stencil+One&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600;6..96,700&family=Oswald:wght@300;400;500;600&family=Archivo:wght@400;500;600;700&family=Saira+Stencil+One&family=Arizonia&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/industrial.css">
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
@@ -28,7 +28,6 @@
     <div class="inner">
       <a class="nav-brand" href="index.html">
         <img src="img/lau-logo.png" alt="Lau. — Crystal's Art School">
-        <span class="name">Crystal's Art School</span>
       </a>
       <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
@@ -142,7 +141,7 @@
             <div class="co-field"><label for="f-exp">Expiry</label><input id="f-exp" required placeholder="MM / YY"></div>
             <div class="co-field"><label for="f-cvc">CVC</label><input id="f-cvc" required inputmode="numeric" placeholder="123"></div>
           </div>
-          <p class="hand-note" style="font-family:var(--font-cond);font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:6px 0 0;">Demo only — no real payment is taken.</p>
+          <p class="hand-note" style="font-family:var(--font-cond);font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:6px 0 0;">Demo only — no real payment is taken.</p>
         </div>
       </form>
       <aside class="summary">
@@ -188,17 +187,14 @@ class Component extends DCLogic {
     if (!root) return;
     const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
 
-    /* theme switch */
+    /* theme — Light (A) / Dark (D) only. The toggle itself lives in js/site-nav.js.
+       A stored or ?theme= value outside A|D is ignored and falls back to the default. */
     const THEME_KEY = 'cas-theme';
-    const valid = ['A','B','C','D'];
-    const applyTheme = (t) => { root.setAttribute('data-theme', t); document.querySelectorAll('.theme-switch button').forEach(b => b.classList.toggle('active', b.dataset.theme === t)); };
-    let saved = (valid.includes(this.props.defaultTheme) ? this.props.defaultTheme : 'A');
-    try { const s = localStorage.getItem(THEME_KEY); if (s && valid.includes(s)) saved = s; } catch (e) {}
+    const valid = ['A','D'];
     let __theme = 'D';
-    try { const __s = localStorage.getItem(THEME_KEY); if (__s && ['A','B','C','D'].indexOf(__s) >= 0) __theme = __s; } catch (e) {}
-    try { const __q = (new URLSearchParams(location.search).get('theme') || '').toUpperCase(); if (['A','B','C','D'].indexOf(__q) >= 0) { __theme = __q; localStorage.setItem(THEME_KEY, __q); } } catch (e) {}
-    applyTheme(__theme);
-    document.querySelectorAll('.theme-switch button').forEach(b => b.addEventListener('click', () => { const t = b.dataset.theme; applyTheme(t); try { localStorage.setItem(THEME_KEY, t); } catch (e) {} }));
+    try { const __s = localStorage.getItem(THEME_KEY); if (valid.indexOf(__s) >= 0) __theme = __s; } catch (e) {}
+    try { const __q = (new URLSearchParams(location.search).get('theme') || '').toUpperCase(); if (valid.indexOf(__q) >= 0) { __theme = __q; localStorage.setItem(THEME_KEY, __q); } } catch (e) {}
+    root.setAttribute('data-theme', __theme);
 
     /* burger handled by js/site-nav.js */
 

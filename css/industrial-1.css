@@ -5,7 +5,7 @@
    warm industrial interior: plaster, concrete, raw oak & walnut,
    copper hardware, iron line-work. The ORIGINAL token names are
    preserved and overridden per [data-theme] so every ported
-   component reskins automatically and responds to the A/B/C/D switch.
+   component reskins automatically and responds to the A ⇄ D switch.
    Full written spec: DESIGN.md
    ============================================================ */
 
@@ -36,6 +36,11 @@
   --font-hand: 'Oswald', sans-serif;
   --font-cond: 'Oswald', sans-serif;
   --font-stencil: 'Saira Stencil One', 'Oswald', sans-serif;
+  /* "Font A" — Arizonia (Google Fonts, SIL OFL). Regular 400 only, no bold, and
+     Latin-only: it carries no CJK glyphs, so any Chinese in a Font A heading
+     falls through to the serif behind it and the heading renders in two faces.
+     Only apply it to headings the client named in writing — see .font-a below. */
+  --font-a: 'Arizonia', 'Bodoni Moda', Georgia, cursive;
 
   /* motion (from original) */
   --ease-brush: cubic-bezier(.19, 1, .22, 1);
@@ -70,17 +75,41 @@
   --olive-metal: linear-gradient(180deg,#5d7733 0%,#4d6625 50%,#3c511c 100%);
   --iron: #2b2823;
 
+  /* ---------- the two colours from the client's written feedback ----------
+     --marine  #598493  things to notice or act on
+     --linen   #d3c2bb  supporting information
+     The rule is same-family substitution with a material exemption: flat brown
+     fills become marine and flat beige fills become linen, but anything carrying
+     a wood or metal texture keeps its finish. Almost every warm fill in this
+     system is textured, so the exemption covers most of them by design.
+     When the client names a textured element anyway, it changes — but as a
+     machined finish, not a flat fill, so it still belongs to the workshop. The
+     -metal gradients below are built exactly like --olive-metal for that. */
+  --marine: #598493;
+  --marine-metal: linear-gradient(180deg,#6b98a7 0%,#598493 50%,#456b78 100%);
+  --linen: #d3c2bb;
+  --linen-metal: linear-gradient(180deg,#e2d5cf 0%,#d3c2bb 50%,#b7a49c 100%);
+  /* --linen-ink is linen used as *text* rather than as a fill. On the dark theme
+     that is #d3c2bb itself (8.5:1). On the light theme #d3c2bb on paper is 1.5:1,
+     i.e. invisible, so A overrides this with the same hue taken down to a readable
+     value. The colour was specified as a fill, and this keeps it reading as the
+     same family without shipping text nobody can see. */
+  --linen-ink: var(--linen);
+
   /* twin-arch portrait mask — the "butterfly": two round-top columns (kept 1:1) */
   --shape-arch-duo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 240'%3E%3Crect x='0' y='0' width='104' height='240' rx='52'/%3E%3Crect x='96' y='0' width='104' height='240' rx='52'/%3E%3C/svg%3E");
 }
 
 /* ============================================================
    THEMES — override the ORIGINAL token names per [data-theme].
-   Every ported component inherits these, so the A/B/C/D switch
+   Every ported component inherits these, so the A ⇄ D switch
    reskins the whole site with zero markup changes.
+   Two themes only: A = Light, D = Dark. The earlier exploratory
+   themes B (Walnut Workshop) and C (Concrete & Iron) were dropped
+   on 2026-08-05 — the brief only ever asked for one light and one dark.
    ============================================================ */
 
-/* A — Light Oak Atelier (default) */
+/* A — Light Oak Atelier */
 [data-theme="A"] {
   --cream:#f8f3e9; --paper-2:#cdc7bd; --paper:#f3ede1; --surface:#f6f0e4; --warm-white:#e3dac9;
   --blush:#d8c39c; --sand:#cab389;
@@ -93,34 +122,7 @@
   --band-bg:#5e4a3d; --band-grain:var(--walnut-grain); --band-ink:#f4e7cf; --band-eyebrow:#cab389;
   --nav-bg:rgba(248,243,233,.86); --line:rgba(71,65,56,.16);
   --shadow:6px 11px 22px rgba(20,17,13,.16); --glow-op:0;
-}
-/* B — Walnut Workshop */
-[data-theme="B"] {
-  --cream:#cdc7bd; --paper-2:#bdb6aa; --paper:#d8d2c6; --surface:#ded8cd; --warm-white:#cbbda9;
-  --blush:#9c8270; --sand:#876d5c;
-  --teal:#8a9a6b; --teal-ink:#4d6625; --mint:#cdd9b0;
-  --coral:#9a6436; --coral-deep:#7e4c27; --coral-ink:#7e4c27;
-  --ink:#3f3930; --muted:#5f594c; --forest:#23201a;
-  --banner-bg:#876d5c; --banner-grain:linear-gradient(180deg, rgba(30,20,12,.30), rgba(30,20,12,.38)), url("../img/wood-rustic.jpg"); --banner-size:cover; --banner-ink:#f4e7cf; --banner-bracket:#d8c39c;
-  --wall:#876d5c; --wall-grain:url("../img/wood-rustic.jpg"); --wall-size:cover;
-  --frame-base:#efe6d6; --frame-tl:#9c8270; --frame-br:#5e4a3d;
-  --band-bg:#23201a; --band-grain:var(--iron-grain); --band-ink:#ede1d0; --band-eyebrow:#cab389;
-  --nav-bg:rgba(205,199,189,.9); --line:rgba(71,65,56,.2);
-  --shadow:6px 12px 26px rgba(20,17,13,.26); --glow-op:0;
-}
-/* C — Concrete & Iron (olive accent) */
-[data-theme="C"] {
-  --cream:#bdb6aa; --paper-2:#cdc7bd; --paper:#c6c0b4; --surface:#cdc7bd; --warm-white:#c2bcae;
-  --blush:#9aa07f; --sand:#a99a72;
-  --teal:#6b7a4a; --teal-ink:#3d521d; --mint:#cdd9b0;
-  --coral:#4d6625; --coral-deep:#3d521d; --coral-ink:#3d521d;
-  --ink:#2b2823; --muted:#5b554a; --forest:#2b2823;
-  --banner-bg:#cdc7bd; --banner-grain:var(--concrete-grain); --banner-ink:#2b2823; --banner-bracket:#2b2823;
-  --wall:#211e1a; --wall-grain:var(--iron-grain); --wall-size:120px 120px;
-  --frame-base:#e8e3d8; --frame-tl:#4a453d; --frame-br:#1c1a16;
-  --band-bg:#4d6625; --band-grain:none; --band-ink:#f1f3e6; --band-eyebrow:#cdd9b0;
-  --nav-bg:rgba(189,182,170,.92); --line:rgba(43,40,35,.22);
-  --shadow:6px 12px 26px rgba(20,17,13,.28); --glow-op:0;
+  --linen-ink:#694f44;   /* same hue as --linen, dark enough to read on paper */
 }
 /* D — Moody Loft (dark, daylight glow) */
 [data-theme="D"] {
@@ -153,7 +155,7 @@ html, body {
 img { display: block; max-width: 100%; }
 a { color: inherit; text-decoration: none; }
 a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !important; }
-.site-nav a.btn.ghost { color: #3f3930 !important; -webkit-text-fill-color: #3f3930 !important; }
+.site-nav a.btn.ghost { color: #2b2823 !important; -webkit-text-fill-color: #2b2823 !important; }
 .tier-card.highlight a.btn { color: var(--coral-deep) !important; -webkit-text-fill-color: var(--coral-deep) !important; }
 .cc-btn.primary, .cover-btn.primary { -webkit-text-fill-color: #f4e7cf; }
 .cc-btn.secondary, .cover-btn.secondary { -webkit-text-fill-color: #474138; }
@@ -202,6 +204,8 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 .section-title.is-left { justify-content: flex-start; text-align: left; font-size: clamp(22px,2.6vw,30px); margin: 0; }
 @keyframes ornament-in { from { transform: rotate(-90deg) scale(.4); opacity: 0; } to { transform: rotate(0); opacity: 1; } }
 .marker-title { font-family: var(--font-marker); font-weight: 600; line-height: 1.04; margin: 4px 0 12px; }
+/* Font A is defined at the foot of industrial-3.css — it has to outrank the
+   per-component heading rules that would otherwise set the face back. */
 .lead { font-size: 17px; color: var(--muted); max-width: 60ch; }
 .hand-note { font-family: var(--font-cond); font-weight: 500; font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
 
@@ -235,6 +239,13 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 /* olive metal (design_base "BOOK" green machined finish) */
 .btn.teal { background-color: #4d6625; background-image: linear-gradient(118deg, rgba(240,245,220,.30), transparent 42%), repeating-linear-gradient(95deg, rgba(0,0,0,.10) 0 1px, transparent 1px 3px), var(--olive-metal); color: #f1f3e6; box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(240,245,220,.35), inset 0 -1px 0 rgba(20,30,8,.4); }
 .btn.teal:hover { filter: brightness(1.07); }
+/* marine metal — the finish a textured element takes when the client names it.
+   Same construction as .btn.teal above, so the two read as one hardware family. */
+.btn.marine { background-color: var(--marine); background-image: linear-gradient(118deg, rgba(226,242,247,.30), transparent 42%), repeating-linear-gradient(95deg, rgba(0,0,0,.10) 0 1px, transparent 1px 3px), var(--marine-metal); color: #f4fbfd !important; -webkit-text-fill-color: #f4fbfd !important; box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(226,242,247,.38), inset 0 -1px 0 rgba(10,35,45,.4); }
+.btn.marine:hover { filter: brightness(1.07); }
+/* linen metal — the supporting-information counterpart */
+.btn.linen { background-color: var(--linen); background-image: linear-gradient(118deg, rgba(255,252,248,.34), transparent 42%), repeating-linear-gradient(95deg, rgba(0,0,0,.07) 0 1px, transparent 1px 3px), var(--linen-metal); color: #2b2823 !important; -webkit-text-fill-color: #2b2823 !important; box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(255,252,248,.5), inset 0 -1px 0 rgba(90,70,60,.28); }
+.btn.linen:hover { filter: brightness(1.04); }
 /* ghost = iron outline (design_base supporting control) */
 .btn.ghost { background: transparent; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 45%, transparent); }
 .btn.ghost:hover { background: var(--ink); color: var(--paper); transform: none; box-shadow: none; }
@@ -269,40 +280,77 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 .nav-top .inner { position: static; display: grid; grid-template-columns: minmax(200px, 1fr) auto minmax(200px, 1fr); align-items: center; gap: 18px; padding: 16px var(--gutter) 10px; }
 .nav-brand { position: absolute; z-index: 6; top: 0; bottom: 0; left: max(var(--gutter), calc((100% - var(--site-max)) / 2 + var(--gutter))); display: flex; align-items: center; gap: 12px; }
 .nav-brand img { height: 66px; width: auto; object-fit: contain; filter: drop-shadow(0 2px 6px rgba(0,0,0,.45)); }
-/* signature reads black on the light woods (A/C); stays cream on dark walnut (B/D) */
-[data-theme="A"] .nav-brand img, [data-theme="C"] .nav-brand img { filter: brightness(0) opacity(.85) drop-shadow(0 1px 2px rgba(255,255,255,.25)); }
-.nav-brand .name { font-family: var(--font-stencil); font-size: 15.5px; line-height: 1.25; letter-spacing: .08em; white-space: normal; max-width: 118px; color: var(--banner-ink); }
+/* signature reads black on the light wood (A); stays cream on the dark walnut (D) */
+[data-theme="A"] .nav-brand img { filter: brightness(0) opacity(.85) drop-shadow(0 1px 2px rgba(255,255,255,.25)); }
 .nav-links { grid-column: 2; display: flex; gap: 4px; list-style: none; margin: 0; padding: 0; }
-.nav-links a { display: block; padding: 8px 13px; font-family: var(--font-cond); font-weight: 500; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; border-radius: var(--radius-pill); color: var(--banner-ink); transition: background .15s; }
+.nav-links a { display: block; padding: 9px 14px; font-family: var(--font-cond); font-weight: 500; font-size: 15px; letter-spacing: .14em; text-transform: uppercase; border-radius: var(--radius-pill); color: var(--banner-ink); transition: background .15s; }
 .nav-links a:hover { background: color-mix(in srgb, var(--banner-bracket) 16%, transparent); }
 .nav-links a.active { background: color-mix(in srgb, var(--banner-ink) 16%, transparent); }
-/* nav Log in = raw-wood pill (design_base "FREE LESSON" finish) — solid in both modes */
-.site-nav .btn.ghost {
-  background-color: #efe6d2;
-  background-image: linear-gradient(180deg, rgba(255,255,255,.42), transparent 55%), var(--oak-grain);
-  background-size: 100% 100%, 200px 90px;
-  color: #3f3930; box-shadow: inset 0 0 0 1px rgba(71,65,56,.32), inset 0 1px 0 rgba(255,255,255,.4), var(--shadow-sm);
+/* The two nav pills are the one place the client asked for a *solid* fill rather
+   than a finish (design direction §3.1 specifies a solid fill): Sign Up in marine, Log in in
+   linen. So they drop the copper and oak they used to carry, and they are scoped
+   to .site-nav — .btn.primary keeps its copper everywhere else on the site.
+   Note: white on #598493 is 4.08:1. That clears AA for UI and large text but sits
+   just under the 4.5:1 for body-size text. The colour is the client's, so it
+   stands as specified rather than being quietly darkened to pass. */
+.site-nav .btn.primary, .site-nav a.btn.primary {
+  background-color: var(--marine); background-image: none;
+  color: #ffffff !important; -webkit-text-fill-color: #ffffff !important;
+  box-shadow: var(--shadow-sm), inset 0 -1px 0 rgba(10,35,45,.28);
 }
-.site-nav .btn.ghost:hover { background-color: #f6efdd; color: #3f3930; transform: translateY(-2px); box-shadow: inset 0 0 0 1px rgba(71,65,56,.32), inset 0 1px 0 rgba(255,255,255,.4), var(--shadow-md); }
+.site-nav .btn.primary:hover { filter: brightness(1.08); }
+.site-nav .btn.ghost {
+  background-color: var(--linen); background-image: none;
+  color: #2b2823; box-shadow: var(--shadow-sm), inset 0 -1px 0 rgba(90,70,60,.22);
+}
+.site-nav .btn.ghost:hover { background-color: var(--linen); filter: brightness(1.05); color: #2b2823; transform: translateY(-2px); box-shadow: var(--shadow-md), inset 0 -1px 0 rgba(90,70,60,.22); }
 .nav-auth { grid-column: 3; justify-self: end; display: flex; align-items: center; gap: 12px; flex: none; }
 .nav-auth .btn { white-space: nowrap; }
-.theme-switch { display: flex; align-items: center; gap: 7px; }
-.theme-switch .lbl { font-family: var(--font-cond); font-size: 9.5px; letter-spacing: .22em; text-transform: uppercase; color: var(--banner-ink); }
-.theme-switch .seg { display: flex; border: 1px solid color-mix(in srgb, var(--banner-ink) 55%, transparent); border-radius: 7px; overflow: hidden; }
-.theme-switch button { border: 0; cursor: pointer; font-family: var(--font-cond); font-weight: 600; font-size: 11px; padding: 6px 0; min-width: 28px; text-align: center; background: transparent; color: var(--banner-ink); transition: background .15s, color .15s; }
-.theme-switch button.active { background: var(--coral); color: var(--paper); }
 .cart-btn { position: relative; width: 40px; height: 40px; border-radius: 50%; border: 0; background-color: #c9c4bc; background-image: linear-gradient(180deg, rgba(255,255,255,.30), transparent 55%), var(--steel); box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(255,255,255,.5), inset 0 -1px 0 rgba(0,0,0,.22); cursor: pointer; display: grid; place-items: center; transition: transform .18s var(--ease-pop); color: #2b2823; }
 .cart-btn:hover { transform: translateY(-2px) rotate(-4deg); }
 .cart-btn svg { width: 19px; height: 19px; }
-.cart-badge { position: absolute; top: -4px; right: -5px; min-width: 18px; height: 18px; border-radius: var(--radius-pill); background: var(--coral); color: var(--paper); font-family: var(--font-cond); font-size: 11px; font-weight: 600; display: grid; place-items: center; padding: 0 4px; }
+.cart-badge { position: absolute; top: -4px; right: -5px; min-width: 18px; height: 18px; border-radius: var(--radius-pill); background: var(--coral); color: var(--paper); font-family: var(--font-cond); font-size: 12.5px; font-weight: 600; display: grid; place-items: center; padding: 0 4px; }
 .nav-burger { display: none; width: 42px; height: 42px; border: 0; border-radius: 50%; background: var(--surface); box-shadow: var(--shadow-sm); cursor: pointer; font-size: 20px; line-height: 1; color: var(--ink); }
 .nav-sheet { display: none; }
 
+/* ---------- Logo2 — the "Crystal Lau ART" signature lockup ----------
+   Where it goes is decided by the wood band, not by the page. A page that has a
+   .page-hero band already carries its own marker-title in the middle of that
+   band, so the signature sits to the right of it; centring it there would run
+   the two into each other. Pages with no band have nothing to collide with, so
+   it is centred above the content. The home page never gains a band — its hero
+   is pushed down to make the room instead.
+   Login / Signup / Dashboard / Checkout don't carry it at all: those are account
+   and payment flows, and the Lau. mark in the header is enough.
+   One transparent cream file serves both themes; the light theme flips it to ink
+   with the same filter the nav mark uses. */
+.logo2 { display: block; line-height: 0; }
+.logo2 img { display: block; width: auto; height: 92px; object-fit: contain; filter: drop-shadow(0 2px 6px rgba(0,0,0,.4)); }
+[data-theme="A"] .logo2 img { filter: brightness(0) opacity(.88) drop-shadow(0 1px 2px rgba(255,255,255,.25)); }
+
+/* centred — pages with no wood band */
+.logo2.is-center { margin: 0 auto 26px; }
+.logo2.is-center img { height: 116px; margin: 0 auto; }
+
+/* right — inside the wood band. The band's container becomes a two-column grid
+   so the signature can never overlap the title, and the band grows to fit it. */
+.page-hero .container { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; column-gap: 36px; }
+.page-hero .container > * { grid-column: 1; min-width: 0; }
+.page-hero .container > .logo2 { grid-column: 2; grid-row: 1 / -1; justify-self: end; }
+
+@media (max-width: 900px) {
+  /* the text column takes the full width and the signature drops beneath it,
+     rather than squeezing the title into a couple of words per line */
+  .page-hero .container { grid-template-columns: 1fr; }
+  .page-hero .container > .logo2 { grid-column: 1; grid-row: auto; justify-self: center; margin-top: 18px; }
+  .logo2 img { height: 68px; }
+  .logo2.is-center img { height: 78px; }
+}
+
 /* ---------- responsive nav ---------- */
-@media (max-width: 1280px) { .nav-links a { padding: 8px 10px; } }
-@media (max-width: 1180px) { .nav-top .inner, .nav-cats .inner { grid-template-columns: minmax(170px, 1fr) auto minmax(170px, 1fr); gap: 12px; } .nav-links { gap: 2px; } .nav-links a { padding: 8px 8px; font-size: 12.5px; } .nav-brand img { height: 56px; } .nav-brand .name { font-size: 14px; } }
+@media (max-width: 1280px) { .nav-links a { padding: 9px 11px; } }
+@media (max-width: 1180px) { .nav-top .inner, .nav-cats .inner { grid-template-columns: minmax(170px, 1fr) auto minmax(170px, 1fr); gap: 12px; } .nav-links { gap: 2px; } .nav-links a { padding: 8px 9px; font-size: 14px; } .nav-brand img { height: 56px; } }
 @media (max-width: 1080px) { .nav-auth .btn { display: none; } }
-@media (max-width: 920px) { .theme-switch .lbl { display: none; } }
 @media (max-width: 860px) {
   .nav-links { display: none; }
   .nav-burger { display: block; }
@@ -340,8 +388,6 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 }
 .hero__swirl { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none; }
 .hero__swirl path { fill: none; stroke: var(--ink); stroke-opacity: .1; stroke-width: 1.6; }
-.hero__brand { position: absolute; left: 4.2%; top: 5.5%; z-index: 6; font-family: var(--font-stencil); font-size: clamp(18px,1.6vw,26px); letter-spacing: .08em; color: var(--ink); }
-.hero__brand-dot { color: var(--coral); }
 .hero__slide { position: absolute; inset: 0; z-index: 4; opacity: 0; pointer-events: none; transition: opacity .6s ease; }
 .hero__slide.is-active { opacity: 1; pointer-events: auto; }
 .hero__text { position: absolute; left: 4.2%; top: 15%; width: 38%; z-index: 5; }
@@ -378,7 +424,7 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 /* ---------- A1 photo banner (photo + ratio chip ONLY) ---------- */
 .pg-banner { position: relative; aspect-ratio: 32/9; border-radius: var(--r-promo); overflow: hidden; box-shadow: var(--shadow); background: var(--paper-2); }
 .pg-banner img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.pg-banner .ratio-chip { position: absolute; right: 14px; bottom: 12px; font-family: var(--font-cond); font-size: 11px; font-weight: 600; letter-spacing: .14em; background: rgba(20,17,13,.55); color: #f3ede1; border-radius: var(--radius-pill); padding: 4px 12px; backdrop-filter: blur(4px); }
+.pg-banner .ratio-chip { position: absolute; right: 14px; bottom: 12px; font-family: var(--font-cond); font-size: 12.5px; font-weight: 600; letter-spacing: .14em; background: rgba(20,17,13,.55); color: #f3ede1; border-radius: var(--radius-pill); padding: 4px 12px; backdrop-filter: blur(4px); }
 
 /* ---------- New Release trio ---------- */
 .release-head { display: grid; grid-template-columns: repeat(12,1fr); gap: var(--gutter); margin-bottom: 14px; }
@@ -412,7 +458,9 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 /* Home variant: title + 2 buttons always on image */
 .cover-card:has(.cc-actions)::after { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(to top, rgba(20,17,13,.66) 0%, rgba(20,17,13,.18) 40%, transparent 64%); opacity: .9; transition: opacity .4s var(--ease-out); }
 .cover-card:has(.cc-actions):hover::after { opacity: 1; }
-.cc-chip { position: absolute; top: 12px; left: 12px; z-index: 2; font-family: var(--font-cond); font-size: 10px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; background: var(--coral); color: var(--paper); border-radius: var(--r-sharp); padding: 5px 11px; box-shadow: var(--shadow-sm); }
+/* The Sale ribbon on a course cover. Marine, to match the reduced price it is
+   announcing — a flat fill with no texture, so a straight substitution. */
+.cc-chip { position: absolute; top: 12px; left: 12px; z-index: 2; font-family: var(--font-cond); font-size: 12px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; background: var(--marine); color: #ffffff; border-radius: var(--r-sharp); padding: 5px 11px; box-shadow: var(--shadow-sm); }
 .cc-title { position: absolute; left: 16px; right: 16px; bottom: 62px; z-index: 2; color: #f3ede1; font-family: var(--font-marker); font-weight: 600; font-size: 18px; line-height: 1.18; text-shadow: 0 2px 12px rgba(0,0,0,.55); }
 .cc-actions { position: absolute; left: 12px; right: 12px; bottom: 12px; z-index: 2; display: flex; gap: 8px; }
 .cc-btn { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 7px; font-family: var(--font-cond); font-weight: 500; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; line-height: 1; padding: 11px 12px; border-radius: var(--radius-pill); cursor: pointer; border: 0; text-decoration: none; white-space: nowrap; transition: transform var(--dur-fast) var(--ease-out), background var(--dur-base), color var(--dur-base); }
@@ -494,7 +542,7 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 .share-card .sc-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .4s; }
 .share-card:hover .sc-img img { transform: scale(1.04); }
 .share-card .sc-body { padding: 16px 18px 20px; flex: 1; display: flex; flex-direction: column; gap: 6px; }
-.share-card .sc-kind { font-family: var(--font-cond); font-size: 10px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--teal-ink); }
+.share-card .sc-kind { font-family: var(--font-cond); font-size: 12px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--teal-ink); }
 .share-card h3 { font-family: var(--font-marker); font-weight: 600; font-size: 16px; margin: 0; line-height: 1.3; color: var(--ink); }
 .share-card p { font-size: 13px; color: var(--muted); margin: 0; flex: 1; }
 .squiggle-links { display: flex; justify-content: center; flex-wrap: wrap; gap: 40px; margin-top: 36px; padding: 16px 0 8px; }
