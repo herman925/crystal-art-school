@@ -287,7 +287,7 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 .nav-links a:hover { background: color-mix(in srgb, var(--banner-bracket) 16%, transparent); }
 .nav-links a.active { background: color-mix(in srgb, var(--banner-ink) 16%, transparent); }
 /* The two nav pills are the one place the client asked for a *solid* fill rather
-   than a finish ("實心背景", design direction §3.1): Sign Up in marine, Log in in
+   than a finish (design direction §3.1 specifies a solid fill): Sign Up in marine, Log in in
    linen. So they drop the copper and oak they used to carry, and they are scoped
    to .site-nav — .btn.primary keeps its copper everywhere else on the site.
    Note: white on #598493 is 4.08:1. That clears AA for UI and large text but sits
