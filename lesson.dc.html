@@ -56,6 +56,12 @@
 /* real video: Google Drive preview iframe fills the stage above the poster.
    The unit-flag stays visible but must not steal clicks from the player UI. */
 .stage .gdrive-frame { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: none; z-index: 6; background: #000; }
+/* 1.4.12: a 9:16 lesson keeps the stage height and is pillarboxed — flat dark
+   fill either side — rather than resizing the stage, so the page does not jump
+   between a landscape and a portrait lesson. Full screen is the embedded
+   player's own behaviour; this page only owns the container. */
+.stage.is-vertical .gdrive-frame,
+.stage.is-vertical > img { left: 50%; right: auto; width: auto; height: 100%; aspect-ratio: 9 / 16; transform: translateX(-50%); }
 .stage.has-video .gdrive-frame { display: block; }
 .stage.has-video .veil, .stage.has-video .sheen { display: none; }
 .stage .unit-flag { pointer-events: none; z-index: 7; }
@@ -440,6 +446,12 @@ class Component extends DCLogic {
       const real = !!src;
       stage.classList.toggle('has-video', real);
       stage.classList.toggle('is-missing', !real);
+      /* 1.4.12: one player, two container ratios. Lesson 1 was filmed vertical
+         and is not being reshot, so a 9:16 unit is a normal case rather than an
+         exception. The stage keeps its height and the video is pillarboxed, so
+         the page does not jump between a landscape and a portrait lesson. */
+      const part = u.parts ? u.parts[curPart] : null;
+      stage.classList.toggle('is-vertical', (part && part.ratio === '9:16') || u.ratio === '9:16');
       if (gframe) {
         const want = real ? src : 'about:blank';
         if (gframe.getAttribute('src') !== want) gframe.setAttribute('src', want);
