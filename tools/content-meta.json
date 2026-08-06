@@ -36,15 +36,22 @@
         {
           "name": "Perspective, form & pencil shading",
           "from": 1,
-          "to": 4
+          "to": 5
         },
         {
           "name": "Watercolour fundamentals & colouring",
-          "from": 5,
-          "to": 12
+          "from": 6,
+          "to": 13
         }
       ],
       "lessons": [
+        {
+          "title": "Lesson 1",
+          "subtitle": "Title and description still to come from Crystal.",
+          "focus": "",
+          "tools": "",
+          "outcome": ""
+        },
         {
           "title": "Pencil cloud form & basic hatching",
           "subtitle": "Simplify fluffy cloud contours in pencil, then hatch to set light, shadow and first volume.",

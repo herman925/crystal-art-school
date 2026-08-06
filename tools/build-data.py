@@ -124,6 +124,15 @@ def build_courses(manifest, meta, links):
             "was": copy["was"],
             "sale": bool(copy["sale"]),
             "cover": asset["cover"],
+            # 7.1: the preview reel for the right-hand column, and the five
+            # course photographs (one large, four small) for the thumbnail row.
+            "preview": (
+                {"url": links.get(asset["highlights"]["file"]),
+                 "dur": asset["highlights"]["dur"],
+                 "src": asset["highlights"]["file"]}
+                if asset.get("highlights") and links.get(asset["highlights"]["file"]) else None
+            ),
+            "photos": [p["img"] for p in asset.get("photos") or []],
             "blurb": copy["blurb"],
             "learn": copy["learn"],
             "who": copy["who"],

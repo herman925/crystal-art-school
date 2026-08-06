@@ -430,6 +430,12 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
    sits directly beneath it with the introduction below that. */
 .co-highlight { position: relative; aspect-ratio: 16/9; border-radius: var(--radius-card); overflow: hidden; background: #1b1814; box-shadow: var(--shadow); margin: 4px 0 18px; display: grid; place-items: center; }
 .co-highlight-empty { font-family: var(--font-cond); font-size: 13px; letter-spacing: .16em; text-transform: uppercase; color: #b6ab97; text-align: center; padding: 0 20px; }
+/* 7.1: the preview reel, once the client has supplied one. */
+.co-highlight.has-video { display: block; }
+.co-highlight .gdrive-frame { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #000; }
+.co-hl-dur { position: absolute; right: 10px; bottom: 10px; z-index: 2; pointer-events: none;
+  font-family: var(--font-cond); font-size: 12.5px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
+  color: #f3ede1; background: rgba(20,17,13,.72); padding: 4px 10px; border-radius: var(--r-sharp); }
 .course-left .course-buy { margin-top: 22px; }
 /* 7.1: the image block is kept short on purpose so the price and CTA below it
    stay on the first screen without scrolling. */

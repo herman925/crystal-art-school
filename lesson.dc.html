@@ -489,7 +489,11 @@ class Component extends DCLogic {
       state.t = 0;
       const u = UNITS[state.unit];
       curPart = 0;
-      poster.src = u.img;
+      /* 8.3: a lesson without a cover shows nothing in its place — no default
+         image. Assigning a null src would request "/null" and leave a broken
+         image box behind the player. */
+      if (u.img) { poster.src = u.img; poster.style.display = ''; }
+      else { poster.removeAttribute('src'); poster.style.display = 'none'; }
       poster.alt = 'Lesson ' + (state.unit + 1) + ' — ' + u.title;
       notes.forEach(a => a.classList.toggle('active', parseInt(a.dataset.unit, 10) === state.unit));
       setVideoMode(u);

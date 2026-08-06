@@ -235,23 +235,27 @@ class Component extends DCLogic {
 
     document.title = c.title + " · Crystal's Art School";
     $('crumb-title').textContent = c.title;
-    $('co-cover').src = c.cover;
+    /* 7.1: five photographs per course — one large plus four small, named per
+       1.4.10. When the set has been supplied the large image is photo one and
+       the strip is the other four; otherwise the lesson covers stand in and
+       the strip says so. */
+    const supplied = (c.photos || []).length >= 5;
+    $('co-cover').src = supplied ? c.photos[0] : c.cover;
     $('co-cover').alt = c.title;
 
-    /* 7.1: four thumbnails under the large image. Each course is meant to supply
-       five photographs — one large, four small, named per 7.1. Those have not
-       arrived, so the lesson covers stand in and the strip says so. */
     (function () {
       const strip = $('co-thumbs');
       if (!strip) return;
-      const shots = (c.lessons || []).map((l) => l.poster).filter(Boolean).slice(0, 4);
+      const shots = supplied
+        ? c.photos.slice(1, 5)
+        : (c.lessons || []).map((l) => l.poster).filter(Boolean).slice(0, 4);
       if (!shots.length) { strip.style.display = 'none'; return; }
       strip.innerHTML = shots.map((p, i) =>
-        '<button class="co-thumb' + (i === 0 ? ' is-active' : '') + '" type="button"' +
-        ' data-src="' + esc(p) + '" aria-label="Show image ' + (i + 1) + '">' +
+        '<button class="co-thumb" type="button"' +
+        ' data-src="' + esc(p) + '" aria-label="Show image ' + (i + 2) + '">' +
         '<img src="' + esc(p) + '" alt="" loading="lazy" decoding="async"></button>').join('');
       const note = $('co-thumbs-note');
-      if (note) note.style.display = '';
+      if (note) note.style.display = supplied ? 'none' : '';
       strip.addEventListener('click', (e) => {
         const b = e.target.closest('.co-thumb');
         if (!b) return;
@@ -259,6 +263,24 @@ class Component extends DCLogic {
         strip.querySelectorAll('.co-thumb').forEach((x) => x.classList.toggle('is-active', x === b));
       });
     })();
+    /* 7.1: the course preview reel sits under the title in the right column.
+       It is a real film from the client, streamed the same way the lessons are;
+       a course without one keeps the empty state rather than borrowing a
+       lesson video. */
+    (function () {
+      const host = $('co-highlight');
+      if (!host) return;
+      const pv = c.preview;
+      if (!pv || !pv.url) return;
+      const mins = pv.dur ? (pv.dur >= 60 ? Math.floor(pv.dur / 60) + 'm ' + (pv.dur % 60) + 's'
+                                          : pv.dur + 's') : '';
+      host.classList.add('has-video');
+      host.innerHTML =
+        '<iframe class="gdrive-frame" src="' + esc(pv.url) + '" title="Course preview" ' +
+        'allow="autoplay; fullscreen" allowfullscreen loading="lazy"></iframe>' +
+        (mins ? '<span class="co-hl-dur">Preview · ' + mins + '</span>' : '');
+    })();
+
     $('co-tag').textContent = c.tag + ' course';
     $('co-title').textContent = c.title;
     $('co-blurb').textContent = c.blurb;

@@ -64,24 +64,38 @@ COURSES = [
     {
         "slug": "clouds-beginner",
         "folder": "01 - Courses/Course 01-Beginner",
-        # explicit whitelist: folders Lesson 13..24 exist but are EMPTY legacy
-        "lesson_folders": ["Lesson %02d" % n for n in range(1, 13)],
+        # 2026-08-07: the client restructured this course. The folders are no
+        # longer "Lesson 01".."Lesson 12" — they are "Lesson01" (no space),
+        # a merged "Lesson02&03", then Lesson04..Lesson14. Lesson01 holds the
+        # opening film that was missing before; Lesson13 and Lesson14 are new.
+        "lesson_folders": ["Lesson01", "Lesson02&03"] + ["Lesson%02d" % n for n in range(4, 15)],
+        # 7.1: the course preview reel, and the one-large-four-small photo set
+        # (naming convention per 1.4.10), both at the course root.
+        "highlights": "Beginner Highlights.mp4",
+        "photos": ["CloudsLesson12.jpg", "CloudsLesson12A.jpg", "CloudsLesson12B.jpg",
+                   "CloudsLesson12C.jpg", "CloudsLesson12D.jpg"],
     },
     {
         "slug": "clouds-intermediate",
         "folder": "01 - Courses/Course 01-Intermediate",
         # source folders keep the old global numbering; display order is 1..7
         "lesson_folders": ["Lesson %d" % n for n in range(13, 20)],
+        "highlights": "Intermediate Hightlights.mp4",   # client's spelling
+        "photos": [],
     },
     {
         "slug": "little-house",
         "folder": "01 - Courses/Course 02",
         "lesson_folders": [""],          # flat folder, single lesson
+        "highlights": None,
+        "photos": [],
     },
     {
         "slug": "urban-sketch",
         "folder": "01 - Courses/Course 03",
         "lesson_folders": [""],
+        "highlights": None,
+        "photos": [],
     },
 ]
 
@@ -121,10 +135,31 @@ def natural_key(s):
     return [int(t) if t.isdigit() else t.lower() for t in re.split(r"(\d+)", s)]
 
 
+# The client's working material lives in the same folders as her artwork: the
+# six handwritten comment boards (*頁面*.jpg, *解說*.jpg) and the design
+# reference shots she sent (*ref*.jpg). These are NEVER site content — one of
+# them shipped to the public gallery as a saleable painting. Excluded here so
+# it cannot happen again, and mirrored by the .gitignore patterns.
+PRIVATE_PATTERNS = ("頁面", "解說", "ref.", " ref", "ref.jpg")
+
+
+def is_private(name):
+    low = name.lower()
+    return any(pat.lower() in low for pat in PRIVATE_PATTERNS)
+
+
 def list_dir(path):
     if not os.path.isdir(path):
         return []
-    return [f for f in os.listdir(path) if not f.startswith(".") and f.lower() != "desktop.ini"]
+    out = []
+    for f in os.listdir(path):
+        if f.startswith(".") or f.lower() == "desktop.ini":
+            continue
+        if is_private(f):
+            print("   (skipping client working material: %s)" % f)
+            continue
+        out.append(f)
+    return out
 
 
 def pick(files, exts):
@@ -195,14 +230,19 @@ def import_courses(force):
             if not images and not videos:
                 warn("%s/%s is empty — skipped" % (course["slug"], sub or "."))
                 continue
-            if not images:
-                warn("%s/%s has a video but no cover photo" % (course["slug"], sub or "."))
-                continue
 
             n = len(lessons) + 1
-            rel = "img/courses/%s/l%02d.jpg" % (course["slug"], n)
-            meta = encode_image(os.path.join(folder, images[0]),
-                                os.path.join(SITE_DIR, rel), MAX_EDGE_POSTER, force)
+            rel, meta = None, None
+            if images:
+                rel = "img/courses/%s/l%02d.jpg" % (course["slug"], n)
+                meta = encode_image(os.path.join(folder, images[0]),
+                                    os.path.join(SITE_DIR, rel), MAX_EDGE_POSTER, force)
+            else:
+                # 8.1 / 8.3: a lesson with no cover photo runs full width and
+                # shows nothing in its place. It is not a reason to drop the
+                # lesson — Lesson01 of the beginner course is video-only.
+                warn("%s/%s has a video but no cover photo — lesson kept, poster left empty"
+                     % (course["slug"], sub or "."))
 
             # A lesson folder may hold several videos: they are PARTS of one
             # lesson, played in natural filename order (client confirmed the
@@ -223,27 +263,63 @@ def import_courses(force):
                 "n": n,
                 "srcFolder": sub or os.path.basename(root),
                 "poster": rel,
-                "posterW": meta["w"], "posterH": meta["h"],
+                "posterW": meta["w"] if meta else None,
+                "posterH": meta["h"] if meta else None,
                 "dur": total,
                 "videos": parts,
                 "srcVideo": parts[0]["file"] if parts else None,
             })
-            print("   l%02d  %-22s %s%s" % (n, images[0], ("%ds" % total) if total else "no video", " (%d parts)" % len(parts) if len(parts) > 1 else ""))
+            print("   l%02d  %-22s %s%s" % (n, images[0] if images else "(no cover)",
+                                            ("%ds" % total) if total else "no video",
+                                            " (%d parts)" % len(parts) if len(parts) > 1 else ""))
 
         if not lessons:
             warn("%s produced no lessons" % course["slug"])
             continue
 
-        # course cover = first lesson poster, re-encoded at gallery size
+        # course cover = first lesson poster that exists, at gallery size
         cover_rel = "img/courses/%s/cover.jpg" % course["slug"]
-        first_folder = course["lesson_folders"][0]
-        first_dir = os.path.join(root, first_folder) if first_folder else root
-        first_img = pick(list_dir(first_dir), IMAGE_EXTS)[0]
-        encode_image(os.path.join(first_dir, first_img),
-                     os.path.join(SITE_DIR, cover_rel), MAX_EDGE_GALLERY, force)
+        cover_src = None
+        for sub in course["lesson_folders"]:
+            d = os.path.join(root, sub) if sub else root
+            imgs = pick(list_dir(d), IMAGE_EXTS)
+            if imgs:
+                cover_src = os.path.join(d, imgs[0])
+                break
+        if cover_src:
+            encode_image(cover_src, os.path.join(SITE_DIR, cover_rel), MAX_EDGE_GALLERY, force)
+        else:
+            warn("%s has no photo to use as a cover" % course["slug"])
+            cover_rel = None
+
+        # 7.1: the five course photographs — one large, four small — live at the
+        # course root under the naming convention in 1.4.10.
+        photos = []
+        for i, name in enumerate(course.get("photos") or []):
+            src = os.path.join(root, name)
+            if not os.path.exists(src):
+                warn("%s: course photo %s not on disk" % (course["slug"], name))
+                continue
+            prel = "img/courses/%s/p%02d.jpg" % (course["slug"], i + 1)
+            pm = encode_image(src, os.path.join(SITE_DIR, prel), MAX_EDGE_GALLERY, force)
+            photos.append({"src": name, "img": prel, "w": pm["w"], "h": pm["h"]})
+        if course.get("photos") and len(photos) < 5:
+            warn("%s has %d of the 5 course photos" % (course["slug"], len(photos)))
+
+        # 7.1: the course preview reel for the right-hand column.
+        hl = course.get("highlights")
+        highlights = None
+        if hl:
+            hp = os.path.join(root, hl)
+            if os.path.exists(hp):
+                highlights = {"file": hl, "dur": probe_duration(hp)}
+                print("   preview  %-20s %ss" % (hl, highlights["dur"]))
+            else:
+                warn("%s: preview reel %s not on disk" % (course["slug"], hl))
 
         out.append({"slug": course["slug"], "folder": course["folder"],
-                    "cover": cover_rel, "lessons": lessons})
+                    "cover": cover_rel, "photos": photos,
+                    "highlights": highlights, "lessons": lessons})
     return out
 
 
