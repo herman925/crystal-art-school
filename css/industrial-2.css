@@ -132,9 +132,24 @@
 .rel-slide.is-active { opacity: 1; pointer-events: auto; }
 .rel-slide > img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .rel-carousel::after { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(to top, rgba(20,17,13,.7) 0%, rgba(20,17,13,.2) 42%, transparent 66%); }
-.rel-chip { position: absolute; top: 12px; left: 12px; z-index: 3; font-family: var(--font-cond); font-size: 12px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; background: var(--coral); color: var(--paper); border-radius: var(--r-sharp); padding: 5px 11px; box-shadow: var(--shadow-sm); }
+/* 5.2: marine and enlarged, but deliberately still the ordinary condensed face —
+   the direction rules Font A out for this label. */
+.rel-chip { position: absolute; top: 12px; left: 12px; z-index: 3; font-family: var(--font-cond); font-size: 14px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; background: var(--marine); color: var(--marine-ink); border-radius: var(--r-sharp); padding: 6px 13px; box-shadow: var(--shadow-sm); }
 .rel-title { position: absolute; left: 16px; right: 16px; bottom: 58px; z-index: 3; color: #f3ede1; font-family: var(--font-marker); font-weight: 600; font-size: 18px; line-height: 1.18; text-shadow: 0 2px 12px rgba(0,0,0,.55); }
 .rel-actions { position: absolute; left: 14px; right: auto; bottom: 14px; z-index: 3; display: flex; gap: 8px; }
+/* 5.2: the three facts sit under the short topic and appear only on hover, with
+   the gradient deepening behind them. The two buttons are always present — the
+   direction is explicit that they do not wait for hover. */
+.rel-facts { position: absolute; left: 16px; right: 16px; bottom: 58px; z-index: 3; display: flex; gap: 20px; color: #f3ede1;
+  opacity: 0; transform: translateY(6px); transition: opacity .3s var(--ease-out), transform .3s var(--ease-out); pointer-events: none; }
+.rel-facts span { display: flex; flex-direction: column; gap: 1px; font-family: var(--font-cond); font-weight: 600; font-size: 14px; line-height: 1.15; }
+.rel-facts i { font-style: normal; font-size: 12px; font-weight: 500; letter-spacing: .14em; text-transform: uppercase; opacity: .78; }
+.rel-carousel:hover .rel-facts, .rel-carousel:focus-within .rel-facts { opacity: 1; transform: none; }
+.rel-carousel:hover::after, .rel-carousel:focus-within::after { background: linear-gradient(to top, rgba(20,17,13,.86) 0%, rgba(20,17,13,.5) 52%, rgba(20,17,13,.18) 100%); }
+@media (hover: none) { .rel-facts { opacity: 1; transform: none; } }
+/* the title lifts to make room for the facts once they are showing */
+.rel-carousel:hover .rel-title, .rel-carousel:focus-within .rel-title { bottom: 104px; }
+.rel-title { transition: bottom .3s var(--ease-out); }
 .rel-actions .cc-btn { flex: 0 0 auto; }
 .rel-dots { position: absolute; top: 14px; right: 14px; z-index: 4; display: flex; gap: 6px; }
 .rel-dots button { width: 8px; height: 8px; border-radius: 50%; border: 0; padding: 0; cursor: pointer; background: rgba(244,231,207,.45); transition: background .2s; }
@@ -161,7 +176,9 @@
 .course-card .cc-cover img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s var(--ease-out); }
 .course-card:hover .cc-cover img { transform: scale(1.05); }
 .course-card .cc-pad { padding: 14px 15px 15px; display: flex; flex-direction: column; gap: 9px; flex: 1; }
-.course-card .cc-meta { align-self: flex-start; font-family: var(--font-cond); font-size: 12px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: #474138; background-color: #cab389; background-image: var(--oak-grain); background-size: 150px 60px; padding: 4px 10px; border-radius: var(--r-sharp); }
+/* 3.5.2: the media tag is named in the client's feedback, so it changes colour
+   despite carrying an oak texture — and it is enlarged, as asked. */
+.course-card .cc-meta { align-self: flex-start; font-family: var(--font-cond); font-size: 14px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--marine-ink); background-color: var(--marine); background-image: none; padding: 5px 12px; border-radius: var(--r-sharp); }
 .course-card h3 { font-family: var(--font-marker); font-weight: 600; font-size: 16px; margin: 0; line-height: 1.2; color: var(--ink); }
 .course-card .cc-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: auto; }
 .course-card .cc-price { font-family: var(--font-cond); font-weight: 600; font-size: 15px; color: var(--coral); }

@@ -164,7 +164,7 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 .site-nav a.btn.ghost { color: #2b2823 !important; -webkit-text-fill-color: #2b2823 !important; }
 .tier-card.highlight a.btn { color: var(--coral-deep) !important; -webkit-text-fill-color: var(--coral-deep) !important; }
 .cc-btn.primary, .cover-btn.primary { -webkit-text-fill-color: #f4e7cf; }
-.cc-btn.secondary, .cover-btn.secondary { -webkit-text-fill-color: #474138; }
+.cc-btn.secondary, .cover-btn.secondary { -webkit-text-fill-color: #2b2823; }
 
 .cas-root { position: relative; min-height: 100vh; background: var(--cream); color: var(--ink); }
 
@@ -208,6 +208,10 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 .section-title::before { content: '✦'; font-size: .56em; color: #7e9b46; display: inline-block; }
 .section-title.in-view::before { animation: ornament-in var(--dur-base) var(--ease-out) both; }
 .section-title.is-left { justify-content: flex-start; text-align: left; font-size: clamp(22px,2.6vw,30px); margin: 0; }
+/* 3.5.1: the lede sits directly under a centred section title and reads as part
+   of the same group, so it is centred too and capped at a comfortable measure —
+   full-width running text under a 1216px layout is unreadable. */
+.shop-lede { max-width: 60ch; margin: 16px auto 0; text-align: center; font-size: 17px; line-height: 1.65; color: var(--muted); }
 @keyframes ornament-in { from { transform: rotate(-90deg) scale(.4); opacity: 0; } to { transform: rotate(0); opacity: 1; } }
 .marker-title { font-family: var(--font-marker); font-weight: 600; line-height: 1.04; margin: 4px 0 12px; }
 /* Font A is defined at the foot of industrial-3.css — it has to outrank the
@@ -479,7 +483,9 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 .cc-btn .arr { transition: transform var(--dur-fast); display: inline-block; }
 .cc-btn.primary { background-color: #5e4a3d; background-image: var(--walnut-grain); background-size: 200px 90px; color: #f4e7cf; box-shadow: var(--shadow-sm); }
 .cc-btn.primary:hover { transform: translateY(-1px); background-color: #4a3a2f; }
-.cc-btn.secondary { background-color: #cab389; background-image: var(--oak-grain); background-size: 200px 90px; color: #474138; }
+/* 5.3: VIEW takes the client's supporting colour. Named in her feedback, so it
+   changes despite the oak texture it used to carry. */
+.cc-btn.secondary { background-color: var(--linen); background-image: none; color: #2b2823; }
 .cc-btn.secondary:hover { transform: translateY(-1px); filter: brightness(.96); }
 .cc-btn.secondary:hover .arr { transform: translateX(3px); }
 .cc-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
