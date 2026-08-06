@@ -46,10 +46,13 @@
 
 /* 8.3: even rows take a slightly lighter tone of the same colour, never a flat
    #d3c2bb fill; and the list's text and spacing are opened up. */
-.curr-card .unit-row:nth-child(even) { background: color-mix(in srgb, var(--ink) 5%, transparent); }
-.curr-card .unit-row { padding: 13px 12px; }
-.curr-card .unit-row .ut { font-size: 15px; }
-.curr-card .unit-row .ud { font-size: 13px; }
+.curr-card .unit-row[data-odd="1"] { background: color-mix(in srgb, var(--ink) 5%, transparent); }
+.curr-card .unit-row { padding: 15px 13px; gap: 13px; }
+.curr-card .unit-row .ut { font-size: 16px; }
+.curr-card .unit-row .ud { font-size: 14px; }
+/* 8.3: at most one thumbnail per lesson. Nothing is substituted when a lesson
+   has no image — no default picture and no frame grabbed from the video. */
+.curr-card .unit-row .uthumb { flex: none; width: 62px; height: 44px; object-fit: cover; border-radius: 8px; box-shadow: var(--shadow-sm); }
 /* real video: Google Drive preview iframe fills the stage above the poster.
    The unit-flag stays visible but must not steal clicks from the player UI. */
 .stage .gdrive-frame { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: none; z-index: 6; background: #000; }
@@ -354,7 +357,13 @@ class Component extends DCLogic {
     document.getElementById('rows-holder').innerHTML = UNITS.map((u, i) =>
       ((moduleOf(i) && (i === 0 || !moduleOf(i - 1) || moduleOf(i - 1).i !== moduleOf(i).i))
         ? '<div class="ch"' + (i ? ' style="margin-top:16px;"' : '') + '>Phase ' + (moduleOf(i).i + 1) + ' — ' + escl(moduleOf(i).name) + '</div>' : '') +
-      '<button class="unit-row" data-unit="' + i + '" type="button"><span class="st">' + (i + 1) + '</span><span class="ut">' + escl(u.title) + ' <span class="now" hidden>· now playing</span></span><span class="ud">' + fmt0(u.dur) + '</span></button>' +
+      /* 8.3: the stripe is driven by the lesson's own index, not by
+         :nth-child — the Phase headers and the nested part rows are siblings,
+         so counting children broke the alternation after every header.
+         One thumbnail per lesson, and nothing at all when there is none. */
+      '<button class="unit-row" data-unit="' + i + '" data-odd="' + (i % 2) + '" type="button"><span class="st">' + (i + 1) + '</span>' +
+        (u.img ? '<img class="uthumb" src="' + escl(u.img) + '" alt="" loading="lazy" decoding="async">' : '') +
+        '<span class="ut">' + escl(u.title) + ' <span class="now" hidden>· now playing</span></span><span class="ud">' + fmt0(u.dur) + '</span></button>' +
       /* 1.4.9: a lesson filmed in several parts lists them underneath itself
          here, rather than in a separate Parts bar above the player. */
       (u.parts ? u.parts.map((pt, j) =>
