@@ -102,6 +102,10 @@
     <div class="blog-feature" id="blog-feature"></div>
     <div class="blog-grid" id="blog-grid"></div>
     <div class="store-empty" id="blog-empty" style="display:none;">No posts under that topic yet — pick another.</div>
+    <!-- 12.2: no ceiling — keeps loading six at a time to the last post. -->
+    <div class="blog-more" id="blog-more" style="display:none;">
+      <button class="btn-big" type="button" id="blog-more-btn">Load more</button>
+    </div>
   </section>
 </main>
 
@@ -148,8 +152,16 @@ class Component extends DCLogic {
     const feature = document.getElementById('blog-feature');
     const grid = document.getElementById('blog-grid');
     const empty = document.getElementById('blog-empty');
+    const moreWrap = document.getElementById('blog-more');
+    const moreBtn = document.getElementById('blog-more-btn');
 
     filters.innerHTML = tags.map(t => '<button class="chip' + (t === active ? ' active' : '') + '" type="button" data-tag="' + esc(t) + '">' + esc(t) + '</button>').join('');
+
+    /* 12.2: six at a time, with no ceiling — Load More keeps going to the last
+       post in the list. Six is a developer default, not a number the client
+       asked for, so it lives here as one constant that is easy to change. */
+    const PER_PAGE = 6;
+    let shown = PER_PAGE;
 
     const render = () => {
       const list = active === 'All' ? all : all.filter(p => p.tag === active);
@@ -158,18 +170,23 @@ class Component extends DCLogic {
       if (list.length) {
         const f = list[0];
         feature.style.display = 'grid';
+        /* 12.1: the title sits in a debossed frame — pressed into the card
+           rather than painted onto it, so no new background colour is
+           introduced. The vertical ribbon on the right carries the category. */
         feature.innerHTML =
           '<a class="bf-img" href="blog-post.dc.html?id=' + esc(f.id) + '" aria-label="' + esc(f.title) + '"><img src="img/' + f.img + '" alt="' + esc(f.title) + '" loading="lazy" decoding="async"></a>' +
           '<div class="bf-body"><span class="bf-kicker">Latest · ' + esc(f.tag) + ' · ' + esc(f.d) + '</span>' +
-          '<h2>' + esc(f.title) + '</h2><p>' + esc(f.excerpt) + '</p>' +
+          '<div class="bf-frame"><h2>' + esc(f.title) + '</h2></div><p>' + esc(f.excerpt) + '</p>' +
           '<span class="bf-reads">' + (f.mins || 4) + ' min read</span>' +
-          '<a class="link-squiggle" href="blog-post.dc.html?id=' + esc(f.id) + '" style="align-self:flex-start;">Read the post →</a></div>';
+          '<a class="link-squiggle" href="blog-post.dc.html?id=' + esc(f.id) + '" style="align-self:flex-start;">Read the post →</a></div>' +
+          '<span class="bf-ribbon" aria-hidden="true"><span>' + esc(f.tag) + '</span></span>';
       } else {
         feature.style.display = 'none';
       }
 
       const rest = list.slice(1);
-      grid.innerHTML = rest.map(p =>
+      const page = rest.slice(0, shown);
+      grid.innerHTML = page.map(p =>
         '<a class="blog-card" href="blog-post.dc.html?id=' + esc(p.id) + '">' +
           '<div class="bc-img"><img src="img/' + p.img + '" alt="' + esc(p.title) + '" loading="lazy" decoding="async"></div>' +
           '<div class="bc-body"><span class="bc-tag">' + esc(p.tag) + '</span>' +
@@ -177,14 +194,23 @@ class Component extends DCLogic {
           '<span class="bc-date">' + esc(p.d) + ' · <span class="bc-reads">' + (p.mins || 4) + ' min</span></span></div>' +
         '</a>'
       ).join('');
+
+      if (moreWrap) {
+        const left = rest.length - page.length;
+        moreWrap.style.display = left > 0 ? 'flex' : 'none';
+        if (moreBtn) moreBtn.textContent = 'Load more (' + left + ' to go)';
+      }
     };
 
     filters.querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => {
       filters.querySelectorAll('.chip').forEach(x => x.classList.remove('active'));
       c.classList.add('active');
       active = c.dataset.tag;
+      shown = PER_PAGE;   /* a new filter starts from the first page again */
       render();
     }));
+
+    if (moreBtn) moreBtn.addEventListener('click', () => { shown += PER_PAGE; render(); });
 
     render();
     document.querySelectorAll('.reveal-one').forEach(el => el.classList.add('in-view'));
