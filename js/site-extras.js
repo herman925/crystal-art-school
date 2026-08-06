@@ -12,7 +12,9 @@
   function money(n) { return '£' + (Math.round(n * 100) / 100).toLocaleString(); }
   function esc(s) { return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
   function imgsrc(p) { return 'img/' + String(p || '').replace(/^img\//, ''); }
-  function curTheme() { var r = document.querySelector('.cas-root'); var t = r && r.getAttribute('data-theme'); if (t) return t; try { return localStorage.getItem(THEME) || 'A'; } catch (e) { return 'A'; } }
+  /* Falls back to D, the site default, not A — the boot blocks in every page resolve
+     to D when nothing valid is stored, so defaulting to A here disagreed with them. */
+  function curTheme() { var r = document.querySelector('.cas-root'); var t = r && r.getAttribute('data-theme'); if (t) return t; try { return localStorage.getItem(THEME) || 'D'; } catch (e) { return 'D'; } }
 
   /* ---------- styles ---------- */
   var css = ''
@@ -63,7 +65,7 @@
     + '.ck-in{max-width:1180px;margin:0 auto;padding:20px 26px;display:grid;grid-template-columns:1fr auto;gap:20px 30px;align-items:center;}'
     + '.ck-txt{font-family:var(--font-cond,sans-serif);font-size:13.5px;line-height:1.5;color:var(--ink);max-width:74ch;}'
     + '.ck-txt b{font-family:var(--font-display-serif,serif);font-weight:600;font-size:14px;letter-spacing:.12em;text-transform:uppercase;display:flex;align-items:center;gap:.5em;margin-bottom:5px;}'
-    + '.ck-txt b .ast{color:#7e9b46;font-size:.8em;}'
+    + '.ck-txt b .ast{color:#7e9b46;font-size:12px;}'
     + '.ck-txt a{color:var(--coral);-webkit-text-fill-color:var(--coral);text-decoration:underline;text-underline-offset:2px;cursor:pointer;}'
     + '.ck-acts{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end;}'
     + '.ck-btn{font-family:var(--font-cond,sans-serif);font-weight:500;font-size:12px;letter-spacing:.13em;text-transform:uppercase;padding:13px 22px;border-radius:2px;border:0;cursor:pointer;white-space:nowrap;transition:transform .15s,background .15s,filter .15s;}'
@@ -80,7 +82,7 @@
     + '.ck-modal.show .ck-card{transform:none;}'
     + '.ck-card-in{padding:30px 32px 32px;}'
     + '.ck-h{font-family:var(--font-display-serif,serif);font-weight:600;font-size:24px;letter-spacing:.04em;text-transform:uppercase;color:var(--ink);display:flex;align-items:center;gap:.5em;margin:0 0 6px;}'
-    + '.ck-h .ast{color:#7e9b46;font-size:.66em;}'
+    + '.ck-h .ast{color:#7e9b46;font-size:12px;}'
     + '.ck-sub{font-family:var(--font-cond,sans-serif);font-size:13px;color:var(--muted);margin:0 0 22px;line-height:1.5;}'
     + '.ck-sect{font-family:var(--font-cond,sans-serif);font-weight:600;font-size:12.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);margin:22px 0 12px;padding-bottom:7px;border-bottom:1px solid var(--line);}'
     + '.ck-row{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;padding:12px 0;}'
@@ -130,7 +132,10 @@
     listEl.addEventListener('click', onListClick);
   }
 
-  function syncTheme() { var t = curTheme(); backdrop.setAttribute('data-theme', t); drawer.setAttribute('data-theme', t); }
+  /* stamp() skips a write when the value already matches, so these can never feed
+     the theme observer a mutation of their own making. */
+  function stamp(el, t) { if (el && el.getAttribute('data-theme') !== t) el.setAttribute('data-theme', t); }
+  function syncTheme() { var t = curTheme(); stamp(backdrop, t); stamp(drawer, t); }
 
   function render() {
     var c = read();
@@ -210,7 +215,7 @@
   var ckBar, ckModal, ckPrefs;
   function ckRead() { try { return JSON.parse(localStorage.getItem(CKKEY) || 'null'); } catch (e) { return null; } }
   function ckWrite(o) { try { localStorage.setItem(CKKEY, JSON.stringify(o)); } catch (e) {} }
-  function ckSyncTheme() { var t = curTheme(); if (ckBar) ckBar.setAttribute('data-theme', t); if (ckModal) ckModal.setAttribute('data-theme', t); }
+  function ckSyncTheme() { var t = curTheme(); stamp(ckBar, t); stamp(ckModal, t); }
 
   function buildCookie() {
     var saved = ckRead() || {};
@@ -369,7 +374,41 @@
     document.querySelectorAll('.cart-btn').forEach(function (b) { b.style.transition = 'transform .18s'; b.style.transform = 'translateY(-3px) rotate(-8deg)'; setTimeout(function () { b.style.transform = ''; }, 220); });
   }
 
-  function init() { injectStyles(); build(); buildCookie(); buildTierPicker(); applyAuthNav(); syncTheme(); updateBadges();
+  /* The cart drawer and the cookie bar are appended to document.body, outside
+     .cas-root, so they cannot inherit [data-theme] and have to be stamped by hand.
+     Both used to be stamped only when they opened, which the cart drawer got away
+     with (it re-syncs on every open) and the cookie bar did not: it is visible from
+     first paint, so switching to the light theme left a black bar pinned to the
+     bottom of every page until the browser was reloaded.
+     Watching the attribute rather than listening for a click keeps this correct no
+     matter what changes the theme — the header toggle, the boot block, or anything
+     added later. */
+  /* Keeps the body-level furniture (cart drawer, cookie bar) on the same theme as
+     .cas-root. They are appended to document.body, outside the themed subtree, so
+     they cannot inherit [data-theme] and have to be stamped by hand.
+
+     Two traps here, both hit while writing this:
+
+     1. This script loads from <helmet>, so init() can run before the runtime has
+        rendered .cas-root. Looking the element up once and giving up silently
+        attaches no observer at all — hence the subtree watch on documentElement.
+     2. The callback's own writes set data-theme on elements inside that subtree,
+        so an unguarded observer re-triggers itself forever, pegs the CPU and
+        leaves a blank page. The target check below is what stops that: only a
+        change on .cas-root itself is acted on, never the stamps we just made. */
+  function watchTheme() {
+    if (typeof MutationObserver !== 'function') return;
+    new MutationObserver(function (records) {
+      for (var i = 0; i < records.length; i++) {
+        var t = records[i].target;
+        if (t && t.classList && t.classList.contains('cas-root')) { syncTheme(); ckSyncTheme(); return; }
+      }
+    }).observe(document.documentElement, {
+      subtree: true, attributes: true, attributeFilter: ['data-theme']
+    });
+  }
+
+  function init() { injectStyles(); build(); buildCookie(); buildTierPicker(); applyAuthNav(); syncTheme(); watchTheme(); updateBadges();
     window.addEventListener('scroll', function () { if (tpPop && tpPop.classList.contains('show')) closeTierPop(); }, { passive: true });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && tpPop && tpPop.classList.contains('show')) closeTierPop(); });
     // keep badge fresh when theme/cart changes elsewhere

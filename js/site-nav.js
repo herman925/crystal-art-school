@@ -117,19 +117,38 @@
     for (var i = 0; i < badges.length; i++) { badges[i].textContent = n; badges[i].style.display = n > 0 ? 'grid' : 'none'; }
   }
 
-  /* ---- replace each page's nav with the canonical one ---- */
-  var tries = 0;
-  var iv = setInterval(function () {
-    tries++;
+  /* ---- replace each page's nav with the canonical one ----
+     This used to stop at the first success. It cannot: the page runtime re-renders
+     and replaces the nav's children afterwards, which throws away the injected
+     markup along with the light/dark toggle and leaves the stale pre-render nav in
+     place. It is intermittent — the same page passed at 1.8s and failed at 4s — so
+     a longer one-shot delay does not fix it either.
+     Instead the guard keeps running: fast while the page is settling, then slowly
+     forever. The steady-state cost is one querySelector and one getAttribute every
+     400ms, and it re-injects only when the marker is actually gone. */
+  var tries = 0, iv = null;
+
+  function ensureNav() {
     var nav = document.querySelector('nav.site-nav');
-    if (nav && !nav.getAttribute('data-cas-synced')) {
-      nav.innerHTML = buildNav();
-      nav.setAttribute('data-cas-synced', '1');
-      renderCart();
-      clearInterval(iv);
-    }
-    if (tries > 300) clearInterval(iv);
-  }, 50);
+    if (!nav || nav.getAttribute('data-cas-synced') === '1') return false;
+    nav.innerHTML = buildNav();
+    nav.setAttribute('data-cas-synced', '1');
+    renderCart();
+    return true;
+  }
+
+  function startGuard(everyMs) {
+    if (iv) clearInterval(iv);
+    iv = setInterval(function () {
+      tries++;
+      /* once it has settled, drop to the cheap steady-state cadence */
+      if (ensureNav() && everyMs < 400 && tries > 4) startGuard(400);
+      else if (everyMs < 400 && tries > 300) startGuard(400);
+    }, everyMs);
+  }
+
+  ensureNav();
+  startGuard(50);
 
   /* ---- behaviour (delegated, so it survives the innerHTML swap) ---- */
   document.addEventListener('click', function (e) {

@@ -95,6 +95,12 @@
      value. The colour was specified as a fill, and this keeps it reading as the
      same family without shipping text nobody can see. */
   --linen-ink: var(--linen);
+  /* --marine-ink is the label colour that sits ON a marine fill. #598493 is a
+     mid-tone (relative luminance .207), so white reaches only 4.08:1 — fine for a
+     UI component or large text, short of the 4.5:1 that 12-15px labels need. No
+     light value clears it; only near-black does. So the ink moves and the client's
+     colour does not, the same trade already made for --linen-ink above. */
+  --marine-ink: #0b1418;   /* 4.56:1 on --marine */
 
   /* twin-arch portrait mask — the "butterfly": two round-top columns (kept 1:1) */
   --shape-arch-duo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 240'%3E%3Crect x='0' y='0' width='104' height='240' rx='52'/%3E%3Crect x='96' y='0' width='104' height='240' rx='52'/%3E%3C/svg%3E");
@@ -241,7 +247,7 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 .btn.teal:hover { filter: brightness(1.07); }
 /* marine metal — the finish a textured element takes when the client names it.
    Same construction as .btn.teal above, so the two read as one hardware family. */
-.btn.marine { background-color: var(--marine); background-image: linear-gradient(118deg, rgba(226,242,247,.30), transparent 42%), repeating-linear-gradient(95deg, rgba(0,0,0,.10) 0 1px, transparent 1px 3px), var(--marine-metal); color: #f4fbfd !important; -webkit-text-fill-color: #f4fbfd !important; box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(226,242,247,.38), inset 0 -1px 0 rgba(10,35,45,.4); }
+.btn.marine { background-color: var(--marine); background-image: linear-gradient(118deg, rgba(226,242,247,.30), transparent 42%), repeating-linear-gradient(95deg, rgba(0,0,0,.10) 0 1px, transparent 1px 3px), var(--marine-metal); color: var(--marine-ink) !important; -webkit-text-fill-color: var(--marine-ink) !important; box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(226,242,247,.38), inset 0 -1px 0 rgba(10,35,45,.4); }
 .btn.marine:hover { filter: brightness(1.07); }
 /* linen metal — the supporting-information counterpart */
 .btn.linen { background-color: var(--linen); background-image: linear-gradient(118deg, rgba(255,252,248,.34), transparent 42%), repeating-linear-gradient(95deg, rgba(0,0,0,.07) 0 1px, transparent 1px 3px), var(--linen-metal); color: #2b2823 !important; -webkit-text-fill-color: #2b2823 !important; box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(255,252,248,.5), inset 0 -1px 0 rgba(90,70,60,.28); }
@@ -295,7 +301,7 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
    stands as specified rather than being quietly darkened to pass. */
 .site-nav .btn.primary, .site-nav a.btn.primary {
   background-color: var(--marine); background-image: none;
-  color: #ffffff !important; -webkit-text-fill-color: #ffffff !important;
+  color: var(--marine-ink) !important; -webkit-text-fill-color: var(--marine-ink) !important;
   box-shadow: var(--shadow-sm), inset 0 -1px 0 rgba(10,35,45,.28);
 }
 .site-nav .btn.primary:hover { filter: brightness(1.08); }
@@ -460,7 +466,7 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 .cover-card:has(.cc-actions):hover::after { opacity: 1; }
 /* The Sale ribbon on a course cover. Marine, to match the reduced price it is
    announcing — a flat fill with no texture, so a straight substitution. */
-.cc-chip { position: absolute; top: 12px; left: 12px; z-index: 2; font-family: var(--font-cond); font-size: 12px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; background: var(--marine); color: #ffffff; border-radius: var(--r-sharp); padding: 5px 11px; box-shadow: var(--shadow-sm); }
+.cc-chip { position: absolute; top: 12px; left: 12px; z-index: 2; font-family: var(--font-cond); font-size: 12px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; background: var(--marine); color: var(--marine-ink); border-radius: var(--r-sharp); padding: 5px 11px; box-shadow: var(--shadow-sm); }
 .cc-title { position: absolute; left: 16px; right: 16px; bottom: 62px; z-index: 2; color: #f3ede1; font-family: var(--font-marker); font-weight: 600; font-size: 18px; line-height: 1.18; text-shadow: 0 2px 12px rgba(0,0,0,.55); }
 .cc-actions { position: absolute; left: 12px; right: 12px; bottom: 12px; z-index: 2; display: flex; gap: 8px; }
 .cc-btn { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 7px; font-family: var(--font-cond); font-weight: 500; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; line-height: 1; padding: 11px 12px; border-radius: var(--radius-pill); cursor: pointer; border: 0; text-decoration: none; white-space: nowrap; transition: transform var(--dur-fast) var(--ease-out), background var(--dur-base), color var(--dur-base); }
