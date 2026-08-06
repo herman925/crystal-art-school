@@ -4,6 +4,9 @@
    eyebrow, title, description and the button label — without touching the
    copy or the layout, which the section rules out. */
 .band-forest .eyebrow { font-size: 14px; }
+/* 1.4.8: the board marks the FREE TRIAL band as too small, and the button label
+   is part of that band — it was still on the global .btn-big 13px. */
+.band-forest .btn-big { font-size: 15px; padding: 16px 32px; }
 .band-community .eyebrow { font-size: 15px; }
 .band-community .eyebrow .star { font-size: 15px; }
 .band-community h2 { font-size: clamp(33px, 3.6vw, 48px) !important; }
