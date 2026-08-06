@@ -294,7 +294,7 @@ class Component extends DCLogic {
     setText('fc-course', COURSE.title);
     setText('fc-count', 'completed · ' + N + ' of ' + N + (N === 1 ? ' lesson' : ' lessons'));
     setText('fc-blurb', N + (N === 1 ? ' lesson' : ' lessons')
-      + (MODULES.length ? ', ' + MODULES.length + ' modules' : '')
+      + (MODULES.length ? ', ' + MODULES.length + (MODULES.length === 1 ? ' phase' : ' phases') : '')
       + " — that's the full course. Share your final piece in the community; the best skies land on the showcase wall.");
     const metaRow = document.getElementById('lx-meta');
     if (metaRow) {
@@ -321,13 +321,13 @@ class Component extends DCLogic {
     const fmt0 = (s) => Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
     document.getElementById('notes-holder').innerHTML = UNITS.map((u, i) =>
       '<article class="unit-notes' + (i === 0 ? ' active' : '') + '" data-unit="' + i + '">' +
-        (moduleOf(i) ? '<div style="font-family:var(--font-cond);font-weight:600;font-size:12.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--coral);margin-bottom:8px;">Module ' + (moduleOf(i).i + 1) + ' · ' + escl(moduleOf(i).name) + '</div>' : '') +
+        (moduleOf(i) ? '<div style="font-family:var(--font-cond);font-weight:600;font-size:12.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--coral);margin-bottom:8px;">Phase ' + (moduleOf(i).i + 1) + ' · ' + escl(moduleOf(i).name) + '</div>' : '') +
         '<h2>' + escl(u.title) + '</h2><p>' + escl(u.note) + '</p>' +
         (u.tip ? '<div class="tip-card"><span class="hand-note">Crystal' + String.fromCharCode(39) + 's note ✦</span>' + escl(u.tip) + '</div>' : '') +
       '</article>').join('');
     document.getElementById('rows-holder').innerHTML = UNITS.map((u, i) =>
       ((moduleOf(i) && (i === 0 || !moduleOf(i - 1) || moduleOf(i - 1).i !== moduleOf(i).i))
-        ? '<div class="ch"' + (i ? ' style="margin-top:16px;"' : '') + '>Module ' + (moduleOf(i).i + 1) + ' — ' + escl(moduleOf(i).name) + '</div>' : '') +
+        ? '<div class="ch"' + (i ? ' style="margin-top:16px;"' : '') + '>Phase ' + (moduleOf(i).i + 1) + ' — ' + escl(moduleOf(i).name) + '</div>' : '') +
       '<button class="unit-row" data-unit="' + i + '" type="button"><span class="st">' + (i + 1) + '</span><span class="ut">' + escl(u.title) + ' <span class="now" hidden>· now playing</span></span><span class="ud">' + fmt0(u.dur) + '</span></button>').join('');
 
     const $ = (id) => document.getElementById(id);

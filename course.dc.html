@@ -127,7 +127,7 @@
 
   <section class="section" id="syllabus">
     <div class="section-head reveal-one" style="text-align:center;">
-      <div class="eyebrow" style="justify-content:center;"><span class="star">✦</span> Module by module, lesson by lesson</div>
+      <div class="eyebrow" style="justify-content:center;"><span class="star">✦</span> Phase by phase, lesson by lesson</div>
       <h2 class="section-title">Syllabus</h2>
     </div>
     <div class="syllabus" id="co-syllabus"></div>
@@ -298,11 +298,11 @@ class Component extends DCLogic {
       let html = '';
       if (!mods.length) {
         /* Single-lesson / unmodularised courses get a flat list — a lone
-           "Module 1" header over one row reads as a mistake. */
+           "Phase 1" header over one row reads as a mistake. */
         html = LESSONS.map((u, i) => lessonRow(u, i, done)).join('');
       } else {
         mods.forEach((m, mi) => {
-          html += '<div style="font-family:var(--font-cond);font-weight:600;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--coral);margin:' + (mi ? '30px' : '4px') + ' 0 10px;">Module ' + (mi + 1) + ' · ' + esc(m.name) + '</div>';
+          html += '<div style="font-family:var(--font-cond);font-weight:600;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--coral);margin:' + (mi ? '30px' : '4px') + ' 0 10px;">Phase ' + (mi + 1) + ' · ' + esc(m.name) + '</div>';
           for (let i = m.from - 1; i <= m.to - 1 && i < LESSONS.length; i++) {
             html += lessonRow(LESSONS[i], i, done);
           }
