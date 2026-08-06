@@ -12,14 +12,14 @@
     if (!root) return;
     const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
 
-    /* theme switch */
+    /* theme — Light (A) / Dark (D) only. The toggle itself lives in js/site-nav.js.
+       A stored or ?theme= value outside A|D is ignored and falls back to the default. */
     const THEME_KEY = 'cas-theme';
-    const valid = ['A','B','C','D'];
-    const applyTheme = (t) => { root.setAttribute('data-theme', t); document.querySelectorAll('.theme-switch button').forEach(b => b.classList.toggle('active', b.dataset.theme === t)); };
-    let saved = (valid.includes('A') ? 'A' : 'A');
-    try { const s = localStorage.getItem(THEME_KEY); if (s && valid.includes(s)) saved = s; } catch (e) {}
-    applyTheme(saved);
-    document.querySelectorAll('.theme-switch button').forEach(b => b.addEventListener('click', () => { const t = b.dataset.theme; applyTheme(t); try { localStorage.setItem(THEME_KEY, t); } catch (e) {} }));
+    const valid = ['A','D'];
+    let __theme = 'D';
+    try { const __s = localStorage.getItem(THEME_KEY); if (valid.indexOf(__s) >= 0) __theme = __s; } catch (e) {}
+    try { const __q = (new URLSearchParams(location.search).get('theme') || '').toUpperCase(); if (valid.indexOf(__q) >= 0) { __theme = __q; localStorage.setItem(THEME_KEY, __q); } } catch (e) {}
+    root.setAttribute('data-theme', __theme);
 
     const burger = document.querySelector('.nav-burger'), sheet = document.querySelector('.nav-sheet');
     if (burger && sheet) { burger.addEventListener('click', () => { const o = sheet.classList.toggle('open'); burger.setAttribute('aria-expanded', o ? 'true' : 'false'); }); sheet.addEventListener('click', (e) => { if (e.target.tagName === 'A') sheet.classList.remove('open'); }); }

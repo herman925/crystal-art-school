@@ -10,7 +10,7 @@
 <helmet>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600;6..96,700&family=Oswald:wght@300;400;500;600&family=Archivo:wght@400;500;600;700&family=Saira+Stencil+One&family=Mrs+Saint+Delafield&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600;6..96,700&family=Oswald:wght@300;400;500;600&family=Archivo:wght@400;500;600;700&family=Saira+Stencil+One&family=Arizonia&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="css/industrial.css">
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
@@ -28,7 +28,6 @@
     <div class="inner">
       <a class="nav-brand" href="index.html">
         <img src="img/lau-logo.png" alt="Lau. — Crystal's Art School">
-        <span class="name">Crystal's Art School</span>
       </a>
       <ul class="nav-links">
         <li><a href="index.html">Home</a></li>
@@ -84,6 +83,8 @@
 
 <main class="container" id="content">
 
+<div class="logo2 is-center"><img src="img/logo2.png" alt="Crystal Lau Art"></div>
+
 <!-- ===========================================================================
      DEV NOTE — About page copy provenance (2026-07-26)
 
@@ -126,7 +127,7 @@
       <div class="portrait-note">that's me ✦</div>
     </div>
     <div>
-      <div class="sig-script reveal-one" aria-hidden="true">Crystal</div>
+      <div class="sig-script reveal-one" aria-hidden="true"><img src="img/signature.png" alt="Crystal Lau"></div>
       <div class="eyebrow reveal-one"><span class="star">✦</span> About</div>
       <h1 class="marker-title reveal-one" style="font-size:clamp(34px,4.4vw,58px);">Hi, I'm Crystal!<br>Welcome to my studio.</h1>
       <div class="reveal-one">
@@ -255,7 +256,7 @@
     </div>
     <div class="reveal" style="text-align:center;margin-top:30px;">
       <p style="font-family:var(--font-marker);font-weight:600;font-size:clamp(20px,2.2vw,26px);color:var(--teal-ink);margin:0;">Grab a cup of tea, set up your brushes, and let's enjoy the process of bringing colour to life!</p>
-      <div class="sig-script" aria-hidden="true" style="margin-top:10px;">Crystal Lau</div>
+      <div class="sig-script" aria-hidden="true" style="margin-top:10px;"><img src="img/signature.png" alt="Crystal Lau"></div>
     </div>
   </section>
 
@@ -359,22 +360,14 @@ class Component extends DCLogic {
     const root = document.querySelector('.cas-root');
     if (!root) return;
 
-    /* theme switch */
+    /* theme — Light (A) / Dark (D) only. The toggle itself lives in js/site-nav.js.
+       A stored or ?theme= value outside A|D is ignored and falls back to the default. */
     const THEME_KEY = 'cas-theme';
-    const valid = ['A','B','C','D'];
-    const applyTheme = (t) => {
-      root.setAttribute('data-theme', t);
-      document.querySelectorAll('.theme-switch button').forEach(b => b.classList.toggle('active', b.dataset.theme === t));
-    };
-    let saved = (valid.includes(this.props.defaultTheme) ? this.props.defaultTheme : 'A');
-    try { const s = localStorage.getItem(THEME_KEY); if (s && valid.includes(s)) saved = s; } catch (e) {}
+    const valid = ['A','D'];
     let __theme = 'D';
-    try { const __s = localStorage.getItem(THEME_KEY); if (__s && ['A','B','C','D'].indexOf(__s) >= 0) __theme = __s; } catch (e) {}
-    try { const __q = (new URLSearchParams(location.search).get('theme') || '').toUpperCase(); if (['A','B','C','D'].indexOf(__q) >= 0) { __theme = __q; localStorage.setItem(THEME_KEY, __q); } } catch (e) {}
-    applyTheme(__theme);
-    document.querySelectorAll('.theme-switch button').forEach(b => {
-      b.addEventListener('click', () => { const t = b.dataset.theme; applyTheme(t); try { localStorage.setItem(THEME_KEY, t); } catch (e) {} });
-    });
+    try { const __s = localStorage.getItem(THEME_KEY); if (valid.indexOf(__s) >= 0) __theme = __s; } catch (e) {}
+    try { const __q = (new URLSearchParams(location.search).get('theme') || '').toUpperCase(); if (valid.indexOf(__q) >= 0) { __theme = __q; localStorage.setItem(THEME_KEY, __q); } } catch (e) {}
+    root.setAttribute('data-theme', __theme);
 
     /* mobile nav sheet */
     /* burger handled by js/site-nav.js */

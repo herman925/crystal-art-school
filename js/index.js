@@ -195,19 +195,14 @@
     const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
     const cartSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1.6"></circle><circle cx="19" cy="21" r="1.6"></circle><path d="M2 3h3l2.6 12.6a1.8 1.8 0 0 0 1.8 1.4h8.9a1.8 1.8 0 0 0 1.8-1.4L22 7H6"></path></svg>';
 
-    /* ---- theme switch (persists across pages) ---- */
+    /* theme — Light (A) / Dark (D) only. The toggle itself lives in js/site-nav.js.
+       A stored or ?theme= value outside A|D is ignored and falls back to the default. */
     const THEME_KEY = 'cas-theme';
-    const valid = ['A','B','C','D'];
-    const applyTheme = (t) => {
-      root.setAttribute('data-theme', t);
-      document.querySelectorAll('.theme-switch button').forEach(b => b.classList.toggle('active', b.dataset.theme === t));
-    };
-    let saved = (valid.includes('A') ? 'A' : 'A');
-    try { const s = localStorage.getItem(THEME_KEY); if (s && valid.includes(s)) saved = s; } catch (e) {}
-    applyTheme(saved);
-    document.querySelectorAll('.theme-switch button').forEach(b => {
-      b.addEventListener('click', () => { const t = b.dataset.theme; applyTheme(t); try { localStorage.setItem(THEME_KEY, t); } catch (e) {} });
-    });
+    const valid = ['A','D'];
+    let __theme = 'D';
+    try { const __s = localStorage.getItem(THEME_KEY); if (valid.indexOf(__s) >= 0) __theme = __s; } catch (e) {}
+    try { const __q = (new URLSearchParams(location.search).get('theme') || '').toUpperCase(); if (valid.indexOf(__q) >= 0) { __theme = __q; localStorage.setItem(THEME_KEY, __q); } } catch (e) {}
+    root.setAttribute('data-theme', __theme);
 
     /* ---- mobile nav sheet ---- */
     const burger = document.querySelector('.nav-burger');

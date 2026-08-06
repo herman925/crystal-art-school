@@ -61,7 +61,7 @@
     sheet += '<a href="Login.dc.html">Log in / Sign up</a>';
 
     return '<div class="nav-top"><div class="inner">' +
-      '<a class="nav-brand" href="index.html"><img src="img/lau-logo.png" alt="Lau. — Crystal\'s Art School"><span class="name">Crystal\'s Art School</span></a>' +
+      '<a class="nav-brand" href="index.html"><img src="img/lau-logo.png" alt="Lau. — Crystal\'s Art School"></a>' +
       '<ul class="nav-links">' + links + '</ul>' +
       '<div class="nav-auth">' +
         '<a class="cart-btn" href="Checkout.dc.html" aria-label="Shopping cart">' + CART_SVG + '<span class="cart-badge">0</span></a>' +
@@ -86,7 +86,7 @@
     '  transition: opacity .2s ease, transform .2s ease, visibility .2s; z-index: 300; }' +
     '.nav-drop.open .nav-mega { opacity: 1; visibility: visible; transform: translateY(0); }' +
     '.nav-mega::before { content:""; position:absolute; top:-12px; left:0; right:0; height:12px; }' +
-    '.mega-eyebrow { display:block; white-space: nowrap; font-family: var(--font-cond); font-size: 10px; letter-spacing: .24em; text-transform: uppercase; color: #cf9457; padding: 8px 12px 8px; }' +
+    '.mega-eyebrow { display:block; white-space: nowrap; font-family: var(--font-cond); font-size: 12px; letter-spacing: .24em; text-transform: uppercase; color: #cf9457; padding: 8px 12px 8px; }' +
     '.mega-eyebrow em { font-style: normal; opacity: .8; }' +
     '.mega-cats { display:flex; flex-direction:column; gap:7px; padding: 2px 8px 12px; }' +
     '.nav-links a.mega-cat, .mega-cat { display:flex; align-items:center; justify-content:space-between; gap:12px;' +
@@ -103,7 +103,7 @@
     '.mode-toggle .ico-sun { display:none; } .mode-toggle .ico-moon { display:block; }' +
     '[data-theme="D"] .mode-toggle .ico-sun { display:block; } [data-theme="D"] .mode-toggle .ico-moon { display:none; }' +
     '.site-nav .nav-links a { white-space: nowrap; }' +
-    '@media (max-width: 1100px) { .site-nav .nav-brand .name { display:none; } .site-nav .nav-links { gap: 4px; } }' +
+    '@media (max-width: 1100px) { .site-nav .nav-links { gap: 4px; } }' +
     '@media (max-width: 860px) { .nav-mega { display:none; } }';
   var st = document.createElement('style');
   st.id = 'cas-nav-style';
