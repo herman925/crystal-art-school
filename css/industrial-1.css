@@ -558,15 +558,16 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 .share-grid { display: grid; grid-template-columns: minmax(0,1fr) 196px; gap: var(--gutter); margin-top: 36px; align-items: center; }
 .share-stack { display: grid; gap: 16px; min-width: 0; }
 @media (max-width: 768px) { .share-grid { grid-template-columns: 1fr; } .share-card { grid-template-columns: 1fr !important; } .tools-btn { justify-self: center; } }
-.share-card { border-radius: var(--radius-card); overflow: hidden; background: var(--surface); box-shadow: var(--shadow-sm); transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-base); text-decoration: none; color: var(--ink); display: grid; grid-template-columns: 1fr 1fr; align-items: stretch; }
+/* 3.7: on desktop the blog card is horizontal — image left, text right. */
+.share-card { display: grid; grid-template-columns: 150px 1fr; align-items: stretch; border-radius: var(--radius-card); overflow: hidden; background: var(--surface); box-shadow: var(--shadow-sm); transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-base); text-decoration: none; color: var(--ink); display: grid; grid-template-columns: 1fr 1fr; align-items: stretch; }
 .share-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
-.share-card .sc-img { overflow: hidden; min-height: 158px; }
+.share-card .sc-img { overflow: hidden; min-height: 0; }
 .share-card .sc-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .4s; }
 .share-card:hover .sc-img img { transform: scale(1.04); }
 .share-card .sc-body { padding: 16px 18px 20px; flex: 1; display: flex; flex-direction: column; gap: 6px; }
 .share-card .sc-kind { font-family: var(--font-cond); font-size: 12px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--teal-ink); }
-.share-card h3 { font-family: var(--font-marker); font-weight: 600; font-size: 16px; margin: 0; line-height: 1.3; color: var(--ink); }
-.share-card p { font-size: 13px; color: var(--muted); margin: 0; flex: 1; }
+.share-card h3 { font-family: var(--font-marker); font-weight: 600; font-size: 17px; margin: 0; line-height: 1.3; color: var(--ink); }
+
 .squiggle-links { display: flex; justify-content: center; flex-wrap: wrap; gap: 40px; margin-top: 36px; padding: 16px 0 8px; }
 
 /* ---------- wood / dark band (the "wooden banner" accent) ---------- */

@@ -1,5 +1,12 @@
 /* 1.4.8: the board marks this band as too small — enlarged with the heading. */
 .band-forest p { margin: 0; font-size: 17px; line-height: 1.6; opacity: .92; max-width: 54ch; }
+/* 3.8: every piece of text in the community block scales up together —
+   eyebrow, title, description and the button label — without touching the
+   copy or the layout, which the section rules out. */
+.band-community .eyebrow { font-size: 15px; }
+.band-community h2 { font-size: clamp(33px, 3.6vw, 48px) !important; }
+.band-community p { font-size: 18.5px; }
+.band-community .btn-big { font-size: 15px; padding: 16px 32px; }
 .band-forest .eyebrow { font-size: 14px; }
 
 /* ---------- testimonials ---------- */
@@ -158,14 +165,15 @@
 .auth-or { display: flex; align-items: center; gap: 12px; margin: 16px 0; color: var(--muted); font-size: 12px; font-family: var(--font-cond); letter-spacing: .1em; text-transform: uppercase; }
 
 /* ---------- Share section: horizontal blog cards + TOOLS filter button ---------- */
-.share-card .sc-body { padding: 16px 18px; }
-.tools-btn { position: relative; justify-self: end; width: 184px; height: 184px; border-radius: 50%; overflow: hidden; box-shadow: var(--shadow); display: grid; place-items: center; text-align: center; background: #1f1c18; color: #f3ede1; transition: transform var(--dur-fast) var(--ease-out); }
+.share-card .sc-body { padding: 16px 18px; justify-content: center; }
+/* 3.7: near-square, not a circle, and with no text beyond the wrench and TOOLS. */
+.tools-btn { position: relative; justify-self: end; width: 184px; height: 184px; border-radius: var(--radius-card); overflow: hidden; box-shadow: var(--shadow); display: grid; place-items: center; text-align: center; background: #1f1c18; color: #f3ede1; transition: transform var(--dur-fast) var(--ease-out); }
 .tools-btn .tb-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
 .tools-btn:hover { transform: translateY(-3px); }
 .tools-btn::after { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(165deg, rgba(20,17,13,.18), rgba(20,17,13,.42)); pointer-events: none; transition: background .35s var(--ease-out); }
-.tools-btn:hover::after, .tools-btn:focus-visible::after { background: linear-gradient(165deg, rgba(20,17,13,.5), rgba(20,17,13,.84)); }
+.tools-btn:hover::after, .tools-btn:focus-visible::after { background: linear-gradient(165deg, rgba(20,17,13,.28), rgba(20,17,13,.55)); }
 .tools-btn .tb-in { position: relative; z-index: 2; }
-.tools-btn .tb-title { font-family: var(--font-stencil); font-size: 17px; letter-spacing: .14em; }
+.tools-btn .tb-title { font-family: var(--font-stencil); font-size: 20px; letter-spacing: .14em; }
 .tools-btn .tb-sub { font-family: var(--font-cond); font-size: 9px; letter-spacing: .18em; text-transform: uppercase; opacity: .82; margin-top: 4px; }
 .tools-btn .tb-in svg { width: 46px; height: 46px; stroke: #f3ede1; }
 
@@ -251,6 +259,9 @@
 .share-viewport { overflow: hidden; }
 .share-rail { display: flex; gap: 20px; transition: transform .45s var(--ease-brush); }
 .share-rail .share-card { flex: 0 0 calc((100% - 20px) / 2); }
+/* 3.7: horizontal card — image left, title right. Scoped to the rail so it
+   outranks whatever else is setting the tracks on this element. */
+.share-rail .share-card { grid-template-columns: 150px minmax(0, 1fr); }
 .share-arrow { position: absolute; top: 50%; transform: translateY(-50%); z-index: 6; width: 40px; height: 40px; border-radius: 50%; background: var(--surface); color: var(--ink); border: 0; box-shadow: var(--shadow-md); cursor: pointer; display: grid; place-items: center; transition: background var(--dur-base); }
 .share-arrow svg { width: 18px; height: 18px; }
 .share-arrow[data-share="prev"] { left: -10px; }

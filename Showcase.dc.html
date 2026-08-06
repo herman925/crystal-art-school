@@ -53,6 +53,8 @@
 .pol-nopin::before { display: none !important; }
 .pol-photo { display:block; position:relative; width:194px; height:194px; overflow:hidden; background:#2b2823; }
 .pol-photo img { width:100%; height:100%; object-fit:cover; display:block; filter: saturate(.94) contrast(1.02); }
+/* 11: filter pills and caption text enlarged */
+.filter-rail .fg-opts .fopt { font-size: 14px; padding: 10px 18px; }
 .pol-med { position:absolute; left:8px; bottom:8px; font-family:var(--font-cond); font-size:12px; font-weight:600; letter-spacing:.16em; text-transform:uppercase; color:#f3ede1; background:rgba(43,40,35,.72); padding:4px 9px; border-radius:2px; }
 .pol-cap { position:absolute; left:13px; right:13px; bottom:10px; display:flex; flex-direction:column; gap:1px; }
 .pol-cap em { font-family:var(--font-marker); font-style:italic; font-weight:600; font-size:14.5px; color:#474138; line-height:1.18; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
@@ -135,7 +137,7 @@
   <div class="wash" aria-hidden="true"></div>
   <div class="container">
     <div class="eyebrow reveal-one"><span class="star">✦</span> Student showcase</div>
-    <h1 class="marker-title font-a reveal-one" style="font-size:clamp(44px,6vw,80px);">Look what the studio painted.</h1>
+    <h1 class="marker-title font-a reveal-one" style="font-size:clamp(44px,6vw,80px);">Look at their learning outcomes</h1>
     <p class="lead reveal-one">Work from students painting along with the courses — pinned up like instant photos, fresh from the studio. Tap any print to see it big.</p>
     <div class="logo2"><img src="img/logo2.png" alt="Crystal Lau Art" loading="lazy" decoding="async"></div>
   </div>
@@ -144,6 +146,7 @@
 <main class="container" id="content">
 
   <section class="section" style="padding-top:18px;">
+    <p class="asset-pending">Student names, titles and mediums are still to be supplied &mdash; captions and the medium filter stay empty until then.</p>
     <div class="filter-rail reveal-one" style="margin-bottom:18px;">
       <div class="fg-opts" id="sw-filter"></div>
     </div>
@@ -182,24 +185,16 @@ class Component extends DCLogic {
     /* ar = presented aspect ratio (tiles crop via object-fit to mix portrait /
        landscape / square rows the way the real student wall will) */
     return [
-      { img: 'cover3.jpg',           ar: 1.52, name: 'Mei Ling',        med: 'Watercolour', title: 'Field at dusk' },
-      { img: 'cover4.jpg',           ar: 0.69, name: 'Jonas K.',        med: 'Watercolour', title: 'Harbour drizzle' },
-      { img: 'Sketchbook.jpg',       ar: 1.44, name: 'Priya',           med: 'Drawing',     title: 'Sketchbook spread, week 3' },
-      { img: 'cover1.jpg',           ar: 1.05, name: 'Tom H.',          med: 'Oils',        title: 'Cloud study no. 2' },
-      { img: 'Liquidwatercolor.jpg', ar: 0.85, name: 'Aiko',            med: 'Watercolour', title: 'Tube portraits' },
-      { img: 'cover2.jpg',           ar: 1.42, name: 'Marcus',          med: 'Oils',        title: 'Big shapes exercise' },
-      { img: 'Rubber.jpg',           ar: 1.62, name: 'Elif',            med: 'Drawing',     title: 'Eraser study' },
-      { img: 'BrushA.jpg',           ar: 1.00, name: 'Sam W.',          med: 'Acrylic',     title: 'Studio tools' },
-      { img: 'Postercolor.jpg',      ar: 1.17, name: 'Nadia',           med: 'Acrylic',     title: 'Poster grey drill' },
-      { img: 'cover4.jpg',           ar: 0.72, name: 'Ken',             med: 'Watercolour', title: 'Rain over the peak' },
-      { img: 'studio.jpg',           ar: 1.50, name: 'Grace',           med: 'Oils',        title: 'Corner of my desk' },
-      { img: 'BrushB.jpg',           ar: 1.44, name: 'Leo',             med: 'Acrylic',     title: 'Brush care homework' },
-      { img: 'cover3.jpg',           ar: 0.80, name: 'Hannah',          med: 'Watercolour', title: 'Sunset wash, take 4' },
-      { img: 'Sketchbook.jpg',       ar: 1.00, name: 'Diego',           med: 'Drawing',     title: 'Value thumbnails' },
-      { img: 'cover1.jpg',           ar: 1.38, name: 'Yuki',            med: 'Oils',        title: 'Shore light' },
-      { img: 'Liquidwatercolor.jpg', ar: 1.12, name: 'Omar',            med: 'Watercolour', title: 'Wet-on-wet first try' },
-      { img: 'cover2.jpg',           ar: 0.95, name: 'Beatriz',         med: 'Oils',        title: 'Block-in practice' },
-      { img: 'Rubber.jpg',           ar: 1.30, name: 'Chloe',           med: 'Drawing',     title: 'Kneaded rubber still life' }
+      { img: 'showcase/sw01.jpg', ar: 1.00, name: '', med: '', title: '' },
+      { img: 'showcase/sw02.jpg', ar: 1.00, name: '', med: '', title: '' },
+      { img: 'showcase/sw03.jpg', ar: 1.00, name: '', med: '', title: '' },
+      { img: 'showcase/sw04.jpg', ar: 1.00, name: '', med: '', title: '' },
+      { img: 'showcase/sw05.jpg', ar: 1.00, name: '', med: '', title: '' },
+      { img: 'showcase/sw06.jpg', ar: 1.00, name: '', med: '', title: '' },
+      { img: 'showcase/sw07.jpg', ar: 1.00, name: '', med: '', title: '' },
+      { img: 'showcase/sw08.jpg', ar: 1.00, name: '', med: '', title: '' },
+      { img: 'showcase/sw09.jpg', ar: 1.00, name: '', med: '', title: '' },
+      { img: 'showcase/sw10.jpg', ar: 1.00, name: '', med: '', title: '' }
     ];
   }
 
