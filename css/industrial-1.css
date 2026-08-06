@@ -273,6 +273,9 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
   border: 0; box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(255,236,210,.45), inset 0 -1px 0 rgba(60,30,10,.4); cursor: pointer; transition: transform var(--dur-fast), box-shadow var(--dur-base);
 }
 .btn-big:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+/* 8.5: named in the client's written feedback, so it changes colour despite the
+   material exemption — and as a machined finish, not a flat fill (1.4.2). */
+.btn-big.btn-marine { background-color: var(--marine); background-image: linear-gradient(118deg, rgba(226,242,247,.30), transparent 42%), repeating-linear-gradient(95deg, rgba(0,0,0,.10) 0 1px, transparent 1px 3px), var(--marine-metal); color: var(--marine-ink); box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(226,242,247,.38), inset 0 -1px 0 rgba(10,35,45,.4); }
 .btn-outline {
   display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-cond);
   font-weight: 500; font-size: 13px; letter-spacing: .14em; text-transform: uppercase;

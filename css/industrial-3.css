@@ -11,6 +11,10 @@
 .res-get { flex: none; font-family: var(--font-cond); font-weight: 600; font-size: 12.5px; letter-spacing: .06em; text-transform: uppercase; color: var(--teal-ink); display: inline-flex; align-items: center; gap: 5px; }
 .res-item:hover .res-get { color: var(--coral); }
 .complete-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 26px; }
+/* 8.1: the completion button takes the client's marine. Scoped here so the
+   copper .btn.primary elsewhere on the site is untouched. */
+.complete-row #complete-btn { background-color: var(--marine); background-image: none; color: var(--marine-ink) !important; -webkit-text-fill-color: var(--marine-ink) !important; box-shadow: var(--shadow-sm), inset 0 -1px 0 rgba(10,35,45,.28); }
+.complete-row #complete-btn:hover { filter: brightness(1.08); }
 .complete-row .done-tag { font-family: var(--font-cond); font-weight: 600; letter-spacing: .08em; text-transform: uppercase; font-size: 13px; color: var(--teal-ink); }
 
 .side-stick { position: sticky; top: 80px; display: grid; gap: 16px; }
