@@ -1,4 +1,6 @@
-.band-forest p { margin: 0; font-size: 15px; opacity: .9; max-width: 54ch; }
+/* 1.4.8: the board marks this band as too small — enlarged with the heading. */
+.band-forest p { margin: 0; font-size: 17px; line-height: 1.6; opacity: .92; max-width: 54ch; }
+.band-forest .eyebrow { font-size: 14px; }
 
 /* ---------- testimonials ---------- */
 .testi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; margin-top: 32px; }
@@ -107,18 +109,47 @@
 @media (max-width: 480px) { .catalog-layout .lesson-grid { grid-template-columns: 1fr; } }
 
 /* tiers */
+/* 18.1: anything shipped before its real asset arrives says so on the page. */
+.asset-pending { font-family: var(--font-cond); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); border: 1px dashed color-mix(in srgb, var(--muted) 55%, transparent); border-radius: var(--r-sharp); padding: 8px 14px; margin: 0 0 16px; display: inline-block; }
 .tier-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
 @media (max-width: 860px) { .tier-grid { grid-template-columns: 1fr; } }
-.tier-card { position: relative; padding: 28px 26px; border-radius: var(--radius-card); box-shadow: var(--shadow-sm); background: var(--surface); }
-.tier-card.highlight { background: var(--coral); color: var(--paper); }
-.tier-card.highlight p { color: rgba(244,231,207,.85) !important; }
-.tier-card.fellow { position: relative; overflow: hidden; background-color: var(--band-bg); background-image: var(--band-grain); background-size: var(--band-size, 300px 150px); color: var(--band-ink); }
-.tier-card.fellow p { color: rgba(231,221,203,.8) !important; }
-.tier-card .tname { font-family: var(--font-stencil); font-size: 18px; letter-spacing: .1em; }
-.tier-card .tprice { font-family: var(--font-cond); font-weight: 600; letter-spacing: .04em; color: var(--coral-ink); margin: 6px 0 10px; }
-.tier-card.highlight .tprice, .tier-card.fellow .tprice { color: inherit; opacity: .9; }
+/* 1.4.8: every card carries a photograph behind it. The scrim has to hold up for
+   a bright photo as well as a dark one, because the image is editable from the CMS
+   and nobody will re-tune the overlay after swapping it — hence a near-opaque base
+   rather than a light wash, plus a bottom-weighted gradient for the body copy. */
+/* The photograph is set inline ON the card, not through a custom property. A url()
+   inside a custom property resolves against the stylesheet that USES the var, not
+   the one that declares it — so a path written in the HTML as img/x.jpg resolved to
+   css/img/x.jpg here and 404'd. Setting background-image on the element keeps the
+   path relative to the document, where it was written. */
+.tier-card { position: relative; padding: 30px 28px; border-radius: var(--radius-card); box-shadow: var(--shadow-sm); background-color: #241f1a; background-size: cover; background-position: center; color: #f4efe6; }
+/* 1.4.8 requires this to hold up whatever photograph is behind it, because the
+   image is client-editable and nobody re-tunes an overlay after swapping one in.
+   Worked from the worst case: a near-white photo. White text needs the backdrop
+   below luminance .183 for 4.5:1, which over a .90 photo means .80 opacity. So
+   .80 is the floor at the top of the card, not a taste decision — anything
+   lighter fails against a bright image. The CMS field should still advise a
+   darker or lower-contrast photo, per the same section. */
+.tier-card::after { content: ""; position: absolute; inset: 0; z-index: 0; border-radius: inherit; background: linear-gradient(180deg, rgba(20,17,13,.80) 0%, rgba(20,17,13,.84) 55%, rgba(20,17,13,.88) 100%); }
+.tier-card > * { position: relative; z-index: 1; }
+.tier-card p { color: rgba(246,240,230,.95) !important; font-size: 16px !important; line-height: 1.6; }
+.tier-card .tname, .tier-card .tprice, .tier-card p { text-shadow: 0 1px 10px rgba(20,17,13,.85); }
+
+/* the middle card is the one the client marked to change colour; marine sits over
+   the photo as a tint so the change still reads once an image is behind it */
+.tier-card.highlight::after { background: linear-gradient(180deg, rgba(52,84,96,.86) 0%, rgba(30,52,60,.90) 100%); }
+.tier-card.highlight { color: #f4fbfd; }
+.tier-card.highlight p { color: rgba(244,251,253,.94) !important; }
+.tier-card.fellow { position: relative; overflow: hidden; color: var(--band-ink); }
+.tier-card.fellow p { color: rgba(231,221,203,.9) !important; }
+/* 1.4.8: all three cards enlarged together */
+.tier-card .tname { font-family: var(--font-stencil); font-size: 23px; letter-spacing: .1em; }
+.tier-card .tprice { font-family: var(--font-cond); font-weight: 600; font-size: 17px; letter-spacing: .04em; color: inherit; opacity: .92; margin: 8px 0 12px; }
+.tier-card.highlight .tprice, .tier-card.fellow .tprice { color: inherit; opacity: .92; }
 .tier-pick { position: absolute; top: -12px; right: 18px; background: var(--iron); color: #f3ede1; font-family: var(--font-cond); font-size: 12.5px; letter-spacing: .14em; text-transform: uppercase; padding: 5px 14px; border-radius: var(--radius-pill); }
-.tier-card.highlight .btn { background: var(--paper); color: var(--coral-deep); }
+.tier-card .btn, .tier-card .btn.ghost { font-size: 14px; }
+.tier-card .btn.ghost { background: rgba(246,240,230,.94); color: #2b2823 !important; -webkit-text-fill-color: #2b2823 !important; box-shadow: none; text-shadow: none; }
+.tier-card.highlight .btn { background: var(--paper); color: #2b2823; }
 .tier-card.fellow .btn { background: var(--coral); color: var(--paper); }
 
 /* ---------- auth: social + divider ---------- */
