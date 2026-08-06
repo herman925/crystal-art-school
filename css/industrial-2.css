@@ -60,6 +60,18 @@
 .lesson-cell .price { font-family: var(--font-cond); font-weight: 600; font-size: 15px; }
 .lesson-cell .price.free { color: var(--teal-ink); }
 .lesson-cell.hidden { display: none; }
+/* 4.3: media tag, top-left on the cover, in the client's marine. */
+.cover-card .media-tag { position: absolute; top: 12px; left: 12px; z-index: 3; font-family: var(--font-cond); font-weight: 600; font-size: 13px; letter-spacing: .12em; text-transform: uppercase; background: var(--marine); color: var(--marine-ink); border-radius: var(--r-sharp); padding: 5px 12px; box-shadow: var(--shadow-sm); }
+
+/* 4.3: the sale marker is a diagonal ribbon across the top-right corner, not a
+   chip. The card already clips its overflow, so the band's ends are cut by the
+   corner and it reads as a real ribbon rather than a rotated rectangle. */
+.cover-card .sale-ribbon { position: absolute; top: 0; right: 0; z-index: 4; width: 132px; height: 132px; overflow: hidden; pointer-events: none; }
+.cover-card .sale-ribbon span { position: absolute; top: 24px; right: -34px; width: 160px; transform: rotate(45deg); text-align: center;
+  background: var(--marine); color: var(--marine-ink);
+  font-family: var(--font-cond); font-weight: 600; font-size: 12.5px; letter-spacing: .18em; text-transform: uppercase;
+  padding: 6px 0; box-shadow: 0 2px 10px rgba(20,17,13,.4); }
+
 .free-flag { position: absolute; top: 12px; left: 12px; z-index: 3; font-family: var(--font-cond); font-size: 12.5px; font-weight: 600; letter-spacing: .16em; text-transform: uppercase; background: var(--coral); color: var(--paper); border-radius: var(--r-sharp); padding: 5px 13px; box-shadow: var(--shadow-sm); }
 @media (max-width: 1024px) { .lesson-grid { grid-template-columns: repeat(3,1fr); } }
 @media (max-width: 860px) { .lesson-grid { grid-template-columns: repeat(2,1fr); } }

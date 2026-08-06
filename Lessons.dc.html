@@ -286,9 +286,12 @@ class Component extends DCLogic {
 
     const courseCard = (c) => {
       const n = c.lessons.length;
-      const meta = [c.tag, c.difficulty.replace('-', ' '),
+      /* 4.3: left to right — total duration, lesson count, difficulty. The media
+         tag is deliberately absent here; it now sits on the cover itself.
+         Home shows two facts and this page shows three (1.4.7); do not unify. */
+      const meta = ['~' + runtime(c.totalSeconds),
                     n + (n === 1 ? ' lesson' : ' lessons'),
-                    '~' + runtime(c.totalSeconds)].join(' · ');
+                    c.difficulty.replace('-', ' ')].join(' · ');
       return '' +
         '<div class="lesson-cell" data-id="' + esc(c.id) + '" data-cat="' + esc(c.cat) + '"' +
              ' data-theme="' + esc(c.theme) + '" data-difficulty="' + esc(c.difficulty) + '"' +
@@ -296,7 +299,8 @@ class Component extends DCLogic {
              (c.sale ? ' data-sale="1"' : '') + '>' +
           '<div class="cover-card">' +
             '<img src="' + esc(c.cover) + '" alt="' + esc(c.title) + ' — ' + esc(c.tag) + ' course" loading="lazy">' +
-            (c.sale ? '<div class="cc-chip">Sale</div>' : '') +
+            '<div class="media-tag">' + esc(String(c.tag || '').split(/\s*[&,\/]\s*/)[0]) + '</div>' +
+            (c.sale ? '<div class="sale-ribbon"><span>Sale</span></div>' : '') +
             '<div class="scrim"><div class="t">' + esc(c.title) + '</div></div>' +
             '<div class="actions">' +
               '<button class="cover-btn primary" type="button" data-add-to-cart data-tiered' +
