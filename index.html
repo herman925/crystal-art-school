@@ -319,7 +319,7 @@ class Component extends DCLogic {
       img: String(c.cover || '').replace(/^img\//, ''),
       /* every lesson's cover photo, for the card's bottom photo strip */
       /* a lesson may legitimately have no cover (8.3), so drop the empties
-         rather than letting one become an <img src=""> in the card strip */
+         rather than letting one reach the card strip with no source */
       posters: (c.lessons || []).map((l) => String(l.poster || '').replace(/^img\//, '')).filter(Boolean),
       /* 3.5.2 shows Lessons and Level over the bottom photo — and only those two.
          The direction dropped total duration from this card on 2026-08-05. */
