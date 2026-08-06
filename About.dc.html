@@ -110,10 +110,14 @@
     <div>
       <div class="sig-script reveal-one" aria-hidden="true"><img src="img/signature.png" alt=""></div>
       <div class="eyebrow reveal-one"><span class="star">✦</span> About</div>
-      <h1 class="marker-title reveal-one" style="font-size:clamp(34px,4.4vw,58px);">Hi, I'm Crystal!<br>Welcome to my studio.</h1>
+      <!-- 13: the board marks this heading FONT A. -->
+      <h1 class="marker-title font-a reveal-one" style="font-size:clamp(40px,5.2vw,70px);">Hi, I'm Crystal!<br>Welcome to my studio.</h1>
       <div class="reveal-one">
         <p class="lead" style="font-size:17px;">I'm Crystal Lau, a contemporary artist specialising in watercolour and oil painting, and the founder of SKY GALLERY.</p>
-        <blockquote class="pull-quote" style="margin:22px 0 24px;">Art is not merely colour on paper; it is an observation of the world and a timeless extension of one's emotions.</blockquote>
+        <!-- 13: "用此符號設計" — the quote takes the same debossed treatment as
+             the blog feature card's title frame (12.1), so the two read as one
+             device rather than two. -->
+        <blockquote class="pull-quote is-deboss" style="margin:22px 0 24px;">Art is not merely colour on paper; it is an observation of the world and a timeless extension of one's emotions.</blockquote>
         <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:6px;">
           <a class="btn primary" href="Lessons.dc.html">Browse courses <span class="arr" aria-hidden="true">→</span></a>
           <a class="btn ghost" href="Gallery.dc.html">Walk the gallery</a>
@@ -122,29 +126,42 @@
     </div>
   </header>
 
+  <!-- 13: three sections above the Demystifying the process line, each with its
+       own photo carousel, alternating left and right so they do not read as one
+       template repeated three times. Two photographs per view, advancing two at
+       a time, which is why every set has to hold an even number.
+       The bio-facts list that used to close this first block is deleted
+       outright — the board marks it "delete" and all four items with it. -->
   <section class="section" id="biography">
     <div class="bio-layout reveal">
-      <div class="bio-photos">
-        <figure class="bio-frame">
-          <img src="img/ProfilePic.jpg" alt="Crystal Lau painting at an easel in her studio" loading="lazy" decoding="async">
-          <figcaption>Crystal in the studio</figcaption>
-        </figure>
-        <figure class="bio-frame">
-          <img src="img/cover2.jpg" alt="A watercolour sky over open fields at sunset" loading="lazy" decoding="async">
-          <figcaption>Watercolour study</figcaption>
-        </figure>
-      </div>
+      <div class="ph-carousel" data-per="2" id="car-livedrawing" aria-label="Live drawing"></div>
       <div class="bio-copy">
-        <div class="eyebrow"><span class="star">✦</span> About me</div>
         <h2 class="marker-title" style="font-size:clamp(26px,3vw,40px);margin:6px 0 14px;">My artistic journey</h2>
         <p>For over a decade, my greatest joy has been stepping outdoors with my easel in hand — embracing the practice of <em>plein air</em> painting. There is something magical about chasing the light, capturing the subtle breeze, and transforming fleeting natural moments into lasting visual stories.</p>
+      </div>
+    </div>
+    <p class="asset-pending" style="margin-top:18px;">Live drawing carousel &mdash; five photographs supplied, six needed. The carousel moves two at a time, so an odd set would repeat one photograph on the last page.</p>
+  </section>
+
+  <section class="section" id="community">
+    <div class="bio-layout bio-layout--flip reveal">
+      <div class="bio-copy">
+        <h2 class="marker-title" style="font-size:clamp(26px,3vw,40px);margin:6px 0 14px;">From gallery walls to global community</h2>
         <p>While painting is a personal form of expression, I believe art becomes truly powerful when shared. Over the years, my work has been featured in mainstream media, published in art collections, and acquired by institutional permanent collections, such as the Sun Museum. In 2018, I launched my YouTube channel, <strong>Crystal Lau Art</strong>, to share the joys of plein air sketching and art history with a broader audience. It showed me how art can bridge distances and connect people anywhere in the world.</p>
-        <ul class="bio-facts">
-          <li><strong>Based in</strong> Hong Kong</li>
-          <li><strong>Media</strong> Watercolour · Oil</li>
-          <li><strong>Studio</strong> Founder of SKY GALLERY</li>
-          <li><strong>Teaching</strong> Over 10 years</li>
-        </ul>
+      </div>
+      <div class="ph-carousel" data-per="2" id="car-exhibition" aria-label="Exhibitions"></div>
+    </div>
+  </section>
+
+  <section class="section" id="instructor">
+    <div class="bio-layout reveal">
+      <div class="ph-carousel" data-per="2" id="car-artful" aria-label="Artful Living"></div>
+      <div class="bio-copy">
+        <h2 class="marker-title" style="font-size:clamp(26px,3vw,40px);margin:6px 0 14px;">Meet your instructor: a lifetime of passion &amp; art</h2>
+        <p>Since childhood, art class was always the highlight of my week and my most consistent source of pride. I spent countless hours at home with a paintbrush in hand, sketching whatever caught my eye. Soon my school textbooks were filled with drawings — and it wasn't long before my classmates' books became my canvases too. Over time I realised that painting was more than a passing interest; it was my true passion. Representing my school in art competitions and earning awards brought me immense joy and built my foundation as an artist.</p>
+        <p>My journey as a teacher began at the age of 16. That was the moment I discovered something incredible: guiding others to paint and watching them fall in love with art is even more rewarding than completing a painting of my own.</p>
+        <p>Later I opened my own art studio, a vibrant space that has now thrived for over 15 years. Throughout this journey the greatest reward has been connecting with so many fellow art lovers. While I share my technical knowledge with my students, they teach me just as much in return — showing me new perspectives and deeper ways to feel and experience art. Teaching and learning truly feed into each other.</p>
+        <p>I am deeply grateful for this online platform, which allows me to reach and connect with art enthusiasts from around the world. Here we learn together, grow together, and celebrate the joy of creation.</p>
       </div>
     </div>
   </section>
@@ -357,6 +374,48 @@ class Component extends DCLogic {
     /* cart */
     const renderCart = () => { let n = 0; try { n = JSON.parse(localStorage.getItem('cas-cart') || '[]').reduce((a, i) => a + i.qty, 0); } catch (e) {} document.querySelectorAll('.cart-badge').forEach(b => { b.textContent = n; b.style.display = n > 0 ? 'grid' : 'none'; }); };
     renderCart();
+
+    /* 13: the three photo carousels. Two per view, advancing two at a time, and
+       every set has to hold an even number or the last page repeats a photo —
+       which is why livedrawing is specified at six rather than the five that
+       have been supplied. Arrows only; no autoplay, matching 3.5.2's rule that
+       nothing on a page moves by itself this round. */
+    const CAROUSELS = {
+      'car-livedrawing': { dir: 'img/about/', files: ['livedrawing-1.jpg','livedrawing-2.jpg','livedrawing-3.jpg','livedrawing-4.jpg','livedrawing-5.jpg'], alt: 'Crystal drawing on location' },
+      'car-exhibition':  { dir: 'img/about/', files: ['exhibition-1.jpg','exhibition-2.jpg','exhibition-3.jpg','exhibition-4.jpg'], alt: 'Exhibition' },
+      'car-artful':      { dir: 'img/about/', files: ['artful-living-1.jpg','artful-living-2.jpg','artful-living-3.jpg','artful-living-4.jpg'], alt: 'Artful Living' }
+    };
+    Object.keys(CAROUSELS).forEach((id) => {
+      const host = document.getElementById(id);
+      if (!host) return;
+      const cfg = CAROUSELS[id];
+      const per = parseInt(host.getAttribute('data-per'), 10) || 2;
+      const pages = Math.max(1, Math.ceil(cfg.files.length / per));
+      let page = 0;
+      host.innerHTML =
+        '<div class="phc-viewport"><div class="phc-rail">' +
+          cfg.files.map((f, i) => '<figure class="phc-cell"><img src="' + cfg.dir + f + '" alt="' + cfg.alt + ' ' + (i + 1) + '" loading="lazy" decoding="async"></figure>').join('') +
+        '</div></div>' +
+        (pages > 1
+          ? '<div class="phc-nav"><button class="phc-arrow" type="button" data-dir="-1" aria-label="Previous photographs">‹</button>' +
+            '<span class="phc-count"></span>' +
+            '<button class="phc-arrow" type="button" data-dir="1" aria-label="More photographs">›</button></div>'
+          : '');
+      const rail = host.querySelector('.phc-rail');
+      const count = host.querySelector('.phc-count');
+      const apply = () => {
+        rail.style.transform = 'translateX(' + (-page * 100) + '%)';
+        if (count) count.textContent = (page + 1) + ' / ' + pages;
+        host.querySelectorAll('.phc-arrow').forEach((b) => {
+          b.disabled = (Number(b.dataset.dir) < 0 && page === 0) || (Number(b.dataset.dir) > 0 && page >= pages - 1);
+        });
+      };
+      host.querySelectorAll('.phc-arrow').forEach((b) => b.addEventListener('click', () => {
+        page = Math.min(pages - 1, Math.max(0, page + Number(b.dataset.dir)));
+        apply();
+      }));
+      apply();
+    });
 
     /* contact form */
     const form = document.getElementById('contact-form');

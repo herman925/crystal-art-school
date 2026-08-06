@@ -332,6 +332,24 @@
 .bio-frame img { width: 100%; display: block; aspect-ratio: 4/5; object-fit: cover; }
 .bio-frame figcaption { font-family: var(--font-cond); font-size: 13px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); padding: 10px 12px; }
 .bio-copy p { color: var(--muted); font-size: 15.5px; line-height: 1.72; margin: 0 0 14px; }
+/* 13: the second of the three About blocks reverses the columns so the set does
+   not read as one template stamped three times. */
+.bio-layout--flip { grid-template-columns: 1.05fr 0.95fr; }
+
+/* 13: two photographs per view, advancing two at a time. Arrows only — nothing
+   on the page moves by itself this round. */
+.ph-carousel { position: relative; }
+.ph-carousel .phc-viewport { overflow: hidden; border-radius: var(--radius-card); }
+.ph-carousel .phc-rail { display: flex; transition: transform .45s var(--ease-brush); }
+.ph-carousel .phc-cell { flex: 0 0 50%; margin: 0; padding: 0 8px; box-sizing: border-box; }
+.ph-carousel .phc-cell img { width: 100%; display: block; aspect-ratio: 4/5; object-fit: cover; border-radius: var(--radius-card); box-shadow: var(--shadow); }
+.ph-carousel .phc-nav { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 14px; }
+.ph-carousel .phc-arrow { width: 38px; height: 38px; border-radius: 50%; border: 0; cursor: pointer; background: var(--surface); color: var(--ink); box-shadow: var(--shadow-sm); font-size: 20px; line-height: 1; display: grid; place-items: center; transition: background var(--dur-base), opacity var(--dur-base); }
+.ph-carousel .phc-arrow:hover:not(:disabled) { background: var(--ink); color: var(--paper); }
+.ph-carousel .phc-arrow:disabled { opacity: .3; cursor: default; }
+.ph-carousel .phc-count { font-family: var(--font-cond); font-size: 13px; letter-spacing: .14em; color: var(--muted); }
+@media (max-width: 620px) { .ph-carousel .phc-cell { flex: 0 0 100%; } }
+
 .bio-facts { list-style: none; padding: 0; margin: 18px 0 4px; display: grid; gap: 0; }
 .bio-facts li { font-family: var(--font-cond); font-size: 14.5px; color: var(--ink); border-top: 1px solid var(--line); padding: 9px 0; }
 .bio-facts strong { display: inline-block; min-width: 130px; color: var(--band-eyebrow); text-transform: uppercase; font-size: 11.5px; letter-spacing: .14em; }
@@ -596,6 +614,22 @@
 
 /* 12.2: Load More sits under the grid and disappears on the last page. */
 .blog-more { display: flex; justify-content: center; margin-top: 30px; }
+
+/* 13: the About quote takes the same debossed device as the blog feature card's
+   title frame — "用此符號設計" — so the two read as one idea rather than two.
+   The pull-quote already carries an oak fill, so only the pressed edge and the
+   quote mark are added here. */
+.pull-quote.is-deboss {
+  box-shadow: var(--shadow-sm), inset 2px 2px 5px rgba(90,70,55,.42),
+              inset -1px -1px 3px rgba(255,255,255,.55), inset 0 0 0 1px rgba(90,70,55,.20);
+  padding-top: 40px;
+}
+.pull-quote.is-deboss::before {
+  content: "\201C"; position: absolute; top: 8px; left: 26px;
+  font-family: var(--font-display-serif); font-size: 62px; line-height: 1;
+  color: rgba(71,65,56,.34);
+  text-shadow: 0 1px 0 rgba(255,255,255,.5), 0 -1px 1px rgba(90,70,55,.4);
+}
 
 .blog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
 @media (max-width: 980px) { .blog-grid { grid-template-columns: repeat(2, 1fr); } }
