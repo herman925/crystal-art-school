@@ -188,7 +188,6 @@
       <div class="am-price" id="am-price">£0</div>
       <div class="am-actions">
         <a class="art-btn etsy" id="am-buy" href="#" target="_blank" rel="noopener" style="padding:12px 18px;">Buy on Etsy</a>
-        <button class="art-btn detail" id="am-cart" type="button" style="padding:12px 18px;" data-add-to-cart>Add to cart</button>
       </div>
     </div>
   </div>
@@ -294,7 +293,10 @@ class Component extends DCLogic {
 
     const cartSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1.6"></circle><circle cx="19" cy="21" r="1.6"></circle><path d="M2 3h3l2.6 12.6a1.8 1.8 0 0 0 1.8 1.4h8.9a1.8 1.8 0 0 0 1.8-1.4L22 7H6"></path></svg>';
 
-    const etsyUrl = (p) => 'https://www.etsy.com/search?q=' + encodeURIComponent("Crystal's Art School " + p.title);
+    /* 9.3: each piece needs its own Etsy listing URL from the client. Until that
+       field exists a search query is not a purchase link, so the button is shown
+       disabled rather than sending a buyer to a results page. */
+    const etsyUrl = (p) => p.etsy || '';
     /* --r is a CSS aspect-ratio, i.e. width / height, and it also decides the
        .land (rotated) frame. Every piece carries a ratio measured from the
        real file by tools/import-assets.py; the old lookup table was keyed by
@@ -311,7 +313,9 @@ class Component extends DCLogic {
           '<div class="art-tagrow">' + p.tags.map(t => '<span class="art-tagchip">' + esc(t) + '</span>').join('') + '</div>' +
           '<div class="art-row"><span class="art-price">£' + p.price + '</span>' +
           '<div class="art-actions">' +
-            '<a class="art-btn etsy" href="' + etsyUrl(p) + '" target="_blank" rel="noopener">Buy on Etsy</a>' +
+            (etsyUrl(p)
+              ? '<a class="art-btn etsy" href="' + etsyUrl(p) + '" target="_blank" rel="noopener">Buy on Etsy</a>'
+              : '<span class="art-btn etsy is-pending" aria-disabled="true">Etsy link to come</span>') +
             '<button class="art-btn detail" type="button" data-detail="' + idx + '">View details</button>' +
           '</div></div>' +
         '</div>' +
@@ -411,9 +415,11 @@ class Component extends DCLogic {
         '<dt>Size</dt><dd>' + esc(p.size) + '</dd>' +
         '<dt>Ships</dt><dd>Framed, 5–7 days</dd>';
       document.getElementById('am-price').textContent = '£' + p.price;
-      document.getElementById('am-buy').href = etsyUrl(p);
-      const amCart = document.getElementById('am-cart');
-      amCart.dataset.cartTitle = p.title; amCart.dataset.cartPrice = p.price; amCart.dataset.cartImg = p.img; amCart.dataset.cartKind = p.orig ? 'Original' : 'Limited print';
+      const amBuy = document.getElementById('am-buy');
+      const href = etsyUrl(p);
+      amBuy.href = href || '#';
+      amBuy.classList.toggle('is-pending', !href);
+      amBuy.textContent = href ? 'Buy on Etsy' : 'Etsy link to come';
       modal.classList.add('open');
       modal.setAttribute('aria-hidden', 'false');
     };

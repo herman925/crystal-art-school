@@ -431,16 +431,21 @@
   background-position: center;
 }
 .art-meta { padding: 14px 4px 0; display: flex; flex-direction: column; flex: 1; }
-.art-title { font-family: var(--font-marker); font-weight: 600; font-size: 17px; line-height: 1.2; color: var(--ink); margin: 0 0 3px; min-height: 2.4em; }
+/* 9.2: artwork titles, prices and tag chips all enlarged together, and the
+   spacing between cards opened up. */
+.art-title { font-family: var(--font-marker); font-weight: 600; font-size: 20px; line-height: 1.22; color: var(--ink); margin: 0 0 4px; min-height: 2.4em; }
 .art-sub { font-family: var(--font-cond); font-size: 12.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 3px; }
 .art-size { font-family: var(--font-cond); font-size: 12.5px; letter-spacing: .03em; color: var(--ink); opacity: .82; margin-bottom: 8px; }
 .art-tagrow { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 12px; }
-.art-tagchip { font-family: var(--font-cond); font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: #474138; background-color: #cab389; background-image: var(--oak-grain); background-size: 120px 50px; padding: 3px 8px; border-radius: var(--r-sharp); }
+.art-tagchip { font-family: var(--font-cond); font-size: 13.5px; letter-spacing: .1em; text-transform: uppercase; padding: 5px 12px; color: #474138; background-color: #cab389; background-image: var(--oak-grain); background-size: 120px 50px; padding: 3px 8px; border-radius: var(--r-sharp); }
 .art-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: auto; padding-top: 4px; }
-.art-price { font-family: var(--font-cond); font-weight: 600; font-size: 18px; color: var(--coral); }
+.art-price { font-family: var(--font-cond); font-weight: 600; font-size: 21px; color: var(--marine-ink); background: var(--marine); border-radius: var(--radius-pill); padding: 4px 14px; }
 .art-actions { display: flex; gap: 8px; }
 .art-btn { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-cond); font-weight: 500; font-size: 12.5px; letter-spacing: .1em; text-transform: uppercase; padding: 9px 13px; border-radius: var(--radius-pill); border: 0; cursor: pointer; text-decoration: none; transition: transform .15s var(--ease-pop), background .18s, filter .18s; }
 .art-btn.etsy { background-color: #5e4a3d; background-image: var(--walnut-grain); background-size: 160px 70px; color: #f4e7cf; }
+/* 9.3: a piece with no Etsy listing URL yet shows a plainly inert button.
+   A search query is not a purchase link. */
+.art-btn.is-pending { opacity: .55; cursor: not-allowed; pointer-events: none; }
 .art-btn.etsy:hover { transform: translateY(-1px); filter: brightness(1.08); }
 .art-btn.detail { background-color: #cab389; background-image: var(--oak-grain); background-size: 160px 70px; color: #474138; }
 .art-btn.detail:hover { transform: translateY(-1px); filter: brightness(.96); }
