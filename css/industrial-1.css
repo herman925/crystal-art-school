@@ -318,7 +318,10 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 }
 .site-nav .btn.ghost:hover { background-color: var(--linen); filter: brightness(1.05); color: #2b2823; transform: translateY(-2px); box-shadow: var(--shadow-md), inset 0 -1px 0 rgba(90,70,60,.22); }
 .nav-auth { grid-column: 3; justify-self: end; display: flex; align-items: center; gap: 12px; flex: none; }
-.nav-auth .btn { white-space: nowrap; }
+/* §3.1 asks for the nav text to be enlarged as a set, and Log in / Sign up are
+   items 11 and 12 of that list. Left at the global .btn 13px they read a size
+   smaller than the links beside them, so they track .nav-links a instead. */
+.nav-auth .btn { white-space: nowrap; font-size: 15px; padding: 11px 24px; }
 .cart-btn { position: relative; width: 40px; height: 40px; border-radius: 50%; border: 0; background-color: #c9c4bc; background-image: linear-gradient(180deg, rgba(255,255,255,.30), transparent 55%), var(--steel); box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(255,255,255,.5), inset 0 -1px 0 rgba(0,0,0,.22); cursor: pointer; display: grid; place-items: center; transition: transform .18s var(--ease-pop); color: #2b2823; }
 .cart-btn:hover { transform: translateY(-2px) rotate(-4deg); }
 .cart-btn svg { width: 19px; height: 19px; }

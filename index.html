@@ -19,7 +19,7 @@
 /* course-card bottom third (3.5.2): one static photo from the course, with the
    lesson count and level over a dark scrim so white text stays readable whatever
    the photo underneath happens to be. */
-.course-card .cc-photo { position: relative; overflow: hidden; }
+.course-card .cc-photo { display: block; position: relative; overflow: hidden; }
 .course-card .cc-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .5s var(--ease-out); }
 .course-card .cc-photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(20,17,13,.82) 0%, rgba(20,17,13,.34) 46%, transparent 72%); pointer-events: none; }
 .course-card .cc-facts { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; display: flex; gap: 22px; padding: 12px 16px; color: #f6f0e4; }
@@ -149,6 +149,7 @@
           <div class="hero__counter"><span class="hero__counter-current">01</span> <span class="hero__counter-total">/ 03</span></div>
         </nav>
       </header>
+      <p class="asset-pending">Placeholder photographs &mdash; the large and small image for each of the three slides are still to be supplied.</p>
     </div>
   </section>
 
@@ -187,6 +188,7 @@
             <div class="eyebrow-lbl">About Crystal</div>
             <a class="link-squiggle arch-visit" href="About.dc.html">Meet Crystal →</a>
             <div class="social-row" data-cas-social="social-btn"></div>
+            <p class="asset-pending">Placeholder portrait; YouTube link still to be supplied.</p>
           </div>
         </div>
 
@@ -197,6 +199,7 @@
   <section class="pg-section">
     <h2 class="section-title">Shop all courses</h2>
     <p class="shop-lede">Designed for both beginners and experienced painters, this self-paced video curriculum guides you through colour mixing, essential tools, and refined techniques.</p>
+    <p class="asset-pending shop-lede-note">Provisional &mdash; taken from <em>Under_Shopallcourses.docx</em>. The final introduction is still to be confirmed.</p>
     <div class="pg-wrap">
       <div class="shop-layout">
         <div class="shop-left">
@@ -271,19 +274,19 @@
   <section class="pg-section" style="padding-bottom:36px;">
     <div class="pg-wrap">
       <h2 class="section-title">Real hands, real progress</h2>
-      <p class="asset-pending">Placeholder students &mdash; real usernames, avatars and comments come from the member list and are still to be chosen.</p>
+      <p class="asset-pending">Placeholder &mdash; each card shows a member&rsquo;s username and their own profile picture, with the comment typed in by an administrator.</p>
       <div class="testi-grid">
         <div class="testi-card reveal-up" style="--i:0">
-          <div class="who"><img src="img/Postercolor.jpg" alt="" loading="lazy" decoding="async"><div><strong>Alex W.</strong><div class="hand-note">Student · 2025</div></div></div>
-          <div class="q">"The block-in method finally made portraits click for me."</div>
+          <div class="who"><img src="img/Postercolor.jpg" alt="" loading="lazy" decoding="async"><div><strong>@username</strong><div class="hand-note">Profile picture &amp; username &mdash; from the member record</div></div></div>
+          <div class="q">Administrator-entered comment appears here.</div>
         </div>
         <div class="testi-card reveal-up" style="--i:1">
-          <div class="who"><img src="img/Sketchbook.jpg" alt="" loading="lazy" decoding="async"><div><strong>Priya M.</strong><div class="hand-note">Student · 2025</div></div></div>
-          <div class="q">"Warm, patient teaching. Crystal's colour notes alone were worth the course."</div>
+          <div class="who"><img src="img/Sketchbook.jpg" alt="" loading="lazy" decoding="async"><div><strong>@username</strong><div class="hand-note">Profile picture &amp; username &mdash; from the member record</div></div></div>
+          <div class="q">Administrator-entered comment appears here.</div>
         </div>
         <div class="testi-card reveal-up" style="--i:2">
-          <div class="who"><img src="img/BrushA.jpg" alt="" loading="lazy" decoding="async"><div><strong>Sam T.</strong><div class="hand-note">Student · 2026</div></div></div>
-          <div class="q">"I finally fill a sketchbook every month. The habit stuck."</div>
+          <div class="who"><img src="img/BrushA.jpg" alt="" loading="lazy" decoding="async"><div><strong>@username</strong><div class="hand-note">Profile picture &amp; username &mdash; from the member record</div></div></div>
+          <div class="q">Administrator-entered comment appears here.</div>
         </div>
       </div>
     </div>
@@ -585,14 +588,17 @@ class Component extends DCLogic {
             '<span><i>Lessons</i>' + (c.lessons != null ? c.lessons : (c.posters || []).length) + '</span>' +
             '<span><i>Level</i>' + esc(c.level || '') + '</span>' +
           '</div>';
+        /* 3.5.2: the cover, the title and the bottom photo are all click targets
+           for the course page — the Add button and the price are not. */
+        const href = this.courseHref(c.id);
         const card = document.createElement('div');
         card.className = 'course-card';
-        card.innerHTML = '<div class="cc-cover"><img src="img/' + c.img + '" alt="' + esc(c.title) + '" loading="lazy" decoding="async"></div>' +
+        card.innerHTML = '<a class="cc-cover" href="' + href + '" aria-label="' + esc(c.title) + '"><img src="img/' + c.img + '" alt="' + esc(c.title) + '" loading="lazy" decoding="async"></a>' +
           '<div class="cc-pad"><div class="cc-meta">' + esc(c.tag) + '</div>' +
-          '<h3><a href="' + this.courseHref(c.id) + '" style="color:inherit;text-decoration:none;">' + esc(c.title) + '</a></h3>' +
+          '<h3><a href="' + href + '" style="color:inherit;text-decoration:none;">' + esc(c.title) + '</a></h3>' +
           '<div class="cc-row"><span class="cc-price">£' + c.price + '</span>' +
           '<button class="cc-btn primary" type="button" data-add-to-cart data-tiered data-title="' + esc(c.title) + '" data-price="' + c.price + '" data-img="' + c.img + '">' + cartSvg + ' Add</button></div></div>' +
-          '<div class="cc-photo">' + stripImgs + '</div>';
+          '<a class="cc-photo" href="' + href + '" aria-label="' + esc(c.title) + '">' + stripImgs + '</a>';
         shopRail.appendChild(card);
       });
 

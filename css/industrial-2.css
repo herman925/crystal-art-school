@@ -3,11 +3,12 @@
 /* 3.8: every piece of text in the community block scales up together —
    eyebrow, title, description and the button label — without touching the
    copy or the layout, which the section rules out. */
+.band-forest .eyebrow { font-size: 14px; }
 .band-community .eyebrow { font-size: 15px; }
+.band-community .eyebrow .star { font-size: 15px; }
 .band-community h2 { font-size: clamp(33px, 3.6vw, 48px) !important; }
 .band-community p { font-size: 18.5px; }
 .band-community .btn-big { font-size: 15px; padding: 16px 32px; }
-.band-forest .eyebrow { font-size: 14px; }
 
 /* ---------- testimonials ---------- */
 .testi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; margin-top: 32px; }
@@ -118,6 +119,8 @@
 /* tiers */
 /* 18.1: anything shipped before its real asset arrives says so on the page. */
 .asset-pending { font-family: var(--font-cond); font-size: 13px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); border: 1px dashed color-mix(in srgb, var(--muted) 55%, transparent); border-radius: var(--r-sharp); padding: 8px 14px; margin: 0 0 16px; display: inline-block; }
+/* the lede sits centred under a centred section title, so its note follows it */
+.shop-lede-note { display: block; width: fit-content; max-width: 60ch; text-align: center; margin: 12px auto 0; }
 .tier-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
 @media (max-width: 860px) { .tier-grid { grid-template-columns: 1fr; } }
 /* 1.4.8: every card carries a photograph behind it. The scrim has to hold up for
@@ -223,7 +226,9 @@
 .shop-rail .course-card { flex: 0 0 calc((100% - 36px) / 3); }
 .course-card { position: relative; border-radius: var(--radius-card); overflow: hidden; box-shadow: var(--shadow-sm); background: var(--surface); display: flex; flex-direction: column; transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-base); }
 .course-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
-.course-card .cc-cover { position: relative; aspect-ratio: 4/3; overflow: hidden; }
+/* 3.5.2 makes the cover a link to the course page, so it has to be a block —
+   an anchor left inline collapses the aspect-ratio box. */
+.course-card .cc-cover { display: block; position: relative; aspect-ratio: 4/3; overflow: hidden; }
 .course-card .cc-cover img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s var(--ease-out); }
 .course-card:hover .cc-cover img { transform: scale(1.05); }
 .course-card .cc-pad { padding: 14px 15px 15px; display: flex; flex-direction: column; gap: 9px; flex: 1; }

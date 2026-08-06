@@ -30,3 +30,4 @@ __pycache__/
 /docs/*頁面*.jpg
 /docs/*解說*.jpg
 /.scratch/
+.verify-report.json
