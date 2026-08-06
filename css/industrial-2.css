@@ -40,7 +40,7 @@
 /* ============================================================
    LESSONS PAGE
    ============================================================ */
-/* wooden header banner (oak) — the client's "wood accent for headers" */
+/* wooden header banner (oak) — the wood accent specified for page headers */
 .page-hero { position: relative; overflow: hidden; padding: 28px 0 26px; margin-top: 0; background-color: var(--banner-bg); background-image: var(--banner-grain); background-size: var(--banner-size, 400px 150px); background-attachment: fixed; background-position: center top; box-shadow: var(--shadow); }
 .page-hero::before { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent 0 56px, rgba(43,40,35,.1) 56px 57px); pointer-events: none; }
 .page-hero .container { position: relative; }

@@ -21,7 +21,7 @@ window.CAS_BLOG = [
     excerpt: 'Every tube, brush, block and bottle in my kit — painted, cut out and laid on the table.',
     img: 'blog-kit-all.jpg', banner: 'blog-kit-18-21.jpg',
     tag: 'Tools', date: '2026-07-23', d: 'Jul 23', mins: 8,
-    devnote: "Draft — not yet approved by Crystal. Her source text was machine-translated from Chinese and contained errors that contradicted her own illustrations. Corrected here without her sign-off: 留白膠 was rendered “blank residue glue” and is now “masking fluid” (items 7 and 8); “Windsor” → “Winsor” & Newton; “Classens” → “Claessens”; “chinchilla hair” → “squirrel” (items 17, 18); item 6 “still dry” → “still damp”; item 5 “before use” → “after use”; the “artist-grade” claim on Van Gogh removed. Title, intro, closing paragraph and the six section headings are also ours — her original was a bare 1–21 list with no title. Full list in docs/blog-drafts/post-1-watercolour-kit.md.",
+
     intro: [
       'People ask what I use far more often than they ask how I paint. So I painted my whole kit — every tube, brush, block and bottle — cut each one out, and laid them all on the table. Twenty-one things. This is honestly what comes with me.',
       'A note before the list: almost none of this is essential to start. Numbers 1, 2, 9 or 10, and 12 or 13 will get you painting. Everything else accumulated over years of finding out what I actually reach for.'
@@ -88,7 +88,7 @@ window.CAS_BLOG = [
     excerpt: 'I used to freeze in front of a room. Then I started painting in front of one.',
     img: 'blog-stage-fright.jpg', banner: 'blog-stage-fright.jpg',
     tag: 'Journal', date: '2026-07-23', d: 'Jul 23', mins: 2,
-    devnote: "Draft — not yet approved by Crystal. Her source text was written entirely in the passive voice with no “I” in it, which read as a translation rather than as her own voice. Rewritten here in the first person without her sign-off. No claim has been changed. Two sentences are ours and are not in her original: “The first time I painted in front of a crowd I expected the same panic — and it never arrived” and “Neither of those was true about me ten years ago.” The photo is also still un-retouched — it is underexposed and we have asked her about lifting it. See docs/blog-drafts/post-2-stage-fright.md.",
+
     body: [
       'I am introverted, and not especially good in a room full of people. For most of my life, standing up to speak meant a pounding heart and a mind that went completely blank. Friends who knew me then still ask how on earth I ended up teaching.',
       'Live demonstrations are what changed it. The first time I painted in front of a crowd I expected the same panic — and it never arrived. Once I was inside the work, the room simply stopped existing. I could paint, explain what I was doing, and answer questions at the same time, and none of it made me nervous.',
@@ -103,7 +103,7 @@ window.CAS_BLOG = [
     excerpt: 'I spent months deciding what I should paint. All it produced was confusion.',
     img: 'blog-true-to-myself.jpg', banner: 'blog-true-to-myself.jpg',
     tag: 'Journal', date: '2026-07-23', d: 'Jul 23', mins: 2,
-    devnote: "Draft — not yet approved by Crystal. As with the stage-fright post, her source text had no “I” in it and read as a translation. Rewritten here in the first person without her sign-off. No claim has been changed. One clause is ours: “and I have stopped worrying about whether the body of work looks consistent.” Her pull-quote line was also tightened — “What is the point of creating when it goes against one's core?” became “What is the point of making something if it goes against who you are?” See docs/blog-drafts/post-3-painting-true-to-myself.md.",
+
     body: [
       'A lot of artists pick one subject and stay with it. It builds a recognisable identity, and for plenty of people it works — you can see the results.',
       'I spent a long time trying to work out which subject that should be for me. What do people want to see? What tends to win prizes? I turned it over for months, and all it produced was confusion. Eventually I had lost sight of why I was painting at all.',

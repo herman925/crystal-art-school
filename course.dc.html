@@ -344,7 +344,7 @@ class Component extends DCLogic {
         $('co-price').innerHTML = (c.was ? '<span class="was">£' + c.was + '</span>' : '') + '£' + c.price;
         buy.style.display = '';
         cont.style.display = 'none';
-        note.innerHTML = 'Buy at <strong>Apprentice</strong> (course only) or <strong>Fellow</strong> (course + private Discord critique channel) — you\'ll pick when adding to cart. Lifetime access, 14-day refund.';
+        note.innerHTML = 'Buy at <strong>Apprentice</strong> (course only) or <strong>Fellow</strong> (course + private Discord critique channel) — you\'ll pick when adding to cart.';
       }
       document.querySelectorAll('#own-toggle .fopt').forEach(b => b.classList.toggle('active', (b.dataset.own === '1') === owned));
       renderSyllabus();
