@@ -91,22 +91,33 @@
   <div class="crumbs" style="padding-top:6px;"><a href="Lessons.dc.html">Courses</a> <span aria-hidden="true">→</span> <span id="crumb-title"></span></div>
 
   <header class="course-hero">
-    <div class="course-cover reveal-one">
-      <img id="co-cover" src="img/cover3.jpg" alt="">
-      <span class="free-flag" id="co-flag-free" style="display:none;">Free</span>
-      <span class="sale-flag" id="co-flag-sale" style="display:none;">Sale</span>
-    </div>
-    <div class="reveal-one">
-      <div class="eyebrow"><span class="star">✦</span> <span id="co-tag"></span></div>
-      <h1 class="marker-title font-a" id="co-title" style="font-size:clamp(39px,4.9vw,65px);margin:6px 0 12px;"></h1>
-      <p class="lead" id="co-blurb" style="font-size:16.5px;"></p>
-      <div class="course-meta-chips" id="co-chips"></div>
+    <div class="course-left reveal-one">
+      <div class="course-cover">
+        <img id="co-cover" src="img/cover3.jpg" alt="">
+        <span class="free-flag" id="co-flag-free" style="display:none;">Free</span>
+        <span class="sale-flag" id="co-flag-sale" style="display:none;">Sale</span>
+      </div>
+      <!-- 7.1: four thumbnails, click to swap the large image. Not a carousel. -->
+      <div class="co-thumbs" id="co-thumbs"></div>
+      <p class="asset-pending" id="co-thumbs-note" style="display:none;">Placeholder images &mdash; the five course photographs are still to be supplied.</p>
+      <!-- 7.1: price and CTA live in the left column, under the images, so the
+           call to action is visible without scrolling on desktop. -->
       <div class="course-buy">
         <div class="course-price" id="co-price"></div>
         <button class="btn primary" type="button" id="co-buy" data-add-to-cart data-tiered>Add to cart</button>
         <a class="btn primary" id="co-continue" href="lesson.dc.html" style="display:none;"></a>
       </div>
       <p class="course-tier-note"></p>
+    </div>
+    <div class="course-right reveal-one">
+      <div class="eyebrow"><span class="star">✦</span> <span id="co-tag"></span></div>
+      <!-- 7.1: title sits above the highlights video, sharing its left edge -->
+      <h1 class="marker-title font-a" id="co-title" style="font-size:clamp(39px,4.9vw,65px);margin:6px 0 12px;"></h1>
+      <div class="co-highlight" id="co-highlight">
+        <div class="co-highlight-empty">Course highlights video &mdash; to be supplied</div>
+      </div>
+      <p class="lead" id="co-blurb" style="font-size:16.5px;"></p>
+      <div class="course-meta-chips" id="co-chips"></div>
       <div class="own-test" style="margin-top:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
         <span style="font-family:var(--font-cond);font-size:12.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);">Client testing — view as</span>
         <div class="fg-opts" id="own-toggle" style="display:inline-flex;gap:6px;">
@@ -122,7 +133,7 @@
       <div class="eyebrow" style="justify-content:center;"><span class="star">✦</span> By the end</div>
       <h2 class="section-title">What you'll learn</h2>
     </div>
-    <ul class="learn-list" id="co-learn" style="max-width:860px;margin-left:auto;margin-right:auto;"></ul>
+    <ul class="learn-list" id="co-learn"></ul>
   </section>
 
   <section class="section" id="syllabus">
@@ -145,7 +156,7 @@
       <div class="eyebrow" style="justify-content:center;"><span class="star">✦</span> Is this you?</div>
       <h2 class="section-title">Who this course is for</h2>
     </div>
-    <div id="co-who" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;max-width:960px;margin:30px auto 0;"></div>
+    <div id="co-who" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin:30px auto 0;"></div>
   </section>
 
   <section class="section">
@@ -224,17 +235,41 @@ class Component extends DCLogic {
     $('crumb-title').textContent = c.title;
     $('co-cover').src = c.cover;
     $('co-cover').alt = c.title;
+
+    /* 7.1: four thumbnails under the large image. Each course is meant to supply
+       five photographs — one large, four small, named per 7.1. Those have not
+       arrived, so the lesson covers stand in and the strip says so. */
+    (function () {
+      const strip = $('co-thumbs');
+      if (!strip) return;
+      const shots = (c.lessons || []).map((l) => l.poster).filter(Boolean).slice(0, 4);
+      if (!shots.length) { strip.style.display = 'none'; return; }
+      strip.innerHTML = shots.map((p, i) =>
+        '<button class="co-thumb' + (i === 0 ? ' is-active' : '') + '" type="button"' +
+        ' data-src="' + esc(p) + '" aria-label="Show image ' + (i + 1) + '">' +
+        '<img src="' + esc(p) + '" alt="" loading="lazy" decoding="async"></button>').join('');
+      const note = $('co-thumbs-note');
+      if (note) note.style.display = '';
+      strip.addEventListener('click', (e) => {
+        const b = e.target.closest('.co-thumb');
+        if (!b) return;
+        $('co-cover').src = b.dataset.src;
+        strip.querySelectorAll('.co-thumb').forEach((x) => x.classList.toggle('is-active', x === b));
+      });
+    })();
     $('co-tag').textContent = c.tag + ' course';
     $('co-title').textContent = c.title;
     $('co-blurb').textContent = c.blurb;
     if (c.sale && c.was) $('co-flag-sale').style.display = '';
 
+    /* 7.3: Media, total duration, lessons, difficulty — in that order, set apart
+       by whitespace rather than dot separators. Duration is computed from the
+       uploaded videos and is never typed in by hand. */
     $('co-chips').innerHTML =
-      '<span class="cmc">' + esc(c.tag) + '</span>' +
-      '<span class="cmc">' + esc(levelLabel) + '</span>' +
-      '<span class="cmc">' + nLessons + (nLessons === 1 ? ' lesson · ' : ' lessons · ')
-        + esc(runtime(c.totalSeconds)) + '</span>' +
-      '<span class="cmc">Real reference included</span>';
+      '<span class="cmc">' + esc(String(c.tag || '').split(/\s*[&,\/]\s*/)[0]) + '</span>' +
+      '<span class="cmc">' + esc(runtime(c.totalSeconds)) + '</span>' +
+      '<span class="cmc">' + nLessons + (nLessons === 1 ? ' lesson' : ' lessons') + '</span>' +
+      '<span class="cmc">' + esc(levelLabel) + '</span>';
 
     const buy = $('co-buy');
     buy.setAttribute('data-title', c.title);
@@ -281,7 +316,7 @@ class Component extends DCLogic {
       const row = open
         ? '<a class="syl-row" href="lesson.dc.html?c=' + encodeURIComponent(c.id) + '&u=' + i + '" style="text-decoration:none;color:inherit;">' + inner + '</a>'
         : '<div class="syl-row" style="opacity:.72;">' + inner + '</div>';
-      if (!keys.length) return '<div class="syl-item">' + row + '</div>';
+      if (!keys.length) return '<div class="syl-item" data-odd="' + (i % 2) + '">' + row + '</div>';
 
       const panelId = 'syld-' + c.id + '-' + i;
       const panel = '<dl class="syl-detail" id="' + panelId + '" hidden>' +
@@ -289,7 +324,7 @@ class Component extends DCLogic {
         '</dl>';
       const toggle = '<button class="syl-more" type="button" aria-expanded="false" aria-controls="' + panelId + '">' +
         '<span>What you will cover</span>' + CHEV + '</button>';
-      return '<div class="syl-item has-detail">' + row + toggle + panel + '</div>';
+      return '<div class="syl-item has-detail" data-odd="' + (i % 2) + '">' + row + toggle + panel + '</div>';
     };
 
     const renderSyllabus = () => {
@@ -302,7 +337,7 @@ class Component extends DCLogic {
         html = LESSONS.map((u, i) => lessonRow(u, i, done)).join('');
       } else {
         mods.forEach((m, mi) => {
-          html += '<div style="font-family:var(--font-cond);font-weight:600;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--coral);margin:' + (mi ? '30px' : '4px') + ' 0 10px;">Phase ' + (mi + 1) + ' · ' + esc(m.name) + '</div>';
+          html += '<div style="font-family:var(--font-cond);font-weight:600;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--coral);margin:' + (mi ? '30px' : '4px') + ' 0 10px;padding:9px 16px;border-radius:var(--r-sharp);background:rgba(20,17,13,.5);color:#f4e7cf;">Phase ' + (mi + 1) + ' · ' + esc(m.name) + '</div>';
           for (let i = m.from - 1; i <= m.to - 1 && i < LESSONS.length; i++) {
             html += lessonRow(LESSONS[i], i, done);
           }

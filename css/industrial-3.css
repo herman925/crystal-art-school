@@ -413,7 +413,23 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
 
 /* ---------- course overview page ---------- */
 .course-hero { display: grid; grid-template-columns: minmax(300px, 460px) 1fr; gap: 46px; align-items: start; padding: 46px 0 10px; }
-.course-cover { position: relative; border-radius: var(--r-promo); overflow: hidden; box-shadow: var(--shadow-lift); aspect-ratio: 4/3; }
+/* 7.1: the image block is height-capped so the price and CTA below it stay on the
+   first screen on a laptop rather than being pushed under the fold. */
+.course-left { display: flex; flex-direction: column; }
+.co-thumbs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 12px; }
+.co-thumb { padding: 0; border: 0; background: none; cursor: pointer; border-radius: 10px; overflow: hidden; aspect-ratio: 4/3; box-shadow: var(--shadow-sm); outline-offset: 2px; }
+.co-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .35s var(--ease-out), opacity .2s; opacity: .78; }
+.co-thumb:hover img, .co-thumb:focus-visible img { opacity: 1; transform: scale(1.05); }
+.co-thumb.is-active { box-shadow: 0 0 0 2px var(--marine), var(--shadow-sm); }
+.co-thumb.is-active img { opacity: 1; }
+/* 7.1 right column: the title shares the video frame's left edge, and the video
+   sits directly beneath it with the introduction below that. */
+.co-highlight { position: relative; aspect-ratio: 16/9; border-radius: var(--radius-card); overflow: hidden; background: #1b1814; box-shadow: var(--shadow); margin: 4px 0 18px; display: grid; place-items: center; }
+.co-highlight-empty { font-family: var(--font-cond); font-size: 13px; letter-spacing: .16em; text-transform: uppercase; color: #b6ab97; text-align: center; padding: 0 20px; }
+.course-left .course-buy { margin-top: 22px; }
+/* 7.1: the image block is kept short on purpose so the price and CTA below it
+   stay on the first screen without scrolling. */
+.course-cover { position: relative; border-radius: var(--r-promo); overflow: hidden; box-shadow: var(--shadow-lift); aspect-ratio: 3/2; }
 .course-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
 .course-cover .free-flag, .course-cover .sale-flag { position: absolute; top: 14px; left: 14px; right: auto; }
 .course-meta-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 4px; }
@@ -422,10 +438,17 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
 .course-price { font-family: var(--font-display); font-weight: 700; font-size: 34px; color: var(--coral-ink); }
 .course-price .was { font-size: 19px; color: var(--muted); text-decoration: line-through; margin-right: 10px; font-weight: 500; }
 .course-tier-note { font-size: 13px; color: var(--muted); max-width: 34ch; }
-.learn-list { list-style: none; margin: 26px 0 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px 22px; }
+/* 7.4: the long-form blocks on this page all sit at the same width. One of them
+   was narrower than the rest, which the client flagged directly. */
+.learn-list, .syllabus, #co-who { max-width: 900px; margin-left: auto; margin-right: auto; }
+.learn-list { list-style: none; margin: 26px auto 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px 22px; }
 .learn-list li { display: flex; gap: 10px; align-items: baseline; font-size: 14.5px; color: var(--ink); }
 .learn-list li::before { content: "✦"; color: var(--teal-ink); font-size: 12px; flex: none; }
-.syllabus { max-width: 860px; margin: 26px auto 0; display: grid; gap: 10px; }
+.syllabus { margin: 26px auto 0; display: grid; gap: 10px; }
+/* 7.5: odd and even rows are distinguished for readability. The box colour
+   itself is deliberately unchanged — the direction says so explicitly — so this
+   is a light tint over it rather than a different fill. */
+.syl-item[data-odd="1"] { background-color: color-mix(in srgb, var(--ink) 5%, var(--surface)) !important; }
 .syl-item { background-color: var(--surface); background-image: var(--concrete-grain); background-size: 220px 220px; border-radius: var(--radius-card); box-shadow: var(--shadow-sm); overflow: hidden; }
 .syl-row { display: grid; grid-template-columns: 44px 1fr auto; align-items: center; gap: 16px; padding: 14px 20px; }
 .syl-more { display: flex; align-items: center; gap: 7px; width: 100%; background: none; border: 0; border-top: 1px solid color-mix(in srgb, var(--ink) 9%, transparent); padding: 9px 20px 9px 64px; cursor: pointer; font-family: var(--font-cond); font-size: 13px; letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
@@ -440,8 +463,8 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
 .syl-detail dd { margin: 0; font-size: 13.5px; line-height: 1.55; color: var(--muted); }
 @media (max-width: 600px) { .syl-more, .syl-detail { padding-left: 20px; } }
 .syl-num { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-family: var(--font-cond); font-weight: 600; font-size: 13px; background: color-mix(in srgb, var(--coral) 16%, transparent); color: var(--coral-ink); }
-.syl-title { font-family: var(--font-marker); font-weight: 600; font-size: 16.5px; color: var(--ink); }
-.syl-sub { font-size: 13px; color: var(--muted); margin-top: 2px; }
+.syl-title { font-family: var(--font-marker); font-weight: 600; font-size: 18.5px; color: var(--ink); }
+.syl-sub { font-size: 14.5px; color: var(--muted); margin-top: 3px; }
 .syl-len { font-family: var(--font-cond); font-size: 12.5px; letter-spacing: .1em; color: var(--muted); }
 .course-teacher { display: flex; gap: 20px; align-items: center; max-width: 860px; margin: 30px auto 0; background-color: var(--surface); background-image: var(--concrete-grain); background-size: 220px 220px; border-radius: var(--radius-card); box-shadow: var(--shadow-sm); padding: 20px 24px; }
 .course-teacher img { width: 74px; height: 74px; border-radius: 50%; object-fit: cover; flex: none; box-shadow: var(--shadow-sm); }
