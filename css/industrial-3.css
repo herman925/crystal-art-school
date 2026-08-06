@@ -444,7 +444,7 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
 .course-tier-note { font-size: 13px; color: var(--muted); max-width: 34ch; }
 /* 7.4: the long-form blocks on this page all sit at the same width. One of them
    was narrower than the rest, which the client flagged directly. */
-.learn-list, .syllabus, #co-who { max-width: 900px; margin-left: auto; margin-right: auto; }
+.learn-list, .syllabus, #co-who, .course-teacher { max-width: 900px; margin-left: auto; margin-right: auto; }
 .learn-list { list-style: none; margin: 26px auto 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px 22px; }
 .learn-list li { display: flex; gap: 10px; align-items: baseline; font-size: 14.5px; color: var(--ink); }
 .learn-list li::before { content: "✦"; color: var(--teal-ink); font-size: 12px; flex: none; }
@@ -470,7 +470,7 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
 .syl-title { font-family: var(--font-marker); font-weight: 600; font-size: 18.5px; color: var(--ink); }
 .syl-sub { font-size: 14.5px; color: var(--muted); margin-top: 3px; }
 .syl-len { font-family: var(--font-cond); font-size: 12.5px; letter-spacing: .1em; color: var(--muted); }
-.course-teacher { display: flex; gap: 20px; align-items: center; max-width: 860px; margin: 30px auto 0; background-color: var(--surface); background-image: var(--concrete-grain); background-size: 220px 220px; border-radius: var(--radius-card); box-shadow: var(--shadow-sm); padding: 20px 24px; }
+.course-teacher { display: flex; gap: 20px; align-items: center; margin: 30px auto 0; background-color: var(--surface); background-image: var(--concrete-grain); background-size: 220px 220px; border-radius: var(--radius-card); box-shadow: var(--shadow-sm); padding: 20px 24px; }
 .course-teacher img { width: 74px; height: 74px; border-radius: 50%; object-fit: cover; flex: none; box-shadow: var(--shadow-sm); }
 @media (max-width: 900px) { .course-hero { grid-template-columns: 1fr; gap: 26px; } .learn-list { grid-template-columns: 1fr; } }
 

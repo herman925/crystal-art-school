@@ -99,15 +99,17 @@
       </div>
       <!-- 7.1: four thumbnails, click to swap the large image. Not a carousel. -->
       <div class="co-thumbs" id="co-thumbs"></div>
-      <p class="asset-pending" id="co-thumbs-note" style="display:none;">Placeholder images &mdash; the five course photographs are still to be supplied.</p>
       <!-- 7.1: price and CTA live in the left column, under the images, so the
-           call to action is visible without scrolling on desktop. -->
+           call to action is visible without scrolling on desktop. The
+           placeholder note sits below them rather than above — it is developer
+           scaffolding and must not push the CTA past the fold. -->
       <div class="course-buy">
         <div class="course-price" id="co-price"></div>
         <button class="btn primary" type="button" id="co-buy" data-add-to-cart data-tiered>Add to cart</button>
         <a class="btn primary" id="co-continue" href="lesson.dc.html" style="display:none;"></a>
       </div>
       <p class="course-tier-note"></p>
+      <p class="asset-pending" id="co-thumbs-note" style="display:none;">Placeholder images &mdash; the five course photographs are still to be supplied.</p>
     </div>
     <div class="course-right reveal-one">
       <div class="eyebrow"><span class="star">✦</span> <span id="co-tag"></span></div>
