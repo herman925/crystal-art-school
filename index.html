@@ -20,6 +20,10 @@
    lesson count and level over a dark scrim so white text stays readable whatever
    the photo underneath happens to be. */
 .course-card .cc-photo { display: block; position: relative; overflow: hidden; }
+/* 18.1: a course whose five photographs have not arrived says so in the strip
+   rather than borrowing an unrelated studio shot or leaving a void. */
+.course-card .cc-photo-empty { position: absolute; inset: 0; display: grid; place-items: center; padding: 0 14px 26px; text-align: center;
+  font-family: var(--font-cond); font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
 .course-card .cc-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .5s var(--ease-out); }
 .course-card .cc-photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(20,17,13,.82) 0%, rgba(20,17,13,.34) 46%, transparent 72%); pointer-events: none; }
 .course-card .cc-facts { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; display: flex; gap: 22px; padding: 12px 16px; color: #f6f0e4; }
@@ -321,6 +325,8 @@ class Component extends DCLogic {
       /* a lesson may legitimately have no cover (8.3), so drop the empties
          rather than letting one reach the card strip with no source */
       posters: (c.lessons || []).map((l) => String(l.poster || '').replace(/^img\//, '')).filter(Boolean),
+      /* 3.5.2: the course's own fixed five-image set, when it has been supplied */
+      photos: (c.photos || []).map((p) => String(p).replace(/^img\//, '')),
       /* 3.5.2 shows Lessons and Level over the bottom photo — and only those two.
          The direction dropped total duration from this card on 2026-08-05. */
       lessons: (c.lessons || []).length,
@@ -538,8 +544,18 @@ class Component extends DCLogic {
       recent.forEach((c, i) => {
         const slide = document.createElement('div');
         slide.className = 'rel-slide' + (i === 0 ? ' is-active' : '');
+        /* 5.1: the card shows the SHORT TOPIC — the text before the hyphen in
+           the shared title field, e.g. "Clouds" — not the whole title. Crystal
+           controls where the hyphen falls; a title without one falls back to
+           the full string rather than showing nothing. The size steps down as
+           the topic gets longer so a long one still fits on one line. */
+        const short = (function (t) {
+          const m = String(t || '').split(/\s+[-–—]\s+/);
+          return (m.length > 1 ? m[0] : String(t || '')).trim();
+        })(c.title);
+        const fit = short.length <= 12 ? '' : (short.length <= 22 ? ' is-mid' : ' is-long');
         slide.innerHTML = '<img src="img/' + c.img + '" alt="' + esc(c.title) + '" loading="lazy" decoding="async">' +
-          '<div class="rel-title">' + esc(c.title) + '</div>' +
+          '<div class="rel-title' + fit + '" title="' + esc(c.title) + '">' + esc(short) + '</div>' +
           /* 5.2: Media / Lessons / Level, in that order. Media is the single
              primary value — the direction rules out showing several. */
           '<div class="rel-facts">' +
@@ -581,11 +597,19 @@ class Component extends DCLogic {
         /* Bottom third (3.5.2): ONE photo, drawn once per page load from the
            course's images with the main cover excluded, shown statically. Not a
            carousel — the direction rules that out for this round explicitly. */
-        const pool2 = (c.posters || []).slice(1);
-        if (!pool2.length) pool2.push('A5.jpeg');
-        const pick = pool2[Math.floor(Math.random() * pool2.length)];
+        /* 3.5.2: the photo comes from the course's OWN five-image set with the
+           main cover excluded. Where that set has been supplied it is the only
+           source; otherwise the course's lesson covers stand in. A course with
+           neither — a single-lesson course whose one poster IS the cover — gets
+           no bottom photo at all rather than an unrelated studio shot. */
+        const pool2 = (c.photos && c.photos.length > 1)
+          ? c.photos.slice(1)
+          : (c.posters || []).slice(1);
+        const pick = pool2.length ? pool2[Math.floor(Math.random() * pool2.length)] : null;
         const stripImgs =
-          '<img src="img/' + pick + '" alt="' + esc(c.title) + ' — from the course" loading="lazy" decoding="async">' +
+          (pick
+            ? '<img src="img/' + pick + '" alt="' + esc(c.title) + ' — from the course" loading="lazy" decoding="async">'
+            : '<span class="cc-photo-empty">Course photographs to come</span>') +
           '<div class="cc-facts">' +
             '<span><i>Lessons</i>' + (c.lessons != null ? c.lessons : (c.posters || []).length) + '</span>' +
             '<span><i>Level</i>' + esc(c.level || '') + '</span>' +

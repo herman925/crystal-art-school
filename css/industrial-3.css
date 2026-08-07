@@ -447,10 +447,20 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
 .course-buy { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 20px; }
 .course-price { font-family: var(--font-display); font-weight: 700; font-size: 34px; color: var(--coral-ink); }
 .course-price .was { font-size: 19px; color: var(--muted); text-decoration: line-through; margin-right: 10px; font-weight: 500; }
+/* 6 / 1.4.3: only the reduced price changes colour. */
+.course-price .now { color: var(--marine); }
 .course-tier-note { font-size: 13px; color: var(--muted); max-width: 34ch; }
+.course-terms-note { font-size: 13px; color: var(--muted); max-width: 34ch; margin-top: 8px; opacity: .85; }
 /* 7.4: the long-form blocks on this page all sit at the same width. One of them
    was narrower than the rest, which the client flagged directly. */
 .learn-list, .syllabus, #co-who, .course-teacher { max-width: 900px; margin-left: auto; margin-right: auto; }
+/* 7.4: the course introduction is a long-form field too, and it was still
+   capped at the 60ch .lead default while the title and preview above it ran the
+   full width of the column. It now fills its column like the rest. */
+.course-right #co-blurb { max-width: none; }
+/* 7.5 / 1.4.10: the SYLLABUS heading is enlarged; the other section headings on
+   this page keep the shared size. */
+#syllabus h2.section-title { font-size: clamp(32px, 3.7vw, 50px); padding: 14px 34px; }
 .learn-list { list-style: none; margin: 26px auto 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px 22px; }
 .learn-list li { display: flex; gap: 10px; align-items: baseline; font-size: 14.5px; color: var(--ink); }
 .learn-list li::before { content: "✦"; color: var(--teal-ink); font-size: 12px; flex: none; }

@@ -205,6 +205,10 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
   background-color: var(--banner-bg); background-image: var(--banner-grain); background-size: var(--banner-size, 300px 120px);
   box-shadow: var(--shadow); position: relative;
 }
+/* 3.7: the home Blog heading keeps the existing face but is noticeably larger
+   than the other section signs — the rename alone was done, the enlargement
+   was not. */
+.section-title.is-blog { font-size: clamp(34px, 3.9vw, 52px); padding: 14px 34px; }
 .section-title::before { content: '✦'; font-size: .56em; color: #7e9b46; display: inline-block; }
 .section-title.in-view::before { animation: ornament-in var(--dur-base) var(--ease-out) both; }
 .section-title.is-left { justify-content: flex-start; text-align: left; font-size: clamp(22px,2.6vw,30px); margin: 0; }
@@ -292,7 +296,10 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
    the exact same axis; the brand is lifted out and spans both rows */
 .nav-top .inner { position: static; display: grid; grid-template-columns: minmax(200px, 1fr) auto minmax(200px, 1fr); align-items: center; gap: 18px; padding: 16px var(--gutter) 10px; }
 .nav-brand { position: absolute; z-index: 6; top: 0; bottom: 0; left: max(var(--gutter), calc((100% - var(--site-max)) / 2 + var(--gutter))); display: flex; align-items: center; gap: 12px; }
-.nav-brand img { height: 66px; width: auto; object-fit: contain; filter: drop-shadow(0 2px 6px rgba(0,0,0,.45)); }
+/* 3.1: "現有 Logo 及導覽文字均明顯放大；允許頁首高度增加" — the nav text was raised
+   but the mark was left at its old 66px, so only half the clause was done. The
+   header is allowed to grow to take it. */
+.nav-brand img { height: 84px; width: auto; object-fit: contain; filter: drop-shadow(0 2px 6px rgba(0,0,0,.45)); }
 /* signature reads black on the light wood (A); stays cream on the dark walnut (D) */
 [data-theme="A"] .nav-brand img { filter: brightness(0) opacity(.85) drop-shadow(0 1px 2px rgba(255,255,255,.25)); }
 .nav-links { grid-column: 2; display: flex; gap: 4px; list-style: none; margin: 0; padding: 0; }

@@ -109,6 +109,10 @@
         <a class="btn primary" id="co-continue" href="lesson.dc.html" style="display:none;"></a>
       </div>
       <p class="course-tier-note"></p>
+      <!-- 7.4: this is one of the three places that carried unapproved refund
+           copy. The instruction is to replace the specifics with neutral
+           placeholder text, not to delete the line — About and FAQ already do. -->
+      <p class="course-terms-note">Access period and refund terms to be confirmed &mdash; both will be published here before launch.</p>
       <p class="asset-pending" id="co-thumbs-note" style="display:none;">Placeholder images &mdash; the five course photographs are still to be supplied.</p>
     </div>
     <div class="course-right reveal-one">
@@ -395,12 +399,19 @@ class Component extends DCLogic {
         $('co-price').innerHTML = '<span style="font-size:16px;letter-spacing:.06em;">Purchased ✓</span>';
         buy.style.display = 'none';
         cont.style.display = '';
-        cont.innerHTML = (dn ? 'Continue learning' : 'Start the course') + ' <span class="arr" aria-hidden="true">→</span>';
+        /* 7.2 names the purchased-state label literally: `View Course`, in the
+           same place as `Add to Cart`. */
+        cont.innerHTML = 'View course <span class="arr" aria-hidden="true">→</span>';
         note.innerHTML = '<strong>' + dn + ' of ' + nLessons + '</strong> '
           + (nLessons === 1 ? 'lesson' : 'lessons')
           + ' complete — your progress is saved automatically.';
       } else {
-        $('co-price').innerHTML = (c.was ? '<span class="was">£' + c.was + '</span>' : '') + '£' + c.price;
+        /* 6 / 1.4.3: on sale the old price keeps its colour and gains a rule
+           through it; only the new price turns marine. A normal price is
+           unchanged. */
+        $('co-price').innerHTML = c.was
+          ? '<span class="was">£' + c.was + '</span><span class="now">£' + c.price + '</span>'
+          : '£' + c.price;
         buy.style.display = '';
         cont.style.display = 'none';
         note.innerHTML = 'Buy at <strong>Apprentice</strong> (course only) or <strong>Fellow</strong> (course + private Discord critique channel) — you\'ll pick when adding to cart.';

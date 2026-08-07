@@ -176,7 +176,10 @@ class Component extends DCLogic {
         feature.innerHTML =
           '<a class="bf-img" href="blog-post.dc.html?id=' + esc(f.id) + '" aria-label="' + esc(f.title) + '"><img src="img/' + f.img + '" alt="' + esc(f.title) + '" loading="lazy" decoding="async"></a>' +
           '<div class="bf-body"><span class="bf-kicker">Latest · ' + esc(f.tag) + ' · ' + esc(f.d) + '</span>' +
-          '<div class="bf-frame"><h2>' + esc(f.title) + '</h2></div><p>' + esc(f.excerpt) + '</p>' +
+          /* 12.2: the board draws the feature card as kicker, framed title,
+             reading time and the link — 作者不顯示，摘要不顯示. The excerpt is
+             deliberately absent. */
+          '<div class="bf-frame"><h2>' + esc(f.title) + '</h2></div>' +
           '<span class="bf-reads">' + (f.mins || 4) + ' min read</span>' +
           '<a class="link-squiggle" href="blog-post.dc.html?id=' + esc(f.id) + '" style="align-self:flex-start;">Read the post →</a></div>' +
           '<span class="bf-ribbon" aria-hidden="true"><span>' + esc(f.tag) + '</span></span>';

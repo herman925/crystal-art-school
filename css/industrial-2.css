@@ -221,7 +221,11 @@
 /* 5.2: marine and enlarged, but deliberately still the ordinary condensed face —
    the direction rules Font A out for this label. */
 .rel-chip { position: absolute; top: 12px; left: 12px; z-index: 3; font-family: var(--font-cond); font-size: 14px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; background: var(--marine); color: var(--marine-ink); border-radius: var(--r-sharp); padding: 6px 13px; box-shadow: var(--shadow-sm); }
-.rel-title { position: absolute; left: 16px; right: 16px; bottom: 58px; z-index: 3; color: #f3ede1; font-family: var(--font-marker); font-weight: 600; font-size: 18px; line-height: 1.18; text-shadow: 0 2px 12px rgba(0,0,0,.55); }
+/* 5.1: the short topic, at the course-title face rather than Font A. It steps
+   down a size as the topic gets longer so a long one still reads on one line. */
+.rel-title { position: absolute; left: 16px; right: 16px; bottom: 58px; z-index: 3; color: #f3ede1; font-family: var(--font-marker); font-weight: 600; font-size: 30px; line-height: 1.14; text-shadow: 0 2px 12px rgba(0,0,0,.55); }
+.rel-title.is-mid { font-size: 23px; }
+.rel-title.is-long { font-size: 18px; }
 .rel-actions { position: absolute; left: 14px; right: auto; bottom: 14px; z-index: 3; display: flex; gap: 8px; }
 /* 5.2: the three facts sit under the short topic and appear only on hover, with
    the gradient deepening behind them. The two buttons are always present — the
@@ -245,6 +249,13 @@
 .social-row { display: flex; gap: 10px; margin-top: 12px; }
 .social-btn { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: color-mix(in srgb, var(--band-eyebrow) 22%, transparent); color: var(--band-ink); transition: background .18s, transform .18s; }
 .social-btn:hover { background: var(--band-eyebrow); color: var(--band-bg); transform: translateY(-2px); }
+/* 2.4 / 18.1: the YouTube slot is present everywhere but plainly inert until
+   the channel URL arrives — a dashed outline, no hover, no cursor. */
+.social-btn.is-pending, .ss-btn.is-pending {
+  border: 1px dashed color-mix(in srgb, currentColor 45%, transparent);
+  background: transparent; opacity: .5; cursor: default;
+}
+.social-btn.is-pending:hover, .ss-btn.is-pending:hover { background: transparent; transform: none; }
 .social-btn svg { width: 18px; height: 18px; display: block; }
 
 /* ============================================================
@@ -449,22 +460,32 @@
 .active-tags { display: flex; flex-wrap: wrap; gap: 8px; }
 .active-tag { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-cond); font-size: 12.5px; letter-spacing: .08em; text-transform: uppercase; background: var(--coral); color: var(--paper); border-radius: var(--radius-pill); padding: 5px 12px; cursor: pointer; }
 .active-tag::after { content: "✕"; font-size: 12px; }
-.store-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
-@media (max-width: 1100px) { .store-grid { grid-template-columns: repeat(2, 1fr); } }
+/* 9.2: the artwork cards and their frames grow with the type, and the spacing
+   between cards is re-opened so the bigger cards still read as a tidy grid.
+   Three across at 1440 gives a wider card; the frame takes more of it. */
+/* 9.2: the artwork cards and their frames grow with the type, and the spacing
+   between cards is re-adjusted. The column gap stays tight so the card itself
+   gets wider; the row gap opens up so the taller cards do not crowd vertically. */
+.store-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px 20px; }
+@media (max-width: 1100px) { .store-grid { grid-template-columns: repeat(2, 1fr); gap: 32px 20px; } }
 @media (max-width: 480px) { .store-grid { grid-template-columns: 1fr; } }
 .store-empty { padding: 60px 20px; text-align: center; font-family: var(--font-body); color: var(--muted); }
 
 /* framed product card — uniform sizing so the whole grid aligns */
 .art-card { display: flex; flex-direction: column; }
 .art-card.hidden { display: none; }
-.art-frame-wrap { background: var(--wall); background-image: var(--wall-grain); background-size: var(--wall-size); border-radius: var(--radius-card); aspect-ratio: 1 / 1; display: grid; place-items: center; box-shadow: inset 0 0 0 1px rgba(0,0,0,.14); container-type: size; }
-.art-frame { background: var(--frame-base); border-style: solid; border-width: 12px; border-top-color: var(--frame-tl); border-left-color: var(--frame-tl); border-right-color: var(--frame-br); border-bottom-color: var(--frame-br); box-shadow: var(--shadow); width: auto; max-width: 86%; max-height: 86%; transition: transform .35s var(--ease-out); }
+/* 9.2 「作品卡／圖框一併放大」: the wall panel is taller than square now, which is
+   what actually enlarges the framed artwork — the frame is portrait, so a square
+   panel was capping it on height while the column width went unused. */
+.art-frame-wrap { background: var(--wall); background-image: var(--wall-grain); background-size: var(--wall-size); border-radius: var(--radius-card); aspect-ratio: 4 / 5; display: grid; place-items: center; box-shadow: inset 0 0 0 1px rgba(0,0,0,.14); container-type: size; }
+.art-frame { background: var(--frame-base); border-style: solid; border-width: 14px; border-top-color: var(--frame-tl); border-left-color: var(--frame-tl); border-right-color: var(--frame-br); border-bottom-color: var(--frame-br); box-shadow: var(--shadow); width: auto; max-width: 92%; max-height: 92%; transition: transform .35s var(--ease-out); }
 .art-card:hover .art-frame { transform: translateY(-4px) scale(1.02); }
 .art-frame .art-img { overflow: hidden; box-shadow: inset 0 0 0 1px rgba(0,0,0,.3); height: min(72cqh, calc(72cqw / var(--r, 0.8))); aspect-ratio: var(--r, 0.8); }
 .art-frame .art-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
 /* Style D — ornate carved frame overlay (replaces the bevel frame) */
 .art-ornate { display: none; }
-[data-theme="D"] .art-frame { background: transparent; border: 0; box-shadow: none; position: relative; aspect-ratio: 18426 / 21301; height: 92cqh; width: auto; max-width: 92cqw; max-height: 92cqh; }
+/* 9.2: the ornate frame takes more of its wrapper so the artwork reads larger. */
+[data-theme="D"] .art-frame { background: transparent; border: 0; box-shadow: none; position: relative; aspect-ratio: 18426 / 21301; height: 99cqh; width: auto; max-width: 99cqw; max-height: 99cqh; }
 [data-theme="D"] .art-frame .art-img { position: absolute; top: 7.4%; bottom: 7.4%; left: 9.1%; right: 9.1%; height: auto; aspect-ratio: auto; box-shadow: inset 0 0 0 1px rgba(0,0,0,.45); }
 [data-theme="D"] .art-ornate { display: block; position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; filter: drop-shadow(0 16px 26px rgba(0,0,0,.55)); }
 /* Style D — real walnut wood photo (matches design_base): banners + framed wall */
@@ -492,7 +513,10 @@
 .art-sub { font-family: var(--font-cond); font-size: 12.5px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 3px; }
 .art-size { font-family: var(--font-cond); font-size: 12.5px; letter-spacing: .03em; color: var(--ink); opacity: .82; margin-bottom: 8px; }
 .art-tagrow { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 12px; }
-.art-tagchip { font-family: var(--font-cond); font-size: 13.5px; letter-spacing: .1em; text-transform: uppercase; padding: 5px 12px; color: #474138; background-color: #cab389; background-image: var(--oak-grain); background-size: 120px 50px; padding: 3px 8px; border-radius: var(--r-sharp); }
+/* 9.2 asks for the chip BOX and its text to grow together. The enlarged padding
+   was written here but a second padding declaration further along the same rule
+   silently won, so only the type ever grew. */
+.art-tagchip { font-family: var(--font-cond); font-size: 13.5px; letter-spacing: .1em; text-transform: uppercase; color: #474138; background-color: #cab389; background-image: var(--oak-grain); background-size: 120px 50px; padding: 5px 12px; border-radius: var(--r-sharp); }
 .art-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: auto; padding-top: 4px; }
 .art-price { font-family: var(--font-cond); font-weight: 600; font-size: 21px; color: var(--marine-ink); background: var(--marine); border-radius: var(--radius-pill); padding: 4px 14px; }
 .art-actions { display: flex; gap: 8px; }

@@ -53,6 +53,9 @@
 /* 8.3: at most one thumbnail per lesson. Nothing is substituted when a lesson
    has no image — no default picture and no frame grabbed from the video. */
 .curr-card .unit-row .uthumb { flex: none; width: 62px; height: 44px; object-fit: cover; border-radius: 8px; box-shadow: var(--shadow-sm); }
+/* 8.1 item 4: the bundled download sits above the per-item list. */
+.materials-card .res-all { display: flex; align-items: center; gap: 12px; padding: 2px 10px 12px; }
+.materials-card .res-all-note { font-family: var(--font-cond); font-size: 12.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); }
 /* real video: Google Drive preview iframe fills the stage above the poster.
    The unit-flag stays visible but must not steal clicks from the player UI. */
 .stage .gdrive-frame { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: none; z-index: 6; background: #000; }
@@ -213,6 +216,11 @@
            button therefore comes before the downloads. -->
       <div class="curr-card materials-card">
         <div class="ch">Course materials</div>
+        <!-- 8.1 item 4: both a bundled download and per-item downloads. -->
+        <div class="res-all">
+          <button class="btn primary" type="button" id="res-all-btn">Download all <span class="arr" aria-hidden="true">↓</span></button>
+          <span class="res-all-note">4 files</span>
+        </div>
         <div class="res-list" style="padding:0 4px 8px;">
           <a class="res-item" download="cloud-course-supply-list.txt" href="data:text/plain;charset=utf-8,INTRODUCTION%20TO%20CLOUD%20PAINTING%20%E2%80%94%20SUPPLY%20LIST"><span class="res-ico" aria-hidden="true" data-comment-anchor="ea2df07cdd-span"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"></rect><path d="M9 8h6M9 12h6M9 16h4"></path></svg></span><span class="res-body"><span class="nm">Supply list</span><br><span class="sz">TXT · 1 KB</span></span><span class="res-get">Download ↓</span></a>
           <a class="res-item" download="cloud-reference-photo-pack.txt" href="data:text/plain;charset=utf-8,CLOUD%20REFERENCE%20PHOTO%20PACK%20—%20PLACEHOLDER%20FOR%20THE%20REAL%20ZIP"><span class="res-ico" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><circle cx="8.5" cy="10" r="1.5"></circle><path d="M21 16l-5-5-9 8"></path></svg></span><span class="res-body"><span class="nm">Cloud reference photo pack</span><br><span class="sz">24 photos · placeholder</span></span><span class="res-get">Download ↓</span></a>
@@ -547,6 +555,26 @@ class Component extends DCLogic {
       else if (curPart !== pt) { curPart = pt; applyVideo(UNITS[u]); }
     }));
     completeBtn.addEventListener('click', () => markDone(false));
+
+    /* 8.1 item 4: "同時支援打包下載及逐項下載". On the real site this is one zip
+       built server-side; in the prototype the button fires each per-item link in
+       turn, which demonstrates the control and keeps one source of truth for the
+       file list. */
+    (function () {
+      const all = document.getElementById('res-all-btn');
+      const list = document.querySelector('.materials-card .res-list');
+      if (!all || !list) return;
+      const items = Array.from(list.querySelectorAll('a.res-item'));
+      const note = document.querySelector('.materials-card .res-all-note');
+      if (note) note.textContent = items.length + (items.length === 1 ? ' file' : ' files');
+      all.addEventListener('click', () => {
+        items.forEach((a, i) => setTimeout(() => a.click(), i * 250));
+        const label = all.innerHTML;
+        all.innerHTML = 'Downloading ' + items.length + ' files…';
+        all.disabled = true;
+        setTimeout(() => { all.innerHTML = label; all.disabled = false; }, items.length * 250 + 600);
+      });
+    })();
     $('reset-btn').addEventListener('click', () => { state = blankState(); save(); loadUnit(0, false); });
     $('watch-again').addEventListener('click', () => { state = blankState(); save(); loadUnit(0, false); try { stage.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) {} });
 
