@@ -52,6 +52,36 @@
   --dur-base: 240ms;
   --stagger: 60ms;
   --tracking-section: .14em;
+
+  /* Letter-spacing scale (issue #19). The client reported text reading too small
+     on a high-density laptop; raising the size floor to 12px was half the fix and
+     this is the other half. Heavy tracking on small caps drops ink coverage inside
+     the cap strip by up to 37% while cap height stays put, so it makes text read
+     smaller, not larger.
+
+     NOTE FOR A LATER READER: no recorded decision in either project document
+     mentions letter-spacing. These three values are a developer judgement call,
+     not a client instruction — the site previously carried sixteen ad-hoc values
+     with no system behind them.
+
+     --tracking-label   Oswald (--font-cond) uppercase micro-labels, 12-16px.
+                        Oswald's own cap-to-cap gap is .117em against a ~.30em
+                        counter, so its computable ceiling is .183em; both agreed
+                        reference sites (Proko, Will Kemp) normalise to .050-.066em
+                        at this size, and at .06em the letter gap stays at 47% of
+                        the word gap so words still group pre-attentively.
+     --tracking-display Bodoni Moda uppercase headings. A didone puts its serifs in
+                        the sidebearings, so its native gap is ~.034em — it needs a
+                        positive delta Oswald does not. Already the de facto value.
+     --tracking-stamp   Saira Stencil One wordmarks only. Bridge gaps are cut into
+                        those strokes; tightening to the label value makes the
+                        bridges read as damage rather than as the typeface. These
+                        are lockups the reader identifies, not labels they scan, so
+                        the word-segmentation ceiling above does not bind. */
+  --tracking-label: .06em;
+  --tracking-display: .04em;
+  --tracking-stamp: .10em;
+
   --fs-h2: clamp(26px, 3.5vw, 38px);
 
   /* shadows */
@@ -599,7 +629,13 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 /* ---------- wood / dark band (the "wooden banner" accent) ---------- */
 .band-forest { position: relative; overflow: hidden; background-color: var(--band-bg); background-image: var(--band-grain); background-size: var(--band-size, 380px 150px); color: var(--band-ink); border-radius: var(--radius-card); padding: 36px 40px; display: flex; align-items: center; gap: 32px; flex-wrap: wrap; box-shadow: var(--shadow); }
 .band-forest::before { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent 0 52px, rgba(0,0,0,.12) 52px 53px); pointer-events: none; }
-.band-forest > * { position: relative; }
+/* The copy column is an inline flex:1 child with no minimum on five of the pages
+   carrying this band, so flex-basis:0 makes the line-break decision fall through
+   to min-content: shave ~20px off the button and the two children stop wrapping
+   onto separate lines, collapsing the copy into a tall narrow ribbon. Measured on
+   Showcase at 390px, the column drops 306px -> 79px. Guard, not a tracking
+   exemption — the container is fragile independently of any type change. (#19) */
+.band-forest > * { position: relative; min-width: 200px; }
 .band-forest .eyebrow { color: var(--band-eyebrow); }
 .band-forest .star { color: var(--band-eyebrow); }
 .band-forest .marker-title, .band-forest h2 { font-family: var(--font-marker); font-weight: 600; font-size: clamp(22px,2.4vw,32px); margin: 0 0 8px; color: var(--band-ink); }
