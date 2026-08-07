@@ -19,6 +19,8 @@
 .testi-card { background: var(--surface); border-radius: var(--radius-card); padding: 22px; box-shadow: var(--shadow-sm); }
 .testi-card .who { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
 .testi-card .who img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; }
+/* Tracking held at .04em: direction §3.9 retains the Real Hands heading, the
+   three-card layout AND its text styles. This rule renders nowhere else. (#20) */
 .testi-card .who strong { font-family: var(--font-cond); font-weight: 600; letter-spacing: .04em; }
 .testi-card .q { font-style: italic; font-size: 14.5px; color: var(--muted); line-height: 1.6; }
 
@@ -219,6 +221,8 @@
 .rel-carousel::after { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(to top, rgba(20,17,13,.7) 0%, rgba(20,17,13,.2) 42%, transparent 66%); }
 /* 5.2: marine and enlarged, but deliberately still the ordinary condensed face —
    the direction rules Font A out for this label. */
+/* Tracking held at .14em pending issue #22 — the client has not yet been asked.
+   §5.2 asks for this chip to be enlarged, so any cut needs ~+1px of size. (#20) */
 .rel-chip { position: absolute; top: 12px; left: 12px; z-index: 3; font-family: var(--font-cond); font-size: 14px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; background: var(--marine); color: var(--marine-ink); border-radius: var(--r-sharp); padding: 6px 13px; box-shadow: var(--shadow-sm); }
 /* 5.1: the short topic, at the course-title face rather than Font A. It steps
    down a size as the topic gets longer so a long one still reads on one line. */
@@ -373,6 +377,8 @@
 
 .bio-facts { list-style: none; padding: 0; margin: 18px 0 4px; display: grid; gap: 0; }
 .bio-facts li { font-family: var(--font-cond); font-size: 14.5px; color: var(--ink); border-top: 1px solid var(--line); padding: 9px 0; }
+/* Tracking and size held: direction §13 deletes this list, and the surviving
+   instance is below About's `Demystifying the process` freeze line (§14). (#20) */
 .bio-facts strong { display: inline-block; min-width: 130px; color: var(--band-eyebrow); text-transform: uppercase; font-size: 11.5px; letter-spacing: .14em; }
 .about-social { margin-top: 16px; }
 
@@ -412,6 +418,8 @@
 
 /* ---------- social strip (Follow along) ---------- */
 .social-strip { display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 6px 0 10px; }
+/* Tracking held at .3em pending issue #22. It is the furthest value from the
+   measured ceiling, but §3 holds home-page elements her board never named. (#20) */
 .social-strip .ss-label { font-family: var(--font-cond); font-weight: 600; font-size: 12px; letter-spacing: .3em; text-transform: uppercase; color: var(--muted); }
 .ss-icons { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
 .ss-btn { width: 54px; height: 54px; border-radius: 50%; display: grid; place-items: center; background-color: #876d5c; background-image: linear-gradient(118deg, rgba(231,221,203,.16), transparent 46%), var(--walnut-grain); background-size: 100% 100%, 200px 90px; color: #f4e7cf; box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(231,221,203,.2); transition: transform .2s var(--ease-pop), filter .2s; }
@@ -711,6 +719,8 @@
 .approach-grid .marker-title { color: var(--ink); }
 .contact-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 26px; align-items: start; }
 .field { margin-bottom: 16px; }
+/* Tracking held at .08em: `.field` renders only in About's contact form, which
+   is below the §13/§14 freeze line. Holding it costs nothing elsewhere. (#20) */
 .field label { font-family: var(--font-cond); font-weight: 600; letter-spacing: .08em; text-transform: uppercase; font-size: 12px; display: block; margin-bottom: 6px; color: var(--ink); }
 .field input, .field textarea { width: 100%; border: 1px solid var(--line); border-radius: var(--r-sharp); background: var(--cream); color: #2b2823; -webkit-text-fill-color: #2b2823; padding: 13px 15px; font-family: var(--font-body); font-size: 14.5px; color: var(--ink); }
 .field input:focus, .field textarea:focus { outline: 2px solid var(--coral); border-color: transparent; }

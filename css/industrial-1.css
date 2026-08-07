@@ -533,6 +533,8 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 .cover-card:has(.cc-actions):hover::after { opacity: 1; }
 .cc-title { position: absolute; left: 16px; right: 16px; bottom: 62px; z-index: 2; color: #f3ede1; font-family: var(--font-marker); font-weight: 600; font-size: 18px; line-height: 1.18; text-shadow: 0 2px 12px rgba(0,0,0,.55); }
 .cc-actions { position: absolute; left: 12px; right: 12px; bottom: 12px; z-index: 2; display: flex; gap: 8px; }
+/* Tracking held at .08em: direction §3.5.2 keeps the ADD button's text, colour
+   and style as they are. 0.24px/glyph looser than --tracking-label. (#20) */
 .cc-btn { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 7px; font-family: var(--font-cond); font-weight: 500; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; line-height: 1; padding: 11px 12px; border-radius: var(--radius-pill); cursor: pointer; border: 0; text-decoration: none; white-space: nowrap; transition: transform var(--dur-fast) var(--ease-out), background var(--dur-base), color var(--dur-base); }
 .cc-btn .arr { transition: transform var(--dur-fast); display: inline-block; }
 .cc-btn.primary { background-color: #5e4a3d; background-image: var(--walnut-grain); background-size: 200px 90px; color: #f4e7cf; box-shadow: var(--shadow-sm); }
@@ -549,6 +551,8 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 .cover-card:hover .scrim .t { transform: translateY(-46px); }
 .cover-card .actions { position: absolute; inset: auto 0 0 0; z-index: 3; display: flex; gap: 8px; justify-content: center; padding: 0 14px 16px; opacity: 0; transform: translateY(10px); transition: opacity .25s, transform .25s var(--ease-pop); pointer-events: none; }
 .cover-card:hover .actions, .cover-card:focus-within .actions { opacity: 1; transform: none; pointer-events: auto; }
+/* Tracking held at .1em, and font-size at 11.5px: named by the brief under
+   direction §3.5.2, and one of the sizes the 12px floor pass left alone. (#20) */
 .cover-btn { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-cond); font-weight: 500; font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; padding: 9px 14px; border-radius: var(--radius-pill); border: 0; cursor: pointer; transition: transform .15s var(--ease-pop), background .15s, color .15s; }
 .cover-btn.primary { background-color: #5e4a3d; background-image: var(--walnut-grain); background-size: 200px 90px; color: #f4e7cf; }
 .cover-btn.primary:hover { transform: translateY(-1px); background-color: #4a3a2f; }

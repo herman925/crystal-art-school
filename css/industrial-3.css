@@ -392,6 +392,7 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
 .contact-channels .ch-ico { flex: none; width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; background: color-mix(in srgb, var(--teal) 22%, transparent); color: var(--teal-ink); }
 .contact-channels .ch-ico svg { width: 20px; height: 20px; }
 .contact-channels li > span:last-child { display: grid; }
+/* Tracking held at .16em: renders only below About's §13/§14 freeze line. (#20) */
 .contact-channels strong { font-family: var(--font-cond); font-weight: 600; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--ink); }
 .contact-channels em { font-style: normal; font-size: 14.5px; color: var(--muted); }
 .contact-note { font-family: var(--font-marker); font-style: italic; font-weight: 600; font-size: 18px; color: var(--teal-ink); margin: 24px 0 0; transform: rotate(-2deg); }
@@ -524,6 +525,8 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
 
 /* ---------- bio credentials (polaroids inside Artist biography) ---------- */
 .bio-certs { margin-top: 26px; }
+/* Tracking held at .2em: below About's §13/§14 freeze line. It will read looser
+   than its retuned siblings; cheaper than breaching the freeze. (#20) */
 .bc-head { display: flex; align-items: center; gap: 8px; font-family: var(--font-cond); font-weight: 600; font-size: 12px; letter-spacing: .2em; text-transform: uppercase; color: var(--coral-ink); margin-bottom: 14px; }
 .bc-head .star { color: var(--teal-ink); font-size: 11px; }
 .bc-row { display: flex; gap: 18px; flex-wrap: wrap; }
@@ -535,6 +538,7 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
    awarding body off the top and the signatures off the bottom. */
 .bc-card--cert { max-width: 230px; }
 .bc-card--cert img { aspect-ratio: 5/7; }
+/* Tracking and 11px size both held: below About's §13/§14 freeze line. (#20) */
 .bc-card figcaption { font-family: var(--font-cond); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: #474138; margin-top: 8px; text-align: center; }
 /* ============================================================
    FONT A — Arizonia
@@ -556,6 +560,9 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
   font-weight: 400;
   font-style: normal;
   line-height: 1.24;
+  /* Tracking held at .01em and deliberately off the token scale: direction §2.2
+     records that Arizonia ships one weight, so hierarchy can only come from size
+     and spacing. Tracking a connected script also breaks the join. (#20) */
   letter-spacing: .01em;
   text-transform: none;
 }
