@@ -47,10 +47,11 @@
       "lessons": [
         {
           "title": "Lesson 1",
-          "subtitle": "Title and description still to come from Crystal.",
+          "subtitle": "Crystal has supplied the film; the title and description are still to come.",
           "focus": "",
           "tools": "",
-          "outcome": ""
+          "outcome": "",
+          "pending": true
         },
         {
           "title": "Pencil cloud form & basic hatching",

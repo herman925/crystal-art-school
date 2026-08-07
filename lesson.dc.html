@@ -297,6 +297,7 @@ class Component extends DCLogic {
       title: l.title,
       dur: l.dur || 60,
       note: l.subtitle,
+      pending: !!l.pending,
       img: l.poster,
       video: l.video || null,  // part 1's Drive preview URL, or null = missing
       parts: (l.videos && l.videos.length > 1) ? l.videos : null
@@ -358,6 +359,10 @@ class Component extends DCLogic {
         (moduleOf(i) ? '<div style="font-family:var(--font-cond);font-weight:600;font-size:12.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--coral);margin-bottom:8px;">Phase ' + (moduleOf(i).i + 1) + ' · ' + escl(moduleOf(i).name) + '</div>' : '') +
         (u.img ? '<img class="unit-cover" src="' + escl(u.img) + '" alt="" loading="lazy" decoding="async">' : '') +
         '<h2>' + escl(u.title) + '</h2><p>' + escl(u.note) + '</p>' +
+        /* 18.1: a lesson whose title and description have not arrived says so
+           in the same dashed marker the rest of the site uses, rather than
+           reading as finished copy. */
+        (u.pending ? '<p class="asset-pending">Placeholder &mdash; title and description still to come from Crystal.</p>' : '') +
         (u.tip ? '<div class="tip-card"><span class="hand-note">Crystal' + String.fromCharCode(39) + 's note ✦</span>' + escl(u.tip) + '</div>' : '') +
       '</article>').join('');
     document.getElementById('rows-holder').innerHTML = UNITS.map((u, i) =>

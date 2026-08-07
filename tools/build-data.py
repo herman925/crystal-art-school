@@ -100,6 +100,9 @@ def build_courses(manifest, meta, links):
                 "n": i + 1,
                 "title": cl["title"],
                 "subtitle": cl["subtitle"],
+                # 18.1: a lesson whose copy has not arrived is flagged so the
+                # player can say so on the page rather than look finished.
+                "pending": bool(cl.get("pending")),
                 "detail": detail,
                 "dur": al["dur"],                 # seconds, ffprobe; sum of parts
                 "poster": al["poster"],
