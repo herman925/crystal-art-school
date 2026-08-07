@@ -3,7 +3,7 @@
   "courses": {
     "clouds-beginner": {
       "_source": "assets/01 - Courses/Course 01-Beginner/Course1_Beginner_introduction.docx (client copy, 2026-07-26). Course-level copy + lessons 1–6 are from that doc. Lessons 7–12 are still PLACEHOLDER — the doc bills the course as 10 lessons and only details 6, while the asset tree holds 12 lesson folders.",
-      "title": "Beginner’s Guide to Drawing & Painting Clouds",
+      "title": "Clouds - Beginner’s Guide to Drawing & Painting Clouds",
       "tag": "Sketching & Watercolour",
       "cat": "watercolour",
       "theme": "landscape",
@@ -123,7 +123,7 @@
     },
     "clouds-intermediate": {
       "_note": "Title renamed 2026-07-26 to pair with Course 01's client-supplied title. NOT client copy — replace when the intermediate introduction docx arrives.",
-      "title": "Intermediate Guide to Drawing & Painting Clouds",
+      "title": "Clouds - Intermediate Guide to Drawing & Painting Clouds",
       "tag": "Watercolour",
       "cat": "watercolour",
       "theme": "landscape",
@@ -196,7 +196,7 @@
       ]
     },
     "little-house": {
-      "title": "Little House in Watercolour",
+      "title": "Little House - Little House in Watercolour",
       "tag": "Watercolour",
       "cat": "watercolour",
       "theme": "landscape",
@@ -229,7 +229,7 @@
       ]
     },
     "urban-sketch": {
-      "title": "Urban Sketching in Watercolour",
+      "title": "Urban Sketch - Urban Sketching in Watercolour",
       "tag": "Watercolour",
       "cat": "watercolour",
       "theme": "cityscape",

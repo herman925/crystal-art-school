@@ -180,11 +180,10 @@
             <span class="rel-chip">New release</span>
             <div class="rel-dots" id="rel-dots"></div>
           </div>
-          <!-- 5.1: the card shows the short topic taken from before the hyphen in
-               the title field. None of the four course titles uses that form yet,
-               so every card falls back to the full title — which 5.1 itself
-               anticipates, and the CMS field will carry the hint. -->
-          <p class="asset-pending rel-note">Showing full titles &mdash; the short topic comes from before the hyphen, e.g. <em>Clouds &mdash; Beginner&rsquo;s Guide&hellip;</em></p>
+          <!-- 5.1: the short topic is the text before the hyphen in the title
+               field. The topics are developer placeholders, like the titles
+               themselves, until Crystal sets them. -->
+          <p class="asset-pending rel-note">Placeholder topics &mdash; the card takes the text before the hyphen in each course title.</p>
         </div>
 
         <div class="span-4 about-col reveal-up" style="--i:2">
@@ -327,6 +326,7 @@ class Component extends DCLogic {
   coursePool() {
     return (window.CAS_COURSES || []).map((c, i) => ({
       id: c.id,
+      topic: c.topic || '',
       img: String(c.cover || '').replace(/^img\//, ''),
       /* every lesson's cover photo, for the card's bottom photo strip */
       /* a lesson may legitimately have no cover (8.3), so drop the empties
@@ -552,14 +552,11 @@ class Component extends DCLogic {
         const slide = document.createElement('div');
         slide.className = 'rel-slide' + (i === 0 ? ' is-active' : '');
         /* 5.1: the card shows the SHORT TOPIC — the text before the hyphen in
-           the shared title field, e.g. "Clouds" — not the whole title. Crystal
-           controls where the hyphen falls; a title without one falls back to
-           the full string rather than showing nothing. The size steps down as
-           the topic gets longer so a long one still fits on one line. */
-        const short = (function (t) {
-          const m = String(t || '').split(/\s+[-–—]\s+/);
-          return (m.length > 1 ? m[0] : String(t || '')).trim();
-        })(c.title);
+           the shared title field, e.g. "Clouds" — not the whole title. The split
+           happens in tools/build-data.py; a title typed without a hyphen leaves
+           topic empty and the card falls back to the full title rather than
+           showing nothing. The size steps down as the topic gets longer. */
+        const short = (c.topic || c.title || '').trim();
         const fit = short.length <= 12 ? '' : (short.length <= 22 ? ' is-mid' : ' is-long');
         slide.innerHTML = '<img src="img/' + c.img + '" alt="' + esc(c.title) + '" loading="lazy" decoding="async">' +
           '<div class="rel-title' + fit + '" title="' + esc(c.title) + '">' + esc(short) + '</div>' +

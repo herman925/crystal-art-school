@@ -114,9 +114,17 @@ def build_courses(manifest, meta, links):
             })
 
         total = sum(l["dur"] or 0 for l in lessons)
+        # 5.1: one title field carries "short topic - full title", separated by a
+        # hyphen. The New Release card shows the topic; every other surface shows
+        # the full title. Splitting here means no page has to know the convention,
+        # and a title typed without a hyphen still yields a usable full title.
+        topic, _, full = [s.strip() for s in copy["title"].partition(" - ")]
+        if not full:
+            topic, full = "", topic
         out.append({
             "id": slug,
-            "title": copy["title"],
+            "title": full,
+            "topic": topic,
             "tag": copy["tag"],
             "cat": copy["cat"],
             "theme": copy["theme"],

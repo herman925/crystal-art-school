@@ -6,6 +6,7 @@ window.CAS_COURSES = [
   {
     "id": "clouds-beginner",
     "title": "Beginner’s Guide to Drawing & Painting Clouds",
+    "topic": "Clouds",
     "tag": "Sketching & Watercolour",
     "cat": "watercolour",
     "theme": "landscape",
@@ -286,6 +287,7 @@ window.CAS_COURSES = [
   {
     "id": "clouds-intermediate",
     "title": "Intermediate Guide to Drawing & Painting Clouds",
+    "topic": "Clouds",
     "tag": "Watercolour",
     "cat": "watercolour",
     "theme": "landscape",
@@ -439,6 +441,7 @@ window.CAS_COURSES = [
   {
     "id": "little-house",
     "title": "Little House in Watercolour",
+    "topic": "Little House",
     "tag": "Watercolour",
     "cat": "watercolour",
     "theme": "landscape",
@@ -488,6 +491,7 @@ window.CAS_COURSES = [
   {
     "id": "urban-sketch",
     "title": "Urban Sketching in Watercolour",
+    "topic": "Urban Sketch",
     "tag": "Watercolour",
     "cat": "watercolour",
     "theme": "cityscape",
