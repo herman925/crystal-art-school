@@ -416,7 +416,10 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
 .sw-close:hover { background: rgba(237,225,208,.3); transform: rotate(90deg); }
 
 /* ---------- course overview page ---------- */
-.course-hero { display: grid; grid-template-columns: minmax(300px, 460px) 1fr; gap: 46px; align-items: start; padding: 46px 0 10px; }
+/* 7.4: the left column is 14px narrower than it was so the right column lands
+   on --prose-max exactly — the introduction then measures the same as every
+   other long-form field on the page rather than 14px short of them. */
+.course-hero { display: grid; grid-template-columns: minmax(300px, 446px) 1fr; gap: 46px; align-items: start; padding: 46px 0 10px; }
 /* 7.1: the image block is height-capped so the price and CTA below it stay on the
    first screen on a laptop rather than being pushed under the fold. */
 .course-left { display: flex; flex-direction: column; }
@@ -453,11 +456,16 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
 .course-terms-note { font-size: 13px; color: var(--muted); max-width: 34ch; margin-top: 8px; opacity: .85; }
 /* 7.4: the long-form blocks on this page all sit at the same width. One of them
    was narrower than the rest, which the client flagged directly. */
-.learn-list, .syllabus, #co-who, .course-teacher { max-width: 900px; margin-left: auto; margin-right: auto; }
-/* 7.4: the course introduction is a long-form field too, and it was still
-   capped at the 60ch .lead default while the title and preview above it ran the
-   full width of the column. It now fills its column like the rest. */
-.course-right #co-blurb { max-width: none; }
+/* 7.4 「所有課程詳情長文欄位統一加闊至相同寬度」: one token, every long-form field on
+   the page. The introduction is one of them — it was still on the 60ch .lead
+   default while the title and preview above it ran the full column, which is
+   exactly the "呢個好短咧⋯⋯我想佢闊翻，好似上邊咁樣" complaint.
+   The introduction sits in the hero's right column, so below the width at which
+   that column reaches the token it is governed by the column instead; that is a
+   property of the two-column hero, not a second width rule. */
+:root { --prose-max: 900px; }
+.learn-list, .syllabus, #co-who, .course-teacher { max-width: var(--prose-max); margin-left: auto; margin-right: auto; }
+.course-right #co-blurb { max-width: var(--prose-max); }
 /* 7.5 / 1.4.10: the SYLLABUS heading is enlarged; the other section headings on
    this page keep the shared size. */
 #syllabus h2.section-title { font-size: clamp(32px, 3.7vw, 50px); padding: 14px 34px; }
