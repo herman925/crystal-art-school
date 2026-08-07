@@ -224,7 +224,9 @@
   <div class="fvm-panel">
     <button class="fvm-close" type="button" data-close aria-label="Close">✕</button>
     <div class="fvm-stage" id="fvm-stage">
-      <img id="fvm-poster" alt="">
+      <!-- filled in when a card is opened; hidden until then so it can never
+           sit in the stage with no source -->
+      <img id="fvm-poster" alt="" style="display:none;">
       <iframe class="gdrive-frame" id="fvm-frame" title="Video player" allow="autoplay; fullscreen" allowfullscreen loading="lazy"></iframe>
       <div class="fvm-missing" id="fvm-missing">Video coming soon</div>
       <div class="fvm-veil" id="fvm-veil"><button class="fvm-big" id="fvm-big" type="button" aria-label="Play">▶</button></div>
@@ -298,7 +300,11 @@ class Component extends DCLogic {
     const noteEl = document.querySelector('.fvm-note');
     const openV = (card) => {
       const img = card.querySelector('.fv-thumb img');
-      poster.src = img ? img.src : '';
+      /* assigning '' would set src to the page URL and request the document
+         itself, leaving a broken image behind the player — the same trap the
+         lesson player hit with a null poster. */
+      if (img && img.src) { poster.src = img.src; poster.style.display = ''; }
+      else { poster.removeAttribute('src'); poster.style.display = 'none'; }
       poster.alt = card.querySelector('h3').textContent;
       $id('fvm-title').textContent = card.querySelector('h3').textContent;
       const p = card.querySelector('p');
