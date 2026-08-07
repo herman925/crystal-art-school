@@ -17,6 +17,40 @@ window.CAS_COURSES = [
     "was": 72,
     "sale": true,
     "cover": "img/courses/clouds-beginner/cover.jpg",
+    "materials": [
+      {
+        "name": "Supply list",
+        "kind": "TXT",
+        "size": "1 KB",
+        "href": "data:text/plain;charset=utf-8,INTRODUCTION%20TO%20CLOUD%20PAINTING%20%E2%80%94%20SUPPLY%20LIST",
+        "file": "cloud-course-supply-list.txt",
+        "icon": "doc"
+      },
+      {
+        "name": "Cloud reference photo pack",
+        "kind": "24 photos",
+        "size": "placeholder",
+        "href": "data:text/plain;charset=utf-8,CLOUD%20REFERENCE%20PHOTO%20PACK%20%E2%80%94%20PLACEHOLDER",
+        "file": "cloud-reference-photo-pack.txt",
+        "icon": "img"
+      },
+      {
+        "name": "Printable value-scale card",
+        "kind": "TXT",
+        "size": "1 KB",
+        "href": "data:text/plain;charset=utf-8,PRINTABLE%20VALUE%20SCALE%20CARD",
+        "file": "value-scale-card.txt",
+        "icon": "scale"
+      },
+      {
+        "name": "Sky palette mixing chart",
+        "kind": "TXT",
+        "size": "1 KB",
+        "href": "data:text/plain;charset=utf-8,SKY%20PALETTE%20MIXING%20CHART",
+        "file": "sky-palette-mixing-chart.txt",
+        "icon": "palette"
+      }
+    ],
     "preview": {
       "url": "https://drive.google.com/file/d/1UfBuUEiX_C1UJxxyw50Zwb3of017cBgR/preview",
       "dur": 56,
@@ -313,6 +347,7 @@ window.CAS_COURSES = [
     "was": null,
     "sale": false,
     "cover": "img/courses/clouds-intermediate/cover.jpg",
+    "materials": [],
     "preview": {
       "url": "https://drive.google.com/file/d/1VTfbsZWgj4c-aWEmCNvHx4D3M7kerw-v/preview",
       "dur": 52,
@@ -474,6 +509,7 @@ window.CAS_COURSES = [
     "was": null,
     "sale": false,
     "cover": "img/courses/little-house/cover.jpg",
+    "materials": [],
     "preview": null,
     "photos": [],
     "blurb": "A single, self-contained study: one small house, start to finish, in one sitting.",
@@ -525,6 +561,7 @@ window.CAS_COURSES = [
     "was": null,
     "sale": false,
     "cover": "img/courses/urban-sketch/cover.jpg",
+    "materials": [],
     "preview": null,
     "photos": [],
     "blurb": "Line and wash on location — buildings, street and figures, painted quickly and loosely.",

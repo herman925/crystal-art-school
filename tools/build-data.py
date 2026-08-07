@@ -138,6 +138,11 @@ def build_courses(manifest, meta, links):
             "was": copy["was"],
             "sale": bool(copy["sale"]),
             "cover": asset["cover"],
+            # 1.4.9 lists materials[] as a per-course field. Crystal has supplied
+            # none; the beginner course carries a developer placeholder set so
+            # 8.1's bundled + per-item download behaviour is demonstrable, and
+            # the others render the empty state rather than borrowing its files.
+            "materials": copy.get("materials") or [],
             # 7.1: the preview reel for the right-hand column, and the five
             # course photographs (one large, four small) for the thumbnail row.
             "preview": (

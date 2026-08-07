@@ -119,6 +119,40 @@
           "title": "Mixing cloud types in one sky",
           "subtitle": "Layer cumulus over stratus without the sky turning busy."
         }
+      ],
+      "materials": [
+        {
+          "name": "Supply list",
+          "kind": "TXT",
+          "size": "1 KB",
+          "href": "data:text/plain;charset=utf-8,INTRODUCTION%20TO%20CLOUD%20PAINTING%20%E2%80%94%20SUPPLY%20LIST",
+          "file": "cloud-course-supply-list.txt",
+          "icon": "doc"
+        },
+        {
+          "name": "Cloud reference photo pack",
+          "kind": "24 photos",
+          "size": "placeholder",
+          "href": "data:text/plain;charset=utf-8,CLOUD%20REFERENCE%20PHOTO%20PACK%20%E2%80%94%20PLACEHOLDER",
+          "file": "cloud-reference-photo-pack.txt",
+          "icon": "img"
+        },
+        {
+          "name": "Printable value-scale card",
+          "kind": "TXT",
+          "size": "1 KB",
+          "href": "data:text/plain;charset=utf-8,PRINTABLE%20VALUE%20SCALE%20CARD",
+          "file": "value-scale-card.txt",
+          "icon": "scale"
+        },
+        {
+          "name": "Sky palette mixing chart",
+          "kind": "TXT",
+          "size": "1 KB",
+          "href": "data:text/plain;charset=utf-8,SKY%20PALETTE%20MIXING%20CHART",
+          "file": "sky-palette-mixing-chart.txt",
+          "icon": "palette"
+        }
       ]
     },
     "clouds-intermediate": {
@@ -193,7 +227,8 @@
           "title": "Composing a full cloudscape",
           "subtitle": "Reference, thumbnails, value plan, palette — and I paint alongside you."
         }
-      ]
+      ],
+      "materials": []
     },
     "little-house": {
       "title": "Little House - Little House in Watercolour",
@@ -226,7 +261,8 @@
           "title": "Painting a little house",
           "subtitle": "A full watercolour study from pencil sketch to final wash."
         }
-      ]
+      ],
+      "materials": []
     },
     "urban-sketch": {
       "title": "Urban Sketch - Urban Sketching in Watercolour",
@@ -259,7 +295,8 @@
           "title": "Urban sketching in watercolour",
           "subtitle": "Line and wash on location: buildings, street and figures."
         }
-      ]
+      ],
+      "materials": []
     }
   },
   "freeVideos": {

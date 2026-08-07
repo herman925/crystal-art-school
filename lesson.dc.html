@@ -214,23 +214,14 @@
       <!-- 8.1: Course Materials sits in the LEFT column, below the completion
            button. The known trade-off, recorded in 1.4.9, is that the completion
            button therefore comes before the downloads. -->
-      <div class="curr-card materials-card">
+      <div class="curr-card materials-card" id="materials-card">
         <div class="ch">Course materials</div>
-        <!-- 8.1 item 4: both a bundled download and per-item downloads. -->
-        <div class="res-all">
-          <button class="btn primary" type="button" id="res-all-btn">Download all <span class="arr" aria-hidden="true">↓</span></button>
-          <span class="res-all-note">4 files</span>
-        </div>
-        <!-- 18.1: the four items below are developer scaffolding, not Crystal's
-             files — they exist to show the bundled and per-item download
-             behaviour that 8.1 asks for. -->
-        <p class="asset-pending" style="margin: 0 10px 12px;">Placeholder files &mdash; Crystal&rsquo;s course materials are still to be supplied.</p>
-        <div class="res-list" style="padding:0 4px 8px;">
-          <a class="res-item" download="cloud-course-supply-list.txt" href="data:text/plain;charset=utf-8,INTRODUCTION%20TO%20CLOUD%20PAINTING%20%E2%80%94%20SUPPLY%20LIST"><span class="res-ico" aria-hidden="true" data-comment-anchor="ea2df07cdd-span"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"></rect><path d="M9 8h6M9 12h6M9 16h4"></path></svg></span><span class="res-body"><span class="nm">Supply list</span><br><span class="sz">TXT · 1 KB</span></span><span class="res-get">Download ↓</span></a>
-          <a class="res-item" download="cloud-reference-photo-pack.txt" href="data:text/plain;charset=utf-8,CLOUD%20REFERENCE%20PHOTO%20PACK%20—%20PLACEHOLDER%20FOR%20THE%20REAL%20ZIP"><span class="res-ico" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><circle cx="8.5" cy="10" r="1.5"></circle><path d="M21 16l-5-5-9 8"></path></svg></span><span class="res-body"><span class="nm">Cloud reference photo pack</span><br><span class="sz">24 photos · placeholder</span></span><span class="res-get">Download ↓</span></a>
-          <a class="res-item" download="value-scale-card.txt" href="data:text/plain;charset=utf-8,PRINTABLE%20VALUE%20SCALE%20CARD"><span class="res-ico" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="8" width="18" height="8" rx="1.5"></rect><path d="M8 8v8M13 8v8M17 8v8"></path><path d="M3.8 8.8h4v6.4h-4z" fill="currentColor" stroke="none"></path></svg></span><span class="res-body"><span class="nm">Printable value-scale card</span><br><span class="sz">TXT · 1 KB</span></span><span class="res-get">Download ↓</span></a>
-          <a class="res-item" download="sky-palette-mixing-chart.txt" href="data:text/plain;charset=utf-8,SKY%20PALETTE%20MIXING%20CHART%20—%20DAYLIGHT%20%C2%B7%20GOLDEN%20HOUR%20%C2%B7%20PASTEL"><span class="res-ico" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3a9 9 0 1 0 0 18c1.4 0 2-.8 2-1.8 0-.9-.6-1.4-.6-2.2 0-1 .8-1.8 2-1.8H17a4.5 4.5 0 0 0 4.5-4.5C21.5 6.4 17.2 3 12 3z"></path><circle cx="7.8" cy="10.2" r="1" fill="currentColor" stroke="none"></circle><circle cx="11.2" cy="7.4" r="1" fill="currentColor" stroke="none"></circle><circle cx="15.4" cy="7.8" r="1" fill="currentColor" stroke="none"></circle></svg></span><span class="res-body"><span class="nm">Sky palette mixing chart</span><br><span class="sz">TXT · 1 KB</span></span><span class="res-get">Download ↓</span></a>
-        </div>
+        <!-- 8.1 item 4 + 1.4.9: materials[] is a per-course field. The list is
+             rendered from the course data so one course cannot show another
+             course's files, and a course with none says so. -->
+        <div class="res-all" id="res-all"></div>
+        <p class="asset-pending" id="res-note" style="margin: 0 10px 12px;"></p>
+        <div class="res-list" id="res-list" style="padding:0 4px 8px;"></div>
       </div>
     </div>
 
@@ -569,19 +560,53 @@ class Component extends DCLogic {
        turn, which demonstrates the control and keeps one source of truth for the
        file list. */
     (function () {
-      const all = document.getElementById('res-all-btn');
-      const list = document.querySelector('.materials-card .res-list');
-      if (!all || !list) return;
-      const items = Array.from(list.querySelectorAll('a.res-item'));
-      const note = document.querySelector('.materials-card .res-all-note');
-      if (note) note.textContent = items.length + (items.length === 1 ? ' file' : ' files');
-      all.addEventListener('click', () => {
-        items.forEach((a, i) => setTimeout(() => a.click(), i * 250));
-        const label = all.innerHTML;
-        all.innerHTML = 'Downloading ' + items.length + ' files…';
-        all.disabled = true;
-        setTimeout(() => { all.innerHTML = label; all.disabled = false; }, items.length * 250 + 600);
-      });
+      const ICO = {
+        doc: '<rect x="5" y="3" width="14" height="18" rx="2"></rect><path d="M9 8h6M9 12h6M9 16h4"></path>',
+        img: '<rect x="3" y="5" width="18" height="14" rx="2"></rect><circle cx="8.5" cy="10" r="1.5"></circle><path d="M21 16l-5-5-9 8"></path>',
+        scale: '<rect x="3" y="8" width="18" height="8" rx="1.5"></rect><path d="M8 8v8M13 8v8M17 8v8"></path>',
+        palette: '<path d="M12 3a9 9 0 1 0 0 18c1.4 0 2-.8 2-1.8 0-.9-.6-1.4-.6-2.2 0-1 .8-1.8 2-1.8H17a4.5 4.5 0 0 0 4.5-4.5C21.5 6.4 17.2 3 12 3z"></path>'
+      };
+      const list = document.getElementById('res-list');
+      const allWrap = document.getElementById('res-all');
+      const note = document.getElementById('res-note');
+      const card = document.getElementById('materials-card');
+      if (!list || !card) return;
+      const mats = COURSE.materials || [];
+
+      /* 1.4.9: materials[] belongs to the course, so a course with none shows
+         the empty state instead of another course's files. */
+      if (!mats.length) {
+        if (allWrap) allWrap.style.display = 'none';
+        list.innerHTML = '';
+        if (note) note.textContent = 'Course materials for this course are still to be supplied.';
+        return;
+      }
+
+      list.innerHTML = mats.map((m) =>
+        '<a class="res-item" download="' + escl(m.file) + '" href="' + escl(m.href) + '">' +
+          '<span class="res-ico" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' +
+            (ICO[m.icon] || ICO.doc) + '</svg></span>' +
+          '<span class="res-body"><span class="nm">' + escl(m.name) + '</span><br>' +
+            '<span class="sz">' + escl(m.kind) + ' · ' + escl(m.size) + '</span></span>' +
+          '<span class="res-get">Download ↓</span></a>').join('');
+      if (note) note.textContent = 'Placeholder files — Crystal’s course materials are still to be supplied.';
+
+      /* 8.1 item 4: one bundled download alongside the per-item links. On the
+         real site this is a zip built server-side; here the button fires each
+         link in turn, so the file list has one source of truth. */
+      if (allWrap) {
+        allWrap.innerHTML = '<button class="btn primary" type="button" id="res-all-btn">Download all <span class="arr" aria-hidden="true">↓</span></button>' +
+          '<span class="res-all-note">' + mats.length + (mats.length === 1 ? ' file' : ' files') + '</span>';
+        const all = document.getElementById('res-all-btn');
+        const items = Array.from(list.querySelectorAll('a.res-item'));
+        all.addEventListener('click', () => {
+          items.forEach((a, i) => setTimeout(() => a.click(), i * 250));
+          const label = all.innerHTML;
+          all.innerHTML = 'Downloading ' + items.length + ' files…';
+          all.disabled = true;
+          setTimeout(() => { all.innerHTML = label; all.disabled = false; }, items.length * 250 + 600);
+        });
+      }
     })();
     $('reset-btn').addEventListener('click', () => { state = blankState(); save(); loadUnit(0, false); });
     $('watch-again').addEventListener('click', () => { state = blankState(); save(); loadUnit(0, false); try { stage.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) {} });

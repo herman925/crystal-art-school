@@ -151,6 +151,10 @@
 .auth-steps { display: flex; gap: 6px; margin-bottom: 22px; }
 .auth-steps .as { flex: 1; height: 5px; border-radius: 99px; background: var(--paper-2); }
 .auth-steps .as.on { background: var(--coral); }
+/* 3.9: the username/avatar clause at the point of joining. */
+.su-terms { font-size: 13px; line-height: 1.6; color: var(--muted); margin: 16px 0 4px; }
+.su-terms strong { color: var(--ink); font-weight: 600; }
+
 .auth-stage { display: none; }
 .auth-stage.active { display: block; }
 .auth-foot { text-align: center; margin-top: 18px; font-size: 13.5px; color: var(--muted); }
