@@ -339,7 +339,10 @@
 .about-col .social-btn:hover { background: var(--coral); color: var(--paper); transform: translateY(-2px); }
 
 /* ---------- About page: biography / story / certificates / signup ---------- */
-.bio-layout { display: grid; grid-template-columns: 0.95fr 1.05fr; gap: 40px; align-items: center; }
+/* 13: the copy columns run long now that each section carries its full text, so
+   the carousel aligns to the top of its section rather than floating in the
+   middle of a much taller neighbour. */
+.bio-layout { display: grid; grid-template-columns: 0.95fr 1.05fr; gap: 40px; align-items: start; }
 .bio-photos { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
 .bio-frame { margin: 0; background: var(--surface); border-radius: var(--radius-card); overflow: hidden; box-shadow: var(--shadow); }
 .bio-frame img { width: 100%; display: block; aspect-ratio: 4/5; object-fit: cover; }
