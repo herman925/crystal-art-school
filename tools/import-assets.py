@@ -208,6 +208,35 @@ def probe_duration(path):
         return None
 
 
+def probe_portrait(path):
+    """True when the video is taller than it is wide, else False, or None if it
+    cannot be read. 1.4.12 makes a portrait lesson a normal case rather than an
+    exception, so the ratio has to come from the file rather than a guess — the
+    display matrix matters, since a rotated 1920x1080 file is portrait on screen."""
+    if not os.path.exists(path):
+        return None
+    try:
+        out = subprocess.run(
+            ["ffprobe", "-v", "error", "-select_streams", "v:0",
+             "-show_entries", "stream=width,height:stream_side_data=rotation",
+             "-of", "default=noprint_wrappers=1:nokey=0", path],
+            capture_output=True, text=True, timeout=120,
+        )
+        vals = dict(
+            line.split("=", 1) for line in out.stdout.strip().splitlines() if "=" in line
+        )
+        w, h = int(vals.get("width", 0)), int(vals.get("height", 0))
+        if not w or not h:
+            return None
+        rot = abs(int(float(vals.get("rotation", 0) or 0))) % 180
+        if rot == 90:
+            w, h = h, w
+        return h > w
+    except Exception as exc:                                   # noqa: BLE001
+        warn("could not read dimensions of %s (%s)" % (os.path.basename(path), exc))
+        return None
+
+
 # --------------------------------------------------------------------------
 # importers
 # --------------------------------------------------------------------------
@@ -249,7 +278,9 @@ def import_courses(force):
             # folder placement is authoritative, 2026-07-23 — e.g. Lesson 01 =
             # the short CloudsLesson2 intro then CloudsLesson3; Lesson 03 =
             # 5A then 5B). Lesson duration = sum of parts.
-            parts = [{"file": v, "dur": probe_duration(os.path.join(folder, v))}
+            parts = [{"file": v,
+                      "dur": probe_duration(os.path.join(folder, v)),
+                      "portrait": probe_portrait(os.path.join(folder, v))}
                      for v in videos]
             if any(pt["dur"] is None for pt in parts):
                 warn("no duration for %s/%s" % (course["slug"], sub or "."))

@@ -13,7 +13,10 @@
 .complete-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 26px; }
 /* 8.1: the completion button takes the client's marine. Scoped here so the
    copper .btn.primary elsewhere on the site is untouched. */
-.complete-row #complete-btn { background-color: var(--marine); background-image: none; color: var(--marine-ink) !important; -webkit-text-fill-color: var(--marine-ink) !important; box-shadow: var(--shadow-sm), inset 0 -1px 0 rgba(10,35,45,.28); }
+/* 1.4.9 turns this button marine, and 1.4.2 says a material-class element that
+   changes colour takes the METAL version of the new colour, not a flat fill —
+   the same treatment Visit the showcase already has. It was flat. */
+.complete-row #complete-btn { background-color: var(--marine); background-image: linear-gradient(118deg, rgba(226,242,247,.30), transparent 42%), repeating-linear-gradient(95deg, rgba(0,0,0,.10) 0 1px, transparent 1px 3px), var(--marine-metal); color: var(--marine-ink) !important; -webkit-text-fill-color: var(--marine-ink) !important; box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(226,242,247,.38), inset 0 -1px 0 rgba(10,35,45,.4); }
 .complete-row #complete-btn:hover { filter: brightness(1.08); }
 .complete-row .done-tag { font-family: var(--font-cond); font-weight: 600; letter-spacing: .08em; text-transform: uppercase; font-size: 13px; color: var(--teal-ink); }
 

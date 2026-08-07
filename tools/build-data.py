@@ -86,8 +86,10 @@ def build_courses(manifest, meta, links):
                     print("  ! %s lesson %d part %s has no Drive link — part dropped"
                           % (slug, i + 1, pt["file"]))
                     continue
+                # 1.4.12: the container ratio follows the file, not a guess.
                 parts.append({"label": "Part %d" % (j + 1), "dur": pt["dur"],
-                              "url": url, "src": pt["file"]})
+                              "url": url, "src": pt["file"],
+                              "portrait": bool(pt.get("portrait"))})
             if len(parts) == 1:
                 parts[0]["label"] = ""
 
@@ -107,6 +109,7 @@ def build_courses(manifest, meta, links):
                 "dur": al["dur"],                 # seconds, ffprobe; sum of parts
                 "poster": al["poster"],
                 "video": parts[0]["url"] if parts else None,
+                "portrait": bool(parts and parts[0].get("portrait")),
                 "videos": parts if len(parts) > 1 else [],
                 "free": i == 0,                   # lesson 1 is the free preview
                 "src": al.get("srcVideo"),        # provenance only, never fetched

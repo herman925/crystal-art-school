@@ -218,7 +218,9 @@ class Component extends DCLogic {
       const top3 = POSTS.slice().sort((a, b) => b.date.localeCompare(a.date)).filter(p => p.id !== pid).slice(0, 3);
       rail.innerHTML = top3.map(p =>
         '<a class="cover-card" href="blog-post.dc.html?id=' + esc(p.id) + '" style="aspect-ratio:4/3;">' +
-          '<img src="img/' + esc(p.img) + '" alt="' + esc(p.title) + '">' +
+          /* 12.2: 文章圖片一律延遲載入 — the Keep reading thumbnails sit far below the
+             fold and were the one place still fetching on load. */
+          '<img src="img/' + esc(p.img) + '" alt="' + esc(p.title) + '" loading="lazy" decoding="async">' +
           '<div class="scrim"><div class="t">' + esc(p.title) + '</div></div></a>').join('');
     }
 

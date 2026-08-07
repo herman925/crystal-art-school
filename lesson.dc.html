@@ -221,6 +221,10 @@
           <button class="btn primary" type="button" id="res-all-btn">Download all <span class="arr" aria-hidden="true">↓</span></button>
           <span class="res-all-note">4 files</span>
         </div>
+        <!-- 18.1: the four items below are developer scaffolding, not Crystal's
+             files — they exist to show the bundled and per-item download
+             behaviour that 8.1 asks for. -->
+        <p class="asset-pending" style="margin: 0 10px 12px;">Placeholder files &mdash; Crystal&rsquo;s course materials are still to be supplied.</p>
         <div class="res-list" style="padding:0 4px 8px;">
           <a class="res-item" download="cloud-course-supply-list.txt" href="data:text/plain;charset=utf-8,INTRODUCTION%20TO%20CLOUD%20PAINTING%20%E2%80%94%20SUPPLY%20LIST"><span class="res-ico" aria-hidden="true" data-comment-anchor="ea2df07cdd-span"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="2"></rect><path d="M9 8h6M9 12h6M9 16h4"></path></svg></span><span class="res-body"><span class="nm">Supply list</span><br><span class="sz">TXT · 1 KB</span></span><span class="res-get">Download ↓</span></a>
           <a class="res-item" download="cloud-reference-photo-pack.txt" href="data:text/plain;charset=utf-8,CLOUD%20REFERENCE%20PHOTO%20PACK%20—%20PLACEHOLDER%20FOR%20THE%20REAL%20ZIP"><span class="res-ico" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"></rect><circle cx="8.5" cy="10" r="1.5"></circle><path d="M21 16l-5-5-9 8"></path></svg></span><span class="res-body"><span class="nm">Cloud reference photo pack</span><br><span class="sz">24 photos · placeholder</span></span><span class="res-get">Download ↓</span></a>
@@ -308,6 +312,7 @@ class Component extends DCLogic {
       pending: !!l.pending,
       img: l.poster,
       video: l.video || null,  // part 1's Drive preview URL, or null = missing
+      portrait: !!l.portrait,  // 1.4.12: measured from the file at import
       parts: (l.videos && l.videos.length > 1) ? l.videos : null
     }));
     const N = UNITS.length;
@@ -460,11 +465,14 @@ class Component extends DCLogic {
       stage.classList.toggle('has-video', real);
       stage.classList.toggle('is-missing', !real);
       /* 1.4.12: one player, two container ratios. Lesson 1 was filmed vertical
-         and is not being reshot, so a 9:16 unit is a normal case rather than an
-         exception. The stage keeps its height and the video is pillarboxed, so
-         the page does not jump between a landscape and a portrait lesson. */
+         and is not being reshot, so a portrait unit is a normal case rather than
+         an exception. The stage keeps its height and the video is pillarboxed,
+         so the page does not jump between a landscape and a portrait lesson.
+         The orientation comes from the file itself, measured at import — an
+         earlier version compared against a ratio string no data carried, so a
+         portrait lesson played letterboxed inside a 16:9 stage. */
       const part = u.parts ? u.parts[curPart] : null;
-      stage.classList.toggle('is-vertical', (part && part.ratio === '9:16') || u.ratio === '9:16');
+      stage.classList.toggle('is-vertical', part ? !!part.portrait : !!u.portrait);
       if (gframe) {
         const want = real ? src : 'about:blank';
         if (gframe.getAttribute('src') !== want) gframe.setAttribute('src', want);
