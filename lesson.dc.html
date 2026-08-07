@@ -27,7 +27,11 @@
 /* 8.1: the lesson cover is wrapped by the description text rather than sitting
    above it. With no cover the paragraph just runs full width — 8.3 rules out a
    placeholder image and rules out leaving a gap. */
-.unit-notes .unit-cover { float: right; width: min(42%, 300px); margin: 4px 0 14px 22px; border-radius: var(--radius-card); box-shadow: var(--shadow-sm); }
+/* 8.1 item 2: the cover floats LEFT, per the client's own Word mock-up and the
+   COURSES 3rd Layer board — text wraps down its right-hand side and then runs
+   full width beneath it. The prose says only 圖文環繞; the side is in the
+   drawings, which are part of the spec. */
+.unit-notes .unit-cover { float: left; width: min(42%, 300px); max-height: 260px; object-fit: cover; margin: 4px 22px 14px 0; border-radius: var(--radius-card); box-shadow: var(--shadow-sm); }
 .unit-notes::after { content: ""; display: block; clear: both; }
 @media (max-width: 620px) { .unit-notes .unit-cover { float: none; width: 100%; margin: 0 0 14px; } }
 /* 1.4.9: nested part rows, indented under their lesson in the phase list */
