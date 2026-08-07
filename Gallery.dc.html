@@ -34,7 +34,11 @@
 [data-theme="D"] .art-frame { height: calc(92cqh * var(--fs, 1)); }
 .art-frame .art-img { position: absolute; top: 7.4%; bottom: 7.4%; left: 9.1%; right: 9.1%; height: auto; aspect-ratio: auto; box-shadow: inset 0 0 0 1px rgba(0,0,0,.35); }
 .art-ornate { display: block; position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; filter: drop-shadow(0 16px 26px rgba(0,0,0,.55)); }
-.art-frame.land { container-type: size; aspect-ratio: 21301 / 18426; width: calc(88cqw * var(--fs, 1)); height: auto; max-width: 92cqw; max-height: 92cqh; }
+/* 9.2: a landscape piece is sized off the panel's WIDTH, so making the panel
+   taller enlarged the portrait pieces and left these behind at 329px against a
+   portrait's 370px. They take almost the full width now, which is the only
+   dimension that governs them. */
+.art-frame.land { container-type: size; aspect-ratio: 21301 / 18426; width: calc(92cqw * var(--fs, 1)); height: auto; max-width: 92cqw; max-height: 92cqh; }
 .art-frame.land .art-ornate { inset: auto; left: 50%; top: 50%; width: 100cqh; height: 100cqw; transform: translate(-50%, -50%) rotate(90deg); }
 .art-frame.land .art-img { top: 9.1%; bottom: 9.1%; left: 7.4%; right: 7.4%; }
 
@@ -178,7 +182,9 @@
   <div class="am-backdrop" data-close></div>
   <div class="am-panel">
     <button class="am-close" type="button" aria-label="Close" data-close>✕</button>
-    <div class="am-frame-wrap"><figure class="am-frame"><div class="am-img"><img id="am-img" alt=""></div><img class="am-ornate" src="img/deer-black.svg" alt="" aria-hidden="true" loading="lazy" decoding="async"></figure></div>
+    <!-- am-img is filled when a piece is opened; hidden until then so it can
+         never sit in the frame with no source -->
+    <div class="am-frame-wrap"><figure class="am-frame"><div class="am-img"><img id="am-img" alt="" style="display:none;"></div><img class="am-ornate" src="img/deer-black.svg" alt="" aria-hidden="true" loading="lazy" decoding="async"></figure></div>
     <div class="am-body">
       <span class="am-sub" id="am-sub">Original</span>
       <h2 class="am-title" id="am-title">—</h2>
@@ -402,7 +408,7 @@ class Component extends DCLogic {
     const modal = document.getElementById('art-modal');
     const mImg = document.getElementById('am-img');
     const openModal = (p) => {
-      mImg.src = 'img/' + p.img; mImg.alt = p.title;
+      mImg.src = 'img/' + p.img; mImg.alt = p.title; mImg.style.display = '';
       document.querySelector('.am-frame .am-img').style.aspectRatio = rOf(p);
       const amFrame = document.querySelector('.am-frame');
       amFrame.classList.toggle('land', rOf(p) > 1.15);

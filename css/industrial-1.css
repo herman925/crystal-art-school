@@ -294,7 +294,11 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 .site-nav .inner { position: relative; z-index: 1; max-width: var(--site-max); margin: 0 auto; }
 /* rows 1 + 2 share the same 3-column grid, so their centred link groups sit on
    the exact same axis; the brand is lifted out and spans both rows */
-.nav-top .inner { position: static; display: grid; grid-template-columns: minmax(200px, 1fr) auto minmax(200px, 1fr); align-items: center; gap: 18px; padding: 16px var(--gutter) 10px; }
+/* 3.1 allows the header to grow, and it has to: .nav-brand is absolutely
+   positioned to the row's full height, so an 84px mark inside a 72px row
+   centres to y=-6 and the top of the L's ascender is cut off at the viewport
+   edge. The row is tall enough to hold the mark whole. */
+.nav-top .inner { position: static; display: grid; grid-template-columns: minmax(200px, 1fr) auto minmax(200px, 1fr); align-items: center; gap: 18px; padding: 26px var(--gutter) 20px; }
 .nav-brand { position: absolute; z-index: 6; top: 0; bottom: 0; left: max(var(--gutter), calc((100% - var(--site-max)) / 2 + var(--gutter))); display: flex; align-items: center; gap: 12px; }
 /* 3.1: "現有 Logo 及導覽文字均明顯放大；允許頁首高度增加" — the nav text was raised
    but the mark was left at its old 66px, so only half the clause was done. The
@@ -459,10 +463,17 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 .release-head .section-title { grid-column: 5 / span 4; margin: 0; }
 .release-trio { margin-top: 34px; align-items: start; }
 .release-trio .free-video, .release-trio .cover-card { aspect-ratio: 1/1; height: auto; min-height: 0; }
-.release-trio .about-col { aspect-ratio: 1 / 1; display: flex; flex-direction: column; }
-.release-trio .about-col .arch-link { flex: 0 0 80%; min-height: 0; display: block; }
-.release-trio .about-col .arch-duo { height: 100%; width: auto; max-width: 100%; aspect-ratio: 5 / 6; margin: 0 auto; }
-.release-trio .about-col .arch-cap { flex: 1 1 20%; min-height: 0; margin-top: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; }
+/* The column used to be a fixed 1:1 box with the photo taking 80% of it and the
+   caption the remaining 20%. Adding the placeholder note to the caption
+   overflowed that 20% band: the centred flex content bled upwards over the
+   portrait and downwards past the column. The photo keeps its own ratio and the
+   column is sized by its content instead. */
+.release-trio .about-col { display: flex; flex-direction: column; }
+.release-trio .about-col .arch-link { flex: 0 0 auto; min-height: 0; display: block; }
+/* square, so the portrait's foot lines up with the free-video card and the New
+   Release card beside it; the caption then hangs below the row of three. */
+.release-trio .about-col .arch-duo { height: auto; width: 100%; aspect-ratio: 1 / 1; margin: 0 auto; }
+.release-trio .about-col .arch-cap { flex: 0 0 auto; margin-top: 12px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 6px; }
 .release-trio .about-col .arch-cap .eyebrow-lbl { font-size: 14px; }
 .release-trio .about-col .arch-cap .arch-visit { margin-top: 0; font-size: 12px; }
 .release-trio .about-col .social-row { margin-top: 3px; gap: 8px; }

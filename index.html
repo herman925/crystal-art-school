@@ -180,6 +180,11 @@
             <span class="rel-chip">New release</span>
             <div class="rel-dots" id="rel-dots"></div>
           </div>
+          <!-- 5.1: the card shows the short topic taken from before the hyphen in
+               the title field. None of the four course titles uses that form yet,
+               so every card falls back to the full title — which 5.1 itself
+               anticipates, and the CMS field will carry the hint. -->
+          <p class="asset-pending rel-note">Showing full titles &mdash; the short topic comes from before the hyphen, e.g. <em>Clouds &mdash; Beginner&rsquo;s Guide&hellip;</em></p>
         </div>
 
         <div class="span-4 about-col reveal-up" style="--i:2">
@@ -192,7 +197,9 @@
             <div class="eyebrow-lbl">About Crystal</div>
             <a class="link-squiggle arch-visit" href="About.dc.html">Meet Crystal →</a>
             <div class="social-row" data-cas-social="social-btn"></div>
-            <p class="asset-pending">Placeholder portrait; YouTube link still to be supplied.</p>
+            <!-- the YouTube link declares itself in the social row above, so
+                 this only has to cover the portrait -->
+            <p class="asset-pending">Placeholder portrait</p>
           </div>
         </div>
 

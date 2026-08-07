@@ -226,6 +226,8 @@
 .rel-title { position: absolute; left: 16px; right: 16px; bottom: 58px; z-index: 3; color: #f3ede1; font-family: var(--font-marker); font-weight: 600; font-size: 30px; line-height: 1.14; text-shadow: 0 2px 12px rgba(0,0,0,.55); }
 .rel-title.is-mid { font-size: 23px; }
 .rel-title.is-long { font-size: 18px; }
+.rel-note { margin-top: 12px; font-size: 12px; letter-spacing: .06em; text-transform: none; }
+.rel-note em { font-size: inherit; }
 .rel-actions { position: absolute; left: 14px; right: auto; bottom: 14px; z-index: 3; display: flex; gap: 8px; }
 /* 5.2: the three facts sit under the short topic and appear only on hover, with
    the gradient deepening behind them. The two buttons are always present — the
@@ -476,16 +478,19 @@
 .art-card.hidden { display: none; }
 /* 9.2 「作品卡／圖框一併放大」: the wall panel is taller than square now, which is
    what actually enlarges the framed artwork — the frame is portrait, so a square
-   panel was capping it on height while the column width went unused. */
-.art-frame-wrap { background: var(--wall); background-image: var(--wall-grain); background-size: var(--wall-size); border-radius: var(--radius-card); aspect-ratio: 4 / 5; display: grid; place-items: center; box-shadow: inset 0 0 0 1px rgba(0,0,0,.14); container-type: size; }
+   panel was capping it on height while the column width went unused. The panel
+   keeps a visible margin of wall on every side, so the framed-on-a-wall reading
+   survives and the hover lift has somewhere to go. */
+.art-frame-wrap { background: var(--wall); background-image: var(--wall-grain); background-size: var(--wall-size); border-radius: var(--radius-card); aspect-ratio: 4 / 5; display: grid; place-items: center; box-shadow: inset 0 0 0 1px rgba(0,0,0,.14); container-type: size; overflow: hidden; }
 .art-frame { background: var(--frame-base); border-style: solid; border-width: 14px; border-top-color: var(--frame-tl); border-left-color: var(--frame-tl); border-right-color: var(--frame-br); border-bottom-color: var(--frame-br); box-shadow: var(--shadow); width: auto; max-width: 92%; max-height: 92%; transition: transform .35s var(--ease-out); }
 .art-card:hover .art-frame { transform: translateY(-4px) scale(1.02); }
 .art-frame .art-img { overflow: hidden; box-shadow: inset 0 0 0 1px rgba(0,0,0,.3); height: min(72cqh, calc(72cqw / var(--r, 0.8))); aspect-ratio: var(--r, 0.8); }
 .art-frame .art-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
 /* Style D — ornate carved frame overlay (replaces the bevel frame) */
 .art-ornate { display: none; }
-/* 9.2: the ornate frame takes more of its wrapper so the artwork reads larger. */
-[data-theme="D"] .art-frame { background: transparent; border: 0; box-shadow: none; position: relative; aspect-ratio: 18426 / 21301; height: 99cqh; width: auto; max-width: 99cqw; max-height: 99cqh; }
+/* 9.2: the ornate frame takes more of its wrapper so the artwork reads larger,
+   while leaving enough wall for the panel to still read as a wall. */
+[data-theme="D"] .art-frame { background: transparent; border: 0; box-shadow: none; position: relative; aspect-ratio: 18426 / 21301; height: 92cqh; width: auto; max-width: 92cqw; max-height: 92cqh; }
 [data-theme="D"] .art-frame .art-img { position: absolute; top: 7.4%; bottom: 7.4%; left: 9.1%; right: 9.1%; height: auto; aspect-ratio: auto; box-shadow: inset 0 0 0 1px rgba(0,0,0,.45); }
 [data-theme="D"] .art-ornate { display: block; position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; filter: drop-shadow(0 16px 26px rgba(0,0,0,.55)); }
 /* Style D — real walnut wood photo (matches design_base): banners + framed wall */
