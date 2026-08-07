@@ -27,13 +27,18 @@
 /* 8.1: the lesson cover is wrapped by the description text rather than sitting
    above it. With no cover the paragraph just runs full width — 8.3 rules out a
    placeholder image and rules out leaving a gap. */
-/* 8.1 item 2: the cover floats LEFT, per the client's own Word mock-up and the
-   COURSES 3rd Layer board — text wraps down its right-hand side and then runs
-   full width beneath it. The prose says only 圖文環繞; the side is in the
-   drawings, which are part of the spec. */
-.unit-notes .unit-cover { float: left; width: min(42%, 300px); max-height: 260px; object-fit: cover; margin: 4px 22px 14px 0; border-radius: var(--radius-card); box-shadow: var(--shadow-sm); }
-.unit-notes::after { content: ""; display: block; clear: both; }
-@media (max-width: 620px) { .unit-notes .unit-cover { float: none; width: 100%; margin: 0 0 14px; } }
+/* 8.1 item 2: the course description with its cover wrapped into it. The cover
+   floats LEFT, per the client's Word mock-up and the COURSES 3rd Layer board —
+   text runs down its right-hand side and then full width beneath. The prose says
+   only 圖文環繞; the side is in the drawings, which are part of the spec. */
+.course-desc { margin-bottom: 22px; }
+/* the title spans the full width above the wrapped block — it is not part of
+   the wrap. Only the cover and the body copy share the float. */
+.course-desc h2 { font-family: var(--font-marker); font-weight: 700; font-size: clamp(26px, 2.8vw, 38px); line-height: 1.14; color: var(--ink); margin: 0 0 16px; }
+.course-desc .cd-body::after { content: ""; display: block; clear: both; }
+.course-desc .cd-cover { float: left; width: min(42%, 320px); margin: 4px 24px 14px 0; border-radius: var(--radius-card); box-shadow: var(--shadow-sm); }
+.course-desc p { font-size: 16px; line-height: 1.72; color: var(--muted); margin: 0; }
+@media (max-width: 620px) { .course-desc .cd-cover { float: none; width: 100%; margin: 0 0 14px; } }
 /* 1.4.9: nested part rows, indented under their lesson in the phase list */
 .part-row { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; border: 0; background: none; cursor: pointer;
   padding: 8px 10px 8px 46px; border-radius: 9px; font-family: var(--font-cond); color: var(--muted); transition: background .15s, color .15s; }
@@ -207,6 +212,13 @@
       </div>
 
       <div class="unit-panel">
+        <!-- 8.1 item 2: the wrapped block is the COURSE description, not a
+             per-lesson one. Every lesson of a course lives on this one page, so
+             there is one description here and it is the course's — which is what
+             her mock-up is labelled and why the text in it runs long enough to
+             wrap around the picture and continue beneath it. The cover floats
+             left, per that mock-up and the 3rd Layer board. -->
+        <div class="course-desc" id="course-desc"></div>
         <div id="notes-holder"></div>
 
         <div class="complete-row">
@@ -361,11 +373,28 @@ class Component extends DCLogic {
 
     /* build the lesson notes + sidebar rows */
     const escl = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+
+    /* 8.1 item 2: the course description with its cover wrapped into it. Static —
+       it describes the course, so it does not change as lessons are selected.
+       No cover means the text runs full width; nothing stands in for it (8.3). */
+    (function () {
+      const host = document.getElementById('course-desc');
+      if (!host) return;
+      const blurb = (COURSE.blurb || '').trim();
+      if (!blurb) { host.style.display = 'none'; return; }
+      /* The title sits ABOVE the wrapped block, full width — it is not part of
+         the wrap. Only the cover and the body text share the float. */
+      host.innerHTML =
+        '<h2>' + escl(COURSE.title) + '</h2>' +
+        '<div class="cd-body">' +
+          (COURSE.cover ? '<img class="cd-cover" src="' + escl(COURSE.cover) + '" alt="' + escl(COURSE.title) + '" loading="lazy" decoding="async">' : '') +
+          '<p>' + escl(blurb) + '</p>' +
+        '</div>';
+    })();
     const fmt0 = (s) => Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
     document.getElementById('notes-holder').innerHTML = UNITS.map((u, i) =>
       '<article class="unit-notes' + (i === 0 ? ' active' : '') + '" data-unit="' + i + '">' +
         (moduleOf(i) ? '<div style="font-family:var(--font-cond);font-weight:600;font-size:12.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--coral);margin-bottom:8px;">Phase ' + (moduleOf(i).i + 1) + ' · ' + escl(moduleOf(i).name) + '</div>' : '') +
-        (u.img ? '<img class="unit-cover" src="' + escl(u.img) + '" alt="" loading="lazy" decoding="async">' : '') +
         '<h2>' + escl(u.title) + '</h2><p>' + escl(u.note) + '</p>' +
         /* 18.1: a lesson whose title and description have not arrived says so
            in the same dashed marker the rest of the site uses, rather than
