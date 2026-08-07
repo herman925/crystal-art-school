@@ -125,7 +125,7 @@
       <p class="lead" id="co-blurb" style="font-size:16.5px;"></p>
       <div class="course-meta-chips" id="co-chips"></div>
       <div class="own-test" style="margin-top:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-        <span style="font-family:var(--font-cond);font-size:12.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--muted);">Client testing — view as</span>
+        <span style="font-family:var(--font-cond);font-size:12.5px;font-weight:600;letter-spacing:var(--tracking-label);text-transform:uppercase;color:var(--muted);">Client testing — view as</span>
         <div class="fg-opts" id="own-toggle" style="display:inline-flex;gap:6px;">
           <button class="fopt" type="button" data-own="0">Not purchased</button>
           <button class="fopt" type="button" data-own="1">Purchased</button>
@@ -338,7 +338,7 @@ class Component extends DCLogic {
       const inner =
         '<div class="syl-num">' + (isDone ? '✓' : (i + 1)) + '</div>' +
         '<div><div class="syl-title">' + esc(u.title) +
-          (!owned && u.free ? ' <span style="font-family:var(--font-cond);font-size:12.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--teal-ink);margin-left:8px;">free preview</span>' : '') +
+          (!owned && u.free ? ' <span style="font-family:var(--font-cond);font-size:12.5px;letter-spacing:var(--tracking-label);text-transform:uppercase;color:var(--teal-ink);margin-left:8px;">free preview</span>' : '') +
         '</div><div class="syl-sub">' + esc(u.subtitle) + '</div></div>' +
         '<div class="syl-len" style="display:inline-flex;align-items:center;gap:7px;">' + (open ? PLAY : LOCK) + ' ' + esc(clock(u.dur)) + '</div>';
       const row = open
@@ -365,7 +365,7 @@ class Component extends DCLogic {
         html = LESSONS.map((u, i) => lessonRow(u, i, done)).join('');
       } else {
         mods.forEach((m, mi) => {
-          html += '<div style="font-family:var(--font-cond);font-weight:600;font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--coral);margin:' + (mi ? '30px' : '4px') + ' 0 10px;padding:9px 16px;border-radius:var(--r-sharp);background:rgba(20,17,13,.5);color:#f4e7cf;">Phase ' + (mi + 1) + ' · ' + esc(m.name) + '</div>';
+          html += '<div style="font-family:var(--font-cond);font-weight:600;font-size:12px;letter-spacing:var(--tracking-label);text-transform:uppercase;color:var(--coral);margin:' + (mi ? '30px' : '4px') + ' 0 10px;padding:9px 16px;border-radius:var(--r-sharp);background:rgba(20,17,13,.5);color:#f4e7cf;">Phase ' + (mi + 1) + ' · ' + esc(m.name) + '</div>';
           for (let i = m.from - 1; i <= m.to - 1 && i < LESSONS.length; i++) {
             html += lessonRow(LESSONS[i], i, done);
           }
@@ -396,7 +396,7 @@ class Component extends DCLogic {
         while (next < nLessons && done[next]) next++;
         if (next >= nLessons) next = nLessons - 1;
         cont.href = 'lesson.dc.html?c=' + encodeURIComponent(c.id) + '&u=' + next;
-        $('co-price').innerHTML = '<span style="font-size:16px;letter-spacing:.06em;">Purchased ✓</span>';
+        $('co-price').innerHTML = '<span style="font-size:16px;">Purchased ✓</span>';
         buy.style.display = 'none';
         cont.style.display = '';
         /* 7.2 names the purchased-state label literally: `View Course`, in the

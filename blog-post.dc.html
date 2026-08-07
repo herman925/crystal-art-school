@@ -26,7 +26,7 @@
 /* Developer's note — TEMPORARY. Declares edits made to Crystal's text before she
    signed off. Remove the `devnote` field in js/blog-data.js once approved. */
 .bp-devnote { border: 1px dashed color-mix(in srgb, var(--coral) 55%, transparent); background: color-mix(in srgb, var(--coral) 7%, var(--surface)); border-radius: var(--radius-card); padding: 16px 20px; margin: 26px 0 8px; }
-.bp-devnote strong { font-family: var(--font-cond); font-size: 12.5px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--coral); display: block; margin-bottom: 6px; }
+.bp-devnote strong { font-family: var(--font-cond); font-size: 12.5px; font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--coral); display: block; margin-bottom: 6px; }
 .bp-devnote p { margin: 0; font-size: 14.5px; line-height: 1.6; }
 /* guide: numbered sections, each with its own photo above its list */
 .bp-hero { margin: 26px 0 8px; }
@@ -199,10 +199,10 @@ class Component extends DCLogic {
           '<div><strong>Crystal Lau</strong><p style="margin:4px 0 0;font-size:14px;color:#5e4a3d;">Oils &amp; drawing teacher. Small studio in Hong Kong, eight years of small-group classes. <a class="link-squiggle" href="About.dc.html" style="font-weight:700;">More about me →</a></p></div></div>' +
         '<section><h2 style="margin-top:8px;">Comments</h2>' +
           '<form class="card" id="comment-form" style="margin-top:8px;">' +
-            '<label for="comment-box" style="font-family:var(--font-cond);font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:13px;display:block;margin-bottom:8px;color:var(--ink);">Join the conversation</label>' +
+            '<label for="comment-box" style="font-family:var(--font-cond);font-weight:600;letter-spacing:var(--tracking-label);text-transform:uppercase;font-size:13px;display:block;margin-bottom:8px;color:var(--ink);">Join the conversation</label>' +
             '<textarea id="comment-box" class="post-field" required rows="3" placeholder="Be kind, be curious…"></textarea>' +
             '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;flex-wrap:wrap;gap:8px;">' +
-              '<span class="hand-note" style="font-family:var(--font-cond);font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);">Log in to post — Wanderer tier is free.</span>' +
+              '<span class="hand-note" style="font-family:var(--font-cond);font-size:12px;text-transform:uppercase;color:var(--muted);">Log in to post — Wanderer tier is free.</span>' +
               '<button class="btn primary" type="submit">Post comment</button></div>' +
             '<div class="sent hand-note" style="display:none;color:var(--teal-ink);margin-top:8px;">Thanks! Your comment is waiting for review. ✦</div>' +
           '</form></section>' +
