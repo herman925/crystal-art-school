@@ -51,7 +51,6 @@
   --dur-fast: 140ms;
   --dur-base: 240ms;
   --stagger: 60ms;
-  --tracking-section: .14em;
 
   /* Letter-spacing scale (issue #19). The client reported text reading too small
      on a high-density laptop; raising the size floor to 12px was half the fix and
@@ -486,7 +485,6 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 /* ---------- A1 photo banner (photo + ratio chip ONLY) ---------- */
 .pg-banner { position: relative; aspect-ratio: 32/9; border-radius: var(--r-promo); overflow: hidden; box-shadow: var(--shadow); background: var(--paper-2); }
 .pg-banner img { width: 100%; height: 100%; object-fit: cover; display: block; }
-.pg-banner .ratio-chip { position: absolute; right: 14px; bottom: 12px; font-family: var(--font-cond); font-size: 12.5px; font-weight: 600; letter-spacing: var(--tracking-label); background: rgba(20,17,13,.55); color: #f3ede1; border-radius: var(--radius-pill); padding: 4px 12px; backdrop-filter: blur(4px); }
 
 /* ---------- New Release trio ---------- */
 .release-head { display: grid; grid-template-columns: repeat(12,1fr); gap: var(--gutter); margin-bottom: 14px; }
@@ -607,8 +605,6 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
   opacity: 0; transform: translateY(6px); transition: opacity .3s var(--ease-out), transform .3s var(--ease-out); }
 .gallery-tile:hover .gt-sub, .gallery-tile:focus-within .gt-sub { opacity: .96; transform: none; }
 @media (hover: none) { .gallery-tile .gt-sub { opacity: .96; transform: none; } }
-.gallery-tile .gt-cta { margin-top: 6px; font-family: var(--font-cond); font-weight: 600; font-size: 12px; letter-spacing: var(--tracking-label); text-transform: uppercase; background: #f3ede1; color: #2b2823; border-radius: var(--radius-pill); padding: 10px 20px; transition: transform var(--dur-fast) var(--ease-out); }
-.gallery-tile:hover .gt-cta { transform: translateY(-1px); }
 
 /* ---------- Share with you ---------- */
 .share-grid { display: grid; grid-template-columns: minmax(0,1fr) 196px; gap: var(--gutter); margin-top: 36px; align-items: center; }
