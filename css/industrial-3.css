@@ -151,8 +151,10 @@
 .auth-steps { display: flex; gap: 6px; margin-bottom: 22px; }
 .auth-steps .as { flex: 1; height: 5px; border-radius: 99px; background: var(--paper-2); }
 .auth-steps .as.on { background: var(--coral); }
-/* 3.9: the username/avatar clause at the point of joining. */
-.su-terms { font-size: 13px; line-height: 1.6; color: var(--muted); margin: 16px 0 4px; }
+/* 3.9: the username/avatar clause at the point of joining. It sits on the 14px
+   step the stage prompts already use rather than introducing another size into
+   an already-tight band — and larger is the right direction for consent copy. */
+.su-terms { font-size: 14px; line-height: 1.6; color: var(--muted); margin: 16px 0 4px; }
 .su-terms strong { color: var(--ink); font-weight: 600; }
 
 .auth-stage { display: none; }
