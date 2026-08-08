@@ -81,9 +81,18 @@
   </div>
 </nav>
 
-<main class="container" id="content">
+<!-- The "✦ About" eyebrow used to sit above the greeting inside the hero. It now
+     sits in the wooden banner every other page carries, which is where an
+     eyebrow belongs on this site. (client feedback 2026-08-08) -->
+<header class="page-hero">
+  <div class="container">
+    <div class="eyebrow reveal-one"><span class="star">✦</span> About</div>
+    <h1 class="marker-title font-a reveal-one" style="font-size:clamp(44px,6vw,80px);">About</h1>
+    <div class="logo2"><img src="img/logo2.png" alt="Crystal Lau Art" loading="lazy" decoding="async"></div>
+  </div>
+</header>
 
-<div class="logo2 is-center"><img src="img/logo2.png" alt="Crystal Lau Art"></div>
+<main class="container" id="content">
 
 <!-- ===========================================================================
      DEV NOTE — About page copy
@@ -109,15 +118,37 @@
     </div>
     <div>
       <div class="sig-script reveal-one" aria-hidden="true"><img src="img/signature.png" alt=""></div>
-      <div class="eyebrow reveal-one"><span class="star">✦</span> About</div>
-      <!-- 13: the board marks this heading FONT A. -->
-      <h1 class="marker-title font-a reveal-one" style="font-size:clamp(40px,5.2vw,70px);">Hi, I'm Crystal!<br>Welcome to my studio.</h1>
+      <!-- 13: the board marks this heading FONT A.
+           Two lines, split at the exclamation mark, the greeting set larger than
+           the line under it. It was already written with a <br>, but motion.js
+           rebuilt the heading from textContent, which drops the break — hence
+           "Crystal!Welcome" running together. The splitter is now line-aware and
+           these are explicit line elements. (client feedback 2026-08-08) -->
+      <h2 class="marker-title font-a reveal-one about-greet">
+        <span class="ag-line ag-1">Hi, I'm Crystal!</span>
+        <span class="ag-line ag-2">Welcome to my studio.</span>
+      </h2>
       <div class="reveal-one">
         <p class="lead" style="font-size:17px;">I'm Crystal Lau, a contemporary artist specialising in watercolour and oil painting, and the founder of SKY GALLERY.</p>
-        <!-- 13: "用此符號設計" — the quote takes the same debossed treatment as
-             the blog feature card's title frame (12.1), so the two read as one
-             device rather than two. -->
-        <blockquote class="pull-quote is-deboss" style="margin:22px 0 24px;">Art is not merely colour on paper; it is an observation of the world and a timeless extension of one's emotions.</blockquote>
+        <!-- 13: "用此符號設計". The quote is now the engraved wooden panel from
+             About ref.jpg, with the blog feature card's quote marks straddling
+             the top and bottom rules where the reference puts its chapter title.
+             (client feedback 2026-08-08) -->
+        <div class="engraved is-quote" style="margin:22px 0 24px;">
+          <div class="eng-head">
+            <span class="eng-rule"></span>
+            <span class="eng-title" aria-hidden="true">&#8220;</span>
+            <span class="eng-rule"></span>
+          </div>
+          <div class="eng-body">
+            <blockquote>Art is not merely colour on paper; it is an observation of the world and a timeless extension of one's emotions.</blockquote>
+          </div>
+          <div class="eng-foot">
+            <span class="eng-rule"></span>
+            <span class="eng-title" aria-hidden="true">&#8221;</span>
+            <span class="eng-rule"></span>
+          </div>
+        </div>
         <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:6px;">
           <a class="btn primary" href="Lessons.dc.html">Browse courses <span class="arr" aria-hidden="true">→</span></a>
           <a class="btn ghost" href="Gallery.dc.html">Walk the gallery</a>
@@ -134,9 +165,20 @@
        outright — the board marks it "delete" and all four items with it. -->
   <section class="section" id="biography">
     <div class="bio-layout reveal">
-      <div class="ph-carousel" data-per="2" id="car-livedrawing" aria-label="Live drawing"></div>
-      <div class="bio-copy">
-        <h2 class="marker-title" style="font-size:clamp(26px,3vw,40px);margin:6px 0 14px;">My artistic journey</h2>
+      <div class="ph-carousel" id="car-livedrawing" aria-label="Live drawing"></div>
+      <!-- The three biography blocks take the same engraved panel as the quote
+           above, so the whole page reads as one device. The heading straddles
+           the top rule exactly as About ref.jpg draws it; the paragraphs stay
+           left-aligned because the reference is the frame, not its centred
+           text, and centring 900px of body copy would be unreadable.
+           (client feedback 2026-08-08) -->
+      <div class="bio-copy engraved">
+        <div class="eng-head">
+          <span class="eng-rule"></span>
+          <h2 class="eng-title marker-title" style="font-size:clamp(24px,2.6vw,34px);">My artistic journey</h2>
+          <span class="eng-rule"></span>
+        </div>
+        <div class="eng-body">
         <!-- 13: 「內文取自 `My artistic Journey.doc`」 — her text in full, with her
              own sub-headings. The page previously carried only the opening
              paragraph. -->
@@ -150,6 +192,7 @@
         <h3 class="bio-sub">Why I love plein air painting</h3>
         <p>Plein air painting teaches us to let go of perfectionism and embrace spontaneity. It builds quick observation skills, strong value control, and a deep intuition for colour harmony that no studio setting can replicate.</p>
         <p>Through my courses, I want to invite you to step out of your comfort zone, pick up your brush, and experience the world through an artist's eyes. You don't need to travel far — beauty is waiting right outside your doorstep, ready to be painted.</p>
+        </div>
       </div>
     </div>
     <!-- ASSET PENDING: Live drawing carousel — five photographs supplied, six needed. The
@@ -159,23 +202,36 @@
 
   <section class="section" id="community">
     <div class="bio-layout bio-layout--flip reveal">
-      <div class="bio-copy">
-        <h2 class="marker-title" style="font-size:clamp(26px,3vw,40px);margin:6px 0 14px;">From gallery walls to global community</h2>
+      <div class="bio-copy engraved">
+        <div class="eng-head">
+          <span class="eng-rule"></span>
+          <h2 class="eng-title marker-title" style="font-size:clamp(24px,2.6vw,34px);">From gallery walls to global community</h2>
+          <span class="eng-rule"></span>
+        </div>
+        <div class="eng-body">
         <p>While painting is a personal form of expression, I believe art becomes truly powerful when shared. Over the years, my work has been featured in mainstream media, published in art collections, and acquired by institutional permanent collections, such as the Sun Museum. In 2018, I launched my YouTube channel, <strong>Crystal Lau Art</strong>, to share the joys of plein air sketching and art history with a broader audience. It showed me how art can bridge distances and connect people anywhere in the world.</p>
+        </div>
       </div>
-      <div class="ph-carousel" data-per="2" id="car-exhibition" aria-label="Exhibitions"></div>
+      <div class="ph-carousel" id="car-exhibition" aria-label="Exhibitions"></div>
     </div>
   </section>
 
   <section class="section" id="instructor">
     <div class="bio-layout reveal">
-      <div class="ph-carousel" data-per="2" id="car-artful" aria-label="Artful Living"></div>
-      <div class="bio-copy">
-        <h2 class="marker-title" style="font-size:clamp(26px,3vw,40px);margin:6px 0 14px;">Meet your instructor: a lifetime of passion &amp; art</h2>
+      <div class="ph-carousel" id="car-artful" aria-label="Artful Living"></div>
+      <div class="bio-copy engraved">
+        <div class="eng-head">
+          <span class="eng-rule"></span>
+          <!-- "A lifetime" capitalised after the colon. (client feedback 2026-08-08) -->
+          <h2 class="eng-title marker-title" style="font-size:clamp(24px,2.6vw,34px);">Meet your instructor: A lifetime of passion &amp; art</h2>
+          <span class="eng-rule"></span>
+        </div>
+        <div class="eng-body">
         <p>Since childhood, art class was always the highlight of my week and my most consistent source of pride. I spent countless hours at home with a paintbrush in hand, sketching whatever caught my eye. Soon my school textbooks were filled with drawings — and it wasn't long before my classmates' books became my canvases too. Over time I realised that painting was more than a passing interest; it was my true passion. Representing my school in art competitions and earning awards brought me immense joy and built my foundation as an artist.</p>
         <p>My journey as a teacher began at the age of 16. That was the moment I discovered something incredible: guiding others to paint and watching them fall in love with art is even more rewarding than completing a painting of my own.</p>
         <p>Later I opened my own art studio, a vibrant space that has now thrived for over 15 years. Throughout this journey the greatest reward has been connecting with so many fellow art lovers. While I share my technical knowledge with my students, they teach me just as much in return — showing me new perspectives and deeper ways to feel and experience art. Teaching and learning truly feed into each other.</p>
         <p>I am deeply grateful for this online platform, which allows me to reach and connect with art enthusiasts from around the world. Here we learn together, grow together, and celebrate the joy of creation.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -238,14 +294,33 @@
              edited to match the honours list above without misrepresenting the
              image. There is an open question on the first certificate — see the
              provenance note referenced at the top of this file. -->
+        <!-- Every certificate hangs in the same portrait mount and is fitted
+             inside it rather than cropped, so a landscape scan letterboxes on
+             the mat instead of needing a second frame size — which is what keeps
+             a mixed set reading as one wall. Both scans supplied so far are
+             portrait, so the third mount is empty and shows the landscape
+             fitting without inventing a certificate. (client feedback
+             2026-08-08) -->
         <div class="bc-row">
           <figure class="bc-card bc-card--cert">
-            <img src="img/about/cert-accademia-2026.jpg" alt="Official Finalist certificate, International Watercolor Academy Award 2026, Accademia Internazionale dell'Acquarello, Italy" loading="lazy" decoding="async">
+            <div class="cert-frame"><div class="cert-mat">
+              <img src="img/about/cert-accademia-2026.jpg" alt="Official Finalist certificate, International Watercolor Academy Award 2026, Accademia Internazionale dell'Acquarello, Italy" loading="lazy" decoding="async">
+            </div></div>
             <figcaption>Official Finalist · International Watercolor Academy Award 2026 · Italy</figcaption>
           </figure>
           <figure class="bc-card bc-card--cert">
-            <img src="img/about/cert-jiwi-2026.jpg" alt="Winning Work certificate, 26th JIWI Online Spring Exhibition, Japan International Watercolour Institute, for the painting City of Japan" loading="lazy" decoding="async">
+            <div class="cert-frame"><div class="cert-mat">
+              <img src="img/about/cert-jiwi-2026.jpg" alt="Winning Work certificate, 26th JIWI Online Spring Exhibition, Japan International Watercolour Institute, for the painting City of Japan" loading="lazy" decoding="async">
+            </div></div>
             <figcaption>Winning Work · 26th JIWI Online Spring Exhibition · 《City of Japan》</figcaption>
+          </figure>
+          <!-- ASSET PENDING: empty mount demonstrating a landscape certificate in the
+                  same frame. Delete this figure once a landscape scan is supplied. -->
+          <figure class="bc-card bc-card--cert is-ph" aria-hidden="true">
+            <div class="cert-frame"><div class="cert-mat">
+              <span class="cert-slot">Landscape certificate</span>
+            </div></div>
+            <figcaption>Same mount, fitted — no crop</figcaption>
           </figure>
         </div>
       </div>
@@ -389,47 +464,92 @@ class Component extends DCLogic {
     const renderCart = () => { let n = 0; try { n = JSON.parse(localStorage.getItem('cas-cart') || '[]').reduce((a, i) => a + i.qty, 0); } catch (e) {} document.querySelectorAll('.cart-badge').forEach(b => { b.textContent = n; b.style.display = n > 0 ? 'grid' : 'none'; }); };
     renderCart();
 
-    /* 13: the three photo carousels. Two per view, advancing two at a time, and
-       every set has to hold an even number or the last page repeats a photo —
-       which is why livedrawing is specified at six rather than the five that
-       have been supplied. Arrows only; no autoplay, matching 3.5.2's rule that
-       nothing on a page moves by itself this round. */
+    /* The three photo carousels. One photograph at a time, advancing on their
+       own, with a dot per photograph rather than a "1 / 2" counter. This
+       reverses §3.5.2's "nothing on the page moves by itself" for these three
+       only, on the client's explicit instruction (2026-08-08).
+
+       The dwell values are deliberately co-prime-ish and none is a multiple of
+       another, so the three never settle into step: 5.3s, 6.7s and 8.1s drift
+       apart and only realign after several minutes. They also wrap rather than
+       stopping at the end, which is what lets them run unattended, and that is
+       why the arrows are no longer disabled at the ends.
+
+       Autoplay pauses while the pointer is over a carousel, while its tab is in
+       the background, and entirely under prefers-reduced-motion. */
     const CAROUSELS = {
-      'car-livedrawing': { dir: 'img/about/', files: ['livedrawing-1.jpg','livedrawing-2.jpg','livedrawing-3.jpg','livedrawing-4.jpg','livedrawing-5.jpg'], alt: 'Crystal drawing on location' },
-      'car-exhibition':  { dir: 'img/about/', files: ['exhibition-1.jpg','exhibition-2.jpg','exhibition-3.jpg','exhibition-4.jpg'], alt: 'Exhibition' },
-      'car-artful':      { dir: 'img/about/', files: ['artful-living-1.jpg','artful-living-2.jpg','artful-living-3.jpg','artful-living-4.jpg'], alt: 'Artful Living' }
+      'car-livedrawing': { dir: 'img/about/', files: ['livedrawing-1.jpg','livedrawing-2.jpg','livedrawing-3.jpg','livedrawing-4.jpg','livedrawing-5.jpg'], alt: 'Crystal drawing on location', dwell: 5300 },
+      'car-exhibition':  { dir: 'img/about/', files: ['exhibition-1.jpg','exhibition-2.jpg','exhibition-3.jpg','exhibition-4.jpg'], alt: 'Exhibition', dwell: 6700 },
+      'car-artful':      { dir: 'img/about/', files: ['artful-living-1.jpg','artful-living-2.jpg','artful-living-3.jpg','artful-living-4.jpg'], alt: 'Artful Living', dwell: 8100 }
     };
+    const stillPlease = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     Object.keys(CAROUSELS).forEach((id) => {
       const host = document.getElementById(id);
       if (!host) return;
       const cfg = CAROUSELS[id];
-      const per = parseInt(host.getAttribute('data-per'), 10) || 2;
-      const pages = Math.max(1, Math.ceil(cfg.files.length / per));
+      const pages = cfg.files.length;
       let page = 0;
       host.innerHTML =
         '<div class="phc-viewport"><div class="phc-rail">' +
           cfg.files.map((f, i) => '<figure class="phc-cell"><img src="' + cfg.dir + f + '" alt="' + cfg.alt + ' ' + (i + 1) + '" loading="lazy" decoding="async"></figure>').join('') +
         '</div></div>' +
         (pages > 1
-          ? '<div class="phc-nav"><button class="phc-arrow" type="button" data-dir="-1" aria-label="Previous photographs">‹</button>' +
-            '<span class="phc-count"></span>' +
-            '<button class="phc-arrow" type="button" data-dir="1" aria-label="More photographs">›</button></div>'
+          ? '<div class="phc-nav"><button class="phc-arrow" type="button" data-dir="-1" aria-label="Previous photograph">‹</button>' +
+            '<span class="phc-dots">' +
+              cfg.files.map((_, i) => '<button class="phc-dot" type="button" data-go="' + i + '" aria-label="Photograph ' + (i + 1) + ' of ' + pages + '"></button>').join('') +
+            '</span>' +
+            '<button class="phc-arrow" type="button" data-dir="1" aria-label="Next photograph">›</button></div>'
           : '');
       const rail = host.querySelector('.phc-rail');
-      const count = host.querySelector('.phc-count');
+      const cells = host.querySelectorAll('.phc-cell');
       const apply = () => {
         rail.style.transform = 'translateX(' + (-page * 100) + '%)';
-        if (count) count.textContent = (page + 1) + ' / ' + pages;
-        host.querySelectorAll('.phc-arrow').forEach((b) => {
-          b.disabled = (Number(b.dataset.dir) < 0 && page === 0) || (Number(b.dataset.dir) > 0 && page >= pages - 1);
+        cells.forEach((c, i) => c.classList.toggle('is-current', i === page));
+        host.querySelectorAll('.phc-dot').forEach((d, i) => {
+          d.classList.toggle('active', i === page);
+          d.setAttribute('aria-current', i === page ? 'true' : 'false');
         });
       };
-      host.querySelectorAll('.phc-arrow').forEach((b) => b.addEventListener('click', () => {
-        page = Math.min(pages - 1, Math.max(0, page + Number(b.dataset.dir)));
-        apply();
-      }));
+      /* wraps, so the set can run unattended */
+      const go = (n) => { page = (n % pages + pages) % pages; apply(); };
+
+      let timer = null, held = false;
+      const stop = () => { if (timer) { clearInterval(timer); timer = null; } };
+      const start = () => {
+        stop();
+        if (stillPlease || held || pages < 2 || document.hidden) return;
+        timer = setInterval(() => go(page + 1), cfg.dwell);
+      };
+      /* a press restarts the clock, so a photograph reached by hand gets its
+         full dwell rather than whatever was left of the previous one */
+      host.querySelectorAll('.phc-arrow').forEach((b) =>
+        b.addEventListener('click', () => { go(page + Number(b.dataset.dir)); start(); }));
+      host.querySelectorAll('.phc-dot').forEach((d) =>
+        d.addEventListener('click', () => { go(Number(d.dataset.go)); start(); }));
+      host.addEventListener('pointerenter', () => { held = true; stop(); });
+      host.addEventListener('pointerleave', () => { held = false; start(); });
+      host.addEventListener('focusin', () => { held = true; stop(); });
+      host.addEventListener('focusout', () => { held = false; start(); });
+      document.addEventListener('visibilitychange', () => document.hidden ? stop() : start());
       apply();
+      start();
     });
+
+    /* The engraved panels: the heading straddles the frame's top rule, so the
+       body has to be pulled up by half the heading's height for the four edges
+       to meet. Measured rather than guessed — the headings run to two lines at
+       some widths and a fixed value would leave a step in the frame. */
+    const measureEngraved = () => {
+      document.querySelectorAll('.engraved').forEach((el) => {
+        const head = el.querySelector('.eng-head');
+        const foot = el.querySelector('.eng-foot');
+        if (head) el.style.setProperty('--eng-h', head.getBoundingClientRect().height + 'px');
+        if (foot) el.style.setProperty('--eng-f', foot.getBoundingClientRect().height + 'px');
+      });
+    };
+    measureEngraved();
+    window.addEventListener('resize', measureEngraved);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(measureEngraved);
 
     /* contact form */
     const form = document.getElementById('contact-form');

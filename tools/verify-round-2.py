@@ -48,7 +48,10 @@ CONTENT_PAGES = [
     ('Showcase.dc.html', 'right'),
     ('Blog.dc.html', 'right'),
     ('blog-post.dc.html?id=watercolour-kit', 'centre'),
-    ('About.dc.html', 'centre'),
+    # About gained the wooden banner the other section pages carry (client
+    # feedback 2026-08-08), so its Logo2 moved from a centred block above the
+    # content into the banner, where it sits right like every other banner page.
+    ('About.dc.html', 'right'),
     ('FAQ.dc.html', 'right'),
     ('FreeVideos.dc.html', 'right'),
 ]

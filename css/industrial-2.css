@@ -366,18 +366,108 @@
    not read as one template stamped three times. */
 .bio-layout--flip { grid-template-columns: 1.05fr 0.95fr; }
 
-/* 13: two photographs per view, advancing two at a time. Arrows only — nothing
-   on the page moves by itself this round. */
+/* One photograph per view, advancing on its own with a dot for each frame.
+   This reverses §3.5.2's "nothing moves by itself" rule for these three
+   carousels only, on the client's explicit instruction (2026-08-08); the rule
+   still stands everywhere else. Each carousel runs on its own interval so the
+   three never fall into step — see the DWELL values in About.dc.html.
+   (client feedback 2026-08-08) */
 .ph-carousel { position: relative; }
 .ph-carousel .phc-viewport { overflow: hidden; border-radius: var(--radius-card); }
-.ph-carousel .phc-rail { display: flex; transition: transform .45s var(--ease-brush); }
-.ph-carousel .phc-cell { flex: 0 0 50%; margin: 0; padding: 0 8px; box-sizing: border-box; }
-.ph-carousel .phc-cell img { width: 100%; display: block; aspect-ratio: 4/5; object-fit: cover; border-radius: var(--radius-card); box-shadow: var(--shadow); }
+.ph-carousel .phc-rail { display: flex; transition: transform .62s var(--ease-brush); }
+.ph-carousel .phc-cell { flex: 0 0 100%; margin: 0; box-sizing: border-box; }
+.ph-carousel .phc-cell img { width: 100%; display: block; aspect-ratio: 4/5; object-fit: cover; border-radius: var(--radius-card); box-shadow: var(--shadow);
+  transition: transform .9s var(--ease-out), opacity .5s linear; }
+/* The frame coming into view drifts and fades a little as it lands, so the
+   change reads as a movement rather than a jump. */
+.ph-carousel .phc-cell:not(.is-current) img { opacity: .55; transform: scale(1.04); }
 .ph-carousel .phc-nav { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 14px; }
 .ph-carousel .phc-arrow { width: 38px; height: 38px; border-radius: 50%; border: 0; cursor: pointer; background: var(--surface); color: var(--ink); box-shadow: var(--shadow-sm); font-size: 20px; line-height: 1; display: grid; place-items: center; transition: background var(--dur-base), opacity var(--dur-base); }
 .ph-carousel .phc-arrow:hover:not(:disabled) { background: var(--ink); color: var(--paper); }
 .ph-carousel .phc-arrow:disabled { opacity: .3; cursor: default; }
-.ph-carousel .phc-count { font-family: var(--font-cond); font-size: 13px; color: var(--muted); }
+/* One dot per photograph, replacing the "1 / 2" counter. (client feedback
+   2026-08-08) */
+.ph-carousel .phc-dots { display: flex; align-items: center; gap: 9px; }
+.ph-carousel .phc-dot { width: 9px; height: 9px; padding: 0; border: 0; border-radius: 50%; cursor: pointer;
+  background: color-mix(in srgb, var(--ink) 26%, transparent);
+  transition: background var(--dur-base), transform var(--dur-base); }
+.ph-carousel .phc-dot.active { background: var(--marine); transform: scale(1.25); }
+.ph-carousel .phc-dot:hover { background: color-mix(in srgb, var(--ink) 48%, transparent); }
+@media (prefers-reduced-motion: reduce) {
+  .ph-carousel .phc-rail { transition: none; }
+  .ph-carousel .phc-cell img { transition: none; }
+  .ph-carousel .phc-cell:not(.is-current) img { opacity: 1; transform: none; }
+}
+
+/* ---- engraved wooden frame ------------------------------------------------
+   Reference: the client's About ref.jpg — a thin rule frame whose top edge is
+   interrupted by the heading, the body sitting inside it. The reference is the
+   FRAME, not its colour (his words), so the panel takes the same oak as the
+   page banner and therefore flips with the theme without a second palette:
+   creamy oak on the light theme, rustic on the dark one.
+
+   The heading sits ON the rule rather than above it. Rather than knock a hole
+   in a border — which needs the heading's wood to line up with the panel's, and
+   background-attachment: fixed is unreliable on iOS — the top edge IS two rule
+   segments either side of the heading, exactly as the reference draws it. The
+   remaining three sides are one border on .eng-body, pulled up by half the
+   heading's height so the four meet. That half is --eng-h, measured in script,
+   with a fallback here for the no-JS case. */
+.engraved { position: relative; padding: 18px; border-radius: var(--radius-card);
+  background-color: var(--banner-bg); background-image: var(--banner-grain);
+  background-size: var(--banner-size, cover); background-position: center;
+  color: var(--banner-ink);
+  box-shadow: var(--shadow-md), inset 0 1px 0 rgba(255,255,255,.14); }
+.engraved .eng-head { display: flex; align-items: center; gap: 18px;
+  margin-bottom: calc(var(--eng-h, 40px) / -2); }
+.engraved .eng-rule { flex: 1 1 auto; height: 1px;
+  background: color-mix(in srgb, var(--banner-ink) 46%, transparent);
+  box-shadow: 0 1px 0 rgba(255,255,255,.20); }
+/* Cut into the wood rather than printed on it: a dark edge above, a lit edge
+   below. The two shadows are what make it read as engraving. */
+.engraved .eng-title { flex: 0 1 auto; margin: 0; text-align: center; text-wrap: balance;
+  color: var(--banner-ink);
+  text-shadow: 0 1px 0 rgba(255,255,255,.28), 0 -1px 1px rgba(0,0,0,.45); }
+.engraved .eng-body { position: relative; padding: 30px 26px 8px; }
+.engraved .eng-body::before { content: ""; position: absolute; inset: 0; pointer-events: none;
+  border: 1px solid color-mix(in srgb, var(--banner-ink) 46%, transparent);
+  border-top: 0; border-radius: 0 0 3px 3px;
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06); }
+/* Body copy inside the panel sits on wood, so it takes the banner ink rather
+   than the page's --muted, which is tuned for the page background. */
+.engraved .eng-body p { color: color-mix(in srgb, var(--banner-ink) 88%, transparent); }
+.engraved .eng-body .bio-sub { color: var(--banner-ink); }
+.engraved .eng-body em, .engraved .eng-body strong { color: var(--banner-ink); }
+@media (max-width: 620px) {
+  .engraved { padding: 14px; }
+  .engraved .eng-body { padding: 24px 16px 6px; }
+  .engraved .eng-rule { display: none; }
+  /* with the rules gone the title is the only flex child, so it needs centring
+     of its own or it sits against the left edge */
+  .engraved .eng-head { margin-bottom: 10px; justify-content: center; }
+  .engraved .eng-body::before { border-top: 1px solid color-mix(in srgb, var(--banner-ink) 46%, transparent); border-radius: 3px; }
+}
+
+/* The pull-quote is the same panel, centred, with the blog feature card's
+   quote marks straddling the top and bottom rules instead of a heading.
+   (client feedback 2026-08-08) */
+.engraved.is-quote .eng-body { text-align: center; padding: 30px 34px 30px; }
+/* both horizontal edges are rule segments here, so the body draws only its sides */
+.engraved.is-quote .eng-body::before { border-bottom: 0; border-radius: 0; }
+.engraved.is-quote blockquote { margin: 0; font-family: var(--font-marker); font-weight: 600;
+  font-size: clamp(20px, 2.2vw, 28px); line-height: 1.4; color: var(--banner-ink);
+  text-shadow: 0 1px 0 rgba(255,255,255,.22), 0 -1px 1px rgba(0,0,0,.38); }
+.engraved.is-quote .eng-title { font-family: var(--font-display-serif); font-weight: 700;
+  font-size: 54px; line-height: .6; padding-bottom: .18em;
+  color: color-mix(in srgb, var(--banner-ink) 62%, transparent); }
+/* the closing mark repeats the head row along the bottom edge */
+.engraved.is-quote .eng-foot { display: flex; align-items: center; gap: 18px;
+  margin-top: calc(var(--eng-f, 34px) / -2); }
+.engraved.is-quote .eng-foot .eng-title { line-height: .9; padding-bottom: 0; }
+@media (max-width: 620px) {
+  .engraved.is-quote .eng-foot .eng-rule { display: none; }
+  .engraved.is-quote .eng-foot { margin-top: 8px; justify-content: center; }
+}
 @media (max-width: 620px) { .ph-carousel .phc-cell { flex: 0 0 100%; } }
 
 /* 13: her own sub-headings inside the journey copy. --band-eyebrow is #cab389,
@@ -882,6 +972,14 @@
 .card h3 { color: var(--ink); }
 .card.blush h3, .card.mint h3 { color: inherit; }
 .about-hero { display: grid; grid-template-columns: 1fr 1.3fr; gap: 48px; align-items: center; padding: 56px 0 30px; }
+/* Two lines split at the exclamation mark, the greeting set larger than the
+   invitation under it. The second line is 0.72 of the first — enough to read as
+   deliberate hierarchy rather than a rendering accident, without the second line
+   dropping to caption size. (client feedback 2026-08-08) */
+.about-greet { margin: 4px 0 12px; }
+.about-greet .ag-line { display: block; line-height: 1.14; }
+.about-greet .ag-1 { font-size: clamp(40px, 5.2vw, 70px); }
+.about-greet .ag-2 { font-size: clamp(29px, 3.75vw, 50px); }
 .about-hero .portrait-wrap { position: relative; }
 .about-hero .arch-duo { box-shadow: var(--shadow-lift); }
 /* 13 names this element and rules the conversion to #d3c2bb automatic. It calls

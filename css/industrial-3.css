@@ -540,12 +540,68 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
 .bc-card + .bc-card { transform: rotate(1.6deg); }
 .bc-card:hover { transform: rotate(0) translateY(-4px) scale(1.03); box-shadow: var(--shadow-lift); z-index: 2; position: relative; }
 .bc-card img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 3px; display: block; }
-/* Award certificates are A4 portrait; the 4/3 landscape crop would cut the
-   awarding body off the top and the signatures off the bottom. */
-.bc-card--cert { max-width: 230px; }
-.bc-card--cert img { aspect-ratio: 5/7; }
+/* Award certificates hang in a matched set of portrait mounts. Every mount is
+   the same 3/4 whatever shape the scan is: the certificate is fitted inside it
+   with object-fit: contain and centred on the mat, so an A4 portrait fills the
+   opening and a landscape one letterboxes with mat above and below instead of
+   forcing a second frame size. That is what keeps a mixed set looking like a
+   wall of certificates rather than an assortment. (client feedback 2026-08-08)
+
+   The scans supplied so far are both portrait, so the row also carries one
+   empty mount at landscape proportions — it demonstrates the fitting without
+   inventing a certificate that does not exist. */
+/* A fixed basis, not a max-width: .bc-row is a flex row, so max-width alone let
+   each mount size to its own content and the set came out 236 / 245 / 179px
+   wide — the one thing a matched set of frames must not do. */
+.bc-card--cert { flex: 0 0 236px; width: 236px; max-width: 236px; padding: 0; background: none; box-shadow: none; }
+/* `.bc-card + .bc-card` tilts the polaroids and outranks a bare `.bc-card--cert`,
+   so the second and third mounts kept a 1.6° rotation. Hanging straight is the
+   point of a mount, and the tilt also inflated their bounding boxes to 245px
+   against the first one's 236 — the set only looked matched in the CSS. */
+.bc-card--cert, .bc-card + .bc-card--cert { transform: none; }
+.bc-card--cert:hover, .bc-card + .bc-card--cert:hover { transform: translateY(-4px); box-shadow: none; }
+.cert-frame { position: relative; aspect-ratio: 3 / 4; border-radius: 3px;
+  padding: 15px; box-sizing: border-box;
+  background-color: var(--banner-bg); background-image: var(--banner-grain);
+  background-size: var(--banner-size, cover); background-position: center;
+  box-shadow: var(--shadow-md), inset 0 0 0 1px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.18);
+  transition: box-shadow .3s; }
+.bc-card--cert:hover .cert-frame { box-shadow: var(--shadow-lift), inset 0 0 0 1px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.18); }
+/* the mat the certificate is mounted on, and the engraved rule around it */
+.cert-frame .cert-mat { position: relative; width: 100%; height: 100%;
+  display: grid; place-items: center; overflow: hidden;
+  background: var(--paper);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--banner-ink) 40%, transparent),
+              inset 0 2px 6px rgba(0,0,0,.18); }
+.cert-frame .cert-mat img { width: 100%; height: 100%; object-fit: contain; display: block;
+  aspect-ratio: auto; border-radius: 0; }
+/* Corner flourishes, masked rather than drawn as images so they take the theme's
+   ink instead of a colour baked into the file. Four copies of one motif, each
+   rotated a quarter turn. */
+.cert-frame::after { content: ""; position: absolute; inset: 6px; pointer-events: none;
+  background: color-mix(in srgb, var(--banner-ink) 62%, transparent);
+  --c-tl: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M1.5 23V6.5C1.5 3.7 3.7 1.5 6.5 1.5H23' fill='none' stroke='%23000' stroke-width='1.4'/%3E%3Cpath d='M7.5 7.5l2.6-2.6 2.6 2.6-2.6 2.6z' fill='%23000'/%3E%3C/svg%3E");
+  --c-tr: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg transform='rotate(90 12 12)'%3E%3Cpath d='M1.5 23V6.5C1.5 3.7 3.7 1.5 6.5 1.5H23' fill='none' stroke='%23000' stroke-width='1.4'/%3E%3Cpath d='M7.5 7.5l2.6-2.6 2.6 2.6-2.6 2.6z' fill='%23000'/%3E%3C/g%3E%3C/svg%3E");
+  --c-br: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg transform='rotate(180 12 12)'%3E%3Cpath d='M1.5 23V6.5C1.5 3.7 3.7 1.5 6.5 1.5H23' fill='none' stroke='%23000' stroke-width='1.4'/%3E%3Cpath d='M7.5 7.5l2.6-2.6 2.6 2.6-2.6 2.6z' fill='%23000'/%3E%3C/g%3E%3C/svg%3E");
+  --c-bl: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg transform='rotate(270 12 12)'%3E%3Cpath d='M1.5 23V6.5C1.5 3.7 3.7 1.5 6.5 1.5H23' fill='none' stroke='%23000' stroke-width='1.4'/%3E%3Cpath d='M7.5 7.5l2.6-2.6 2.6 2.6-2.6 2.6z' fill='%23000'/%3E%3C/g%3E%3C/svg%3E");
+  -webkit-mask: var(--c-tl) top left / 20px 20px no-repeat, var(--c-tr) top right / 20px 20px no-repeat,
+                var(--c-br) bottom right / 20px 20px no-repeat, var(--c-bl) bottom left / 20px 20px no-repeat;
+          mask: var(--c-tl) top left / 20px 20px no-repeat, var(--c-tr) top right / 20px 20px no-repeat,
+                var(--c-br) bottom right / 20px 20px no-repeat, var(--c-bl) bottom left / 20px 20px no-repeat; }
+/* The empty mount that shows a landscape scan fitting the same frame. Marked
+   as a placeholder in the same language the free-videos rails use. */
+.bc-card--cert.is-ph .cert-mat { background: var(--surface); }
+.bc-card--cert.is-ph .cert-slot { width: 100%; aspect-ratio: 4 / 3; display: grid; place-items: center;
+  background: repeating-linear-gradient(135deg, transparent 0 10px,
+    color-mix(in srgb, var(--ink) 6%, transparent) 10px 20px);
+  font-family: var(--font-cond); font-size: 11px; font-weight: 600;
+  letter-spacing: var(--tracking-label); text-transform: uppercase;
+  color: var(--muted); text-align: center; padding: 0 10px; }
 /* Tracking and 11px size both held: below About's §13/§14 freeze line. (#20) */
 .bc-card figcaption { font-family: var(--font-cond); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: #474138; margin-top: 8px; text-align: center; }
+/* Captions under a wooden mount sit on the page, not on the wood, so they take
+   the page's own muted ink rather than the fixed #474138 the polaroids use. */
+.bc-card--cert figcaption { color: var(--muted); margin-top: 10px; }
 /* ============================================================
    FONT A — Arizonia
    Applied only to the headings the client named in writing (see the design

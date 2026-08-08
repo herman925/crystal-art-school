@@ -94,15 +94,34 @@
           { clipPath: 'inset(-25% -8% -25% -5%)', rotate: -3, duration: 1.25, ease: 'power2.inOut', delay: .3, clearProps: 'clipPath' });
       }
 
-      /* split the main headline into words that rise from behind a mask */
+      /* Split the main headline into words that rise from behind a mask.
+         Line-aware: the headline is rebuilt from scratch, so reading it with
+         textContent threw away every <br> and ran the last word of one line
+         into the first of the next — which is how About's hero came to read
+         "Crystal!Welcome to my studio." Each line is rebuilt as its own block
+         and the words are split inside it. A single-line headline produces one
+         line element and behaves exactly as before. */
       var h1 = document.querySelector('.about-hero h1, .page-hero h1, .course-hero h1');
       if (h1 && !h1.__split) {
         h1.__split = 1;
-        var words = h1.textContent.split(/\s+/).filter(Boolean);
-        h1.innerHTML = words.map(function (w) {
-          return '<span style="display:inline-block;overflow:hidden;vertical-align:bottom;"><span style="display:inline-block;">' + w.replace(/&/g, '&amp;').replace(/</g, '&lt;') + '</span></span>';
-        }).join(' ');
-        g.from(qa(':scope > span > span', h1), { yPercent: 115, rotate: 4, duration: .85, stagger: .07, ease: 'power3.out', delay: sig ? .45 : .2 });
+        var esc = function (s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;'); };
+        var lines = h1.innerHTML.split(/<br\s*\/?>/i).map(function (line) {
+          var tmp = document.createElement('div');
+          tmp.innerHTML = line;
+          return tmp.textContent;
+        }).filter(function (s) { return s.trim(); });
+        h1.innerHTML = lines.map(function (line) {
+          var inner = line.trim().split(/\s+/).filter(Boolean).map(function (w) {
+            return '<span style="display:inline-block;overflow:hidden;vertical-align:bottom;">'
+                 + '<span class="hl-w" style="display:inline-block;">' + esc(w) + '</span></span>';
+          }).join(' ');
+          return lines.length > 1
+            ? '<span class="hl-line" style="display:block;">' + inner + '</span>'
+            : inner;
+        }).join('');
+        /* .hl-w, not 'span > span' — with a line wrapper the mask span is itself
+           the child of a span and would otherwise be animated as well. */
+        g.from(qa('.hl-w', h1), { yPercent: 115, rotate: 4, duration: .85, stagger: .07, ease: 'power3.out', delay: sig ? .45 : .2 });
       }
 
       var heroScope = document.querySelector('.about-hero > div:last-child') || document.querySelector('.page-hero .container');
