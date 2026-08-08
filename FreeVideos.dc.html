@@ -29,13 +29,23 @@
 .fv-sec h2 { font-family: var(--font-marker); font-weight: 600; font-size: clamp(24px, 2.6vw, 32px); color: var(--ink); margin: 0 0 10px; }
 .cas-root .fv-sec h2.font-a { font-size: clamp(31px, 3.4vw, 46px); line-height: 1.16; margin-bottom: 12px; }
 
-/* 15: the featured Studio Notes block, 16:9, with its own dots. */
-.fv-featured .fv-feat-stage { margin-top: 20px; max-width: 760px; }
+/* 15: the featured Studio Notes block, 16:9, with its own dots.
+   The whole block is centred on the page — heading, portrait, stage and dots.
+   (client feedback 2026-08-08) */
+.fv-featured .fv-feat-head { display: flex; align-items: center; justify-content: center; gap: 16px; }
+/* The disc is sized off the heading's own line box, so it stays level with the
+   title at every clamp step instead of needing a matching clamp of its own. */
+.fv-featured .fv-feat-avatar { flex: none; width: 1.15em; height: 1.15em;
+  font-size: clamp(31px, 3.4vw, 46px); border-radius: 50%; object-fit: cover;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--ink) 16%, transparent); }
+.cas-root .fv-featured .fv-feat-head h2.font-a { margin-bottom: 0; text-align: center; }
+.fv-featured .fv-feat-stage { margin: 20px auto 0; max-width: 760px; }
 .fv-featured .fv-feat-stage .fv-thumb { aspect-ratio: 16 / 9; }
-.fv-feat-empty { aspect-ratio: 16 / 9; max-width: 520px; display: grid; place-items: center; border-radius: var(--radius-card);
+.fv-feat-empty { aspect-ratio: 16 / 9; max-width: 520px; margin-inline: auto; display: grid; place-items: center;
+  padding: 0 24px; text-align: center; border-radius: var(--radius-card);
   background: var(--surface); box-shadow: var(--shadow-sm); color: var(--muted);
   font-family: var(--font-cond); font-size: 15px; letter-spacing: var(--tracking-label); text-transform: uppercase; }
-.fv-feat-dots { display: flex; gap: 8px; margin: 14px 0 6px; }
+.fv-feat-dots { display: flex; justify-content: center; gap: 8px; margin: 14px 0 6px; }
 .fv-feat-dots button { width: 9px; height: 9px; padding: 0; border: 0; border-radius: 50%; cursor: pointer; background: color-mix(in srgb, var(--ink) 26%, transparent); }
 .fv-feat-dots button.active { background: var(--marine); }
 
@@ -44,9 +54,51 @@
    section two's layout and changes only the content and the ratio, so the
    column count stays at three. */
 .fv-grid.is-vertical .fv-thumb { aspect-ratio: 9 / 16; }
-.fv-sec .fv-sec-intro { max-width: 72ch; margin: 0; color: var(--muted); }
-.fv-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 30px 24px; margin-top: 26px; align-items: stretch; }
-.fv-card { display: flex; flex-direction: column; }
+/* The intro runs the full content width rather than stopping at a 72ch measure —
+   it was ending less than half way across a 1392px container. (client feedback
+   2026-08-08) */
+.fv-sec .fv-sec-intro { max-width: none; margin: 0; color: var(--muted); }
+
+/* Each section is a rail: three cards visible, the rest reached with the arrows
+   or by dragging. Still a grid, so the card itself is unchanged — the columns
+   are now auto-flowed along x with a snap point on each. (client feedback
+   2026-08-08) */
+.fv-rail { position: relative; }
+.fv-grid { display: grid; grid-auto-flow: column; grid-auto-columns: calc((100% - 48px) / 3);
+  gap: 30px 24px; margin-top: 26px; align-items: stretch;
+  overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth;
+  scrollbar-width: none; padding-bottom: 4px; }
+.fv-grid::-webkit-scrollbar { display: none; }
+.fv-card { display: flex; flex-direction: column; scroll-snap-align: start; }
+/* The arrows only exist when there is something off-screen to reach; the JS adds
+   .has-more, so a section holding three or fewer films looks exactly as before. */
+.fv-rail .fv-arrow { position: absolute; top: calc(26px + 28%); z-index: 3; display: none;
+  width: 42px; height: 42px; border-radius: 50%; cursor: pointer;
+  border: 1px solid color-mix(in srgb, var(--ink) 22%, transparent);
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  color: var(--ink); font-size: 15px; line-height: 1; backdrop-filter: blur(3px);
+  box-shadow: var(--shadow-sm); transition: background .2s ease, transform .2s ease; }
+.fv-rail.has-more .fv-arrow { display: grid; place-items: center; }
+.fv-rail .fv-arrow:hover { background: var(--surface); transform: scale(1.06); }
+.fv-rail .fv-arrow[disabled] { opacity: .3; cursor: default; transform: none; }
+.fv-rail .fv-arrow.prev { left: -14px; }
+.fv-rail .fv-arrow.next { right: -14px; }
+
+/* Empty sections show the card shape rather than a sentence, so the layout can
+   be judged before Crystal's films arrive. Deliberately blank: no invented
+   titles, no borrowed thumbnails. (client feedback 2026-08-08) */
+.fv-card.is-ph { pointer-events: none; }
+.fv-card.is-ph .fv-thumb { background: var(--surface); box-shadow: var(--shadow-sm); }
+.fv-card.is-ph .fv-thumb::before { content: ""; position: absolute; inset: 0;
+  background: repeating-linear-gradient(135deg, transparent 0 11px,
+    color-mix(in srgb, var(--ink) 5%, transparent) 11px 22px); }
+.fv-card.is-ph .fv-ph-label { position: absolute; inset: 0; display: grid; place-items: center; z-index: 2;
+  font-family: var(--font-cond); font-size: 12.5px; font-weight: 600;
+  letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); }
+.fv-card.is-ph .fv-ph-bar { display: block; height: 12px; border-radius: 3px;
+  background: color-mix(in srgb, var(--ink) 11%, transparent); margin-top: 14px; }
+.fv-card.is-ph .fv-ph-bar.w2 { height: 9px; margin-top: 9px; width: 72%; }
+.fv-card.is-ph .fv-ph-bar.w3 { height: 9px; margin-top: 7px; width: 54%; }
 /* 15: the section table assigns 16:9 to the thumbnail videos of Sections 1 and
    2; 9:16 is reserved for Section 3. */
 .fv-thumb { display: block; position: relative; aspect-ratio: 16 / 9; border-radius: var(--radius-card); overflow: hidden; background: #2b2823; }
@@ -60,8 +112,11 @@
 .fv-dur { position: absolute; right: 10px; bottom: 10px; font-family: var(--font-cond); font-size: 12.5px; font-weight: 600; color: #f3ede1; background: rgba(43,40,35,.75); padding: 4px 9px; border-radius: 2px; z-index: 2; }
 .fv-card h3 { font-family: var(--font-marker); font-weight: 600; font-size: 20px; line-height: 1.2; color: var(--ink); margin: 13px 0 6px; min-height: 2.4em; }
 .fv-card p { margin: 0; font-size: 14px; line-height: 1.55; color: var(--muted); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
-@media (max-width: 900px) { .fv-grid { grid-template-columns: 1fr 1fr; } }
-@media (max-width: 620px) { .fv-grid { grid-template-columns: 1fr; } }
+/* Narrower viewports show fewer cards at a time; the rail itself is unchanged,
+   so a phone swipes through the same films the arrows step through on desktop. */
+@media (max-width: 900px) { .fv-grid { grid-auto-columns: calc((100% - 24px) / 2); } }
+@media (max-width: 620px) { .fv-grid { grid-auto-columns: 84%; }
+  .fv-rail .fv-arrow { display: none !important; } }
 /* ---- lightbox video player (stand-in for the YouTube / backend embeds) ---- */
 .fv-modal { position: fixed; inset: 0; z-index: 400; display: none; align-items: center; justify-content: center; padding: 22px; }
 .fvm-stage .gdrive-frame { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: none; z-index: 5; background: #000; }
@@ -159,16 +214,17 @@
   <div class="container">
     <div class="eyebrow reveal-one"><span class="star">✦</span> Watch, then paint along</div>
     <h1 class="marker-title font-a reveal-one" style="font-size:clamp(49px,6.5vw,88px);">Free videos</h1>
-    <!-- 15: the first line of FREE VIDEOS.docx. It is one sentence built round a
-         colon, so the phrase before it is the title above and the rest is this
-         lede. Crystal's words either way. -->
     <div class="logo2"><img src="img/logo2.png" alt="Crystal Lau Art" loading="lazy" decoding="async"></div>
   </div>
 </header>
 
 <!-- The wood banner carries the page title and its eyebrow only; the
-     introduction reads below it. (client feedback 2026-08-08) -->
-<div class="container page-lead-wrap"><p class="page-lead">Including short Reels, lessons, tutorials and painting tips.</p></div>
+     introduction reads below it. (client feedback 2026-08-08)
+     The lede is the whole first line of FREE VIDEOS.docx, including the phrase
+     before the colon. It had been split — the phrase used as the page title and
+     only the remainder left here — which dropped "Free painting video:" from the
+     page. Crystal's sentence now reads intact. (client feedback 2026-08-08) -->
+<div class="container page-lead-wrap"><p class="page-lead">Free painting video: including short Reels, lessons, tutorials and painting tips.</p></div>
 
 <main class="container" id="content" style="padding-bottom:70px;">
 
@@ -177,17 +233,23 @@
 
   <!-- Featured: the latest Studio Note, 16:9, with carousel dots. -->
   <section class="fv-sec fv-featured" style="margin-top:26px;">
-    <h2 class="font-a">Studio notes from Crystal Lau</h2>
+    <!-- Centred, with Crystal's portrait as a small disc to the left of the
+         title. (client feedback 2026-08-08) -->
+    <div class="fv-feat-head">
+      <img class="fv-feat-avatar" src="img/ProfilePic.jpg" alt="Crystal Lau" loading="lazy" decoding="async">
+      <h2 class="font-a">Studio notes from Crystal Lau</h2>
+    </div>
     <div class="fv-feat-stage" id="fv-feat"></div>
     <div class="fv-feat-dots" id="fv-feat-dots"></div>
-    <!-- ASSET PENDING: Placeholder — the Studio Notes films and Crystal’s photograph for
-            this block are still to be supplied. -->
+    <!-- ASSET PENDING: Placeholder — the Studio Notes films are still to be supplied.
+            The portrait above is img/ProfilePic.jpg, the same photograph used on About,
+            the lesson page and the blog byline. -->
   </section>
 
   <section class="fv-sec" data-section="Step-by-Step Demos">
     <h2 class="font-a">Step-by-step demos</h2>
     <p class="fv-sec-intro">Complete tutorials, free to watch — no sign-up, no preview cut short. Paint along at your own pace, then pick up the <a class="link-squiggle" href="Lessons.dc.html">step-by-step courses</a> when you want the slow version.</p>
-    <div class="fv-grid" data-grid="Step-by-Step Demos"></div>
+    <div class="fv-rail"><div class="fv-grid" data-grid="Step-by-Step Demos"></div></div>
     <p class="fv-sec-intro fv-empty" data-empty="Step-by-Step Demos" style="display:none;">Nothing published in this section yet.</p>
     <!-- ASSET PENDING: All three published films sit here for now. Which section each
             belongs to is Crystal’s call. -->
@@ -196,7 +258,7 @@
   <section class="fv-sec" data-section="Quick Inspiration">
     <h2 class="font-a">Quick inspiration &amp; bite-sized tips</h2>
     <p class="fv-sec-intro">Short on time? Browse our collection of quick painting tips, colour-mixing secrets, and plein air mini-demos. Perfect for a daily dose of creative inspiration or a quick refresh between paintings — 100% free, no sign-up needed.</p>
-    <div class="fv-grid" data-grid="Quick Inspiration"></div>
+    <div class="fv-rail"><div class="fv-grid" data-grid="Quick Inspiration"></div></div>
     <p class="fv-sec-intro fv-empty" data-empty="Quick Inspiration" style="display:none;">Nothing published in this section yet.</p>
   </section>
 
@@ -206,7 +268,7 @@
   <section class="fv-sec" data-section="Shorts">
     <h2 class="font-a">Shorts</h2>
     <p class="fv-sec-intro">Quick vertical clips from the studio and from location, the same ones that go out on Instagram and YouTube Shorts.</p>
-    <div class="fv-grid is-vertical" data-grid="Shorts"></div>
+    <div class="fv-rail"><div class="fv-grid is-vertical" data-grid="Shorts"></div></div>
     <p class="fv-sec-intro fv-empty" data-empty="Shorts" style="display:none;">Nothing published in this section yet.</p>
     <!-- ASSET PENDING: Section name is a developer suggestion, not Crystal’s — Reels,
             Sketchbook Moments and In the Studio are the alternatives. The clips themselves
@@ -369,15 +431,71 @@ class Component extends DCLogic {
       '</a>';
     };
 
+    /* A section with no films of its own shows the card shape instead of a
+       sentence, so the layout reads as intended before Crystal's clips arrive.
+       The cards are deliberately blank — hatched thumbnail, grey title bars, no
+       invented titles and no thumbnail borrowed from another section. */
+    const fvPlaceholder = () =>
+      '<span class="fv-card is-ph" aria-hidden="true">' +
+        '<span class="fv-thumb"><span class="fv-ph-label">Coming soon</span></span>' +
+        '<span class="fv-ph-bar"></span>' +
+        '<span class="fv-ph-bar w2"></span>' +
+        '<span class="fv-ph-bar w3"></span>' +
+      '</span>';
+
     /* 15: one grid per section, filled from the video's own section field.
-       A section with nothing in it says so rather than collapsing away — the
-       three sections are the page's structure, not a function of the data. */
+       A section with nothing in it still renders rather than collapsing away —
+       the three sections are the page's structure, not a function of the data. */
     document.querySelectorAll('.fv-grid[data-grid]').forEach((grid) => {
       const name = grid.getAttribute('data-grid');
       const list = FV.filter((v) => v.section === name);
-      grid.innerHTML = list.map(fvCard).join('');
+      /* Every rail is padded out to six tiles. Three real films fit the rail
+         exactly, so without this the arrows on Step-by-Step Demos would have
+         nothing to scroll to and would never appear — and the rail is the thing
+         being reviewed. The padding is the same blank card used for an empty
+         section, so a placeholder never reads as a film. */
+      const pad = Math.max(0, 6 - list.length);
+      grid.innerHTML = list.map(fvCard).join('')
+        + new Array(pad).fill(null).map(fvPlaceholder).join('');
+      grid.classList.toggle('is-placeholder', !list.length);
+      /* the sentence is redundant now the shapes are there, but it stays in the
+         markup so removing the placeholders restores the old behaviour */
       const empty = document.querySelector('.fv-empty[data-empty="' + name + '"]');
-      if (empty) empty.style.display = list.length ? 'none' : '';
+      if (empty) empty.style.display = 'none';
+    });
+
+    /* Rails: arrows appear only when a section holds more than fits, and each
+       press moves by exactly one column plus its gap so cards never end up
+       straddling the edge. */
+    document.querySelectorAll('.fv-rail').forEach((rail) => {
+      const grid = rail.querySelector('.fv-grid');
+      if (!grid) return;
+      const mk = (dir, glyph) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.className = 'fv-arrow ' + dir;
+        b.setAttribute('aria-label', dir === 'prev' ? 'Previous videos' : 'More videos');
+        b.textContent = glyph;
+        rail.appendChild(b);
+        return b;
+      };
+      const prev = mk('prev', '‹'), next = mk('next', '›');
+      const step = () => {
+        const card = grid.querySelector('.fv-card');
+        const gap = parseFloat(getComputedStyle(grid).columnGap) || 24;
+        return card ? card.getBoundingClientRect().width + gap : grid.clientWidth;
+      };
+      const sync = () => {
+        const over = grid.scrollWidth - grid.clientWidth;
+        rail.classList.toggle('has-more', over > 4);
+        prev.disabled = grid.scrollLeft <= 2;
+        next.disabled = grid.scrollLeft >= over - 2;
+      };
+      prev.addEventListener('click', () => grid.scrollBy({ left: -step(), behavior: 'smooth' }));
+      next.addEventListener('click', () => grid.scrollBy({ left: step(), behavior: 'smooth' }));
+      grid.addEventListener('scroll', sync);
+      window.addEventListener('resize', sync);
+      sync();
     });
 
     /* 15: the featured Studio Notes block — latest first, with dots. Nothing
@@ -388,7 +506,7 @@ class Component extends DCLogic {
     if (feat) {
       const notes = FV.filter((v) => v.section === 'Studio Notes');
       if (!notes.length) {
-        feat.innerHTML = '<div class="fv-feat-empty">Studio notes to come</div>';
+        feat.innerHTML = '<div class="fv-feat-empty">The latest free video will play here</div>';
         if (featDots) featDots.style.display = 'none';
       } else {
         let fi = 0;
@@ -404,7 +522,9 @@ class Component extends DCLogic {
       }
     }
 
-    document.querySelectorAll('.fv-card').forEach(c => c.addEventListener('click', (e) => { e.preventDefault(); openV(c); }));
+    /* :not(.is-ph) — a placeholder has no <h3> for openV to read, and opening a
+       player on a card that stands for nothing would be a dead end anyway. */
+    document.querySelectorAll('.fv-card:not(.is-ph)').forEach(c => c.addEventListener('click', (e) => { e.preventDefault(); openV(c); }));
     $id('fvm-veil').addEventListener('click', () => setPlaying(true));
     playBtn.addEventListener('click', () => setPlaying(!playing));
     $id('fvm-seek').addEventListener('click', (e) => { const r = e.currentTarget.getBoundingClientRect(); cur = dur * Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)); renderT(); });
