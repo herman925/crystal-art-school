@@ -703,7 +703,7 @@
    headline and give the quote marks something to hang off. */
 .blog-feature .bf-frame {
   position: relative; align-self: flex-start; max-width: 100%;
-  padding: 40px 26px 22px 34px;
+  padding: 6px 0 10px;
 }
 /* Blind deboss: light comes from the top left, so the wall above each letter is
    in shadow and the lip below it catches the light. That pairing — dark offset
@@ -717,22 +717,29 @@
     0 1px 0 rgba(255,240,212,.50),
     0 2px 4px rgba(40,22,10,.28);
 }
-/* §12.1 and §13: the headline sits inside quote marks, the same pair the About
-   page's pull-quote uses, so the two pages read as one device. They are much
-   larger here because on the feature card the quote is the whole design rather
-   than an accent, and they carry the same deboss as the headline so they look
-   stamped into the cover with it. */
-.blog-feature .bf-frame::before,
-.blog-feature .bf-frame::after {
-  position: absolute; z-index: 0; pointer-events: none;
-  font-family: var(--font-display-serif); font-weight: 700; line-height: 1;
-  font-size: clamp(76px, 7.6vw, 118px);
-  color: rgba(52,36,23,.40);
-  text-shadow: 0 -1px 1px rgba(40,22,10,.60), 0 1px 0 rgba(255,240,212,.46);
+/* §12.1: the headline sits inside quote marks. They are inline on the heading
+   rather than absolutely positioned on the box, so they open immediately before
+   the first word and close after the last one — which is what wrapping the text
+   means. As absolute corners they floated free of the sentence, and at 118px
+   under the full deboss Bodoni's comma-shaped quotes read as two dark blobs
+   rather than as punctuation. The deboss here is lighter than the headline's: a
+   glyph this large loses its shape under a shadow stack tuned for 41px type. */
+.blog-feature .bf-frame h2::before,
+.blog-feature .bf-frame h2::after {
+  /* Georgia, not the display serif: Bodoni draws its quotation marks as plain
+     balls with no tail, so at any size they read as a pair of dots rather than
+     as punctuation. Georgia's are comma-shaped and unmistakable. */
+  font-family: Georgia, "Times New Roman", serif; font-weight: 700;
+  /* 2.4em, not the 1.2em it started at: Bodoni draws its quotes as small high
+     commas, so at anything near the text size they read as a pair of dots
+     rather than as punctuation. line-height:0 keeps them out of the layout
+     and the negative vertical-align hangs them from the cap line. */
+  font-size: 2.4em; line-height: 0; vertical-align: -.28em; color: rgba(52,36,23,.5);
+  text-shadow: 0 -1px 1px rgba(40,22,10,.45), 0 1px 0 rgba(255,240,212,.42);
 }
-.blog-feature .bf-frame::before { content: "\201C"; top: -6px; left: -12px; }
-.blog-feature .bf-frame::after  { content: "\201D"; right: -6px; bottom: -46px; }
-.blog-feature .bf-frame h2 { position: relative; z-index: 1; }
+.blog-feature .bf-frame h2::before { content: "“"; margin-right: .04em; }
+.blog-feature .bf-frame h2::after  { content: "”"; margin-left: .04em; }
+.blog-feature .bf-frame h2 { position: relative; z-index: 1; text-wrap: pretty; }
 
 /* 12.1: a bookmark ribbon down the right-hand edge carrying the category,
    hanging over the top edge of the card the way a page marker would. Bigger and
