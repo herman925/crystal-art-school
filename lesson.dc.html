@@ -269,7 +269,7 @@
              rendered from the course data so one course cannot show another
              course's files, and a course with none says so. -->
         <div class="res-all" id="res-all"></div>
-        <p class="asset-pending" id="res-note" style="margin: 0 10px 12px;"></p>
+        <!-- ASSET PENDING:  -->
         <div class="res-list" id="res-list" style="padding:0 4px 8px;"></div>
       </div>
     </div>
@@ -443,7 +443,7 @@ class Component extends DCLogic {
         /* 18.1: a lesson whose title and description have not arrived says so
            in the same dashed marker the rest of the site uses, rather than
            reading as finished copy. */
-        (u.pending ? '<p class="asset-pending">Placeholder &mdash; title and description still to come from Crystal.</p>' : '') +
+        (u.pending ? '<!-- ASSET PENDING: Placeholder — title and description still to come from Crystal. -->' : '') +
         (u.tip ? '<div class="tip-card"><span class="hand-note">Crystal' + String.fromCharCode(39) + 's note ✦</span>' + escl(u.tip) + '</div>' : '') +
       '</article>').join('');
     document.getElementById('rows-holder').innerHTML = UNITS.map((u, i) =>
