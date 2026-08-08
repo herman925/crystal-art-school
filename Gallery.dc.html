@@ -121,11 +121,14 @@
 <header class="page-hero">
   <div class="container">
     <div class="eyebrow reveal-one"><span class="star">✦</span> The gallery shop</div>
-    <h1 class="marker-title font-a reveal-one" style="font-size:clamp(44px,6vw,80px);">Take a piece home.</h1>
-    <p class="lead reveal-one">Original artworks and limited-edition prints directly from the studio — each piece is signed by the artist and comes with a certificate of authenticity and elegant packaging. You can filter by medium, price, or date added, then head over to Etsy to make your purchase.</p>
+    <h1 class="marker-title font-a reveal-one" style="font-size:clamp(44px,6vw,80px);">Gallery Introduction</h1>
     <div class="logo2"><img src="img/logo2.png" alt="Crystal Lau Art" loading="lazy" decoding="async"></div>
   </div>
 </header>
+
+<!-- The wood banner carries the page title and its eyebrow only; the
+     introduction reads below it. (client feedback 2026-08-08) -->
+<div class="container page-lead-wrap"><p class="page-lead">Original artworks and limited-edition prints directly from the studio — each piece is signed by the artist and comes with a certificate of authenticity and elegant packaging. You can filter by medium, price, or date added, then head over to Etsy to make your purchase.</p></div>
 
 <main class="container store-head" id="content">
   <div class="store-layout">
@@ -174,7 +177,7 @@
       <!-- 18.1 / 18.2: the photographs are Crystal's own, but every title,
            price, size and medium below is developer-generated placeholder
            metadata, and the finished artwork material is still outstanding. -->
-      <p class="asset-pending">Placeholder details &mdash; the artwork photographs are Crystal&rsquo;s, but the titles, prices, sizes and mediums are stand-ins until she supplies them.</p>
+      <p class="asset-pending">Placeholder details &mdash; the artwork photographs are Crystal&rsquo;s, but the titles, prices, sizes, mediums and the sale flags are stand-ins until she supplies them. Buy on Etsy opens the shop front; &sect;9.3 needs one listing URL per piece.</p>
       <div class="store-grid" id="store-grid"></div>
       <div class="store-empty" id="store-empty" style="display:none;">No pieces match those filters — try widening your search.</div>
     </section>
@@ -306,7 +309,12 @@ class Component extends DCLogic {
     /* 9.3: each piece needs its own Etsy listing URL from the client. Until that
        field exists a search query is not a purchase link, so the button is shown
        disabled rather than sending a buyer to a results page. */
-    const etsyUrl = (p) => p.etsy || '';
+    /* 9.3 asks for one listing URL per piece and none has arrived yet. Rather
+       than an inert grey label, the button behaves exactly as it will and
+       opens the shop front; the note above the grid says the per-artwork links
+       are still to come. (client feedback 2026-08-08) */
+    const ETSY_SHOP = 'https://www.etsy.com/';
+    const etsyUrl = (p) => p.etsy || ETSY_SHOP;
     /* --r is a CSS aspect-ratio, i.e. width / height, and it also decides the
        .land (rotated) frame. Every piece carries a ratio measured from the
        real file by tools/import-assets.py; the old lookup table was keyed by
@@ -315,13 +323,15 @@ class Component extends DCLogic {
     const fsOf = (p) => /A5/.test(p.size) ? 0.62 : /A4/.test(p.size) ? 0.74 : /A3/.test(p.size) ? 0.86 : 1;
     const cardHTML = (p, idx) =>
       '<article class="art-card" data-idx="' + idx + '">' +
-        '<div class="art-frame-wrap"><figure class="art-frame' + (rOf(p) > 1.15 ? ' land' : '') + '" style="--fs:' + fsOf(p) + ';"><div class="art-img" style="--r:' + rOf(p) + '"><img src="img/' + p.img + '" alt="' + esc(p.title) + '" loading="lazy" decoding="async"></div><img class="art-ornate" src="img/deer-black.svg" alt="" aria-hidden="true" loading="lazy"></figure></div>' +
+        '<div class="art-frame-wrap">' + (p.was ? '<div class="sale-ribbon"><span>Sale</span></div>' : '') + '<figure class="art-frame' + (rOf(p) > 1.15 ? ' land' : '') + '" style="--fs:' + fsOf(p) + ';"><div class="art-img" style="--r:' + rOf(p) + '"><img src="img/' + p.img + '" alt="' + esc(p.title) + '" loading="lazy" decoding="async"></div><img class="art-ornate" src="img/deer-black.svg" alt="" aria-hidden="true" loading="lazy"></figure></div>' +
         '<div class="art-meta">' +
           '<h3 class="art-title">' + esc(p.title) + '</h3>' +
           '<div class="art-sub">' + (p.orig ? 'Original' : 'Limited print') + '</div>' +
           '<div class="art-size">' + esc(p.size) + '</div>' +
           '<div class="art-tagrow">' + p.tags.map(t => '<span class="art-tagchip">' + esc(t) + '</span>').join('') + '</div>' +
-          '<div class="art-row"><span class="art-price">£' + p.price + '</span>' +
+          '<div class="art-row">'
+            + (p.was ? '<s class="art-was">£' + p.was + '</s>' : '')
+            + '<span class="art-price">£' + p.price + '</span>' +
           '<div class="art-actions">' +
             (etsyUrl(p)
               ? '<a class="art-btn etsy" href="' + etsyUrl(p) + '" target="_blank" rel="noopener">Buy on Etsy</a>'

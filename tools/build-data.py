@@ -202,11 +202,16 @@ def build_gallery(manifest, meta):
         # the artwork, which is why every piece gets a real measured number.
         ratio = round(item["w"] / item["h"], 3)
 
+        # Placeholder sale flags so the layout can be judged: every third piece
+        # shows a struck original price and a ribbon. Crystal sets the real ones.
+        was = int(round(price * 1.25 / 5.0)) * 5 if i % 3 == 1 else None
+
         out.append({
             "title": "%s No.%d" % (subject, seen[subject]),
             "img": "gallery/" + item["img"],   # cardHTML prefixes 'img/'
             "tags": [g["medium"], subject],
             "price": price,
+            "was": was,
             "date": "2026-%02d-%02d" % (7 - (i // 3), 28 - (i % 3) * 9),
             "orig": subject == "Original painting",
             "size": size,

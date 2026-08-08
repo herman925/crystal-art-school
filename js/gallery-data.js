@@ -11,6 +11,7 @@ window.CAS_GALLERY = [
       "Original painting"
     ],
     "price": 320,
+    "was": null,
     "date": "2026-07-28",
     "orig": true,
     "size": "30 × 40 cm",
@@ -25,6 +26,7 @@ window.CAS_GALLERY = [
       "Art print"
     ],
     "price": 120,
+    "was": 150,
     "date": "2026-07-19",
     "orig": false,
     "size": "40 × 60 cm",
@@ -39,6 +41,7 @@ window.CAS_GALLERY = [
       "Pet drawing"
     ],
     "price": 200,
+    "was": null,
     "date": "2026-07-10",
     "orig": false,
     "size": "30 × 40 cm",
@@ -53,6 +56,7 @@ window.CAS_GALLERY = [
       "Original painting"
     ],
     "price": 340,
+    "was": null,
     "date": "2026-06-28",
     "orig": true,
     "size": "40 × 60 cm",
@@ -67,6 +71,7 @@ window.CAS_GALLERY = [
       "Art print"
     ],
     "price": 140,
+    "was": 175,
     "date": "2026-06-19",
     "orig": false,
     "size": "30 × 40 cm",
@@ -81,6 +86,7 @@ window.CAS_GALLERY = [
       "Pet drawing"
     ],
     "price": 220,
+    "was": null,
     "date": "2026-06-10",
     "orig": false,
     "size": "40 × 60 cm",
@@ -95,6 +101,7 @@ window.CAS_GALLERY = [
       "Original painting"
     ],
     "price": 300,
+    "was": null,
     "date": "2026-05-28",
     "orig": true,
     "size": "30 × 40 cm",
@@ -109,6 +116,7 @@ window.CAS_GALLERY = [
       "Art print"
     ],
     "price": 160,
+    "was": 200,
     "date": "2026-05-19",
     "orig": false,
     "size": "40 × 60 cm",
@@ -123,6 +131,7 @@ window.CAS_GALLERY = [
       "Pet drawing"
     ],
     "price": 180,
+    "was": null,
     "date": "2026-05-10",
     "orig": false,
     "size": "30 × 40 cm",
@@ -137,6 +146,7 @@ window.CAS_GALLERY = [
       "Original painting"
     ],
     "price": 360,
+    "was": null,
     "date": "2026-04-28",
     "orig": true,
     "size": "40 × 60 cm",
@@ -151,6 +161,7 @@ window.CAS_GALLERY = [
       "Art print"
     ],
     "price": 130,
+    "was": 160,
     "date": "2026-04-19",
     "orig": false,
     "size": "30 × 40 cm",
@@ -165,6 +176,7 @@ window.CAS_GALLERY = [
       "Pet drawing"
     ],
     "price": 240,
+    "was": null,
     "date": "2026-04-10",
     "orig": false,
     "size": "40 × 60 cm",
@@ -179,6 +191,7 @@ window.CAS_GALLERY = [
       "Original painting"
     ],
     "price": 280,
+    "was": null,
     "date": "2026-03-28",
     "orig": true,
     "size": "30 × 40 cm",
@@ -193,6 +206,7 @@ window.CAS_GALLERY = [
       "Art print"
     ],
     "price": 150,
+    "was": 190,
     "date": "2026-03-19",
     "orig": false,
     "size": "40 × 60 cm",
@@ -207,6 +221,7 @@ window.CAS_GALLERY = [
       "Pet drawing"
     ],
     "price": 210,
+    "was": null,
     "date": "2026-03-10",
     "orig": false,
     "size": "30 × 40 cm",
@@ -221,6 +236,7 @@ window.CAS_GALLERY = [
       "Original painting"
     ],
     "price": 330,
+    "was": null,
     "date": "2026-02-28",
     "orig": true,
     "size": "40 × 60 cm",
@@ -235,6 +251,7 @@ window.CAS_GALLERY = [
       "Art print"
     ],
     "price": 170,
+    "was": 210,
     "date": "2026-02-19",
     "orig": false,
     "size": "30 × 40 cm",

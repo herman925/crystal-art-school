@@ -224,9 +224,12 @@ def run_page(browser, path, want_mark, theme):
         # 9 — Buy links point at listings, not a search query (§9.3)
         check(label, not r['etsySearch'],
               'Buy link is a search query: %s' % (r['etsySearch'][:1] or ''))
+        shopFront = [h for h in r['etsy'] if h.rstrip('/').endswith('etsy.com')]
+        if shopFront:
+            notes.append('%s: %d Buy links open the Etsy shop front rather than a listing — '
+                         'blocked on the client for per-artwork URLs (#17)' % (label, len(shopFront)))
         if r['buyPending']:
-            notes.append('%s: %d Buy buttons are still placeholders — blocked on the client '
-                         'for per-artwork listing URLs (#17)' % (label, r['buyPending']))
+            notes.append('%s: %d Buy buttons are inert placeholders (#17)' % (label, r['buyPending']))
 
         # 8 — home card fields (§1.4.7)
         if path == 'index.html':
