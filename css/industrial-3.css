@@ -566,4 +566,8 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
   letter-spacing: .01em;
   text-transform: none;
 }
-.cas-root .hero__title.font-a { font-size: clamp(39px, 5.7vw, 94px); line-height: 1.1; }
+/* Arizonia sets a small x-height inside a tall em, so 1.1 leaves a gap between
+   lines that reads as a mistake rather than as leading. The text column also
+   widens, because at 38% the second line wrapped and the heading rendered as
+   three lines instead of two. (client feedback 2026-08-08) */
+.cas-root .hero__title.font-a { font-size: clamp(39px, 5.1vw, 84px); line-height: .95; }
