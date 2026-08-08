@@ -384,7 +384,15 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
    header is allowed to grow to take it. */
 .nav-brand img { height: 84px; width: auto; object-fit: contain; filter: drop-shadow(0 2px 6px rgba(0,0,0,.45)); }
 /* signature reads black on the light wood (A); stays cream on the dark walnut (D) */
-[data-theme="A"] .nav-brand img { filter: brightness(0) opacity(.85) drop-shadow(0 1px 2px rgba(255,255,255,.25)); }
+/* 2026-08-08: the invert is OFF while Crystal's own uploads are in place. It is
+   correct for a cut-out mark and wrong for an opaque rectangle — brightness(0)
+   turns the whole white box black, which reads as a rendering bug rather than as
+   a missing asset. §2.3 puts the de-backgrounding on her side; the cut-outs we
+   had made are kept in docs/asset-cutouts/ and the method is written up in
+   docs/20260808_Transparency_Work_Not_In_Scope.md.
+   RE-ENABLE BOTH RULES the moment real transparent artwork arrives, or the light
+   theme loses the inversion it needs. */
+/* [data-theme="A"] .nav-brand img { filter: brightness(0) opacity(.85) drop-shadow(0 1px 2px rgba(255,255,255,.25)); } */
 .nav-links { grid-column: 2; display: flex; gap: 4px; list-style: none; margin: 0; padding: 0; }
 .nav-links a { display: block; padding: 9px 14px; font-family: var(--font-cond); font-weight: 500; font-size: 15px; letter-spacing: var(--tracking-label); text-transform: uppercase; border-radius: var(--radius-pill); color: var(--banner-ink); transition: background .15s; }
 .nav-links a:hover { background: color-mix(in srgb, var(--banner-bracket) 16%, transparent); }
@@ -432,7 +440,7 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
    with the same filter the nav mark uses. */
 .logo2 { display: block; line-height: 0; }
 .logo2 img { display: block; width: auto; height: 92px; object-fit: contain; filter: drop-shadow(0 2px 6px rgba(0,0,0,.4)); }
-[data-theme="A"] .logo2 img { filter: brightness(0) opacity(.88) drop-shadow(0 1px 2px rgba(255,255,255,.25)); }
+/* [data-theme="A"] .logo2 img { filter: brightness(0) opacity(.88) drop-shadow(0 1px 2px rgba(255,255,255,.25)); } */
 
 /* centred — pages with no wood band */
 .logo2.is-center { margin: 0 auto 26px; }

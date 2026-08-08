@@ -34,3 +34,8 @@ __pycache__/
 
 # impeccable hook cache — machine-written, not shared
 .impeccable/hook.cache.json
+
+# Scope and commercial reasoning, and the cut-outs the client did not supply.
+# The repo is public with Issues enabled — neither belongs in it.
+/docs/*_Transparency_Work_*
+/docs/asset-cutouts/
