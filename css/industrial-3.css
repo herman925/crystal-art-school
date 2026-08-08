@@ -476,7 +476,17 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
 /* 6 / 1.4.3: only the reduced price changes colour. */
 .course-price .now { color: var(--marine); }
 .course-tier-note { font-size: 13px; color: var(--muted); max-width: 34ch; }
-.course-terms-note { font-size: 13px; color: var(--muted); max-width: 34ch; margin-top: 8px; opacity: .85; }
+/* Her own line under the course title. */
+.co-subline { font-family: var(--font-cond); font-weight: 600; font-size: 13.5px;
+  letter-spacing: var(--tracking-label); text-transform: uppercase;
+  color: var(--teal-ink); margin: 0 0 12px; }
+.course-terms-note { font-size: 13px; color: var(--muted); max-width: 46ch; margin-top: 12px; opacity: .85; }
+/* The client-testing switch, moved under the Add to cart button because that is
+   what it changes. (client feedback 2026-08-08) */
+.own-test { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+.own-test-label { font-family: var(--font-cond); font-size: 12.5px; font-weight: 600;
+  letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); }
+.own-test .fg-opts { display: inline-flex; gap: 6px; }
 /* 7.4 「所有課程詳情長文欄位統一加闊至相同寬度」: every long-form field on the page at
    one measure. The introduction was on the 60ch .lead default while the title and
    preview above it ran the full column — the "呢個好短咧⋯⋯我想佢闊翻，好似上邊咁樣"
@@ -759,4 +769,3 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
    widens, because at 38% the second line wrapped and the heading rendered as
    three lines instead of two. (client feedback 2026-08-08) */
 .cas-root .hero__title.font-a { font-size: clamp(39px, 5.1vw, 84px); line-height: .95; }
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
