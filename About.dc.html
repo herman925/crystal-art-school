@@ -86,7 +86,7 @@
      eyebrow belongs on this site. (client feedback 2026-08-08) -->
 <header class="page-hero">
   <div class="container">
-    <div class="eyebrow reveal-one"><span class="star">✦</span> About</div>
+    <div class="eyebrow reveal-one"><span class="star">✦</span> Meet the artist</div>
     <h1 class="marker-title font-a reveal-one" style="font-size:clamp(44px,6vw,80px);">About</h1>
     <div class="logo2"><img src="img/logo2.png" alt="Crystal Lau Art" loading="lazy" decoding="async"></div>
   </div>
@@ -210,13 +210,13 @@
         <p>While painting is a personal form of expression, I believe art becomes truly powerful when shared. Over the years, my work has been featured in mainstream media, published in art collections, and acquired by institutional permanent collections, such as the Sun Museum. In 2018, I launched my YouTube channel, <strong>Crystal Lau Art</strong>, to share the joys of plein air sketching and art history with a broader audience. It showed me how art can bridge distances and connect people anywhere in the world.</p>
         </div>
       </div>
-      <div class="ph-carousel" id="car-exhibition" aria-label="Exhibitions"></div>
+      <div class="ph-carousel is-fill" id="car-exhibition" aria-label="Exhibitions"></div>
     </div>
   </section>
 
   <section class="section" id="instructor">
     <div class="bio-layout reveal">
-      <div class="ph-carousel" id="car-artful" aria-label="Artful Living"></div>
+      <div class="ph-carousel is-portrait" id="car-artful" aria-label="Artful Living"></div>
       <div class="bio-copy engraved">
         <div class="eng-head">
           <span class="eng-rule"></span>
@@ -296,10 +296,20 @@
              inside it rather than cropped, so a landscape scan letterboxes on
              the mat instead of needing a second frame size — which is what keeps
              a mixed set reading as one wall. Both scans supplied so far are
-             portrait, so the third mount is empty and shows the landscape
-             fitting without inventing a certificate. (client feedback
-             2026-08-08) -->
-        <div class="bc-row">
+             portrait, so the empty mounts show the landscape fitting without
+             inventing a certificate. (client feedback 2026-08-08)
+
+             CMS NOTE — this row is ORDERED BY HAND. The author arranges the
+             certificates in whatever sequence they want in the CMS and the page
+             renders them in that order; it does NOT sort by award year, awarding
+             body or any other field on the record. If a future change makes the
+             order automatic, the manual arrangement is lost, so treat the
+             ordering as content and not as a display option.
+
+             It scrolls as one continuous strip that can be dragged, rather than
+             stepping page by page: the mounts are identical in size and there is
+             no natural page boundary between them. -->
+        <div class="bc-row is-rail">
           <figure class="bc-card bc-card--cert">
             <div class="cert-frame"><div class="cert-mat">
               <img src="img/about/cert-accademia-2026.jpg" alt="Official Finalist certificate, International Watercolor Academy Award 2026, Accademia Internazionale dell'Acquarello, Italy" loading="lazy" decoding="async">
@@ -312,13 +322,32 @@
             </div></div>
             <figcaption>Winning Work · 26th JIWI Online Spring Exhibition · 《City of Japan》</figcaption>
           </figure>
-          <!-- ASSET PENDING: empty mount demonstrating a landscape certificate in the
-                  same frame. Delete this figure once a landscape scan is supplied. -->
+          <!-- ASSET PENDING: empty mounts showing how further certificates fill the
+                  rail, and how a landscape scan sits in the same portrait frame. Delete
+                  these figures as real scans are supplied. -->
           <figure class="bc-card bc-card--cert is-ph" aria-hidden="true">
             <div class="cert-frame"><div class="cert-mat">
-              <span class="cert-slot">Landscape certificate</span>
+              <span class="cert-slot is-landscape">Landscape certificate</span>
             </div></div>
             <figcaption>Same mount, fitted — no crop</figcaption>
+          </figure>
+          <figure class="bc-card bc-card--cert is-ph" aria-hidden="true">
+            <div class="cert-frame"><div class="cert-mat">
+              <span class="cert-slot is-portrait">Portrait certificate</span>
+            </div></div>
+            <figcaption>Awaiting scan</figcaption>
+          </figure>
+          <figure class="bc-card bc-card--cert is-ph" aria-hidden="true">
+            <div class="cert-frame"><div class="cert-mat">
+              <span class="cert-slot is-square">Square certificate</span>
+            </div></div>
+            <figcaption>Awaiting scan</figcaption>
+          </figure>
+          <figure class="bc-card bc-card--cert is-ph" aria-hidden="true">
+            <div class="cert-frame"><div class="cert-mat">
+              <span class="cert-slot is-landscape">Landscape certificate</span>
+            </div></div>
+            <figcaption>Awaiting scan</figcaption>
           </figure>
         </div>
       </div>
@@ -576,6 +605,41 @@ class Component extends DCLogic {
     measureEngraved();
     window.addEventListener('resize', measureEngraved);
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(measureEngraved);
+
+    /* Pagination was built here and then removed: fixed-height sheets with the
+       overflow carried to a second page were tried and rejected on sight
+       (client feedback 2026-08-08). A sheet grows to its copy. If long CMS copy
+       becomes a problem later, git has the working implementation at 2e37d51's
+       successor -- do not rebuild it from scratch. */
+    /* ---- the certificate rail ---------------------------------------------
+       A continuous drag rather than pages: the mounts are all the same size and
+       there is no natural page boundary between them, so click-and-drag (or a
+       trackpad swipe, or the arrow keys once focused) reads better than a step.
+       Order is whatever the author puts in the CMS — see the note in the
+       markup. */
+    const rail = document.querySelector('.bc-row.is-rail');
+    if (rail) {
+      let down = false, startX = 0, startLeft = 0, moved = 0;
+      rail.addEventListener('pointerdown', (e) => {
+        down = true; moved = 0; startX = e.clientX; startLeft = rail.scrollLeft;
+        rail.classList.add('is-dragging'); rail.setPointerCapture(e.pointerId);
+      });
+      rail.addEventListener('pointermove', (e) => {
+        if (!down) return;
+        const dx = e.clientX - startX;
+        moved = Math.max(moved, Math.abs(dx));
+        rail.scrollLeft = startLeft - dx;
+      });
+      const release = (e) => {
+        if (!down) return;
+        down = false; rail.classList.remove('is-dragging');
+        try { rail.releasePointerCapture(e.pointerId); } catch (err) {}
+      };
+      rail.addEventListener('pointerup', release);
+      rail.addEventListener('pointercancel', release);
+      /* a drag that ends on a link must not also count as a click on it */
+      rail.addEventListener('click', (e) => { if (moved > 6) { e.preventDefault(); e.stopPropagation(); } }, true);
+    }
 
     /* contact form */
     const form = document.getElementById('contact-form');

@@ -61,6 +61,15 @@
 .site-footer a:hover { opacity: 1; color: var(--band-eyebrow); }
 .site-footer .social-btn { display: grid; place-items: center; padding: 0; }
 .footer-brand { font-family: var(--font-stencil); font-size: 20px; letter-spacing: var(--tracking-stamp); margin-bottom: 8px; }
+/* The signature replaces the stencilled wordmark. (client feedback 2026-08-08)
+   The supplied file is dark ink on an opaque light ground, so on the dark
+   footer it is knocked out to the footer's own ink rather than left as a white
+   slab — the same treatment .sig-script uses on the light theme, in reverse.
+   Drop both filters once transparent artwork arrives (#17). */
+.footer-sig { line-height: 0; margin-bottom: 12px; }
+.footer-sig img { display: block; width: clamp(150px, 15vw, 200px); height: auto;
+  mix-blend-mode: multiply; }
+[data-theme="D"] .footer-sig img { mix-blend-mode: screen; filter: invert(1) brightness(1.6) contrast(1.15); }
 .footer-meta { margin-top: 30px; padding-top: 16px; border-top: 1px solid rgba(244,231,207,.22); display: flex; justify-content: space-between; font-family: var(--font-cond); font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; opacity: .72; flex-wrap: wrap; gap: 8px; }
 @media (max-width: 900px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 540px) { .footer-grid { grid-template-columns: 1fr; } }
@@ -388,6 +397,12 @@
   object-fit: contain; background: var(--surface);
   border-radius: var(--radius-card); box-shadow: var(--shadow);
   transition: transform .9s var(--ease-out), opacity .5s linear; }
+/* .is-fill — now that the photograph sits in a frame there is no reason to
+   letterbox it; it fills the frame instead. .is-portrait — every photograph in
+   that set is portrait, so the frame is portrait and narrower.
+   (client feedback 2026-08-08) */
+.ph-carousel.is-fill .phc-cell img { object-fit: cover; }
+.ph-carousel.is-portrait .phc-cell img { height: 560px; object-fit: cover; }
 /* The page coming into view drifts and fades a little as it lands, so the
    change reads as a movement rather than a jump. */
 .ph-carousel .phc-cell:not(.is-current) img { opacity: .55; transform: scale(1.03); }
@@ -437,8 +452,13 @@
   --note-margin: rgba(176,90,80,.38); --note-ink: #3d372e;
   position: relative; padding: 18px; border-radius: var(--radius-card);
   background-color: var(--note-paper);
-  background-image: var(--note-tooth);
-  background-size: 180px 180px;
+  /* mottling, tooth, fibre — three passes, because one faint speckle read as a
+     flat colour (client feedback 2026-08-08) */
+  background-image:
+    radial-gradient(120% 90% at 18% 8%, rgba(255,255,255,.5), transparent 55%),
+    radial-gradient(90% 70% at 86% 92%, rgba(96,74,46,.09), transparent 60%),
+    var(--note-tooth), var(--note-fibre);
+  background-size: auto, auto, 180px 180px, 320px 320px;
   color: var(--note-ink);
   box-shadow: var(--shadow-md), inset 0 0 0 1px rgba(90,70,55,.14),
               inset 0 1px 0 rgba(255,255,255,.6); }
@@ -467,12 +487,30 @@
    rules run the full width of the frame. Anchoring it to the panel instead put
    the first rule an arbitrary distance above the first line. (client feedback
    2026-08-08) */
-.engraved .eng-body { position: relative; padding: calc(var(--note-line) + 3px) 26px 8px;
+/* Two things are being lined up here and they need different origins, which is
+   why background-origin takes a list.
+
+   The RULING is measured from the content box, so the first rule falls on the
+   bottom edge of the first line of text and every line after it follows.
+
+   The MARGIN RULE is measured from the padding box, so it sits at a fixed 44px
+   from the sheet's edge whatever the text inset is — and the text inset is then
+   set past it. Both were on the content box before, which put the red line 43px
+   INTO the text and every line was written straight across it. (client feedback
+   2026-08-08)
+
+   The top padding reserves the title's overhang plus one clear line, so the gap
+   under the heading is the same whether the title runs to one line or two. It
+   was a flat 30px, which a two-line title ate into — the reason the first
+   paragraph sat hard against the heading on two of the three sheets. */
+.engraved .eng-body { position: relative;
+  padding: calc(var(--eng-h, 40px) / 2 + var(--note-line)) 26px 8px 62px;
   background-image:
     linear-gradient(90deg, transparent 0 43px, var(--note-margin) 43px 44px, transparent 44px),
     repeating-linear-gradient(180deg, transparent 0 calc(var(--note-line) - 1px),
                               var(--note-rule) calc(var(--note-line) - 1px) var(--note-line));
-  background-origin: content-box; background-clip: padding-box; }
+  background-origin: padding-box, content-box;
+  background-clip: padding-box, padding-box; }
 .engraved .eng-body::before { content: ""; position: absolute; inset: 0; pointer-events: none;
   border: 1px solid color-mix(in srgb, var(--note-ink) 46%, transparent);
   border-top: 0; border-radius: 0 0 3px 3px; }
@@ -497,6 +535,21 @@
 /* The pull-quote is the same panel, centred, with the blog feature card's
    quote marks straddling the top and bottom rules instead of a heading.
    (client feedback 2026-08-08) */
+/* ---- per-section proportions ---------------------------------------------
+   Each of the three blocks is tuned on its own; the shared .bio-layout only
+   sets the gap and the alignment now. (client feedback 2026-08-08) */
+/* the journey copy is much the longest, so it takes about a fifth more width */
+#biography .bio-layout { grid-template-columns: 0.74fr 1.26fr; }
+/* short copy beside a single photograph: sheet and picture near enough equal */
+#community .bio-layout--flip { grid-template-columns: 0.96fr 1.04fr; }
+/* every Artful Living photograph is portrait, so the frame is portrait too and
+   narrower, which hands the width back to the sheet */
+#instructor .bio-layout { grid-template-columns: 0.62fr 1.38fr; }
+@media (max-width: 900px) {
+  #biography .bio-layout, #community .bio-layout--flip, #instructor .bio-layout {
+    grid-template-columns: 1fr; }
+}
+
 /* The quote is a plain panel — flat colour, no ruling, no tooth. Only the
    biography sheets below it are notebook paper; the reference is a printed
    chapter opener, not a page torn out of a pad. (client feedback 2026-08-08) */

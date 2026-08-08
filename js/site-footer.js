@@ -67,7 +67,12 @@
       '<div class="inner">' +
         '<div class="footer-grid">' +
           '<div>' +
-            '<div class="footer-brand">CRYSTAL\'S</div>' +
+            /* Her own signature, the same file the About hero uses, in place of
+               the typeset word CRYSTAL'S. (client feedback 2026-08-08) The
+               signature is decorative here — the studio name is written out in
+               the copyright line below and in the paragraph under it — so it is
+               marked aria-hidden with empty alt rather than read out twice. */
+            '<div class="footer-brand footer-sig"><img src="img/signature.png" alt="" aria-hidden="true" loading="lazy" decoding="async"></div>' +
             /* Facts here come from assets/06 - About/AboutMe.docx. The previous
                line ("watercolour, acrylic & drawing … a small studio of plaster,
                wood and iron") was invented placeholder copy — she works in

@@ -590,12 +590,30 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
   aspect-ratio: auto; border-radius: 0; }
 /* The empty mount that shows a landscape scan fitting the same frame. Marked
    as a placeholder in the same language the free-videos rails use. */
-.bc-card--cert.is-ph .cert-slot { width: 100%; aspect-ratio: 4 / 3; display: grid; place-items: center;
+.bc-card--cert.is-ph .cert-slot { width: 100%; display: grid; place-items: center;
   background: repeating-linear-gradient(135deg, transparent 0 10px,
     rgba(138,111,61,.13) 10px 20px);
   font-family: var(--font-cond); font-size: 11px; font-weight: 600;
   letter-spacing: var(--tracking-label); text-transform: uppercase;
   color: rgba(90,72,42,.72); text-align: center; padding: 0 10px; }
+/* the three shapes an author might upload, all sitting in the one mount */
+.bc-card--cert.is-ph .cert-slot.is-landscape { aspect-ratio: 4 / 3; }
+.bc-card--cert.is-ph .cert-slot.is-portrait { aspect-ratio: 3 / 4; height: 100%; width: auto; }
+.bc-card--cert.is-ph .cert-slot.is-square { aspect-ratio: 1 / 1; }
+
+/* The row is one continuous strip that can be dragged, not a set of pages: the
+   mounts are identical in size, so there is no natural page boundary between
+   them. Order is authored by hand in the CMS — see the note in the markup.
+   (client feedback 2026-08-08) */
+.bc-row.is-rail { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: thin;
+  cursor: grab; padding-bottom: 8px; scroll-behavior: smooth;
+  overscroll-behavior-x: contain; }
+.bc-row.is-rail.is-dragging { cursor: grabbing; scroll-behavior: auto; user-select: none; }
+.bc-row.is-rail.is-dragging img { pointer-events: none; }
+.bc-row.is-rail::-webkit-scrollbar { height: 8px; }
+.bc-row.is-rail::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--ink) 22%, transparent); border-radius: 4px; }
+/* the tilt returns on hover only, so a dragged strip stays flat */
+.bc-row.is-rail .bc-card--cert:hover { transform: translateY(-4px); }
 /* Tracking and 11px size both held: below About's §13/§14 freeze line. (#20) */
 .bc-card figcaption { font-family: var(--font-cond); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: #474138; margin-top: 8px; text-align: center; }
 /* Captions under a wooden mount sit on the page, not on the wood, so they take
