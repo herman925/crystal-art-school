@@ -108,11 +108,18 @@
         <button class="btn primary" type="button" id="co-buy" data-add-to-cart data-tiered>Add to cart</button>
         <a class="btn primary" id="co-continue" href="lesson.dc.html" style="display:none;"></a>
       </div>
+      <!-- The purchased/not-purchased switch sits directly under the button,
+           because the button is what it changes. It used to live over in the
+           right-hand column where nobody found it. Developer scaffolding, not
+           part of the shipped page. (client feedback 2026-08-08) -->
+      <div class="own-test">
+        <span class="own-test-label">Client testing &mdash; view as</span>
+        <div class="fg-opts" id="own-toggle">
+          <button class="fopt" type="button" data-own="0">Not purchased</button>
+          <button class="fopt" type="button" data-own="1">Purchased</button>
+        </div>
+      </div>
       <p class="course-tier-note"></p>
-      <!-- 7.4: this is one of the three places that carried unapproved refund
-           copy. The instruction is to replace the specifics with neutral
-           placeholder text, not to delete the line — About and FAQ already do. -->
-      <p class="course-terms-note">Access period and refund terms to be confirmed &mdash; both will be published here before launch.</p>
       <!-- ASSET PENDING: Placeholder images — the five course photographs are still to be
               supplied. -->
     </div>
@@ -123,15 +130,18 @@
       <div class="co-highlight" id="co-highlight">
         <div class="co-highlight-empty">Course highlights video &mdash; to be supplied</div>
       </div>
-      <p class="lead" id="co-blurb" style="font-size:16.5px;"></p>
+      <p class="co-subline" id="co-subline"></p>
+      <!-- Her ABOUT THIS COURSE section, paragraph by paragraph as she wrote it.
+           It had been flattened into one run-on paragraph, which is why the page
+           carried less than her document does. (client feedback 2026-08-08) -->
+      <div class="lead" id="co-blurb" style="font-size:16.5px;"></div>
       <div class="course-meta-chips" id="co-chips"></div>
-      <div class="own-test" style="margin-top:16px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
-        <span style="font-family:var(--font-cond);font-size:12.5px;font-weight:600;letter-spacing:var(--tracking-label);text-transform:uppercase;color:var(--muted);">Client testing — view as</span>
-        <div class="fg-opts" id="own-toggle" style="display:inline-flex;gap:6px;">
-          <button class="fopt" type="button" data-own="0">Not purchased</button>
-          <button class="fopt" type="button" data-own="1">Purchased</button>
-        </div>
-      </div>
+      <!-- 7.4 requires this line to exist somewhere on the page: the specifics
+           were replaced with neutral placeholder text rather than deleted.
+           It has been moved OFF the left column, under the Add to cart button,
+           where the instruction is price and button only. (client feedback
+           2026-08-08) -->
+      <p class="course-terms-note">Access period and refund terms to be confirmed &mdash; both will be published here before launch.</p>
     </div>
   </header>
 
@@ -159,8 +169,10 @@
   </section>
 
   <section class="section" id="who">
-    <div class="section-head reveal-one" style="text-align:center;">
-      <div class="eyebrow" style="justify-content:center;"><span class="star">✦</span> Is this you?</div>
+    <!-- Left-aligned, the eyebrow sitting directly above the title rather than
+         centred over it. (client feedback 2026-08-08) -->
+    <div class="section-head reveal-one">
+      <div class="eyebrow"><span class="star">✦</span> Is this you?</div>
       <h2 class="section-title">Who this course is for</h2>
     </div>
     <div id="co-who" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin:30px auto 0;"></div>
@@ -226,7 +238,14 @@ class Component extends DCLogic {
     if (!c) { $('crumb-title').textContent = 'Course not found'; return; }
 
     const LESSONS = c.lessons || [];
-    const nLessons = LESSONS.length;
+    /* Two different numbers, and conflating them was the "I thought there were
+       14 lessons but I can only see 13" report. nRows is how many cards there
+       are; nLessons is how many lessons Crystal numbered. They differ because
+       her folder "Lesson02&03" is ONE film covering TWO of her lessons, so the
+       course is 14 lessons across 13 films. Progress and indexing use nRows;
+       anything the reader is shown uses nLessons. (client feedback 2026-08-08) */
+    const nRows = LESSONS.length;
+    const nLessons = c.lessonCount || nRows;
     const clock = (secs) => {
       if (secs == null) return '—';
       const m = Math.floor(secs / 60), s = Math.floor(secs % 60);
@@ -288,17 +307,25 @@ class Component extends DCLogic {
 
     $('co-tag').textContent = c.tag + ' course';
     $('co-title').textContent = c.title;
-    $('co-blurb').textContent = c.blurb;
+    /* paragraphs when she has written them, the single blurb otherwise */
+    $('co-blurb').innerHTML = (c.about && c.about.length ? c.about : [c.blurb])
+      .map(p => '<p style="margin:0 0 12px;">' + esc(p) + '</p>').join('');
+    if (c.subline) $('co-subline').textContent = c.subline;
+    else $('co-subline').style.display = 'none';
     if (c.sale && c.was) $('co-flag-sale').style.display = '';
 
     /* 7.3: Media, total duration, lessons, difficulty — in that order, set apart
        by whitespace rather than dot separators. Duration is computed from the
        uploaded videos and is never typed in by hand. */
+    /* .is-filter = you can filter the courses page by this (medium, length,
+       level). .is-fact = true of this course but not a filter — you cannot
+       filter by "14 lessons". They were all one colour. (client feedback
+       2026-08-08) */
     $('co-chips').innerHTML =
-      '<span class="cmc">' + esc(String(c.tag || '').split(/\s*[&,\/]\s*/)[0]) + '</span>' +
-      '<span class="cmc">' + esc(runtime(c.totalSeconds)) + '</span>' +
-      '<span class="cmc">' + nLessons + (nLessons === 1 ? ' lesson' : ' lessons') + '</span>' +
-      '<span class="cmc">' + esc(levelLabel) + '</span>';
+      '<span class="cmc is-filter">' + esc(String(c.tag || '').split(/\s*[&,\/]\s*/)[0]) + '</span>' +
+      '<span class="cmc is-filter">' + esc(runtime(c.totalSeconds)) + '</span>' +
+      '<span class="cmc is-fact">' + nLessons + (nLessons === 1 ? ' lesson' : ' lessons') + '</span>' +
+      '<span class="cmc is-filter">' + esc(levelLabel) + '</span>';
 
     const buy = $('co-buy');
     buy.setAttribute('data-title', c.title);
@@ -336,12 +363,26 @@ class Component extends DCLogic {
       const isDone = owned && done[i];
       const open = owned || u.free;
       const keys = Object.keys(u.detail || {}).filter(k => DETAIL_LABELS[k]);
+      /* Her own lesson number, not the row index: one film can carry two of
+         them, and that card is labelled "2 & 3". */
+      const num = u.spans > 1 ? (u.n + ' & ' + (u.n + u.spans - 1)) : String(u.n || (i + 1));
+      /* ASSET PENDING / CMS: the thumbnail is the lesson's own cover photograph,
+         square with a rounded corner. It comes from the JPEG sitting beside the
+         film in the lesson folder — in the CMS this becomes an upload field on
+         the lesson record, so Crystal can set or change it herself. A lesson
+         with no JPEG (Lesson 1, film only) simply renders no thumbnail rather
+         than a placeholder box. (client feedback 2026-08-08) */
+      const thumb = u.poster
+        ? '<img class="syl-thumb" src="' + esc(u.poster) + '" alt="" loading="lazy" decoding="async">'
+        : '';
       const inner =
-        '<div class="syl-num">' + (isDone ? '✓' : (i + 1)) + '</div>' +
+        '<div class="syl-num">' + (isDone ? '✓' : num) + '</div>' +
         '<div><div class="syl-title">' + esc(u.title) +
           (!owned && u.free ? ' <span style="font-family:var(--font-cond);font-size:12.5px;letter-spacing:var(--tracking-label);text-transform:uppercase;color:var(--teal-ink);margin-left:8px;">free preview</span>' : '') +
+          (u.spans > 1 ? ' <span style="font-family:var(--font-cond);font-size:12.5px;letter-spacing:var(--tracking-label);text-transform:uppercase;color:var(--muted);margin-left:8px;">one film, two lessons</span>' : '') +
         '</div><div class="syl-sub">' + esc(u.subtitle) + '</div></div>' +
-        '<div class="syl-len" style="display:inline-flex;align-items:center;gap:7px;">' + (open ? PLAY : LOCK) + ' ' + esc(clock(u.dur)) + '</div>';
+        '<div class="syl-len" style="display:inline-flex;align-items:center;gap:7px;">' + (open ? PLAY : LOCK) + ' ' + esc(clock(u.dur)) + '</div>' +
+        thumb;
       const row = open
         ? '<a class="syl-row" href="lesson.dc.html?c=' + encodeURIComponent(c.id) + '&u=' + i + '" style="text-decoration:none;color:inherit;">' + inner + '</a>'
         : '<div class="syl-row" style="opacity:.72;">' + inner + '</div>';
@@ -365,11 +406,27 @@ class Component extends DCLogic {
            "Phase 1" header over one row reads as a mistake. */
         html = LESSONS.map((u, i) => lessonRow(u, i, done)).join('');
       } else {
+        /* Each phase is a collapsed section. Collapsed by DEFAULT: fourteen rows
+           open at once was the complaint, and a reader scanning a syllabus wants
+           the shape first and the detail on request. (client feedback
+           2026-08-08) */
         mods.forEach((m, mi) => {
-          html += '<div style="font-family:var(--font-cond);font-weight:600;font-size:12px;letter-spacing:var(--tracking-label);text-transform:uppercase;color:var(--coral);margin:' + (mi ? '30px' : '4px') + ' 0 10px;padding:9px 16px;border-radius:var(--r-sharp);background:rgba(20,17,13,.5);color:#f4e7cf;">Phase ' + (mi + 1) + ' · ' + esc(m.name) + '</div>';
+          const bodyId = 'sylp-' + c.id + '-' + mi;
+          let rows = '';
+          let count = 0;
           for (let i = m.from - 1; i <= m.to - 1 && i < LESSONS.length; i++) {
-            html += lessonRow(LESSONS[i], i, done);
+            rows += lessonRow(LESSONS[i], i, done);
+            count += LESSONS[i].spans || 1;
           }
+          html += '<section class="syl-phase">' +
+            '<button class="syl-phase-btn" type="button" aria-expanded="false" aria-controls="' + bodyId + '">' +
+              '<span class="sp-n">Phase ' + (mi + 1) + '</span>' +
+              '<span class="sp-name">' + esc(m.name) + '</span>' +
+              '<span class="sp-count">' + count + (count === 1 ? ' lesson' : ' lessons') + '</span>' +
+              CHEV +
+            '</button>' +
+            '<div class="syl-phase-body" id="' + bodyId + '" hidden>' + rows + '</div>' +
+          '</section>';
         });
       }
       $('co-syllabus').innerHTML = html;
@@ -377,6 +434,14 @@ class Component extends DCLogic {
 
     /* Delegated, so it survives every renderSyllabus() re-render. */
     $('co-syllabus').addEventListener('click', (ev) => {
+      const phase = ev.target.closest('.syl-phase-btn');
+      if (phase) {
+        const body = document.getElementById(phase.getAttribute('aria-controls'));
+        const openNow = phase.getAttribute('aria-expanded') !== 'true';
+        phase.setAttribute('aria-expanded', String(openNow));
+        if (body) body.hidden = !openNow;
+        return;
+      }
       const btn = ev.target.closest('.syl-more');
       if (!btn) return;
       const panel = document.getElementById(btn.getAttribute('aria-controls'));
@@ -394,8 +459,8 @@ class Component extends DCLogic {
       if (owned) {
         /* resume at the first unfinished lesson, not always lesson 1 */
         let next = 0;
-        while (next < nLessons && done[next]) next++;
-        if (next >= nLessons) next = nLessons - 1;
+        while (next < nRows && done[next]) next++;
+        if (next >= nRows) next = nRows - 1;
         cont.href = 'lesson.dc.html?c=' + encodeURIComponent(c.id) + '&u=' + next;
         $('co-price').innerHTML = '<span style="font-size:16px;">Purchased ✓</span>';
         buy.style.display = 'none';
@@ -403,8 +468,8 @@ class Component extends DCLogic {
         /* 7.2 names the purchased-state label literally: `View Course`, in the
            same place as `Add to Cart`. */
         cont.innerHTML = 'View course <span class="arr" aria-hidden="true">→</span>';
-        note.innerHTML = '<strong>' + dn + ' of ' + nLessons + '</strong> '
-          + (nLessons === 1 ? 'lesson' : 'lessons')
+        note.innerHTML = '<strong>' + dn + ' of ' + nRows + '</strong> '
+          + (nRows === 1 ? 'film' : 'films')
           + ' complete — your progress is saved automatically.';
       } else {
         /* 6 / 1.4.3: on sale the old price keeps its colour and gains a rule

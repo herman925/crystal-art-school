@@ -2,7 +2,7 @@
   "_note": "Human-authored copy. Merged with tools/asset-manifest.json by tools/build-data.py to produce js/course-data.js + js/gallery-data.js. PLACEHOLDER copy — not client-approved (spec Q1, Q3, Q4, Q5).",
   "courses": {
     "clouds-beginner": {
-      "_source": "assets/01 - Courses/Course 01-Beginner/Course1_Beginner_introduction.docx (client copy). Title, blurb, phase names and lessons 2-7 are hers, verbatim apart from UK spellings (her doc uses US color/watercolor; the rest of the site is UK). TWO NUMBERS IN HER DOC DISAGREE WITH THE ASSETS: it bills the course as '10 HD Video Lessons' and details 6, while the asset tree holds 13 films. The blurb no longer states a count, so the page cannot contradict itself — ask her which is right. Lesson 1 has no title yet: she supplied the film only. Lessons 8-13 are in no supplied doc; their titles are developer-written but describe what her own cover painting for each shows (`fromArtwork: true`).",
+      "_source": "assets/01 - Courses/Course 01-Beginner/Course1_Beginner_introduction.docx (client copy). `about` is her ABOUT THIS COURSE section paragraph by paragraph, verbatim apart from UK spellings (her doc uses US color/watercolor) and one grammar fix ('a intuitive' -> 'an intuitive'). It had been flattened into a single run-on paragraph, which is why the page read as less than she wrote. `subline` is her line under the title, minus the lesson count. COUNTS IN HER OWN MATERIAL DISAGREE: the doc bills '10 HD Video Lessons' and details 6, while her asset tree numbers lessons 01..14 across 13 films (Lesson02&03 is one film covering two). The site shows 14, which is what her folders say and what she expects; no number appears in the copy, so the page cannot contradict itself. Ask her which is right. Titles were checked AGAINST THE ARTWORK, not assumed: l02 is pencil cloud hatching (her LESSON 1) and l06 is a graded sky wash (her LESSON 5), so her folder numbers are NOT her lesson numbers and the existing mapping is correct. Lesson 1 has no title yet: she supplied the film only. Lessons 8-14 are in no supplied doc; their titles are developer-written but describe what her own cover painting for each shows (`fromArtwork: true`). `learn` and `who` are developer-written entirely.",
       "title": "Clouds - Beginner’s Guide to Drawing & Painting Clouds",
       "tag": "Sketching & Watercolour",
       "cat": "watercolour",
@@ -159,6 +159,12 @@
           "file": "sky-palette-mixing-chart.txt",
           "icon": "palette"
         }
+      ],
+      "subline": "HD video lessons with English voiceover and subtitles",
+      "about": [
+        "Beginner’s Guide to Drawing & Painting Clouds is a structured online masterclass thoughtfully designed for aspiring artists and beginners. Featuring high-definition video demonstration lessons, this course comes with clear English voiceovers and subtitles, making your learning experience seamless and accessible.",
+        "The curriculum follows an intuitive step-by-step progression, starting from foundational pencil sketching and simple perspective principles to help you grasp the three-dimensional volume of clouds. You will dive into a systematic breakdown of line work, composition, light and shadow placement, colour mixing, and essential water control.",
+        "As you move into watercolour painting, you will master the medium’s core techniques, including flat washes, colour blending, wet-on-wet, dry-on-dry, and negative space painting. Whether you are picking up a paintbrush for the very first time or seeking to enhance the atmospheric depth of your artwork, this course will empower you to capture the fleeting beauty of skies and clouds with total technical confidence."
       ]
     },
     "clouds-intermediate": {

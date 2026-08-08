@@ -44,6 +44,7 @@
       "lessons": [
         {
           "n": 1,
+          "spans": 1,
           "srcFolder": "Lesson01",
           "poster": null,
           "posterW": null,
@@ -60,6 +61,7 @@
         },
         {
           "n": 2,
+          "spans": 2,
           "srcFolder": "Lesson02&03",
           "poster": "img/courses/clouds-beginner/l02.jpg",
           "posterW": 1280,
@@ -75,7 +77,8 @@
           "srcVideo": "Lesson 02&03.MOV"
         },
         {
-          "n": 3,
+          "n": 4,
+          "spans": 1,
           "srcFolder": "Lesson04",
           "poster": "img/courses/clouds-beginner/l03.jpg",
           "posterW": 1280,
@@ -91,7 +94,8 @@
           "srcVideo": "CloudsLesson4.mp4"
         },
         {
-          "n": 4,
+          "n": 5,
+          "spans": 1,
           "srcFolder": "Lesson05",
           "poster": "img/courses/clouds-beginner/l04.jpg",
           "posterW": 1280,
@@ -112,7 +116,8 @@
           "srcVideo": "CloudsLesson5A.mp4"
         },
         {
-          "n": 5,
+          "n": 6,
+          "spans": 1,
           "srcFolder": "Lesson06",
           "poster": "img/courses/clouds-beginner/l05.jpg",
           "posterW": 1280,
@@ -128,7 +133,8 @@
           "srcVideo": "CloudsLesson6.mp4"
         },
         {
-          "n": 6,
+          "n": 7,
+          "spans": 1,
           "srcFolder": "Lesson07",
           "poster": "img/courses/clouds-beginner/l06.jpg",
           "posterW": 1280,
@@ -144,7 +150,8 @@
           "srcVideo": "CloudsLesson7.mp4"
         },
         {
-          "n": 7,
+          "n": 8,
+          "spans": 1,
           "srcFolder": "Lesson08",
           "poster": "img/courses/clouds-beginner/l07.jpg",
           "posterW": 915,
@@ -160,7 +167,8 @@
           "srcVideo": "CloudsLesson8.mp4"
         },
         {
-          "n": 8,
+          "n": 9,
+          "spans": 1,
           "srcFolder": "Lesson09",
           "poster": "img/courses/clouds-beginner/l08.jpg",
           "posterW": 945,
@@ -176,7 +184,8 @@
           "srcVideo": "CloudsLesson9.mp4"
         },
         {
-          "n": 9,
+          "n": 10,
+          "spans": 1,
           "srcFolder": "Lesson10",
           "poster": "img/courses/clouds-beginner/l09.jpg",
           "posterW": 1280,
@@ -192,7 +201,8 @@
           "srcVideo": "CloudsLesson10.mp4"
         },
         {
-          "n": 10,
+          "n": 11,
+          "spans": 1,
           "srcFolder": "Lesson11",
           "poster": "img/courses/clouds-beginner/l10.jpg",
           "posterW": 1280,
@@ -208,7 +218,8 @@
           "srcVideo": "CloudsLesson11.mp4"
         },
         {
-          "n": 11,
+          "n": 12,
+          "spans": 1,
           "srcFolder": "Lesson12",
           "poster": "img/courses/clouds-beginner/l11.jpg",
           "posterW": 1280,
@@ -224,7 +235,8 @@
           "srcVideo": "CloudsLesson12.mp4"
         },
         {
-          "n": 12,
+          "n": 13,
+          "spans": 1,
           "srcFolder": "Lesson13",
           "poster": "img/courses/clouds-beginner/l12.jpg",
           "posterW": 1280,
@@ -240,7 +252,8 @@
           "srcVideo": "CloudsLesson13.mp4"
         },
         {
-          "n": 13,
+          "n": 14,
+          "spans": 1,
           "srcFolder": "Lesson14",
           "poster": "img/courses/clouds-beginner/l13.jpg",
           "posterW": 1280,
@@ -269,6 +282,7 @@
       "lessons": [
         {
           "n": 1,
+          "spans": 1,
           "srcFolder": "Lesson 13",
           "poster": "img/courses/clouds-intermediate/l01.jpg",
           "posterW": 1280,
@@ -285,6 +299,7 @@
         },
         {
           "n": 2,
+          "spans": 1,
           "srcFolder": "Lesson 14",
           "poster": "img/courses/clouds-intermediate/l02.jpg",
           "posterW": 1280,
@@ -301,6 +316,7 @@
         },
         {
           "n": 3,
+          "spans": 1,
           "srcFolder": "Lesson 15",
           "poster": "img/courses/clouds-intermediate/l03.jpg",
           "posterW": 1280,
@@ -317,6 +333,7 @@
         },
         {
           "n": 4,
+          "spans": 1,
           "srcFolder": "Lesson 16",
           "poster": "img/courses/clouds-intermediate/l04.jpg",
           "posterW": 1280,
@@ -333,6 +350,7 @@
         },
         {
           "n": 5,
+          "spans": 1,
           "srcFolder": "Lesson 17",
           "poster": "img/courses/clouds-intermediate/l05.jpg",
           "posterW": 1280,
@@ -349,6 +367,7 @@
         },
         {
           "n": 6,
+          "spans": 1,
           "srcFolder": "Lesson 18",
           "poster": "img/courses/clouds-intermediate/l06.jpg",
           "posterW": 1280,
@@ -365,6 +384,7 @@
         },
         {
           "n": 7,
+          "spans": 1,
           "srcFolder": "Lesson 19",
           "poster": "img/courses/clouds-intermediate/l07.jpg",
           "posterW": 1280,
@@ -390,6 +410,7 @@
       "lessons": [
         {
           "n": 1,
+          "spans": 1,
           "srcFolder": "Course 02",
           "poster": "img/courses/little-house/l01.jpg",
           "posterW": 540,
@@ -415,6 +436,7 @@
       "lessons": [
         {
           "n": 1,
+          "spans": 1,
           "srcFolder": "Course 03",
           "poster": "img/courses/urban-sketch/l01.jpg",
           "posterW": 1280,

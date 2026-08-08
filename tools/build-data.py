@@ -106,7 +106,11 @@ def build_courses(manifest, meta, links):
             detail = {k: cl[k] for k in ("focus", "tools", "outcome") if cl.get(k)}
 
             lessons.append({
-                "n": i + 1,
+                # her own numbering, which is not the row index: one film can
+                # carry two of her lessons (see `spans`), so the numbers run
+                # 1, 2 & 3, 4 ... 14 across 13 rows
+                "n": al.get("n", i + 1),
+                "spans": al.get("spans", 1),
                 "title": cl["title"],
                 "subtitle": cl["subtitle"],
                 # 18.1: a lesson whose copy has not arrived is flagged so the
@@ -124,6 +128,9 @@ def build_courses(manifest, meta, links):
             })
 
         total = sum(l["dur"] or 0 for l in lessons)
+        # What the page calls the lesson count: her numbering, not the row
+        # count. 13 films, 14 lessons.
+        lesson_count = sum(l.get("spans", 1) for l in lessons)
         # 5.1: one title field carries "short topic - full title", separated by a
         # hyphen. The New Release card shows the topic; every other surface shows
         # the full title. Splitting here means no page has to know the convention,
@@ -160,12 +167,19 @@ def build_courses(manifest, meta, links):
             ),
             "photos": [p["img"] for p in asset.get("photos") or []],
             "blurb": copy["blurb"],
+            # 7.1: `about` is her ABOUT THIS COURSE section as she wrote it,
+            # paragraph by paragraph. `blurb` stays a single string because the
+            # course cards and the meta description need one. `subline` is the
+            # line she puts under the course title.
+            "about": copy.get("about") or [],
+            "subline": copy.get("subline") or "",
             "learn": copy["learn"],
             "who": copy["who"],
             "modules": copy["modules"],
+            "lessonCount": lesson_count,
             "lessons": lessons,
         })
-        print("   %-22s %2d lessons  %5ds  %s" % (slug, len(lessons), total,
+        print("   %-22s %2d lessons (%d rows)  %5ds  %s" % (slug, lesson_count, len(lessons), total,
                                                  duration_bucket(total)))
     return out
 

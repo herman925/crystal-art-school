@@ -64,6 +64,12 @@ window.CAS_COURSES = [
       "img/courses/clouds-beginner/p05.jpg"
     ],
     "blurb": "Beginner’s Guide to Drawing & Painting Clouds is a structured online masterclass thoughtfully designed for aspiring artists and beginners. Featuring high-definition video demonstration lessons, this course comes with clear English voiceovers and subtitles, making your learning experience seamless and accessible. The curriculum follows an intuitive step-by-step progression, starting from foundational pencil sketching and simple perspective principles to help you grasp the three-dimensional volume of clouds. You will dive into a systematic breakdown of line work, composition, light and shadow placement, colour mixing, and essential water control. As you move into watercolour painting, you will master the medium’s core techniques, including flat washes, colour blending, wet-on-wet, dry-on-dry, and negative space painting. Whether you are picking up a paintbrush for the very first time or seeking to enhance the atmospheric depth of your artwork, this course will empower you to capture the fleeting beauty of skies and clouds with total technical confidence.",
+    "about": [
+      "Beginner’s Guide to Drawing & Painting Clouds is a structured online masterclass thoughtfully designed for aspiring artists and beginners. Featuring high-definition video demonstration lessons, this course comes with clear English voiceovers and subtitles, making your learning experience seamless and accessible.",
+      "The curriculum follows an intuitive step-by-step progression, starting from foundational pencil sketching and simple perspective principles to help you grasp the three-dimensional volume of clouds. You will dive into a systematic breakdown of line work, composition, light and shadow placement, colour mixing, and essential water control.",
+      "As you move into watercolour painting, you will master the medium’s core techniques, including flat washes, colour blending, wet-on-wet, dry-on-dry, and negative space painting. Whether you are picking up a paintbrush for the very first time or seeking to enhance the atmospheric depth of your artwork, this course will empower you to capture the fleeting beauty of skies and clouds with total technical confidence."
+    ],
+    "subline": "HD video lessons with English voiceover and subtitles",
     "learn": [
       "Simplify fluffy cloud contours in pencil and hatch them into three-dimensional form",
       "Arrange clouds on a perspective grid so the sky reads with real foreground-to-horizon depth",
@@ -96,9 +102,11 @@ window.CAS_COURSES = [
         "to": 13
       }
     ],
+    "lessonCount": 14,
     "lessons": [
       {
         "n": 1,
+        "spans": 1,
         "title": "Lesson 1",
         "subtitle": "Crystal has supplied the film; the title and description are still to come.",
         "pending": true,
@@ -114,6 +122,7 @@ window.CAS_COURSES = [
       },
       {
         "n": 2,
+        "spans": 2,
         "title": "Pencil cloud form & basic hatching",
         "subtitle": "Simplify fluffy cloud contours in pencil, then hatch to set light, shadow and first volume.",
         "pending": false,
@@ -132,7 +141,8 @@ window.CAS_COURSES = [
         "srcFolder": "Lesson02&03"
       },
       {
-        "n": 3,
+        "n": 4,
+        "spans": 1,
         "title": "Marker perspective grid & spatial depth",
         "subtitle": "Arrange clouds from foreground to horizon on a perspective grid, varying stroke weight for depth.",
         "pending": false,
@@ -151,7 +161,8 @@ window.CAS_COURSES = [
         "srcFolder": "Lesson04"
       },
       {
-        "n": 4,
+        "n": 5,
+        "spans": 1,
         "title": "Detailed graphite shading & soft edges",
         "subtitle": "Understand the concepts of sketching and use deep shadows and subtle tonal gradations to transform flat outlines into three-dimensional cloud forms.",
         "pending": false,
@@ -185,7 +196,8 @@ window.CAS_COURSES = [
         "srcFolder": "Lesson05"
       },
       {
-        "n": 5,
+        "n": 6,
+        "spans": 1,
         "title": "Marker block-in & value distribution",
         "subtitle": "Dual-tone markers block sky and cloud shadow fast, so composition is planned before paint.",
         "pending": false,
@@ -204,7 +216,8 @@ window.CAS_COURSES = [
         "srcFolder": "Lesson06"
       },
       {
-        "n": 6,
+        "n": 7,
+        "spans": 1,
         "title": "Perfect sky gradient & water control",
         "subtitle": "Control the water-to-paint ratio for smooth, brushstroke-free sky gradients — no backruns.",
         "pending": false,
@@ -223,7 +236,8 @@ window.CAS_COURSES = [
         "srcFolder": "Lesson07"
       },
       {
-        "n": 7,
+        "n": 8,
+        "spans": 1,
         "title": "Cloud volume, light & layered shading",
         "subtitle": "Warm sunset light against cool purple-grey shadow, built up in multiple washes.",
         "pending": false,
@@ -242,7 +256,8 @@ window.CAS_COURSES = [
         "srcFolder": "Lesson08"
       },
       {
-        "n": 8,
+        "n": 9,
+        "spans": 1,
         "title": "Reserved whites & flat-wash cloud studies",
         "subtitle": "Two studies on one sheet: hard-edged whites left unpainted, cool flat washes laid around them.",
         "pending": false,
@@ -257,7 +272,8 @@ window.CAS_COURSES = [
         "srcFolder": "Lesson09"
       },
       {
-        "n": 9,
+        "n": 10,
+        "spans": 1,
         "title": "Soft-edged cumulus on a deep blue sky",
         "subtitle": "Building a saturated blue behind billowing whites, keeping every edge soft.",
         "pending": false,
@@ -272,7 +288,8 @@ window.CAS_COURSES = [
         "srcFolder": "Lesson10"
       },
       {
-        "n": 10,
+        "n": 11,
+        "spans": 1,
         "title": "A dark cloud bank over a warm horizon",
         "subtitle": "Cool storm greys above, warm ochre and orange below — two temperatures in one sky.",
         "pending": false,
@@ -287,7 +304,8 @@ window.CAS_COURSES = [
         "srcFolder": "Lesson11"
       },
       {
-        "n": 11,
+        "n": 12,
+        "spans": 1,
         "title": "Lifting & softening a single cloud",
         "subtitle": "Working back into a damp wash with a clean brush to shape one cloud from the sky itself.",
         "pending": false,
@@ -302,7 +320,8 @@ window.CAS_COURSES = [
         "srcFolder": "Lesson12"
       },
       {
-        "n": 12,
+        "n": 13,
+        "spans": 1,
         "title": "Towering cumulus in layered greys",
         "subtitle": "Stacked grey-violet washes against deep blue, with the sunlit faces reserved.",
         "pending": false,
@@ -317,7 +336,8 @@ window.CAS_COURSES = [
         "srcFolder": "Lesson13"
       },
       {
-        "n": 13,
+        "n": 14,
+        "spans": 1,
         "title": "A broken sky of scattered cloud",
         "subtitle": "Many small forms at once — reserved whites, grey undersides, and blue holes between them.",
         "pending": false,
@@ -355,6 +375,8 @@ window.CAS_COURSES = [
     },
     "photos": [],
     "blurb": "The techniques that separate a study from a painting. Wet-on-wet edges, gradient washes, guarded whites — then three full scenes where all of it runs at once.",
+    "about": [],
+    "subline": "",
     "learn": [
       "Time a wet-on-wet edge by the shine on the paper, not by fiddling",
       "Lay a smooth gradient wash that a cloud can actually sit on",
@@ -387,9 +409,11 @@ window.CAS_COURSES = [
         "to": 7
       }
     ],
+    "lessonCount": 7,
     "lessons": [
       {
         "n": 1,
+        "spans": 1,
         "title": "Violet Sunset & Soft Cloud Strata",
         "subtitle": "Master blending vibrant light sources into gentle pastel gradient skies and render translucent, floating cloud silhouettes.",
         "pending": false,
@@ -409,6 +433,7 @@ window.CAS_COURSES = [
       },
       {
         "n": 2,
+        "spans": 1,
         "title": "Dramatic Twilight Sky & Utility Pole Silhouette",
         "subtitle": "Learn to paint dynamic multi-colour sky gradients and master fine brushwork for intricate dark silhouettes over colourful backgrounds.",
         "pending": false,
@@ -428,6 +453,7 @@ window.CAS_COURSES = [
       },
       {
         "n": 3,
+        "spans": 1,
         "title": "Sunset Countryside Horizon & Soft Clouds",
         "subtitle": "Master creating depth across sky and ground elements, combining soft atmospheric gradients with crisp landscape detail.",
         "pending": false,
@@ -447,6 +473,7 @@ window.CAS_COURSES = [
       },
       {
         "n": 4,
+        "spans": 1,
         "title": "Golden Hour Country Barn & Cloudscape",
         "subtitle": "Master golden hour colour palettes and learn to build dimension in both cloud forms and focal point architectural structures.",
         "pending": false,
@@ -466,6 +493,7 @@ window.CAS_COURSES = [
       },
       {
         "n": 5,
+        "spans": 1,
         "title": "Fluffy Cumulus Clouds & Pure Blue Sky",
         "subtitle": "Master sculpting three-dimensional cloud volume using subtle cool grey shadows and organic, soft-edged water control.",
         "pending": false,
@@ -485,6 +513,7 @@ window.CAS_COURSES = [
       },
       {
         "n": 6,
+        "spans": 1,
         "title": "Coastal Horizon & Stormy Horizon Clouds",
         "subtitle": "Master combining stormy sky mood with reflective water planes, achieving harmony between heavy atmospheric clouds and clear water.",
         "pending": false,
@@ -504,6 +533,7 @@ window.CAS_COURSES = [
       },
       {
         "n": 7,
+        "spans": 1,
         "title": "Crimson Ocean Sunset & Low Horizon",
         "subtitle": "Master dramatic colour contrast and horizontal stroke layering to capture rich, glowing water and sky reflections during peak sunset.",
         "pending": false,
@@ -541,6 +571,8 @@ window.CAS_COURSES = [
     "preview": null,
     "photos": [],
     "blurb": "A single, self-contained study: one small house, start to finish, in one sitting.",
+    "about": [],
+    "subline": "",
     "learn": [
       "Block in a simple building without a ruler",
       "Keep a roof, a wall and a shadow reading as three different values",
@@ -557,9 +589,11 @@ window.CAS_COURSES = [
       ]
     ],
     "modules": [],
+    "lessonCount": 1,
     "lessons": [
       {
         "n": 1,
+        "spans": 1,
         "title": "Painting a little house",
         "subtitle": "A full watercolour study from pencil sketch to final wash.",
         "pending": false,
@@ -593,6 +627,8 @@ window.CAS_COURSES = [
     "preview": null,
     "photos": [],
     "blurb": "Line and wash on location — buildings, street and figures, painted quickly and loosely.",
+    "about": [],
+    "subline": "",
     "learn": [
       "Draw a street scene fast, in ink, without measuring",
       "Drop colour over line without losing the drawing",
@@ -609,9 +645,11 @@ window.CAS_COURSES = [
       ]
     ],
     "modules": [],
+    "lessonCount": 1,
     "lessons": [
       {
         "n": 1,
+        "spans": 1,
         "title": "Urban sketching in watercolour",
         "subtitle": "Line and wash on location: buildings, street and figures.",
         "pending": false,

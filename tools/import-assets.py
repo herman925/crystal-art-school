@@ -68,7 +68,12 @@ COURSES = [
         # longer "Lesson 01".."Lesson 12" — they are "Lesson01" (no space),
         # a merged "Lesson02&03", then Lesson04..Lesson14. Lesson01 holds the
         # opening film that was missing before; Lesson13 and Lesson14 are new.
-        "lesson_folders": ["Lesson01", "Lesson02&03"] + ["Lesson%02d" % n for n in range(4, 15)],
+        # "Lesson02&03" is ONE folder holding ONE film that covers TWO of her
+        # numbered lessons. That is why 13 folders make 14 lessons — the count
+        # the client expects. A ("folder", n) pair means the folder SPANS n
+        # lesson numbers: it stays one card, labelled "2 & 3", and the course
+        # total counts n. A bare string spans one.
+        "lesson_folders": ["Lesson01", ("Lesson02&03", 2)] + ["Lesson%02d" % n for n in range(4, 15)],
         # 7.1: the course preview reel, and the one-large-four-small photo set
         # (naming convention per 1.4.10), both at the course root.
         "highlights": "Beginner Highlights.mp4",
@@ -251,7 +256,13 @@ def import_courses(force):
 
         print("\n== %s (%s)" % (course["slug"], course["folder"]))
         lessons = []
-        for idx, sub in enumerate(course["lesson_folders"]):
+        # `seq` numbers the poster files by position and must stay stable, or a
+        # folder gaining a span would rename every image after it. `number` is
+        # what the reader sees and advances by the span.
+        seq, number = 0, 1
+        for idx, entry in enumerate(course["lesson_folders"]):
+            # ("Lesson02&03", 2) — one folder, one film, two of her lesson numbers
+            sub, spans = entry if isinstance(entry, tuple) else (entry, 1)
             folder = os.path.join(root, sub) if sub else root
             files = list_dir(folder)
             images, videos = pick(files, IMAGE_EXTS), pick(files, VIDEO_EXTS)
@@ -260,10 +271,10 @@ def import_courses(force):
                 warn("%s/%s is empty — skipped" % (course["slug"], sub or "."))
                 continue
 
-            n = len(lessons) + 1
+            seq += 1
             rel, meta = None, None
             if images:
-                rel = "img/courses/%s/l%02d.jpg" % (course["slug"], n)
+                rel = "img/courses/%s/l%02d.jpg" % (course["slug"], seq)
                 meta = encode_image(os.path.join(folder, images[0]),
                                     os.path.join(SITE_DIR, rel), MAX_EDGE_POSTER, force)
             else:
@@ -291,7 +302,11 @@ def import_courses(force):
             total = sum(pt["dur"] or 0 for pt in parts) or None
 
             lessons.append({
-                "n": n,
+                "n": number,
+                # spans > 1 means this one film carries more than one of her
+                # numbered lessons: the card is labelled "2 & 3" and the course
+                # total counts both.
+                "spans": spans,
                 "srcFolder": sub or os.path.basename(root),
                 "poster": rel,
                 "posterW": meta["w"] if meta else None,
@@ -300,9 +315,12 @@ def import_courses(force):
                 "videos": parts,
                 "srcVideo": parts[0]["file"] if parts else None,
             })
-            print("   l%02d  %-22s %s%s" % (n, images[0] if images else "(no cover)",
-                                            ("%ds" % total) if total else "no video",
-                                            " (%d parts)" % len(parts) if len(parts) > 1 else ""))
+            label = str(number) if spans == 1 else "%d & %d" % (number, number + spans - 1)
+            number += spans
+            print("   %-7s %-22s %s%s" % ("l" + str(seq).zfill(2) + " (" + label + ")",
+                                          images[0] if images else "(no cover)",
+                                          ("%ds" % total) if total else "no video",
+                                          " (%d parts)" % len(parts) if len(parts) > 1 else ""))
 
         if not lessons:
             warn("%s produced no lessons" % course["slug"])
@@ -311,7 +329,9 @@ def import_courses(force):
         # course cover = first lesson poster that exists, at gallery size
         cover_rel = "img/courses/%s/cover.jpg" % course["slug"]
         cover_src = None
-        for sub in course["lesson_folders"]:
+        for entry in course["lesson_folders"]:
+            # entries may be ("folder", spans) — see the note on lesson_folders
+            sub = entry[0] if isinstance(entry, tuple) else entry
             d = os.path.join(root, sub) if sub else root
             imgs = pick(list_dir(d), IMAGE_EXTS)
             if imgs:

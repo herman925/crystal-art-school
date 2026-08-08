@@ -463,6 +463,13 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
 .course-cover .free-flag, .course-cover .sale-flag { position: absolute; top: 14px; left: 14px; right: auto; }
 .course-meta-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 4px; }
 .cmc { font-family: var(--font-cond); font-weight: 500; font-size: 13px; letter-spacing: var(--tracking-label); text-transform: uppercase; padding: 6px 14px; border-radius: var(--radius-pill); background: color-mix(in srgb, var(--ink) 8%, transparent); color: var(--ink); }
+/* Two kinds of chip, and they were indistinguishable. .is-filter marks the ones
+   that correspond to a filter on the courses page — medium, length and level —
+   and takes marine, the colour that classification already uses site-wide. A
+   plain chip is a fact about this course that you cannot filter by, such as the
+   lesson count, and takes linen. (client feedback 2026-08-08) */
+.cmc.is-filter { background: var(--marine); color: var(--marine-ink); }
+.cmc.is-fact { background: var(--linen); color: var(--linen-ink); }
 .course-buy { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 20px; }
 .course-price { font-family: var(--font-display); font-weight: 700; font-size: 34px; color: var(--coral-ink); }
 .course-price .was { font-size: 19px; color: var(--muted); text-decoration: line-through; margin-right: 10px; font-weight: 500; }
@@ -496,9 +503,39 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
 /* 7.5: odd and even rows are distinguished for readability. The box colour
    itself is deliberately unchanged — the direction says so explicitly — so this
    is a light tint over it rather than a different fill. */
-.syl-item[data-odd="1"] { background-color: color-mix(in srgb, var(--ink) 5%, var(--surface)) !important; }
+/* The alternation was 5% and effectively invisible. (client feedback
+   2026-08-08) */
+.syl-item[data-odd="1"] { background-color: color-mix(in srgb, var(--ink) 13%, var(--surface)) !important; }
 .syl-item { background-color: var(--surface); background-image: var(--concrete-grain); background-size: 220px 220px; border-radius: var(--radius-card); box-shadow: var(--shadow-sm); overflow: hidden; }
-.syl-row { display: grid; grid-template-columns: 44px 1fr auto; align-items: center; gap: 16px; padding: 14px 20px; }
+/* The fourth column is the lesson thumbnail, on the right as the syllabus asks.
+   auto rather than a fixed width so a lesson with no cover — Lesson 1, which
+   Crystal supplied as film only — closes the column up instead of leaving a
+   hole. (client feedback 2026-08-08) */
+.syl-row { display: grid; grid-template-columns: 44px 1fr auto auto; align-items: center; gap: 16px; padding: 14px 20px; }
+.syl-thumb { width: 76px; height: 76px; border-radius: 14px; object-fit: cover; display: block;
+  background: color-mix(in srgb, var(--ink) 8%, transparent); box-shadow: var(--shadow-sm); }
+@media (max-width: 600px) { .syl-thumb { width: 56px; height: 56px; border-radius: 11px; } }
+
+/* ---- collapsible phases ----
+   Collapsed by default: fourteen rows open at once was the complaint.
+   (client feedback 2026-08-08) */
+.syl-phase { margin: 30px 0 10px; }
+.syl-phase:first-of-type { margin-top: 4px; }
+.syl-phase-btn { display: flex; align-items: center; gap: 14px; width: 100%; cursor: pointer;
+  border: 0; text-align: left; padding: 16px 20px; border-radius: var(--r-sharp);
+  background: rgba(20,17,13,.5); color: #f4e7cf; }
+[data-theme="A"] .syl-phase-btn { background: color-mix(in srgb, var(--ink) 82%, transparent); color: var(--paper); }
+.syl-phase-btn .sp-n { font-family: var(--font-cond); font-weight: 600;
+  font-size: clamp(19px, 2.1vw, 26px); letter-spacing: var(--tracking-label);
+  text-transform: uppercase; flex: none; }
+.syl-phase-btn .sp-name { font-family: var(--font-marker); font-weight: 600;
+  font-size: clamp(16px, 1.6vw, 21px); flex: 1; opacity: .92; }
+.syl-phase-btn .sp-count { font-family: var(--font-cond); font-size: 13px;
+  letter-spacing: var(--tracking-label); text-transform: uppercase; opacity: .7; flex: none; }
+.syl-phase-btn svg { transition: transform .2s ease; flex: none; }
+.syl-phase-btn[aria-expanded="true"] svg { transform: rotate(180deg); }
+.syl-phase-body { display: grid; gap: 10px; margin-top: 10px; }
+.syl-phase-body[hidden] { display: none; }
 .syl-more { display: flex; align-items: center; gap: 7px; width: 100%; background: none; border: 0; border-top: 1px solid color-mix(in srgb, var(--ink) 9%, transparent); padding: 9px 20px 9px 64px; cursor: pointer; font-family: var(--font-cond); font-size: 13px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); }
 .syl-more:hover { color: var(--coral-ink); }
 .syl-more svg { transition: transform .18s ease; }
@@ -722,3 +759,4 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
    widens, because at 38% the second line wrapped and the heading rendered as
    three lines instead of two. (client feedback 2026-08-08) */
 .cas-root .hero__title.font-a { font-size: clamp(39px, 5.1vw, 84px); line-height: .95; }
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
