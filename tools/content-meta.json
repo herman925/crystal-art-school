@@ -2,7 +2,7 @@
   "_note": "Human-authored copy. Merged with tools/asset-manifest.json by tools/build-data.py to produce js/course-data.js + js/gallery-data.js. PLACEHOLDER copy — not client-approved (spec Q1, Q3, Q4, Q5).",
   "courses": {
     "clouds-beginner": {
-      "_source": "assets/01 - Courses/Course 01-Beginner/Course1_Beginner_introduction.docx (client copy). Course-level copy and lessons 2-7 are hers, verbatim from that doc (her LESSON 1-6). Lesson 1 has no title yet - she supplied the film only. Lessons 8-13 are NOT in any supplied doc: it details 6 lessons and bills the course as 10, while the asset tree holds 13 films. Their titles are developer-written but describe what her own cover painting for each lesson actually shows (`fromArtwork: true`), rather than inventing a syllabus. Replace them when she writes lessons 7-12 of her own numbering.",
+      "_source": "assets/01 - Courses/Course 01-Beginner/Course1_Beginner_introduction.docx (client copy). Title, blurb, phase names and lessons 2-7 are hers, verbatim apart from UK spellings (her doc uses US color/watercolor; the rest of the site is UK). TWO NUMBERS IN HER DOC DISAGREE WITH THE ASSETS: it bills the course as '10 HD Video Lessons' and details 6, while the asset tree holds 13 films. The blurb no longer states a count, so the page cannot contradict itself — ask her which is right. Lesson 1 has no title yet: she supplied the film only. Lessons 8-13 are in no supplied doc; their titles are developer-written but describe what her own cover painting for each shows (`fromArtwork: true`).",
       "title": "Clouds - Beginner’s Guide to Drawing & Painting Clouds",
       "tag": "Sketching & Watercolour",
       "cat": "watercolour",
@@ -11,7 +11,7 @@
       "price": 58,
       "was": 72,
       "sale": true,
-      "blurb": "A structured masterclass for aspiring artists and complete beginners. It starts at foundational pencil sketching and simple perspective — enough to grasp the three-dimensional volume of a cloud — then works through line, composition, light and shadow placement, colour mixing and water control before moving into watercolour proper: flat washes, blending, wet-on-wet, dry-on-dry and negative space painting.",
+      "blurb": "Beginner’s Guide to Drawing & Painting Clouds is a structured online masterclass thoughtfully designed for aspiring artists and beginners. Featuring high-definition video demonstration lessons, this course comes with clear English voiceovers and subtitles, making your learning experience seamless and accessible. The curriculum follows an intuitive step-by-step progression, starting from foundational pencil sketching and simple perspective principles to help you grasp the three-dimensional volume of clouds. You will dive into a systematic breakdown of line work, composition, light and shadow placement, colour mixing, and essential water control. As you move into watercolour painting, you will master the medium’s core techniques, including flat washes, colour blending, wet-on-wet, dry-on-dry, and negative space painting. Whether you are picking up a paintbrush for the very first time or seeking to enhance the atmospheric depth of your artwork, this course will empower you to capture the fleeting beauty of skies and clouds with total technical confidence.",
       "learn": [
         "Simplify fluffy cloud contours in pencil and hatch them into three-dimensional form",
         "Arrange clouds on a perspective grid so the sky reads with real foreground-to-horizon depth",
@@ -34,12 +34,12 @@
       ],
       "modules": [
         {
-          "name": "Perspective, form & pencil shading",
+          "name": "Perspective, Form & Pencil Shading",
           "from": 1,
           "to": 5
         },
         {
-          "name": "Watercolour fundamentals & colouring",
+          "name": "Watercolour Fundamentals and Colouring Techniques",
           "from": 6,
           "to": 13
         }
@@ -69,10 +69,10 @@
         },
         {
           "title": "Detailed graphite shading & soft edges",
-          "subtitle": "Break cumulus into simple spheres, then push graphite and a kneaded eraser for real texture.",
+          "subtitle": "Understand the concepts of sketching and use deep shadows and subtle tonal gradations to transform flat outlines into three-dimensional cloud forms.",
           "focus": "Deconstruct complex cumulus clouds into simple spherical units and establish basic shading with pencil hatching. Render hyper-realistic cloud textures and high-contrast volumetric light using graphite pencils and kneaded erasers.",
           "tools": "A detailed sketching lesson covering fundamental geometric concepts. You will explore tonal values — from highlights and mid-tones to shadows — and the interplay of space, light and shadow, while learning step by step how to render abstract cloud formations.",
-          "outcome": "Use deep shadows and subtle tonal gradations to turn flat outlines into three-dimensional cloud forms with tangible volume. Capture the interplay of light and shadow on the clouds, and employ a variety of sketching pencils — hard through soft — for diverse line qualities and blending textures."
+          "outcome": "Understand the concepts of sketching and use deep shadows and subtle tonal gradations to transform flat outlines into three-dimensional cloud forms."
         },
         {
           "title": "Marker block-in & value distribution",

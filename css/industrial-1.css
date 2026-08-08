@@ -448,9 +448,18 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 
 /* right — inside the wood band. The band's container becomes a two-column grid
    so the signature can never overlap the title, and the band grows to fit it. */
-.page-hero .container { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; column-gap: 36px; }
-.page-hero .container > * { grid-column: 1; min-width: 0; }
-.page-hero .container > .logo2 { grid-column: 2; grid-row: 1 / -1; justify-self: end; }
+/* The signature is taken out of the flow rather than placed in the grid. As a
+   row-spanning grid item its own height set the row heights, so a 160px mark
+   forced 73px of dead space between the eyebrow and the title — the band read
+   as two widely separated lines with a picture beside them. Absolutely
+   positioned it is centred against the whole text block and contributes nothing
+   to it, and the container reserves its width as padding so a long title still
+   cannot run underneath. (client feedback 2026-08-08) */
+.page-hero .container { position: relative; padding-right: 296px; }
+.page-hero .container:not(:has(h1.font-a)) { padding-right: 246px; }
+.page-hero .container > .logo2 {
+  position: absolute; right: 24px; top: 50%; transform: translateY(-50%);
+  margin: 0; line-height: 0; }
 /* The signature stands as tall as the eyebrow-and-title beside it instead of a
    fixed 92px. Two values rather than one, because the two title sizes in use
    give two stack heights: 160px where the title is the large Font A one, 126px
@@ -465,9 +474,10 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 @media (max-width: 900px) {
   /* the text column takes the full width and the signature drops beneath it,
      rather than squeezing the title into a couple of words per line */
-  .page-hero .container { grid-template-columns: 1fr; }
-  .page-hero .container > .logo2 { grid-column: 1; grid-row: auto; justify-self: center; margin-top: 18px; }
-  .logo2 img { height: 68px; }
+  .page-hero .container { padding-right: 24px; }
+  .page-hero .container:not(:has(h1.font-a)) { padding-right: 24px; }
+  .page-hero .container > .logo2 { position: static; transform: none; margin: 18px auto 0; text-align: center; }
+  .page-hero .container > .logo2 img { height: 68px; }
   .logo2.is-center img { height: 78px; }
 }
 

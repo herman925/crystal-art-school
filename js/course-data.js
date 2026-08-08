@@ -63,7 +63,7 @@ window.CAS_COURSES = [
       "img/courses/clouds-beginner/p04.jpg",
       "img/courses/clouds-beginner/p05.jpg"
     ],
-    "blurb": "A structured masterclass for aspiring artists and complete beginners. It starts at foundational pencil sketching and simple perspective — enough to grasp the three-dimensional volume of a cloud — then works through line, composition, light and shadow placement, colour mixing and water control before moving into watercolour proper: flat washes, blending, wet-on-wet, dry-on-dry and negative space painting.",
+    "blurb": "Beginner’s Guide to Drawing & Painting Clouds is a structured online masterclass thoughtfully designed for aspiring artists and beginners. Featuring high-definition video demonstration lessons, this course comes with clear English voiceovers and subtitles, making your learning experience seamless and accessible. The curriculum follows an intuitive step-by-step progression, starting from foundational pencil sketching and simple perspective principles to help you grasp the three-dimensional volume of clouds. You will dive into a systematic breakdown of line work, composition, light and shadow placement, colour mixing, and essential water control. As you move into watercolour painting, you will master the medium’s core techniques, including flat washes, colour blending, wet-on-wet, dry-on-dry, and negative space painting. Whether you are picking up a paintbrush for the very first time or seeking to enhance the atmospheric depth of your artwork, this course will empower you to capture the fleeting beauty of skies and clouds with total technical confidence.",
     "learn": [
       "Simplify fluffy cloud contours in pencil and hatch them into three-dimensional form",
       "Arrange clouds on a perspective grid so the sky reads with real foreground-to-horizon depth",
@@ -86,12 +86,12 @@ window.CAS_COURSES = [
     ],
     "modules": [
       {
-        "name": "Perspective, form & pencil shading",
+        "name": "Perspective, Form & Pencil Shading",
         "from": 1,
         "to": 5
       },
       {
-        "name": "Watercolour fundamentals & colouring",
+        "name": "Watercolour Fundamentals and Colouring Techniques",
         "from": 6,
         "to": 13
       }
@@ -153,12 +153,12 @@ window.CAS_COURSES = [
       {
         "n": 4,
         "title": "Detailed graphite shading & soft edges",
-        "subtitle": "Break cumulus into simple spheres, then push graphite and a kneaded eraser for real texture.",
+        "subtitle": "Understand the concepts of sketching and use deep shadows and subtle tonal gradations to transform flat outlines into three-dimensional cloud forms.",
         "pending": false,
         "detail": {
           "focus": "Deconstruct complex cumulus clouds into simple spherical units and establish basic shading with pencil hatching. Render hyper-realistic cloud textures and high-contrast volumetric light using graphite pencils and kneaded erasers.",
           "tools": "A detailed sketching lesson covering fundamental geometric concepts. You will explore tonal values — from highlights and mid-tones to shadows — and the interplay of space, light and shadow, while learning step by step how to render abstract cloud formations.",
-          "outcome": "Use deep shadows and subtle tonal gradations to turn flat outlines into three-dimensional cloud forms with tangible volume. Capture the interplay of light and shadow on the clouds, and employ a variety of sketching pencils — hard through soft — for diverse line qualities and blending textures."
+          "outcome": "Understand the concepts of sketching and use deep shadows and subtle tonal gradations to transform flat outlines into three-dimensional cloud forms."
         },
         "dur": 2758,
         "poster": "img/courses/clouds-beginner/l04.jpg",
