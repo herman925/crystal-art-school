@@ -469,7 +469,11 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
    plain chip is a fact about this course that you cannot filter by, such as the
    lesson count, and takes linen. (client feedback 2026-08-08) */
 .cmc.is-filter { background: var(--marine); color: var(--marine-ink); }
-.cmc.is-fact { background: var(--linen); color: var(--linen-ink); }
+/* NOT --linen-ink: that token is linen used AS text on a dark ground, so on the
+   dark theme it resolves to linen itself and the chip was linen on linen —
+   invisible. A linen FILL takes the same dark ink .btn.linen uses, 8.5:1.
+   (client feedback 2026-08-09) */
+.cmc.is-fact { background: var(--linen); color: #2b2823; }
 .course-buy { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 20px; }
 .course-price { font-family: var(--font-display); font-weight: 700; font-size: 34px; color: var(--coral-ink); }
 .course-price .was { font-size: 19px; color: var(--muted); text-decoration: line-through; margin-right: 10px; font-weight: 500; }
@@ -651,43 +655,48 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
 .bc-card--cert.is-ph .cert-slot.is-portrait { aspect-ratio: 3 / 4; height: 100%; width: auto; }
 .bc-card--cert.is-ph .cert-slot.is-square { aspect-ratio: 1 / 1; }
 
-/* ---- the certificate strip: a timeline over a rail of mounts --------------
-   Both hold exactly five across and share one item width, so their scroll
-   positions map 1:1 and the script mirrors one to the other. Scroll either and
-   the other follows — a year in the timeline is always directly above its own
-   certificate. (client feedback 2026-08-08)
+/* ---- the certificate strip: a table that drives a rail of pictures --------
+   Desktop is two things and only two: a vertical table of certificates, and the
+   pictures beside it. The table is the CONTROL — scroll it and the pictures
+   move with it. There is no second horizontal strip of text; that existed only
+   to force the two into step and was never wanted. (client feedback 2026-08-09)
 
-   --cert-gap and the five-across division live here rather than in the script,
-   so the two rails cannot drift apart by having their widths worked out in two
-   places. */
-.bio-certs { --cert-gap: 18px; --cert-show: 5; }
-.cert-timeline { position: relative; display: flex; flex-wrap: nowrap; gap: var(--cert-gap);
-  overflow-x: auto; scrollbar-width: none; margin-bottom: 6px;
-  overscroll-behavior-x: contain; scroll-behavior: smooth; }
-.cert-timeline::-webkit-scrollbar { display: none; }
-/* the rule the markers sit on, drawn the full scrollable length */
-.cert-timeline::before { content: ""; position: absolute; left: 0; top: 46px; height: 1px;
-  width: max(100%, var(--ct-span, 100%));
-  background: color-mix(in srgb, var(--ink) 22%, transparent); }
-.ct-node { position: relative; flex: 0 0 calc((100% - (var(--cert-show) - 1) * var(--cert-gap)) / var(--cert-show));
-  display: flex; flex-direction: column; align-items: center; text-align: center; gap: 6px;
-  padding-bottom: 4px; }
-.ct-year { font-family: var(--font-cond); font-weight: 600; font-size: 15px;
-  letter-spacing: var(--tracking-label); color: var(--ink); }
-.ct-dot { width: 11px; height: 11px; border-radius: 50%; background: var(--marine);
-  box-shadow: 0 0 0 4px var(--surface); }
-.ct-node.is-pending .ct-dot { background: color-mix(in srgb, var(--ink) 26%, transparent); }
-.ct-node.is-pending .ct-year { color: var(--muted); }
-.ct-label { font-size: 12.5px; line-height: 1.4; color: var(--muted); max-width: 22ch; }
-/* The eye opens the certificate on its own. It is the only way to see a scan on
-   a phone, where the mounts are not rendered at all. */
-.ct-eye { display: inline-grid; place-items: center; width: 30px; height: 30px; padding: 0;
-  border: 1px solid color-mix(in srgb, var(--ink) 20%, transparent); border-radius: 50%;
-  background: var(--surface); color: var(--ink); cursor: pointer;
+   --cert-rows is how many rows are visible before the table scrolls, and the
+   rail is sized so the same number of pictures is visible, which is what makes
+   one scrollbar position mean the same thing in both. */
+.bio-certs { --cert-gap: 18px; --cert-show: 5; --cert-row: 62px; }
+.cert-split { display: grid; grid-template-columns: minmax(280px, 0.9fr) 1.6fr; gap: 26px; align-items: start; }
+@media (max-width: 1100px) { .cert-split { grid-template-columns: 1fr; } }
+
+.cert-list { max-height: calc(var(--cert-show) * var(--cert-row)); overflow-y: auto;
+  overscroll-behavior-y: contain; scrollbar-width: thin;
+  border-radius: var(--radius-card); background: var(--surface); box-shadow: var(--shadow-sm); }
+.cert-list::-webkit-scrollbar { width: 8px; }
+.cert-list::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--ink) 22%, transparent); border-radius: 4px; }
+.cert-row { display: grid; grid-template-columns: 34px 58px 1fr; align-items: center; gap: 12px;
+  height: var(--cert-row); box-sizing: border-box; padding: 0 14px; cursor: pointer;
+  border-bottom: 1px solid color-mix(in srgb, var(--ink) 10%, transparent);
+  background: none; border-left: 0; border-right: 0; border-top: 0; width: 100%;
+  text-align: left; color: inherit; font: inherit;
+  transition: background var(--dur-base); }
+.cert-row:last-child { border-bottom: 0; }
+.cert-row:hover, .cert-row.is-active { background: color-mix(in srgb, var(--ink) 7%, transparent); }
+.cert-row.is-active { box-shadow: inset 3px 0 0 var(--marine); }
+/* The info button is a column of its own at the left edge, so every icon lines
+   up down the table instead of floating after text of differing lengths.
+   (client feedback 2026-08-09) Desktop does not need it — the picture is right
+   there — so it only appears on the narrow layout. */
+.cert-info { display: none; grid-column: 1; width: 30px; height: 30px; place-items: center;
+  border-radius: 50%; border: 1px solid color-mix(in srgb, var(--ink) 22%, transparent);
+  background: var(--surface); color: var(--ink); cursor: pointer; padding: 0;
+  font-family: var(--font-cond); font-weight: 700; font-size: 14px; line-height: 1;
   transition: background var(--dur-base), transform var(--dur-base); }
-.ct-eye:hover { background: var(--ink); color: var(--paper); transform: scale(1.06); }
-.ct-eye svg { width: 15px; height: 15px; }
-.ct-node.is-pending .ct-eye { opacity: .35; pointer-events: none; }
+.cert-info:hover { background: var(--marine); color: var(--marine-ink); transform: scale(1.06); }
+.cert-year { grid-column: 2; font-family: var(--font-cond); font-weight: 600; font-size: 14px;
+  letter-spacing: var(--tracking-label); color: var(--ink); }
+.cert-name { grid-column: 3; font-size: 13.5px; line-height: 1.4; color: var(--muted);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.cert-row.is-pending .cert-year, .cert-row.is-pending .cert-name { color: var(--muted); opacity: .7; }
 
 /* The row is one continuous strip that can be dragged, not a set of pages: the
    mounts are identical in size, so there is no natural page boundary between
@@ -702,20 +711,15 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
 /* the tilt returns on hover only, so a dragged strip stays flat */
 .bc-row.is-rail .bc-card--cert:hover { transform: translateY(-4px); }
 
-/* On a phone the mounts are not rendered at all — five 3:4 frames in a 360px
-   column would be thumbnails. The timeline becomes the whole presentation,
-   stacked, and each entry opens its certificate through the eye.
-   (client feedback 2026-08-08) */
-@media (max-width: 760px) {
+/* Below 1100px the pictures are dropped and the table is the whole thing: five
+   3:4 mounts in a narrow column would be thumbnails. That is when the info
+   button appears, because the table becomes the only route to a scan.
+   (client feedback 2026-08-09) */
+@media (max-width: 1100px) {
   .bio-certs .bc-row.is-rail { display: none; }
-  .cert-timeline { display: block; overflow: visible; margin-bottom: 0; }
-  .cert-timeline::before { top: 0; bottom: 0; left: 14px; width: 1px; height: auto; }
-  .ct-node { flex: none; flex-direction: row; align-items: center; text-align: left;
-    gap: 12px; padding: 10px 0 10px 0; }
-  .ct-node .ct-year { flex: 0 0 46px; order: 2; }
-  .ct-node .ct-dot { order: 1; flex: none; }
-  .ct-node .ct-label { order: 3; flex: 1; max-width: none; }
-  .ct-node .ct-eye { order: 4; flex: none; }
+  .cert-list { max-height: none; }
+  .cert-info { display: grid; }
+  .cert-row { cursor: default; }
 }
 
 /* ---- the certificate lightbox ---- */

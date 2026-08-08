@@ -309,11 +309,16 @@
              It scrolls as one continuous strip that can be dragged, rather than
              stepping page by page: the mounts are identical in size and there is
              no natural page boundary between them. -->
-        <!-- The timeline is generated from the mounts below, so the two can
-             never disagree about how many there are or what order they are in.
-             Both hold five across and their scroll positions are mirrored. -->
-        <div class="cert-timeline" id="cert-timeline" aria-label="Certificate timeline"></div>
-        <div class="bc-row is-rail" id="cert-rail">
+        <!-- The vertical table is the desktop layout and it is the CONTROL: as it
+             scrolls, the pictures beside it scroll with it. There is no second
+             horizontal strip of text — that existed only to force the two into
+             step and it was never wanted. (client feedback 2026-08-09)
+
+             Five rows are visible; an eleventh certificate is reached by
+             scrolling the table, not by paging it. -->
+        <div class="cert-split">
+          <div class="cert-list" id="cert-list" role="list" aria-label="Certificates"></div>
+          <div class="bc-row is-rail" id="cert-rail">
           <figure class="bc-card bc-card--cert" data-year="2026" data-place="Accademia Internazionale dell'Acquarello, Italy">
             <div class="cert-frame"><div class="cert-mat">
               <img src="img/about/cert-accademia-2026.jpg" alt="Official Finalist certificate, International Watercolor Academy Award 2026, Accademia Internazionale dell'Acquarello, Italy" loading="lazy" decoding="async">
@@ -326,14 +331,15 @@
             </div></div>
             <figcaption>Winning Work · 26th JIWI Online Spring Exhibition · 《City of Japan》</figcaption>
           </figure>
-          <!-- ASSET PENDING: empty mounts showing how further certificates fill the
-                  rail, and how a landscape scan sits in the same portrait frame. Delete
-                  these figures as real scans are supplied. -->
+          <!-- ASSET PENDING: eight empty mounts, so ten in all — enough to show the
+                  table scrolling past its five visible rows and the pictures keeping
+                  step. They also show landscape, portrait and square scans all sitting
+                  in the one portrait mount. Delete them as real scans are supplied. -->
           <figure class="bc-card bc-card--cert is-ph" aria-hidden="true">
             <div class="cert-frame"><div class="cert-mat">
               <span class="cert-slot is-landscape">Landscape certificate</span>
             </div></div>
-            <figcaption>Same mount, fitted — no crop</figcaption>
+            <figcaption>Awaiting scan</figcaption>
           </figure>
           <figure class="bc-card bc-card--cert is-ph" aria-hidden="true">
             <div class="cert-frame"><div class="cert-mat">
@@ -353,6 +359,32 @@
             </div></div>
             <figcaption>Awaiting scan</figcaption>
           </figure>
+          <figure class="bc-card bc-card--cert is-ph" aria-hidden="true">
+            <div class="cert-frame"><div class="cert-mat">
+              <span class="cert-slot is-portrait">Portrait certificate</span>
+            </div></div>
+            <figcaption>Awaiting scan</figcaption>
+          </figure>
+          <figure class="bc-card bc-card--cert is-ph" aria-hidden="true">
+            <div class="cert-frame"><div class="cert-mat">
+              <span class="cert-slot is-landscape">Landscape certificate</span>
+            </div></div>
+            <figcaption>Awaiting scan</figcaption>
+          </figure>
+          <figure class="bc-card bc-card--cert is-ph" aria-hidden="true">
+            <div class="cert-frame"><div class="cert-mat">
+              <span class="cert-slot is-square">Square certificate</span>
+            </div></div>
+            <figcaption>Awaiting scan</figcaption>
+          </figure>
+          <figure class="bc-card bc-card--cert is-ph" aria-hidden="true">
+            <div class="cert-frame"><div class="cert-mat">
+              <span class="cert-slot is-portrait">Portrait certificate</span>
+            </div></div>
+            <figcaption>Awaiting scan</figcaption>
+          </figure>
+          </div>
+        </div>
         </div>
       </div>
     </div>
@@ -639,52 +671,48 @@ class Component extends DCLogic {
        Order is whatever the author puts in the CMS — see the note in the
        markup. */
     const rail = document.getElementById('cert-rail');
-    const tl = document.getElementById('cert-timeline');
-    if (rail && tl) {
-      /* The timeline is built FROM the mounts rather than written out beside
-         them, so the two cannot disagree about how many certificates there are
-         or what order they are in — and the author only arranges one list in
-         the CMS. Same item count, same width division, so the scroll positions
-         map 1:1 and each can be mirrored onto the other. */
-      const EYE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M1.8 12S5.5 5.5 12 5.5 22.2 12 22.2 12 18.5 18.5 12 18.5 1.8 12 1.8 12z"></path><circle cx="12" cy="12" r="3.1"></circle></svg>';
+    const list = document.getElementById('cert-list');
+    if (rail && list) {
+      /* The table is built FROM the mounts, so the two cannot disagree about how
+         many certificates there are or what order they are in, and the author
+         still arranges one list in the CMS. It is also the CONTROL: scrolling
+         the table scrolls the pictures. There is no second horizontal strip of
+         text — that existed only to force the sync and was not wanted.
+         (client feedback 2026-08-09) */
       const mounts = Array.from(rail.querySelectorAll('.bc-card--cert'));
-      tl.innerHTML = mounts.map((fig, i) => {
+      list.innerHTML = mounts.map((fig, i) => {
         const pending = fig.classList.contains('is-ph');
         const cap = (fig.querySelector('figcaption') || {}).textContent || '';
         const year = fig.getAttribute('data-year') || '—';
-        /* the caption's first segment is the award itself; the rest is the
-           exhibition and the work, which is more than a timeline node wants */
-        const label = pending ? 'Awaiting scan' : cap.split(' · ')[0];
-        return '<div class="ct-node' + (pending ? ' is-pending' : '') + '" data-i="' + i + '">' +
-          '<span class="ct-year">' + year + '</span>' +
-          '<span class="ct-dot" aria-hidden="true"></span>' +
-          '<span class="ct-label">' + label + '</span>' +
-          '<button class="ct-eye" type="button" data-i="' + i + '" aria-label="View certificate' +
-            (pending ? ' (not yet supplied)' : ': ' + cap.replace(/"/g, '')) + '"' +
-            (pending ? ' disabled' : '') + '>' + EYE + '</button>' +
-        '</div>';
+        const name = pending ? 'Awaiting scan' : cap;
+        return '<button class="cert-row' + (pending ? ' is-pending' : '') + '" type="button" role="listitem" data-i="' + i + '">' +
+          '<span class="cert-info" role="presentation" aria-hidden="true">i</span>' +
+          '<span class="cert-year">' + year + '</span>' +
+          '<span class="cert-name">' + name + '</span>' +
+        '</button>';
       }).join('');
-      /* the rule runs the full scrollable length, not just the visible part */
-      const spanRule = () => tl.style.setProperty('--ct-span', tl.scrollWidth + 'px');
-      spanRule();
-      window.addEventListener('resize', spanRule);
 
-      /* Mirror in both directions. The guard stops the two handlers bouncing
-         the scroll back and forth between them. */
+      /* Both scrollers are driven as a FRACTION of their own scrollable room,
+         not by pixels: the table scrolls vertically in 62px rows and the rail
+         scrolls horizontally in mount widths, so pixel-for-pixel would drift
+         immediately. The guard stops the two handlers bouncing off each other. */
       let syncing = false;
-      const mirror = (from, to) => {
+      const mirror = (from, to, fromAxis, toAxis) => {
         if (syncing) return;
         syncing = true;
-        const room = from.scrollWidth - from.clientWidth;
-        const toRoom = to.scrollWidth - to.clientWidth;
-        to.scrollLeft = room > 0 ? (from.scrollLeft / room) * toRoom : 0;
+        const fromRoom = fromAxis === 'y' ? from.scrollHeight - from.clientHeight
+                                          : from.scrollWidth - from.clientWidth;
+        const toRoom = toAxis === 'y' ? to.scrollHeight - to.clientHeight
+                                      : to.scrollWidth - to.clientWidth;
+        const at = fromRoom > 0 ? (fromAxis === 'y' ? from.scrollTop : from.scrollLeft) / fromRoom : 0;
+        if (toAxis === 'y') to.scrollTop = at * toRoom; else to.scrollLeft = at * toRoom;
         requestAnimationFrame(() => { syncing = false; });
       };
-      rail.addEventListener('scroll', () => mirror(rail, tl));
-      tl.addEventListener('scroll', () => mirror(tl, rail));
+      list.addEventListener('scroll', () => mirror(list, rail, 'y', 'x'));
+      rail.addEventListener('scroll', () => mirror(rail, list, 'x', 'y'));
 
-      /* the lightbox — the only route to a scan on a phone, where the mounts
-         are not rendered */
+      /* the lightbox — on the narrow layout, where the mounts are not rendered,
+         this is the only route to a scan */
       const lb = document.getElementById('cert-lb');
       const lbImg = document.getElementById('clb-img');
       const lbCap = document.getElementById('clb-cap');
@@ -705,8 +733,18 @@ class Component extends DCLogic {
         lbImg.removeAttribute('src');
         document.body.style.overflow = '';
       };
-      tl.querySelectorAll('.ct-eye').forEach((b) =>
-        b.addEventListener('click', () => openCert(Number(b.dataset.i))));
+      const rows = Array.from(list.querySelectorAll('.cert-row'));
+      rows.forEach((r, i) => {
+        r.addEventListener('click', () => {
+          if (r.classList.contains('is-pending')) return;
+          openCert(i);
+        });
+        /* hovering a row marks the matching mount, so the pairing is visible */
+        r.addEventListener('pointerenter', () => {
+          rows.forEach((x, j) => x.classList.toggle('is-active', i === j));
+        });
+      });
+      list.addEventListener('pointerleave', () => rows.forEach((x) => x.classList.remove('is-active')));
       mounts.forEach((fig, i) => { if (!fig.classList.contains('is-ph')) fig.addEventListener('click', () => openCert(i)); });
       lb.querySelectorAll('[data-close]').forEach((el) => el.addEventListener('click', closeCert));
       document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && lb.classList.contains('open')) closeCert(); });
