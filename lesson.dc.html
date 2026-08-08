@@ -34,7 +34,7 @@
 .course-desc { margin-bottom: 22px; }
 /* the title spans the full width above the wrapped block — it is not part of
    the wrap. Only the cover and the body copy share the float. */
-.course-desc h2 { font-family: var(--font-marker); font-weight: 700; font-size: clamp(26px, 2.8vw, 38px); line-height: 1.14; color: var(--ink); margin: 0 0 16px; }
+.course-desc h1 { font-family: var(--font-marker); font-weight: 700; font-size: clamp(26px, 2.8vw, 38px); line-height: 1.14; color: var(--ink); margin: 0 0 16px; }
 .course-desc .cd-body::after { content: ""; display: block; clear: both; }
 .course-desc .cd-cover { float: left; width: min(42%, 320px); margin: 4px 24px 14px 0; border-radius: var(--radius-card); box-shadow: var(--shadow-sm); }
 .course-desc p { font-size: 16px; line-height: 1.72; color: var(--muted); margin: 0; }
@@ -159,8 +159,11 @@
   <div class="container">
     <!-- filled from window.CAS_COURSES for the course named by ?c= -->
     <div class="crumbs"><a href="Lessons.dc.html">Courses</a> <span aria-hidden="true">→</span> <a id="lx-course-link" href="course.dc.html"></a></div>
-    <h1 class="marker-title" id="lx-title" style="font-size:clamp(30px,4vw,54px);margin-top:12px;color:var(--banner-ink);"></h1>
-    <p class="lead" id="lx-blurb" style="color:var(--banner-ink);opacity:.85;"></p>
+    <!-- 1.4.9 (2026-08-07): the course title and blurb live in the wrapped
+         Course Description below the player, which is where her Word layout puts
+         them. The banner carried a second copy of both; two titles and two
+         identical paragraphs on one page read as a mistake. The crumb above
+         still names the course, and the meta row below still identifies it. -->
     <div class="lesson-meta-row" id="lx-meta"></div>
     <div class="logo2"><img src="img/logo2.png" alt="Crystal Lau Art" loading="lazy" decoding="async"></div>
   </div>
@@ -343,8 +346,6 @@ class Component extends DCLogic {
     const link = document.getElementById('lx-course-link');
     if (link) { link.href = courseHref; link.textContent = COURSE.title; }
     const setText = (id, txt) => { const el = document.getElementById(id); if (el) el.textContent = txt; };
-    setText('lx-title', COURSE.title);
-    setText('lx-blurb', COURSE.blurb);
     setText('lx-total', String(N));
     setText('fc-course', COURSE.title);
     setText('fc-count', 'completed · ' + N + ' of ' + N + (N === 1 ? ' lesson' : ' lessons'));
@@ -383,9 +384,11 @@ class Component extends DCLogic {
       const blurb = (COURSE.blurb || '').trim();
       if (!blurb) { host.style.display = 'none'; return; }
       /* The title sits ABOVE the wrapped block, full width — it is not part of
-         the wrap. Only the cover and the body text share the float. */
+         the wrap. Only the cover and the body text share the float.
+         It is the page's h1: the banner no longer carries a heading, because a
+         second copy of this same title and paragraph up there read as a mistake. */
       host.innerHTML =
-        '<h2>' + escl(COURSE.title) + '</h2>' +
+        '<h1>' + escl(COURSE.title) + '</h1>' +
         '<div class="cd-body">' +
           (COURSE.cover ? '<img class="cd-cover" src="' + escl(COURSE.cover) + '" alt="' + escl(COURSE.title) + '" loading="lazy" decoding="async">' : '') +
           '<p>' + escl(blurb) + '</p>' +
