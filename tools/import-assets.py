@@ -414,7 +414,7 @@ def main():
     manifest["warnings"] = warnings
 
     os.makedirs(TOOLS_DIR, exist_ok=True)
-    with open(MANIFEST, "w", encoding="utf-8") as fh:
+    with open(MANIFEST, "w", encoding="utf-8", newline="\n") as fh:
         json.dump(manifest, fh, indent=2, ensure_ascii=False)
 
     print("\nwrote %s" % os.path.relpath(MANIFEST, SITE_DIR))

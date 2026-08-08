@@ -1,0 +1,32 @@
+# Line endings are decided here, once, instead of by whichever tool last wrote a
+# file. Before this, Python's open() in text mode on Windows silently rewrote
+# whole files from LF to CRLF, so ordinary one-line edits produced diffs
+# thousands of lines long -- which is how an orphaned CSS brace stayed invisible
+# for two commits.
+#
+# text=auto: git decides text vs binary by content, and normalises to LF in the
+# repository on commit. eol=lf: check out LF too, so the working tree and the
+# repository agree and a text-mode write can no longer cause a phantom diff.
+* text=auto eol=lf
+
+# Batch files are read by cmd.exe, which is the one consumer here that has ever
+# cared. Keep them CRLF on disk.
+*.bat text eol=crlf
+
+# Named explicitly rather than left to content sniffing -- a stray text guess on
+# a font or a photograph corrupts it.
+*.png  binary
+*.jpg  binary
+*.jpeg binary
+*.gif  binary
+*.webp binary
+*.ico  binary
+*.mp4  binary
+*.mov  binary
+*.woff binary
+*.woff2 binary
+*.ttf  binary
+*.otf  binary
+*.pdf  binary
+*.docx binary
+*.zip  binary

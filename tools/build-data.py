@@ -229,7 +229,7 @@ def build_gallery(manifest, meta):
 
 
 def write_js(path, varname, payload, extra=""):
-    with open(path, "w", encoding="utf-8") as fh:
+    with open(path, "w", encoding="utf-8", newline="\n") as fh:
         fh.write(BANNER)
         fh.write("window.%s = %s;\n" % (varname, json.dumps(payload, indent=2, ensure_ascii=False)))
         if extra:
