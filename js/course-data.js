@@ -390,10 +390,14 @@ window.CAS_COURSES = [
     "lessons": [
       {
         "n": 1,
-        "title": "Wet-on-wet cloud edges",
-        "subtitle": "Soft, seamless transitions — control the chaos with timing, not fiddling.",
+        "title": "Violet Sunset & Soft Cloud Strata",
+        "subtitle": "Master blending vibrant light sources into gentle pastel gradient skies and render translucent, floating cloud silhouettes.",
         "pending": false,
-        "detail": {},
+        "detail": {
+          "focus": "Explore the subtle transition between luminous yellow centre and cool violet/pink sky tones, practicing soft horizontal layering for ambient cloud formations.",
+          "tools": "Flat/Round watercolour brushes, graded wash, wet-on-wet blend, wet-on-dry layering.",
+          "outcome": "Master blending vibrant light sources into gentle pastel gradient skies and render translucent, floating cloud silhouettes."
+        },
         "dur": 301,
         "poster": "img/courses/clouds-intermediate/l01.jpg",
         "video": "https://drive.google.com/file/d/1eFPmktMVG8fIkiVSbWyZmggVteg5jC3T/preview",
@@ -405,10 +409,14 @@ window.CAS_COURSES = [
       },
       {
         "n": 2,
-        "title": "Gradient washes for skies",
-        "subtitle": "Load a bead, tilt the board, walk away.",
+        "title": "Dramatic Twilight Sky & Utility Pole Silhouette",
+        "subtitle": "Learn to paint dynamic multi-colour sky gradients and master fine brushwork for intricate dark silhouettes over colourful backgrounds.",
         "pending": false,
-        "detail": {},
+        "detail": {
+          "focus": "Capture a striking twilight gradient from deep ultramarine to warm fiery orange, using fine line control to add crisp architectural silhouettes.",
+          "tools": "Flat brush, fine detail liner brush, graded wash, wet-on-wet softening, precise dry-brush detail.",
+          "outcome": "Learn to paint dynamic multi-colour sky gradients and master fine brushwork for intricate dark silhouettes over colourful backgrounds."
+        },
         "dur": 721,
         "poster": "img/courses/clouds-intermediate/l02.jpg",
         "video": "https://drive.google.com/file/d/13z7hg--pE6KH86rQlM1sSzPDgDeuOBJ0/preview",
@@ -420,10 +428,14 @@ window.CAS_COURSES = [
       },
       {
         "n": 3,
-        "title": "Negative painting & hard edges",
-        "subtitle": "The brightest highlight is paper you never touched.",
+        "title": "Sunset Countryside Horizon & Soft Clouds",
+        "subtitle": "Master creating depth across sky and ground elements, combining soft atmospheric gradients with crisp landscape detail.",
         "pending": false,
-        "detail": {},
+        "detail": {
+          "focus": "Balance a vibrant warm horizon with soft purple clouds overhead, while integrating textured green foreground fields and distant tree silhouettes.",
+          "tools": "Flat/Round watercolour brushes, graded wash, wet-on-wet cloud softness, dry-brush texturing",
+          "outcome": "Master creating depth across sky and ground elements, combining soft atmospheric gradients with crisp landscape detail."
+        },
         "dur": 365,
         "poster": "img/courses/clouds-intermediate/l03.jpg",
         "video": "https://drive.google.com/file/d/1z_hWBZRbqbXSoCgG_ukg8X6pe22DIvdE/preview",
@@ -435,10 +447,14 @@ window.CAS_COURSES = [
       },
       {
         "n": 4,
-        "title": "Lifting & softening",
-        "subtitle": "The rescue kit — a damp brush, clean tissue, and knowing when to stop.",
+        "title": "Golden Hour Country Barn & Cloudscape",
+        "subtitle": "Master golden hour colour palettes and learn to build dimension in both cloud forms and focal point architectural structures.",
         "pending": false,
-        "detail": {},
+        "detail": {
+          "focus": "Render a warm golden hour light across expansive clouds, capturing the rich glowing tones on a rustic barn and surrounding fields.",
+          "tools": "Round brush, flat brush, wet-on-wet wash, wet-on-dry edge control, lifting technique.",
+          "outcome": "Master golden hour colour palettes and learn to build dimension in both cloud forms and focal point architectural structures."
+        },
         "dur": 646,
         "poster": "img/courses/clouds-intermediate/l04.jpg",
         "video": "https://drive.google.com/file/d/1e970EeC_5gW5AcG-4hbCndSwmK7qOJGe/preview",
@@ -450,10 +466,14 @@ window.CAS_COURSES = [
       },
       {
         "n": 5,
-        "title": "Storm clouds over the ocean",
-        "subtitle": "First full scene: everything from the values phase, at full volume.",
+        "title": "Fluffy Cumulus Clouds & Pure Blue Sky",
+        "subtitle": "Master sculpting three-dimensional cloud volume using subtle cool grey shadows and organic, soft-edged water control.",
         "pending": false,
-        "detail": {},
+        "detail": {
+          "focus": "Understand light and shadow structure in voluminous white clouds against a deep, vibrant blue backdrop.",
+          "tools": "Mop/Round watercolour brushes, wet-on-wet soft blending, soft lifting, graded sky wash.",
+          "outcome": "Master sculpting three-dimensional cloud volume using subtle cool grey shadows and organic, soft-edged water control."
+        },
         "dur": 452,
         "poster": "img/courses/clouds-intermediate/l05.jpg",
         "video": "https://drive.google.com/file/d/1Vi3NdvAymd4y8QUKRyH-SiP5lm2Ynl6k/preview",
@@ -465,10 +485,14 @@ window.CAS_COURSES = [
       },
       {
         "n": 6,
-        "title": "Evening silhouettes & power lines",
-        "subtitle": "A peaceful dusk silhouette — quiet, graphic, easier than it looks.",
+        "title": "Coastal Horizon & Stormy Horizon Clouds",
+        "subtitle": "Master combining stormy sky mood with reflective water planes, achieving harmony between heavy atmospheric clouds and clear water.",
         "pending": false,
-        "detail": {},
+        "detail": {
+          "focus": "Depict dramatic, heavy cloud formations hovering over a serene coastal shoreline and wet sandy beach reflections.",
+          "tools": "Flat brush, mop brush, wet-on-wet cloud softness, wet-on-dry horizon lines",
+          "outcome": "Master combining stormy sky mood with reflective water planes, achieving harmony between heavy atmospheric clouds and clear water."
+        },
         "dur": 752,
         "poster": "img/courses/clouds-intermediate/l06.jpg",
         "video": "https://drive.google.com/file/d/1nLsTY2HX2QX0Mn7DPCkX7N-_0a-D1s1T/preview",
@@ -480,10 +504,14 @@ window.CAS_COURSES = [
       },
       {
         "n": 7,
-        "title": "Composing a full cloudscape",
-        "subtitle": "Reference, thumbnails, value plan, palette — and I paint alongside you.",
+        "title": "Crimson Ocean Sunset & Low Horizon",
+        "subtitle": "Master dramatic colour contrast and horizontal stroke layering to capture rich, glowing water and sky reflections during peak sunset.",
         "pending": false,
-        "detail": {},
+        "detail": {
+          "focus": "Explore intense sunset colours with horizontal light banding, a glowing sun disk, and dark distant mountain silhouettes against reflective waters.",
+          "tools": "Flat wash brush, detail brush, graded wash, wet-on-dry horizontal streak, masking/lifting for sun",
+          "outcome": "Master dramatic colour contrast and horizontal stroke layering to capture rich, glowing water and sky reflections during peak sunset."
+        },
         "dur": 850,
         "poster": "img/courses/clouds-intermediate/l07.jpg",
         "video": "https://drive.google.com/file/d/1JKOkG3Bn6C4xzyr0lr-5jlIqtVcgmiM5/preview",
