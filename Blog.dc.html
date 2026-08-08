@@ -191,7 +191,18 @@ class Component extends DCLogic {
           /* 12.2: the board draws the feature card as kicker, framed title,
              reading time and the link — 作者不顯示，摘要不顯示. The excerpt is
              deliberately absent. */
-          '<div class="bf-frame"><h2>' + esc(f.title) + '</h2></div>' +
+          /* Three boxes, not one: the marks were pseudo-elements on the <h2>, so
+             they shared its line box and the closing one collided with the last
+             line of the title. Each now owns a grid row and the layout engine
+             places them without overlap.
+             The spans are empty in the markup and the glyph comes from CSS
+             content, so at CMS time there is no field here for anyone to edit —
+             the marks are chrome, only the <h2> is content. */
+          '<div class="bf-frame">'
+            + '<span class="bf-quote is-open" aria-hidden="true"></span>'
+            + '<h2>' + esc(f.title) + '</h2>'
+            + '<span class="bf-quote is-close" aria-hidden="true"></span>'
+          + '</div>' +
           '<span class="bf-reads">' + (f.mins || 4) + ' min read</span>' +
           '<a class="link-squiggle" href="blog-post.dc.html?id=' + esc(f.id) + '" style="align-self:flex-start;">Read the post →</a></div>' +
           '<span class="bf-ribbon" aria-hidden="true"><span>' + esc(f.tag) + '</span></span>';

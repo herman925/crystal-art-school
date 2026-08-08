@@ -704,6 +704,7 @@
 .blog-feature .bf-frame {
   position: relative; align-self: flex-start; max-width: 100%;
   padding: 6px 0 10px;
+  display: grid; justify-items: start; gap: 2px;
 }
 /* Blind deboss: light comes from the top left, so the wall above each letter is
    in shadow and the lip below it catches the light. That pairing — dark offset
@@ -728,38 +729,25 @@
     0 1px 0 rgba(255,240,212,.50),
     0 2px 4px rgba(40,22,10,.28);
 }
-/* §12.1: the headline sits inside quote marks. They are inline on the heading
-   rather than absolutely positioned on the box, so they open immediately before
-   the first word and close after the last one — which is what wrapping the text
-   means. As absolute corners they floated free of the sentence, and at 118px
-   under the full deboss Bodoni's comma-shaped quotes read as two dark blobs
-   rather than as punctuation. The deboss here is lighter than the headline's: a
-   glyph this large loses its shape under a shadow stack tuned for 41px type. */
-.blog-feature .bf-frame h2::before,
-.blog-feature .bf-frame h2::after {
-  /* Georgia, not the display serif: Bodoni draws its quotation marks as plain
-     balls with no tail, so at any size they read as a pair of dots rather than
-     as punctuation. Georgia's are comma-shaped and unmistakable. */
+/* §12.1: the headline sits inside quote marks, each in its own box.
+   They were pseudo-elements on the <h2>, which meant all three shared one line
+   box: the closing mark had to hang off whatever word the title happened to end
+   on, and it collided with the last line. As grid rows the engine places them
+   with no overlap and no hand-tuned offsets.
+   The spans are empty in the markup — the glyph is CSS content — so there is no
+   field here for the CMS to expose. Only the <h2> is editable content. */
+.blog-feature .bf-quote { display: block; line-height: .52; pointer-events: none;
   font-family: Georgia, "Times New Roman", serif; font-weight: 700;
-  /* 2.4em, not the 1.2em it started at: Bodoni draws its quotes as small high
-     commas, so at anything near the text size they read as a pair of dots
-     rather than as punctuation. line-height:0 keeps them out of the layout
-     and the negative vertical-align hangs them from the cap line. */
-  /* Each mark takes its own line — the opening one above the headline, the
-     closing one below and hard right, the way a pull-quote sets them. Inline
-     they had to hang off the first and last words, which meant the closing
-     mark landed wherever the text happened to stop. (client feedback
-     2026-08-08) */
-  display: block; font-size: 2.4em; line-height: .58; color: rgba(52,36,23,.5);
-  /* Georgia's comma tapers to a thin tail. A centred stroke fattens the whole
-     glyph without changing its shape, which is what a mark pressed into hide
-     would look like — the tool has a width. Tested against Archivo and Oswald
-     first: both draw straight wedges with no tail at all. */
+  font-size: clamp(62px, 6.1vw, 96px); color: rgba(52,36,23,.5);
+  /* Georgia's comma tapers to a thin tail and no weight it ships fixes that. A
+     centred stroke fattens the glyph without changing its shape, which is what a
+     mark pressed into hide looks like — the tool had a width. Archivo and Oswald
+     were tried first: both draw straight wedges with no tail at all. */
   -webkit-text-stroke: 3px rgba(52,36,23,.5);
-  text-shadow: 0 -1px 1px rgba(40,22,10,.45), 0 1px 0 rgba(255,240,212,.42);
-}
-.blog-feature .bf-frame h2::before { content: "“"; margin: 0 0 .04em -.06em; }
-.blog-feature .bf-frame h2::after  { content: "”"; margin: .12em -.06em 0 0; text-align: right; }
+  text-shadow: 0 -1px 1px rgba(40,22,10,.45), 0 1px 0 rgba(255,240,212,.42); }
+.blog-feature .bf-quote.is-open::before  { content: "“"; }
+.blog-feature .bf-quote.is-close::before { content: "”"; }
+.blog-feature .bf-quote.is-close { justify-self: end; }
 .blog-feature .bf-frame h2 { position: relative; z-index: 1; text-wrap: pretty; }
 
 /* 12.1: a bookmark ribbon down the right-hand edge carrying the category,
