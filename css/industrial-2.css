@@ -66,16 +66,12 @@
    footer it is knocked out to the footer's own ink rather than left as a white
    slab — the same treatment .sig-script uses on the light theme, in reverse.
    Drop both filters once transparent artwork arrives (#17). */
-/* The wrapper carries the footer's own colour so the blend has a backdrop: the
-   footer's background is a gradient over a wood image, and blending against
-   that gave a white slab on the light theme and a black one on the dark. Same
-   reason .sig-script paints --cream. */
-.footer-sig { line-height: 0; margin-bottom: 12px; display: inline-block;
-  background: var(--footer-bg, #e3d2ac); }
-[data-theme="D"] .footer-sig { background: #17130e; }
-.footer-sig img { display: block; width: clamp(150px, 15vw, 200px); height: auto;
-  mix-blend-mode: multiply; }
-[data-theme="D"] .footer-sig img { mix-blend-mode: screen; filter: invert(1) brightness(1.6) contrast(1.15); }
+/* Her signature ships exactly as she uploaded it — opaque white ground and all.
+   See the note on .sig-script in industrial-3.css: the cut-out is her side of
+   the work, and faking it with a blend mode hides the ask. Removed on the
+   client's instruction (2026-08-09). */
+.footer-sig { line-height: 0; margin-bottom: 12px; display: inline-block; }
+.footer-sig img { display: block; width: clamp(150px, 15vw, 200px); height: auto; }
 .footer-meta { margin-top: 30px; padding-top: 16px; border-top: 1px solid rgba(244,231,207,.22); display: flex; justify-content: space-between; font-family: var(--font-cond); font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; opacity: .72; flex-wrap: wrap; gap: 8px; }
 @media (max-width: 900px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 540px) { .footer-grid { grid-template-columns: 1fr; } }
