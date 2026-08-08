@@ -693,12 +693,25 @@
    one theme and not the other. See the --leather-* block for why they are all
    near-black. */
 .blog-feature .bf-body { color: var(--leather-label); }
+/* Light theme swaps the hide for pale grey stock. Only the colour and the inks
+   change; the pore, shine and grain images are the same generated textures, so
+   it is recognisably the same object in a different light. (2026-08-08) */
+[data-theme="A"] .blog-feature { background-color: var(--leather-a); }
+[data-theme="A"] .blog-feature .bf-body { color: var(--leather-a-label); }
+[data-theme="A"] .blog-feature .bf-frame h2 { color: var(--leather-a-ink); }
+[data-theme="A"] .blog-feature .bf-reads { color: var(--leather-a-meta); }
+[data-theme="A"] .blog-feature .bf-quote { color: rgba(47,42,36,.5); -webkit-text-stroke-color: rgba(47,42,36,.5); }
+[data-theme="A"] .blog-feature .bf-body .link-squiggle { color: var(--leather-a-cta); background-image: linear-gradient(var(--leather-a-cta), var(--leather-a-cta)); }
 .blog-feature .bf-kicker { font-family: var(--font-cond); font-size: 14px; font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--leather-label); }
 .blog-feature h2 { font-family: var(--font-marker); font-weight: 600; font-size: clamp(28px,3.3vw,41px); line-height: 1.08; margin: 0; color: var(--leather-ink); }
 .blog-feature p { font-size: 16.5px; line-height: 1.62; color: var(--leather-meta); margin: 0; }
 .blog-feature .bf-reads { font-size: 14px; color: var(--leather-meta); }
 /* The squiggle's copper underline is invisible on tan; it takes the label ink. */
-.blog-feature .link-squiggle { background-image: linear-gradient(var(--leather-label), var(--leather-label)); }
+/* The call to action is the one thing on the cover that is not just more text,
+   so it takes its own colour rather than the label ink. (client feedback
+   2026-08-08) */
+.blog-feature .link-squiggle { color: var(--leather-cta);
+  background-image: linear-gradient(var(--leather-cta), var(--leather-cta)); }
 
 /* 12.1: the title is pressed into the cover. The frame is no longer a box — the
    leather moved up to the card, so all this element does now is hold the
@@ -706,7 +719,7 @@
 .blog-feature .bf-frame {
   position: relative; align-self: flex-start; max-width: 100%;
   padding: 6px 0 10px;
-  display: grid; justify-items: start; gap: 2px;
+  display: grid; justify-items: start; gap: 10px;
 }
 /* Blind deboss: light comes from the top left, so the wall above each letter is
    in shadow and the lip below it catches the light. That pairing — dark offset
@@ -738,7 +751,7 @@
    with no overlap and no hand-tuned offsets.
    The spans are empty in the markup — the glyph is CSS content — so there is no
    field here for the CMS to expose. Only the <h2> is editable content. */
-.blog-feature .bf-quote { display: block; line-height: .52; pointer-events: none;
+.blog-feature .bf-quote { display: block; line-height: .78; pointer-events: none;
   font-family: Georgia, "Times New Roman", serif; font-weight: 700;
   font-size: clamp(62px, 6.1vw, 96px); color: rgba(52,36,23,.5);
   /* Georgia's comma tapers to a thin tail and no weight it ships fixes that. A
@@ -749,6 +762,11 @@
   text-shadow: 0 -1px 1px rgba(40,22,10,.45), 0 1px 0 rgba(255,240,212,.42); }
 .blog-feature .bf-quote.is-open::before  { content: "“"; }
 .blog-feature .bf-quote.is-close::before { content: "”"; }
+/* Each mark is confined to its own box: at line-height .52 the glyph spilled
+   well past its band and could sit on the headline's last line. .78 keeps the
+   ink inside, and the row gap separates the four bands — kicker, open mark,
+   headline, close mark — so a long title lengthens its own box and can never
+   reach a mark. (client feedback 2026-08-08) */
 .blog-feature .bf-quote.is-close { justify-self: end; }
 .blog-feature .bf-frame h2 { position: relative; z-index: 1; text-wrap: pretty; }
 
@@ -767,7 +785,7 @@
    colour — measured at #7d8a87 against a specified #598493. */
 .blog-feature { position: relative; }
 .blog-feature .bf-ribbon {
-  position: absolute; top: -18px; right: 34px; z-index: 3; width: 58px; min-height: 148px;
+  position: absolute; top: -18px; right: 34px; z-index: 3; width: 58px; min-height: 195px;
   background-color: #6f9dad;
   background-image:
     linear-gradient(101deg, rgba(255,255,255,.16), rgba(255,255,255,0) 46%, rgba(0,0,0,.18)),
@@ -780,7 +798,11 @@
 }
 .blog-feature .bf-ribbon span {
   writing-mode: vertical-rl; text-orientation: mixed;
-  font-family: var(--font-cond); font-weight: 600; font-size: 15px;
+  /* The tag is whatever the post carries, so the type sizes itself to the length
+     instead of assuming a short word. --rib-len is the character count, set on
+     the element by the template. (client feedback 2026-08-08) */
+  font-family: var(--font-cond); font-weight: 600;
+  font-size: clamp(11px, calc(150px / max(var(--rib-len, 5), 5)), 19px);
   letter-spacing: var(--tracking-label); text-transform: uppercase;
 }
 @media (max-width: 760px) { .blog-feature .bf-ribbon { right: 16px; } }

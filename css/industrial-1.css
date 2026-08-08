@@ -139,6 +139,19 @@
   --leather-ink: #33241a;      /* headline, 4.45:1 solid / 3.42:1 at the .92 it ships at */
   --leather-label: #2b1d10;    /* kicker and links, 4.87:1 */
   --leather-meta: #3a2716;     /* reading time, 4.23:1 */
+  /* The call to action carries its own colour so it does not read as one more
+     line of dark text. Rouge, the obvious choice, measures 1.73:1 on this tan
+     and is unusable; this is as red as the surface allows. 4.79:1 here. */
+  --leather-cta: #3d1410;
+  /* Light theme: the cover turns to pale grey leather (client feedback
+     2026-08-08). Same hide, different stock — the pores, shine and grain
+     images are shared, only the colour and the inks change. On this surface a
+     brighter madder is legible, so the CTA warms up: 7.26:1. */
+  --leather-a: #d2cec7;
+  --leather-a-ink: #2f2a24;
+  --leather-a-label: #241f19;
+  --leather-a-meta: #3a352e;
+  --leather-a-cta: #6b2018;
 
   /* brushed metal & button materials (from design_base.html / DESIGN.md §6) */
   --steel-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='160'%3E%3Cfilter id='st'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012 0.92' numOctaves='2' seed='9' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.40 0 0 0 0 0.41 0 0 0 0 0.44 0 0 0 0.20 0'/%3E%3C/filter%3E%3Crect width='240' height='160' filter='url(%23st)'/%3E%3C/svg%3E");
