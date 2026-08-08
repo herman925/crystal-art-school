@@ -22,7 +22,10 @@
 <script src="js/motion.js"></script>
 <script src="js/blog-data.js"></script>
 <style>
-.bc-reads, .bf-reads { display:inline-flex; align-items:center; gap:5px; font-family: var(--font-cond); font-size: 12.5px; font-weight:600; letter-spacing:var(--tracking-label); text-transform:uppercase; color: var(--linen-ink); }
+/* 13.5px so the reading time still sits on the same line as .bc-date, which went
+   up with the rest of the listing card on 2026-08-08. The feature card's own
+   .bf-reads keeps its larger 14px override in css/industrial-2.css. */
+.bc-reads, .bf-reads { display:inline-flex; align-items:center; gap:5px; font-family: var(--font-cond); font-size: 13.5px; font-weight:600; letter-spacing:var(--tracking-label); text-transform:uppercase; color: var(--linen-ink); }
 .bc-reads svg, .bf-reads svg { width:13px; height:13px; flex:none; }
 </style>
 </helmet>
@@ -90,7 +93,13 @@
 <header class="page-hero">
   <div class="container">
     <div class="eyebrow reveal-one"><span class="star">✦</span> From the studio</div>
-    <h1 class="marker-title reveal-one" style="font-size:clamp(34px,4.6vw,62px);">The journal.</h1>
+    <!-- Font A, at the same clamp every other banner title on the site carries.
+         §2.2 lists the headings that take Font A and this one is not on that
+         list, so it is a client override of the written spec (2026-08-08), not a
+         correction. Adding font-a also drops this container out of the
+         :not(:has(h1.font-a)) rule in css/industrial-1.css, which is what brings
+         the banner signature up to the size the other pages use. -->
+    <h1 class="marker-title font-a reveal-one" style="font-size:clamp(44px,6vw,80px);">The journal.</h1>
     <div class="logo2"><img src="img/logo2.png" alt="Crystal Lau Art" loading="lazy" decoding="async"></div>
   </div>
 </header>

@@ -96,6 +96,50 @@
   --concrete-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='c'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.05' numOctaves='3' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.30 0 0 0 0 0.28 0 0 0 0 0.24 0 0 0 0.07 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23c)'/%3E%3C/svg%3E");
   --iron-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='i'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.14 0.008' numOctaves='3' seed='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.14 0 0 0 0 0.12 0 0 0 0 0.10 0 0 0 0.45 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23i)'/%3E%3C/svg%3E");
 
+  /* ---------- leather (client feedback 2026-08-08, blog feature card) ----------
+     Leather needs two frequencies to read as hide rather than as film grain: a
+     fine pebble for the pores and a slow, broad blotch for the way a hide takes
+     dye unevenly.
+
+     Both use type='fractalNoise', the same as the wood tokens above, and that
+     was not the obvious choice. type='turbulence' has the cellular output that
+     sounds like leather, and eight variants of it were rendered and compared
+     before being rejected: with several octaves it builds a regular crosshatch
+     and the card reads as woven bookcloth, and with one or two octaves it draws
+     a maze of connected worm shapes with the tile seams plainly visible.
+     fractalNoise at a high frequency and a single octave is the one that gives
+     an irregular fine pebble with no repeat a viewer can find, which is what
+     calfskin actually looks like.
+
+     Two numbers here are load-bearing. baseFrequency is the trap: the first
+     attempt used 0.62 with the tile drawn smaller than its natural size, which
+     put a pore every one and a half pixels, so the texture averaged out and the
+     card looked like flat card stock. And the pores ship as a matched dark/light
+     pair off the same seed, offset by a pixel against each other in the
+     component; that offset is what lights each pebble from one side, and it is
+     the whole reason the surface reads as raised rather than as speckle. */
+  --leather-pores: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Cfilter id='lp'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.5 0.55' numOctaves='1' seed='13' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.10 0 0 0 0 0.06 0 0 0 0 0.03 0 0 0 0.62 0'/%3E%3C/filter%3E%3Crect width='150' height='150' filter='url(%23lp)'/%3E%3C/svg%3E");
+  --leather-shine: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Cfilter id='ls'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.5 0.55' numOctaves='1' seed='13' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 0.91 0 0 0 0 0.74 0 0 0 0.52 0'/%3E%3C/filter%3E%3Crect width='150' height='150' filter='url(%23ls)'/%3E%3C/svg%3E");
+  --leather-hide: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='520' height='520'%3E%3Cfilter id='lh'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012 0.015' numOctaves='4' seed='41' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.21 0 0 0 0 0.13 0 0 0 0 0.06 0 0 0 0.34 0'/%3E%3C/filter%3E%3Crect width='520' height='520' filter='url(%23lh)'/%3E%3C/svg%3E");
+  /* The hide itself and the three inks that sit on it. Held here rather than in
+     the theme blocks because leather is a material, like the oak on .pull-quote
+     and .tip-card: it looks the same under both themes and its inks travel with
+     it.
+     The fill is a mid-tone, and a mid-tone has a low ceiling — the best any
+     colour can manage against it is a little over 5:1 — so every label on it has
+     to be near-black to clear 4.5:1. That is the same trade already recorded for
+     --marine-ink; the inks stay in the warm brown family so they still read as
+     coral and linen rather than as neutral black.
+     The ratios below were measured off the rendered pixels, not calculated from
+     this value, and the two are a long way apart: the layers stacked on top of
+     #d0a877 in .blog-feature take it down to #a28869 on screen, which is a third
+     of the luminance gone. The first pass at these inks was calculated from the
+     token and every number was wrong. Sample the screenshot. */
+  --leather: #d0a877;
+  --leather-ink: #33241a;      /* headline, 4.45:1 solid / 3.42:1 at the .92 it ships at */
+  --leather-label: #2b1d10;    /* kicker and links, 4.87:1 */
+  --leather-meta: #3a2716;     /* reading time, 4.23:1 */
+
   /* brushed metal & button materials (from design_base.html / DESIGN.md §6) */
   --steel-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='160'%3E%3Cfilter id='st'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012 0.92' numOctaves='2' seed='9' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.40 0 0 0 0 0.41 0 0 0 0 0.44 0 0 0 0.20 0'/%3E%3C/filter%3E%3Crect width='240' height='160' filter='url(%23st)'/%3E%3C/svg%3E");
   --steel: linear-gradient(96deg,#bdb8b0,#e9e5de 17%,#aaa49b 41%,#dbd7d0 59%,#a09a91 82%,#c9c4bc);

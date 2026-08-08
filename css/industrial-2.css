@@ -606,9 +606,51 @@
 /* ============================================================
    BLOG (listing + tag filter)
    ============================================================ */
-.blog-feature { display: grid; grid-template-columns: 1.1fr .9fr; gap: 20px; border-radius: var(--radius-card); padding: 16px; box-shadow: var(--shadow); background: var(--surface); margin-bottom: 30px; align-items: stretch; }
+/* The whole feature card is the leather notebook cover (client feedback
+   2026-08-08). §12.1 asked only for the title box to be pressed leather and said
+   not to add a background colour; the client has since asked for the material to
+   carry the card instead, so the fill here is a deliberate override of that
+   sentence rather than an oversight. Four layers, topmost first: a light fall
+   from the upper left, a diagonal that darkens the lower right the way a curved
+   cover loses the light, the pores, and the hide blotch under everything. The
+   inset shadows are the cover's edge — a lit top lip, a dark bottom one, and a
+   wide inner vignette that rounds the board over. */
+.blog-feature {
+  display: grid; grid-template-columns: 1.1fr .9fr; gap: 20px;
+  border-radius: var(--radius-card); padding: 18px; margin-bottom: 30px; align-items: stretch;
+  background-color: var(--leather);
+  background-image:
+    radial-gradient(115% 78% at 18% -4%, rgba(255,238,206,.30), rgba(255,238,206,0) 56%),
+    linear-gradient(163deg, rgba(255,241,214,.10) 0%, rgba(48,29,15,0) 38%, rgba(44,26,13,.17) 100%),
+    var(--leather-pores),
+    var(--leather-shine),
+    var(--leather-hide);
+  /* The pore layer sits a pixel down and right of the identical highlight layer
+     beneath it, so every pebble gets a lit edge on one side and a shadowed one
+     on the other. Without the offset the two cancel and the grain disappears. */
+  background-position: 0 0, 0 0, 1px 1px, 0 0, 0 0;
+  background-size: 100% 100%, 100% 100%, 150px 150px, 150px 150px, 520px 520px;
+  box-shadow:
+    var(--shadow),
+    inset 0 1px 0 rgba(255,242,216,.34),
+    inset 0 -2px 0 rgba(38,21,10,.42),
+    inset 0 0 0 1px rgba(44,26,13,.38),
+    inset 0 0 44px rgba(44,26,13,.20);
+}
+/* The saddle stitch that runs round a bound cover. A dashed border is the only
+   way to draw it without an image; the drop-shadow underneath is what stops it
+   reading as a dotted CSS border — it puts each stitch in its own groove. It
+   sits inside the card's padding so it never crosses the photograph. */
+.blog-feature::before {
+  content: ""; position: absolute; inset: 8px; border-radius: 11px; z-index: 2;
+  border: 2px dashed rgba(255,240,212,.52);
+  filter: drop-shadow(0 1.5px 0 rgba(40,22,10,.62));
+  pointer-events: none;
+}
 @media (max-width: 760px) { .blog-feature { grid-template-columns: 1fr; } }
-.blog-feature .bf-img { position: relative; overflow: hidden; min-height: 260px; border-radius: var(--radius-card); }
+/* The photograph is mounted on the cover rather than set into it, so it takes an
+   outer shadow. An inset ring would be hidden by the <img> that fills it. */
+.blog-feature .bf-img { position: relative; overflow: hidden; min-height: 260px; border-radius: var(--radius-card); box-shadow: 0 3px 14px rgba(30,16,7,.42); }
 .blog-feature .bf-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s var(--ease-out); }
 .blog-feature:hover .bf-img img { transform: scale(1.04); }
 .blog-feature .bf-body { padding: 20px 26px; display: flex; flex-direction: column; gap: 12px; justify-content: center; }
@@ -643,45 +685,87 @@
   background-size: cover;
   background-position: center;
 }
-/* 12.2: the board marks the whole feature card as too small. */
-.blog-feature .bf-kicker { font-family: var(--font-cond); font-size: 14px; font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--coral); }
-.blog-feature h2 { font-family: var(--font-marker); font-weight: 600; font-size: clamp(28px,3.3vw,41px); line-height: 1.08; margin: 0; color: var(--ink); }
-.blog-feature p { font-size: 16.5px; line-height: 1.62; color: var(--muted); margin: 0; }
-.blog-feature .bf-reads { font-size: 14px; }
+/* 12.2: the board marks the whole feature card as too small.
+   Every ink in the body is now a leather ink rather than a theme token: the card
+   is the same tan under both themes, so --ink and --coral would be readable in
+   one theme and not the other. See the --leather-* block for why they are all
+   near-black. */
+.blog-feature .bf-body { color: var(--leather-label); }
+.blog-feature .bf-kicker { font-family: var(--font-cond); font-size: 14px; font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--leather-label); }
+.blog-feature h2 { font-family: var(--font-marker); font-weight: 600; font-size: clamp(28px,3.3vw,41px); line-height: 1.08; margin: 0; color: var(--leather-ink); }
+.blog-feature p { font-size: 16.5px; line-height: 1.62; color: var(--leather-meta); margin: 0; }
+.blog-feature .bf-reads { font-size: 14px; color: var(--leather-meta); }
+/* The squiggle's copper underline is invisible on tan; it takes the label ink. */
+.blog-feature .link-squiggle { background-image: linear-gradient(var(--leather-label), var(--leather-label)); }
 
-/* 12.1: the title sits in a debossed frame — pressed into the card rather than
-   painted onto it. The section rules out a new background colour, so the effect
-   is carried entirely by an inset shadow pair: a dark top-left edge and a light
-   bottom-right one, which is what reads as stamped leather. */
+/* 12.1: the title is pressed into the cover. The frame is no longer a box — the
+   leather moved up to the card, so all this element does now is hold the
+   headline and give the quote marks something to hang off. */
 .blog-feature .bf-frame {
   position: relative; align-self: flex-start; max-width: 100%;
-  padding: 16px 22px; border-radius: var(--r-sharp);
-  box-shadow: inset 2px 2px 4px rgba(20,17,13,.55), inset -1px -1px 3px rgba(255,245,225,.09),
-              inset 0 0 0 1px rgba(20,17,13,.30);
+  padding: 40px 26px 22px 34px;
 }
-.blog-feature .bf-frame h2 { text-shadow: 0 1px 0 rgba(255,245,225,.10), 0 -1px 1px rgba(20,17,13,.55); }
-[data-theme="A"] .blog-feature .bf-frame {
-  box-shadow: inset 2px 2px 4px rgba(90,70,55,.30), inset -1px -1px 3px rgba(255,255,255,.75),
-              inset 0 0 0 1px rgba(90,70,55,.18);
+/* Blind deboss: light comes from the top left, so the wall above each letter is
+   in shadow and the lip below it catches the light. That pairing — dark offset
+   up, light offset down — is what the eye reads as a groove rather than as a
+   drop shadow. The letters are 90% opaque so the pores show faintly through the
+   recess, which is the part that sells it; a solid fill reads as printed ink. */
+.blog-feature .bf-frame h2 {
+  color: rgba(51,36,26,.92);
+  text-shadow:
+    0 -1px 1px rgba(40,22,10,.70),
+    0 1px 0 rgba(255,240,212,.50),
+    0 2px 4px rgba(40,22,10,.28);
 }
-[data-theme="A"] .blog-feature .bf-frame h2 { text-shadow: 0 1px 0 rgba(255,255,255,.7), 0 -1px 1px rgba(90,70,55,.28); }
+/* §12.1 and §13: the headline sits inside quote marks, the same pair the About
+   page's pull-quote uses, so the two pages read as one device. They are much
+   larger here because on the feature card the quote is the whole design rather
+   than an accent, and they carry the same deboss as the headline so they look
+   stamped into the cover with it. */
+.blog-feature .bf-frame::before,
+.blog-feature .bf-frame::after {
+  position: absolute; z-index: 0; pointer-events: none;
+  font-family: var(--font-display-serif); font-weight: 700; line-height: 1;
+  font-size: clamp(76px, 7.6vw, 118px);
+  color: rgba(52,36,23,.40);
+  text-shadow: 0 -1px 1px rgba(40,22,10,.60), 0 1px 0 rgba(255,240,212,.46);
+}
+.blog-feature .bf-frame::before { content: "\201C"; top: -6px; left: -12px; }
+.blog-feature .bf-frame::after  { content: "\201D"; right: -6px; bottom: -46px; }
+.blog-feature .bf-frame h2 { position: relative; z-index: 1; }
 
 /* 12.1: a bookmark ribbon down the right-hand edge carrying the category,
-   hanging over the top edge of the card the way a page marker would. */
+   hanging over the top edge of the card the way a page marker would. Bigger and
+   in leather as well (client feedback 2026-08-08), so it reads as a strap
+   stitched to the cover rather than as a flat tab.
+   The category colour is fixed at --marine by §1.4.2, and --marine-ink only just
+   clears 4.56:1 on it, so the pores could not simply be laid over --marine — the
+   grain is dark and would have eaten the margin. The fill starts instead at the
+   light end of --marine-metal and the pores bring it back down to roughly
+   --marine, which keeps the client's colour and the contrast both intact.
+   The ribbon takes the dark pore layer on its own and skips the cream highlight
+   the card uses. The highlight is a warm cream, and over a blue-grey it washed
+   the ribbon out to a flat grey-green that was visibly no longer the client's
+   colour — measured at #7d8a87 against a specified #598493. */
 .blog-feature { position: relative; }
 .blog-feature .bf-ribbon {
-  position: absolute; top: -10px; right: 26px; z-index: 3; width: 40px;
-  background: var(--marine); color: var(--marine-ink);
-  box-shadow: var(--shadow-sm);
-  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - 13px), 0 100%);
-  display: flex; justify-content: center; padding: 14px 0 26px;
+  position: absolute; top: -18px; right: 34px; z-index: 3; width: 58px; min-height: 148px;
+  background-color: #6f9dad;
+  background-image:
+    linear-gradient(101deg, rgba(255,255,255,.16), rgba(255,255,255,0) 46%, rgba(0,0,0,.18)),
+    var(--leather-pores);
+  background-size: 100% 100%, 110px 110px;
+  color: var(--marine-ink);
+  box-shadow: var(--shadow-md), inset 0 0 0 1px rgba(255,255,255,.18), inset 0 -2px 6px rgba(0,0,0,.22);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - 20px), 0 100%);
+  display: flex; justify-content: center; padding: 20px 0 44px;
 }
 .blog-feature .bf-ribbon span {
   writing-mode: vertical-rl; text-orientation: mixed;
-  font-family: var(--font-cond); font-weight: 600; font-size: 13px;
+  font-family: var(--font-cond); font-weight: 600; font-size: 15px;
   letter-spacing: var(--tracking-label); text-transform: uppercase;
 }
-@media (max-width: 760px) { .blog-feature .bf-ribbon { right: 14px; } }
+@media (max-width: 760px) { .blog-feature .bf-ribbon { right: 16px; } }
 
 /* 12.2: Load More sits under the grid and disappears on the last page. */
 .blog-more { display: flex; justify-content: center; margin-top: 30px; }
@@ -715,9 +799,14 @@
 /* The post's category chip is a classification marker, same job as the course
    media tag, so it takes marine too. */
 .blog-card .bc-tag { align-self: flex-start; font-family: var(--font-cond); font-size: 12px; font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--marine-ink); background: var(--marine); border-radius: var(--r-sharp); padding: 4px 10px; }
-.blog-card h3 { font-family: var(--font-marker); font-weight: 600; font-size: 17px; line-height: 1.25; margin: 0; }
-.blog-card p { font-size: 13px; line-height: 1.55; color: var(--muted); margin: 0; flex: 1; }
-.blog-card .bc-date { font-family: var(--font-cond); font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); }
+/* The listing cards were called too small alongside the feature card (client
+   feedback 2026-08-08), the same complaint §12.2 already recorded against the
+   feature card itself. Title 17 → 19px, excerpt 13 → 14.5px, date 12.5 → 13.5px.
+   The title climbs least in proportion because Bodoni Moda already sets larger
+   on the body than Archivo does at the same nominal size. */
+.blog-card h3 { font-family: var(--font-marker); font-weight: 600; font-size: 19px; line-height: 1.24; margin: 0; }
+.blog-card p { font-size: 14.5px; line-height: 1.55; color: var(--muted); margin: 0; flex: 1; }
+.blog-card .bc-date { font-family: var(--font-cond); font-size: 13.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); }
 /* Reading time is purely supporting information, so it takes linen.
    Blog.dc.html styles .bc-reads / .bf-reads itself; both point at the token. */
 .bc-reads, .bf-reads { color: var(--linen-ink); }
