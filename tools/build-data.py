@@ -45,13 +45,20 @@ def load_video_links():
 
 
 def duration_bucket(total_seconds):
-    """Buckets must match the visible filter labels in Lessons.dc.html:
-       short = 'Under 1h', medium = '1-2h', long = '2h+'."""
+    """Five bands, not three (client feedback 2026-08-08). With three, every
+       course over two hours fell into one chip and the filter stopped telling
+       you anything. Labels live in js/filter-tags.js and must match these keys:
+       xs = 'Under 30m', short = '30m-1h', medium = '1-2h', long = '2-4h',
+       xl = '4h+'."""
+    if total_seconds < 1800:
+        return "xs"
     if total_seconds < 3600:
         return "short"
     if total_seconds < 7200:
         return "medium"
-    return "long"
+    if total_seconds < 14400:
+        return "long"
+    return "xl"
 
 
 def build_courses(manifest, meta, links):

@@ -13,7 +13,7 @@ window.CasFilters = (function () {
     perspective: 'Perspective', abstract: 'Abstract',
     beginner: 'Beginner', intermediate: 'Intermediate', advanced: 'Advanced',
     'all-levels': 'All levels',
-    short: 'Under 1h', medium: '1–2h', long: '2h+',
+    xs: 'Under 30m', short: '30m–1h', medium: '1–2h', long: '2–4h', xl: '4h+',
     sale: 'On sale'
   };
   var esc = function (s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;'); };
@@ -53,11 +53,33 @@ window.CasFilters = (function () {
      groupEl (optional) = the wrapper to hide (e.g. the .fgroup). */
   function populate(el, items, get, opts) {
     if (!el) return [];
-    var vals = collect(items, get);
-    el.innerHTML = chipsHTML(vals, opts);
-    var group = (opts && opts.groupEl) || null;
-    if (group) group.style.display = vals.length ? '' : 'none';
-    return vals;
+    opts = opts || {};
+    var present = collect(items, get);
+    /* `scale` is a fixed run of values that should always be offered, in order,
+       even where nothing on the page falls into one of them — a length or price
+       band only reads as a scale if the whole scale is visible. Bands with no
+       items render disabled rather than being dropped, so the row still says
+       what the range is. Groups without a scale keep the original behaviour:
+       a chip exists only if something carries that value. */
+    var vals = opts.scale ? opts.scale.slice() : present;
+    var html = "";
+    if (opts.allLabel) {
+      html += chip(opts.allValue || "all", opts.allLabel,
+                   opts.active == null || opts.active === (opts.allValue || "all"));
+    }
+    vals.forEach(function (v) {
+      var text = opts.labelOf ? opts.labelOf(v) : label(v);
+      var c = chip(v, text, opts.active === v);
+      if (present.indexOf(v) < 0) {
+        c = c.replace("<button ", "<button disabled aria-disabled=\"true\" ")
+             .replace('class="fopt', 'class="fopt is-empty');
+      }
+      html += c;
+    });
+    el.innerHTML = html;
+    var group = opts.groupEl || null;
+    if (group) group.style.display = (opts.scale || present.length) ? "" : "none";
+    return present;
   }
 
   return { collect: collect, chipsHTML: chipsHTML, populate: populate, label: label };

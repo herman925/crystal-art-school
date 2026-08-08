@@ -299,6 +299,9 @@ class Component extends DCLogic {
     };
     const CART_ICO = '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M2 3h3.2l2.5 12.2a1.5 1.5 0 0 0 1.5 1.2h9a1.5 1.5 0 0 0 1.5-1.2L21.5 7H6.5"></path></svg>';
 
+    /* every medium a course is tagged with, lower-cased for matching */
+    const mediaOf = (c) => String(c.tag || c.cat || '')
+      .split(/\s*[&,\/]\s*/).map(s => s.trim().toLowerCase()).filter(Boolean);
     const courseCard = (c) => {
       const n = c.lessons.length;
       /* 4.3: left to right — total duration, lesson count, difficulty. The media
@@ -308,7 +311,12 @@ class Component extends DCLogic {
                     n + (n === 1 ? ' lesson' : ' lessons'),
                     c.difficulty.replace('-', ' ')].join(' · ');
       return '' +
+        /* data-media carries every medium named in the card's tag, split on & and ,
+           — "Sketching & Watercolour" is two of them. data-cat holds one value,
+           which is why the Medium filter offered Watercolour only while a card
+           plainly said SKETCHING. (client feedback 2026-08-08) */
         '<div class="lesson-cell" data-id="' + esc(c.id) + '" data-cat="' + esc(c.cat) + '"' +
+             ' data-media="' + esc(mediaOf(c).join('|')) + '"' +
              ' data-theme="' + esc(c.theme) + '" data-difficulty="' + esc(c.difficulty) + '"' +
              ' data-price="' + c.price + '" data-duration="' + esc(c.durationBucket) + '"' +
              (c.sale ? ' data-sale="1"' : '') + '>' +
@@ -340,15 +348,19 @@ class Component extends DCLogic {
     /* multi-group filter panel — options are built dynamically from the
        tags on the courses actually in the grid (shared js/filter-tags.js) */
     const cells = Array.from(document.querySelectorAll('.lesson-cell'));
-    const popGroup = (group, get, allLabel) => {
+    const popGroup = (group, get, allLabel, scale) => {
       const g = document.querySelector('.fgroup[data-group="' + group + '"]');
       if (!g || !window.CasFilters) return;
-      window.CasFilters.populate(g.querySelector('.fg-opts'), cells, get, { allLabel: allLabel || 'Any', groupEl: g });
+      window.CasFilters.populate(g.querySelector('.fg-opts'), cells, get,
+        { allLabel: allLabel || 'Any', groupEl: g, scale: scale });
     };
-    popGroup('medium', c => c.dataset.cat);
+    popGroup('medium', c => (c.dataset.media || '').split('|').filter(Boolean));
     popGroup('theme', c => c.dataset.theme);
     popGroup('difficulty', c => c.dataset.difficulty);
-    popGroup('duration', c => c.dataset.duration);
+    /* Five bands, always all shown, so the row reads as a scale even on a small
+       catalogue; bands with no courses render disabled. */
+    popGroup('duration', c => c.dataset.duration, 'Any',
+             ['xs', 'short', 'medium', 'long', 'xl']);
     popGroup('offer', c => (c.dataset.sale === '1' ? 'sale' : null), 'All');
     const groupEls = Array.from(document.querySelectorAll('.fgroup'));
     const sel = {};
@@ -358,7 +370,8 @@ class Component extends DCLogic {
     const noRes = document.getElementById('no-results');
 
     const matches = (cell) => {
-      if (sel.medium !== 'all' && cell.dataset.cat !== sel.medium) return false;
+      if (sel.medium !== 'all'
+          && (cell.dataset.media || '').split('|').indexOf(sel.medium) < 0) return false;
       if (sel.theme && sel.theme !== 'all' && cell.dataset.theme !== sel.theme) return false;
       if (sel.difficulty !== 'all' && cell.dataset.difficulty !== sel.difficulty) return false;
       if (sel.duration !== 'all' && cell.dataset.duration !== sel.duration) return false;

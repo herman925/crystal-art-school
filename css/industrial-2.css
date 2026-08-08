@@ -133,6 +133,10 @@
 .fg-opts { display: flex; flex-wrap: wrap; gap: 7px; }
 .fopt { font-family: var(--font-cond); font-weight: 500; font-size: 14px; padding: 8px 15px; border-radius: var(--radius-pill); border: 1px solid var(--line); background: transparent; color: var(--ink); -webkit-text-fill-color: var(--ink); cursor: pointer; transition: background .15s, color .15s, border-color .15s; }
 .fopt:hover { background: var(--warm-white); }
+/* A band with nothing in it still shows, so the row reads as a full scale, but
+   it is plainly not clickable. (client feedback 2026-08-08) */
+.fopt.is-empty { opacity: .38; cursor: default; }
+.fopt.is-empty:hover { background: transparent; }
 .fopt.active { background-color: #c9c4bc; background-image: linear-gradient(180deg, rgba(255,255,255,.28), transparent 55%), var(--steel); color: #2b2823; -webkit-text-fill-color: #2b2823; border-color: transparent; box-shadow: inset 0 1px 0 rgba(255,255,255,.5), inset 0 -1px 0 rgba(0,0,0,.18); }
 .catalog-layout .lesson-grid { grid-template-columns: repeat(3,1fr); margin-top: 0; }
 .lesson-meta-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; min-height: 18px; }
@@ -155,8 +159,6 @@
    the same treatment the catalogue cards use, at a smaller size, so the row
    reads as a shortcut into the grid below rather than a second catalogue. */
 
-/* 4.2: page-level description, part shown with the rest behind Read More. */
-  font-family: var(--font-cond); font-size: 14px; font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--marine); }
 
 .tier-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
 @media (max-width: 860px) { .tier-grid { grid-template-columns: 1fr; } }
