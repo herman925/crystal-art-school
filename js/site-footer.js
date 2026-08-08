@@ -18,12 +18,10 @@
   var SOCIAL = {
     instagram: 'https://www.instagram.com/crystalauart',
     facebook: 'https://www.facebook.com/crystal430',
-    /* 2.4: the official YouTube channel joins every social area site-wide. The
-       URL is still to be supplied, so the slot renders as a plainly inert
-       placeholder rather than being left out — 18.1 requires an outstanding
-       asset to declare itself on the page. Fill this in and it becomes a live
-       link everywhere at once. */
-    youtube: '',
+    /* 2.4: the official YouTube channel joins every social area site-wide.
+       Supplied by the client 2026-08-08. The pending-placeholder branch below
+       stays in place for the next time a link is outstanding. */
+    youtube: 'https://youtube.com/@crystallauart',
     email: 'crystalau430@gmail.com'
   };
   window.CAS_SOCIAL = SOCIAL;
@@ -54,6 +52,7 @@
       '<a href="mailto:' + SOCIAL.email + '">' + SOCIAL.email + '</a>' +
       '<a href="' + SOCIAL.instagram + '" target="_blank" rel="noopener">Instagram</a>' +
       '<a href="' + SOCIAL.facebook + '" target="_blank" rel="noopener">Facebook</a>' +
+      (SOCIAL.youtube ? '<a href="' + SOCIAL.youtube + '" target="_blank" rel="noopener">YouTube</a>' : '') +
       '<a href="About.dc.html#terms">Terms &amp; privacy</a>',
     account:
       '<h4>Account</h4>' +
