@@ -64,6 +64,15 @@
 .curr-card .unit-row .uthumb { flex: none; width: 62px; height: 44px; object-fit: cover; border-radius: 8px; box-shadow: var(--shadow-sm); }
 /* 8.1 item 4: the bundled download sits above the per-item list. */
 .materials-card .res-all { display: flex; align-items: center; gap: 12px; padding: 2px 10px 12px; }
+/* The card is the full width of the left column, and the list was capped at
+   560px, leaving ~380px of empty card to the right of every Download link.
+   The files now pack the width in as many columns as fit.
+   (client feedback 2026-08-08) */
+.materials-card .res-list { max-width: none; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); }
+/* The section heading was 13px, the same size as the sidebar labels, on a
+   card that is the widest thing in the column. */
+.materials-card .ch { font-size: 21px; font-family: var(--font-marker); font-weight: 600;
+  letter-spacing: normal; text-transform: none; color: var(--ink); padding: 4px 10px 14px; }
 .materials-card .res-all-note { font-family: var(--font-cond); font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); }
 /* real video: Google Drive preview iframe fills the stage above the poster.
    The unit-flag stays visible but must not steal clicks from the player UI. */
@@ -355,11 +364,22 @@ class Component extends DCLogic {
     const metaRow = document.getElementById('lx-meta');
     if (metaRow) {
       const lvl = COURSE.difficulty.charAt(0).toUpperCase() + COURSE.difficulty.slice(1).replace('-', ' ');
+      /* A dot-separated string set in 13px was hard to read and used almost
+         none of the banner's width. Same four facts, each under its own
+         label, in the fact-strip pattern the course cards already use.
+         Running time splits off the lesson count so both can be scanned. */
+      /* Escapes inline rather than calling escl(): that const is declared
+         further down this scope, so calling it from here hits the temporal
+         dead zone and takes the whole componentDidMount down with it. */
+      const fact = (label, value) =>
+        '<span class="lf"><i>' + label + '</i>'
+        + String(value).replace(/&/g, '&amp;').replace(/</g, '&lt;') + '</span>';
       metaRow.innerHTML =
-        '<span>' + COURSE.tag + '</span><span class="dot">✦</span>' +
-        '<span>' + lvl + '</span><span class="dot">✦</span>' +
-        '<span>' + N + (N === 1 ? ' lesson · ~' : ' lessons · ~') + runtimeStr(COURSE.totalSeconds) + '</span>' +
-        '<span class="dot">✦</span><span>Taught by Crystal Lau</span>';
+        fact('Media', COURSE.tag) +
+        fact('Level', lvl) +
+        fact('Lessons', String(N)) +
+        fact('Running time', '~' + runtimeStr(COURSE.totalSeconds)) +
+        fact('Taught by', 'Crystal Lau');
     }
 
     const SPEED = 12;

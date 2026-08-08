@@ -10,7 +10,7 @@
 .res-body .sz { font-family: var(--font-cond); font-size: 12px; color: var(--muted); }
 .res-get { flex: none; font-family: var(--font-cond); font-weight: 600; font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--teal-ink); display: inline-flex; align-items: center; gap: 5px; }
 .res-item:hover .res-get { color: var(--coral); }
-.complete-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 26px; }
+.complete-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 26px; margin-bottom: 26px; }
 /* 8.1: the completion button takes the client's marine. Scoped here so the
    copper .btn.primary elsewhere on the site is untouched. */
 /* 1.4.9 turns this button marine, and 1.4.2 says a material-class element that
@@ -26,7 +26,13 @@
 .progress-card .pc-top { display: flex; justify-content: space-between; align-items: baseline; }
 .progress-card .pc-label { font-family: var(--font-cond); font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; font-size: 13px; color: var(--ink); }
 .progress-card .pc-count { font-family: var(--font-stencil); font-size: 18px; color: var(--teal-ink); }
-.pbar { margin-top: 12px; height: 10px; border-radius: 99px; background: var(--paper-2); overflow: hidden; }
+/* --paper-2 equals --surface in the dark theme, so the track was invisible
+   against the card and an empty bar looked like a missing bar. Derived from
+   the ink instead, so it reads in both themes. Also thicker, per §8.2's
+   "只將進度條加粗加大". (client feedback 2026-08-08) */
+.pbar { margin-top: 12px; height: 14px; border-radius: 99px; overflow: hidden;
+  background: color-mix(in srgb, var(--ink) 18%, transparent);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,.18); }
 .pbar .pfill { height: 100%; width: 0%; border-radius: 99px; background: linear-gradient(90deg, var(--teal-ink), var(--coral)); transition: width .6s var(--ease-brush); }
 .pc-reset { margin-top: 12px; font-family: var(--font-cond); font-size: 12px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); background: none; border: 0; cursor: pointer; padding: 0; }
 .pc-reset:hover { color: var(--coral); }
