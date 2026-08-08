@@ -38,8 +38,7 @@ numbered pages above; those are public.
 |---|---|
 | `20260804_Design_Direction.md` | **The specification.** Single source of truth for the current round. Nothing here supersedes it. |
 | `20260804_Design Discussion Minutes.md` | Minutes of the meeting the direction came from. |
-| `20260807_About_Copy_Provenance.md` | Where each line of About came from, and the discrepancies still open with the client. |
-| `20260808_Transparency_Work_Not_In_Scope.md` | Why the brand marks ship with their backgrounds, and what not to re-add. |
+| `20260807_About_Copy_Provenance.md` | Where each line of About came from, the discrepancies still open with the client, and the scope position on the brand-mark cut-outs. |
 
 Six other dated documents used to sit here — a coverage audit, a derived spec, a
 letter-spacing analysis, a session handoff, a raw transcript and a set of blog

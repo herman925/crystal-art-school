@@ -207,3 +207,34 @@ merge conflict with the deletion. They will visibly disagree with their retuned
 siblings; that is accepted, not an oversight. The list with its reasoning is in
 the local design-direction document (gitignored). Before "fixing" a stray
 tracking value, check that list.
+
+## Brand marks ship exactly as the client supplied them
+
+All three marks — the nav logo, `logo2`, the signature — are **fully opaque**.
+Every file the client uploaded has 0.0% transparent pixels, so each one draws a
+solid rectangle behind the artwork. That is deliberate and must stay.
+
+De-backgrounding is the client's side of the work under the design direction, and
+doing it here has two costs: it reads as included, so it becomes the baseline
+expectation for everything after; and while it looks done, she never sends the
+real file. The solid rectangle is the ask, made self-evident.
+
+Three consequences for anyone styling these:
+
+- **Do not cut them out.** A set of cut-outs was built, shipped, and then removed
+  again. They are kept locally and in git history.
+- **Do not fake it either.** `mix-blend-mode: multiply` (and `screen` plus an
+  invert on the dark theme) removes the white ground convincingly without
+  touching the file. It was built and removed on the same instruction: the page
+  would look finished while the asset is not. The method is written up locally so
+  nobody derives it a third time.
+- **Do not "fix" it with `filter: brightness(0)`.** On an opaque white rectangle
+  that produces a black box, which reads as a rendering bug rather than a missing
+  asset. The two light-theme invert rules in `css/industrial-1.css` are commented
+  out for exactly this reason, and **must be re-enabled the moment transparent
+  artwork arrives** or the light theme loses the invert it needs.
+
+That last step is easy to forget, so it is not left to memory:
+`tools/verify-round-2.py` reads the alpha channel of the shipped marks on every
+run and fails if transparency has arrived while the rules are still commented —
+or if the rules are live over an opaque mark.

@@ -26,8 +26,20 @@
 /* 15: the page title and all four block titles are Font A. The .font-a rule in
    industrial-3.css sets the family; the size is set here because this page's
    headings run larger than the site default. */
+/* Each section title sits on the same wood as the page banner — left-aligned,
+   and with no eyebrow above it. The band bleeds to the viewport edges the way
+   .page-hero does, so it reads as the same device rather than as a wide card.
+   (client feedback 2026-08-09) */
 .fv-sec h2 { font-family: var(--font-marker); font-weight: 600; font-size: clamp(24px, 2.6vw, 32px); color: var(--ink); margin: 0 0 10px; }
-.cas-root .fv-sec h2.font-a { font-size: clamp(31px, 3.4vw, 46px); line-height: 1.16; margin-bottom: 12px; }
+.cas-root .fv-sec > h2 {
+  position: relative; margin: 0 calc(50% - 50vw) 16px; padding: 16px calc(50vw - 50% + 0px);
+  background-color: var(--banner-bg); background-image: var(--banner-grain);
+  background-size: var(--banner-size, cover); background-position: center top;
+  background-attachment: fixed;
+  color: var(--banner-ink); box-shadow: var(--shadow); text-align: left; }
+.cas-root .fv-sec > h2::before { content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: repeating-linear-gradient(0deg, transparent 0 56px, rgba(43,40,35,.1) 56px 57px); }
+.cas-root .fv-sec h2.font-a { font-size: clamp(31px, 3.4vw, 46px); line-height: 1.16; }
 
 /* 15: the featured Studio Notes block, 16:9, with its own dots.
    The whole block is centred on the page — heading, portrait, stage and dots.
@@ -53,7 +65,14 @@
    two ratios, rather than a second component. 15 says the section reuses
    section two's layout and changes only the content and the ratio, so the
    column count stays at three. */
+/* A 9:16 thumbnail in a third-of-the-row column is ~800px tall, which is what
+   made the Shorts section tower over the rest of the page. Shorts are shown
+   five across instead of three, so the same ratio lands near 380px.
+   (client feedback 2026-08-09) */
+.fv-grid.is-vertical { grid-auto-columns: calc((100% - 4 * 24px) / 5); }
 .fv-grid.is-vertical .fv-thumb { aspect-ratio: 9 / 16; }
+@media (max-width: 900px) { .fv-grid.is-vertical { grid-auto-columns: calc((100% - 2 * 24px) / 3); } }
+@media (max-width: 620px) { .fv-grid.is-vertical { grid-auto-columns: 52%; } }
 /* The intro runs the full content width rather than stopping at a 72ch measure —
    it was ending less than half way across a 1392px container. (client feedback
    2026-08-08) */
@@ -72,15 +91,22 @@
 .fv-card { display: flex; flex-direction: column; scroll-snap-align: start; }
 /* The arrows only exist when there is something off-screen to reach; the JS adds
    .has-more, so a section holding three or fewer films looks exactly as before. */
-.fv-rail .fv-arrow { position: absolute; top: calc(26px + 28%); z-index: 3; display: none;
+/* --fv-arrow-top is the vertical centre of the thumbnail, measured in script.
+   It was calc(26px + 28%) — a guess against the whole card, so the arrows sat
+   below the middle of the picture and moved further off as the card grew.
+   (client feedback 2026-08-09) */
+.fv-rail .fv-arrow { position: absolute; top: var(--fv-arrow-top, 50%); transform: translateY(-50%);
+  z-index: 3; display: none;
   width: 42px; height: 42px; border-radius: 50%; cursor: pointer;
   border: 1px solid color-mix(in srgb, var(--ink) 22%, transparent);
   background: color-mix(in srgb, var(--surface) 88%, transparent);
   color: var(--ink); font-size: 15px; line-height: 1; backdrop-filter: blur(3px);
   box-shadow: var(--shadow-sm); transition: background .2s ease, transform .2s ease; }
 .fv-rail.has-more .fv-arrow { display: grid; place-items: center; }
-.fv-rail .fv-arrow:hover { background: var(--surface); transform: scale(1.06); }
-.fv-rail .fv-arrow[disabled] { opacity: .3; cursor: default; transform: none; }
+/* the translate is part of the positioning, so hover and disabled have to carry
+   it too or the arrow jumps to sit 21px low the moment you touch it */
+.fv-rail .fv-arrow:hover { background: var(--surface); transform: translateY(-50%) scale(1.06); }
+.fv-rail .fv-arrow[disabled] { opacity: .3; cursor: default; transform: translateY(-50%); }
 .fv-rail .fv-arrow.prev { left: -14px; }
 .fv-rail .fv-arrow.next { right: -14px; }
 
@@ -480,6 +506,14 @@ class Component extends DCLogic {
         return b;
       };
       const prev = mk('prev', '‹'), next = mk('next', '›');
+      /* centre the arrows on the PICTURE, not on the card: the title and blurb
+         below it are a different height in every section */
+      const centreArrows = () => {
+        const thumb = grid.querySelector('.fv-thumb');
+        if (!thumb) return;
+        const t = thumb.getBoundingClientRect(), r = rail.getBoundingClientRect();
+        rail.style.setProperty('--fv-arrow-top', (t.top - r.top + t.height / 2) + 'px');
+      };
       const step = () => {
         const card = grid.querySelector('.fv-card');
         const gap = parseFloat(getComputedStyle(grid).columnGap) || 24;
@@ -494,8 +528,14 @@ class Component extends DCLogic {
       prev.addEventListener('click', () => grid.scrollBy({ left: -step(), behavior: 'smooth' }));
       next.addEventListener('click', () => grid.scrollBy({ left: step(), behavior: 'smooth' }));
       grid.addEventListener('scroll', sync);
-      window.addEventListener('resize', sync);
+      window.addEventListener('resize', () => { sync(); centreArrows(); });
       sync();
+      centreArrows();
+      /* the thumbnails are lazy, so the first measurement can precede layout */
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(centreArrows);
+      grid.querySelectorAll('img').forEach((im) => {
+        if (!im.complete) im.addEventListener('load', centreArrows, { once: true });
+      });
     });
 
     /* 15: the featured Studio Notes block — latest first, with dots. Nothing

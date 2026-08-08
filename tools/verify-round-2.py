@@ -287,7 +287,7 @@ def check_light_theme_invert():
     is right for a cut-out and wrong for the opaque files the client actually
     uploaded — on those it paints a black slab — so the two rules are commented
     out while her raw artwork is in place. The reasoning is in
-    docs/20260808_Transparency_Work_Not_In_Scope.md (gitignored).
+    docs/03-design-system.md.
 
     Re-enabling them is a step nobody will remember, so the trigger fires by
     itself: the moment a shipped mark carries real transparency this fails until

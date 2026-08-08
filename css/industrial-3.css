@@ -384,7 +384,7 @@ img, svg, video { max-width: 100%; }
    the ask and sets the expectation that we will keep doing it. The white box is
    the ask, made self-evident. A blend-mode workaround was written here and
    REMOVED on the client's instruction (2026-08-09); the method is recorded in
-   docs/20260808_Transparency_Work_Not_In_Scope.md so nobody has to work it out
+   docs/20260807_About_Copy_Provenance.md so nobody has to work it out
    again, and it stays out of the site until she supplies transparent artwork
    (#17). Do not re-add it.
 
@@ -633,16 +633,19 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
    does not repaint itself when the site does. (client feedback 2026-08-08 — the
    wooden mount read as a picture frame, which is not how certificates are
    presented.) */
+/* Frame 22px + mat 13px was 35px of chrome a side on a 254px mount, leaving the
+   scan barely half the width. The certificate is the content; the frame is the
+   frame. (client feedback 2026-08-09) */
 .cert-frame { position: relative; aspect-ratio: 3 / 4; box-sizing: border-box;
-  padding: 13px;
+  padding: 5px;
   background-color: #f7f2e5;
   background-image:
     radial-gradient(120% 80% at 50% 0%, rgba(255,255,255,.85), transparent 60%),
     repeating-linear-gradient(45deg, rgba(138,111,61,.045) 0 6px, transparent 6px 12px),
     repeating-linear-gradient(-45deg, rgba(138,111,61,.045) 0 6px, transparent 6px 12px);
-  border: 22px solid transparent;
+  border: 12px solid transparent;
   border-image-source: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%238a6f3d' stroke-linecap='round'%3E%3Crect x='3.5' y='3.5' width='113' height='113' stroke-width='3'/%3E%3Crect x='11.5' y='11.5' width='97' height='97' stroke-width='1'/%3E%3Cpath d='M17 30V17h13M103 30V17H90M17 90v13h13M103 90v13H90' stroke-width='2.2'/%3E%3C/g%3E%3Cg fill='%238a6f3d'%3E%3Cpath d='M23.5 19.6l4 3.9-4 3.9-4-3.9z'/%3E%3Cpath d='M96.5 19.6l4 3.9-4 3.9-4-3.9z'/%3E%3Cpath d='M23.5 92.6l4 3.9-4 3.9-4-3.9z'/%3E%3Cpath d='M96.5 92.6l4 3.9-4 3.9-4-3.9z'/%3E%3C/g%3E%3Cg stroke='%238a6f3d' stroke-width='1.1' fill='none'%3E%3Cpath d='M30 23.5c6 0 9-3 9-6.5M90 23.5c-6 0-9-3-9-6.5M30 96.5c6 0 9 3 9 6.5M90 96.5c-6 0-9 3-9 6.5'/%3E%3C/g%3E%3C/svg%3E");
-  border-image-slice: 44; border-image-width: 22px; border-image-repeat: stretch;
+  border-image-slice: 44; border-image-width: 12px; border-image-repeat: stretch;
   box-shadow: var(--shadow-md); transition: box-shadow .3s; }
 .bc-card--cert:hover .cert-frame { box-shadow: var(--shadow-lift); }
 /* the mat the certificate is mounted on */
