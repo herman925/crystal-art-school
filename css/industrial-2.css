@@ -156,17 +156,7 @@
    reads as a shortcut into the grid below rather than a second catalogue. */
 
 /* 4.2: page-level description, part shown with the rest behind Read More. */
-.cat-intro-body { max-width: 74ch; }
-.cat-intro-rest { display: none; }
-.cat-intro-rest.is-open { display: block; }
-.cat-intro-body p { font-size: 17px; line-height: 1.65; color: var(--muted); margin: 0 0 12px; }
-.cat-intro-body ul { margin: 0 0 12px; padding-left: 20px; color: var(--muted); font-size: 17px; line-height: 1.65; }
-.cat-intro-body strong { color: var(--ink); }
-.read-more { display: inline-flex; align-items: center; gap: 7px; background: none; border: 0; padding: 2px 0; cursor: pointer;
   font-family: var(--font-cond); font-size: 14px; font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--marine); }
-.read-more:hover { filter: brightness(1.15); }
-.read-more .arr { transition: transform var(--dur-fast) var(--ease-out); }
-.read-more:hover .arr { transform: translateY(2px); }
 
 .tier-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
 @media (max-width: 860px) { .tier-grid { grid-template-columns: 1fr; } }

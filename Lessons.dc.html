@@ -100,28 +100,12 @@
        note saying it was not a ranking. Restore from git if the ranking is
        wanted once there is a commerce backend. -->
 
-  <!-- 4.2: page-level description, part shown and the rest behind Read More.
-       Copy is Crystal's own Course Overview; she still has to mark where the
-       fold falls. -->
-  <section class="section" id="cat-intro" style="padding-top:6px;">
-    <div class="cat-intro-body">
-      <p>Each module features both Beginner and Advanced levels. The Beginner courses are clear and easy to follow, and every lesson includes clear English voiceovers and subtitles.</p>
-      <div class="cat-intro-rest" id="cat-intro-rest">
-        <p>Designed for both beginners and experienced painters, this self-paced video curriculum guides you through colour mixing, essential tools, and refined techniques. It offers a comprehensive, step-by-step framework built on my years of experience as a student, artist, and instructor.</p>
-        <p>Inside the studio, you will explore a single subject from multiple angles and perspectives, mastering every stage of the painting process from initial sketch to final touch.</p>
-        <ul>
-          <li><strong>Step-by-step curriculum</strong> &mdash; learn comfortably at your own pace.</li>
-          <li><strong>Flexible stage-by-stage steps</strong> &mdash; break complex paintings into approachable, manageable phases.</li>
-        </ul>
-        <!-- Under_Shopallcourses.docx belongs to the HOME page: it sits in
-             assets/00 - Home/ and its filename names the section it goes under.
-             Its four questions were briefly duplicated here and have been removed;
-             the description above is the page-level intro §4.2 asks for. -->
-      </div>
-      <button class="read-more" type="button" id="cat-intro-more" aria-expanded="false" aria-controls="cat-intro-rest">Read more <span class="arr" aria-hidden="true">↓</span></button>
-    </div>
-    <p class="asset-pending">No copy has been supplied for this page. &sect;4.2 asks for a page-level description here; the paragraphs above are borrowed from <em>Under_Shopallcourses.docx</em>, which lives in <em>00 - Home</em> and is written for the home page &mdash; it reads there in full. Still needed: a description written for this page, or permission to keep borrowing; where the fold falls (&sect;4.2 says she marks it, not the system); and the sentence about how long access lasts, which &sect;7.4 holds back.</p>
-  </section>
+  <!-- 4.2 "Description + Read More" was removed on the client's instruction
+       2026-08-08. The section is still specified: §4.2 asks for a page-level
+       description here with a client-marked fold. It had no copy of its own —
+       the paragraphs were borrowed from Under_Shopallcourses.docx, which belongs
+       to the home page and now reads there in full. Restore from git once copy
+       written for this page exists. -->
 
   <section class="section" style="padding-top:6px;">
     <div class="catalog-layout">
@@ -350,19 +334,6 @@ class Component extends DCLogic {
     const COURSES = window.CAS_COURSES || [];
     if (grid) grid.innerHTML = COURSES.map(courseCard).join('');
 
-    /* 4.2: part of the description shows, Read More opens the rest. */
-    const introBtn = document.getElementById('cat-intro-more');
-    const introRest = document.getElementById('cat-intro-rest');
-    if (introBtn && introRest) {
-      /* a class rather than the hidden attribute: the dc runtime re-renders this
-         markup and drops valueless attributes, which left the fold open. */
-      introBtn.addEventListener('click', () => {
-        const open = !introRest.classList.contains('is-open');
-        introRest.classList.toggle('is-open', open);
-        introBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
-        introBtn.innerHTML = (open ? 'Read less' : 'Read more') + ' <span class="arr" aria-hidden="true">' + (open ? '↑' : '↓') + '</span>';
-      });
-    }
 
     /* multi-group filter panel — options are built dynamically from the
        tags on the courses actually in the grid (shared js/filter-tags.js) */
