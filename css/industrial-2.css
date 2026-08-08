@@ -710,6 +710,17 @@
    up, light offset down — is what the eye reads as a groove rather than as a
    drop shadow. The letters are 90% opaque so the pores show faintly through the
    recess, which is the part that sells it; a solid fill reads as printed ink. */
+/* Everything printed on the cover is pressed into it rather than laid on top:
+   the kicker, the reading time and the call to action take the same groove as
+   the headline (client feedback 2026-08-08). The offsets stay at 1px with no
+   blur, because the shadow that reads as a groove on 41px type reads as a smear
+   on 14px — only the headline carries the extra ambient layer, in its own rule
+   below. */
+.blog-feature .bf-kicker,
+.blog-feature .bf-reads,
+.blog-feature .bf-body .link-squiggle {
+  text-shadow: 0 -1px 0 rgba(40,22,10,.55), 0 1px 0 rgba(255,240,212,.42);
+}
 .blog-feature .bf-frame h2 {
   color: rgba(51,36,26,.92);
   text-shadow:
@@ -735,6 +746,11 @@
      rather than as punctuation. line-height:0 keeps them out of the layout
      and the negative vertical-align hangs them from the cap line. */
   font-size: 2.4em; line-height: 0; vertical-align: -.28em; color: rgba(52,36,23,.5);
+  /* Georgia's comma tapers to a thin tail. A centred stroke fattens the whole
+     glyph without changing its shape, which is what a mark pressed into hide
+     would look like — the tool has a width. Tested against Archivo and Oswald
+     first: both draw straight wedges with no tail at all. */
+  -webkit-text-stroke: 3px rgba(52,36,23,.5);
   text-shadow: 0 -1px 1px rgba(40,22,10,.45), 0 1px 0 rgba(255,240,212,.42);
 }
 .blog-feature .bf-frame h2::before { content: "“"; margin-right: .04em; }
