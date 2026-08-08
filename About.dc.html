@@ -210,7 +210,7 @@
         <p>While painting is a personal form of expression, I believe art becomes truly powerful when shared. Over the years, my work has been featured in mainstream media, published in art collections, and acquired by institutional permanent collections, such as the Sun Museum. In 2018, I launched my YouTube channel, <strong>Crystal Lau Art</strong>, to share the joys of plein air sketching and art history with a broader audience. It showed me how art can bridge distances and connect people anywhere in the world.</p>
         </div>
       </div>
-      <div class="ph-carousel is-fill" id="car-exhibition" aria-label="Exhibitions"></div>
+      <div class="ph-carousel" id="car-exhibition" aria-label="Exhibitions"></div>
     </div>
   </section>
 
@@ -309,14 +309,18 @@
              It scrolls as one continuous strip that can be dragged, rather than
              stepping page by page: the mounts are identical in size and there is
              no natural page boundary between them. -->
-        <div class="bc-row is-rail">
-          <figure class="bc-card bc-card--cert">
+        <!-- The timeline is generated from the mounts below, so the two can
+             never disagree about how many there are or what order they are in.
+             Both hold five across and their scroll positions are mirrored. -->
+        <div class="cert-timeline" id="cert-timeline" aria-label="Certificate timeline"></div>
+        <div class="bc-row is-rail" id="cert-rail">
+          <figure class="bc-card bc-card--cert" data-year="2026" data-place="Accademia Internazionale dell'Acquarello, Italy">
             <div class="cert-frame"><div class="cert-mat">
               <img src="img/about/cert-accademia-2026.jpg" alt="Official Finalist certificate, International Watercolor Academy Award 2026, Accademia Internazionale dell'Acquarello, Italy" loading="lazy" decoding="async">
             </div></div>
             <figcaption>Official Finalist · International Watercolor Academy Award 2026 · Italy</figcaption>
           </figure>
-          <figure class="bc-card bc-card--cert">
+          <figure class="bc-card bc-card--cert" data-year="2026" data-place="Japan International Watercolour Institute">
             <div class="cert-frame"><div class="cert-mat">
               <img src="img/about/cert-jiwi-2026.jpg" alt="Winning Work certificate, 26th JIWI Online Spring Exhibition, Japan International Watercolour Institute, for the painting City of Japan" loading="lazy" decoding="async">
             </div></div>
@@ -463,6 +467,17 @@
   </section>
 
 </main>
+
+<!-- Certificates open here from the timeline's eye. On a phone this is the only
+     way to see a scan, because the mounts are not rendered at that width. -->
+<div class="cert-lb" id="cert-lb" aria-hidden="true" role="dialog" aria-modal="true">
+  <div class="clb-backdrop" data-close></div>
+  <div class="clb-panel">
+    <button class="clb-close" type="button" data-close aria-label="Close">✕</button>
+    <img id="clb-img" alt="">
+    <p class="clb-cap" id="clb-cap"></p>
+  </div>
+</div>
 
 <!-- footer markup lives in js/site-footer.js — single source of truth -->
 <footer class="site-footer" aria-label="Site footer"></footer>
@@ -617,7 +632,79 @@ class Component extends DCLogic {
        trackpad swipe, or the arrow keys once focused) reads better than a step.
        Order is whatever the author puts in the CMS — see the note in the
        markup. */
-    const rail = document.querySelector('.bc-row.is-rail');
+    const rail = document.getElementById('cert-rail');
+    const tl = document.getElementById('cert-timeline');
+    if (rail && tl) {
+      /* The timeline is built FROM the mounts rather than written out beside
+         them, so the two cannot disagree about how many certificates there are
+         or what order they are in — and the author only arranges one list in
+         the CMS. Same item count, same width division, so the scroll positions
+         map 1:1 and each can be mirrored onto the other. */
+      const EYE = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M1.8 12S5.5 5.5 12 5.5 22.2 12 22.2 12 18.5 18.5 12 18.5 1.8 12 1.8 12z"></path><circle cx="12" cy="12" r="3.1"></circle></svg>';
+      const mounts = Array.from(rail.querySelectorAll('.bc-card--cert'));
+      tl.innerHTML = mounts.map((fig, i) => {
+        const pending = fig.classList.contains('is-ph');
+        const cap = (fig.querySelector('figcaption') || {}).textContent || '';
+        const year = fig.getAttribute('data-year') || '—';
+        /* the caption's first segment is the award itself; the rest is the
+           exhibition and the work, which is more than a timeline node wants */
+        const label = pending ? 'Awaiting scan' : cap.split(' · ')[0];
+        return '<div class="ct-node' + (pending ? ' is-pending' : '') + '" data-i="' + i + '">' +
+          '<span class="ct-year">' + year + '</span>' +
+          '<span class="ct-dot" aria-hidden="true"></span>' +
+          '<span class="ct-label">' + label + '</span>' +
+          '<button class="ct-eye" type="button" data-i="' + i + '" aria-label="View certificate' +
+            (pending ? ' (not yet supplied)' : ': ' + cap.replace(/"/g, '')) + '"' +
+            (pending ? ' disabled' : '') + '>' + EYE + '</button>' +
+        '</div>';
+      }).join('');
+      /* the rule runs the full scrollable length, not just the visible part */
+      const spanRule = () => tl.style.setProperty('--ct-span', tl.scrollWidth + 'px');
+      spanRule();
+      window.addEventListener('resize', spanRule);
+
+      /* Mirror in both directions. The guard stops the two handlers bouncing
+         the scroll back and forth between them. */
+      let syncing = false;
+      const mirror = (from, to) => {
+        if (syncing) return;
+        syncing = true;
+        const room = from.scrollWidth - from.clientWidth;
+        const toRoom = to.scrollWidth - to.clientWidth;
+        to.scrollLeft = room > 0 ? (from.scrollLeft / room) * toRoom : 0;
+        requestAnimationFrame(() => { syncing = false; });
+      };
+      rail.addEventListener('scroll', () => mirror(rail, tl));
+      tl.addEventListener('scroll', () => mirror(tl, rail));
+
+      /* the lightbox — the only route to a scan on a phone, where the mounts
+         are not rendered */
+      const lb = document.getElementById('cert-lb');
+      const lbImg = document.getElementById('clb-img');
+      const lbCap = document.getElementById('clb-cap');
+      const openCert = (i) => {
+        const fig = mounts[i];
+        const img = fig && fig.querySelector('img');
+        if (!img) return;
+        lbImg.src = img.src;
+        lbImg.alt = img.alt;
+        lbCap.textContent = (fig.querySelector('figcaption') || {}).textContent || '';
+        lb.classList.add('open');
+        lb.setAttribute('aria-hidden', 'false');
+        document.body.style.overflow = 'hidden';
+      };
+      const closeCert = () => {
+        lb.classList.remove('open');
+        lb.setAttribute('aria-hidden', 'true');
+        lbImg.removeAttribute('src');
+        document.body.style.overflow = '';
+      };
+      tl.querySelectorAll('.ct-eye').forEach((b) =>
+        b.addEventListener('click', () => openCert(Number(b.dataset.i))));
+      mounts.forEach((fig, i) => { if (!fig.classList.contains('is-ph')) fig.addEventListener('click', () => openCert(i)); });
+      lb.querySelectorAll('[data-close]').forEach((el) => el.addEventListener('click', closeCert));
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && lb.classList.contains('open')) closeCert(); });
+    }
     if (rail) {
       let down = false, startX = 0, startLeft = 0, moved = 0;
       rail.addEventListener('pointerdown', (e) => {

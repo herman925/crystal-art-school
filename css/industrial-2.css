@@ -389,20 +389,21 @@
    the cells to full width on a phone without the script knowing, half the
    photographs would become unreachable. The script sets it and recomputes the
    page count with it. (client feedback 2026-08-08) */
-.ph-carousel .phc-cell { flex: 0 0 calc(100% / var(--phc-per)); margin: 0; padding: 0 8px; box-sizing: border-box; }
-/* A fixed height with the photograph fitted inside it, not cropped to a ratio:
-   her sets mix 3:4, 4:3 and near-square, and a shared aspect-ratio was cutting
-   the tops off. Each sits on its own mat instead. (client feedback 2026-08-08) */
+/* overflow: hidden matters. The settling animation scales the incoming frame
+   slightly, and without clipping the scaled image spilled ~2.3px past its own
+   cell — which is why slivers of the neighbouring photographs showed at both
+   edges of the viewport. (client feedback 2026-08-08) */
+.ph-carousel .phc-cell { flex: 0 0 calc(100% / var(--phc-per)); margin: 0; padding: 0 8px;
+  box-sizing: border-box; overflow: hidden; }
+/* Fixed height, and the photograph fills the frame rather than being fitted
+   inside it. (client feedback 2026-08-08 — "fill instead of fit") */
 .ph-carousel .phc-cell img { width: 100%; height: 400px; display: block;
-  object-fit: contain; background: var(--surface);
+  object-fit: cover; background: var(--surface);
   border-radius: var(--radius-card); box-shadow: var(--shadow);
   transition: transform .9s var(--ease-out), opacity .5s linear; }
-/* .is-fill — now that the photograph sits in a frame there is no reason to
-   letterbox it; it fills the frame instead. .is-portrait — every photograph in
-   that set is portrait, so the frame is portrait and narrower.
-   (client feedback 2026-08-08) */
-.ph-carousel.is-fill .phc-cell img { object-fit: cover; }
-.ph-carousel.is-portrait .phc-cell img { height: 560px; object-fit: cover; }
+/* .is-portrait — every photograph in that set is portrait, so the frame is
+   portrait and narrower. */
+.ph-carousel.is-portrait .phc-cell img { height: 560px; }
 /* The page coming into view drifts and fades a little as it lands, so the
    change reads as a movement rather than a jump. */
 .ph-carousel .phc-cell:not(.is-current) img { opacity: .55; transform: scale(1.03); }

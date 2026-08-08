@@ -552,8 +552,11 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
    inventing a certificate that does not exist. */
 /* A fixed basis, not a max-width: .bc-row is a flex row, so max-width alone let
    each mount size to its own content and the set came out 236 / 245 / 179px
-   wide — the one thing a matched set of frames must not do. */
-.bc-card--cert { flex: 0 0 236px; width: 236px; max-width: 236px; padding: 0; background: none; box-shadow: none; }
+   wide — the one thing a matched set of frames must not do.
+   Five across, worked out from the same division the timeline uses so the two
+   rails cannot disagree. It was showing a little over five. */
+.bc-card--cert { flex: 0 0 calc((100% - (var(--cert-show) - 1) * var(--cert-gap)) / var(--cert-show));
+  width: auto; max-width: none; padding: 0; background: none; box-shadow: none; }
 /* `.bc-card + .bc-card` tilts the polaroids and outranks a bare `.bc-card--cert`,
    so the second and third mounts kept a 1.6° rotation. Hanging straight is the
    point of a mount, and the tilt also inflated their bounding boxes to 245px
@@ -601,11 +604,48 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
 .bc-card--cert.is-ph .cert-slot.is-portrait { aspect-ratio: 3 / 4; height: 100%; width: auto; }
 .bc-card--cert.is-ph .cert-slot.is-square { aspect-ratio: 1 / 1; }
 
+/* ---- the certificate strip: a timeline over a rail of mounts --------------
+   Both hold exactly five across and share one item width, so their scroll
+   positions map 1:1 and the script mirrors one to the other. Scroll either and
+   the other follows — a year in the timeline is always directly above its own
+   certificate. (client feedback 2026-08-08)
+
+   --cert-gap and the five-across division live here rather than in the script,
+   so the two rails cannot drift apart by having their widths worked out in two
+   places. */
+.bio-certs { --cert-gap: 18px; --cert-show: 5; }
+.cert-timeline { position: relative; display: flex; flex-wrap: nowrap; gap: var(--cert-gap);
+  overflow-x: auto; scrollbar-width: none; margin-bottom: 6px;
+  overscroll-behavior-x: contain; scroll-behavior: smooth; }
+.cert-timeline::-webkit-scrollbar { display: none; }
+/* the rule the markers sit on, drawn the full scrollable length */
+.cert-timeline::before { content: ""; position: absolute; left: 0; top: 46px; height: 1px;
+  width: max(100%, var(--ct-span, 100%));
+  background: color-mix(in srgb, var(--ink) 22%, transparent); }
+.ct-node { position: relative; flex: 0 0 calc((100% - (var(--cert-show) - 1) * var(--cert-gap)) / var(--cert-show));
+  display: flex; flex-direction: column; align-items: center; text-align: center; gap: 6px;
+  padding-bottom: 4px; }
+.ct-year { font-family: var(--font-cond); font-weight: 600; font-size: 15px;
+  letter-spacing: var(--tracking-label); color: var(--ink); }
+.ct-dot { width: 11px; height: 11px; border-radius: 50%; background: var(--marine);
+  box-shadow: 0 0 0 4px var(--surface); }
+.ct-node.is-pending .ct-dot { background: color-mix(in srgb, var(--ink) 26%, transparent); }
+.ct-node.is-pending .ct-year { color: var(--muted); }
+.ct-label { font-size: 12.5px; line-height: 1.4; color: var(--muted); max-width: 22ch; }
+/* The eye opens the certificate on its own. It is the only way to see a scan on
+   a phone, where the mounts are not rendered at all. */
+.ct-eye { display: inline-grid; place-items: center; width: 30px; height: 30px; padding: 0;
+  border: 1px solid color-mix(in srgb, var(--ink) 20%, transparent); border-radius: 50%;
+  background: var(--surface); color: var(--ink); cursor: pointer;
+  transition: background var(--dur-base), transform var(--dur-base); }
+.ct-eye:hover { background: var(--ink); color: var(--paper); transform: scale(1.06); }
+.ct-eye svg { width: 15px; height: 15px; }
+.ct-node.is-pending .ct-eye { opacity: .35; pointer-events: none; }
+
 /* The row is one continuous strip that can be dragged, not a set of pages: the
    mounts are identical in size, so there is no natural page boundary between
-   them. Order is authored by hand in the CMS — see the note in the markup.
-   (client feedback 2026-08-08) */
-.bc-row.is-rail { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: thin;
+   them. Order is authored by hand in the CMS — see the note in the markup. */
+.bc-row.is-rail { flex-wrap: nowrap; gap: var(--cert-gap); overflow-x: auto; scrollbar-width: thin;
   cursor: grab; padding-bottom: 8px; scroll-behavior: smooth;
   overscroll-behavior-x: contain; }
 .bc-row.is-rail.is-dragging { cursor: grabbing; scroll-behavior: auto; user-select: none; }
@@ -614,6 +654,38 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
 .bc-row.is-rail::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--ink) 22%, transparent); border-radius: 4px; }
 /* the tilt returns on hover only, so a dragged strip stays flat */
 .bc-row.is-rail .bc-card--cert:hover { transform: translateY(-4px); }
+
+/* On a phone the mounts are not rendered at all — five 3:4 frames in a 360px
+   column would be thumbnails. The timeline becomes the whole presentation,
+   stacked, and each entry opens its certificate through the eye.
+   (client feedback 2026-08-08) */
+@media (max-width: 760px) {
+  .bio-certs .bc-row.is-rail { display: none; }
+  .cert-timeline { display: block; overflow: visible; margin-bottom: 0; }
+  .cert-timeline::before { top: 0; bottom: 0; left: 14px; width: 1px; height: auto; }
+  .ct-node { flex: none; flex-direction: row; align-items: center; text-align: left;
+    gap: 12px; padding: 10px 0 10px 0; }
+  .ct-node .ct-year { flex: 0 0 46px; order: 2; }
+  .ct-node .ct-dot { order: 1; flex: none; }
+  .ct-node .ct-label { order: 3; flex: 1; max-width: none; }
+  .ct-node .ct-eye { order: 4; flex: none; }
+}
+
+/* ---- the certificate lightbox ---- */
+.cert-lb { position: fixed; inset: 0; z-index: 420; display: none; align-items: center;
+  justify-content: center; padding: 24px; }
+.cert-lb.open { display: flex; }
+.cert-lb .clb-backdrop { position: absolute; inset: 0; background: rgba(15,12,9,.8); backdrop-filter: blur(4px); }
+.cert-lb .clb-panel { position: relative; z-index: 1; max-width: min(560px, 100%); max-height: 100%;
+  display: flex; flex-direction: column; gap: 12px; }
+.cert-lb .clb-panel img { max-width: 100%; max-height: 74vh; object-fit: contain;
+  background: #fffdf7; border-radius: 3px; box-shadow: 0 30px 70px rgba(0,0,0,.55); }
+.cert-lb .clb-cap { font-family: var(--font-cond); font-size: 12.5px;
+  letter-spacing: var(--tracking-label); text-transform: uppercase;
+  color: rgba(243,237,225,.82); text-align: center; }
+.cert-lb .clb-close { position: absolute; top: -6px; right: -6px; z-index: 3; width: 36px; height: 36px;
+  border-radius: 50%; border: 1px solid rgba(243,237,225,.3); background: rgba(24,20,16,.7);
+  color: #f3ede1; cursor: pointer; font-size: 14px; }
 /* Tracking and 11px size both held: below About's §13/§14 freeze line. (#20) */
 .bc-card figcaption { font-family: var(--font-cond); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: #474138; margin-top: 8px; text-align: center; }
 /* Captions under a wooden mount sit on the page, not on the wood, so they take
