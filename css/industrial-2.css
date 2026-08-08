@@ -649,7 +649,7 @@
 }
 @media (max-width: 760px) { .blog-feature { grid-template-columns: 1fr; } }
 /* The photograph is mounted on the cover rather than set into it, so it takes an
-   outer shadow. An inset ring would be hidden by the <img> that fills it. */
+   outer shadow. An inset ring would be hidden by the photograph that fills it. */
 .blog-feature .bf-img { position: relative; overflow: hidden; min-height: 260px; border-radius: var(--radius-card); box-shadow: 0 3px 14px rgba(30,16,7,.42); }
 .blog-feature .bf-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s var(--ease-out); }
 .blog-feature:hover .bf-img img { transform: scale(1.04); }
