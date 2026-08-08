@@ -279,6 +279,53 @@ def run_theme_fallback(browser):
     return baselines
 
 
+def check_light_theme_invert():
+    """The light theme inverts the brand marks with `filter: brightness(0)`. That
+    is right for a cut-out and wrong for the opaque files the client actually
+    uploaded — on those it paints a black slab — so the two rules are commented
+    out while her raw artwork is in place. The reasoning is in
+    docs/20260808_Transparency_Work_Not_In_Scope.md (gitignored).
+
+    Re-enabling them is a step nobody will remember, so the trigger fires by
+    itself: the moment a shipped mark carries real transparency this fails until
+    the rules are uncommented, and if the rules are ever live over an opaque mark
+    it fails the other way."""
+    marks = ['img/lau-logo.png', 'img/logo2.png']
+    try:
+        from PIL import Image
+    except ImportError:
+        return                      # no Pillow, no opinion
+
+    transparent = []
+    for rel in marks:
+        p = REPO / rel
+        if not p.exists():
+            continue
+        im = Image.open(p).convert('RGBA')
+        hist = im.getchannel('A').histogram()
+        if hist[0] / float(im.size[0] * im.size[1]) > 0.01:
+            transparent.append(rel)
+
+    css = (REPO / 'css' / 'industrial-1.css').read_text(encoding='utf-8').splitlines()
+    live = [l for l in css if l.startswith('[data-theme="A"]') and 'brightness(0)' in l]
+    off = [l for l in css if l.startswith('/* [data-theme="A"]') and 'brightness(0)' in l]
+
+    if transparent and not live:
+        failures.append(
+            'light-theme invert: %s now carry transparency, so the two '
+            '[data-theme="A"] brightness(0) rules in css/industrial-1.css have to be '
+            'uncommented — without them the light theme puts a cream mark on cream'
+            % ', '.join(transparent))
+    elif not transparent and live:
+        failures.append(
+            'light-theme invert: the brightness(0) rules are live but the marks are '
+            'opaque, so each one paints a black rectangle. Comment them out again.')
+    elif not transparent and off:
+        notes.append('light-theme invert is off while the brand marks are the '
+                     'client’s own opaque uploads — correct for now, and this check '
+                     'fails the moment transparent artwork lands (#17)')
+
+
 def main():
     start_server()
     with sync_playwright() as p:
@@ -290,6 +337,8 @@ def main():
                 run_page(browser, path, 'absent', theme)
         baselines = run_theme_fallback(browser)
         browser.close()
+
+    check_light_theme_invert()
 
     print('themes reachable: %s' % ', '.join('%s=%s' % kv for kv in sorted(baselines.items())))
     print('pages checked: %d content + %d excluded, in both themes'
