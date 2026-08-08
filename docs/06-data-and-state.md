@@ -115,3 +115,48 @@ If you add or rename a course, update **all** of these, or links/prices will dri
 future refactor could hoist this into a shared `js/data.js`, but today it's copied.
 
 Next: [07 — Commerce](07-commerce.md).
+
+## The asset pipeline
+
+Content comes from the client's Drive tree, not from hand-written JavaScript.
+
+```
+assets/                     the client's own folders (outside the repo)
+  └─ tools/import-assets.py     resize, strip EXIF, probe video durations
+       └─ tools/asset-manifest.json
+            └─ tools/build-data.py
+                 └─ js/course-data.js, js/gallery-data.js, js/free-videos-data.js
+```
+
+**Never hand-edit `js/*-data.js`.** They are generated and the next run
+overwrites them. The only hand-written copy is `tools/content-meta.json`; video
+IDs live in `tools/video-links.json`.
+
+### Traps in here, all of which have cost time
+
+- **`tools/import-assets.py` filters the client's working material out by
+  filename** (her handwritten comment boards and reference shots sit in the same
+  folders as her artwork). One of those boards once shipped to the public gallery
+  as a saleable painting. **Do not remove that filter.**
+- **A folder is not a lesson number.** One folder can span more than one of the
+  client's numbered lessons — the beginner course is 14 lessons across 13 films,
+  because one folder holds a single film covering two of them. The `spans` field
+  carries this; `lessonCount` is what the reader is shown and `lessons.length` is
+  what indexing and progress use. Conflating them is what produced "I thought
+  there were 14 lessons but I can only see 13".
+- **Poster filenames are numbered by position, not by lesson number**, precisely
+  so a folder gaining a span does not rename every image after it.
+- **Her folder numbers are not her lesson numbers.** Before remapping any title,
+  check it against the artwork — the covers are the evidence. A remap that looked
+  obviously right would have shifted every title by one.
+- **Her own documents disagree with each other** on counts. Where they do, no
+  number goes in the copy, so the page cannot contradict itself, and the conflict
+  is recorded in `tools/content-meta.json` `_source` for the client to resolve.
+
+### Provenance
+
+`_source` on each record says where the copy came from and what was changed.
+Anything developer-written that describes the client's work is flagged in the
+data (`fromArtwork`, `pending`) rather than presented as hers. Do not write
+biography, credentials or syllabus that did not come from the client — an
+earlier build invented credentials and they had to be removed.

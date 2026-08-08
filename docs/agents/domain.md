@@ -9,6 +9,7 @@
 - `docs/adr/0001-cms-editable-whitelist.md` applies to every page issue in the
   2026-08 round: nothing is client-editable unless its section names it.
 - The authoritative design specification for the 2026-08 round is
-  `docs/20260804_Design_Direction.md`, with `docs/20260806_SPEC_design_round_2.md` as its
-  implementation spec. **Both are gitignored** (client working material, public repo) —
-  they exist locally only. Cite them by section number.
+  `docs/20260804_Design_Direction.md`. **It is gitignored** (client working material,
+  public repo) — it exists locally only. Cite it by section number. The derived
+  implementation spec that used to sit beside it was removed on 2026-08-09; the
+  direction is the only spec now.

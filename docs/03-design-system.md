@@ -168,3 +168,42 @@ The last block (roughly lines 1355+) is the newest work — if a page looks unst
 a partial CSS sync, it's usually because that tail didn't make it up.
 
 Next: [04 — Pages Reference](04-pages.md).
+
+## Letter-spacing
+
+Three tokens, and a fourth case that is the absence of one. Anything not on this
+scale is a drift, not a decision.
+
+| Token | Value | Applies to |
+|---|---|---|
+| `--tracking-label` | `0.06em` | Every Oswald (`--font-cond`) UPPERCASE micro-label, 12–16px: eyebrows, kickers, chips, tags, flags, pills, buttons, nav links, meta rows, table headers |
+| `--tracking-display` | `0.04em` | Bodoni Moda (`--font-display` / `--font-display-serif`) uppercase headings at any size |
+| `--tracking-stamp` | `0.10em` | Saira Stencil One (`--font-stencil`) wordmarks only — four declarations |
+| *(no token — delete the declaration)* | `normal` | All sentence-case and lowercase text in any face |
+
+Why these numbers, briefly:
+
+- **0.06em** is where three independent derivations land: the two contracted
+  reference sites' stylised-label ceilings normalise to a 0.050–0.066em band on
+  Oswald; at 0.06em the letter gap is 47% of the word gap, and past ~0.10em words
+  stop grouping pre-attentively; and Oswald's optical cap-fit gives ~0.05em. One
+  value, no size ramp.
+- **0.04em** is separate because a didone's serifs occupy the sidebearings — its
+  native cap-to-cap gap is ~0.034em against Oswald's 0.117em, so it needs a
+  positive delta Oswald does not. This role never drifted; folding it into
+  0.06em would cost display quality for nothing.
+- **0.10em** is separate because a stencil face has bridge gaps cut into the
+  strokes. Tightened to the label value the bridges read as damage. These four
+  are lockups the reader identifies, not labels they scan.
+- **Never track running lowercase.** The fit is drawn for exactly that use and
+  added space costs visual span. Both reference sites set body copy to `normal`.
+  Expressing this as a token would give the system a fourth name meaning "delete
+  the line", so these declarations are removed rather than re-pointed.
+
+**Nine declarations are deliberately off-scale.** Each is protected by a recorded
+client decision — a section of the page the client froze, an element the client
+named, or an element scheduled for deletion where retuning would only create a
+merge conflict with the deletion. They will visibly disagree with their retuned
+siblings; that is accepted, not an oversight. The list with its reasoning is in
+the local design-direction document (gitignored). Before "fixing" a stray
+tracking value, check that list.

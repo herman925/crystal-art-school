@@ -23,7 +23,29 @@ Claude Design authoring workflow.
 | 06 | [Data & State](06-data-and-state.md) | Content data models + every `localStorage` key + demo-account behaviour |
 | 07 | [Commerce](07-commerce.md) | Cart drawer, tier picker, checkout flow, membership tiers, Etsy bridge |
 | 08 | [Claude Design Sync](08-claude-design-sync.md) | Syncing local files up to the Claude Design project (the 32K-token wall) |
-| 09 | [Deploy & Ops](09-deploy.md) | Git, hosting, local dev server |
+| 09 | [Deploy & Ops](09-deploy.md) | Git, hosting, local dev server, the Pages build + md5 check, the Google-Drive git hazards |
+
+---
+
+## The four local documents (gitignored, never committed)
+
+`docs/` also holds client working material that **must not reach this repo** — it
+names the client, quotes her documents, and records scope and commercial
+reasoning. It is gitignored and stays that way. Do not fold any of it into the
+numbered pages above; those are public.
+
+| File | What it is |
+|---|---|
+| `20260804_Design_Direction.md` | **The specification.** Single source of truth for the current round. Nothing here supersedes it. |
+| `20260804_Design Discussion Minutes.md` | Minutes of the meeting the direction came from. |
+| `20260807_About_Copy_Provenance.md` | Where each line of About came from, and the discrepancies still open with the client. |
+| `20260808_Transparency_Work_Not_In_Scope.md` | Why the brand marks ship with their backgrounds, and what not to re-add. |
+
+Six other dated documents used to sit here — a coverage audit, a derived spec, a
+letter-spacing analysis, a session handoff, a raw transcript and a set of blog
+dev-notes. Their durable engineering content was folded into 03, 05, 06 and 09 on
+2026-08-09 and the originals removed. Anything of theirs that was client material
+rather than engineering stayed out.
 
 ---
 

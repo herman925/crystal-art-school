@@ -154,3 +154,48 @@ section titles, cookie/cart/tier headers, and is individually animated (twinkle)
 `motion.js`. Search `✦` before restyling it.
 
 Next: [06 — Data & State](06-data-and-state.md).
+
+## Verifying a change
+
+**Use Playwright against the rendered page. Never an iframe, never by reading
+source.** Iframe cache-busting misses `<script src>` and has produced false
+readings; reading the CSS tells you what you wrote, not what painted.
+
+```python
+page.goto(url, wait_until='domcontentloaded')      # never networkidle
+page.wait_for_function("() => <the thing you are about to measure>")
+```
+
+A fixed timeout instead of `wait_for_function` has repeatedly measured a page
+mid-layout and produced a defect that was not there. Test both themes by seeding
+`localStorage['cas-theme']` to `'A'` / `'D'` in an init script.
+
+### Prove the probe before the finding
+
+Bad probes have produced more false findings on this site than the site has had
+real defects. Every one of these actually happened:
+
+- matching case-sensitively against text that CSS uppercases
+- reading `color` when the value under test was on `background`
+- comparing image basenames when every course ships its own `cover.jpg`
+- measuring an element that was off-screen, or before a smooth scroll settled
+- calling `getBoundingClientRect()` on a child of an `overflow: hidden` box —
+  it reports the **pre-clip** rectangle, so it cannot see clipping at all
+
+When a measurement surprises you, check the CSS, the data, or the probe before
+writing it down. For anything about what is actually *painted* — clipping,
+blending, a colour behind an image — screenshot the element and sample pixels.
+
+### dc-runtime traps
+
+- The runtime **strips HTML comments from the DOM** and drops valueless
+  attributes. A comment is fine as a note to a developer; it is not a hook.
+- Pages build in `componentDidMount`, so anything measured before that runs sees
+  an empty container.
+- `motion.js` rebuilds the hero headline from its markup. It is line-aware now,
+  but it still replaces the element's children — do not attach anything to them
+  beforehand.
+- Assigning `src = ''` to an `<img>` makes the browser request the **document
+  itself** and leaves a broken image behind the player. Remove the attribute
+  instead. This has bitten twice: the free-videos player and the certificate
+  lightbox.
