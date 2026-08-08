@@ -31,3 +31,6 @@ __pycache__/
 /docs/*解說*.jpg
 /.scratch/
 .verify-report.json
+
+# impeccable hook cache — machine-written, not shared
+.impeccable/hook.cache.json

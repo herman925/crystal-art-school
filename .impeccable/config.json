@@ -1,0 +1,32 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "broken-image",
+        "value": "*",
+        "files": [
+          "Gallery.dc.html"
+        ],
+        "createdAt": "2026-08-08T02:03:01.854Z"
+      },
+      {
+        "rule": "broken-image",
+        "value": "*",
+        "files": [
+          "FreeVideos.dc.html"
+        ],
+        "createdAt": "2026-08-08T02:03:01.942Z"
+      },
+      {
+        "rule": "layout-transition",
+        "value": "*",
+        "files": [
+          "css/industrial-3.css"
+        ],
+        "createdAt": "2026-08-08T02:03:02.048Z"
+      }
+    ]
+  }
+}
