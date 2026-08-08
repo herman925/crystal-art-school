@@ -474,6 +474,12 @@
   <div class="clb-backdrop" data-close></div>
   <div class="clb-panel">
     <button class="clb-close" type="button" data-close aria-label="Close">✕</button>
+    <!-- Deliberately shipped with NO src, and the src is removed again on close.
+         The dialog is display:none until it opens, so nothing is ever painted
+         from this state. Do not "fix" it by adding src="" — an empty src makes
+         the browser request the page itself and leaves a broken image behind
+         the panel, which is exactly the trap the free-videos player fell into
+         (see the note in FreeVideos.dc.html's openV). -->
     <img id="clb-img" alt="">
     <p class="clb-cap" id="clb-cap"></p>
   </div>
