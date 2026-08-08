@@ -375,9 +375,29 @@ img, svg, video { max-width: 100%; }
    Crystal's real signature, not a script webfont pretending to be one. The tilt
    is already in her hand, so no rotate here. Same one transparent cream file and
    the same light-theme filter flip as the other two brand marks. */
-.sig-script { display: inline-block; width: clamp(210px, 24vw, 320px); margin: -6px 0 10px 2px; line-height: 0; user-select: none; }
-.sig-script img { display: block; width: 100%; height: auto; filter: drop-shadow(0 2px 5px rgba(0,0,0,.35)); }
-[data-theme="A"] .sig-script img { filter: brightness(0) opacity(.9); }
+/* The background here is load-bearing, not decoration. mix-blend-mode blends an
+   element against the backdrop WITHIN its stacking context, and GSAP puts an
+   inline transform on the .reveal wrapper around the closing signature — which
+   creates a stacking context and cuts the image off from the page behind it. So
+   that one blended against nothing and stayed a white box while the hero
+   signature worked. Painting the page colour onto .sig-script itself gives the
+   blend a backdrop inside any stacking context, so both behave the same. */
+.sig-script { display: inline-block; width: clamp(210px, 24vw, 320px); margin: -6px 0 10px 2px; line-height: 0; user-select: none; background: var(--cream); }
+/* signature.png is 100% OPAQUE — a white rectangle with black ink, 0.0% of its
+   pixels transparent — so wherever it is placed it draws a white box. The old
+   light-theme rule was brightness(0), which does not help: applied to an opaque
+   white rectangle it produces a BLACK box instead of a white one.
+
+   Blending drops the ground instead of recolouring it. multiply keeps the dark
+   ink and lets the white fall to whatever is behind it; on the dark theme the
+   image is inverted first so the ink is light, then screen drops the black.
+   Same treatment as .footer-sig.
+
+   This is a display workaround, not a fix: the real answer is transparent
+   artwork from the client (#17), and both blend rules come out when it lands.
+   (client feedback 2026-08-09) */
+.sig-script img { display: block; width: 100%; height: auto; mix-blend-mode: multiply; }
+[data-theme="D"] .sig-script img { mix-blend-mode: screen; filter: invert(1) brightness(1.7) contrast(1.1); }
 
 /* ---------- accordion (FAQ + terms) ---------- */
 .acc-list { display: grid; gap: 12px; max-width: 860px; margin: 28px auto 0; }
