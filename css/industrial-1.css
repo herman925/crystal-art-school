@@ -116,6 +116,12 @@
      -metal gradients below are built exactly like --olive-metal for that. */
   --marine: #598493;
   --marine-metal: linear-gradient(180deg,#6b98a7 0%,#598493 50%,#456b78 100%);
+  /* A watercolour red for sale marks, asked for by the client on 2026-08-08 in
+     place of the marine §1.4.2 had assigned them. Mixed as a madder lake — the
+     red a watercolourist actually reaches for — so it reads as pigment rather
+     than as a signal colour, and built as a metal gradient like the others. */
+  --rouge: #a8463f;
+  --rouge-metal: linear-gradient(180deg,#c05a51 0%,#a8463f 50%,#84332e 100%);
   --linen: #d3c2bb;
   --linen-metal: linear-gradient(180deg,#e2d5cf 0%,#d3c2bb 50%,#b7a49c 100%);
   /* --linen-ink is linen used as *text* rather than as a fill. On the dark theme

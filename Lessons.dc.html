@@ -94,17 +94,11 @@
 
 <main class="container" id="content">
 
-  <!-- 4.1: five most popular courses, ordered by how many people have bought
-       them. There is no commerce backend yet, so the order below is not a
-       ranking and says so. -->
-  <section class="section" id="popular" style="padding-top:18px;">
-    <div class="section-head reveal-one">
-      <div class="eyebrow"><span class="star">✦</span> Most popular</div>
-      <h2 class="section-title is-left">What people are buying</h2>
-    </div>
-    <p class="asset-pending">Not a ranking &mdash; &sect;4.1 orders these five by number of purchases, which needs sales data the prototype has no source for. All four published courses are shown.</p>
-    <div class="popular-rail" id="popular-rail"></div>
-  </section>
+  <!-- 4.1 "Most popular" was removed on the client's instruction 2026-08-08.
+       The section is still specified: §4.1 asks for five items ranked by number
+       of purchases. It was built with no sales data to rank by, so it carried a
+       note saying it was not a ranking. Restore from git if the ranking is
+       wanted once there is a commerce backend. -->
 
   <!-- 4.2: page-level description, part shown and the rest behind Read More.
        Copy is Crystal's own Course Overview; she still has to mark where the
@@ -247,7 +241,7 @@
   </section>
 
   <section class="section">
-    <div class="band-forest reveal-one">
+    <div class="band-forest is-trial reveal-one">
       <div style="flex:0 0 180px;border-radius:var(--radius-card);overflow:hidden;aspect-ratio:1/1;position:relative;z-index:1;">
         <img src="img/cover3.jpg" alt="Free lesson preview" style="width:100%;height:100%;object-fit:cover;" loading="lazy" decoding="async">
       </div>
@@ -355,20 +349,6 @@ class Component extends DCLogic {
     const grid = document.getElementById('lesson-grid');
     const COURSES = window.CAS_COURSES || [];
     if (grid) grid.innerHTML = COURSES.map(courseCard).join('');
-
-    /* 4.1: the five best-selling courses. Sorting by purchases needs a sales
-       figure per course, and nothing in the data carries one — the catalogue
-       order stands in until it does, which the note above the rail states.
-       Capped at five so the layout is the one the section describes. */
-    const popRail = document.getElementById('popular-rail');
-    if (popRail) {
-      popRail.innerHTML = COURSES.slice(0, 5).map((c) =>
-        '<a class="pop-card" href="course.dc.html?id=' + encodeURIComponent(c.id) + '">' +
-          '<img src="' + esc(c.cover) + '" alt="' + esc(c.title) + '" loading="lazy" decoding="async">' +
-          '<span class="pop-scrim"></span>' +
-          '<span class="pop-t">' + esc(c.title) + '</span>' +
-        '</a>').join('');
-    }
 
     /* 4.2: part of the description shows, Read More opens the rest. */
     const introBtn = document.getElementById('cat-intro-more');
