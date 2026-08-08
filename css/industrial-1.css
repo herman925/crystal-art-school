@@ -399,6 +399,16 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 .page-hero .container { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; column-gap: 36px; }
 .page-hero .container > * { grid-column: 1; min-width: 0; }
 .page-hero .container > .logo2 { grid-column: 2; grid-row: 1 / -1; justify-self: end; }
+/* The signature stands as tall as the eyebrow-and-title beside it instead of a
+   fixed 92px. Two values rather than one, because the two title sizes in use
+   give two stack heights: 160px where the title is the large Font A one, 126px
+   on Blog and FAQ where it is not.
+   Not derived from the row height: `align-self: stretch` with a percentage
+   height is circular here — the picture's own 615px feeds back into the row it
+   is being measured against, and the band went from 207px to 1062px. Measured
+   values, no feedback loop. (client feedback 2026-08-08) */
+.page-hero .container > .logo2 img { height: clamp(104px, 11.1vw, 160px); }
+.page-hero .container:not(:has(h1.font-a)) > .logo2 img { height: clamp(88px, 8.8vw, 126px); }
 
 @media (max-width: 900px) {
   /* the text column takes the full width and the signature drops beneath it,
