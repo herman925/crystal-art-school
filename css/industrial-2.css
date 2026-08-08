@@ -19,6 +19,13 @@
 .testi-card { background: var(--surface); border-radius: var(--radius-card); padding: 22px; box-shadow: var(--shadow-sm); }
 .testi-card .who { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
 .testi-card .who img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; }
+/* §3.9 says this slot holds the member's own uploaded profile picture. Until
+   there are members it holds nothing — an empty disc, not a photograph of a
+   paintbrush. A stand-in that looks like a real answer is worse than a blank
+   one here, because a reader cannot tell an avatar apart from a decision. */
+.testi-card .who-avatar { flex: none; width: 42px; height: 42px; border-radius: 50%;
+  background: color-mix(in srgb, var(--ink) 10%, transparent);
+  border: 1px dashed color-mix(in srgb, var(--muted) 55%, transparent); }
 /* Tracking held at .04em: direction §3.9 retains the Real Hands heading, the
    three-card layout AND its text styles. This rule renders nowhere else. (#20) */
 .testi-card .who strong { font-family: var(--font-cond); font-weight: 600; letter-spacing: .04em; }

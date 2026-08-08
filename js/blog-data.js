@@ -19,14 +19,20 @@ window.CAS_BLOG = [
     id: 'watercolour-kit', layout: 'guide',
     title: "What's in my watercolour kit — the 21 tools I actually use",
     excerpt: 'Every tube, brush, block and bottle in my kit — painted, cut out and laid on the table.',
-    img: 'blog-kit-all.jpg', banner: 'blog-kit-18-21.jpg',
+    /* The banner was blog-kit-18-21.jpg, which is also the photograph for items
+       18-21 further down, so the reader met the same picture twice. The
+       all-21-tools shot is the establishing image for an article about 21 tools
+       and appears nowhere else in the body. */
+    img: 'blog-kit-all.jpg', banner: 'blog-kit-all.jpg',
     tag: 'Tools', date: '2026-07-23', d: 'Jul 23', mins: 8,
 
     intro: [
       'People ask what I use far more often than they ask how I paint. So I painted my whole kit — every tube, brush, block and bottle — cut each one out, and laid them all on the table. Twenty-one things. This is honestly what comes with me.',
       'A note before the list: almost none of this is essential to start. Numbers 1, 2, 9 or 10, and 12 or 13 will get you painting. Everything else accumulated over years of finding out what I actually reach for.'
     ],
-    hero: 'blog-kit-all.jpg',
+    /* No in-article hero: the banner above the title is already this photograph,
+       and repeating it 550px later just makes the reader scroll past the same
+       picture twice. `hero` stays supported for posts whose banner differs. */
     sections: [
       {
         t: 'Paints and palette', src: 'blog-kit-1-4.jpg', start: 1,
