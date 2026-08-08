@@ -720,10 +720,15 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
 /* The row is one continuous strip that can be dragged, not a set of pages: the
    mounts are identical in size, so there is no natural page boundary between
    them. Order is authored by hand in the CMS — see the note in the markup. */
+/* No scroll-behavior: smooth. Every programmatic write to a smooth scroller
+   starts an ANIMATION that emits scroll events for many frames afterwards, and
+   those echoed back into the table while the reader was still scrolling it —
+   the row-by-row stutter. The follower has to track 1:1. Jumps that genuinely
+   want easing ask for it per call with scrollTo({behavior:'smooth'}). */
 .bc-row.is-rail { flex-wrap: nowrap; gap: var(--cert-gap); overflow-x: auto; scrollbar-width: thin;
-  cursor: grab; padding-bottom: 8px; scroll-behavior: smooth;
+  cursor: grab; padding-bottom: 8px;
   overscroll-behavior-x: contain; }
-.bc-row.is-rail.is-dragging { cursor: grabbing; scroll-behavior: auto; user-select: none; }
+.bc-row.is-rail.is-dragging { cursor: grabbing; user-select: none; }
 .bc-row.is-rail.is-dragging img { pointer-events: none; }
 .bc-row.is-rail::-webkit-scrollbar { height: 8px; }
 .bc-row.is-rail::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--ink) 22%, transparent); border-radius: 4px; }

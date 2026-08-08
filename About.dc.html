@@ -675,21 +675,38 @@ class Component extends DCLogic {
       /* Both scrollers are driven as a FRACTION of their own scrollable room,
          not by pixels: the table scrolls vertically in 62px rows and the rail
          scrolls horizontally in mount widths, so pixel-for-pixel would drift
-         immediately. The guard stops the two handlers bouncing off each other. */
-      let syncing = false;
+         immediately.
+
+         Whichever scroller the reader touches OWNS the gesture, and the other
+         only follows. A single-frame guard is not enough: writing to a scroller
+         makes it emit its own scroll events, and those arrive over many frames.
+         With only a one-frame lock the echo came back and wrote into the
+         scroller the reader was still moving, which is why dragging the table
+         stuttered and snapped row by row while dragging the pictures felt
+         smooth. Ownership is released a short time after the last event, so a
+         wheel gesture stays with its scroller from start to finish. */
+      let owner = null, release = null;
+      const claim = (el) => {
+        owner = el;
+        clearTimeout(release);
+        release = setTimeout(() => { owner = null; }, 160);
+      };
       const mirror = (from, to, fromAxis, toAxis) => {
-        if (syncing) return;
-        syncing = true;
+        if (owner && owner !== from) return;
+        claim(from);
         const fromRoom = fromAxis === 'y' ? from.scrollHeight - from.clientHeight
                                           : from.scrollWidth - from.clientWidth;
         const toRoom = toAxis === 'y' ? to.scrollHeight - to.clientHeight
                                       : to.scrollWidth - to.clientWidth;
         const at = fromRoom > 0 ? (fromAxis === 'y' ? from.scrollTop : from.scrollLeft) / fromRoom : 0;
-        if (toAxis === 'y') to.scrollTop = at * toRoom; else to.scrollLeft = at * toRoom;
-        requestAnimationFrame(() => { syncing = false; });
+        const want = at * toRoom;
+        /* assign only on a real change, so the follower does not emit a scroll
+           event of its own for a value it already holds */
+        if (toAxis === 'y') { if (Math.abs(to.scrollTop - want) > 0.5) to.scrollTop = want; }
+        else { if (Math.abs(to.scrollLeft - want) > 0.5) to.scrollLeft = want; }
       };
-      list.addEventListener('scroll', () => mirror(list, rail, 'y', 'x'));
-      rail.addEventListener('scroll', () => mirror(rail, list, 'x', 'y'));
+      list.addEventListener('scroll', () => mirror(list, rail, 'y', 'x'), { passive: true });
+      rail.addEventListener('scroll', () => mirror(rail, list, 'x', 'y'), { passive: true });
 
       /* the lightbox — on the narrow layout, where the mounts are not rendered,
          this is the only route to a scan */
