@@ -278,112 +278,87 @@
     </div>
     <div class="card reveal" style="margin-top:18px;">
       <h3 class="marker-title" style="font-size:19px;margin:0 0 4px;">International honours &amp; exhibitions</h3>
-      <!-- Verbatim from AboutMe.docx. The 2025 line conflicts with the JIWI
-           certificate below, which reads 26th edition / 2026 — see DEV NOTE. -->
-      <ul class="bio-facts" style="margin-top:8px;">
-        <li><strong>2026</strong> Top 18 Finalist, International Watercolor Academy Award (Accademia Internazionale dell'Acquarello, Italy)</li>
-        <li><strong>2025</strong> Selected, 25th International Watercolor Spring Exhibition (Japan International Watercolour Institute)</li>
-        <li><strong>2017</strong> Selected, Fabriano in Acquarello (Italy)</li>
-        <li><strong>2016</strong> Selected, 1st Hong Kong International Biennial Exhibition</li>
-      </ul>
-      <div class="bio-certs">
-        <div class="bc-head"><span class="star">✦</span> Certificates</div>
-        <!-- Captions describe what each scan actually says, so they cannot be
-             edited to match the honours list above without misrepresenting the
-             image. There is an open question on the first certificate — see the
-             provenance note referenced at the top of this file. -->
-        <!-- Every certificate hangs in the same portrait mount and is fitted
-             inside it rather than cropped, so a landscape scan letterboxes on
-             the mat instead of needing a second frame size — which is what keeps
-             a mixed set reading as one wall. Both scans supplied so far are
-             portrait, so the empty mounts show the landscape fitting without
-             inventing a certificate. (client feedback 2026-08-08)
+      <!-- ONE table, not two. Her honours list WAS the table-style list all along;
+           a second list of certificates underneath it repeated the same years
+           and the same shape. The honours are the rows and each row's
+           certificate is the picture beside it. (client feedback 2026-08-09)
 
-             CMS NOTE — this row is ORDERED BY HAND. The author arranges the
-             certificates in whatever sequence they want in the CMS and the page
-             renders them in that order; it does NOT sort by award year, awarding
-             body or any other field on the record. If a future change makes the
-             order automatic, the manual arrangement is lost, so treat the
-             ordering as content and not as a display option.
+           The rows are generated from the mounts below, so the two cannot
+           disagree about how many there are or what order they are in, and the
+           author arranges one list in the CMS. Ordering is BY HAND: the page
+           renders the sequence the author sets and does not sort by year or by
+           awarding body. If a later change makes it automatic, the arrangement
+           is lost — treat it as content, not as a display option.
 
-             It scrolls as one continuous strip that can be dragged, rather than
-             stepping page by page: the mounts are identical in size and there is
-             no natural page boundary between them. -->
-        <!-- The vertical table is the desktop layout and it is the CONTROL: as it
-             scrolls, the pictures beside it scroll with it. There is no second
-             horizontal strip of text — that existed only to force the two into
-             step and it was never wanted. (client feedback 2026-08-09)
+           The table is the CONTROL: five rows visible, the rest reached by
+           scrolling it, and the pictures move with it.
 
-             Five rows are visible; an eleventh certificate is reached by
-             scrolling the table, not by paging it. -->
-        <div class="cert-split">
-          <div class="cert-list" id="cert-list" role="list" aria-label="Certificates"></div>
-          <div class="bc-row is-rail" id="cert-rail">
-          <figure class="bc-card bc-card--cert" data-year="2026" data-place="Accademia Internazionale dell'Acquarello, Italy">
+           NOTE on row 2: her honours list says 25th / 2025 while the scan itself
+           says 26th / 2026. The row keeps her wording and the picture keeps the
+           scan's; neither is edited to agree with the other. Open with her. -->
+      <div class="cert-split">
+        <div class="cert-list" id="cert-list" role="list" aria-label="International honours and certificates"></div>
+        <div class="bc-row is-rail" id="cert-rail">
+          <figure class="bc-card bc-card--cert" data-year="2026" data-honour="Top 18 Finalist, International Watercolor Academy Award (Accademia Internazionale dell'Acquarello, Italy)">
             <div class="cert-frame"><div class="cert-mat">
               <img src="img/about/cert-accademia-2026.jpg" alt="Official Finalist certificate, International Watercolor Academy Award 2026, Accademia Internazionale dell'Acquarello, Italy" loading="lazy" decoding="async">
             </div></div>
             <figcaption>Official Finalist · International Watercolor Academy Award 2026 · Italy</figcaption>
           </figure>
-          <figure class="bc-card bc-card--cert" data-year="2026" data-place="Japan International Watercolour Institute">
+          <figure class="bc-card bc-card--cert" data-year="2025" data-honour="Selected, 25th International Watercolor Spring Exhibition (Japan International Watercolour Institute)">
             <div class="cert-frame"><div class="cert-mat">
               <img src="img/about/cert-jiwi-2026.jpg" alt="Winning Work certificate, 26th JIWI Online Spring Exhibition, Japan International Watercolour Institute, for the painting City of Japan" loading="lazy" decoding="async">
             </div></div>
             <figcaption>Winning Work · 26th JIWI Online Spring Exhibition · 《City of Japan》</figcaption>
           </figure>
-          <!-- ASSET PENDING: eight empty mounts, so ten in all — enough to show the
-                  table scrolling past its five visible rows and the pictures keeping
-                  step. They also show landscape, portrait and square scans all sitting
-                  in the one portrait mount. Delete them as real scans are supplied. -->
-          <figure class="bc-card bc-card--cert is-ph" aria-hidden="true">
+          <figure class="bc-card bc-card--cert is-ph" data-year="2017" data-honour="Selected, Fabriano in Acquarello (Italy)">
+            <div class="cert-frame"><div class="cert-mat">
+              <span class="cert-slot is-portrait">Scan not supplied</span>
+            </div></div>
+            <figcaption>Scan not supplied</figcaption>
+          </figure>
+          <figure class="bc-card bc-card--cert is-ph" data-year="2016" data-honour="Selected, 1st Hong Kong International Biennial Exhibition">
+            <div class="cert-frame"><div class="cert-mat">
+              <span class="cert-slot is-portrait">Scan not supplied</span>
+            </div></div>
+            <figcaption>Scan not supplied</figcaption>
+          </figure>
+          <figure class="bc-card bc-card--cert is-ph is-demo" data-year="—" data-honour="Placeholder — shows the table scrolling past its five visible rows">
             <div class="cert-frame"><div class="cert-mat">
               <span class="cert-slot is-landscape">Landscape certificate</span>
             </div></div>
-            <figcaption>Awaiting scan</figcaption>
+            <figcaption>Placeholder</figcaption>
           </figure>
-          <figure class="bc-card bc-card--cert is-ph" aria-hidden="true">
+          <figure class="bc-card bc-card--cert is-ph is-demo" data-year="—" data-honour="Placeholder — shows the table scrolling past its five visible rows">
             <div class="cert-frame"><div class="cert-mat">
               <span class="cert-slot is-portrait">Portrait certificate</span>
             </div></div>
-            <figcaption>Awaiting scan</figcaption>
+            <figcaption>Placeholder</figcaption>
           </figure>
-          <figure class="bc-card bc-card--cert is-ph" aria-hidden="true">
+          <figure class="bc-card bc-card--cert is-ph is-demo" data-year="—" data-honour="Placeholder — shows the table scrolling past its five visible rows">
             <div class="cert-frame"><div class="cert-mat">
               <span class="cert-slot is-square">Square certificate</span>
             </div></div>
-            <figcaption>Awaiting scan</figcaption>
+            <figcaption>Placeholder</figcaption>
           </figure>
-          <figure class="bc-card bc-card--cert is-ph" aria-hidden="true">
+          <figure class="bc-card bc-card--cert is-ph is-demo" data-year="—" data-honour="Placeholder — shows the table scrolling past its five visible rows">
             <div class="cert-frame"><div class="cert-mat">
               <span class="cert-slot is-landscape">Landscape certificate</span>
             </div></div>
-            <figcaption>Awaiting scan</figcaption>
+            <figcaption>Placeholder</figcaption>
           </figure>
-          <figure class="bc-card bc-card--cert is-ph" aria-hidden="true">
+          <figure class="bc-card bc-card--cert is-ph is-demo" data-year="—" data-honour="Placeholder — shows the table scrolling past its five visible rows">
             <div class="cert-frame"><div class="cert-mat">
               <span class="cert-slot is-portrait">Portrait certificate</span>
             </div></div>
-            <figcaption>Awaiting scan</figcaption>
+            <figcaption>Placeholder</figcaption>
           </figure>
-          <figure class="bc-card bc-card--cert is-ph" aria-hidden="true">
-            <div class="cert-frame"><div class="cert-mat">
-              <span class="cert-slot is-landscape">Landscape certificate</span>
-            </div></div>
-            <figcaption>Awaiting scan</figcaption>
-          </figure>
-          <figure class="bc-card bc-card--cert is-ph" aria-hidden="true">
+          <figure class="bc-card bc-card--cert is-ph is-demo" data-year="—" data-honour="Placeholder — shows the table scrolling past its five visible rows">
             <div class="cert-frame"><div class="cert-mat">
               <span class="cert-slot is-square">Square certificate</span>
             </div></div>
-            <figcaption>Awaiting scan</figcaption>
+            <figcaption>Placeholder</figcaption>
           </figure>
-          <figure class="bc-card bc-card--cert is-ph" aria-hidden="true">
-            <div class="cert-frame"><div class="cert-mat">
-              <span class="cert-slot is-portrait">Portrait certificate</span>
-            </div></div>
-            <figcaption>Awaiting scan</figcaption>
-          </figure>
-          </div>
         </div>
         </div>
       </div>
@@ -680,15 +655,21 @@ class Component extends DCLogic {
          text — that existed only to force the sync and was not wanted.
          (client feedback 2026-08-09) */
       const mounts = Array.from(rail.querySelectorAll('.bc-card--cert'));
+      const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (ch) => (
+        { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
       list.innerHTML = mounts.map((fig, i) => {
-        const pending = fig.classList.contains('is-ph');
-        const cap = (fig.querySelector('figcaption') || {}).textContent || '';
+        const noScan = fig.classList.contains('is-ph');
+        const demo = fig.classList.contains('is-demo');
+        /* the row text is HER honour, not the certificate's caption: the caption
+           describes the scan and the two do not always agree (see the note in
+           the markup) */
+        const honour = fig.getAttribute('data-honour') || '';
         const year = fig.getAttribute('data-year') || '—';
-        const name = pending ? 'Awaiting scan' : cap;
-        return '<button class="cert-row' + (pending ? ' is-pending' : '') + '" type="button" role="listitem" data-i="' + i + '">' +
+        return '<button class="cert-row' + (noScan ? ' is-pending' : '') + (demo ? ' is-demo' : '') +
+            '" type="button" role="listitem" data-i="' + i + '"' + (noScan ? ' disabled' : '') + '>' +
           '<span class="cert-info" role="presentation" aria-hidden="true">i</span>' +
-          '<span class="cert-year">' + year + '</span>' +
-          '<span class="cert-name">' + name + '</span>' +
+          '<span class="cert-year">' + esc(year) + '</span>' +
+          '<span class="cert-name">' + esc(honour) + '</span>' +
         '</button>';
       }).join('');
 

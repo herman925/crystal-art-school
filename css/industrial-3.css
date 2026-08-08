@@ -581,11 +581,8 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
 @media (max-width: 760px) { .ob-steps { grid-template-columns: 1fr; } .dash-onboard .ob-hero { flex-direction: column; align-items: flex-start; } }
 
 /* ---------- bio credentials (polaroids inside Artist biography) ---------- */
-.bio-certs { margin-top: 26px; }
 /* Tracking held at .2em: below About's §13/§14 freeze line. It will read looser
    than its retuned siblings; cheaper than breaching the freeze. (#20) */
-.bc-head { display: flex; align-items: center; gap: 8px; font-family: var(--font-cond); font-weight: 600; font-size: 12px; letter-spacing: .2em; text-transform: uppercase; color: var(--coral-ink); margin-bottom: 14px; }
-.bc-head .star { color: var(--teal-ink); font-size: 11px; }
 .bc-row { display: flex; gap: 18px; flex-wrap: wrap; }
 .bc-card { margin: 0; background: var(--paper); padding: 10px 10px 12px; border-radius: 6px; box-shadow: var(--shadow-md); transform: rotate(-2deg); transition: transform .3s var(--ease-pop), box-shadow .3s; max-width: 200px; }
 .bc-card + .bc-card { transform: rotate(1.6deg); }
@@ -664,8 +661,13 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
    --cert-rows is how many rows are visible before the table scrolls, and the
    rail is sized so the same number of pictures is visible, which is what makes
    one scrollbar position mean the same thing in both. */
-.bio-certs { --cert-gap: 18px; --cert-show: 5; --cert-row: 62px; }
-.cert-split { display: grid; grid-template-columns: minmax(280px, 0.9fr) 1.6fr; gap: 26px; align-items: start; }
+/* These live on .cert-split, not on a wrapper. They were on .bio-certs, and
+   when that wrapper was removed every calc() using them became invalid — the
+   five-row cap and the five-across mount width both silently stopped applying
+   and the table rendered all ten rows. A custom property on an element that may
+   be refactored away is a trap; keep them on the element that uses them. */
+.cert-split { --cert-gap: 18px; --cert-show: 5; --cert-row: 62px;
+  display: grid; grid-template-columns: minmax(280px, 0.9fr) 1.6fr; gap: 26px; align-items: start; }
 @media (max-width: 1100px) { .cert-split { grid-template-columns: 1fr; } }
 
 .cert-list { max-height: calc(var(--cert-show) * var(--cert-row)); overflow-y: auto;
@@ -696,7 +698,11 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
   letter-spacing: var(--tracking-label); color: var(--ink); }
 .cert-name { grid-column: 3; font-size: 13.5px; line-height: 1.4; color: var(--muted);
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.cert-row.is-pending .cert-year, .cert-row.is-pending .cert-name { color: var(--muted); opacity: .7; }
+.cert-row.is-pending .cert-year, .cert-row.is-pending .cert-name { color: var(--muted); opacity: .8; }
+.cert-row[disabled] { cursor: default; }
+/* rows that exist only to demonstrate the scroll, so they cannot be mistaken
+   for honours she has actually been given */
+.cert-row.is-demo .cert-name { font-style: italic; opacity: .55; }
 
 /* The row is one continuous strip that can be dragged, not a set of pages: the
    mounts are identical in size, so there is no natural page boundary between
@@ -716,7 +722,10 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
    button appears, because the table becomes the only route to a scan.
    (client feedback 2026-08-09) */
 @media (max-width: 1100px) {
-  .bio-certs .bc-row.is-rail { display: none; }
+  /* .cert-split, not .bio-certs: that wrapper no longer exists, and scoping to
+     it left the rail rendering at every width. Same fault as the custom
+     properties above — check for orphaned ancestors after removing a wrapper. */
+  .cert-split .bc-row.is-rail { display: none; }
   .cert-list { max-height: none; }
   .cert-info { display: grid; }
   .cert-row { cursor: default; }
