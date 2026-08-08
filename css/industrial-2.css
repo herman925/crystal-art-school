@@ -372,19 +372,27 @@
    still stands everywhere else. Each carousel runs on its own interval so the
    three never fall into step — see the DWELL values in About.dc.html.
    (client feedback 2026-08-08) */
-.ph-carousel { position: relative; }
+.ph-carousel { --phc-per: 2; position: relative; }
 .ph-carousel .phc-viewport { overflow: hidden; border-radius: var(--radius-card); }
 .ph-carousel .phc-rail { display: flex; transition: transform .62s var(--ease-brush); }
-.ph-carousel .phc-cell { flex: 0 0 100%; margin: 0; box-sizing: border-box; }
-.ph-carousel .phc-cell img { width: 100%; display: block; aspect-ratio: 4/5; object-fit: cover; border-radius: var(--radius-card); box-shadow: var(--shadow);
+/* Two photographs to a page, as before. The count is a variable rather than a
+   media query because the rail advances a whole page at a time — if CSS dropped
+   the cells to full width on a phone without the script knowing, half the
+   photographs would become unreachable. The script sets it and recomputes the
+   page count with it. (client feedback 2026-08-08) */
+.ph-carousel .phc-cell { flex: 0 0 calc(100% / var(--phc-per)); margin: 0; padding: 0 8px; box-sizing: border-box; }
+/* A fixed height with the photograph fitted inside it, not cropped to a ratio:
+   her sets mix 3:4, 4:3 and near-square, and a shared aspect-ratio was cutting
+   the tops off. Each sits on its own mat instead. (client feedback 2026-08-08) */
+.ph-carousel .phc-cell img { width: 100%; height: 400px; display: block;
+  object-fit: contain; background: var(--surface);
+  border-radius: var(--radius-card); box-shadow: var(--shadow);
   transition: transform .9s var(--ease-out), opacity .5s linear; }
-/* The frame coming into view drifts and fades a little as it lands, so the
+/* The page coming into view drifts and fades a little as it lands, so the
    change reads as a movement rather than a jump. */
-.ph-carousel .phc-cell:not(.is-current) img { opacity: .55; transform: scale(1.04); }
+.ph-carousel .phc-cell:not(.is-current) img { opacity: .55; transform: scale(1.03); }
+@media (max-width: 900px) { .ph-carousel .phc-cell img { height: 320px; } }
 .ph-carousel .phc-nav { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 14px; }
-.ph-carousel .phc-arrow { width: 38px; height: 38px; border-radius: 50%; border: 0; cursor: pointer; background: var(--surface); color: var(--ink); box-shadow: var(--shadow-sm); font-size: 20px; line-height: 1; display: grid; place-items: center; transition: background var(--dur-base), opacity var(--dur-base); }
-.ph-carousel .phc-arrow:hover:not(:disabled) { background: var(--ink); color: var(--paper); }
-.ph-carousel .phc-arrow:disabled { opacity: .3; cursor: default; }
 /* One dot per photograph, replacing the "1 / 2" counter. (client feedback
    2026-08-08) */
 .ph-carousel .phc-dots { display: flex; align-items: center; gap: 9px; }
@@ -413,31 +421,69 @@
    remaining three sides are one border on .eng-body, pulled up by half the
    heading's height so the four meet. That half is --eng-h, measured in script,
    with a fallback here for the no-JS case. */
-.engraved { position: relative; padding: 18px; border-radius: var(--radius-card);
-  background-color: var(--banner-bg); background-image: var(--banner-grain);
-  background-size: var(--banner-size, cover); background-position: center;
-  color: var(--banner-ink);
-  box-shadow: var(--shadow-md), inset 0 1px 0 rgba(255,255,255,.14); }
+/* Notebook paper, not wood. The reference is a printed page — a texture, not a
+   material — and an oak panel read as furniture. (client feedback 2026-08-08)
+   The sheet is ruled, with a margin line down the left, and --note-line is the
+   ruling pitch: the body copy is set to exactly that line-height and its
+   margins to whole multiples, so the text actually sits on the rules instead of
+   drifting across them. Change --note-line and the whole panel re-registers. */
+.engraved {
+  --note-line: 27px;
+  /* Two real sheets, not one sheet and its negative: white notepaper on the
+     light theme, manila on the dark one. The dark theme had been given a
+     near-black panel, which is not a colour paper comes in. (client feedback
+     2026-08-08) Both keep dark ink, because that is what paper does. */
+  --note-paper: #f6f1e2; --note-rule: rgba(90,120,150,.34);
+  --note-margin: rgba(176,90,80,.38); --note-ink: #3d372e;
+  position: relative; padding: 18px; border-radius: var(--radius-card);
+  background-color: var(--note-paper);
+  background-image: var(--note-tooth);
+  background-size: 180px 180px;
+  color: var(--note-ink);
+  box-shadow: var(--shadow-md), inset 0 0 0 1px rgba(90,70,55,.14),
+              inset 0 1px 0 rgba(255,255,255,.6); }
+[data-theme="D"] .engraved {
+  --note-paper: #cdbb98; --note-rule: rgba(72,96,124,.34);
+  --note-margin: rgba(150,66,54,.40); --note-ink: #33291d;
+  box-shadow: var(--shadow-md), inset 0 0 0 1px rgba(60,44,26,.28),
+              inset 0 1px 0 rgba(255,255,255,.34); }
 .engraved .eng-head { display: flex; align-items: center; gap: 18px;
   margin-bottom: calc(var(--eng-h, 40px) / -2); }
 .engraved .eng-rule { flex: 1 1 auto; height: 1px;
-  background: color-mix(in srgb, var(--banner-ink) 46%, transparent);
-  box-shadow: 0 1px 0 rgba(255,255,255,.20); }
-/* Cut into the wood rather than printed on it: a dark edge above, a lit edge
-   below. The two shadows are what make it read as engraving. */
+  background: color-mix(in srgb, var(--note-ink) 46%, transparent); }
+/* Pressed into the sheet rather than printed on it: a lit edge below the
+   glyphs, a dark one above. Kept subtle — on paper this is an impression, not
+   the deep cut a wooden panel could carry. */
 .engraved .eng-title { flex: 0 1 auto; margin: 0; text-align: center; text-wrap: balance;
-  color: var(--banner-ink);
-  text-shadow: 0 1px 0 rgba(255,255,255,.28), 0 -1px 1px rgba(0,0,0,.45); }
-.engraved .eng-body { position: relative; padding: 30px 26px 8px; }
+  color: var(--note-ink);
+  text-shadow: 0 1px 0 rgba(255,255,255,.5), 0 -1px 0 rgba(60,45,35,.22); }
+[data-theme="D"] .engraved .eng-title { text-shadow: 0 1px 0 rgba(255,255,255,.10), 0 -1px 1px rgba(0,0,0,.5); }
+/* The ruling lives on the body, not on the panel, and is measured from the body's
+   CONTENT box — background-origin: content-box. That is what makes the text sit
+   on the lines instead of near them: the first rule falls on the bottom edge of
+   the first line box, exactly where a rule sits under handwriting, and every
+   line after it follows because the copy is set to --note-line and its margins
+   are whole multiples of it. Painting still clips to the padding box so the
+   rules run the full width of the frame. Anchoring it to the panel instead put
+   the first rule an arbitrary distance above the first line. (client feedback
+   2026-08-08) */
+.engraved .eng-body { position: relative; padding: calc(var(--note-line) + 3px) 26px 8px;
+  background-image:
+    linear-gradient(90deg, transparent 0 43px, var(--note-margin) 43px 44px, transparent 44px),
+    repeating-linear-gradient(180deg, transparent 0 calc(var(--note-line) - 1px),
+                              var(--note-rule) calc(var(--note-line) - 1px) var(--note-line));
+  background-origin: content-box; background-clip: padding-box; }
 .engraved .eng-body::before { content: ""; position: absolute; inset: 0; pointer-events: none;
-  border: 1px solid color-mix(in srgb, var(--banner-ink) 46%, transparent);
-  border-top: 0; border-radius: 0 0 3px 3px;
-  box-shadow: inset 0 0 0 1px rgba(255,255,255,.06); }
-/* Body copy inside the panel sits on wood, so it takes the banner ink rather
-   than the page's --muted, which is tuned for the page background. */
-.engraved .eng-body p { color: color-mix(in srgb, var(--banner-ink) 88%, transparent); }
-.engraved .eng-body .bio-sub { color: var(--banner-ink); }
-.engraved .eng-body em, .engraved .eng-body strong { color: var(--banner-ink); }
+  border: 1px solid color-mix(in srgb, var(--note-ink) 46%, transparent);
+  border-top: 0; border-radius: 0 0 3px 3px; }
+/* Copy inside the panel sits on the sheet, not on the page, so it takes the
+   sheet's own ink; and it is set to the ruling so the lines mean something. */
+.engraved .eng-body p { color: color-mix(in srgb, var(--note-ink) 88%, transparent);
+  font-size: 15.5px; line-height: var(--note-line); margin: 0 0 var(--note-line); }
+.engraved .eng-body .bio-sub { color: var(--note-ink); line-height: var(--note-line);
+  margin: var(--note-line) 0 0; }
+.engraved .eng-body .bio-sub:first-of-type { margin-top: 0; }
+.engraved .eng-body em, .engraved .eng-body strong { color: var(--note-ink); }
 @media (max-width: 620px) {
   .engraved { padding: 14px; }
   .engraved .eng-body { padding: 24px 16px 6px; }
@@ -451,24 +497,36 @@
 /* The pull-quote is the same panel, centred, with the blog feature card's
    quote marks straddling the top and bottom rules instead of a heading.
    (client feedback 2026-08-08) */
-.engraved.is-quote .eng-body { text-align: center; padding: 30px 34px 30px; }
+/* The quote is a plain panel — flat colour, no ruling, no tooth. Only the
+   biography sheets below it are notebook paper; the reference is a printed
+   chapter opener, not a page torn out of a pad. (client feedback 2026-08-08) */
+.engraved.is-quote { background-color: var(--surface); background-image: none;
+  color: var(--ink); box-shadow: var(--shadow-md); }
+[data-theme="D"] .engraved.is-quote { box-shadow: var(--shadow-md); }
+.engraved.is-quote .eng-rule { background: color-mix(in srgb, var(--ink) 42%, transparent); }
+.engraved.is-quote .eng-body { text-align: center; background-image: none;
+  padding: 26px 34px 26px; }
+.engraved.is-quote .eng-body::before { border-color: color-mix(in srgb, var(--ink) 42%, transparent); }
 /* both horizontal edges are rule segments here, so the body draws only its sides */
 .engraved.is-quote .eng-body::before { border-bottom: 0; border-radius: 0; }
 .engraved.is-quote blockquote { margin: 0; font-family: var(--font-marker); font-weight: 600;
-  font-size: clamp(20px, 2.2vw, 28px); line-height: 1.4; color: var(--banner-ink);
-  text-shadow: 0 1px 0 rgba(255,255,255,.22), 0 -1px 1px rgba(0,0,0,.38); }
+  font-size: clamp(20px, 2.2vw, 28px); line-height: 1.42; color: var(--ink); }
 .engraved.is-quote .eng-title { font-family: var(--font-display-serif); font-weight: 700;
-  font-size: 54px; line-height: .6; padding-bottom: .18em;
-  color: color-mix(in srgb, var(--banner-ink) 62%, transparent); }
-/* the closing mark repeats the head row along the bottom edge */
+  font-size: 54px; line-height: .6; padding-bottom: .18em; text-shadow: none;
+  color: color-mix(in srgb, var(--ink) 52%, transparent); }
+/* The marks sit at the outer corners rather than centred on the rules — opening
+   at the top left, closing at the bottom right, the way a quotation is actually
+   punctuated. (client feedback 2026-08-08) The single rule in each row takes up
+   the remaining width, so the frame edge still runs unbroken to the far corner. */
 .engraved.is-quote .eng-foot { display: flex; align-items: center; gap: 18px;
   margin-top: calc(var(--eng-f, 34px) / -2); }
 .engraved.is-quote .eng-foot .eng-title { line-height: .9; padding-bottom: 0; }
 @media (max-width: 620px) {
   .engraved.is-quote .eng-foot .eng-rule { display: none; }
-  .engraved.is-quote .eng-foot { margin-top: 8px; justify-content: center; }
+  .engraved.is-quote .eng-foot { margin-top: 8px; justify-content: flex-end; }
 }
-@media (max-width: 620px) { .ph-carousel .phc-cell { flex: 0 0 100%; } }
+/* the one-per-page drop on small screens is driven by --phc-per from the
+   script, so the page count moves with it — see the note on .phc-cell */
 
 /* 13: her own sub-headings inside the journey copy. --band-eyebrow is #cab389,
    which sits at 1.84:1 on the light theme's paper — these are heading text, not

@@ -136,7 +136,6 @@
              (client feedback 2026-08-08) -->
         <div class="engraved is-quote" style="margin:22px 0 24px;">
           <div class="eng-head">
-            <span class="eng-rule"></span>
             <span class="eng-title" aria-hidden="true">&#8220;</span>
             <span class="eng-rule"></span>
           </div>
@@ -146,7 +145,6 @@
           <div class="eng-foot">
             <span class="eng-rule"></span>
             <span class="eng-title" aria-hidden="true">&#8221;</span>
-            <span class="eng-rule"></span>
           </div>
         </div>
         <div style="display:flex;gap:12px;flex-wrap:wrap;margin-top:6px;">
@@ -464,10 +462,11 @@ class Component extends DCLogic {
     const renderCart = () => { let n = 0; try { n = JSON.parse(localStorage.getItem('cas-cart') || '[]').reduce((a, i) => a + i.qty, 0); } catch (e) {} document.querySelectorAll('.cart-badge').forEach(b => { b.textContent = n; b.style.display = n > 0 ? 'grid' : 'none'; }); };
     renderCart();
 
-    /* The three photo carousels. One photograph at a time, advancing on their
-       own, with a dot per photograph rather than a "1 / 2" counter. This
-       reverses §3.5.2's "nothing on the page moves by itself" for these three
-       only, on the client's explicit instruction (2026-08-08).
+    /* The three photo carousels. Two photographs to a page — five live-drawing
+       shots make three pages, the other two sets make two — advancing on their
+       own, with a dot per page rather than a "1 / 2" counter. This reverses
+       §3.5.2's "nothing on the page moves by itself" for these three only, on
+       the client's explicit instruction (2026-08-08).
 
        The dwell values are deliberately co-prime-ish and none is a multiple of
        another, so the three never settle into step: 5.3s, 6.7s and 8.1s drift
@@ -478,40 +477,67 @@ class Component extends DCLogic {
        Autoplay pauses while the pointer is over a carousel, while its tab is in
        the background, and entirely under prefers-reduced-motion. */
     const CAROUSELS = {
-      'car-livedrawing': { dir: 'img/about/', files: ['livedrawing-1.jpg','livedrawing-2.jpg','livedrawing-3.jpg','livedrawing-4.jpg','livedrawing-5.jpg'], alt: 'Crystal drawing on location', dwell: 5300 },
-      'car-exhibition':  { dir: 'img/about/', files: ['exhibition-1.jpg','exhibition-2.jpg','exhibition-3.jpg','exhibition-4.jpg'], alt: 'Exhibition', dwell: 6700 },
-      'car-artful':      { dir: 'img/about/', files: ['artful-living-1.jpg','artful-living-2.jpg','artful-living-3.jpg','artful-living-4.jpg'], alt: 'Artful Living', dwell: 8100 }
+      /* per = photographs to a page. Live drawing is the only two-up set:
+         5 photographs, 3 pages. The other two are one-up: 4 photographs,
+         4 pages each. (client feedback 2026-08-08) */
+      'car-livedrawing': { dir: 'img/about/', per: 2, files: ['livedrawing-1.jpg','livedrawing-2.jpg','livedrawing-3.jpg','livedrawing-4.jpg','livedrawing-5.jpg'], alt: 'Crystal drawing on location', dwell: 5300 },
+      'car-exhibition':  { dir: 'img/about/', per: 1, files: ['exhibition-1.jpg','exhibition-2.jpg','exhibition-3.jpg','exhibition-4.jpg'], alt: 'Exhibition', dwell: 6700 },
+      'car-artful':      { dir: 'img/about/', per: 1, files: ['artful-living-1.jpg','artful-living-2.jpg','artful-living-3.jpg','artful-living-4.jpg'], alt: 'Artful Living', dwell: 8100 }
     };
     const stillPlease = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     Object.keys(CAROUSELS).forEach((id) => {
       const host = document.getElementById(id);
       if (!host) return;
       const cfg = CAROUSELS[id];
-      const pages = cfg.files.length;
+      /* How many photographs share a page is a property of the carousel, not of
+         the page: Live drawing shows two at a time, Exhibitions and Artful
+         Living show one. Below 620px everything drops to one.
+         The script owns the count rather than a media query, because the rail
+         moves a whole page per step: if CSS made the cells full width on its
+         own, half of a two-up set would sit past the last page and never be
+         reachable. */
+      const perFor = () => (window.matchMedia('(max-width: 620px)').matches ? 1 : cfg.per);
+      let per = perFor();
+      let pages = Math.max(1, Math.ceil(cfg.files.length / per));
       let page = 0;
+      host.style.setProperty('--phc-per', per);
       host.innerHTML =
         '<div class="phc-viewport"><div class="phc-rail">' +
           cfg.files.map((f, i) => '<figure class="phc-cell"><img src="' + cfg.dir + f + '" alt="' + cfg.alt + ' ' + (i + 1) + '" loading="lazy" decoding="async"></figure>').join('') +
         '</div></div>' +
-        (pages > 1
-          ? '<div class="phc-nav"><button class="phc-arrow" type="button" data-dir="-1" aria-label="Previous photograph">‹</button>' +
-            '<span class="phc-dots">' +
-              cfg.files.map((_, i) => '<button class="phc-dot" type="button" data-go="' + i + '" aria-label="Photograph ' + (i + 1) + ' of ' + pages + '"></button>').join('') +
-            '</span>' +
-            '<button class="phc-arrow" type="button" data-dir="1" aria-label="Next photograph">›</button></div>'
-          : '');
+        /* Dots only. No arrows — the set advances by itself and the dots are
+           there to jump, not to step. (client feedback 2026-08-08) */
+        '<div class="phc-nav"><span class="phc-dots"></span></div>';
       const rail = host.querySelector('.phc-rail');
       const cells = host.querySelectorAll('.phc-cell');
+      const dotBox = host.querySelector('.phc-dots');
+      const drawDots = () => {
+        dotBox.innerHTML = Array.from({ length: pages }, (_, i) =>
+          '<button class="phc-dot" type="button" data-go="' + i + '" aria-label="Page ' + (i + 1) + ' of ' + pages + '"></button>').join('');
+        dotBox.querySelectorAll('.phc-dot').forEach((d) =>
+          d.addEventListener('click', () => { go(Number(d.dataset.go)); start(); }));
+        host.querySelector('.phc-nav').style.display = pages > 1 ? '' : 'none';
+      };
       const apply = () => {
         rail.style.transform = 'translateX(' + (-page * 100) + '%)';
-        cells.forEach((c, i) => c.classList.toggle('is-current', i === page));
-        host.querySelectorAll('.phc-dot').forEach((d, i) => {
+        cells.forEach((c, i) => c.classList.toggle('is-current', Math.floor(i / per) === page));
+        dotBox.querySelectorAll('.phc-dot').forEach((d, i) => {
           d.classList.toggle('active', i === page);
           d.setAttribute('aria-current', i === page ? 'true' : 'false');
         });
       };
       /* wraps, so the set can run unattended */
       const go = (n) => { page = (n % pages + pages) % pages; apply(); };
+      const relayout = () => {
+        const now = perFor();
+        if (now === per) return;
+        per = now;
+        host.style.setProperty('--phc-per', per);
+        pages = Math.max(1, Math.ceil(cfg.files.length / per));
+        page = Math.min(page, pages - 1);
+        drawDots(); apply();
+      };
+      window.addEventListener('resize', relayout);
 
       let timer = null, held = false;
       const stop = () => { if (timer) { clearInterval(timer); timer = null; } };
@@ -520,17 +546,17 @@ class Component extends DCLogic {
         if (stillPlease || held || pages < 2 || document.hidden) return;
         timer = setInterval(() => go(page + 1), cfg.dwell);
       };
-      /* a press restarts the clock, so a photograph reached by hand gets its
-         full dwell rather than whatever was left of the previous one */
-      host.querySelectorAll('.phc-arrow').forEach((b) =>
-        b.addEventListener('click', () => { go(page + Number(b.dataset.dir)); start(); }));
-      host.querySelectorAll('.phc-dot').forEach((d) =>
-        d.addEventListener('click', () => { go(Number(d.dataset.go)); start(); }));
+      /* The dots are bound inside drawDots — they are rebuilt whenever the page
+         count changes, so binding them here would attach to elements that are
+         about to be replaced. A press there restarts the clock, so a page
+         reached by hand gets its full dwell rather than whatever was left of
+         the previous one. */
       host.addEventListener('pointerenter', () => { held = true; stop(); });
       host.addEventListener('pointerleave', () => { held = false; start(); });
       host.addEventListener('focusin', () => { held = true; stop(); });
       host.addEventListener('focusout', () => { held = false; start(); });
       document.addEventListener('visibilitychange', () => document.hidden ? stop() : start());
+      drawDots();
       apply();
       start();
     });

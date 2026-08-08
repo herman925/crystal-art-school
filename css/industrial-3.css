@@ -560,43 +560,42 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
    against the first one's 236 — the set only looked matched in the CSS. */
 .bc-card--cert, .bc-card + .bc-card--cert { transform: none; }
 .bc-card--cert:hover, .bc-card + .bc-card--cert:hover { transform: translateY(-4px); box-shadow: none; }
-.cert-frame { position: relative; aspect-ratio: 3 / 4; border-radius: 3px;
-  padding: 15px; box-sizing: border-box;
-  background-color: var(--banner-bg); background-image: var(--banner-grain);
-  background-size: var(--banner-size, cover); background-position: center;
-  box-shadow: var(--shadow-md), inset 0 0 0 1px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.18);
-  transition: box-shadow .3s; }
-.bc-card--cert:hover .cert-frame { box-shadow: var(--shadow-lift), inset 0 0 0 1px rgba(0,0,0,.22), inset 0 1px 0 rgba(255,255,255,.18); }
-/* the mat the certificate is mounted on, and the engraved rule around it */
+/* The border is one SVG, applied with border-image so the corner ornaments keep
+   their proportions at any frame size and only the straight runs between them
+   stretch — the reason four masked corner motifs were the wrong tool. It is the
+   engraved rule-and-flourish border a certificate is actually printed with:
+   a heavy outer rule, a hairline inner one, a lozenge and a leaf at each corner.
+   Gold on cream in both themes, because a certificate is a physical object and
+   does not repaint itself when the site does. (client feedback 2026-08-08 — the
+   wooden mount read as a picture frame, which is not how certificates are
+   presented.) */
+.cert-frame { position: relative; aspect-ratio: 3 / 4; box-sizing: border-box;
+  padding: 13px;
+  background-color: #f7f2e5;
+  background-image:
+    radial-gradient(120% 80% at 50% 0%, rgba(255,255,255,.85), transparent 60%),
+    repeating-linear-gradient(45deg, rgba(138,111,61,.045) 0 6px, transparent 6px 12px),
+    repeating-linear-gradient(-45deg, rgba(138,111,61,.045) 0 6px, transparent 6px 12px);
+  border: 22px solid transparent;
+  border-image-source: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%238a6f3d' stroke-linecap='round'%3E%3Crect x='3.5' y='3.5' width='113' height='113' stroke-width='3'/%3E%3Crect x='11.5' y='11.5' width='97' height='97' stroke-width='1'/%3E%3Cpath d='M17 30V17h13M103 30V17H90M17 90v13h13M103 90v13H90' stroke-width='2.2'/%3E%3C/g%3E%3Cg fill='%238a6f3d'%3E%3Cpath d='M23.5 19.6l4 3.9-4 3.9-4-3.9z'/%3E%3Cpath d='M96.5 19.6l4 3.9-4 3.9-4-3.9z'/%3E%3Cpath d='M23.5 92.6l4 3.9-4 3.9-4-3.9z'/%3E%3Cpath d='M96.5 92.6l4 3.9-4 3.9-4-3.9z'/%3E%3C/g%3E%3Cg stroke='%238a6f3d' stroke-width='1.1' fill='none'%3E%3Cpath d='M30 23.5c6 0 9-3 9-6.5M90 23.5c-6 0-9-3-9-6.5M30 96.5c6 0 9 3 9 6.5M90 96.5c-6 0-9 3-9 6.5'/%3E%3C/g%3E%3C/svg%3E");
+  border-image-slice: 44; border-image-width: 22px; border-image-repeat: stretch;
+  box-shadow: var(--shadow-md); transition: box-shadow .3s; }
+.bc-card--cert:hover .cert-frame { box-shadow: var(--shadow-lift); }
+/* the mat the certificate is mounted on */
 .cert-frame .cert-mat { position: relative; width: 100%; height: 100%;
   display: grid; place-items: center; overflow: hidden;
-  background: var(--paper);
-  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--banner-ink) 40%, transparent),
-              inset 0 2px 6px rgba(0,0,0,.18); }
+  background: #fffdf7;
+  box-shadow: inset 0 0 0 1px rgba(138,111,61,.42), inset 0 2px 7px rgba(90,70,40,.13); }
 .cert-frame .cert-mat img { width: 100%; height: 100%; object-fit: contain; display: block;
   aspect-ratio: auto; border-radius: 0; }
-/* Corner flourishes, masked rather than drawn as images so they take the theme's
-   ink instead of a colour baked into the file. Four copies of one motif, each
-   rotated a quarter turn. */
-.cert-frame::after { content: ""; position: absolute; inset: 6px; pointer-events: none;
-  background: color-mix(in srgb, var(--banner-ink) 62%, transparent);
-  --c-tl: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M1.5 23V6.5C1.5 3.7 3.7 1.5 6.5 1.5H23' fill='none' stroke='%23000' stroke-width='1.4'/%3E%3Cpath d='M7.5 7.5l2.6-2.6 2.6 2.6-2.6 2.6z' fill='%23000'/%3E%3C/svg%3E");
-  --c-tr: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg transform='rotate(90 12 12)'%3E%3Cpath d='M1.5 23V6.5C1.5 3.7 3.7 1.5 6.5 1.5H23' fill='none' stroke='%23000' stroke-width='1.4'/%3E%3Cpath d='M7.5 7.5l2.6-2.6 2.6 2.6-2.6 2.6z' fill='%23000'/%3E%3C/g%3E%3C/svg%3E");
-  --c-br: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg transform='rotate(180 12 12)'%3E%3Cpath d='M1.5 23V6.5C1.5 3.7 3.7 1.5 6.5 1.5H23' fill='none' stroke='%23000' stroke-width='1.4'/%3E%3Cpath d='M7.5 7.5l2.6-2.6 2.6 2.6-2.6 2.6z' fill='%23000'/%3E%3C/g%3E%3C/svg%3E");
-  --c-bl: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cg transform='rotate(270 12 12)'%3E%3Cpath d='M1.5 23V6.5C1.5 3.7 3.7 1.5 6.5 1.5H23' fill='none' stroke='%23000' stroke-width='1.4'/%3E%3Cpath d='M7.5 7.5l2.6-2.6 2.6 2.6-2.6 2.6z' fill='%23000'/%3E%3C/g%3E%3C/svg%3E");
-  -webkit-mask: var(--c-tl) top left / 20px 20px no-repeat, var(--c-tr) top right / 20px 20px no-repeat,
-                var(--c-br) bottom right / 20px 20px no-repeat, var(--c-bl) bottom left / 20px 20px no-repeat;
-          mask: var(--c-tl) top left / 20px 20px no-repeat, var(--c-tr) top right / 20px 20px no-repeat,
-                var(--c-br) bottom right / 20px 20px no-repeat, var(--c-bl) bottom left / 20px 20px no-repeat; }
 /* The empty mount that shows a landscape scan fitting the same frame. Marked
    as a placeholder in the same language the free-videos rails use. */
-.bc-card--cert.is-ph .cert-mat { background: var(--surface); }
 .bc-card--cert.is-ph .cert-slot { width: 100%; aspect-ratio: 4 / 3; display: grid; place-items: center;
   background: repeating-linear-gradient(135deg, transparent 0 10px,
-    color-mix(in srgb, var(--ink) 6%, transparent) 10px 20px);
+    rgba(138,111,61,.13) 10px 20px);
   font-family: var(--font-cond); font-size: 11px; font-weight: 600;
   letter-spacing: var(--tracking-label); text-transform: uppercase;
-  color: var(--muted); text-align: center; padding: 0 10px; }
+  color: rgba(90,72,42,.72); text-align: center; padding: 0 10px; }
 /* Tracking and 11px size both held: below About's §13/§14 freeze line. (#20) */
 .bc-card figcaption { font-family: var(--font-cond); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: #474138; margin-top: 8px; text-align: center; }
 /* Captions under a wooden mount sit on the page, not on the wood, so they take
