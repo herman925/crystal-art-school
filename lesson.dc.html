@@ -21,9 +21,11 @@
 <script src="js/course-data.js"></script>
 <script src="js/motion.js"></script>
 <style>
-/* "now playing" must only show on the active lesson (the .now rule in the
-   design css overrides the hidden attribute, so re-assert it) */
-.unit-row .now[hidden] { display: none; }
+/* "now playing" must only show on the active lesson. The design css sets
+   .curr-card .unit-row .now, which outranks a plain [hidden] rule, so the
+   guard has to carry the same specificity. Raising the badge's specificity
+   without raising this one puts the badge on every row at once. */
+.curr-card .unit-row .now[hidden], .unit-row .now[hidden] { display: none; }
 /* 8.1: the lesson cover is wrapped by the description text rather than sitting
    above it. With no cover the paragraph just runs full width — 8.3 rules out a
    placeholder image and rules out leaving a gap. */
@@ -61,7 +63,26 @@
 .curr-card .unit-row .ud { font-size: 14px; }
 /* 8.3: at most one thumbnail per lesson. Nothing is substituted when a lesson
    has no image — no default picture and no frame grabbed from the video. */
-.curr-card .unit-row .uthumb { flex: none; width: 62px; height: 44px; object-fit: cover; border-radius: 8px; box-shadow: var(--shadow-sm); }
+.curr-card .unit-row .uthumb-wrap { position: relative; flex: none; width: 78px; height: 48px; border-radius: 8px; overflow: hidden; }
+.curr-card .unit-row .uthumb { display: block; width: 100%; height: 100%; object-fit: cover; box-shadow: var(--shadow-sm); }
+/* A lesson with no cover still reserves the slot, so the rows stay aligned
+   and the badge has somewhere to sit. */
+.curr-card .unit-row .uthumb-wrap.is-empty { background: color-mix(in srgb, var(--ink) 10%, transparent); }
+/* "Now playing" reads on the thumbnail rather than beside the title, so the
+   title is never pushed around by a state change and the eye finds the active
+   lesson by its picture. (client feedback 2026-08-08) */
+/* One line, always: at 62px the label wrapped to two rows and covered the
+   painting it was supposed to sit on. The thumbnail carries the extra width.
+   10px is below the site's 12px floor, deliberately and only here — it is a
+   state marker on an image, not reading matter, and it sits on a solid bar. */
+.curr-card .unit-row .now { position: absolute; inset: auto 0 0 0; display: flex; align-items: center; justify-content: center; gap: 4px;
+  padding: 3px 0; background: rgba(20,17,13,.78); backdrop-filter: blur(2px);
+  font-family: var(--font-cond); font-weight: 600; font-size: 10px; line-height: 1.1;
+  letter-spacing: .02em; text-transform: uppercase; white-space: nowrap; color: #f3ede1; }
+.curr-card .unit-row .now-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--coral);
+  animation: nowPulse 1.6s var(--ease-out) infinite; }
+@keyframes nowPulse { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
+@media (prefers-reduced-motion: reduce) { .curr-card .unit-row .now-dot { animation: none; } }
 /* 8.1 item 4: the bundled download sits above the per-item list. */
 .materials-card .res-all { display: flex; align-items: center; gap: 12px; padding: 2px 10px 12px; }
 /* The card is the full width of the left column, and the list was capped at
@@ -433,8 +454,11 @@ class Component extends DCLogic {
          so counting children broke the alternation after every header.
          One thumbnail per lesson, and nothing at all when there is none. */
       '<button class="unit-row" data-unit="' + i + '" data-odd="' + (i % 2) + '" type="button"><span class="st">' + (i + 1) + '</span>' +
-        (u.img ? '<img class="uthumb" src="' + escl(u.img) + '" alt="" loading="lazy" decoding="async">' : '') +
-        '<span class="ut">' + escl(u.title) + ' <span class="now" hidden>· now playing</span></span><span class="ud">' + fmt0(u.dur) + '</span></button>' +
+        (u.img
+          ? '<span class="uthumb-wrap"><img class="uthumb" src="' + escl(u.img) + '" alt="" loading="lazy" decoding="async">'
+            + '<span class="now" hidden><span class="now-dot" aria-hidden="true"></span>Now playing</span></span>'
+          : '<span class="uthumb-wrap is-empty"><span class="now" hidden><span class="now-dot" aria-hidden="true"></span>Now playing</span></span>') +
+        '<span class="ut">' + escl(u.title) + '</span><span class="ud">' + fmt0(u.dur) + '</span></button>' +
       /* 1.4.9: a lesson filmed in several parts lists them underneath itself
          here, rather than in a separate Parts bar above the player. */
       (u.parts ? u.parts.map((pt, j) =>
