@@ -701,17 +701,10 @@
 [data-theme="A"] .blog-feature .bf-frame h2 { color: var(--leather-a-ink); }
 [data-theme="A"] .blog-feature .bf-reads { color: var(--leather-a-meta); }
 [data-theme="A"] .blog-feature .bf-quote { color: rgba(47,42,36,.5); -webkit-text-stroke-color: rgba(47,42,36,.5); }
-[data-theme="A"] .blog-feature .bf-body .link-squiggle { color: var(--leather-a-cta); background-image: linear-gradient(var(--leather-a-cta), var(--leather-a-cta)); }
 .blog-feature .bf-kicker { font-family: var(--font-cond); font-size: 14px; font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--leather-label); }
 .blog-feature h2 { font-family: var(--font-marker); font-weight: 600; font-size: clamp(28px,3.3vw,41px); line-height: 1.08; margin: 0; color: var(--leather-ink); }
 .blog-feature p { font-size: 16.5px; line-height: 1.62; color: var(--leather-meta); margin: 0; }
 .blog-feature .bf-reads { font-size: 14px; color: var(--leather-meta); }
-/* The squiggle's copper underline is invisible on tan; it takes the label ink. */
-/* The call to action is the one thing on the cover that is not just more text,
-   so it takes its own colour rather than the label ink. (client feedback
-   2026-08-08) */
-.blog-feature .link-squiggle { color: var(--leather-cta);
-  background-image: linear-gradient(var(--leather-cta), var(--leather-cta)); }
 
 /* 12.1: the title is pressed into the cover. The frame is no longer a box — the
    leather moved up to the card, so all this element does now is hold the
@@ -733,8 +726,7 @@
    on 14px — only the headline carries the extra ambient layer, in its own rule
    below. */
 .blog-feature .bf-kicker,
-.blog-feature .bf-reads,
-.blog-feature .bf-body .link-squiggle {
+.blog-feature .bf-reads {
   text-shadow: 0 -1px 0 rgba(40,22,10,.55), 0 1px 0 rgba(255,240,212,.42);
 }
 .blog-feature .bf-frame h2 {
@@ -784,6 +776,34 @@
    the ribbon out to a flat grey-green that was visibly no longer the client's
    colour — measured at #7d8a87 against a specified #598493. */
 .blog-feature { position: relative; }
+/* The call to action is a button, not a coloured line of text. At 13px on a
+   patterned hide a colour change alone was invisible next to the reading time.
+
+   The fill is the deep red rather than the marine §1.4.2 assigns to actions:
+   marine measures 1.22:1 against this tan and copper 1.47:1, so a pill in
+   either would be a shape nobody can see. The red is 4.79:1 on the tan and
+   10.26:1 on the light cover, with cream type at 13.77:1 on the fill.
+   (client feedback 2026-08-08) */
+.blog-feature .bf-cta {
+  align-self: flex-start; display: inline-flex; align-items: center; gap: 9px;
+  margin-top: 4px; padding: 13px 26px; border-radius: var(--radius-pill);
+  background-color: #3d1410;
+  background-image: linear-gradient(180deg, rgba(255,236,222,.16), transparent 46%),
+    var(--leather-pores);
+  background-size: 100% 100%, 110px 110px;
+  color: #fdf3ef; text-decoration: none;
+  font-family: var(--font-cond); font-weight: 500; font-size: 14px;
+  letter-spacing: var(--tracking-label); text-transform: uppercase;
+  box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(255,236,222,.22),
+    inset 0 -2px 5px rgba(0,0,0,.34);
+  transition: transform var(--dur-fast) var(--ease-pop), filter var(--dur-base);
+}
+.blog-feature .bf-cta:hover { transform: translateY(-2px); filter: brightness(1.12); }
+.blog-feature .bf-cta .arr { transition: transform var(--dur-fast) var(--ease-out); }
+.blog-feature .bf-cta:hover .arr { transform: translateX(3px); }
+/* The light cover is paler, so the same fill can afford to lift a little. */
+[data-theme="A"] .blog-feature .bf-cta { background-color: #6b2018; }
+
 .blog-feature .bf-ribbon {
   position: absolute; top: -18px; right: 34px; z-index: 3; width: 58px; min-height: 195px;
   background-color: #6f9dad;

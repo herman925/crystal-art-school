@@ -204,7 +204,7 @@ class Component extends DCLogic {
             + '<span class="bf-quote is-close" aria-hidden="true"></span>'
           + '</div>' +
           '<span class="bf-reads">' + (f.mins || 4) + ' min read</span>' +
-          '<a class="link-squiggle" href="blog-post.dc.html?id=' + esc(f.id) + '" style="align-self:flex-start;">Read the post →</a></div>' +
+          '<a class="bf-cta" href="blog-post.dc.html?id=' + esc(f.id) + '">Read the post <span class="arr" aria-hidden="true">→</span></a></div>' +
           /* --rib-len lets the ribbon size its own type to the tag it is given;
              the tag is per-post and will be whatever the CMS supplies. */
           '<span class="bf-ribbon" aria-hidden="true" style="--rib-len:' + String(f.tag || '').length + '">'
