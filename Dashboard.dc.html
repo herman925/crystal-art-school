@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,6 +8,8 @@
 <body>
 <x-dc>
 <helmet>
+<title>My studio — Crystal's Art School</title>
+<meta name="description" content="Your Crystal's Art School dashboard: the courses you own, your progress through them, your receipts and your account settings.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600;6..96,700&family=Oswald:wght@300;400;500;600&family=Archivo:wght@400;500;600;700&family=Saira+Stencil+One&family=Arizonia&display=swap" rel="stylesheet">
@@ -15,117 +17,68 @@
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="js/course-data.js"></script>
 <script src="js/site-extras.js"></script>
 <script src="js/site-nav.js"></script>
 <script src="js/site-footer.js"></script>
 <script src="js/motion.js"></script>
 </helmet>
 <div class="cas-root" data-theme="D">
+<a class="skip-link" href="#content">Skip to content</a>
 <div class="glow-layer" aria-hidden="true"></div>
 
-<nav class="site-nav" aria-label="Main">
-  <div class="nav-top">
-    <div class="inner">
-      <a class="nav-brand" href="index.html">
-        <img src="img/lau-logo.png" alt="Lau. — Crystal's Art School">
-      </a>
-      <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="Lessons.dc.html">Courses</a></li>
-        <li><a href="Gallery.dc.html">Gallery</a></li>
-        <li><a href="Showcase.dc.html">Showcase</a></li>
-        <li><a href="Blog.dc.html">Blog</a></li>
-        <li><a href="About.dc.html">About</a></li>
-        <li><a href="FreeVideos.dc.html">Free video</a></li>
-        <li><a href="Blog.dc.html?tag=Tools">Tools</a></li>
-        <li><a href="FAQ.dc.html">FAQ</a></li>
-      </ul>
-      <div class="nav-auth">
-        <a class="cart-btn" href="Checkout.dc.html" aria-label="Shopping cart">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M2 3h3.2l2.5 12.2a1.5 1.5 0 0 0 1.5 1.2h9a1.5 1.5 0 0 0 1.5-1.2L21.5 7H6.5"></path></svg>
-          <span class="cart-badge">0</span>
-        </a>
-        <a class="btn ghost" href="Login.dc.html">Log in</a>
-        <a class="btn primary" href="Signup.dc.html">Sign up</a>
-        <button class="nav-burger" type="button" aria-label="Menu" aria-expanded="false">☰</button>
-      </div>
-    </div>
-  </div>
-  <div class="nav-cats">
-    <div class="inner">
-      <ul class="nav-cat-links">
-        <li><a href="Lessons.dc.html?cat=Watercolour">Watercolour</a></li>
-        <li><a href="Lessons.dc.html?cat=Oil">Oils</a></li>
-        <li><a href="Lessons.dc.html?cat=Drawing">Drawing</a></li>
-        <li><a href="Lessons.dc.html?cat=Ink">Ink</a></li>
-        <li><a href="Lessons.dc.html?cat=Beginners">Beginners</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="nav-sheet">
-    <a href="index.html">Home</a>
-    <a href="Lessons.dc.html">Courses</a>
-    <a href="Gallery.dc.html">Gallery</a>
-    <a href="Showcase.dc.html">Showcase</a>
-    <a href="Blog.dc.html">Blog</a>
-    <a href="About.dc.html">About</a>
-    <a href="FreeVideos.dc.html">Free video</a>
-    <a href="Blog.dc.html?tag=Tools">Tools</a>
-    <a href="FAQ.dc.html">FAQ</a>
-    <a href="Lessons.dc.html?cat=Watercolour">Watercolour</a>
-    <a href="Lessons.dc.html?cat=Oil">Oils</a>
-    <a href="Lessons.dc.html?cat=Drawing">Drawing</a>
-    <a href="Lessons.dc.html?cat=Ink">Ink</a>
-    <a href="Lessons.dc.html?cat=Beginners">Beginners</a>
-    <a href="Login.dc.html">Log in / Sign up</a>
-  </div>
-</nav>
+<!-- nav markup lives in js/site-nav.js — single source of truth -->
+<nav class="site-nav" aria-label="Main"></nav>
 
-<main class="container" id="content" style="padding-top:26px;padding-bottom:60px;">
+<main class="container" id="content" tabindex="-1" style="padding-top:26px;padding-bottom:60px;">
 
   <section class="dash-hero">
     <div class="dash-avatar"><img src="img/ProfilePic.jpg" alt="" loading="lazy" decoding="async"></div>
     <div class="dash-hi">
-      <div class="eyebrow"><span class="star">✦</span> Your studio</div>
+      <div class="eyebrow"><span class="star">&#10022;</span> Your studio</div>
       <h1 id="dash-greeting">Welcome back.</h1>
-      <p id="dash-sub">Pick up where you left off — your bench is just as you left it.</p>
+      <p id="dash-sub">Pick up where you left off &#8212; your bench is just as you left it.</p>
       <span class="dash-plan-chip" id="dash-plan">Wanderer</span>
     </div>
     <div class="dash-stats">
       <div class="dash-stat"><div class="v" id="stat-courses">0</div><div class="k">Courses</div></div>
       <div class="dash-stat"><div class="v" id="stat-lessons">0</div><div class="k">Lessons done</div></div>
-      <div class="dash-stat"><div class="v" id="stat-since">—</div><div class="k">Member since</div></div>
+      <div class="dash-stat"><div class="v" id="stat-since">&#8212;</div><div class="k">Member since</div></div>
     </div>
   </section>
 
   <div class="dash-layout">
-    <aside class="dash-rail" role="tablist" aria-label="Dashboard sections">
-      <button class="dash-tab active" type="button" data-panel="overview"><svg class="ti" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg> Overview</button>
-      <button class="dash-tab" type="button" data-panel="courses"><svg class="ti" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg> My courses <span class="badge" id="badge-courses">0</span></button>
-      <button class="dash-tab" type="button" data-panel="progress"><svg class="ti" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"></path><path d="M7 14l4-4 3 3 5-6"></path></svg> Progress</button>
-      <button class="dash-tab" type="button" data-panel="purchases"><svg class="ti" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><path d="M3 6h18"></path><path d="M16 10a4 4 0 0 1-8 0"></path></svg> Purchases</button>
-      <button class="dash-tab" type="button" data-panel="discord"><svg class="ti" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="12" r="1"></circle><circle cx="15" cy="12" r="1"></circle><path d="M7.5 7.2A16 16 0 0 1 12 6.5a16 16 0 0 1 4.5.7c2 3 2.6 6 2.5 9a13 13 0 0 1-4 2l-1-1.6"></path><path d="M9.5 16.6 8.5 18a13 13 0 0 1-4-2c-.1-3 .5-6 2.5-9"></path></svg> Discord</button>
-      <button class="dash-tab" type="button" data-panel="settings"><svg class="ti" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg> Settings</button>
-    </aside>
+    <!-- was <aside role="tablist">, which both overwrote the complementary
+         landmark and claimed a tab contract the six plain buttons did not
+         implement. A tablist is not a complementary landmark, so the element is
+         now a div and the buttons are real tabs. -->
+    <div class="dash-rail" role="tablist" aria-label="Dashboard sections" aria-orientation="vertical">
+      <button class="dash-tab active" type="button" role="tab" id="tab-overview" aria-selected="true" aria-controls="panel-overview" tabindex="0" data-panel="overview"><svg class="ti" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg> Overview</button>
+      <button class="dash-tab" type="button" role="tab" id="tab-courses" aria-selected="false" aria-controls="panel-courses" tabindex="-1" data-panel="courses"><svg class="ti" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg> My courses <span class="badge" id="badge-courses">0</span></button>
+      <button class="dash-tab" type="button" role="tab" id="tab-progress" aria-selected="false" aria-controls="panel-progress" tabindex="-1" data-panel="progress"><svg class="ti" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3v18h18"></path><path d="M7 14l4-4 3 3 5-6"></path></svg> Progress</button>
+      <button class="dash-tab" type="button" role="tab" id="tab-purchases" aria-selected="false" aria-controls="panel-purchases" tabindex="-1" data-panel="purchases"><svg class="ti" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><path d="M3 6h18"></path><path d="M16 10a4 4 0 0 1-8 0"></path></svg> Purchases</button>
+      <button class="dash-tab" type="button" role="tab" id="tab-discord" aria-selected="false" aria-controls="panel-discord" tabindex="-1" data-panel="discord"><svg class="ti" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="12" r="1"></circle><circle cx="15" cy="12" r="1"></circle><path d="M7.5 7.2A16 16 0 0 1 12 6.5a16 16 0 0 1 4.5.7c2 3 2.6 6 2.5 9a13 13 0 0 1-4 2l-1-1.6"></path><path d="M9.5 16.6 8.5 18a13 13 0 0 1-4-2c-.1-3 .5-6 2.5-9"></path></svg> Discord</button>
+      <button class="dash-tab" type="button" role="tab" id="tab-settings" aria-selected="false" aria-controls="panel-settings" tabindex="-1" data-panel="settings"><svg class="ti" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg> Settings</button>
+    </div>
 
     <div class="dash-main">
       <!-- OVERVIEW -->
-      <section class="dash-panel active" data-panel="overview">
-        <div class="dash-panel-head"><h2><span class="ast">✦</span> Continue learning</h2></div>
+      <section class="dash-panel active" role="tabpanel" id="panel-overview" aria-labelledby="tab-overview" tabindex="0" data-panel="overview">
+        <div class="dash-panel-head"><h2><span class="ast">&#10022;</span> Continue learning</h2></div>
         <div class="dash-card resume-card" id="resume-card"></div>
-        <div class="dash-panel-head" style="margin-top:26px;"><h2><span class="ast">✦</span> Recommended next</h2><p>Hand-picked from your focus</p></div>
+        <div class="dash-panel-head" style="margin-top:26px;"><h2><span class="ast">&#10022;</span> Recommended next</h2><p>From the catalogue, matched to your focus</p></div>
         <div class="mycourse-grid" id="recommend-grid"></div>
       </section>
 
       <!-- COURSES -->
-      <section class="dash-panel" data-panel="courses">
-        <div class="dash-panel-head"><h2><span class="ast">✦</span> My courses</h2><p id="courses-note"></p></div>
+      <section class="dash-panel" role="tabpanel" id="panel-courses" aria-labelledby="tab-courses" tabindex="0" data-panel="courses">
+        <div class="dash-panel-head"><h2><span class="ast">&#10022;</span> My courses</h2><p id="courses-note"></p></div>
         <div class="mycourse-grid" id="mycourse-grid"></div>
       </section>
 
       <!-- PROGRESS -->
-      <section class="dash-panel" data-panel="progress">
-        <div class="dash-panel-head"><h2><span class="ast">✦</span> Your progress</h2></div>
+      <section class="dash-panel" role="tabpanel" id="panel-progress" aria-labelledby="tab-progress" tabindex="0" data-panel="progress">
+        <div class="dash-panel-head"><h2><span class="ast">&#10022;</span> Your progress</h2></div>
         <div class="dash-card">
           <div class="prog-row"><span>Overall completion</span><b id="overall-pct">0%</b></div>
           <div class="prog"><i id="overall-bar" style="width:0%"></i></div>
@@ -134,48 +87,52 @@
       </section>
 
       <!-- PURCHASES -->
-      <section class="dash-panel" data-panel="purchases">
-        <div class="dash-panel-head"><h2><span class="ast">✦</span> Purchase history</h2><p>Receipts &amp; invoices</p></div>
+      <section class="dash-panel" role="tabpanel" id="panel-purchases" aria-labelledby="tab-purchases" tabindex="0" data-panel="purchases">
+        <div class="dash-panel-head"><h2><span class="ast">&#10022;</span> Purchase history</h2><p>Receipts</p></div>
         <div class="dash-card" style="padding:6px 4px;">
           <table class="dash-table">
-            <thead><tr><th>Order</th><th>Date</th><th>Item</th><th>Amount</th><th></th></tr></thead>
+            <caption style="position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0;">Orders placed on this device, newest first.</caption>
+            <thead><tr><th scope="col">Order</th><th scope="col">Date</th><th scope="col">Item</th><th scope="col">Amount</th><th scope="col">Receipt</th></tr></thead>
             <tbody id="orders-body"></tbody>
           </table>
         </div>
       </section>
 
       <!-- DISCORD -->
-      <section class="dash-panel" data-panel="discord">
-        <div class="dash-panel-head"><h2><span class="ast">✦</span> Fellow Discord</h2></div>
+      <section class="dash-panel" role="tabpanel" id="panel-discord" aria-labelledby="tab-discord" tabindex="0" data-panel="discord">
+        <div class="dash-panel-head"><h2><span class="ast">&#10022;</span> Fellow Discord</h2></div>
         <div id="discord-slot"></div>
       </section>
 
       <!-- SETTINGS -->
-      <section class="dash-panel" data-panel="settings">
-        <div class="dash-panel-head"><h2><span class="ast">✦</span> Account settings</h2></div>
+      <section class="dash-panel" role="tabpanel" id="panel-settings" aria-labelledby="tab-settings" tabindex="0" data-panel="settings">
+        <div class="dash-panel-head"><h2><span class="ast">&#10022;</span> Account settings</h2></div>
         <div class="dash-card">
           <div class="set-grid">
-            <div class="set-field"><label for="set-name">Full name</label><input id="set-name" type="text"></div>
-            <div class="set-field"><label for="set-email">Email</label><input id="set-email" type="email"></div>
+            <div class="set-field"><label for="set-name">Full name</label><input id="set-name" type="text" autocomplete="name"></div>
+            <div class="set-field"><label for="set-email">Email</label><input id="set-email" type="email" autocomplete="email"></div>
             <div class="set-field"><label for="set-focus">Main focus</label><select id="set-focus"><option>Watercolour</option><option>Oils</option><option>Drawing</option><option>Acrylic</option><option>Ink</option></select></div>
-            <div class="set-field"><label for="set-country">Country</label><select id="set-country"><option>United Kingdom</option><option>Hong Kong</option><option>Other</option></select></div>
+            <div class="set-field"><label for="set-country">Country</label><select id="set-country" autocomplete="country-name"><option>United Kingdom</option><option>Hong Kong</option><option>Other</option></select></div>
             <div class="set-field full"><button class="btn primary" type="button" id="save-account">Save changes</button></div>
           </div>
         </div>
         <div class="dash-card" style="margin-top:16px;">
-          <div class="dash-panel-head" style="margin-bottom:4px;"><h2 style="font-size:16px;">Notifications</h2></div>
-          <div class="set-row-tog"><div><div class="l">New course alerts</div><div class="d">Email me when Crystal publishes a new course.</div></div><button class="set-tog on" type="button" data-set="newcourse"></button></div>
-          <div class="set-row-tog"><div><div class="l">Lesson reminders</div><div class="d">A gentle nudge to keep your streak going.</div></div><button class="set-tog on" type="button" data-set="reminders"></button></div>
-          <div class="set-row-tog"><div><div class="l">Promotions</div><div class="d">Occasional offers and studio news.</div></div><button class="set-tog" type="button" data-set="promos"></button></div>
+          <div class="dash-panel-head" style="margin-bottom:4px;"><h2 style="font-size:16px;" id="set-notify-h">Notifications</h2></div>
+          <!-- these three had no accessible name at all and flipped a CSS class
+               without persisting anything -->
+          <div class="set-row-tog"><div><div class="l" id="set-lbl-newcourse">New course alerts</div><div class="d">Email me when Crystal publishes a new course.</div></div><button class="set-tog" type="button" role="switch" aria-checked="false" aria-labelledby="set-lbl-newcourse" data-set="newcourse"></button></div>
+          <div class="set-row-tog"><div><div class="l" id="set-lbl-reminders">Lesson reminders</div><div class="d">A gentle nudge to keep your streak going.</div></div><button class="set-tog" type="button" role="switch" aria-checked="false" aria-labelledby="set-lbl-reminders" data-set="reminders"></button></div>
+          <div class="set-row-tog"><div><div class="l" id="set-lbl-promos">Promotions</div><div class="d">Occasional offers and studio news.</div></div><button class="set-tog" type="button" role="switch" aria-checked="false" aria-labelledby="set-lbl-promos" data-set="promos"></button></div>
+          <p class="hand-note" style="margin:12px 0 0;">Demo &#8212; preferences are stored in this browser. No email is sent from this prototype.</p>
         </div>
         <div class="dash-card" style="margin-top:16px;">
           <div class="dash-panel-head" style="margin-bottom:4px;"><h2 style="font-size:16px;">Privacy</h2></div>
-          <p style="font-family:var(--font-cond);font-size:13.5px;color:var(--muted);margin:0 0 14px;">Manage cookies and exercise your UK GDPR data rights — request, correct or export your data.</p>
+          <p style="font-family:var(--font-cond);font-size:13.5px;color:var(--muted);margin:0 0 14px;">Manage cookies and exercise your UK GDPR data rights &#8212; request, correct or export your data.</p>
           <button class="btn ghost" type="button" id="open-privacy">Privacy choices &amp; data rights</button>
         </div>
         <div class="danger-zone">
           <h3>Delete account</h3>
-          <p>Permanently remove your account and personal data. This cannot be undone.</p>
+          <p>Removes the account, enrolments, progress, receipts and basket this browser holds. This cannot be undone.</p>
           <button class="btn danger" type="button" id="delete-account">Delete my account</button>
         </div>
       </section>
@@ -192,18 +149,6 @@
 </x-dc>
 <script type="text/x-dc" data-dc-script data-props="{&quot;defaultTheme&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;A&quot;,&quot;D&quot;],&quot;default&quot;:&quot;D&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
 class Component extends DCLogic {
-  pool() {
-    return [
-      { img: 'cover1.jpg', title: 'Light & shadow on the head', tag: 'Oils', price: 42 },
-      { img: 'cover2.jpg', title: 'Blocking in large shapes', tag: 'Oils', price: 36 },
-      { img: 'cover3.jpg', title: 'Mixing greens from scratch', tag: 'Watercolour', price: 29 },
-      { img: 'Liquidwatercolor.jpg', title: 'Wet-on-wet washes', tag: 'Watercolour', price: 34 },
-      { img: 'Postercolor.jpg', title: 'Flat & opaque in poster colour', tag: 'Poster', price: 38 },
-      { img: 'Sketchbook.jpg', title: 'Fill a sketchbook in 30 days', tag: 'Drawing', price: 24 },
-      { img: 'BrushA.jpg', title: 'Brush & ink studies', tag: 'Ink', price: 44 }
-    ];
-  }
-
   componentDidMount() {
     const root = document.querySelector('.cas-root');
     if (!root) return;
@@ -219,190 +164,341 @@ class Component extends DCLogic {
     try { const __q = (new URLSearchParams(location.search).get('theme') || '').toUpperCase(); if (valid.indexOf(__q) >= 0) { __theme = __q; localStorage.setItem(THEME_KEY, __q); } } catch (e) {}
     root.setAttribute('data-theme', __theme);
 
-    /* burger handled by js/site-nav.js */
+    /* ---- skip link ---- a fragment jump moves the viewport, not the caret */
+    document.addEventListener('click', (e) => {
+      const s = e.target.closest && e.target.closest('.skip-link');
+      if (!s) return;
+      const t = document.querySelector(s.getAttribute('href') || '');
+      if (!t) return;
+      e.preventDefault();
+      t.setAttribute('tabindex', '-1');
+      try { t.focus(); } catch (er) {}
+    });
+
+    const say = (m, p) => { try { if (window.CasAnnounce) window.CasAnnounce(m, p); } catch (er) {} };
+
+    /* ---- toast ----
+       three actions used this as their only confirmation channel and it had no
+       role and no aria-live, so none of them was announced. The visible toast is
+       the visual channel; CasAnnounce is the spoken one, so it is said once. */
+    let toastTimer = null;
+    const toast = (msg) => {
+      const el = $('dash-toast');
+      el.textContent = msg; el.classList.add('show');
+      if (toastTimer) clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => el.classList.remove('show'), 2600);
+      say(msg);
+    };
 
     /* ---- user (gate: no account -> log in first) ---- */
     let user = null;
     try { user = JSON.parse(localStorage.getItem('cas-user') || 'null'); } catch (e) { user = null; }
     if (!user || !(user.name || user.email)) { window.location.replace('Login.dc.html?next=Dashboard.dc.html'); return; }
-    const name = user.name || 'Friend';
-    const first = String(name).split(' ')[0];
-    const email = user.email || (first.toLowerCase() + '@example.com');
-    const nun = $('nav-user-name'); if (nun) nun.textContent = first;
+    const name = user.name || '';
+    const first = String(name || (user.email || '').split('@')[0]).split(' ')[0];
+    const email = user.email || '';
     const isNew = !!user.newUser;
     $('dash-greeting').textContent = (isNew ? 'Welcome, ' : 'Welcome back, ') + first + '.';
-    $('dash-sub').textContent = isNew ? 'Your bench is set up and waiting — here\'s how to start.' : 'Pick up where you left off — your bench is just as you left it.';
+    $('dash-sub').textContent = isNew ? 'Your bench is set up and waiting \u2014 here\'s how to start.' : 'Pick up where you left off \u2014 your bench is just as you left it.';
     $('dash-plan').textContent = (user.plan || 'Wanderer') + ' member';
 
-    /* ---- enrolled courses ----
-       brand-new accounts start EMPTY (onboarding state);
-       returning demo users get seeded sample data so the design shows populated */
-    let enrolled;
-    try { enrolled = JSON.parse(localStorage.getItem('cas-enrolled') || 'null'); } catch (e) { enrolled = null; }
-    if (!enrolled) {
-      enrolled = isNew ? [] : [
-        { img: 'cover3.jpg', title: 'Materials & setting up', tier: 'Apprentice', units: 6, free: true },
-        { img: 'cover1.jpg', title: 'Light & shadow on the head', tier: 'Fellow', units: 8, done: 3 },
-        { img: 'Sketchbook.jpg', title: 'Fill a sketchbook in 30 days', tier: 'Apprentice', units: 10, done: 10 }
-      ];
-      try { localStorage.setItem('cas-enrolled', JSON.stringify(enrolled)); } catch (e) {}
-    }
-    const empty = !enrolled.length;
-    // free-lesson real progress
-    let freeDone = 0;
-    try { const f = JSON.parse(localStorage.getItem('cas-free-lesson-progress') || 'null'); if (f && f.done) freeDone = f.done.filter(Boolean).length; } catch (e) {}
-    const courseDone = (c) => c.free ? freeDone : (c.done || 0);
-    const coursePct = (c) => Math.round((courseDone(c) / c.units) * 100);
+    /* ---- the catalogue is the source of truth for every course shown here ----
+       This page used to carry its own pool() of seven invented courses with
+       invented prices, whose hrefs mapped to slugs that do not exist, and it
+       WROTE seeded demo enrolments and orders into cas-enrolled / cas-orders —
+       the same keys real state uses. Both are gone: everything below is either
+       real catalogue data (js/course-data.js) or something the user actually did
+       on this device. Nothing is seeded and nothing is written on load. */
+    const CATALOGUE = (window.CAS_COURSES || []).slice();
+    const courseById = (id) => { for (let i = 0; i < CATALOGUE.length; i++) if (CATALOGUE[i].id === id) return CATALOGUE[i]; return null; };
+    const unitCount = (c) => (c && c.lessons ? c.lessons.length : 0);
+    /* real progress, written by lesson.dc.html as cas-progress-<courseId> */
+    const doneCount = (id) => {
+      try {
+        const s = JSON.parse(localStorage.getItem('cas-progress-' + id) || 'null');
+        return (s && s.done) ? s.done.filter(Boolean).length : 0;
+      } catch (e) { return 0; }
+    };
+    const nextUnit = (id, units) => {
+      try {
+        const s = JSON.parse(localStorage.getItem('cas-progress-' + id) || 'null');
+        if (s && s.done) { for (let i = 0; i < s.done.length; i++) if (!s.done[i]) return i; }
+      } catch (e) {}
+      return 0;
+    };
+    const coverImg = (c, alt) => '<img src="' + esc(c.cover) + '"' +
+      (c.srcset ? ' srcset="' + esc(c.srcset) + '"' : '') +
+      (c.sizes ? ' sizes="' + esc(c.sizes) + '"' : '') +
+      ' alt="' + esc(alt || '') + '" loading="lazy" decoding="async">';
+    const courseHref = (id) => 'course.dc.html?id=' + encodeURIComponent(id);
+    const lessonHref = (id, u) => 'lesson.dc.html?c=' + encodeURIComponent(id) + '&u=' + u;
 
-    /* ---- orders (seed if empty) ---- */
-    let orders;
-    try { orders = JSON.parse(localStorage.getItem('cas-orders') || 'null'); } catch (e) { orders = null; }
-    if (!orders) orders = [];
-    if (!orders.length && !isNew) {
-      orders = [
-        { id: 'CAS-2041', date: '12 Jun 2026', title: 'Light & shadow on the head', tier: 'Fellow', img: 'cover1.jpg', amount: 76 },
-        { id: 'CAS-1990', date: '28 May 2026', title: 'Fill a sketchbook in 30 days', tier: 'Apprentice', img: 'Sketchbook.jpg', amount: 24 }
-      ];
-      try { localStorage.setItem('cas-orders', JSON.stringify(orders)); } catch (e) {}
-    }
+    /* ---- enrolled: read only, never seeded ---- */
+    let stored = [];
+    try { const s = JSON.parse(localStorage.getItem('cas-enrolled') || '[]'); if (Array.isArray(s)) stored = s; } catch (e) {}
+    const enrolled = stored.map((e) => {
+      const c = courseById(e.id);
+      if (!c) return null;
+      const units = unitCount(c);
+      const done = Math.min(doneCount(c.id), units);
+      return { id: c.id, course: c, title: c.title, tier: e.tier || 'Apprentice', units: units, done: done,
+               pct: units ? Math.round((done / units) * 100) : 0 };
+    }).filter(Boolean);
+    const empty = !enrolled.length;
+
+    /* ---- orders: read only, written by Checkout.dc.html when an order is placed ---- */
+    let orders = [];
+    try { const o = JSON.parse(localStorage.getItem('cas-orders') || '[]'); if (Array.isArray(o)) orders = o; } catch (e) {}
 
     /* ---- stats ---- */
-    const lessonsDone = enrolled.reduce((a, c) => a + courseDone(c), 0);
     $('stat-courses').textContent = enrolled.length;
-    $('stat-lessons').textContent = lessonsDone;
-    $('stat-since').textContent = user.since || (isNew ? 'Jul 2026' : 'Apr 2026');
+    $('stat-lessons').textContent = enrolled.reduce((a, c) => a + c.done, 0);
+    /* was a hard-coded 'Apr 2026' / 'Jul 2026' — it told a brand-new account it
+       had joined last month. Only a date the account actually carries is shown. */
+    $('stat-since').textContent = user.since || '\u2014';
     $('badge-courses').textContent = enrolled.length;
 
-    /* ---- overview: resume card, or onboarding for a fresh account ---- */
+    /* ---- overview: resume card, or onboarding for an empty bench ---- */
     if (empty) {
+      const firstCourse = CATALOGUE[0];
       $('resume-card').innerHTML =
         '<div class="dash-onboard" style="width:100%;">' +
-          '<div class="ob-hero"><img src="img/cover3.jpg" alt="" loading="lazy" decoding="async">' +
+          '<div class="ob-hero">' + (firstCourse ? coverImg(firstCourse, '') : '') +
             '<div><h3 style="font-family:var(--font-marker);font-weight:600;font-size:20px;margin:0 0 6px;">Your bench is ready.</h3>' +
-            '<p style="margin:0;font-size:14px;color:var(--muted);max-width:52ch;">Nothing enrolled yet — and that\'s exactly where everyone starts. The free intro course takes under an hour and needs no materials.</p></div></div>' +
+            '<p style="margin:0;font-size:14px;color:var(--muted);max-width:52ch;">Nothing enrolled yet \u2014 and that\'s exactly where everyone starts. Every course in the catalogue opens with a free first lesson, so you can watch before you buy.</p></div></div>' +
           '<div class="ob-steps">' +
-            '<div class="ob-step"><div class="n">1</div><h4>Watch the free course</h4><p><em>Materials &amp; setting up</em> — all 6 units free.</p></div>' +
-            '<div class="ob-step"><div class="n">2</div><h4>Pick your first course</h4><p>Filter the catalog by medium and level.</p></div>' +
-            '<div class="ob-step"><div class="n">3</div><h4>Paint along</h4><p>Real reference and notes ship with every unit.</p></div>' +
+            '<div class="ob-step"><div class="n">1</div><h4>Watch a free first lesson</h4><p>Lesson 1 of every course is free to watch.</p></div>' +
+            '<div class="ob-step"><div class="n">2</div><h4>Pick your first course</h4><p>Filter the catalogue by medium and level.</p></div>' +
+            '<div class="ob-step"><div class="n">3</div><h4>Paint along</h4><p>Reference material ships with every course.</p></div>' +
           '</div>' +
           '<div style="display:flex;gap:12px;flex-wrap:wrap;">' +
-            '<a class="btn primary" href="lesson.dc.html">Start the free course <span class="arr" aria-hidden="true">→</span></a>' +
-            '<a class="btn ghost" href="Lessons.dc.html">Browse the catalog</a>' +
+            (firstCourse ? '<a class="btn primary" href="' + lessonHref(firstCourse.id, 0) + '">Watch the free lesson <span class="arr" aria-hidden="true">\u2192</span></a>' : '') +
+            '<a class="btn ghost" href="Lessons.dc.html">Browse the catalogue</a>' +
           '</div>' +
         '</div>';
     } else {
-      const inProg = enrolled.filter(c => coursePct(c) < 100).sort((a, b) => coursePct(b) - coursePct(a));
-      const resume = inProg[0] || enrolled[0];
-      const rp = coursePct(resume);
+      const inProg = enrolled.filter(c => c.pct < 100).sort((a, b) => b.pct - a.pct);
+      const r = inProg[0] || enrolled[0];
       $('resume-card').innerHTML =
-        '<div class="resume-thumb"><img src="img/' + esc(resume.img) + '" alt=""></div>' +
-        '<div class="resume-body"><div class="rk">' + esc(resume.tier) + ' · in progress</div>' +
-        '<h3>' + esc(resume.title) + '</h3>' +
-        '<div class="prog-row"><span>' + courseDone(resume) + ' of ' + resume.units + ' units</span><b>' + rp + '%</b></div>' +
-        '<div class="prog"><i style="width:' + rp + '%"></i></div></div>' +
-        '<a class="btn primary" href="lesson.dc.html" style="flex:none;">Resume →</a>';
+        '<div class="resume-thumb">' + coverImg(r.course, '') + '</div>' +
+        '<div class="resume-body"><div class="rk">' + esc(r.tier) + ' \u00b7 ' + (r.pct >= 100 ? 'complete' : 'in progress') + '</div>' +
+        '<h3>' + esc(r.title) + '</h3>' +
+        '<div class="prog-row"><span>' + r.done + ' of ' + r.units + ' lessons</span><b>' + r.pct + '%</b></div>' +
+        '<div class="prog"><i style="width:' + r.pct + '%"></i></div></div>' +
+        '<a class="btn primary" href="' + lessonHref(r.id, nextUnit(r.id, r.units)) + '" style="flex:none;">' +
+        (r.pct >= 100 ? 'Rewatch' : (r.done ? 'Resume' : 'Start')) + ' \u2192</a>';
     }
 
-    const courseHref = (title) => {
-      const m = { 'Materials & setting up': 'materials-setting-up', 'Light & shadow on the head': 'light-shadow-head', 'Blocking in large shapes': 'blocking-large-shapes', 'Mixing greens from scratch': 'mixing-greens', 'Soft edges, clean paint': 'soft-edges-clean-paint', 'Loading a brush properly': 'loading-a-brush', 'Warm vs cool greys': 'warm-cool-greys', 'Erasing as a drawing tool': 'erasing-drawing-tool', 'Brush care & studio habits': 'brush-care-habits' };
-      return m[title] ? 'course.dc.html?id=' + m[title] : 'Lessons.dc.html';
-    };
     /* ---- overview: recommended (focus-matched, not enrolled) ---- */
-    const enrolledTitles = enrolled.map(c => c.title);
-    const focus = (user.focus || 'Watercolour').toLowerCase();
-    const recs = this.pool().filter(c => enrolledTitles.indexOf(c.title) < 0)
-      .sort((a, b) => (b.tag.toLowerCase() === focus ? 1 : 0) - (a.tag.toLowerCase() === focus ? 1 : 0)).slice(0, 3);
-    $('recommend-grid').innerHTML = recs.map(c =>
-      '<div class="mc-course"><div class="cov"><img src="img/' + esc(c.img) + '" alt=""></div>' +
-      '<div class="body"><div class="meta">' + esc(c.tag) + ' · £' + c.price + '</div><h3>' + esc(c.title) + '</h3>' +
-      '<a class="btn ghost" href="' + courseHref(c.title) + '" style="margin-top:auto;">View course →</a></div></div>').join('');
+    const stem = (s) => String(s || '').toLowerCase().replace(/s$/, '');
+    const focusStem = stem(user.focus || '');
+    const owned = enrolled.map(c => c.id);
+    const recs = CATALOGUE.filter(c => owned.indexOf(c.id) < 0)
+      .sort((a, b) => (stem(b.cat) === focusStem ? 1 : 0) - (stem(a.cat) === focusStem ? 1 : 0))
+      .slice(0, 3);
+    $('recommend-grid').innerHTML = recs.length ? recs.map(c =>
+      '<div class="mc-course"><div class="cov">' + coverImg(c, '') + '</div>' +
+      '<div class="body"><div class="meta">' + esc(c.tag || c.cat) + ' \u00b7 \u00a3' + c.price + '</div><h3>' + esc(c.title) + '</h3>' +
+      '<a class="btn ghost" href="' + courseHref(c.id) + '">View course \u2192</a></div></div>').join('')
+      : '<div class="dash-card" style="grid-column:1/-1;"><p style="margin:0;font-size:14.5px;color:var(--muted);">You own every course in the catalogue.</p></div>';
 
     /* ---- my courses ---- */
-    $('courses-note').textContent = empty ? 'None yet' : enrolled.length + ' enrolled';
-    if (empty) $('mycourse-grid').innerHTML = '<div class="dash-card" style="grid-column:1/-1;"><p style="margin:0;font-size:14.5px;color:var(--muted);">No courses yet — the <a class="link-squiggle" href="lesson.dc.html" style="font-weight:700;">free intro course</a> is the usual first step, or <a class="link-squiggle" href="Lessons.dc.html" style="font-weight:700;">browse the catalog</a>.</p></div>';
+    $('courses-note').textContent = empty ? 'None yet' : enrolled.length + (enrolled.length === 1 ? ' course' : ' courses');
+    if (empty) $('mycourse-grid').innerHTML = '<div class="dash-card" style="grid-column:1/-1;"><p style="margin:0;font-size:14.5px;color:var(--muted);">No courses yet \u2014 <a class="link-squiggle" href="Lessons.dc.html" style="font-weight:700;">browse the catalogue</a>; lesson 1 of each one is free to watch.</p></div>';
     else $('mycourse-grid').innerHTML = enrolled.map(c => {
-      const p = coursePct(c), tierCls = c.tier === 'Fellow' ? ' fellow' : '';
-      const cta = p >= 100 ? 'Review →' : (courseDone(c) > 0 ? 'Continue →' : 'Start →');
-      return '<div class="mc-course"><div class="cov"><img src="img/' + esc(c.img) + '" alt=""><span class="mc-tier' + tierCls + '">' + esc(c.tier) + '</span></div>' +
+      const tierCls = c.tier === 'Fellow' ? ' fellow' : '';
+      const doneAll = c.pct >= 100;
+      return '<div class="mc-course"><div class="cov">' + coverImg(c.course, '') + '<span class="mc-tier' + tierCls + '">' + esc(c.tier) + '</span></div>' +
         '<div class="body"><h3>' + esc(c.title) + '</h3>' +
-        '<div class="prog-row" style="margin-bottom:0;"><span>' + (p >= 100 ? 'Completed' : courseDone(c) + '/' + c.units + ' units') + '</span><b>' + p + '%</b></div>' +
-        '<div class="prog"><i style="width:' + p + '%"></i></div>' +
-        '<a class="btn ' + (p >= 100 ? 'ghost' : 'primary') + '" href="lesson.dc.html">' + cta + '</a></div></div>';
+        '<div class="prog-row" style="margin-bottom:0;"><span>' + (doneAll ? 'Completed' : c.done + '/' + c.units + ' lessons') + '</span><b>' + c.pct + '%</b></div>' +
+        '<div class="prog"><i style="width:' + c.pct + '%"></i></div>' +
+        '<a class="btn ' + (doneAll ? 'ghost' : 'primary') + '" href="' + (doneAll ? courseHref(c.id) : lessonHref(c.id, nextUnit(c.id, c.units))) + '">' +
+        (doneAll ? 'Review \u2192' : (c.done ? 'Continue \u2192' : 'Start \u2192')) + '</a></div></div>';
     }).join('');
 
     /* ---- progress ---- */
-    const overall = empty ? 0 : Math.round(enrolled.reduce((a, c) => a + coursePct(c), 0) / enrolled.length);
+    const overall = empty ? 0 : Math.round(enrolled.reduce((a, c) => a + c.pct, 0) / enrolled.length);
     $('overall-pct').textContent = overall + '%';
     $('overall-bar').style.width = overall + '%';
-    if (empty) $('progress-list').innerHTML = '<div class="dash-card" style="margin-top:0;"><p style="margin:0;font-size:14.5px;color:var(--muted);">Progress appears here as you finish units — start with the free course and watch this fill up.</p></div>';
-    else $('progress-list').innerHTML = enrolled.map(c => {
-      const p = coursePct(c);
-      return '<div class="dash-card" style="margin-top:0;margin-bottom:12px;"><div class="prog-row"><span><b>' + esc(c.title) + '</b> · ' + esc(c.tier) + '</span><b>' + p + '%</b></div><div class="prog"><i style="width:' + p + '%"></i></div></div>';
-    }).join('');
+    if (empty) $('progress-list').innerHTML = '<div class="dash-card" style="margin-top:0;"><p style="margin:0;font-size:14.5px;color:var(--muted);">Progress appears here as you finish lessons.</p></div>';
+    else $('progress-list').innerHTML = enrolled.map(c =>
+      '<div class="dash-card" style="margin-top:0;margin-bottom:12px;"><div class="prog-row"><span><b>' + esc(c.title) + '</b> \u00b7 ' + esc(c.tier) + '</span><b>' + c.pct + '%</b></div><div class="prog"><i style="width:' + c.pct + '%"></i></div></div>').join('');
 
     /* ---- purchases ---- */
-    const money = (n) => '£' + n.toLocaleString();
-    if (!orders.length) $('orders-body').innerHTML = '<tr><td colspan="5" style="padding:18px 14px;color:var(--muted);font-size:14px;">No purchases yet — receipts will appear here.</td></tr>';
-    else $('orders-body').innerHTML = orders.map(o =>
+    const money = (n) => '\u00a3' + Number(n || 0).toLocaleString();
+    if (!orders.length) $('orders-body').innerHTML = '<tr><td colspan="5" style="padding:18px 14px;color:var(--muted);font-size:14px;">No purchases yet \u2014 receipts appear here after you place an order.</td></tr>';
+    else $('orders-body').innerHTML = orders.slice().reverse().map((o, i) =>
       '<tr><td style="font-family:var(--font-cond);color:var(--muted);">' + esc(o.id) + '</td>' +
       '<td style="color:var(--muted);">' + esc(o.date) + '</td>' +
-      '<td><div class="ord-item"><img src="img/' + esc(o.img) + '" alt=""><div><div class="t">' + esc(o.title) + '</div><div class="ord-tier">' + esc(o.tier) + ' tier</div></div></div></td>' +
+      '<td><div class="ord-item">' + (o.img ? '<img src="' + esc(o.img) + '" alt="">' : '') + '<div><div class="t">' + esc(o.title) + '</div><div class="ord-tier">' + esc(o.tier || '') + '</div></div></div></td>' +
       '<td><span class="amt">' + money(o.amount) + '</span></td>' +
-      '<td><span class="inv-link" data-inv="' + esc(o.id) + '">Invoice ↓</span></td></tr>').join('');
+      /* was a <span> with a click handler: not focusable, not a control, and its
+         toast claimed a download that never happened */
+      '<td><button class="inv-link" type="button" data-inv="' + i + '" style="border:0;background:none;padding:0;font:inherit;">Receipt \u2193</button></td></tr>').join('');
+
+    const receiptFor = (o) => [
+      "CRYSTAL'S ART SCHOOL \u2014 DEMO RECEIPT",
+      '',
+      'Order:  ' + o.id,
+      'Date:   ' + o.date,
+      'Item:   ' + o.title + (o.tier ? ' (' + o.tier + ')' : ''),
+      'Amount: ' + money(o.amount),
+      '',
+      'Demo only. No payment was taken and this is not a tax invoice.'
+    ].join('\r\n');
+    $('orders-body').addEventListener('click', (e) => {
+      const b = e.target.closest && e.target.closest('[data-inv]');
+      if (!b) return;
+      const o = orders.slice().reverse()[+b.getAttribute('data-inv')];
+      if (!o) return;
+      try {
+        const blob = new Blob([receiptFor(o)], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url; a.download = 'receipt-' + o.id.replace(/[^\w-]/g, '') + '.txt';
+        document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 5000);
+        toast('Receipt ' + o.id + ' downloaded.');
+      } catch (er) { toast('This browser blocked the download.'); }
+    });
 
     /* ---- discord (Fellow-gated) ---- */
     const isFellow = enrolled.some(c => c.tier === 'Fellow') || (user.plan === 'Fellow');
-    const dico = '<div class="dc-ico"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.5 5.3A17 17 0 0 0 15.3 4l-.2.4a12.7 12.7 0 0 1 3.7 1.2 12.6 12.6 0 0 0-11.6 0A12.6 12.6 0 0 1 10.9 4.4L10.7 4A17 17 0 0 0 6.5 5.3 17.7 17.7 0 0 0 3.4 17a17 17 0 0 0 5.2 2.6l.4-.6a11 11 0 0 1-1.8-.9l.4-.3a12.1 12.1 0 0 0 10.8 0l.4.3a11 11 0 0 1-1.8.9l.4.6A17 17 0 0 0 22.6 17a17.6 17.6 0 0 0-3.1-11.7zM9.3 14.4c-.8 0-1.5-.8-1.5-1.7s.7-1.7 1.5-1.7 1.5.8 1.5 1.7-.7 1.7-1.5 1.7zm5.4 0c-.8 0-1.5-.8-1.5-1.7s.7-1.7 1.5-1.7 1.5.8 1.5 1.7-.6 1.7-1.5 1.7z"></path></svg></div>';
+    const dico = '<div class="dc-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19.5 5.3A17 17 0 0 0 15.3 4l-.2.4a12.7 12.7 0 0 1 3.7 1.2 12.6 12.6 0 0 0-11.6 0A12.6 12.6 0 0 1 10.9 4.4L10.7 4A17 17 0 0 0 6.5 5.3 17.7 17.7 0 0 0 3.4 17a17 17 0 0 0 5.2 2.6l.4-.6a11 11 0 0 1-1.8-.9l.4-.3a12.1 12.1 0 0 0 10.8 0l.4.3a11 11 0 0 1-1.8.9l.4.6A17 17 0 0 0 22.6 17a17.6 17.6 0 0 0-3.1-11.7zM9.3 14.4c-.8 0-1.5-.8-1.5-1.7s.7-1.7 1.5-1.7 1.5.8 1.5 1.7-.7 1.7-1.5 1.7zm5.4 0c-.8 0-1.5-.8-1.5-1.7s.7-1.7 1.5-1.7 1.5.8 1.5 1.7-.6 1.7-1.5 1.7z"></path></svg></div>';
     if (isFellow) {
+      /* the CTA was href="#" + preventDefault + a toast claiming "Invite sent —
+         Crystal will approve you shortly". No invite is sent by anything, and no
+         invite URL has been supplied, so the card says exactly that. */
       $('discord-slot').innerHTML = '<div class="dash-card discord-card">' + dico +
-        '<div class="dc-body"><h3>You\'re a Fellow — welcome in.</h3><p>Your Fellow-tier courses include access to Crystal\'s private Discord for critique and questions. Click below; Crystal approves each new member manually, usually within a day.</p></div>' +
-        '<a class="btn" href="#" id="discord-join">Join the Discord →</a></div>';
-      const j = $('discord-join'); if (j) j.addEventListener('click', (e) => { e.preventDefault(); toast('Invite sent — Crystal will approve you shortly.'); });
+        '<div class="dc-body"><h3>You\'re a Fellow \u2014 welcome in.</h3>' +
+        '<p>Fellow-tier courses include Crystal\'s private Discord. The invite link has not been supplied yet, so it is not published here; it will appear on this card once it is.</p></div></div>';
     } else {
       $('discord-slot').innerHTML = '<div class="dash-card discord-card dc-locked">' + dico +
         '<div class="dc-body"><h3>Unlock with a Fellow course</h3><p>The private Discord is part of the Fellow tier. Buy any course at the Fellow tier to join the studio conversation.</p></div>' +
-        '<a class="btn" href="Lessons.dc.html">Browse courses →</a></div>';
+        '<a class="btn" href="Lessons.dc.html">Browse courses \u2192</a></div>';
     }
 
     /* ---- settings ---- */
     $('set-name').value = name;
     $('set-email').value = email;
     if (user.focus) { const sel = $('set-focus'); Array.from(sel.options).forEach(o => { if (o.value === user.focus) sel.value = user.focus; }); }
+    /* #set-country was never read by the save handler */
+    if (user.country) { const cs = $('set-country'); Array.from(cs.options).forEach(o => { if (o.value === user.country) cs.value = user.country; }); }
+
     $('save-account').addEventListener('click', () => {
-      const u = Object.assign({}, user, { name: $('set-name').value.trim() || name, email: $('set-email').value.trim(), focus: $('set-focus').value });
+      const u = Object.assign({}, user, {
+        name: $('set-name').value.trim() || name,
+        email: $('set-email').value.trim(),
+        focus: $('set-focus').value,
+        country: $('set-country').value
+      });
       try { localStorage.setItem('cas-user', JSON.stringify(u)); } catch (e) {}
-      $('nav-user-name').textContent = (u.name || 'Friend').split(' ')[0];
-      $('dash-greeting').textContent = 'Welcome back, ' + (u.name || 'Friend').split(' ')[0] + '.';
+      user = u;
+      const f = String(u.name || '').split(' ')[0];
+      /* #nav-user-name is referenced nowhere in the markup and never has been —
+         this line threw a TypeError after the storage write, so the data saved,
+         the greeting never updated and no toast fired. The nav chip that does
+         exist is built by js/site-extras.js. */
+      document.querySelectorAll('.nav-user .nm').forEach(n => { n.textContent = f; });
+      $('dash-greeting').textContent = 'Welcome back, ' + f + '.';
       toast('Account saved.');
     });
-    document.querySelectorAll('.set-tog').forEach(t => t.addEventListener('click', () => t.classList.toggle('on')));
+
+    /* notification switches: state persisted and exposed */
+    const NOTIFY = 'cas-notify';
+    let notify = {};
+    try { notify = JSON.parse(localStorage.getItem(NOTIFY) || '{}') || {}; } catch (e) { notify = {}; }
+    document.querySelectorAll('.set-tog').forEach(t => {
+      const k = t.getAttribute('data-set');
+      const on = !!notify[k];
+      t.classList.toggle('on', on);
+      t.setAttribute('aria-checked', on ? 'true' : 'false');
+      t.addEventListener('click', () => {
+        const nowOn = t.getAttribute('aria-checked') !== 'true';
+        t.classList.toggle('on', nowOn);
+        t.setAttribute('aria-checked', nowOn ? 'true' : 'false');
+        notify[k] = nowOn;
+        try { localStorage.setItem(NOTIFY, JSON.stringify(notify)); } catch (e) {}
+        const lbl = document.getElementById('set-lbl-' + k);
+        say((lbl ? lbl.textContent : 'Setting') + (nowOn ? ' on.' : ' off.'));
+      });
+    });
+
     const op = $('open-privacy'); if (op) op.addEventListener('click', () => { if (window.casOpenPrivacy) window.casOpenPrivacy(); });
-    $('delete-account').addEventListener('click', () => { if (window.casOpenPrivacy) window.casOpenPrivacy(); else toast('Erasure request received.'); });
 
-    /* ---- invoices ---- */
-    $('orders-body').addEventListener('click', (e) => { const inv = e.target.closest('[data-inv]'); if (inv) toast('Invoice ' + inv.getAttribute('data-inv') + ' downloaded.'); });
+    /* was wired to the cookie + privacy modal, which deletes nothing. It now
+       does what it says on this prototype: clears the account state this browser
+       holds. */
+    $('delete-account').addEventListener('click', () => {
+      const ok = window.confirm('Delete this account? Your account, enrolments, progress, receipts and basket stored in this browser will be removed. This cannot be undone.');
+      if (!ok) { say('Deletion cancelled.'); return; }
+      try {
+        const keys = [];
+        for (let i = 0; i < localStorage.length; i++) { const k = localStorage.key(i); if (k && k.indexOf('cas-') === 0 && k !== 'cas-theme') keys.push(k); }
+        keys.forEach(k => localStorage.removeItem(k));
+      } catch (e) {}
+      say('Account deleted. Returning to the home page.', 'assertive');
+      setTimeout(() => { window.location.href = 'index.html'; }, 400);
+    });
 
-    /* ---- logout ---- */
-    const logout = (e) => { e.preventDefault(); try { localStorage.removeItem('cas-user'); } catch (er) {} window.location.href = 'index.html'; };
-    const lb = $('logout-btn'); if (lb) lb.addEventListener('click', logout);
-    const ls = $('logout-sheet'); if (ls) ls.addEventListener('click', logout);
-
-    /* ---- tabs ---- */
+    /* ---- tabs ----
+       role=tablist wrapped six plain buttons: no role=tab, no aria-selected, no
+       role=tabpanel and no arrow keys. */
     const tabs = Array.from(document.querySelectorAll('.dash-tab'));
     const panels = Array.from(document.querySelectorAll('.dash-panel'));
-    const go = (name) => {
-      tabs.forEach(t => t.classList.toggle('active', t.dataset.panel === name));
-      panels.forEach(p => p.classList.toggle('active', p.dataset.panel === name));
-      try { localStorage.setItem('cas-dash-tab', name); } catch (e) {}
+    const rail = document.querySelector('.dash-rail');
+    const keepInView = (el) => {
+      if (!rail || !el || rail.scrollWidth <= rail.clientWidth + 1) return;
+      const r = el.getBoundingClientRect(), rr = rail.getBoundingClientRect();
+      let d = 0;
+      if (r.left < rr.left) d = r.left - rr.left - 10;
+      else if (r.right > rr.right) d = r.right - rr.right + 10;
+      if (!d) return;
+      rail.scrollLeft = rail.scrollLeft + d;
     };
-    tabs.forEach(t => t.addEventListener('click', () => go(t.dataset.panel)));
+    const go = (nameKey, announce) => {
+      tabs.forEach(t => {
+        const on = t.dataset.panel === nameKey;
+        t.classList.toggle('active', on);
+        t.setAttribute('aria-selected', on ? 'true' : 'false');
+        t.setAttribute('tabindex', on ? '0' : '-1');
+      });
+      panels.forEach(p => p.classList.toggle('active', p.dataset.panel === nameKey));
+      try { localStorage.setItem('cas-dash-tab', nameKey); } catch (e) {}
+      /* below 880px .dash-rail becomes a horizontal scroller (scrollWidth 705 in
+         a 356px box at 390px) with no edge affordance, so the selected tab could
+         sit off the end of it unseen. Only the rail's own scrollLeft is touched:
+         Element.scrollIntoView() also moves the sequential focus navigation
+         starting point in Chromium, which measurably cost the page its skip link
+         as the first tab stop. */
+      keepInView(tabs.filter(x => x.dataset.panel === nameKey)[0]);
+      if (announce) {
+        const t = tabs.filter(x => x.dataset.panel === nameKey)[0];
+        say((t ? t.textContent.trim() : nameKey) + ' selected.');
+      }
+    };
+    tabs.forEach(t => {
+      t.addEventListener('click', () => go(t.dataset.panel, true));
+      t.addEventListener('keydown', (e) => {
+        const i = tabs.indexOf(t);
+        let j = -1;
+        if (e.key === 'ArrowDown' || e.key === 'ArrowRight') j = (i + 1) % tabs.length;
+        else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') j = (i + tabs.length - 1) % tabs.length;
+        else if (e.key === 'Home') j = 0;
+        else if (e.key === 'End') j = tabs.length - 1;
+        if (j < 0) return;
+        e.preventDefault();
+        go(tabs[j].dataset.panel, true);
+        try { tabs[j].focus(); } catch (er) {}
+      });
+    });
     let startTab = 'overview';
-    try { const h = (location.hash || '').replace('#', ''); if (h && tabs.some(t => t.dataset.panel === h)) startTab = h; else { const s = localStorage.getItem('cas-dash-tab'); if (s && tabs.some(t => t.dataset.panel === s)) startTab = s; } } catch (e) {}
-    go(startTab);
-
-    /* ---- toast ---- */
-    let toastTimer = null;
-    function toast(msg) { const el = $('dash-toast'); el.textContent = msg; el.classList.add('show'); if (toastTimer) clearTimeout(toastTimer); toastTimer = setTimeout(() => el.classList.remove('show'), 2600); }
+    try {
+      const h = (location.hash || '').replace('#', '');
+      if (h && tabs.some(t => t.dataset.panel === h)) startTab = h;
+      else { const s = localStorage.getItem('cas-dash-tab'); if (s && tabs.some(t => t.dataset.panel === s)) startTab = s; }
+    } catch (e) {}
+    go(startTab, false);
   }
 }
 </script>

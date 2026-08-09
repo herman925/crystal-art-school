@@ -1,6 +1,6 @@
 .tip-card .hand-note { font-family: var(--font-cond); font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; font-size: 12px; display: block; margin-bottom: 4px; color: var(--coral-deep); }
-.res-title { font-family: var(--font-cond); font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; font-size: 13px; color: var(--coral); margin: 24px 0 10px; display: flex; align-items: center; gap: 8px; }
-.res-title::before { content: '✦'; color: var(--coral); font-size: 12.5px; }
+.res-title { font-family: var(--font-cond); font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; font-size: 13px; color: var(--coral-ink); margin: 24px 0 10px; display: flex; align-items: center; gap: 8px; }
+.res-title::before { content: '✦'; color: var(--coral-ink); font-size: 12.5px; }
 .res-list { display: grid; gap: 10px; max-width: 560px; }
 .res-item { display: flex; align-items: center; gap: 14px; background: var(--surface); border-radius: var(--radius-card); padding: 12px 16px; box-shadow: var(--shadow-sm); transition: transform .15s var(--ease-pop), box-shadow .15s; text-decoration: none; color: var(--ink); }
 .res-item:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
@@ -9,7 +9,7 @@
 .res-body .nm { font-family: var(--font-cond); font-weight: 600; font-size: 14px; }
 .res-body .sz { font-family: var(--font-cond); font-size: 12px; color: var(--muted); }
 .res-get { flex: none; font-family: var(--font-cond); font-weight: 600; font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--teal-ink); display: inline-flex; align-items: center; gap: 5px; }
-.res-item:hover .res-get { color: var(--coral); }
+.res-item:hover .res-get { color: var(--coral-ink); }
 .complete-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 26px; margin-bottom: 26px; }
 /* 8.1: the completion button takes the client's marine. Scoped here so the
    copper .btn.primary elsewhere on the site is untouched. */
@@ -35,15 +35,15 @@
   box-shadow: inset 0 1px 2px rgba(0,0,0,.18); }
 .pbar .pfill { height: 100%; width: 0%; border-radius: 99px; background: linear-gradient(90deg, var(--teal-ink), var(--coral)); transition: width .6s var(--ease-brush); }
 .pc-reset { margin-top: 12px; font-family: var(--font-cond); font-size: 12px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); background: none; border: 0; cursor: pointer; padding: 0; }
-.pc-reset:hover { color: var(--coral); }
+.pc-reset:hover { color: var(--coral-ink); }
 .curr-card { background: var(--surface); border-radius: var(--radius-card); padding: 14px; box-shadow: var(--shadow-sm); }
-.curr-card .ch { font-family: var(--font-cond); font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; font-size: 13px; color: var(--coral); padding: 6px 10px 12px; }
+.curr-card .ch { font-family: var(--font-cond); font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; font-size: 13px; color: var(--coral-ink); padding: 6px 10px 12px; }
 .unit-row { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; border: 0; background: none; cursor: pointer; padding: 11px 10px; border-radius: 10px; font-family: var(--font-body); color: var(--ink); transition: background .15s; }
 .unit-row:hover { background: var(--cream); }
 .unit-row.current { background-color: #cab389; background-image: var(--oak-grain); background-size: 180px 70px; }
 .unit-row .st { flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-family: var(--font-cond); font-size: 12px; font-weight: 600; background: var(--paper-2); color: var(--muted); transition: background .25s, color .25s; }
 .unit-row.done .st { background: #4d6625; color: #f1f3e6; }
-.unit-row.current .st { background: var(--coral); color: var(--paper); }
+.unit-row.current .st { background: var(--coral-fill); color: var(--coral-fill-ink); }
 .unit-row .ut { flex: 1; min-width: 0; font-family: var(--font-cond); font-weight: 500; font-size: 13.5px; line-height: 1.3; color: var(--ink); }
 .unit-row.current .ut { color: #3f3930; }
 .unit-row .ud { flex: none; font-family: var(--font-cond); font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
@@ -55,7 +55,7 @@
 
 .finish-card { display: none; position: relative; overflow: hidden; text-align: center; background: var(--surface); border-radius: var(--radius-card); box-shadow: var(--shadow); padding: 54px 30px 46px; margin-top: 26px; }
 .finish-card.show { display: block; }
-.finish-card .fc-star { font-size: 34px; color: var(--coral); display: inline-block; }
+.finish-card .fc-star { font-size: 34px; color: var(--coral-ink); display: inline-block; }
 .finish-card h2 { font-family: var(--font-marker); font-weight: 600; font-size: clamp(28px,3.4vw,44px); margin: 10px 0 8px; color: var(--ink); }
 .finish-card p { color: var(--muted); max-width: 52ch; margin: 0 auto 8px; }
 .finish-card .cert { display: inline-block; margin: 18px auto 22px; background-color: #cab389; background-image: var(--oak-grain); background-size: 240px 100px; color: #474138; border-radius: var(--radius-card); padding: 18px 34px; box-shadow: var(--shadow-sm); transform: rotate(-1deg); }
@@ -79,22 +79,42 @@
 .byline img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
 .byline strong { font-family: var(--font-cond); font-weight: 600; color: var(--ink); font-size: 14px; }
 .byline .hand-note { font-family: var(--font-cond); font-size: 12px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); }
-.article { max-width: 760px; margin: 0 auto; }
-.article h2 { font-family: var(--font-display); font-weight: 600; font-size: clamp(24px,2.6vw,34px); letter-spacing: var(--tracking-display); text-transform: uppercase; margin: 44px 0 14px; color: var(--ink); }
+/* #27: 760px at 16.5px is about 46em, and it measured 104 characters a line at
+   1692px — counted with Range.getClientRects(), not estimated — against the
+   65-75 a sustained read wants. The cap is now in ch so it tracks the type
+   rather than a pixel count someone has to remember to update, and 760px stays
+   as the ceiling so nothing gets WIDER than it used to be. .page-lead on FAQ
+   was already capped this way at 74ch; this is the same device.
+   58ch resolves to 550px here, and the corpus then measures min 57 / median 67 /
+   max 80 characters a line — counted with Range.getClientRects() over every
+   character INCLUDING SPACES, because a space takes measure like any other
+   glyph and leaving them out under-reports a line by about a sixth. The median
+   is the statistic that matters: a fixed column always has a spread, and the
+   80 is one space-light paragraph, not the typical line. */
+/* #27: 65-75 characters per line, counted per LINE BOX with Range rects (not
+   paragraph length / line count, which averages the short last line in and
+   reads ~20 low). `ch` is the width of "0", which in this face is 0.57em
+   against a 0.44em average glyph, so a ch value reads about 1.6x the real
+   character count: 68ch measured 89. 55ch measures 70-73. */
+.article { max-width: min(760px, 55ch); margin: 0 auto; font-size: 16.5px; }
+/* #27 heading inversion. Every CONTENT section heading on a post carries
+   .bp-sec and is set to 26px by the page; this rule matches only the headings
+   the page appends AFTER the content — Comments — and it was painting them at
+   34px. So the least important heading on the page outranked all twenty-one of
+   the real ones. Sized below the content step rather than above it: the trailing
+   blocks are apparatus, not chapters. */
+.article h2 { font-family: var(--font-display); font-weight: 600; font-size: clamp(21px,1.6vw,24px); letter-spacing: var(--tracking-display); text-transform: uppercase; margin: 44px 0 14px; color: var(--ink); }
 .article h3 { font-family: var(--font-cond); font-weight: 600; font-size: 19px; margin: 30px 0 10px; color: var(--ink); }
 .article p { font-size: 16.5px; line-height: 1.75; margin: 0 0 18px; color: var(--ink); }
 .article figure { margin: 30px 0; }
 .article figure img { border-radius: var(--radius-card); width: 100%; box-shadow: var(--shadow-sm); }
-.article figcaption { font-family: var(--font-cond); font-size: 13px; color: var(--muted); padding-top: 8px; }
 .pull-quote { font-family: var(--font-marker); font-weight: 600; font-size: clamp(20px,2.2vw,28px); line-height: 1.4; padding: 26px 30px; margin: 34px 0; background-color: #cab389; background-image: var(--oak-grain); background-size: 300px 120px; color: #474138; border-radius: var(--radius-card); position: relative; box-shadow: var(--shadow-sm); }
-.pull-quote::before { content: "✦"; position: absolute; top: -14px; left: 24px; color: var(--coral); font-size: 24px; }
+.pull-quote::before { content: "✦"; position: absolute; top: -14px; left: 24px; color: var(--coral-deep); font-size: 24px; }
 .toc { background: var(--surface); border-radius: var(--radius-card); padding: 24px 28px; margin: 30px 0 8px; box-shadow: var(--shadow-sm); }
-.toc .toc-title { font-family: var(--font-cond); font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; font-size: 14px; color: var(--coral); margin: 0 0 12px; }
+.toc .toc-title { font-family: var(--font-cond); font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; font-size: 14px; color: var(--coral-ink); margin: 0 0 12px; }
 .toc ol { margin: 0; padding-left: 22px; font-size: 15px; color: var(--ink); }
 .toc > ol > li { font-family: var(--font-cond); font-weight: 600; padding: 4px 0; }
-.toc ol ol { padding-left: 20px; padding-top: 4px; }
-.toc ol ol li { font-family: var(--font-body); font-weight: 500; padding: 2.5px 0; color: var(--muted); }
-.toc a:hover { color: var(--coral); }
+.toc a:hover { color: var(--coral-ink); }
 .comment { display: flex; gap: 14px; margin-bottom: 20px; }
 .comment img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; flex: none; }
 .comment .bubble { background: var(--surface); border-radius: var(--radius-card); box-shadow: var(--shadow-sm); padding: 14px 18px; font-size: 14.5px; color: var(--ink); }
@@ -114,7 +134,7 @@
 .step { display: flex; align-items: center; gap: 9px; font-family: var(--font-cond); font-size: 12px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); }
 .step .sn { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: var(--surface); color: var(--muted); font-weight: 600; box-shadow: var(--shadow-sm); }
 .step.active { color: var(--ink); }
-.step.active .sn { background: var(--coral); color: var(--paper); }
+.step.active .sn { background: var(--coral-fill); color: var(--coral-fill-ink); }
 .step.done .sn { background: #4d6625; color: #f1f3e6; }
 .step-arrow { color: var(--muted); opacity: .5; }
 .line-item { display: grid; grid-template-columns: 78px 1fr auto; gap: 16px; align-items: center; background: var(--surface); border-radius: var(--radius-card); padding: 14px; box-shadow: var(--shadow-sm); margin-bottom: 14px; }
@@ -123,25 +143,33 @@
 .line-item .li-title { font-family: var(--font-marker); font-weight: 600; font-size: 16px; color: var(--ink); margin: 0 0 3px; }
 .line-item .li-sub { font-family: var(--font-cond); font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); }
 .line-item .li-right { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
-.line-item .li-price { font-family: var(--font-cond); font-weight: 600; font-size: 16px; color: var(--coral); }
+.line-item .li-price { font-family: var(--font-cond); font-weight: 600; font-size: 16px; color: var(--coral-ink); }
 .qty { display: inline-flex; align-items: center; border: 1px solid var(--line); border-radius: var(--radius-pill); overflow: hidden; }
 .qty button { width: 28px; height: 28px; border: 0; background: var(--cream); color: var(--ink); cursor: pointer; font-size: 15px; line-height: 1; }
-.qty button:hover { background: var(--coral); color: var(--paper); }
+.qty button:hover { background: var(--coral-fill); color: var(--coral-fill-ink); }
 .qty .qv { min-width: 30px; text-align: center; font-family: var(--font-cond); font-weight: 600; font-size: 14px; color: var(--ink); }
 .li-remove { font-family: var(--font-cond); font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); background: none; border: 0; cursor: pointer; }
-.li-remove:hover { color: var(--coral); }
+.li-remove:hover { color: var(--coral-ink); }
 .summary { position: sticky; top: 88px; background: var(--surface); border-radius: var(--radius-card); padding: 24px 26px; box-shadow: var(--shadow-sm); }
 @media (max-width: 880px) { .summary { position: static; } }
-.summary h3 { font-family: var(--font-cond); font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; font-size: 13px; color: var(--coral); margin: 0 0 16px; }
+.summary h3 { font-family: var(--font-cond); font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; font-size: 13px; color: var(--coral-ink); margin: 0 0 16px; }
 .sum-row { display: flex; justify-content: space-between; font-size: 14px; color: var(--ink); padding: 7px 0; }
 .sum-row.muted { color: var(--muted); }
 .sum-total { display: flex; justify-content: space-between; align-items: baseline; margin-top: 12px; padding-top: 14px; border-top: 1px solid var(--line); }
 .sum-total .l { font-family: var(--font-cond); font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; font-size: 13px; color: var(--ink); }
-.sum-total .v { font-family: var(--font-marker); font-weight: 600; font-size: 26px; color: var(--coral); }
+.sum-total .v { font-family: var(--font-marker); font-weight: 600; font-size: 26px; color: var(--coral-ink); }
 .cart-empty { text-align: center; padding: 60px 20px; color: var(--muted); }
 .co-field { margin-bottom: 14px; }
 .co-field label { font-family: var(--font-cond); font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; font-size: 12.5px; display: block; margin-bottom: 6px; color: var(--ink); }
-.co-field input, .co-field select { width: 100%; border: 1px solid var(--line); border-radius: var(--r-sharp); background: var(--cream); color: #2b2823; -webkit-text-fill-color: #2b2823; padding: 12px 14px; font-family: var(--font-body); font-size: 14.5px; color: var(--ink); }
+/* #02: the same construct as .field in industrial-2.css, and the same fault.
+   `color:#2b2823` was declared and then declared again as `color:var(--ink)`
+   in the same rule, so only the -webkit-text-fill-color survived — which on
+   theme D painted the card number, address and password at #2b2823 over
+   --cream #211e1a. Measured 1.13:1 from the pixels: no pixel in a filled
+   field was darker than its own background. */
+.co-field input, .co-field select { width: 100%; border: 1px solid var(--line); border-radius: var(--r-sharp); background: var(--cream); padding: 12px 14px; font-family: var(--font-body); font-size: 14.5px; color: var(--ink); -webkit-text-fill-color: var(--ink); }
+.co-field input::placeholder { color: var(--muted); opacity: 1; -webkit-text-fill-color: var(--muted); }
+.co-field select option { color: var(--ink); background: var(--cream); }
 .co-field input:focus, .co-field select:focus { outline: 2px solid var(--coral); border-color: transparent; }
 .co-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
 .co-panel { background: var(--surface); border-radius: var(--radius-card); padding: 26px 28px; box-shadow: var(--shadow-sm); }
@@ -166,7 +194,7 @@
 .auth-stage { display: none; }
 .auth-stage.active { display: block; }
 .auth-foot { text-align: center; margin-top: 18px; font-size: 13.5px; color: var(--muted); }
-.auth-foot a { color: var(--coral); font-weight: 600; }
+.auth-foot a { color: var(--coral-ink); font-weight: 600; }
 .plan-opt { display: flex; gap: 12px; align-items: flex-start; border: 1.5px solid var(--line); border-radius: var(--radius-card); padding: 14px 16px; margin-bottom: 12px; cursor: pointer; transition: border-color .15s, background .15s; }
 .plan-opt:hover { border-color: var(--coral); }
 .plan-opt.sel { border-color: var(--coral); background: color-mix(in srgb, var(--coral) 8%, transparent); }
@@ -175,7 +203,7 @@
 .plan-opt.sel .po-radio::after { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--coral); }
 .plan-opt .po-name { font-family: var(--font-cond); font-weight: 600; color: var(--ink); }
 .plan-opt .po-desc { font-size: 12.5px; color: var(--muted); }
-.plan-opt .po-price { margin-left: auto; font-family: var(--font-cond); font-weight: 600; color: var(--coral); }
+.plan-opt .po-price { margin-left: auto; font-family: var(--font-cond); font-weight: 600; color: var(--coral-ink); }
 .btn.full { width: 100%; justify-content: center; }
 .auth-success { text-align: center; padding: 16px 0; }
 .auth-success .as-check { width: 64px; height: 64px; border-radius: 50%; background: #4d6625; color: #f1f3e6; display: grid; place-items: center; margin: 0 auto 16px; font-size: 30px; }
@@ -190,7 +218,7 @@
 .dash-hi .eyebrow { color: var(--band-eyebrow); margin-bottom: 6px; }
 .dash-hi h1 { font-family: var(--font-marker); font-weight: 600; font-size: clamp(26px,3vw,40px); margin: 0 0 6px; color: var(--band-ink); }
 .dash-hi p { margin: 0; font-size: 14.5px; opacity: .85; }
-.dash-plan-chip { display: inline-flex; align-items: center; gap: 7px; font-family: var(--font-cond); font-weight: 600; font-size: 13px; letter-spacing: var(--tracking-label); text-transform: uppercase; background: var(--coral); color: #f4e7cf; padding: 5px 12px; border-radius: 999px; margin-top: 10px; }
+.dash-plan-chip { display: inline-flex; align-items: center; gap: 7px; font-family: var(--font-cond); font-weight: 600; font-size: 13px; letter-spacing: var(--tracking-label); text-transform: uppercase; background: var(--coral-fill); color: var(--coral-fill-ink); padding: 5px 12px; border-radius: 999px; margin-top: 10px; }
 .dash-stats { display: flex; gap: 14px; flex-wrap: wrap; }
 .dash-stat { background: color-mix(in srgb, var(--band-ink) 12%, transparent); border: 1px solid color-mix(in srgb, var(--band-ink) 22%, transparent); border-radius: 12px; padding: 14px 18px; min-width: 96px; }
 .dash-stat .v { font-family: var(--font-display-serif); font-weight: 600; font-size: 30px; line-height: 1; color: var(--band-ink); }
@@ -203,7 +231,7 @@
 .dash-tab { display: flex; align-items: center; gap: 11px; width: 100%; text-align: left; border: 0; background: transparent; color: var(--ink); font-family: var(--font-cond); font-weight: 500; font-size: 14px; padding: 11px 13px; border-radius: 9px; cursor: pointer; white-space: nowrap; transition: background .15s, color .15s; }
 .dash-tab .ti { width: 18px; height: 18px; flex: none; opacity: .8; }
 .dash-tab:hover { background: color-mix(in srgb, var(--ink) 7%, transparent); }
-.dash-tab.active { background: var(--coral); color: #f4e7cf; }
+.dash-tab.active { background: var(--coral-fill); color: var(--coral-fill-ink); }
 .dash-tab.active .ti { opacity: 1; }
 .dash-tab .badge { margin-left: auto; font-size: 12.5px; background: color-mix(in srgb, var(--ink) 12%, transparent); padding: 1px 8px; border-radius: 999px; }
 .dash-tab.active .badge { background: rgba(244,231,207,.25); }
@@ -221,7 +249,7 @@
 .resume-thumb { width: 150px; aspect-ratio: 4/3; border-radius: 10px; overflow: hidden; flex: none; box-shadow: var(--shadow-sm); }
 .resume-thumb img { width: 100%; height: 100%; object-fit: cover; }
 .resume-body { flex: 1; min-width: 220px; }
-.resume-body .rk { font-family: var(--font-cond); font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--coral); }
+.resume-body .rk { font-family: var(--font-cond); font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--coral-ink); }
 .resume-body h3 { font-family: var(--font-marker); font-weight: 600; font-size: 20px; margin: 4px 0 12px; color: var(--ink); }
 
 .prog { height: 9px; border-radius: 999px; background: color-mix(in srgb, var(--ink) 13%, transparent); overflow: hidden; }
@@ -235,7 +263,7 @@
 .mc-course .cov { aspect-ratio: 16/10; overflow: hidden; position: relative; }
 .mc-course .cov img { width: 100%; height: 100%; object-fit: cover; }
 .mc-tier { position: absolute; top: 10px; left: 10px; font-family: var(--font-cond); font-size: 12px; font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; padding: 3px 9px; border-radius: 999px; background: rgba(20,17,13,.62); color: #f3ede1; }
-.mc-tier.fellow { background: var(--coral); }
+.mc-tier.fellow { background: var(--coral-fill); color: var(--coral-fill-ink); }
 .mc-course .body { padding: 14px 15px 16px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
 .mc-course .body h3 { font-family: var(--font-marker); font-weight: 600; font-size: 15.5px; line-height: 1.2; margin: 0; color: var(--ink); }
 .mc-course .body .meta { font-family: var(--font-cond); font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); }
@@ -250,7 +278,7 @@
 .dash-table .ord-item .t { font-family: var(--font-marker); font-weight: 600; font-size: 14.5px; color: var(--ink); }
 .ord-tier { font-size: 12px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); }
 .dash-table .amt { font-family: var(--font-display-serif); font-weight: 600; font-size: 17px; color: var(--ink); }
-.inv-link { color: var(--coral); cursor: pointer; font-size: 12.5px; }
+.inv-link { color: var(--coral-ink); cursor: pointer; font-size: 12.5px; }
 .inv-link:hover { text-decoration: underline; }
 
 .discord-card { display: flex; gap: 22px; align-items: center; flex-wrap: wrap; background-color: #4d5a8a; background-image: linear-gradient(135deg, #5865F2 0%, #404a9e 100%); color: #fff; border: 0; }
@@ -264,15 +292,30 @@
 .dc-locked .dc-ico { background: color-mix(in srgb, var(--ink) 8%, transparent); color: var(--muted); }
 .dc-locked h3 { color: var(--ink); }
 .dc-locked p { color: var(--muted); }
-.dc-locked .btn { background: var(--coral) !important; color: #f4e7cf !important; -webkit-text-fill-color: #f4e7cf !important; }
+.dc-locked .btn { background: var(--coral-fill) !important; color: var(--coral-fill-ink) !important; -webkit-text-fill-color: var(--coral-fill-ink) !important; }
 
 .set-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 @media (max-width: 620px) { .set-grid { grid-template-columns: 1fr; } }
 .set-field { display: flex; flex-direction: column; gap: 6px; }
 .set-field.full { grid-column: 1 / -1; }
 .set-field label { font-family: var(--font-cond); font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); }
-.set-field input, .set-field select { font-family: var(--font-cond); font-size: 14.5px; color: #2b2823; -webkit-text-fill-color: #2b2823; background: #f3ede1; border: 1px solid var(--line); border-radius: 9px; padding: 12px 13px; }
-.set-field select option { color: #2b2823; }
+/* #28: these were #2b2823 on #f3ede1 in BOTH themes — a cream field with dark
+   type sitting in a near-black panel on theme D, with a --line border that
+   measured about 1.03:1 against its own fill, i.e. no visible edge at all.
+   Tokened, and the border derived from --ink so the field has a boundary you
+   can see. A text input is a control, so its edge needs 3:1 against BOTH what it
+   encloses and what it sits in — and here the fill and the panel are within
+   1.3:1 of each other, so the border is the only boundary there is. --line at
+   16% alpha reached 1.54:1 (D) / 1.30:1 (A); 42% reached 3.39/2.13, still short
+   on the light theme, because --ink is much closer to the cream page than it is
+   to the dark one. 65% is the first value that clears it in both:
+   3.59:1 / 3.49:1 (A) and 6.20:1 / 5.49:1 (D), fill and panel respectively. */
+.set-field input, .set-field select { font-family: var(--font-cond); font-size: 14.5px;
+  color: var(--ink); -webkit-text-fill-color: var(--ink);
+  background: var(--cream); border: 1px solid color-mix(in srgb, var(--ink) 65%, transparent);
+  border-radius: 9px; padding: 12px 13px; }
+.set-field input::placeholder { color: var(--muted); opacity: 1; -webkit-text-fill-color: var(--muted); }
+.set-field select option { color: var(--ink); background: var(--cream); }
 .set-field input:focus, .set-field select:focus { outline: none; border-color: var(--coral); }
 .set-row-tog { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--line); }
 .set-row-tog:last-of-type { border-bottom: 0; }
@@ -282,11 +325,14 @@
 .set-tog::after { content: ""; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: var(--paper); transition: transform .2s; }
 .set-tog.on { background: var(--coral); }
 .set-tog.on::after { transform: translateX(20px); }
-.danger-zone { border: 1px solid color-mix(in srgb, #9a3b2f 50%, var(--line)); border-radius: 14px; padding: 20px 22px; margin-top: 16px; }
-.danger-zone h3 { font-family: var(--font-marker); font-weight: 600; font-size: 16px; color: #9a3b2f; margin: 0 0 6px; }
+/* #28: #9a3b2f is a light-theme red. On the dark page it measured 2.40:1 —
+   the heading and the button label of the one destructive control on the
+   site were the least legible text on it. --danger moves with the theme. */
+.danger-zone { border: 1px solid color-mix(in srgb, var(--danger) 50%, var(--line)); border-radius: 14px; padding: 20px 22px; margin-top: 16px; }
+.danger-zone h3 { font-family: var(--font-marker); font-weight: 600; font-size: 16px; color: var(--danger); margin: 0 0 6px; }
 .danger-zone p { font-family: var(--font-cond); font-size: 13px; color: var(--muted); margin: 0 0 14px; }
-.btn.danger { background: transparent; color: #9a3b2f; box-shadow: inset 0 0 0 1px #9a3b2f; }
-.btn.danger:hover { background: #9a3b2f; color: #f3ede1; }
+.btn.danger { background: transparent; color: var(--danger); -webkit-text-fill-color: var(--danger); box-shadow: inset 0 0 0 1px var(--danger); }
+.btn.danger:hover { background: var(--danger); color: #211e1a; -webkit-text-fill-color: #211e1a; }
 .dash-toast { position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%) translateY(20px); background: var(--ink); color: var(--paper); font-family: var(--font-cond); font-size: 13.5px; padding: 13px 22px; border-radius: 999px; box-shadow: 0 12px 30px rgba(20,17,13,.4); opacity: 0; pointer-events: none; transition: opacity .3s, transform .3s; z-index: 1700; }
 .dash-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 .nav-user { display: inline-flex; align-items: center; gap: 9px; padding: 5px 8px 5px 5px; border-radius: 999px; background: color-mix(in srgb, var(--banner-ink) 12%, transparent); }
@@ -311,11 +357,16 @@ img, svg, video { max-width: 100%; }
   .pg-section { padding-top: 52px; }
 }
 
-/* ---- tablet / large-phone (≪860, burger is showing) ---- */
-@media (max-width: 860px) {
+/* The sheet's presentation follows the sheet: it is shown from 1080px down
+   (industrial-1.css), so these cannot sit in the 860px block. (#14) */
+@media (max-width: 1080px) {
   .nav-sheet.open { display: flex; flex-direction: column; gap: 2px; padding: 10px var(--gutter) 16px; }
   .nav-sheet a { padding: 13px 10px; font-family: var(--font-cond); font-weight: 500; font-size: 15px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--banner-ink); border-radius: 8px; min-height: 44px; display: flex; align-items: center; }
   .nav-sheet a:hover { background: color-mix(in srgb, var(--banner-ink) 12%, transparent); }
+}
+
+/* ---- tablet / large-phone (≪860, the link row is gone) ---- */
+@media (max-width: 860px) {
   /* theme switch + cart stay in the top bar; keep them compact */
   .nav-auth { gap: 10px; }
   /* page-hero & bands: tighten vertical rhythm */
@@ -361,11 +412,6 @@ img, svg, video { max-width: 100%; }
   .dash-stat .v { font-size: 21px; }
 }
 
-/* coarse-pointer: ensure comfortable tap targets everywhere */
-@media (hover: none) and (pointer: coarse) {
-  .nav-links a, .filter-rail .tag-row, .dash-tab { min-height: 40px; }
-  .btn, .cc-btn, .cover-btn { min-height: 42px; }
-}
 
 /* ============================================================
    2026-07 additions — About rework, accordions, showcase, course page
@@ -394,13 +440,24 @@ img, svg, video { max-width: 100%; }
 
 /* ---------- accordion (FAQ + terms) ---------- */
 .acc-list { display: grid; gap: 12px; max-width: 860px; margin: 28px auto 0; }
-details.acc-item { background-color: var(--surface); background-image: var(--concrete-grain); background-size: 220px 220px; border-radius: var(--radius-card); box-shadow: var(--shadow-sm); overflow: hidden; }
+/* #08: was `overflow: hidden`, which clipped the focus ring off the summary
+   inside it — A/B pixel diff: 44 pixels changed on focus with hidden, 4752
+   with the clip margin, and none of them above the summary's top edge.
+   `overflow: clip` still clips to the rounded padding box, which is the only
+   reason the hidden was there; overflow-clip-margin then lets ink — and only
+   ink, not scrollable content — spill by the width of the ring. */
+details.acc-item { background-color: var(--surface); background-image: var(--concrete-grain); background-size: 220px 220px; border-radius: var(--radius-card); box-shadow: var(--shadow-sm); overflow: clip; overflow-clip-margin: 8px; }
 details.acc-item summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 17px 22px; font-family: var(--font-marker); font-weight: 600; font-size: 17.5px; color: var(--ink); transition: background .15s; }
 details.acc-item summary::-webkit-details-marker { display: none; }
 details.acc-item summary:hover { background: color-mix(in srgb, var(--ink) 6%, transparent); }
 .acc-ico { flex: none; width: 30px; height: 30px; display: grid; place-items: center; border-radius: 50%; background: color-mix(in srgb, var(--coral) 18%, transparent); color: var(--coral-ink); font-family: var(--font-cond); font-size: 19px; font-weight: 500; line-height: 1; transition: transform .25s var(--ease-pop), background .2s; }
-details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--coral); color: var(--paper); }
+details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--coral-fill); color: var(--coral-fill-ink); }
+/* #27: measured 118 characters a line at 1692px. The panel keeps its full
+   width — the answer is inside a card and the card is the component — but the
+   copy inside it is capped to a readable measure. */
 .acc-body { padding: 0 22px 20px; font-size: 14.5px; line-height: 1.65; color: var(--muted); }
+/* #27: see the note on .article — 68ch measured 88 characters per line. */
+.acc-body p, .acc-body li { max-width: 55ch; }
 .acc-body p { margin: 0 0 10px; }
 .acc-body p:last-child { margin-bottom: 0; }
 
@@ -418,22 +475,14 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
 .contact-card { background-color: var(--surface); background-image: var(--concrete-grain); background-size: 220px 220px; border-radius: var(--radius-card); box-shadow: var(--shadow-md); padding: 26px 26px 24px; }
 @media (max-width: 900px) { .contact-wrap { grid-template-columns: 1fr; gap: 30px; } }
 
-/* ---------- Student Showcase (justified rows, Google-Photos style) ---------- */
-.sw-grid { display: flex; flex-wrap: wrap; gap: 10px; }
-.sw-tile { position: relative; flex-grow: calc(var(--ar) * 100); flex-basis: calc(var(--ar) * 240px); height: 240px; border-radius: var(--radius-card); overflow: hidden; box-shadow: var(--shadow-sm); cursor: zoom-in; border: 0; padding: 0; background: var(--paper-2); }
-.sw-tile img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s var(--ease-out); }
-.sw-tile:hover img, .sw-tile:focus-visible img { transform: scale(1.045); }
-.sw-tile::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 55%, rgba(15,12,9,.72) 100%); opacity: 0; transition: opacity .3s; pointer-events: none; }
-.sw-tile:hover::after, .sw-tile:focus-visible::after { opacity: 1; }
-.sw-owner { position: absolute; left: 10px; bottom: 10px; z-index: 2; display: flex; align-items: center; gap: 8px; opacity: 0; transform: translateY(6px); transition: opacity .3s, transform .3s; pointer-events: none; }
-.sw-tile:hover .sw-owner, .sw-tile:focus-visible .sw-owner { opacity: 1; transform: translateY(0); }
+/* ---------- Student Showcase ----------
+   #19: the justified-collage rules (.sw-grid, .sw-tile and its hover overlay,
+   .sw-owner, .sw-name, .sw-medium, the 760px breakpoint and the .sw-grid::after
+   last-row guard) are gone. Showcase renders .pol-tile squares from its own page
+   CSS and has never rendered a .sw-tile; the collage was measured matching zero
+   elements on the page at every width.
+   .sw-ava stays: the Showcase LIGHTBOX below still uses it for the avatar disc. */
 .sw-ava { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-family: var(--font-cond); font-weight: 600; font-size: 12px; color: #f3ede1; box-shadow: 0 1px 4px rgba(0,0,0,.4); }
-.sw-name { font-family: var(--font-cond); font-weight: 500; font-size: 12.5px; color: #f3ede1; text-shadow: 0 1px 3px rgba(0,0,0,.5); }
-.sw-medium { position: absolute; top: 10px; left: 10px; z-index: 2; font-family: var(--font-cond); font-weight: 600; font-size: 12px; letter-spacing: var(--tracking-label); text-transform: uppercase; padding: 4px 10px; border-radius: var(--radius-pill); background: rgba(20,16,12,.55); color: #ede1d0; opacity: 0; transition: opacity .3s; pointer-events: none; }
-.sw-tile:hover .sw-medium { opacity: 1; }
-@media (max-width: 760px) { .sw-tile { height: 170px; flex-basis: calc(var(--ar) * 170px); } }
-/* last row: stop tiles from over-stretching */
-.sw-grid::after { content: ""; flex-grow: 1000000; }
 
 /* showcase lightbox */
 .sw-modal { position: fixed; inset: 0; z-index: 1500; display: none; place-items: center; background: rgba(15,12,9,.86); backdrop-filter: blur(3px); padding: 30px; }
@@ -448,7 +497,18 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
 /* 7.4: the left column is 14px narrower than it was so the right column lands
    on --prose-max exactly — the introduction then measures the same as every
    other long-form field on the page rather than 14px short of them. */
-.course-hero { display: grid; grid-template-columns: minmax(300px, 446px) 1fr; gap: 46px; align-items: start; padding: 46px 0 10px; }
+/* #20: the left column was pinned at 446px until the 900px breakpoint, so at
+   laptop widths it kept taking a fixed slice out of a shrinking container and
+   the right column — and with it every long-form field on the page, which is
+   sized to match it — collapsed: 660px of content at 1200, 560 at 1100, 460 at
+   1000, against 270px of empty gutter each side. It is a proportion now,
+   floored at 300px and capped at the 446px it already used at 1440+, so the
+   desktop measure is unchanged and the laptop one stops collapsing.
+   Held in a variable because the long-form measure below subtracts it; the two
+   used to be a 446 here and a hard-coded 492 there, which is exactly the kind
+   of pair that drifts. */
+:root { --course-left: clamp(300px, 31%, 446px); --course-gap: 46px; }
+.course-hero { display: grid; grid-template-columns: var(--course-left) 1fr; gap: var(--course-gap); align-items: start; padding: 46px 0 10px; }
 /* 7.1: the image block is height-capped so the price and CTA below it stay on the
    first screen on a laptop rather than being pushed under the fold. */
 .course-left { display: flex; flex-direction: column; }
@@ -460,8 +520,14 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
 .co-thumb.is-active img { opacity: 1; }
 /* 7.1 right column: the title shares the video frame's left edge, and the video
    sits directly beneath it with the introduction below that. */
-.co-highlight { position: relative; aspect-ratio: 16/9; border-radius: var(--radius-card); overflow: hidden; background: #1b1814; box-shadow: var(--shadow); margin: 4px 0 18px; display: grid; place-items: center; }
-.co-highlight-empty { font-family: var(--font-cond); font-size: 13px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: #b6ab97; text-align: center; padding: 0 20px; }
+/* #28: #1b1814 in both themes put a 900x506 black rectangle above the fold on
+   the cream page. Black is right for a frame that is HOLDING a film — that is
+   the letterbox, a material — and wrong for one that is only announcing that
+   a film is coming. So the empty frame is a themed surface and .has-video,
+   which is the branch the iframe renders into, keeps the black. */
+.co-highlight { position: relative; aspect-ratio: 16/9; border-radius: var(--radius-card); overflow: hidden; background: var(--surface); box-shadow: var(--shadow); margin: 4px 0 18px; display: grid; place-items: center; }
+.co-highlight.has-video { background: #1b1814; }
+.co-highlight-empty { font-family: var(--font-cond); font-size: 13px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); text-align: center; padding: 0 20px; }
 /* 7.1: the preview reel, once the client has supplied one. */
 .co-highlight.has-video { display: block; }
 .co-highlight .gdrive-frame { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #000; }
@@ -497,7 +563,10 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
 .co-subline { font-family: var(--font-cond); font-weight: 600; font-size: 13.5px;
   letter-spacing: var(--tracking-label); text-transform: uppercase;
   color: var(--teal-ink); margin: 0 0 12px; }
-.course-terms-note { font-size: 13px; color: var(--muted); max-width: 46ch; margin-top: 12px; opacity: .85; }
+/* #09: --muted is already the quiet step; the extra .85 took it to 3.75:1 on
+   the light page. Dimming a token that was chosen for its contrast just
+   spends the margin it was chosen for. */
+.course-terms-note { font-size: 13px; color: var(--muted); max-width: 46ch; margin-top: 12px; }
 /* The client-testing switch, moved under the Add to cart button because that is
    what it changes. (client feedback 2026-08-08) */
 .own-test { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
@@ -518,7 +587,7 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
 .learn-list, .syllabus, #co-who, .course-teacher { max-width: var(--prose-max); margin-left: auto; margin-right: auto; }
 .course-right #co-blurb { max-width: var(--prose-max); }
 @media (min-width: 901px) {
-  .learn-list, .syllabus, #co-who, .course-teacher { max-width: min(var(--prose-max), calc(100% - 492px)); }
+  .learn-list, .syllabus, #co-who, .course-teacher { max-width: min(var(--prose-max), calc(100% - var(--course-left) - var(--course-gap))); }
 }
 /* 7.5 / 1.4.10: the SYLLABUS heading is enlarged; the other section headings on
    this page keep the shared size. */
@@ -533,7 +602,9 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
 /* The alternation was 5% and effectively invisible. (client feedback
    2026-08-08) */
 .syl-item[data-odd="1"] { background-color: color-mix(in srgb, var(--ink) 13%, var(--surface)) !important; }
-.syl-item { background-color: var(--surface); background-image: var(--concrete-grain); background-size: 220px 220px; border-radius: var(--radius-card); box-shadow: var(--shadow-sm); overflow: hidden; }
+/* #08: same change as details.acc-item above, and the same reason — as shipped
+   0 of 103,008 pixels changed when a .syl-row took focus. */
+.syl-item { background-color: var(--surface); background-image: var(--concrete-grain); background-size: 220px 220px; border-radius: var(--radius-card); box-shadow: var(--shadow-sm); overflow: clip; overflow-clip-margin: 8px; }
 /* The fourth column is the lesson thumbnail, on the right as the syllabus asks.
    auto rather than a fixed width so a lesson with no cover — Lesson 1, which
    Crystal supplied as film only — closes the column up instead of leaving a
@@ -557,8 +628,14 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
   text-transform: uppercase; flex: none; }
 .syl-phase-btn .sp-name { font-family: var(--font-marker); font-weight: 600;
   font-size: clamp(16px, 1.6vw, 21px); flex: 1; opacity: .92; }
+/* #09: at opacity .7 over the phase bar this measured 3.49:1 on theme A, and
+   fading it to 82% of the bar's own ink only reached 4.15:1 — the bar is a
+   mid-tone in that theme, so there is very little room above it. The count is
+   the only thing on the row that says how many lessons are inside, so it is
+   content, not chrome: it takes the bar's ink at full strength (5.26:1 in A,
+   14.50:1 in D) and stays subordinate by being 13px against the name's 16-21. */
 .syl-phase-btn .sp-count { font-family: var(--font-cond); font-size: 13px;
-  letter-spacing: var(--tracking-label); text-transform: uppercase; opacity: .7; flex: none; }
+  letter-spacing: var(--tracking-label); text-transform: uppercase; flex: none; }
 .syl-phase-btn svg { transition: transform .2s ease; flex: none; }
 .syl-phase-btn[aria-expanded="true"] svg { transform: rotate(180deg); }
 .syl-phase-body { display: grid; gap: 10px; margin-top: 10px; }
@@ -578,6 +655,30 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
 .syl-title { font-family: var(--font-marker); font-weight: 600; font-size: 18.5px; color: var(--ink); }
 .syl-sub { font-size: 14.5px; color: var(--muted); margin-top: 3px; }
 .syl-len { font-family: var(--font-cond); font-size: 12.5px; color: var(--muted); }
+/* ---- #16: locked rows ----
+   course.dc.html used to emit style="opacity:.72" inline on twelve of thirteen
+   rows, which painted 2.55:1 (A) / 3.00:1 (D) and, being inline, could not be
+   overridden from here at all. The dimming is a real requirement — a locked row
+   has to read as locked — but opacity is the wrong instrument: it fades the row
+   AND its contrast at the same rate, so the more locked it looks the less
+   readable it is.
+   Locked is carried by three things that cost no contrast instead: the number
+   disc drops its copper for a neutral, the thumbnail loses its colour, and the
+   text steps back one stop towards --muted.
+   NOT all the way to --muted: half these rows sit on the .syl-item[data-odd]
+   tint rather than on --surface, and --muted measured 4.47:1 (D) / 3.94:1 (A)
+   against THAT. --muted is chosen for --surface, and a tinted row is not
+   --surface. Two stops, because the numeral sits on its own lighter disc and
+   needs more than the title does: measured 5.70/4.96 for the text and 5.29/5.33
+   for the numeral. */
+.syl-row.is-locked { --locked-ink: color-mix(in srgb, var(--ink) 40%, var(--muted)); }
+.syl-row.is-locked .syl-title,
+.syl-row.is-locked .syl-sub,
+.syl-row.is-locked .syl-len { color: var(--locked-ink); }
+.syl-row.is-locked .syl-num { background: color-mix(in srgb, var(--ink) 13%, transparent);
+  color: color-mix(in srgb, var(--ink) 70%, var(--muted)); }
+.syl-row.is-locked .syl-thumb { filter: grayscale(.85) contrast(.95); }
+.syl-row.is-locked svg { color: var(--locked-ink); }
 .course-teacher { display: flex; gap: 20px; align-items: center; margin: 30px auto 0; background-color: var(--surface); background-image: var(--concrete-grain); background-size: 220px 220px; border-radius: var(--radius-card); box-shadow: var(--shadow-sm); padding: 20px 24px; }
 .course-teacher img { width: 74px; height: 74px; border-radius: 50%; object-fit: cover; flex: none; box-shadow: var(--shadow-sm); }
 @media (max-width: 900px) { .course-hero { grid-template-columns: 1fr; gap: 26px; } .learn-list { grid-template-columns: 1fr; } }
@@ -704,6 +805,13 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
    up down the table instead of floating after text of differing lengths.
    (client feedback 2026-08-09) Desktop does not need it — the picture is right
    there — so it only appears on the narrow layout. */
+/* #23: this is a decorative glyph INSIDE the real control — the row itself is
+   the <button>, and the disc is an aria-hidden span, which is why it cannot be
+   a nested button. It is only emitted on rows that have a scan to open, so it
+   never appears on a disabled row. Its pointer cursor now matches the row's
+   (the `.cert-row { cursor: default }` that used to sit in the 1100px block
+   below is gone), so the pointer no longer appears on the one element in the
+   widget that is not a control while the control showed an arrow. */
 .cert-info { display: none; grid-column: 1; width: 30px; height: 30px; place-items: center;
   border-radius: 50%; border: 1px solid color-mix(in srgb, var(--ink) 22%, transparent);
   background: var(--surface); color: var(--ink); cursor: pointer; padding: 0;
@@ -714,7 +822,10 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
   letter-spacing: var(--tracking-label); color: var(--ink); }
 .cert-name { grid-column: 3; font-size: 13.5px; line-height: 1.4; color: var(--muted);
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.cert-row.is-pending .cert-year, .cert-row.is-pending .cert-name { color: var(--muted); opacity: .8; }
+/* #09: --muted at .8 measured 3.36:1 on the light theme. A pending row still
+   has to be readable; it is marked as pending by the italic demo caption and
+   the disabled cursor, not by being faded out. */
+.cert-row.is-pending .cert-year, .cert-row.is-pending .cert-name { color: var(--muted); }
 .cert-row[disabled] { cursor: default; }
 /* rows that exist only to demonstrate the scroll, so they cannot be mistaken
    for honours she has actually been given */
@@ -749,7 +860,6 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
   .cert-split .bc-row.is-rail { display: none; }
   .cert-list { max-height: none; }
   .cert-info { display: grid; }
-  .cert-row { cursor: default; }
 }
 
 /* ---- the certificate lightbox ---- */
@@ -803,3 +913,187 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
    widens, because at 38% the second line wrapped and the heading rendered as
    three lines instead of two. (client feedback 2026-08-08) */
 .cas-root .hero__title.font-a { font-size: clamp(39px, 5.1vw, 84px); line-height: .95; }
+
+/* ============================================================
+   ACCESSIBILITY LAYER — touch targets, focus, skip link (#08, #18)
+   This block is LAST on purpose. Both halves of it are corrections that
+   have to outrank the component rules they correct, and several of those
+   components set the same properties at the same specificity: .cert-info
+   declares 30x30 and .social-btn 30x30 several hundred lines below where
+   this used to sit, so the coarse-pointer minimums simply lost the
+   cascade and measured 30x30 at 390px after the rule was written.
+   Keep it after every component. Font A follows it and only sets
+   font-family, so the two cannot collide.
+   ============================================================ */
+
+/* ============================================================
+   TOUCH TARGETS (#18)
+   Every interactive control reaches 44x44 under a coarse pointer, or is given a
+   44x44 hit area without changing what it looks like.
+   The two minimums here used to be 40px and 42px — deliberately below 44, and
+   they were the only rule in the file, so most controls never met either: the
+   New Release dots measured 8x8, the About carousel dots 9x9, Remove 21px tall,
+   the quantity steppers 28x28, the social discs 30-36, the cart and theme
+   buttons 38x38, the burger 40x40, a filter option 39px and a cover button 36px.
+
+   Three techniques, chosen per control:
+     min-height           where the control is a text button and can simply grow
+     width/height         where it is an icon disc and growing it is harmless
+     padding + background-clip: content-box + box-sizing: content-box
+                          where the control is a DOT and growing it would change
+                          what the design says. The padding enlarges the box, the
+                          clip keeps the paint at the old size, and border-radius
+                          is resolved against each box separately so the dot
+                          stays a circle.
+   ============================================================ */
+@media (pointer: coarse) {
+  /* text-shaped controls: grow the box, keep the type */
+  .nav-links a, .nav-sheet a, .filter-rail .tag-row, .tag-row, .dash-tab,
+  .fopt, .chip, .li-remove, .syl-more, .pc-reset, .inv-link, .auth-foot a,
+  .filter-clear, .active-tag, .price-scale, .cert-row, .plan-opt,
+  .btn, .cc-btn, .cover-btn, .btn-big, .btn-outline, .art-btn, .hero__cta {
+    min-height: 44px;
+  }
+  .li-remove, .pc-reset, .inv-link, .fopt, .chip, .art-btn, .cc-btn, .cover-btn {
+    display: inline-flex; align-items: center;
+  }
+  /* icon discs: 44x44 outright. flex:none matters as much as the size — the
+     cart button and the burger are flex items in .nav-auth, and at 390px they
+     were being shrunk to 32 and 36 wide by the row, not by their own rule. */
+  .cart-btn, .nav-burger, .site-nav .mode-toggle, .social-btn, .ss-btn,
+  .car-arrow, .shop-arrow, .share-arrow, .art-modal .am-close, .cert-info,
+  .cert-lb .clb-close, .sw-close, .ctl-btn,
+  /* the home column narrows its social discs to 30px at (0,3,0), so match it */
+  .release-trio .about-col .social-btn,
+  /* FreeVideos sets its own 42px on `.fv-rail .fv-arrow`, in a <style> that
+     loads after this file, so the extra step is what reaches it */
+  .cas-root .fv-rail .fv-arrow {
+    width: 44px; height: 44px; flex: none;
+  }
+  .qty button { width: 44px; height: 44px; }
+  /* the label is the control here — clicking it toggles the 15px box —
+     so the label is what has to clear 44 (#18) */
+  .li-remember-lbl { min-height: 44px; }
+  /* the toggle keeps its 46x26 switch shape; the hit area grows around it */
+  .set-tog { position: relative; }
+  .set-tog::before { content: ""; position: absolute; left: 0; right: 0; top: -9px; bottom: -9px; }
+  /* dots: 44x44 of control, unchanged paint. No negative margin to claw the
+     layout back — three 44px targets 6px apart would overlap by 38px each, and
+     an overlapping target is not a target. The group grows instead, and loses
+     its own padding and its inset from the corner to pay for it. */
+  .rel-dots { gap: 0; padding: 0; top: 4px; right: 4px; }
+  .rel-dots button {
+    box-sizing: content-box; padding: 18px; margin: 0;
+  }
+  .ph-carousel .phc-dot {
+    box-sizing: content-box; padding: 18px; margin: -13px -6px;
+  }
+  /* eleven dots at 45px each cannot sit on one 358px line, so the row wraps
+     rather than overflowing its carousel */
+  .ph-carousel .phc-dots { flex-wrap: wrap; justify-content: center; row-gap: 0; }
+}
+@media (max-width: 560px) {
+  /* these two are set to 38/40 in the phone block above; 44 is the floor */
+  .cart-btn { width: 44px; height: 44px; }
+  .nav-burger { width: 44px; height: 44px; }
+}
+
+/* ============================================================
+   FOCUS (#08)
+   There was no :focus-visible rule anywhere in css/ except on form fields, so
+   every link, button and summary fell through to Chromium's default ring — and
+   on a dark page, with color-scheme computing to `normal`, that ring was drawn
+   for a white page.
+
+   The ring is three bands: dark, pale, dark. The pale band is the outline; the
+   dark bands are the box-shadow it is drawn on top of, because outlines paint
+   above outer box-shadows. See the note on --focus-ring for why one colour
+   cannot do this job on both themes.
+
+   The box-shadow replaces whatever resting shadow the control had, so
+   --shadow-sm is restated at the end of the stack: a focused button keeps a
+   drop shadow, and loses only the 1px inset bevel lines, for as long as it has
+   focus.
+   ============================================================ */
+.cas-root a:focus-visible,
+.cas-root button:focus-visible,
+.cas-root summary:focus-visible,
+.cas-root input:focus-visible,
+.cas-root select:focus-visible,
+.cas-root textarea:focus-visible,
+.cas-root [tabindex]:focus-visible,
+.cas-root .syl-row:focus-visible,
+.cas-root .fopt:focus-visible,
+.cas-root .chip:focus-visible,
+.cas-root .phc-dot:focus-visible,
+.cas-root .fv-card:focus-visible,
+.cas-root .fv-arrow:focus-visible,
+.cas-root .pol-tile:focus-visible,
+.cas-root .art-btn:focus-visible,
+.cas-root .co-thumb:focus-visible,
+.cas-root .dash-tab:focus-visible,
+.cas-root .li-remove:focus-visible,
+.cas-root .skip-link:focus-visible {
+  outline: var(--focus-ring-w) solid var(--focus-ring);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 calc(var(--focus-ring-w) + 4px) var(--focus-ring-edge), var(--shadow-sm);
+}
+/* Controls whose container must keep clipping hard get the same ring turned
+   inward. .cover-card clips its own overflow so the sale ribbon's ends are cut
+   by the corner, and .qty and .cert-list clip for their pill and their scroll —
+   none of those can take an overflow-clip-margin without giving something up. */
+.cas-root .cover-card a:focus-visible,
+.cas-root .cover-card button:focus-visible,
+.cas-root .course-card .cc-cover:focus-visible,
+.cas-root .qty button:focus-visible,
+.cas-root .cert-row:focus-visible {
+  outline-offset: calc(-2px - var(--focus-ring-w));
+  box-shadow: inset 0 0 0 calc(var(--focus-ring-w) + 4px) var(--focus-ring-edge);
+}
+/* the form fields already had a :focus outline in --coral; it was 2px, it was
+   the accent colour on a surface built from the accent colour, and it did not
+   distinguish pointer focus from keyboard focus. One ring for everything. */
+.co-field input:focus, .co-field select:focus,
+.field input:focus, .field textarea:focus,
+.post-field:focus, .set-field input:focus, .set-field select:focus,
+.signup-form input:focus {
+  outline: none; border-color: var(--coral-ink);
+}
+.co-field input:focus-visible, .co-field select:focus-visible,
+.field input:focus-visible, .field textarea:focus-visible,
+.post-field:focus-visible, .set-field input:focus-visible, .set-field select:focus-visible,
+.signup-form input:focus-visible {
+  outline: var(--focus-ring-w) solid var(--focus-ring);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 calc(var(--focus-ring-w) + 4px) var(--focus-ring-edge);
+}
+
+/* ---- skip link (#08 styling for the #10 markup) ----
+   The page agents add `<a class="skip-link" href="#content">` as the first child
+   of .cas-root; this is its only styling. It is off-screen rather than
+   display:none so it stays in the tab order, and it comes back on :focus as well
+   as :focus-visible because a scripted focus() should reveal it too. */
+.cas-root .skip-link {
+  position: absolute; z-index: 2000; left: 16px; top: 12px;
+  display: inline-flex; align-items: center; min-height: 44px;
+  padding: 10px 20px; border-radius: var(--radius-pill);
+  font-family: var(--font-cond); font-weight: 600; font-size: 14px;
+  letter-spacing: var(--tracking-label); text-transform: uppercase;
+  background: var(--linen); color: #2b2823; box-shadow: var(--shadow-md);
+  transform: translateY(-200%);
+  transition: transform var(--dur-base) var(--ease-out);
+}
+.cas-root .skip-link:focus, .cas-root .skip-link:focus-visible { transform: none; }
+
+/* ---- runtime-injected chrome (#09) ----
+   .mc-price / .mc-btn.primary / .ck-btn.primary are declared in a <style> that
+   js/site-extras.js appends to <head>, so they land after this file and win any
+   tie. The extra .cas-root/body step is what makes these reach them. Both the
+   drawer and the cookie bar are appended to <body>, outside .cas-root, hence
+   `body`. Delete these three rules once site-extras.js reads the role tokens
+   itself. Measured before: .mc-price 2.98:1 (D), .mc-btn.primary 3.36:1 (D). */
+body .mc-price { color: var(--coral-ink); }
+body .mc-btn.primary, body .ck-btn.primary {
+  background: var(--coral-fill); color: var(--coral-fill-ink);
+  -webkit-text-fill-color: var(--coral-fill-ink);
+}

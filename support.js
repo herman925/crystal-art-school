@@ -1481,8 +1481,81 @@
   var REACT_DOM_SRI = "sha384-gTGxhz21lVGYNMcdJOyq01Edg0jhn/c22nsx0kyqP0TxaV5WVdsSH1fSDUf5YJj1";
   function hideRawTemplate() {
     const s = document.createElement("style");
+    s.setAttribute("data-dc-hide-raw", "");
     s.textContent = "x-dc{display:none!important}";
     document.head.appendChild(s);
+  }
+  /* ---- hand-added, not generated: third-party-CDN fallback -----------------
+     React and ReactDOM are fetched from unpkg.com. When that origin is
+     unreachable, loadReactUmd() rejects, init() never runs, and the whole site
+     is a blank page: measured document.body.scrollHeight === 0 on all five
+     pages checked, with only the cookie banner in the DOM.
+     <x-dc> is a complete, already-parsed copy of the authored page — the same
+     markup the runtime would have re-rendered — and the pages carry no template
+     interpolation or directives (no {{ }}, no sc-if/sc-for/x-import anywhere),
+     so simply promoting it is a faithful render, not an approximation.
+     The stylesheets and scripts inside <helmet> are parsed inline in the body
+     and have therefore already loaded and run, so nothing needs re-injecting.
+     Re-run the build from dc-runtime/src and this block has to be re-applied. */
+  function staticFallback() {
+    const promote = () => {
+      const dc = document.querySelector("x-dc");
+      if (!dc) return;
+      document.querySelectorAll("style[data-dc-hide-raw]").forEach((e) => e.remove());
+      const s = document.createElement("style");
+      s.setAttribute("data-dc-fallback", "");
+      s.textContent =
+        "html,body{height:100%;margin:0}" +
+        "x-dc{display:contents!important}" +
+        "x-dc>helmet{display:none!important}";
+      document.head.appendChild(s);
+      document.documentElement.setAttribute("data-dc-fallback", "");
+      runPageLogic();
+    };
+    if (document.readyState === "loading")
+      document.addEventListener("DOMContentLoaded", promote);
+    else promote();
+  }
+  /* The page's own `class Component extends DCLogic` block is plain ES5+ — it is
+     evaluated with `new Function`, never Babel — so it can be run against a
+     minimal base class. Anything it cannot do without React (setState-driven
+     re-render) degrades to a no-op instead of throwing the page away. */
+  function runPageLogic() {
+    const el = document.querySelector("script[data-dc-script]");
+    if (!el || !el.textContent) return;
+    try {
+      const Base = function (props) {
+        this.props = props || {};
+        this.state = {};
+      };
+      Base.prototype.setState = function (u, cb) {
+        if (typeof u === "function") u = u(this.state, this.props);
+        if (u) Object.assign(this.state, u);
+        if (cb) cb();
+      };
+      Base.prototype.forceUpdate = function () {};
+      Base.prototype.componentDidMount = function () {};
+      Base.prototype.componentDidUpdate = function () {};
+      Base.prototype.componentWillUnmount = function () {};
+      Base.prototype.renderVals = function () {
+        return {};
+      };
+      //! nosemgrep: eval-and-function-constructor
+      const C = new Function(
+        "DCLogic",
+        "StreamableLogic",
+        "React",
+        el.textContent +
+          '\n;return (typeof Component!=="undefined"&&Component)||undefined;'
+      )(Base, Base, void 0);
+      if (typeof C === "function") {
+        const inst = new C({});
+        if (inst && typeof inst.componentDidMount === "function")
+          inst.componentDidMount();
+      }
+    } catch (e) {
+      console.warn("[dc] static fallback: page logic did not run", e);
+    }
   }
   function loadScript(src, integrity) {
     return new Promise((resolve2, reject) => {
@@ -1562,6 +1635,6 @@
   hideRawTemplate();
   loadReactUmd().then(init).catch((err) => {
     console.error("[dc] failed to load React or boot:", err);
-    throw err;
+    staticFallback();
   });
 })();

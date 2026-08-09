@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,6 +8,8 @@
 <body>
 <x-dc>
 <helmet>
+<title>Log in — Crystal's Art School</title>
+<meta name="description" content="Log in to Crystal's Art School to pick up your watercolour and oil painting courses where you left off.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600;6..96,700&family=Oswald:wght@300;400;500;600&family=Archivo:wght@400;500;600;700&family=Saira+Stencil+One&family=Arizonia&display=swap" rel="stylesheet">
@@ -21,116 +23,70 @@
 <script src="js/motion.js"></script>
 </helmet>
 <div class="cas-root" data-theme="D">
+<a class="skip-link" href="#content">Skip to content</a>
 <div class="glow-layer" aria-hidden="true"></div>
 
-<nav class="site-nav" aria-label="Main">
-  <div class="nav-top">
-    <div class="inner">
-      <a class="nav-brand" href="index.html">
-        <img src="img/lau-logo.png" alt="Lau. — Crystal's Art School">
-      </a>
-      <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="Lessons.dc.html">Courses</a></li>
-        <li><a href="Gallery.dc.html">Gallery</a></li>
-        <li><a href="Showcase.dc.html">Showcase</a></li>
-        <li><a href="Blog.dc.html">Blog</a></li>
-        <li><a href="About.dc.html">About</a></li>
-        <li><a href="FreeVideos.dc.html">Free video</a></li>
-        <li><a href="Blog.dc.html?tag=Tools">Tools</a></li>
-        <li><a href="FAQ.dc.html">FAQ</a></li>
-      </ul>
-      <div class="nav-auth">
-        <a class="cart-btn" href="Checkout.dc.html" aria-label="Shopping cart">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M2 3h3.2l2.5 12.2a1.5 1.5 0 0 0 1.5 1.2h9a1.5 1.5 0 0 0 1.5-1.2L21.5 7H6.5"></path></svg>
-          <span class="cart-badge">0</span>
-        </a>
-        <a class="btn ghost" href="Login.dc.html">Log in</a>
-        <a class="btn primary" href="Signup.dc.html">Sign up</a>
-        <button class="nav-burger" type="button" aria-label="Menu" aria-expanded="false">☰</button>
-      </div>
-    </div>
-  </div>
-  <div class="nav-cats">
-    <div class="inner">
-      <ul class="nav-cat-links">
-        <li><a href="Lessons.dc.html?cat=Watercolour">Watercolour</a></li>
-        <li><a href="Lessons.dc.html?cat=Oil">Oils</a></li>
-        <li><a href="Lessons.dc.html?cat=Drawing">Drawing</a></li>
-        <li><a href="Lessons.dc.html?cat=Ink">Ink</a></li>
-        <li><a href="Lessons.dc.html?cat=Beginners">Beginners</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="nav-sheet">
-    <a href="index.html">Home</a>
-    <a href="Lessons.dc.html">Courses</a>
-    <a href="Gallery.dc.html">Gallery</a>
-    <a href="Showcase.dc.html">Showcase</a>
-    <a href="Blog.dc.html">Blog</a>
-    <a href="About.dc.html">About</a>
-    <a href="FreeVideos.dc.html">Free video</a>
-    <a href="Blog.dc.html?tag=Tools">Tools</a>
-    <a href="FAQ.dc.html">FAQ</a>
-    <a href="Lessons.dc.html?cat=Watercolour">Watercolour</a>
-    <a href="Lessons.dc.html?cat=Oil">Oils</a>
-    <a href="Lessons.dc.html?cat=Drawing">Drawing</a>
-    <a href="Lessons.dc.html?cat=Ink">Ink</a>
-    <a href="Lessons.dc.html?cat=Beginners">Beginners</a>
-    <a href="Login.dc.html">Log in / Sign up</a>
-  </div>
-</nav>
+<!-- nav markup lives in js/site-nav.js — single source of truth -->
+<nav class="site-nav" aria-label="Main"></nav>
 
-<main id="content">
+<main id="content" tabindex="-1">
   <div class="auth-wrap">
     <div class="auth-card">
       <div class="auth-head" id="li-head">
-        <div class="eyebrow"><span class="star">✦</span> Welcome back</div>
+        <div class="eyebrow"><span class="star">&#10022;</span> Welcome back</div>
         <h1>Log in</h1>
         <p>Pick up exactly where you left off.</p>
       </div>
 
-      <form id="li-form" class="auth-stage active">
-        <button class="btn social-google full" type="button" id="li-google">
+      <!-- novalidate: the native bubble is not announced to a screen reader and
+           cannot be styled. The page runs checkValidity() itself and writes a
+           real message, moves focus, and announces it. -->
+      <form id="li-form" class="auth-stage active" tabindex="-1" novalidate="novalidate">
+        <button class="btn social-google full" type="button" id="li-google" aria-describedby="li-google-note">
           <svg viewBox="0 0 18 18" width="18" height="18" aria-hidden="true"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.17-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.91c1.7-1.57 2.69-3.88 2.69-6.62z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.91-2.26c-.81.54-1.84.86-3.05.86-2.35 0-4.34-1.58-5.05-3.71H.96v2.33A9 9 0 0 0 9 18z"/><path fill="#FBBC05" d="M3.95 10.71a5.41 5.41 0 0 1 0-3.42V4.96H.96a9 9 0 0 0 0 8.08l2.99-2.33z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.5.45 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0A9 9 0 0 0 .96 4.96l2.99 2.33C4.66 5.16 6.65 3.58 9 3.58z"/></svg>
           Continue with Google
         </button>
+        <p class="hand-note" id="li-google-note" style="margin:8px 0 0;text-align:center;">Demo &#8212; Google sign-in is not connected.</p>
         <div class="auth-or"><span style="flex:1;height:1px;background:var(--line);"></span> or <span style="flex:1;height:1px;background:var(--line);"></span></div>
-        <div class="co-field"><label for="li-email">Email</label><input id="li-email" type="email" required placeholder="you@example.com"></div>
-        <div class="co-field"><label for="li-pass">Password</label><input id="li-pass" type="password" required placeholder="Your password"></div>
+        <p class="form-error" id="li-error" style="display:none;margin:0 0 14px;font-family:var(--font-cond);font-size:13.5px;line-height:1.45;color:var(--danger);"></p>
+        <div class="co-field"><label for="li-email">Email</label><input id="li-email" type="email" required="required" autocomplete="username" placeholder="you@example.com"></div>
+        <div class="co-field"><label for="li-pass">Password</label><input id="li-pass" type="password" required="required" autocomplete="current-password" placeholder="Your password"></div>
         <div style="display:flex;justify-content:space-between;align-items:center;margin:2px 0 16px;flex-wrap:wrap;gap:8px;">
-          <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);cursor:pointer;"><input type="checkbox" id="li-remember" style="accent-color:var(--coral);width:15px;height:15px;"> Remember me</label>
-          <a href="#" id="li-forgot" style="font-size:13px;color:var(--coral);font-weight:600;">Forgot password?</a>
+          <label class="li-remember-lbl" style="display:flex;align-items:center;gap:8px;font-size:13px;color:var(--muted);cursor:pointer;"><input type="checkbox" id="li-remember" style="accent-color:var(--coral);width:15px;height:15px;"> Remember me</label>
+          <a href="#" id="li-forgot" style="font-size:13px;color:var(--coral-ink);font-weight:600;">Forgot password?</a>
         </div>
-        <button class="btn primary big full" id="li-submit" type="submit">Log in →</button>
+        <button class="btn primary big full" id="li-submit" type="submit">Log in &#8594;</button>
         <button class="btn ghost full" type="button" id="li-guest" style="margin-top:12px;">Continue as guest</button>
       </form>
 
-      <form id="fp-form" class="auth-stage" novalidate>
-        <div class="co-field"><label for="fp-email">Email</label><input id="fp-email" type="email" required placeholder="you@example.com"></div>
-        <p style="font-size:13px;color:var(--muted);margin:0 0 16px;">We'll send a reset link to this address. (Demo — no email is actually sent.)</p>
-        <button class="btn primary big full" id="fp-submit" type="submit">Send reset link →</button>
-        <button class="btn ghost full" type="button" id="fp-back" style="margin-top:12px;">← Back to log in</button>
+      <form id="fp-form" class="auth-stage" tabindex="-1" novalidate="novalidate">
+        <p class="form-error" id="fp-error" style="display:none;margin:0 0 14px;font-family:var(--font-cond);font-size:13.5px;line-height:1.45;color:var(--danger);"></p>
+        <div class="co-field"><label for="fp-email">Email</label><input id="fp-email" type="email" required="required" autocomplete="email" placeholder="you@example.com"></div>
+        <p style="font-size:13px;color:var(--muted);margin:0 0 16px;">Demo &#8212; this prototype does not send email. Nothing is delivered to the address you type here.</p>
+        <button class="btn primary big full" id="fp-submit" type="submit">Send reset link &#8594;</button>
+        <button class="btn ghost full" type="button" id="fp-back" style="margin-top:12px;">&#8592; Back to log in</button>
       </form>
 
-      <div class="auth-stage" id="fp-sent">
+      <div class="auth-stage" id="fp-sent" tabindex="-1">
         <div class="auth-success">
-          <div class="as-check">✉</div>
-          <h2 style="font-family:var(--font-marker);font-weight:600;font-size:24px;color:var(--ink);margin:0 0 8px;">Check your inbox</h2>
-          <p style="color:var(--muted);margin:0 0 20px;">If <b id="fp-sent-email" style="color:var(--ink);"></b> matches an account, a reset link is on its way.</p>
+          <div class="as-check" aria-hidden="true">&#9993;</div>
+          <h2 style="font-family:var(--font-marker);font-weight:600;font-size:24px;color:var(--ink);margin:0 0 8px;">Reset requested</h2>
+          <p style="color:var(--muted);margin:0 0 8px;">You asked for a reset link for <b id="fp-sent-email" style="color:var(--ink);"></b>.</p>
+          <p class="hand-note" style="margin:0 0 20px;">Demo &#8212; no email was sent.</p>
           <div class="fc-btns" style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
             <button class="btn primary big" type="button" id="fp-return">Back to log in</button>
           </div>
         </div>
       </div>
 
-      <div class="auth-stage" id="li-done">
+      <div class="auth-stage" id="li-done" tabindex="-1">
         <div class="auth-success">
-          <div class="as-check">✓</div>
+          <div class="as-check" aria-hidden="true">&#10003;</div>
           <h2 style="font-family:var(--font-marker);font-weight:600;font-size:26px;color:var(--ink);margin:0 0 8px;">Logged in</h2>
-          <p style="color:var(--muted);margin:0 0 20px;">Welcome back<span id="li-name"></span> — your studio is ready.</p>
+          <p style="color:var(--muted);margin:0 0 8px;">Welcome back<span id="li-name"></span> &#8212; your studio is ready.</p>
+          <p class="hand-note" style="margin:0 0 20px;">Demo &#8212; the session is stored in this browser only.</p>
           <div class="fc-btns" style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
-            <a class="btn primary big" href="Dashboard.dc.html">Go to my dashboard →</a>
+            <a class="btn primary big" href="Dashboard.dc.html">Go to my dashboard &#8594;</a>
             <a class="btn ghost" href="Lessons.dc.html">Browse courses</a>
           </div>
         </div>
@@ -140,6 +96,11 @@
     </div>
   </div>
 </main>
+
+<!-- footer markup lives in js/site-footer.js — single source of truth.
+     This page previously shipped no footer at all, so the two pages that ask
+     for personal data carried no privacy, terms or contact link. -->
+<footer class="site-footer" aria-label="Site footer"></footer>
 
 </div>
 </x-dc>
@@ -158,16 +119,81 @@ class Component extends DCLogic {
     try { const __q = (new URLSearchParams(location.search).get('theme') || '').toUpperCase(); if (valid.indexOf(__q) >= 0) { __theme = __q; localStorage.setItem(THEME_KEY, __q); } } catch (e) {}
     root.setAttribute('data-theme', __theme);
 
-    /* burger handled by js/site-nav.js */
-    document.querySelectorAll('.cart-badge').forEach(b => { try { const n = JSON.parse(localStorage.getItem('cas-cart') || '[]').reduce((a, i) => a + i.qty, 0); b.textContent = n; b.style.display = n > 0 ? 'grid' : 'none'; } catch (e) {} });
+    /* ---- skip link ----
+       A bare fragment jump moves the viewport but not the caret, so the next Tab
+       carries on from the link. Focus the target explicitly. */
+    document.addEventListener('click', (e) => {
+      const s = e.target.closest && e.target.closest('.skip-link');
+      if (!s) return;
+      const t = document.querySelector(s.getAttribute('href') || '');
+      if (!t) return;
+      e.preventDefault();
+      t.setAttribute('tabindex', '-1');
+      try { t.focus(); } catch (er) {}
+    });
+
+    /* window.CasAnnounce lives in js/site-extras.js — one polite live region for
+       the whole site. Nothing on this card announced before. */
+    const say = (m, p) => { try { if (window.CasAnnounce) window.CasAnnounce(m, p); } catch (er) {} };
+
+    /* the cart badge is filled by js/site-nav.js and js/site-extras.js; the copy
+       this page used to keep was a third writer of the same element */
+
+    /* ---- constraint validation ----
+       `required` in source is dropped by the runtime (valueless attributes do not
+       survive), which is why an entirely empty form used to authenticate. The
+       markup now writes required="required"; this is the part that reports it. */
+    const fieldName = (el) => {
+      const f = el.closest('.co-field');
+      const lab = f && f.querySelector('label');
+      return String((lab && lab.textContent) || el.getAttribute('aria-label') || el.id || 'This field').trim();
+    };
+    const reason = (el) => {
+      const n = fieldName(el), v = el.validity;
+      if (v.valueMissing) return n + ' is required.';
+      if (v.typeMismatch) return 'Enter a valid email address in ' + n + '.';
+      if (v.tooShort) return n + ' must be at least ' + el.minLength + ' characters.';
+      return n + ' is not valid.';
+    };
+    const clearErr = (form, box) => {
+      box.style.display = 'none'; box.textContent = '';
+      Array.prototype.forEach.call(form.elements, (el) => {
+        el.removeAttribute('aria-invalid');
+        if (el.getAttribute('aria-describedby') === box.id) el.removeAttribute('aria-describedby');
+      });
+    };
+    const validate = (form, box) => {
+      clearErr(form, box);
+      if (form.checkValidity()) return true;
+      const bad = Array.prototype.filter.call(form.elements, (el) => el.willValidate && !el.checkValidity());
+      if (!bad.length) return true;
+      const first = bad[0];
+      const msg = reason(first) + (bad.length > 1 ? ' ' + bad.length + ' fields need attention.' : '');
+      box.textContent = msg; box.style.display = 'block';
+      first.setAttribute('aria-invalid', 'true');
+      first.setAttribute('aria-describedby', box.id);
+      try { first.focus(); } catch (er) {}
+      say(msg, 'assertive');
+      return false;
+    };
 
     const form = document.getElementById('li-form');
     const fp = document.getElementById('fp-form');
+    const liErr = document.getElementById('li-error');
+    const fpErr = document.getElementById('fp-error');
+    [[form, liErr], [fp, fpErr]].forEach(([f, b]) => {
+      f.addEventListener('input', () => { if (b.style.display !== 'none') clearErr(f, b); });
+    });
+
     const stages = { login: form, fp: fp, fpSent: document.getElementById('fp-sent'), done: document.getElementById('li-done') };
-    const show = (key) => { Object.keys(stages).forEach(k => stages[k].classList.toggle('active', k === key)); };
+    const show = (key) => {
+      Object.keys(stages).forEach(k => stages[k].classList.toggle('active', k === key));
+      const el = stages[key];
+      if (el) { try { el.focus(); } catch (er) {} }
+    };
     const head = document.getElementById('li-head');
     const foot = document.getElementById('li-foot');
-    const setHead = (ey, h, p) => { head.innerHTML = '<div class="eyebrow"><span class="star">✦</span> ' + ey + '</div><h1>' + h + '</h1><p>' + p + '</p>'; };
+    const setHead = (ey, h, p) => { head.innerHTML = '<div class="eyebrow"><span class="star">\u2726</span> ' + ey + '</div><h1>' + h + '</h1><p>' + p + '</p>'; };
 
     const done = (msg) => {
       head.style.display = 'none'; foot.style.display = 'none';
@@ -182,50 +208,81 @@ class Component extends DCLogic {
     try { const n = new URLSearchParams(location.search).get('next') || ''; if (/^[\w.-]+\.html$/.test(n)) next = n; } catch (er) {}
     const finish = () => {
       done(userName());
+      say('Logged in.' + (next ? ' Taking you to your dashboard.' : ''));
       if (next) setTimeout(() => { window.location.href = next; }, 900);
     };
 
+    /* ---- remember me ----
+       The checkbox was wired to nothing. It now stores the address only (never a
+       password), and restores it on the next visit. */
+    const REMEMBER = 'cas-remember-email';
+    const emailEl = document.getElementById('li-email');
+    const rememberEl = document.getElementById('li-remember');
+    try {
+      const saved = localStorage.getItem(REMEMBER);
+      if (saved) { emailEl.value = saved; rememberEl.checked = true; }
+    } catch (er) {}
+
     form.addEventListener('submit', (e) => {
       e.preventDefault();
+      if (!validate(form, liErr)) return;
       const btn = document.getElementById('li-submit');
-      btn.textContent = 'Signing in…';
-      /* demo auth: the email prefix becomes the account name */
+      btn.textContent = 'Signing in\u2026'; btn.disabled = true;
+      /* demo auth: the email prefix becomes the account name. Nothing is invented —
+         with an empty form this branch is now unreachable. */
+      const em = (emailEl.value || '').trim();
       try {
-        const em = (document.getElementById('li-email').value || '').trim();
         const u = JSON.parse(localStorage.getItem('cas-user') || '{}') || {};
-        u.name = u.name || (em ? em.split('@')[0].replace(/^./, c => c.toUpperCase()) : 'Friend');
-        u.email = em || u.email; u.via = 'email';
+        u.name = u.name || em.split('@')[0].replace(/^./, c => c.toUpperCase());
+        u.email = em; u.via = 'email';
         localStorage.setItem('cas-user', JSON.stringify(u));
       } catch (er) {}
+      try { if (rememberEl.checked) localStorage.setItem(REMEMBER, em); else localStorage.removeItem(REMEMBER); } catch (er) {}
       setTimeout(finish, 700);
     });
+
+    /* ---- Google button ----
+       This used to write an account called "Jane" into localStorage — an invented
+       person, with no consent screen and no provider. There is no OAuth client on
+       a static demo, so the button says so and hands over to the real form. */
     document.getElementById('li-google').addEventListener('click', () => {
-      const b = document.getElementById('li-google');
-      b.disabled = true; b.style.opacity = '.7';
-      const orig = b.innerHTML; b.innerHTML = b.innerHTML.replace('Continue with Google', 'Connecting to Google…');
-      try { const u = JSON.parse(localStorage.getItem('cas-user') || '{}') || {}; u.name = u.name || 'Jane'; u.via = 'google'; localStorage.setItem('cas-user', JSON.stringify(u)); } catch (er) {}
-      setTimeout(finish, 850);
+      const msg = 'Google sign-in is not connected in this demo. Use your email and password below.';
+      liErr.textContent = msg; liErr.style.display = 'block';
+      say(msg, 'assertive');
+      try { emailEl.focus(); } catch (er) {}
     });
-    document.getElementById('li-guest').addEventListener('click', () => { window.location.href = 'Gallery.dc.html'; });
+
+    document.getElementById('li-guest').addEventListener('click', () => { say('Continuing as a guest.'); window.location.href = 'Gallery.dc.html'; });
 
     /* forgot-password pipeline */
     document.getElementById('li-forgot').addEventListener('click', (e) => {
       e.preventDefault();
-      setHead('Reset access', 'Forgot password?', 'No worries — we\'ll email you a reset link.');
+      setHead('Reset access', 'Forgot password?', 'Tell us the address on the account.');
       foot.style.display = 'none';
-      const liEmail = document.getElementById('li-email').value;
+      const liEmail = emailEl.value;
       if (liEmail) document.getElementById('fp-email').value = liEmail;
       show('fp');
+      say('Password reset. Step 1 of 2 \u2014 confirm your email address.');
     });
-    const backToLogin = () => { setHead('Welcome back', 'Log in', 'Pick up exactly where you left off.'); foot.style.display = ''; show('login'); };
+    const backToLogin = () => {
+      setHead('Welcome back', 'Log in', 'Pick up exactly where you left off.');
+      foot.style.display = ''; show('login');
+      say('Back to the log in form.');
+    };
     document.getElementById('fp-back').addEventListener('click', backToLogin);
     document.getElementById('fp-return').addEventListener('click', backToLogin);
     fp.addEventListener('submit', (e) => {
       e.preventDefault();
+      if (!validate(fp, fpErr)) return;
       const em = document.getElementById('fp-email').value.trim();
-      if (!em) { document.getElementById('fp-email').focus(); return; }
-      const btn = document.getElementById('fp-submit'); btn.textContent = 'Sending…'; btn.disabled = true;
-      setTimeout(() => { document.getElementById('fp-sent-email').textContent = em; head.style.display = 'none'; show('fpSent'); btn.textContent = 'Send reset link →'; btn.disabled = false; }, 750);
+      const btn = document.getElementById('fp-submit'); btn.textContent = 'Sending\u2026'; btn.disabled = true;
+      setTimeout(() => {
+        document.getElementById('fp-sent-email').textContent = em;
+        head.style.display = 'none';
+        show('fpSent');
+        btn.textContent = 'Send reset link \u2192'; btn.disabled = false;
+        say('Reset requested for ' + em + '. Demo \u2014 no email was sent.');
+      }, 750);
     });
   }
 }

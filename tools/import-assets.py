@@ -5,6 +5,9 @@ import-assets.py — one-way asset pipeline for the Crystal's Art School prototy
 Walks the client's Google-Drive `assets/` tree, and for every image it needs:
   * auto-rotates per EXIF, strips EXIF, resizes, re-encodes as progressive JPEG
   * writes it into img/ under a lowercase ASCII, space-free name
+  * writes the responsive derivatives beside it (`name-320.jpg` and friends)
+    at the widths the page actually paints, and records the ready-made
+    srcset/sizes/w/h for build-data.py to hand to the pages
 and for every video it needs:
   * reads the duration with ffprobe (header only — the files are 0.6-2.4 GB and
     are NEVER copied into the site)
@@ -18,6 +21,7 @@ Usage:  python tools/import-assets.py [--force]
         --force   re-encode images even if the output already exists
 """
 
+import fnmatch
 import json
 import os
 import re
@@ -49,6 +53,153 @@ SIZE_WARN_BYTES = 600 * 1024
 
 IMAGE_EXTS = {".jpg", ".jpeg", ".png", ".webp"}
 VIDEO_EXTS = {".mp4", ".mov", ".m4v"}
+
+# --------------------------------------------------------------------------
+# responsive derivatives
+#
+# The site shipped one file per image at 1280-1600px and painted it at 78px.
+# Every width below comes from MEASURING the rendered page (Playwright,
+# 2026-08-09, viewports 390 / 768 / 1280 / 1600, lazy images scrolled in and
+# the states you only reach by opening something -- the gallery quick-view,
+# the free-video modal, the lesson stage). The CSS rule that fixes each slot
+# is named beside it. None of these numbers is a guess; if the layout moves,
+# re-measure and change them here rather than in a page.
+#
+#   widths -- the derivative ladder. A rung is skipped when the master is not
+#             meaningfully bigger than it, so a 540px cover does not gain a
+#             896px "derivative" that is really an upscale.
+#   sizes  -- the `sizes` attribute for the slot this image is MOSTLY painted
+#             in. A page that puts the same file in a second, much larger slot
+#             (the lesson stage, a lightbox) must override `sizes` there; the
+#             master is always the last srcset candidate, so an override that
+#             is forgotten costs bytes, never sharpness.
+# --------------------------------------------------------------------------
+
+SLOTS = {
+    # course.dc.html `.syl-thumb` is 76px (56px under 600px, industrial-3.css
+    # :542,:544); lesson.dc.html `.uthumb` paints 78x48. The same file also
+    # fills `#stage-poster` (.stage measures 366 / 828 / 938) and index's
+    # `.cc-photo` at 269 -- hence the two big rungs.
+    "course-poster": {
+        "widths": [96, 160, 384, 768],
+        "sizes": "(max-width: 600px) 56px, 78px",
+    },
+    # `.cd-cover` 320, `.rel-slide` 373, `.cc-cover` 269; 420 at 768, 366 at 390.
+    "course-cover": {
+        "widths": [224, 448, 896],
+        "sizes": "(max-width: 600px) 366px, (max-width: 1000px) 420px, 373px",
+    },
+    # `#co-cover` (photos[0]) paints 446 at 1280; 358 at 390, 351 at 768.
+    "course-photo-lead": {
+        "widths": [128, 256, 448, 896],
+        "sizes": "(max-width: 600px) 358px, (max-width: 1000px) 351px, 446px",
+    },
+    # `.co-thumb` (photos[1..]) paints 104; 82 at 390, 173 at 768. Index reuses
+    # the same files in `.cc-photo` at 269.
+    "course-photo-thumb": {
+        "widths": [128, 256, 448, 896],
+        "sizes": "(max-width: 600px) 82px, (max-width: 1000px) 173px, 269px",
+    },
+    # `.art-img` paints 241-306 across all four viewports. The quick-view
+    # `#am-img` is SMALLER, not larger: 175 / 186 / 237 / 237 -- the modal frame
+    # is only 78% of a narrow column. Nothing on this page ever needs 1600px.
+    "gallery": {
+        "widths": [320, 640, 960],
+        "sizes": "306px",
+    },
+    # `.fv-thumb` paints 301 / 348 / 395 / 448. `#fvm-poster` in the modal is
+    # 346 at 390 and 880 from 1280 up, which is what the 896 rung is for.
+    "free-poster": {
+        "widths": [320, 480, 896],
+        "sizes": "(max-width: 600px) 346px, (max-width: 1000px) 395px, 448px",
+    },
+}
+
+# Images that are already checked into img/ and are written into the pages by
+# hand (or by js/blog-data.js) rather than produced from assets/. The pipeline
+# does not own their content -- it only adds the derivative ladder beside them,
+# which is a pure function of the file, so this pass stays idempotent.
+#
+# Brand marks are deliberately absent: img/lau-logo.png, img/logo2.png and
+# img/signature.png ship exactly as the client uploaded them.
+# CSS background textures (wood-*.jpg, marble-wall.jpg, corkboard.jpg,
+# Sketchbook.jpg, Postercolor.jpg) are absent too -- a background cannot carry
+# srcset, so shrinking those is a stylesheet decision, not a data one.
+
+STATIC_SLOTS = [
+    # blog-post.dc.html `.post-banner`: 358 / 1173 / 1232 / 1392. Also Blog's
+    # `.bf-img` at 647 and index's `.sc-img` at 150.
+    {"glob": "img/blog-kit-all.jpg",
+     "widths": [192, 384, 768, 1440],
+     "sizes": "(max-width: 600px) 358px, (max-width: 1000px) 1173px, 1392px"},
+    # blog-post.dc.html numbered-section figures: 358 / 720 / 760 / 760.
+    {"glob": "img/blog-kit-[0-9]*.jpg",
+     "widths": [384, 768],
+     "sizes": "(max-width: 600px) 358px, (max-width: 1000px) 720px, 760px"},
+    # Blog `.bc-img` 393, blog-post `.cover-card` 399, index `.sc-img` 150;
+    # 358 at 390 and 720 at 768.
+    {"glob": "img/blog-*.jpg",
+     "widths": [192, 384, 768],
+     "sizes": "(max-width: 600px) 358px, (max-width: 1000px) 720px, 452px"},
+    # About `.arch-duo` portrait 515 / 584; the byline and teacher-card avatars
+    # reuse the same file at 36-74, which is what the 96 rung is for.
+    {"glob": "img/ProfilePic.jpg",
+     "widths": [96, 160, 384, 640],
+     "sizes": "(max-width: 600px) 358px, (max-width: 1000px) 380px, 584px"},
+    # About `.phc-cell`, exhibition strip: 352 / 725 / 622 / 708.
+    {"glob": "img/about/exhibition-*.jpg",
+     "widths": [384, 768, 1440],
+     "sizes": "(max-width: 600px) 352px, (max-width: 1000px) 725px, 708px"},
+    # About `.phc-cell`, artful-living strip: 352 / 725 / 364 / 415.
+    {"glob": "img/about/artful-living-*.jpg",
+     "widths": [384, 768, 1440],
+     "sizes": "(max-width: 600px) 352px, (max-width: 1000px) 725px, 415px"},
+    # About `.phc-cell`, live-drawing strip: 352 / 354 / 211 / 241.
+    {"glob": "img/about/livedrawing-*.jpg",
+     "widths": [256, 384, 768],
+     "sizes": "(max-width: 600px) 352px, (max-width: 1000px) 354px, 241px"},
+    # About `.cert-mat` paints 100 at 1280 and 120 at 1600, and is not rendered
+    # at all below 1000. cert-jiwi-2026.jpg was the worst oversample on the
+    # site at 8.9x.
+    {"glob": "img/about/cert-*.jpg",
+     "widths": [128, 256],
+     "sizes": "120px"},
+    # Showcase `.pol-photo` 194-298; `#swm-img` in the modal 330 / 445.
+    {"glob": "img/showcase/sw*.jpg",
+     "widths": [224, 448],
+     "sizes": "(max-width: 600px) 298px, 215px"},
+    # index `.hero__img--large`: 251 / 504 / 487 / 487.
+    {"glob": "img/A1.jpeg", "widths": [256, 512, 1024],
+     "sizes": "(max-width: 600px) 251px, (max-width: 1000px) 504px, 487px"},
+    {"glob": "img/cover2.jpg", "widths": [256, 512, 1024],
+     "sizes": "(max-width: 600px) 251px, (max-width: 1000px) 504px, 487px"},
+    {"glob": "img/cover3.jpg", "widths": [256, 512, 1024],
+     "sizes": "(max-width: 600px) 251px, (max-width: 1000px) 504px, 487px"},
+    # index `.hero__img--small`: 136 / 274 / 280 / 280. BrushA.jpg is also a
+    # decorative background at 452, which the 576 rung covers.
+    {"glob": "img/BrushA.jpg", "widths": [160, 288, 576],
+     "sizes": "(max-width: 600px) 136px, (max-width: 1000px) 274px, 280px"},
+    {"glob": "img/BrushB.jpg", "widths": [160, 288, 576],
+     "sizes": "(max-width: 600px) 136px, (max-width: 1000px) 274px, 280px"},
+    {"glob": "img/Liquidwatercolor.jpg", "widths": [160, 288, 576],
+     "sizes": "(max-width: 600px) 136px, (max-width: 1000px) 274px, 280px"},
+    # index `.free-video` / `.arch-duo` square tiles: 358 / 420 / 373 / 373.
+    {"glob": "img/A2.jpeg", "widths": [192, 384, 768],
+     "sizes": "(max-width: 600px) 358px, (max-width: 1000px) 420px, 373px"},
+    {"glob": "img/A3.jpeg", "widths": [192, 384, 768],
+     "sizes": "(max-width: 600px) 358px, (max-width: 1000px) 420px, 373px"},
+    # index `.gallery-tile`: 358 / 720 / 300 / 300.
+    {"glob": "img/A4.jpeg", "widths": [384, 768],
+     "sizes": "(max-width: 600px) 358px, (max-width: 1000px) 720px, 300px"},
+    # index `.tb-photo` is 184 at every viewport.
+    {"glob": "img/A6.jpeg", "widths": [192, 384], "sizes": "184px"},
+    # index and lesson `.thumb`: 200 at every viewport. cover4.jpg was 722 KB
+    # for a 200px square.
+    {"glob": "img/Rubber.jpg", "widths": [224, 448], "sizes": "200px"},
+    {"glob": "img/cover4.jpg", "widths": [224, 448], "sizes": "200px"},
+]
+
+DERIVATIVE_RE = re.compile(r"^(?P<stem>.+)-(?P<w>\d{2,4})(?P<ext>\.jpe?g)$", re.I)
 
 # --------------------------------------------------------------------------
 # course map — folder on disk -> slug used everywhere in the site.
@@ -171,12 +322,90 @@ def pick(files, exts):
     return sorted([f for f in files if os.path.splitext(f)[1].lower() in exts], key=natural_key)
 
 
-def encode_image(src, dst, max_edge, force=False):
-    """Resize + re-encode. Returns {w, h, ratio, bytes} of the OUTPUT."""
+# every master this run has produced or measured — sweep_derivatives must never
+# delete one of these, whatever it looks like next to another master's stem
+MASTERS = set()
+
+
+def site_rel(path):
+    """img/gallery/g01.jpg — the form a page writes in an attribute."""
+    return os.path.relpath(path, SITE_DIR).replace(os.sep, "/")
+
+
+def derivative_path(master, width):
+    stem, ext = os.path.splitext(master)
+    return "%s-%d%s" % (stem, width, ext)
+
+
+def sweep_derivatives(master, keep):
+    """Delete `<stem>-<n>.jpg` files beside `master` that the current ladder no
+    longer lists, so shrinking a ladder does not leave orphans in the repo.
+    Only ever touches names that match the derivative pattern for THIS master,
+    and never a file that is itself a master."""
+    stem, ext = os.path.splitext(os.path.basename(master))
+    folder = os.path.dirname(master)
+    pattern = re.compile(r"^%s-(\d{2,4})%s$" % (re.escape(stem), re.escape(ext)), re.I)
+    for name in os.listdir(folder) if os.path.isdir(folder) else []:
+        m = pattern.match(name)
+        if not m:
+            continue
+        p = os.path.join(folder, name)
+        if p in MASTERS or site_rel(p) in keep:
+            continue
+        os.remove(p)
+        print("   (removed stale derivative %s)" % site_rel(p))
+
+
+def make_derivatives(master, widths, sizes, force=False):
+    """Write `<stem>-<w>.jpg` beside the master for every ladder rung the master
+    is actually bigger than, and return the srcset/sizes/w/h a page needs.
+
+    Idempotent: an existing derivative is measured, not rewritten, unless
+    --force. The master is always the last candidate, so a slot that is bigger
+    than the page agent told us still gets a sharp image."""
+    MASTERS.add(master)
+    with Image.open(master) as im:
+        mw, mh = im.size
+        base = im.copy()
+
+    cands = []
+    for w in sorted(set(widths)):
+        # A rung has to be materially smaller than the master to be worth a
+        # file. At 0.95 the gallery gained seventeen 960px copies of ~1160px
+        # masters — 2.7 MB in the repo to save a fraction of one fetch at
+        # DPR 3 — and every 1600px photograph gained a 1440px twin. 0.80 keeps
+        # the rungs that halve a fetch and drops the ones that shave it.
+        if w >= mw * 0.80:
+            continue
+        p = derivative_path(master, w)
+        if force or not os.path.exists(p):
+            h = max(1, int(round(mh * w / float(mw))))
+            base.resize((w, h), Image.LANCZOS).save(
+                p, "JPEG", quality=JPEG_QUALITY, optimize=True, progressive=True)
+        with Image.open(p) as im2:
+            dw, dh = im2.size
+        cands.append({"w": dw, "h": dh, "src": site_rel(p), "bytes": os.path.getsize(p)})
+    cands.append({"w": mw, "h": mh, "src": site_rel(master),
+                  "bytes": os.path.getsize(master)})
+
+    sweep_derivatives(master, {c["src"] for c in cands})
+    return {
+        "w": mw, "h": mh,
+        "srcset": ", ".join("%s %dw" % (c["src"], c["w"]) for c in cands),
+        "sizes": sizes,
+        "widths": [c["w"] for c in cands],
+        "derivativeBytes": sum(c["bytes"] for c in cands[:-1]),
+    }
+
+
+def encode_image(src, dst, max_edge, force=False, slot=None):
+    """Resize + re-encode. Returns {w, h, ratio, bytes} of the OUTPUT, plus
+    {srcset, sizes, widths} when `slot` names a row in SLOTS."""
     if os.path.exists(dst) and not force:
         with Image.open(dst) as im:
             w, h = im.size
-        return {"w": w, "h": h, "ratio": round(h / w, 4), "bytes": os.path.getsize(dst)}
+        meta = {"w": w, "h": h, "ratio": round(h / w, 4), "bytes": os.path.getsize(dst)}
+        return with_derivatives(dst, meta, slot, force)
 
     os.makedirs(os.path.dirname(dst), exist_ok=True)
     with Image.open(src) as im:
@@ -194,7 +423,28 @@ def encode_image(src, dst, max_edge, force=False):
     n = os.path.getsize(dst)
     if n > SIZE_WARN_BYTES:
         warn("%s is %d KB (over the 600 KB ceiling)" % (os.path.relpath(dst, SITE_DIR), n // 1024))
-    return {"w": w, "h": h, "ratio": round(h / w, 4), "bytes": n}
+    meta = {"w": w, "h": h, "ratio": round(h / w, 4), "bytes": n}
+    return with_derivatives(dst, meta, slot, force)
+
+
+def img_meta(meta):
+    """The four fields a page reads, and nothing else. `None` for an image that
+    does not exist (a lesson with no cover photo), so a page can tell the
+    difference between "no ladder" and "ladder of one"."""
+    if not meta or "srcset" not in meta:
+        return None
+    return {"srcset": meta["srcset"], "sizes": meta["sizes"],
+            "w": meta["w"], "h": meta["h"]}
+
+
+def with_derivatives(dst, meta, slot, force):
+    if not slot:
+        MASTERS.add(dst)
+        return meta
+    spec = SLOTS[slot]
+    meta.update(make_derivatives(dst, spec["widths"], spec["sizes"], force))
+    meta["slot"] = slot
+    return meta
 
 
 def probe_duration(path):
@@ -276,7 +526,8 @@ def import_courses(force):
             if images:
                 rel = "img/courses/%s/l%02d.jpg" % (course["slug"], seq)
                 meta = encode_image(os.path.join(folder, images[0]),
-                                    os.path.join(SITE_DIR, rel), MAX_EDGE_POSTER, force)
+                                    os.path.join(SITE_DIR, rel), MAX_EDGE_POSTER, force,
+                                    slot="course-poster")
             else:
                 # 8.1 / 8.3: a lesson with no cover photo runs full width and
                 # shows nothing in its place. It is not a reason to drop the
@@ -311,6 +562,10 @@ def import_courses(force):
                 "poster": rel,
                 "posterW": meta["w"] if meta else None,
                 "posterH": meta["h"] if meta else None,
+                # ticket 17: the responsive ladder for this poster. Every page
+                # that paints it reads srcset/sizes/w/h from here via
+                # build-data.py rather than re-deriving the widths.
+                "posterMeta": img_meta(meta),
                 "dur": total,
                 "videos": parts,
                 "srcVideo": parts[0]["file"] if parts else None,
@@ -337,8 +592,11 @@ def import_courses(force):
             if imgs:
                 cover_src = os.path.join(d, imgs[0])
                 break
+        cover_meta = None
         if cover_src:
-            encode_image(cover_src, os.path.join(SITE_DIR, cover_rel), MAX_EDGE_GALLERY, force)
+            cover_meta = img_meta(encode_image(
+                cover_src, os.path.join(SITE_DIR, cover_rel), MAX_EDGE_GALLERY, force,
+                slot="course-cover"))
         else:
             warn("%s has no photo to use as a cover" % course["slug"])
             cover_rel = None
@@ -352,8 +610,13 @@ def import_courses(force):
                 warn("%s: course photo %s not on disk" % (course["slug"], name))
                 continue
             prel = "img/courses/%s/p%02d.jpg" % (course["slug"], i + 1)
-            pm = encode_image(src, os.path.join(SITE_DIR, prel), MAX_EDGE_GALLERY, force)
-            photos.append({"src": name, "img": prel, "w": pm["w"], "h": pm["h"]})
+            # photos[0] is the lead shot in `#co-cover` at 446px; the rest are
+            # the 104px `.co-thumb` strip below it. Same ladder, different
+            # `sizes`, because one `sizes` for both would cost the thumbs 4x.
+            pm = encode_image(src, os.path.join(SITE_DIR, prel), MAX_EDGE_GALLERY, force,
+                              slot="course-photo-lead" if i == 0 else "course-photo-thumb")
+            photos.append({"src": name, "img": prel, "w": pm["w"], "h": pm["h"],
+                           "meta": img_meta(pm)})
         if course.get("photos") and len(photos) < 5:
             warn("%s has %d of the 5 course photos" % (course["slug"], len(photos)))
 
@@ -369,7 +632,7 @@ def import_courses(force):
                 warn("%s: preview reel %s not on disk" % (course["slug"], hl))
 
         out.append({"slug": course["slug"], "folder": course["folder"],
-                    "cover": cover_rel, "photos": photos,
+                    "cover": cover_rel, "coverMeta": cover_meta, "photos": photos,
                     "highlights": highlights, "lessons": lessons})
     return out
 
@@ -386,10 +649,11 @@ def import_gallery(force):
     for i, name in enumerate(files, 1):
         rel = "img/gallery/g%02d.jpg" % i
         meta = encode_image(os.path.join(root, name), os.path.join(SITE_DIR, rel),
-                            MAX_EDGE_GALLERY, force)
+                            MAX_EDGE_GALLERY, force, slot="gallery")
         # ratio drives the gallery frame; a missing value silently squashes art
         out.append({"img": "g%02d.jpg" % i, "src": name, "path": rel,
-                    "w": meta["w"], "h": meta["h"], "ratio": meta["ratio"]})
+                    "w": meta["w"], "h": meta["h"], "ratio": meta["ratio"],
+                    "meta": img_meta(meta)})
         print("   g%02d  %-24s %dx%d  r=%.2f" % (i, name, meta["w"], meta["h"], meta["ratio"]))
     return out
 
@@ -405,7 +669,8 @@ def import_free_videos(force):
             continue
 
         rel = "img/free/%s.jpg" % item["slug"]
-        meta = encode_image(poster_src, os.path.join(SITE_DIR, rel), MAX_EDGE_GALLERY, force)
+        meta = encode_image(poster_src, os.path.join(SITE_DIR, rel), MAX_EDGE_GALLERY,
+                            force, slot="free-poster")
 
         video_src = os.path.join(root, item["video"])
         present = os.path.exists(video_src)
@@ -414,10 +679,61 @@ def import_free_videos(force):
         dur = probe_duration(video_src) if present else None
 
         out.append({"slug": item["slug"], "poster": rel, "posterW": meta["w"],
-                    "posterH": meta["h"], "srcVideo": item["video"],
+                    "posterH": meta["h"], "posterMeta": img_meta(meta),
+                    "srcVideo": item["video"],
                     "videoPresent": present, "dur": dur})
         print("   %-20s %s" % (item["slug"], ("%ds" % dur) if dur else "no duration"))
     return out
+
+
+def derive_static(force):
+    """Second pass: the images that were already in img/ before this tool
+    existed, and that the pages name directly (About's photo strips, the blog
+    photographs, the home-page collage). Their CONTENT is not this tool's —
+    nothing is re-encoded, nothing is moved. All this adds is the derivative
+    ladder beside each one, plus the srcset/sizes/w/h that go with it, so a
+    hand-written <img> on About.dc.html can be as responsive as a generated one.
+
+    Runs after the asset passes so MASTERS already holds everything produced
+    from assets/ and the sweep cannot mistake one of those for an orphan."""
+    print("\n== static images")
+    out = {}
+    for spec in STATIC_SLOTS:
+        folder = os.path.join(SITE_DIR, os.path.dirname(spec["glob"]))
+        if not os.path.isdir(folder):
+            warn("static slot folder missing: %s" % spec["glob"])
+            continue
+        for name in sorted(os.listdir(folder), key=natural_key):
+            rel = "%s/%s" % (os.path.dirname(spec["glob"]), name)
+            if rel in out:                       # first matching rule wins
+                continue
+            if not fnmatch.fnmatch(rel, spec["glob"]):
+                continue
+            path = os.path.join(SITE_DIR, rel.replace("/", os.sep))
+            if DERIVATIVE_RE.match(name) and derivative_master(path):
+                continue                          # it is a derivative, not a master
+            try:
+                meta = make_derivatives(path, spec["widths"], spec["sizes"], force)
+            except Exception as exc:              # noqa: BLE001
+                warn("could not derive %s (%s)" % (rel, exc))
+                continue
+            out[rel] = {"srcset": meta["srcset"], "sizes": meta["sizes"],
+                        "w": meta["w"], "h": meta["h"]}
+            print("   %-34s %4dx%-4d -> %s" % (name, meta["w"], meta["h"],
+                                               " ".join(str(w) for w in meta["widths"][:-1]) or "(none)"))
+    return out
+
+
+def derivative_master(path):
+    """`img/x-384.jpg` -> `img/x.jpg` when that file exists, else None. Stops
+    the static pass treating its own output as a new master on the second run —
+    and `blog-kit-1-4.jpg` is NOT a derivative of `blog-kit-1.jpg`, because no
+    such master exists."""
+    m = DERIVATIVE_RE.match(os.path.basename(path))
+    if not m:
+        return None
+    cand = os.path.join(os.path.dirname(path), m.group("stem") + m.group("ext"))
+    return cand if os.path.exists(cand) else None
 
 
 def main():
@@ -431,6 +747,10 @@ def main():
         "gallery": import_gallery(force),
         "freeVideos": import_free_videos(force),
     }
+    # ticket 17: path -> {srcset, sizes, w, h} for the images the pages name
+    # directly. Nothing reads this at runtime; it is here so a page agent can
+    # look up the exact attribute text without re-measuring the layout.
+    manifest["static"] = derive_static(force)
     manifest["warnings"] = warnings
 
     os.makedirs(TOOLS_DIR, exist_ok=True)
@@ -438,9 +758,9 @@ def main():
         json.dump(manifest, fh, indent=2, ensure_ascii=False)
 
     print("\nwrote %s" % os.path.relpath(MANIFEST, SITE_DIR))
-    print("courses=%d  gallery=%d  free=%d  warnings=%d" % (
+    print("courses=%d  gallery=%d  free=%d  static=%d  warnings=%d" % (
         len(manifest["courses"]), len(manifest["gallery"]),
-        len(manifest["freeVideos"]), len(warnings)))
+        len(manifest["freeVideos"]), len(manifest["static"]), len(warnings)))
     if warnings:
         print("\nWARNINGS")
         for w in warnings:

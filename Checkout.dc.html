@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,6 +8,8 @@
 <body>
 <x-dc>
 <helmet>
+<title>Basket &amp; checkout — Crystal's Art School</title>
+<meta name="description" content="Review your basket and complete a demo checkout at Crystal's Art School. No payment is taken.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600;6..96,700&family=Oswald:wght@300;400;500;600&family=Archivo:wght@400;500;600;700&family=Saira+Stencil+One&family=Arizonia&display=swap" rel="stylesheet">
@@ -15,165 +17,127 @@
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="js/course-data.js"></script>
 <script src="js/site-extras.js"></script>
 <script src="js/site-nav.js"></script>
 <script src="js/site-footer.js"></script>
 <script src="js/motion.js"></script>
 </helmet>
 <div class="cas-root" data-theme="D">
+<a class="skip-link" href="#content">Skip to content</a>
 <div class="glow-layer" aria-hidden="true"></div>
 
-<nav class="site-nav" aria-label="Main">
-  <div class="nav-top">
-    <div class="inner">
-      <a class="nav-brand" href="index.html">
-        <img src="img/lau-logo.png" alt="Lau. — Crystal's Art School">
-      </a>
-      <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="Lessons.dc.html">Courses</a></li>
-        <li><a href="Gallery.dc.html">Gallery</a></li>
-        <li><a href="Showcase.dc.html">Showcase</a></li>
-        <li><a href="Blog.dc.html">Blog</a></li>
-        <li><a href="About.dc.html">About</a></li>
-        <li><a href="FreeVideos.dc.html">Free video</a></li>
-        <li><a href="Blog.dc.html?tag=Tools">Tools</a></li>
-        <li><a href="FAQ.dc.html">FAQ</a></li>
-      </ul>
-      <div class="nav-auth">
-        <a class="cart-btn" href="Checkout.dc.html" aria-label="Shopping cart">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M2 3h3.2l2.5 12.2a1.5 1.5 0 0 0 1.5 1.2h9a1.5 1.5 0 0 0 1.5-1.2L21.5 7H6.5"></path></svg>
-          <span class="cart-badge">0</span>
-        </a>
-        <a class="btn ghost" href="Login.dc.html">Log in</a>
-        <a class="btn primary" href="Signup.dc.html">Sign up</a>
-        <button class="nav-burger" type="button" aria-label="Menu" aria-expanded="false">☰</button>
-      </div>
-    </div>
-  </div>
-  <div class="nav-cats">
-    <div class="inner">
-      <ul class="nav-cat-links">
-        <li><a href="Lessons.dc.html?cat=Watercolour">Watercolour</a></li>
-        <li><a href="Lessons.dc.html?cat=Oil">Oils</a></li>
-        <li><a href="Lessons.dc.html?cat=Drawing">Drawing</a></li>
-        <li><a href="Lessons.dc.html?cat=Ink">Ink</a></li>
-        <li><a href="Lessons.dc.html?cat=Beginners">Beginners</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="nav-sheet">
-    <a href="index.html">Home</a>
-    <a href="Lessons.dc.html">Courses</a>
-    <a href="Gallery.dc.html">Gallery</a>
-    <a href="Showcase.dc.html">Showcase</a>
-    <a href="Blog.dc.html">Blog</a>
-    <a href="About.dc.html">About</a>
-    <a href="FreeVideos.dc.html">Free video</a>
-    <a href="Blog.dc.html?tag=Tools">Tools</a>
-    <a href="FAQ.dc.html">FAQ</a>
-    <a href="Lessons.dc.html?cat=Watercolour">Watercolour</a>
-    <a href="Lessons.dc.html?cat=Oil">Oils</a>
-    <a href="Lessons.dc.html?cat=Drawing">Drawing</a>
-    <a href="Lessons.dc.html?cat=Ink">Ink</a>
-    <a href="Lessons.dc.html?cat=Beginners">Beginners</a>
-    <a href="Login.dc.html">Log in / Sign up</a>
-  </div>
-</nav>
+<!-- nav markup lives in js/site-nav.js — single source of truth -->
+<nav class="site-nav" aria-label="Main"></nav>
 
 <header class="page-hero">
   <div class="container">
-    <div class="eyebrow"><span class="star">✦</span> Your basket</div>
+    <div class="eyebrow"><span class="star">&#10022;</span> Your basket</div>
     <h1 class="marker-title" style="font-size:clamp(32px,4vw,52px);color:var(--banner-ink);">Checkout</h1>
   </div>
 </header>
 
 <!-- The wood banner carries the page title and its eyebrow only; the
      introduction reads below it. (client feedback 2026-08-08) -->
-<div class="container page-lead-wrap"><p class="page-lead">Framed and ready to hang — review your pieces, then we'll take it from here.</p></div>
+<div class="container page-lead-wrap"><p class="page-lead">Review what's in your basket, then we'll take it from here.</p></div>
 
-<main class="container" id="content">
+<main class="container" id="content" tabindex="-1">
   <div class="steps" id="steps">
     <div class="step active" data-step="1"><span class="sn">1</span> Basket</div>
-    <span class="step-arrow">→</span>
+    <span class="step-arrow" aria-hidden="true">&#8594;</span>
     <div class="step" data-step="2"><span class="sn">2</span> Details &amp; payment</div>
-    <span class="step-arrow">→</span>
+    <span class="step-arrow" aria-hidden="true">&#8594;</span>
     <div class="step" data-step="3"><span class="sn">3</span> Confirmation</div>
   </div>
 
   <!-- STEP 1: basket -->
-  <section data-stage="1">
+  <section data-stage="1" tabindex="-1">
     <div class="checkout-grid">
       <div>
         <div id="cart-lines"></div>
         <div class="cart-empty" id="cart-empty" style="display:none;">
           <p style="font-family:var(--font-marker);font-weight:600;font-size:22px;color:var(--ink);margin:0 0 8px;">Your basket is empty</p>
-          <p style="margin:0 0 18px;">Browse the gallery and add a piece or two.</p>
-          <a class="btn primary" href="Gallery.dc.html">Visit the gallery →</a>
+          <p style="margin:0 0 18px;">Browse the courses and add one.</p>
+          <a class="btn primary" href="Lessons.dc.html">See the courses &#8594;</a>
         </div>
       </div>
       <aside class="summary" id="summary-1">
         <h3>Order summary</h3>
-        <div class="sum-row"><span>Subtotal</span><span id="sub-1">$0</span></div>
-        <div class="sum-row muted"><span>Shipping (framed, insured)</span><span id="ship-1">$18</span></div>
-        <div class="sum-total"><span class="l">Total</span><span class="v" id="tot-1">$0</span></div>
-        <button class="btn primary big full" id="to-details" type="button" style="margin-top:18px;">Continue to details →</button>
-        <a class="btn ghost full" href="Gallery.dc.html" style="margin-top:10px;">Keep browsing</a>
+        <div class="sum-row"><span>Subtotal</span><span id="sub-1">&#163;0</span></div>
+        <div class="sum-row muted" id="ship-row-1" style="display:none;"><span>Shipping <span class="hand-note" style="text-transform:none;">(rate to be confirmed)</span></span><span id="ship-1">&#163;0</span></div>
+        <div class="sum-total"><span class="l">Total</span><span class="v" id="tot-1">&#163;0</span></div>
+        <button class="btn primary big full" id="to-details" type="button" style="margin-top:18px;">Continue to details &#8594;</button>
+        <a class="btn ghost full" href="Lessons.dc.html" style="margin-top:10px;">Keep browsing</a>
+        <p class="hand-note" style="margin:14px 0 0;">Demo checkout &#8212; no payment is taken and no order is fulfilled.</p>
       </aside>
     </div>
   </section>
 
   <!-- STEP 2: details + payment -->
-  <section data-stage="2" style="display:none;">
+  <section data-stage="2" tabindex="-1" style="display:none;">
     <div class="checkout-grid">
-      <form id="details-form">
+      <!-- novalidate: the native bubble is not announced and cannot be styled, so
+           the page runs checkValidity() itself. Before this there was no JS
+           validation path at all and an entirely empty form placed an order. -->
+      <form id="details-form" novalidate="novalidate">
+        <p class="form-error" id="co-error" style="display:none;margin:0 0 14px;font-family:var(--font-cond);font-size:13.5px;line-height:1.45;color:var(--danger);"></p>
         <div class="co-panel" style="margin-bottom:18px;">
-          <h3>Shipping address</h3>
-          <div class="co-field"><label for="f-name">Full name</label><input id="f-name" required placeholder="Your name"></div>
-          <div class="co-field"><label for="f-addr">Address</label><input id="f-addr" required placeholder="Street address"></div>
+          <h3 id="co-billing-h">Billing address</h3>
+          <div class="co-field"><label for="f-name">Full name</label><input id="f-name" type="text" required="required" autocomplete="name" placeholder="Your name"></div>
+          <div class="co-field"><label for="f-addr">Address</label><input id="f-addr" type="text" required="required" autocomplete="street-address" placeholder="Street address"></div>
           <div class="co-row">
-            <div class="co-field"><label for="f-city">City</label><input id="f-city" required placeholder="City"></div>
-            <div class="co-field"><label for="f-post">Postcode</label><input id="f-post" required placeholder="Postcode"></div>
+            <div class="co-field"><label for="f-city">City</label><input id="f-city" type="text" required="required" autocomplete="address-level2" placeholder="City"></div>
+            <div class="co-field"><label for="f-post">Postcode</label><input id="f-post" type="text" required="required" autocomplete="postal-code" placeholder="Postcode"></div>
           </div>
-          <div class="co-field"><label for="f-country">Country</label><select id="f-country"><option>United Kingdom</option><option>Hong Kong</option><option>United States</option><option>Australia</option><option>Other</option></select></div>
+          <div class="co-field"><label for="f-country">Country</label><select id="f-country" autocomplete="country-name"><option>United Kingdom</option><option>Hong Kong</option><option>United States</option><option>Australia</option><option>Other</option></select></div>
         </div>
         <div class="co-panel">
           <h3>Payment</h3>
-          <div class="co-field"><label for="f-card">Card number</label><input id="f-card" required inputmode="numeric" placeholder="4242 4242 4242 4242"></div>
+          <!-- autocomplete is deliberately off on the three card fields: this is a
+               demo form that stores nothing and posts nowhere, so inviting the
+               browser to fill a real card into it would be wrong. -->
+          <div class="co-field"><label for="f-card">Card number</label><input id="f-card" type="text" required="required" inputmode="numeric" autocomplete="off" placeholder="4242 4242 4242 4242"></div>
           <div class="co-row">
-            <div class="co-field"><label for="f-exp">Expiry</label><input id="f-exp" required placeholder="MM / YY"></div>
-            <div class="co-field"><label for="f-cvc">CVC</label><input id="f-cvc" required inputmode="numeric" placeholder="123"></div>
+            <div class="co-field"><label for="f-exp">Expiry</label><input id="f-exp" type="text" required="required" autocomplete="off" placeholder="MM / YY"></div>
+            <div class="co-field"><label for="f-cvc">CVC</label><input id="f-cvc" type="text" required="required" inputmode="numeric" autocomplete="off" placeholder="123"></div>
           </div>
-          <p class="hand-note" style="font-family:var(--font-cond);font-size:12.5px;text-transform:uppercase;color:var(--muted);margin:6px 0 0;">Demo only — no real payment is taken.</p>
+          <p class="hand-note" style="margin:6px 0 0;">Demo only &#8212; no real payment is taken. Do not enter a real card number.</p>
         </div>
       </form>
       <aside class="summary">
         <h3>Order summary</h3>
         <div id="mini-lines" style="margin-bottom:8px;"></div>
-        <div class="sum-row"><span>Subtotal</span><span id="sub-2">$0</span></div>
-        <div class="sum-row muted"><span>Shipping</span><span id="ship-2">$18</span></div>
-        <div class="sum-total"><span class="l">Total</span><span class="v" id="tot-2">$0</span></div>
-        <button class="btn primary big full" id="place-order" type="submit" form="details-form" style="margin-top:18px;">Place order →</button>
-        <button class="btn ghost full" id="back-basket" type="button" style="margin-top:10px;">← Back to basket</button>
+        <div class="sum-row"><span>Subtotal</span><span id="sub-2">&#163;0</span></div>
+        <div class="sum-row muted" id="ship-row-2" style="display:none;"><span>Shipping <span class="hand-note" style="text-transform:none;">(rate to be confirmed)</span></span><span id="ship-2">&#163;0</span></div>
+        <div class="sum-total"><span class="l">Total</span><span class="v" id="tot-2">&#163;0</span></div>
+        <button class="btn primary big full" id="place-order" type="submit" form="details-form" style="margin-top:18px;">Place order &#8594;</button>
+        <button class="btn ghost full" id="back-basket" type="button" style="margin-top:10px;">&#8592; Back to basket</button>
+        <p style="font-family:var(--font-cond);font-size:12.5px;line-height:1.5;color:var(--muted);margin:14px 0 0;">By placing this order you agree to the <a class="link-squiggle" href="About.dc.html#terms">terms &amp; privacy</a>.</p>
+        <p class="hand-note" style="margin:8px 0 0;">Demo checkout &#8212; nothing is charged.</p>
       </aside>
     </div>
   </section>
 
   <!-- STEP 3: confirmation -->
-  <section data-stage="3" style="display:none;">
+  <section data-stage="3" tabindex="-1" style="display:none;">
     <div class="finish-card show" style="max-width:620px;margin:10px auto 80px;">
-      <span class="fc-star">✦</span>
-      <h2>Order placed — thank you!</h2>
-      <p>A confirmation is on its way to your inbox. Each piece ships framed and insured within 5–7 days.</p>
+      <span class="fc-star" aria-hidden="true">&#10022;</span>
+      <h2>Order placed</h2>
+      <!-- This used to read "A confirmation is on its way to your inbox. Each
+           piece ships framed and insured within 5–7 days." on a form with no
+           email field, for a basket that holds video courses. -->
+      <p id="fc-line">Your receipt is saved to <a class="link-squiggle" href="Dashboard.dc.html#purchases">Purchase history</a> in your dashboard.</p>
+      <p class="hand-note" style="margin:0 0 18px;">Demo only &#8212; no payment was taken, no email was sent and nothing will be despatched.</p>
       <div class="cert">
         <div class="c1">Crystal's Art School</div>
-        <div class="c2">Order <span id="order-no">#CAS-0000</span></div>
-        <div class="c3"><span id="order-count">0</span> pieces · <span id="order-total">$0</span></div>
+        <div class="c2">Order <span id="order-no">&#8212;</span></div>
+        <div class="c3"><span id="order-count">0</span> <span id="order-noun">items</span> &#183; <span id="order-total">&#163;0</span></div>
       </div>
       <div class="fc-btns">
-        <a class="btn primary big" href="Gallery.dc.html">Back to the gallery <span class="arr" aria-hidden="true">→</span></a>
-        <a class="btn teal" href="index.html">Home</a>
+        <a class="btn primary big" href="Dashboard.dc.html#courses">Go to my courses <span class="arr" aria-hidden="true">&#8594;</span></a>
+        <a class="btn teal" href="Lessons.dc.html">Keep browsing</a>
       </div>
+      <p style="font-family:var(--font-cond);font-size:12.5px;line-height:1.5;color:var(--muted);margin:18px 0 0;"><a class="link-squiggle" href="About.dc.html#terms">Terms &amp; privacy</a></p>
     </div>
   </section>
 </main>
@@ -188,7 +152,8 @@ class Component extends DCLogic {
   componentDidMount() {
     const root = document.querySelector('.cas-root');
     if (!root) return;
-    const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+    const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    const $ = (id) => document.getElementById(id);
 
     /* theme — Light (A) / Dark (D) only. The toggle itself lives in js/site-nav.js.
        A stored or ?theme= value outside A|D is ignored and falls back to the default. */
@@ -199,85 +164,285 @@ class Component extends DCLogic {
     try { const __q = (new URLSearchParams(location.search).get('theme') || '').toUpperCase(); if (valid.indexOf(__q) >= 0) { __theme = __q; localStorage.setItem(THEME_KEY, __q); } } catch (e) {}
     root.setAttribute('data-theme', __theme);
 
-    /* burger handled by js/site-nav.js */
+    /* ---- skip link ---- a fragment jump moves the viewport, not the caret */
+    document.addEventListener('click', (e) => {
+      const s = e.target.closest && e.target.closest('.skip-link');
+      if (!s) return;
+      const t = document.querySelector(s.getAttribute('href') || '');
+      if (!t) return;
+      e.preventDefault();
+      t.setAttribute('tabindex', '-1');
+      try { t.focus(); } catch (er) {}
+    });
 
-    /* ---- cart state ---- */
+    const say = (m, p) => { try { if (window.CasAnnounce) window.CasAnnounce(m, p); } catch (er) {} };
+
+    /* =========================================================================
+       ONE SOURCE OF TRUTH FOR THE CART
+       The header mini-cart drawer (js/site-extras.js) and this page both write
+       cas-cart, and the page had no listener for the drawer's writes because the
+       storage event only fires cross-tab. Reproduced before this change: open the
+       drawer here, increment a line, close it — drawer £230, page £200,
+       localStorage [3,1], payment step £248.
+       Now: storage is read in exactly one place (readCart), the money is computed
+       in exactly one place (totals), every step paints from the SAME object, and
+       the placed order uses that object rather than recomputing.
+       ========================================================================= */
     const CART = 'cas-cart';
-    const SHIP = 18;
-    const read = () => { try { return JSON.parse(localStorage.getItem(CART) || '[]'); } catch (e) { return []; } };
-    const write = (c) => { try { localStorage.setItem(CART, JSON.stringify(c)); } catch (e) {} };
-    const totalQty = (c) => c.reduce((n, i) => n + i.qty, 0);
-    const subtotal = (c) => c.reduce((n, i) => n + i.price * i.qty, 0);
-    const money = (n) => '£' + n.toLocaleString();
-    const badge = () => { const n = totalQty(read()); document.querySelectorAll('.cart-badge').forEach(b => { b.textContent = n; b.style.display = n > 0 ? 'grid' : 'none'; }); };
-
-    const lines = document.getElementById('cart-lines');
-    const empty = document.getElementById('cart-empty');
-    const toDetails = document.getElementById('to-details');
-
-    const renderBasket = () => {
-      const c = read();
-      badge();
-      if (!c.length) {
-        lines.innerHTML = ''; empty.style.display = 'block';
-        document.getElementById('summary-1').style.opacity = '.5';
-        toDetails.disabled = true; toDetails.style.opacity = '.5'; toDetails.style.pointerEvents = 'none';
-      } else {
-        empty.style.display = 'none';
-        document.getElementById('summary-1').style.opacity = '1';
-        toDetails.disabled = false; toDetails.style.opacity = '1'; toDetails.style.pointerEvents = 'auto';
-        lines.innerHTML = c.map((it, i) =>
-          '<div class="line-item">' +
-            '<div class="li-thumb">' + (it.img ? '<img src="img/' + esc(String(it.img).replace(/^img\//,'')) + '" alt="">' : '') + '</div>' +
-            '<div><div class="li-title">' + esc(it.title) + '</div><div class="li-sub">' + esc(it.kind || 'Artwork') + '</div>' +
-              '<div class="qty" style="margin-top:8px;"><button type="button" data-dec="' + i + '">−</button><span class="qv">' + it.qty + '</span><button type="button" data-inc="' + i + '">+</button></div></div>' +
-            '<div class="li-right"><div class="li-price">' + money(it.price * it.qty) + '</div><button class="li-remove" data-rm="' + i + '">Remove</button></div>' +
-          '</div>'
-        ).join('');
-        lines.querySelectorAll('[data-inc]').forEach(b => b.addEventListener('click', () => { const c2 = read(); c2[+b.dataset.inc].qty++; write(c2); renderBasket(); }));
-        lines.querySelectorAll('[data-dec]').forEach(b => b.addEventListener('click', () => { const c2 = read(); const it = c2[+b.dataset.dec]; it.qty--; if (it.qty < 1) c2.splice(+b.dataset.dec, 1); write(c2); renderBasket(); }));
-        lines.querySelectorAll('[data-rm]').forEach(b => b.addEventListener('click', () => { const c2 = read(); c2.splice(+b.dataset.rm, 1); write(c2); renderBasket(); }));
-      }
-      const sub = subtotal(c);
-      document.getElementById('sub-1').textContent = money(sub);
-      document.getElementById('tot-1').textContent = money(c.length ? sub + SHIP : 0);
-      document.getElementById('ship-1').textContent = money(SHIP);
+    /* UNCONFIRMED. £18, "5–7 days" and "framed, insured" were never sourced from
+       the client; the delivery promise has been removed and the rate is labelled
+       "to be confirmed" until it is. It is only ever applied to a physical item,
+       and nothing on the site currently adds one. */
+    const SHIP_FLAT = 18;
+    const isDigital = (it) => !!it.tier || /course|video|lesson|download/i.test(String(it.kind || ''));
+    const readCart = () => { try { const c = JSON.parse(localStorage.getItem(CART) || '[]'); return Array.isArray(c) ? c : []; } catch (e) { return []; } };
+    const money = (n) => '\u00a3' + Number(n || 0).toLocaleString();
+    const totals = (c) => {
+      const sub = c.reduce((n, i) => n + (Number(i.price) || 0) * (Number(i.qty) || 1), 0);
+      const qty = c.reduce((n, i) => n + (Number(i.qty) || 1), 0);
+      const physical = c.some(i => !isDigital(i));
+      const ship = physical ? SHIP_FLAT : 0;
+      return { sub: sub, ship: ship, total: sub + ship, qty: qty, physical: physical, lines: c.length };
     };
+
+    /* the single live snapshot every step paints from */
+    const state = { cart: [], t: totals([]), raw: null };
+
+    const lines = $('cart-lines');
+    const emptyBox = $('cart-empty');
+    const toDetails = $('to-details');
+
+    const paintSummary = (t) => {
+      $('sub-1').textContent = money(t.sub);
+      $('sub-2').textContent = money(t.sub);
+      $('tot-1').textContent = money(t.total);
+      $('tot-2').textContent = money(t.total);
+      /* #ship-1 used to read £18 on an empty basket, and charged postage on video
+         courses. The row only exists when something physical is in the basket. */
+      $('ship-1').textContent = money(t.ship);
+      $('ship-2').textContent = money(t.ship);
+      $('ship-row-1').style.display = t.ship > 0 ? '' : 'none';
+      $('ship-row-2').style.display = t.ship > 0 ? '' : 'none';
+    };
+
+    const paintLines = (c) => {
+      if (!c.length) {
+        lines.innerHTML = ''; emptyBox.style.display = 'block';
+        /* the whole summary used to drop to opacity .5 while pointer-events
+           stayed auto, so "Keep browsing" was a live link painted at 2.51:1.
+           Only the control that is actually unavailable is dimmed now. */
+        toDetails.disabled = true;
+        toDetails.setAttribute('aria-disabled', 'true');
+        toDetails.style.opacity = '.5';
+        return;
+      }
+      emptyBox.style.display = 'none';
+      toDetails.disabled = false;
+      toDetails.removeAttribute('aria-disabled');
+      toDetails.style.opacity = '';
+      lines.innerHTML = c.map((it, i) =>
+        '<div class="line-item">' +
+          '<div class="li-thumb">' + (it.img ? '<img src="img/' + esc(String(it.img).replace(/^img\//, '')) + '" alt="" loading="lazy" decoding="async">' : '') + '</div>' +
+          '<div><div class="li-title">' + esc(it.title) + '</div><div class="li-sub">' + esc(it.kind || 'Item') + '</div>' +
+            '<div class="qty" style="margin-top:8px;">' +
+              '<button type="button" data-dec="' + i + '" aria-label="Decrease quantity of ' + esc(it.title) + '">\u2212</button>' +
+              '<span class="qv">' + (Number(it.qty) || 1) + '</span>' +
+              '<button type="button" data-inc="' + i + '" aria-label="Increase quantity of ' + esc(it.title) + '">+</button>' +
+            '</div></div>' +
+          '<div class="li-right"><div class="li-price">' + money((Number(it.price) || 0) * (Number(it.qty) || 1)) + '</div>' +
+            '<button class="li-remove" type="button" data-rm="' + i + '" aria-label="Remove ' + esc(it.title) + ' from your basket">Remove</button></div>' +
+        '</div>'
+      ).join('');
+    };
+
+    const paintMini = (c, t) => {
+      $('mini-lines').innerHTML = c.map(it =>
+        '<div class="sum-row"><span>' + esc(it.title) + ' \u00d7' + (Number(it.qty) || 1) + '</span><span>' +
+        money((Number(it.price) || 0) * (Number(it.qty) || 1)) + '</span></div>').join('');
+    };
+
+    const renderAll = () => {
+      state.cart = readCart();
+      state.t = totals(state.cart);
+      paintLines(state.cart);
+      paintMini(state.cart, state.t);
+      paintSummary(state.t);
+      if (window.casRenderCart) { try { window.casRenderCart(); } catch (e) {} }
+    };
+
+    const writeCart = (c) => {
+      try { localStorage.setItem(CART, JSON.stringify(c)); } catch (e) {}
+      state.raw = null;              /* force the watcher to agree with us */
+      renderAll();
+      state.raw = (function () { try { return localStorage.getItem(CART) || '[]'; } catch (e) { return '[]'; } })();
+    };
+
+    /* the drawer writes cas-cart synchronously inside its own click handler, so a
+       bubble-phase listener here sees the new value in the same frame; the timer
+       is the backstop for anything that changes storage without a click. */
+    const watch = () => {
+      let raw = '[]';
+      try { raw = localStorage.getItem(CART) || '[]'; } catch (e) {}
+      if (raw === state.raw) return;
+      state.raw = raw;
+      renderAll();
+      if (stepNow === 2 && !state.cart.length) { goStep(1); say('Your basket is now empty.', 'assertive'); }
+    };
+    document.addEventListener('click', () => { watch(); requestAnimationFrame(watch); });
+    window.addEventListener('storage', watch);
+    window.addEventListener('focus', watch);
+    window.addEventListener('pageshow', watch);
+    /* the click path above is what makes the drawer's edits land in the same
+       frame; this is only a backstop for a write that arrives without one, so it
+       is deliberately slow — a fast permanent interval is exactly what ticket 25
+       objects to in the nav guard. */
+    setInterval(watch, 1000);
+
+    /* ---- basket controls ---- */
+    lines.addEventListener('click', (e) => {
+      const b = e.target.closest && e.target.closest('[data-inc],[data-dec],[data-rm]');
+      if (!b) return;
+      const c = readCart();
+      let msg = '';
+      if (b.hasAttribute('data-inc')) {
+        const i = +b.getAttribute('data-inc'); c[i].qty = (Number(c[i].qty) || 1) + 1;
+        msg = c[i].title + ', quantity ' + c[i].qty + '.';
+      } else if (b.hasAttribute('data-dec')) {
+        const i = +b.getAttribute('data-dec'); c[i].qty = (Number(c[i].qty) || 1) - 1;
+        msg = c[i].qty < 1 ? c[i].title + ' removed from your basket.' : c[i].title + ', quantity ' + c[i].qty + '.';
+        if (c[i].qty < 1) c.splice(i, 1);
+      } else {
+        const i = +b.getAttribute('data-rm'); msg = c[i].title + ' removed from your basket.'; c.splice(i, 1);
+      }
+      writeCart(c);
+      say(msg + (state.cart.length ? ' Total ' + money(state.t.total) + '.' : ' Your basket is empty.'));
+      if (!state.cart.length) { try { $('cart-empty').querySelector('a').focus(); } catch (er) {} }
+    });
 
     /* ---- step flow ---- */
     const stages = { 1: document.querySelector('[data-stage="1"]'), 2: document.querySelector('[data-stage="2"]'), 3: document.querySelector('[data-stage="3"]') };
     const stepEls = document.querySelectorAll('.step');
-    const goStep = (n) => {
-      Object.keys(stages).forEach(k => stages[k].style.display = (+k === n) ? 'block' : 'none');
-      stepEls.forEach(s => { const sn = +s.dataset.step; s.classList.toggle('active', sn === n); s.classList.toggle('done', sn < n); });
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+    const STEP_NAME = { 1: 'Step 1 of 3, your basket.', 2: 'Step 2 of 3, details and payment.', 3: 'Step 3 of 3, confirmation.' };
+    let stepNow = 1;
+    /* goStep used to scroll with behavior:"smooth" unconditionally, which wins
+       over the reduced-motion CSS, and it never moved focus. */
+    const reduceMotion = () => { try { return window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; } };
+    function goStep(n, announce) {
+      stepNow = n;
+      Object.keys(stages).forEach(k => { stages[k].style.display = (+k === n) ? 'block' : 'none'; });
+      stepEls.forEach(s => { const sn = +s.dataset.step; s.classList.toggle('active', sn === n); s.classList.toggle('done', sn < n); s.setAttribute('aria-current', sn === n ? 'step' : 'false'); });
+      window.scrollTo({ top: 0, behavior: reduceMotion() ? 'auto' : 'smooth' });
+      try { stages[n].focus(); } catch (e) {}
+      if (announce !== false) say(STEP_NAME[n]);
+    }
+
+    toDetails.addEventListener('click', () => {
+      watch();
+      if (!state.cart.length) { say('Your basket is empty.', 'assertive'); return; }
+      goStep(2);
+    });
+    $('back-basket').addEventListener('click', () => goStep(1));
+
+    /* ---- constraint validation ----
+       `required` in source is dropped by the runtime, checkValidity() returned
+       true on an empty form, and there was no JS validation path at all: clicking
+       Place order with every field empty produced an order number and a total. */
+    const form = $('details-form');
+    const errBox = $('co-error');
+    const fieldName = (el) => {
+      const f = el.closest('.co-field');
+      const lab = f && f.querySelector('label');
+      return String((lab && lab.textContent) || el.id || 'This field').trim();
+    };
+    const reason = (el) => {
+      const n = fieldName(el), v = el.validity;
+      if (v.valueMissing) return n + ' is required.';
+      if (v.typeMismatch) return n + ' is not in the expected format.';
+      if (v.tooShort) return n + ' must be at least ' + el.minLength + ' characters.';
+      return n + ' is not valid.';
+    };
+    const clearErr = () => {
+      errBox.style.display = 'none'; errBox.textContent = '';
+      Array.prototype.forEach.call(form.elements, (el) => {
+        el.removeAttribute('aria-invalid');
+        if (el.getAttribute('aria-describedby') === 'co-error') el.removeAttribute('aria-describedby');
+      });
+    };
+    form.addEventListener('input', () => { if (errBox.style.display !== 'none') clearErr(); });
+    const validate = () => {
+      clearErr();
+      if (form.checkValidity()) return true;
+      const bad = Array.prototype.filter.call(form.elements, (el) => el.willValidate && !el.checkValidity());
+      if (!bad.length) return true;
+      const first = bad[0];
+      const msg = reason(first) + (bad.length > 1 ? ' ' + bad.length + ' fields need attention.' : '');
+      errBox.textContent = msg; errBox.style.display = 'block';
+      first.setAttribute('aria-invalid', 'true');
+      first.setAttribute('aria-describedby', 'co-error');
+      try { first.focus(); } catch (e) {}
+      say(msg, 'assertive');
+      return false;
     };
 
-    const fillStep2 = () => {
-      const c = read();
-      const mini = document.getElementById('mini-lines');
-      mini.innerHTML = c.map(it => '<div class="sum-row"><span>' + esc(it.title) + ' ×' + it.qty + '</span><span>' + money(it.price * it.qty) + '</span></div>').join('');
-      const sub = subtotal(c);
-      document.getElementById('sub-2').textContent = money(sub);
-      document.getElementById('ship-2').textContent = money(SHIP);
-      document.getElementById('tot-2').textContent = money(sub + SHIP);
+    /* ---- placing the order ----
+       cas-orders was written by no other file, so a real purchase could never
+       appear in the dashboard's Purchase history. It is written here, from the
+       same snapshot the payment step displayed, along with the enrolments. */
+    const courseIdFor = (title) => {
+      const list = window.CAS_COURSES || [];
+      for (let i = 0; i < list.length; i++) if (list[i].title === title) return list[i].id;
+      return '';
     };
-
-    toDetails.addEventListener('click', () => { if (!read().length) return; fillStep2(); goStep(2); });
-    document.getElementById('back-basket').addEventListener('click', () => goStep(1));
-
-    document.getElementById('details-form').addEventListener('submit', (e) => {
+    form.addEventListener('submit', (e) => {
       e.preventDefault();
-      const c = read();
-      const sub = subtotal(c);
-      document.getElementById('order-no').textContent = '#CAS-' + String(Math.floor(1000 + Math.random() * 9000));
-      document.getElementById('order-count').textContent = totalQty(c);
-      document.getElementById('order-total').textContent = money(sub + SHIP);
-      write([]); badge();
-      goStep(3);
+      watch();
+      if (!state.cart.length) { goStep(1); say('Your basket is empty.', 'assertive'); return; }
+      if (!validate()) return;
+
+      /* the charged figures ARE the reviewed figures — same object, no second sum */
+      const cart = state.cart, t = state.t;
+      const stamp = new Date();
+      const orderId = 'CAS-' + String(stamp.getTime()).slice(-6);
+      let date = '';
+      try { date = stamp.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' }); } catch (er) { date = stamp.toISOString().slice(0, 10); }
+
+      try {
+        const prev = JSON.parse(localStorage.getItem('cas-orders') || '[]');
+        const orders = Array.isArray(prev) ? prev : [];
+        cart.forEach(it => {
+          orders.push({ id: orderId, date: date, title: it.title, tier: it.tier || it.kind || '',
+                        img: it.img ? 'img/' + String(it.img).replace(/^img\//, '') : '',
+                        amount: (Number(it.price) || 0) * (Number(it.qty) || 1) });
+        });
+        if (t.ship > 0) orders.push({ id: orderId, date: date, title: 'Shipping', tier: '', img: '', amount: t.ship });
+        localStorage.setItem('cas-orders', JSON.stringify(orders));
+      } catch (er) {}
+
+      try {
+        const prevE = JSON.parse(localStorage.getItem('cas-enrolled') || '[]');
+        const enrolled = Array.isArray(prevE) ? prevE : [];
+        cart.forEach(it => {
+          const cid = courseIdFor(it.title);
+          if (!cid) return;
+          const hit = enrolled.filter(x => x.id === cid)[0];
+          if (hit) { if (it.tier === 'Fellow') hit.tier = 'Fellow'; }
+          else enrolled.push({ id: cid, tier: it.tier || 'Apprentice' });
+        });
+        localStorage.setItem('cas-enrolled', JSON.stringify(enrolled));
+      } catch (er) {}
+
+      $('order-no').textContent = orderId;
+      $('order-count').textContent = t.qty;
+      $('order-noun').textContent = t.qty === 1 ? 'item' : 'items';
+      $('order-total').textContent = money(t.total);
+
+      writeCart([]);
+      goStep(3, false);
+      say('Order ' + orderId + ' placed. ' + t.qty + (t.qty === 1 ? ' item' : ' items') + ', total ' + money(t.total) + '. Demo only \u2014 no payment was taken.', 'assertive');
     });
 
-    renderBasket();
+    renderAll();
+    state.raw = (function () { try { return localStorage.getItem(CART) || '[]'; } catch (e) { return '[]'; } })();
   }
 }
 </script>

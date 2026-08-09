@@ -123,7 +123,7 @@
   font-family: var(--font-cond); font-weight: 600; font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase;
   padding: 6px 0; box-shadow: 0 2px 10px rgba(20,17,13,.4); }
 
-.free-flag { position: absolute; top: 12px; left: 12px; z-index: 3; font-family: var(--font-cond); font-size: 12.5px; font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; background: var(--coral); color: var(--paper); border-radius: var(--r-sharp); padding: 5px 13px; box-shadow: var(--shadow-sm); }
+.free-flag { position: absolute; top: 12px; left: 12px; z-index: 3; font-family: var(--font-cond); font-size: 12.5px; font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; background: var(--coral-fill); color: var(--coral-fill-ink); border-radius: var(--r-sharp); padding: 5px 13px; box-shadow: var(--shadow-sm); }
 @media (max-width: 1024px) { .lesson-grid { grid-template-columns: repeat(3,1fr); } }
 @media (max-width: 860px) { .lesson-grid { grid-template-columns: repeat(2,1fr); } }
 @media (max-width: 480px) { .lesson-grid { grid-template-columns: 1fr; } }
@@ -137,7 +137,7 @@
 .filter-panel { position: sticky; top: 88px; align-self: start; background-color: var(--surface); background-image: var(--concrete-grain); background-size: 200px 200px; border-radius: var(--radius-card); box-shadow: var(--shadow-sm); padding: 18px 20px 12px; }
 .filter-panel .fp-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
 .filter-panel .fp-title { font-family: var(--font-display-serif); font-weight: 600; font-size: 18px; letter-spacing: var(--tracking-display); text-transform: uppercase; color: var(--ink); }
-.filter-panel .fp-clear { border: 0; background: none; cursor: pointer; font-family: var(--font-cond); font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--coral); -webkit-text-fill-color: var(--coral); }
+.filter-panel .fp-clear { border: 0; background: none; cursor: pointer; font-family: var(--font-cond); font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--coral-ink); -webkit-text-fill-color: var(--coral-ink); }
 .filter-panel .fp-clear:hover { text-decoration: underline; }
 .fgroup { padding: 13px 0; border-top: 1px solid var(--line); }
 .fgroup .fg-title { font-family: var(--font-cond); font-weight: 600; font-size: 14px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
@@ -153,7 +153,6 @@
 .lesson-meta-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; min-height: 18px; }
 .lesson-count { font-family: var(--font-cond); font-size: 13px; color: var(--muted); }
 .no-results { display: none; padding: 44px 0; text-align: center; color: var(--muted); font-size: 15px; }
-.lesson-cell .price .was { text-decoration: line-through; color: var(--muted); font-weight: 500; font-size: 15px; margin-right: 6px; }
 /* Sale ribbon takes marine to match the reduced price it announces. Flat fill,
    no texture to exempt, so it is a straight substitution. */
 .sale-flag { position: absolute; top: 12px; right: 12px; z-index: 3; font-family: var(--font-cond); font-size: 12.5px; font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; background: var(--marine); color: var(--marine-ink); padding: 4px 9px; border-radius: var(--r-sharp); }
@@ -210,7 +209,7 @@
 .tier-card .btn, .tier-card .btn.ghost { font-size: 14px; }
 .tier-card .btn.ghost { background: rgba(246,240,230,.94); color: #2b2823 !important; -webkit-text-fill-color: #2b2823 !important; box-shadow: none; text-shadow: none; }
 .tier-card.highlight .btn { background: var(--paper); color: #2b2823; }
-.tier-card.fellow .btn { background: var(--coral); color: var(--paper); }
+.tier-card.fellow .btn { background: var(--coral-fill); color: var(--coral-fill-ink); }
 
 /* ---------- auth: social + divider ---------- */
 .btn.social-google { background: #f3ede1 !important; color: #2b2823 !important; -webkit-text-fill-color: #2b2823 !important; box-shadow: inset 0 0 0 1px rgba(43,40,35,.22); justify-content: center; gap: 10px; }
@@ -263,8 +262,21 @@
 .rel-title { transition: bottom .3s var(--ease-out); }
 .rel-actions .cc-btn { flex: 0 0 auto; }
 .rel-dots { position: absolute; top: 14px; right: 14px; z-index: 4; display: flex; gap: 6px; }
-.rel-dots button { width: 8px; height: 8px; border-radius: 50%; border: 0; padding: 0; cursor: pointer; background: rgba(244,231,207,.45); transition: background .2s; }
-.rel-dots button.active { background: #f3ede1; }
+/* #18: 8px of dot, but the control grows to 44x44 under a coarse pointer —
+   padding added in the coarse-pointer block at the foot of industrial-3.css,
+   plus background-clip:content-box here so the hit area grows and the dot does
+   not.
+   These dots sit ON THE PHOTOGRAPH, and the photograph is client-editable, so no
+   fill can be guaranteed 3:1 against it — measured 1.15:1 where the image runs
+   to white. The group gets its own scrim instead, which is a surface we control:
+   at .72 the darkest thing the scrim can become over a white photograph is
+   #565452, and a .72 cream dot on that measures 4.4:1; over a black photograph
+   it is 9.2:1. */
+.rel-dots { background: rgba(20,17,13,.72); border-radius: var(--radius-pill); padding: 6px 8px; }
+.rel-dots button { width: 8px; height: 8px; border-radius: 50%; border: 0; padding: 0; cursor: pointer;
+  background: rgba(244,231,207,.72); background-clip: content-box;
+  transition: background .2s; }
+.rel-dots button.active { background: #f3ede1; background-clip: content-box; }
 
 /* ---------- social buttons ---------- */
 .social-row { display: flex; gap: 10px; margin-top: 12px; }
@@ -307,7 +319,7 @@
    put it. (client feedback 2026-08-08) */
 .course-card h3 { font-family: var(--font-marker); font-weight: 600; font-size: 23px; margin: 0; line-height: 1.18; color: var(--ink); }
 .course-card .cc-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: auto; }
-.course-card .cc-price { font-family: var(--font-cond); font-weight: 600; font-size: 15px; color: var(--coral); }
+.course-card .cc-price { font-family: var(--font-cond); font-weight: 600; font-size: 15px; color: var(--coral-ink); }
 .course-card .cc-btn { flex: 0 0 auto; }
 .course-card .cc-photo { aspect-ratio: 16/9; overflow: hidden; border-top: 2px solid color-mix(in srgb, var(--ink) 12%, transparent); }
 .course-card .cc-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s var(--ease-out); }
@@ -351,7 +363,7 @@
 .feature-lesson .fl-media img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s var(--ease-out); }
 .feature-lesson:hover .fl-media img { transform: scale(1.04); }
 .feature-lesson .fl-body { padding: 28px 30px; display: flex; flex-direction: column; gap: 12px; justify-content: center; }
-.feature-lesson .fl-chip { align-self: flex-start; font-family: var(--font-cond); font-size: 12px; font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; background: var(--coral); color: var(--paper); border-radius: var(--r-sharp); padding: 5px 12px; }
+.feature-lesson .fl-chip { align-self: flex-start; font-family: var(--font-cond); font-size: 12px; font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; background: var(--coral-fill); color: var(--coral-fill-ink); border-radius: var(--r-sharp); padding: 5px 12px; }
 .feature-lesson .fl-title { font-family: var(--font-marker); font-weight: 600; font-size: clamp(22px,2.4vw,30px); line-height: 1.1; margin: 0; color: var(--ink); }
 .feature-lesson .fl-text { font-size: 13.5px; line-height: 1.6; color: var(--muted); margin: 0; }
 .feature-lesson .fl-actions { display: flex; gap: 10px; margin-top: 6px; flex-wrap: wrap; }
@@ -361,7 +373,7 @@
 /* About column — Instagram + Facebook */
 .about-col .social-row { justify-content: center; margin-top: 14px; }
 .about-col .social-btn { background: color-mix(in srgb, var(--ink) 12%, transparent); color: var(--ink); }
-.about-col .social-btn:hover { background: var(--coral); color: var(--paper); transform: translateY(-2px); }
+.about-col .social-btn:hover { background: var(--coral-fill); color: var(--coral-fill-ink); transform: translateY(-2px); }
 
 /* ---------- About page: biography / story / certificates / signup ---------- */
 /* 13: the copy columns run long now that each section carries its full text, so
@@ -399,26 +411,56 @@
   box-sizing: border-box; overflow: hidden; }
 /* Fixed height, and the photograph fills the frame rather than being fitted
    inside it. (client feedback 2026-08-08 — "fill instead of fit") */
-.ph-carousel .phc-cell img { width: 100%; height: 400px; display: block;
+/* #20: the height is a custom property rather than a value here, because the
+   portrait variant used to set it on `.ph-carousel.is-portrait .phc-cell img`
+   (0,3,2) and the small-screen override sat on `.ph-carousel .phc-cell img`
+   inside a media query (0,2,2). Specificity does not care which query you are
+   in, so the portrait set stayed 560px tall in a 358px-wide cell at 390px.
+   A variable moves the decision to the CAROUSEL, where both the variant and the
+   breakpoint can set it and the last one wins on cascade order, not weight. */
+.ph-carousel { --phc-h: 400px; }
+.ph-carousel .phc-cell img { width: 100%; height: var(--phc-h); display: block;
   object-fit: cover; background: var(--surface);
   border-radius: var(--radius-card); box-shadow: var(--shadow);
   transition: transform .9s var(--ease-out), opacity .5s linear; }
 /* .is-portrait — every photograph in that set is portrait, so the frame is
    portrait and narrower. */
-.ph-carousel.is-portrait .phc-cell img { height: 560px; }
+.ph-carousel.is-portrait { --phc-h: 560px; }
 /* The page coming into view drifts and fades a little as it lands, so the
    change reads as a movement rather than a jump. */
 .ph-carousel .phc-cell:not(.is-current) img { opacity: .55; transform: scale(1.03); }
-@media (max-width: 900px) { .ph-carousel .phc-cell img { height: 320px; } }
+@media (max-width: 900px) {
+  .ph-carousel { --phc-h: 320px; }
+  /* still taller than it is wide at these widths, so the set still reads as
+     portrait, but 560px in a 358px cell was a letterbox on its side */
+  .ph-carousel.is-portrait { --phc-h: 420px; }
+}
+@media (max-width: 560px) {
+  .ph-carousel { --phc-h: 240px; }
+  .ph-carousel.is-portrait { --phc-h: 380px; }
+}
 .ph-carousel .phc-nav { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 14px; }
 /* One dot per photograph, replacing the "1 / 2" counter. (client feedback
    2026-08-08) */
 .ph-carousel .phc-dots { display: flex; align-items: center; gap: 9px; }
+/* #18: the dot stays 9px — it is a position indicator, not a button face — but
+   the CONTROL grows to 44x44 under a coarse pointer. background-clip:content-box
+   is what makes that possible: the padding added in the coarse-pointer block at
+   the foot of industrial-3.css enlarges the hit area while the painted disc
+   stays the size of the content box. It is a no-op at zero padding, so desktop
+   is unchanged.
+   #18 also: at 26% ink the inactive dot measured 1.56:1 (A) / 2.08:1 (D) against
+   the page. A pagination dot is a non-text control, so it needs 3:1. 55% ink was
+   still only 2.80:1 on the LIGHT theme — a mix towards transparent is not
+   symmetrical between a dark page and a pale one — so 65%, which measures
+   3.36:1 (A) and 5.68:1 (D). It still reads as "not the current one" because the
+   active dot is marine and 25% larger. */
 .ph-carousel .phc-dot { width: 9px; height: 9px; padding: 0; border: 0; border-radius: 50%; cursor: pointer;
-  background: color-mix(in srgb, var(--ink) 26%, transparent);
+  background: color-mix(in srgb, var(--ink) 65%, transparent);
+  background-clip: content-box;
   transition: background var(--dur-base), transform var(--dur-base); }
-.ph-carousel .phc-dot.active { background: var(--marine); transform: scale(1.25); }
-.ph-carousel .phc-dot:hover { background: color-mix(in srgb, var(--ink) 48%, transparent); }
+.ph-carousel .phc-dot.active { background: var(--marine); background-clip: content-box; transform: scale(1.25); }
+.ph-carousel .phc-dot:hover { background: color-mix(in srgb, var(--ink) 78%, transparent); background-clip: content-box; }
 @media (prefers-reduced-motion: reduce) {
   .ph-carousel .phc-rail { transition: none; }
   .ph-carousel .phc-cell img { transition: none; }
@@ -590,18 +632,9 @@
 .bio-sub { font-family: var(--font-cond); font-weight: 600; font-size: 15px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--ink); margin: 22px 0 8px; }
 .bio-sub:first-of-type { margin-top: 6px; }
 
-/* Tracking and size held: direction §13 deletes this list, and the surviving
-   instance is below About's `Demystifying the process` freeze line (§14). (#20) */
-.about-social { margin-top: 16px; }
-
-.story-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; margin-top: 30px; }
-.story-media { border-radius: var(--radius-card); overflow: hidden; box-shadow: var(--shadow); }
-.story-media img { width: 100%; display: block; aspect-ratio: 4/3; object-fit: cover; }
-.story-copy p { color: var(--muted); font-size: 15.5px; line-height: 1.78; margin: 0 0 14px; }
-
-.cert-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 30px; }
-.cert-card { margin: 0; background-color: #1c130b; background-image: linear-gradient(180deg, rgba(22,15,9,.4), rgba(22,15,9,.5)), url("../img/wood-rustic.jpg"); background-size: cover; background-position: center; border-radius: var(--radius-card); padding: 16px; box-shadow: var(--shadow); }
-.cert-card img { width: 100%; display: block; aspect-ratio: 4/3; object-fit: cover; border-radius: 8px; }
+/* #19: .story-layout / .story-media / .story-copy and .cert-grid / .cert-card
+   are gone. About renders neither block; the certificates are the .cert-split
+   table plus the .bc-card--cert mounts in industrial-3.css. */
 
 .signup-band { position: relative; overflow: hidden; background-color: var(--band-bg); background-image: var(--band-grain); background-size: var(--band-size, 380px 150px); color: var(--band-ink); border-radius: var(--radius-card); padding: 40px 44px; display: grid; grid-template-columns: auto 1fr; gap: 40px; align-items: center; box-shadow: var(--shadow); }
 .signup-band::before { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent 0 52px, rgba(0,0,0,.12) 52px 53px); pointer-events: none; }
@@ -615,18 +648,13 @@
 .signup-form input::placeholder { color: rgba(244,231,207,.55); }
 .signup-form input:focus { outline: none; border-color: var(--band-eyebrow); }
 @media (max-width: 820px) {
-  .bio-layout, .story-layout, .cert-grid { grid-template-columns: 1fr; gap: 26px; }
+  .bio-layout { grid-template-columns: 1fr; gap: 26px; }
   .signup-band { grid-template-columns: 1fr; gap: 22px; padding: 30px; }
   .signup-logo { padding-right: 0; border-right: 0; border-bottom: 1px solid rgba(244,231,207,.2); padding-bottom: 18px; }
 }
 
-/* ---------- two-row nav: category subnav (second row) ---------- */
-.nav-cats { position: relative; z-index: 1; }
-.nav-cats .inner { display: grid; grid-template-columns: minmax(200px, 1fr) auto minmax(200px, 1fr); max-width: var(--site-max); margin: 0 auto; padding: 0 var(--gutter) 8px; }
-.nav-cat-links { grid-column: 2; display: flex; justify-content: center; flex-wrap: wrap; gap: 6px; list-style: none; margin: 0; padding: 0; }
-.nav-cat-links a { display: block; padding: 5px 16px; font-family: var(--font-cond); font-weight: 500; font-size: 12px; letter-spacing: var(--tracking-label); text-transform: uppercase; border-radius: var(--radius-pill); color: var(--banner-ink); opacity: .88; transition: background .15s, opacity .15s; }
-.nav-cat-links a:hover { background: color-mix(in srgb, var(--banner-bracket) 22%, transparent); opacity: 1; }
-@media (max-width: 860px) { .nav-cats { display: none; } }
+/* #19: the .nav-cats second nav row and its five rules are gone. buildNav()
+   emits no such block, so they matched nothing on any page at any width. */
 
 /* ---------- social strip (Follow along) ---------- */
 .social-strip { display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 6px 0 10px; }
@@ -657,23 +685,23 @@
 /* filter rail */
 .filter-rail { position: sticky; top: 88px; align-self: start; background: var(--surface); border-radius: var(--radius-card); padding: 22px 20px; box-shadow: var(--shadow-sm); }
 @media (max-width: 820px) { .filter-rail { position: static; } }
-.filter-rail h3 { font-family: var(--font-cond); font-weight: 600; font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--coral); margin: 0 0 12px; }
+.filter-rail h3 { font-family: var(--font-cond); font-weight: 600; font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--coral-ink); margin: 0 0 12px; }
 .filter-group { padding-bottom: 18px; margin-bottom: 18px; border-bottom: 1px solid var(--line); }
 .filter-group:last-child { border-bottom: 0; margin-bottom: 0; padding-bottom: 0; }
 .tag-list { display: flex; flex-direction: column; gap: 2px; }
 .tag-row { display: flex; align-items: center; gap: 9px; padding: 7px 8px; border-radius: var(--r-sharp); cursor: pointer; font-family: var(--font-body); font-size: 13.5px; color: var(--ink); transition: background .15s; }
 .tag-row:hover { background: var(--line); }
 .tag-row input { appearance: none; -webkit-appearance: none; width: 16px; height: 16px; border: 1.6px solid var(--muted); border-radius: 3px; display: grid; place-items: center; cursor: pointer; flex: none; transition: background .15s, border-color .15s; }
-.tag-row input:checked { background: var(--coral); border-color: var(--coral); }
-.tag-row input:checked::after { content: "✓"; color: var(--paper); font-size: 12.5px; font-weight: 700; line-height: 1; }
+.tag-row input:checked { background: var(--coral-fill); border-color: var(--coral-fill); }
+.tag-row input:checked::after { content: "✓"; color: var(--coral-fill-ink); font-size: 12.5px; font-weight: 700; line-height: 1; }
 .tag-row .count { margin-left: auto; font-family: var(--font-cond); font-size: 12.5px; color: var(--muted); }
 .price-val { font-family: var(--font-cond); font-weight: 600; font-size: 16px; color: var(--ink); margin-bottom: 10px; }
 .slider-wrap { padding: 8px 0 4px; }
 .slider-ui { position: relative; height: 20px; margin: 0 10px; }
 .slider-track { position: absolute; top: 7px; left: 0; right: 0; height: 6px; border-radius: 6px; background: color-mix(in srgb, var(--ink) 18%, transparent); pointer-events: none; }
 .slider-fill { position: absolute; top: 7px; left: 0; height: 6px; border-radius: 6px; background: var(--coral); width: var(--pct, 100%); pointer-events: none; }
-.slider-knob { pointer-events: none; position: absolute; top: 0; left: var(--pct, 100%); width: 20px; height: 20px; border-radius: 50%; background: var(--coral); border: 3px solid var(--surface); box-shadow: 0 1px 5px rgba(0,0,0,.32); transform: translateX(-50%); transition: transform .12s; pointer-events: none; }
-.price-slider { position: absolute; top: 0; left: 0; right: 0; width: auto; height: 20px; margin: 0; padding: 0; -webkit-appearance: none; appearance: none; background: transparent; cursor: pointer; z-index: 2; outline: none; z-index: 2; }
+.slider-knob { position: absolute; top: 0; left: var(--pct, 100%); width: 20px; height: 20px; border-radius: 50%; background: var(--coral); border: 3px solid var(--surface); box-shadow: 0 1px 5px rgba(0,0,0,.32); transform: translateX(-50%); transition: transform .12s; pointer-events: none; }
+.price-slider { position: absolute; top: 0; left: 0; right: 0; width: auto; height: 20px; margin: 0; padding: 0; -webkit-appearance: none; appearance: none; background: transparent; cursor: pointer; z-index: 2; }
 .price-slider:active + .slider-knob, .slider-ui:hover .slider-knob { transform: translateX(-50%) scale(1.14); }
 .price-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 24px; height: 24px; background: transparent; border: 0; cursor: pointer; }
 .price-slider::-moz-range-thumb { width: 24px; height: 24px; background: transparent; border: 0; cursor: pointer; }
@@ -688,7 +716,7 @@
 .store-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
 .store-count { font-family: var(--font-cond); font-size: 12px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); }
 .active-tags { display: flex; flex-wrap: wrap; gap: 8px; }
-.active-tag { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-cond); font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; background: var(--coral); color: var(--paper); border-radius: var(--radius-pill); padding: 5px 12px; cursor: pointer; }
+.active-tag { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-cond); font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; background: var(--coral-fill); color: var(--coral-fill-ink); border-radius: var(--radius-pill); padding: 5px 12px; cursor: pointer; }
 .active-tag::after { content: "✕"; font-size: 12px; }
 /* 9.2: the artwork cards and their frames grow with the type, and the spacing
    between cards is re-opened so the bigger cards still read as a tidy grid.
@@ -716,11 +744,12 @@
 .art-frame .art-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
 /* Style D — ornate carved frame overlay (replaces the bevel frame) */
 .art-ornate { display: none; }
-/* 9.2: the ornate frame takes more of its wrapper so the artwork reads larger,
-   while leaving enough wall for the panel to still read as a wall. */
-[data-theme="D"] .art-frame { background: transparent; border: 0; box-shadow: none; position: relative; aspect-ratio: 18426 / 21301; height: 92cqh; width: auto; max-width: 92cqw; max-height: 92cqh; }
-[data-theme="D"] .art-frame .art-img { position: absolute; top: 7.4%; bottom: 7.4%; left: 9.1%; right: 9.1%; height: auto; aspect-ratio: auto; box-shadow: inset 0 0 0 1px rgba(0,0,0,.45); }
-[data-theme="D"] .art-ornate { display: block; position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; filter: drop-shadow(0 16px 26px rgba(0,0,0,.55)); }
+/* #19: the theme-D carved-frame block that used to sit here is gone. Gallery
+   promoted the carved frame to every theme in its own page CSS ("carved-frame
+   layout, all themes (was theme-D only)"), which restates every declaration of
+   it — and the page even carries a `[data-theme="D"] .art-frame` rule of its own
+   whose only purpose was to out-specify this one. Nothing here was reaching the
+   screen. */
 /* Style D — real walnut wood photo (matches design_base): banners + framed wall */
 [data-theme="D"] .site-nav,
 [data-theme="D"] .hero__panel,
@@ -769,9 +798,6 @@
 .art-actions { display: flex; gap: 8px; }
 .art-btn { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-cond); font-weight: 500; font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; padding: 9px 13px; border-radius: var(--radius-pill); border: 0; cursor: pointer; text-decoration: none; transition: transform .15s var(--ease-pop), background .18s, filter .18s; }
 .art-btn.etsy { background-color: #5e4a3d; background-image: var(--walnut-grain); background-size: 160px 70px; color: #f4e7cf; }
-/* 9.3: a piece with no Etsy listing URL yet shows a plainly inert button.
-   A search query is not a purchase link. */
-.art-btn.is-pending { opacity: .55; cursor: not-allowed; pointer-events: none; }
 .art-btn.etsy:hover { transform: translateY(-1px); filter: brightness(1.08); }
 .art-btn.detail { background-color: #cab389; background-image: var(--oak-grain); background-size: 160px 70px; color: #474138; }
 .art-btn.detail:hover { transform: translateY(-1px); filter: brightness(.96); }
@@ -792,7 +818,7 @@
 [data-theme="D"] .art-modal .am-frame .am-img { position: absolute; top: 7.4%; bottom: 7.4%; left: 9.1%; right: 9.1%; aspect-ratio: auto !important; box-shadow: inset 0 0 0 1px rgba(0,0,0,.45); }
 [data-theme="D"] .art-modal .am-ornate { display: block; position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; filter: drop-shadow(0 16px 26px rgba(0,0,0,.55)); }
 .art-modal .am-body { padding: 30px 30px 28px; display: flex; flex-direction: column; gap: 12px; }
-.art-modal .am-sub { font-family: var(--font-cond); font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--coral); }
+.art-modal .am-sub { font-family: var(--font-cond); font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--coral-ink); }
 .art-modal .am-title { font-family: var(--font-marker); font-weight: 600; font-size: 28px; line-height: 1.05; color: var(--ink); margin: 0; }
 .art-modal .am-tags { display: flex; flex-wrap: wrap; gap: 6px; }
 .art-modal .am-desc { font-size: 14px; line-height: 1.6; color: var(--muted); margin: 0; }
@@ -1051,7 +1077,6 @@
 @media (max-width: 980px) { .blog-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 560px) { .blog-grid { grid-template-columns: 1fr; } }
 .blog-card { display: flex; flex-direction: column; border-radius: var(--radius-card); overflow: hidden; background: var(--surface); box-shadow: var(--shadow-sm); text-decoration: none; color: var(--ink); transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-base); }
-.blog-card.hidden { display: none; }
 .blog-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
 .blog-card .bc-img { aspect-ratio: 3/2; overflow: hidden; }
 .blog-card .bc-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
@@ -1106,11 +1131,18 @@
 /* Tracking held at .08em: `.field` renders only in About's contact form, which
    is below the §13/§14 freeze line. Holding it costs nothing elsewhere. (#20) */
 .field label { font-family: var(--font-cond); font-weight: 600; letter-spacing: .08em; text-transform: uppercase; font-size: 12px; display: block; margin-bottom: 6px; color: var(--ink); }
-.field input, .field textarea { width: 100%; border: 1px solid var(--line); border-radius: var(--r-sharp); background: var(--cream); color: #2b2823; -webkit-text-fill-color: #2b2823; padding: 13px 15px; font-family: var(--font-body); font-size: 14.5px; color: var(--ink); }
+/* #02: this rule declared color:#2b2823, then declared color:var(--ink) again
+   further along the SAME rule, so the first was dead and only the
+   -webkit-text-fill-color was doing any work. On theme D that painted #2b2823
+   over --cream #211e1a: measured 1.13:1 off the pixels, i.e. what you type is
+   invisible. Both inks now follow --ink, and the fill colour is stated rather
+   than left to WebKit's default so the two cannot drift apart again. */
+.field input, .field textarea { width: 100%; border: 1px solid var(--line); border-radius: var(--r-sharp); background: var(--cream); padding: 13px 15px; font-family: var(--font-body); font-size: 14.5px; color: var(--ink); -webkit-text-fill-color: var(--ink); }
+.field input::placeholder, .field textarea::placeholder { color: var(--muted); opacity: 1; -webkit-text-fill-color: var(--muted); }
 .field input:focus, .field textarea:focus { outline: 2px solid var(--coral); border-color: transparent; }
 .tc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
 .about-tri { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
-.approach-num { font-family: var(--font-stencil); font-size: 22px; color: var(--coral); margin-bottom: 6px; }
+.approach-num { font-family: var(--font-stencil); font-size: 22px; color: var(--coral-ink); margin-bottom: 6px; }
 @media (max-width: 900px) {
   .about-hero { grid-template-columns: 1fr; gap: 30px; }
   .about-hero .portrait-wrap { max-width: 380px; }
@@ -1122,7 +1154,7 @@
    ============================================================ */
 .crumbs { font-family: var(--font-cond); font-size: 14px; font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--banner-ink); opacity: .85; margin-bottom: 10px; }
 .crumbs a:hover { color: var(--banner-ink); text-decoration: underline; }
-.free-pill { display: inline-block; font-family: var(--font-cond); font-size: 12.5px; font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; background: var(--coral); color: var(--paper); border-radius: var(--r-sharp); padding: 5px 14px; box-shadow: var(--shadow-sm); }
+.free-pill { display: inline-block; font-family: var(--font-cond); font-size: 12.5px; font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; background: var(--coral-fill); color: var(--coral-fill-ink); border-radius: var(--r-sharp); padding: 5px 14px; box-shadow: var(--shadow-sm); }
 /* The banner is 1440px wide and was carrying four facts as one 13px
    dot-separated string. Same facts, each under its own label, in the strip
    pattern the course cards use — readable at a glance and it fills the width.
@@ -1154,7 +1186,7 @@
 .stage .done-toast.show { opacity: 1; transform: translate(-50%,-50%) scale(1); }
 .controls { display: flex; align-items: center; gap: 12px; padding: 11px 16px 13px; background: #1b1814; color: #ede1d0; }
 .ctl-btn { width: 38px; height: 38px; border-radius: 50%; border: 0; cursor: pointer; background: rgba(243,237,225,.12); color: #ede1d0; display: grid; place-items: center; font-size: 14px; transition: background .15s, transform .15s var(--ease-pop); }
-.ctl-btn:hover { background: var(--coral); color: var(--paper); transform: translateY(-1px); }
+.ctl-btn:hover { background: var(--coral-fill); color: var(--coral-fill-ink); transform: translateY(-1px); }
 .timecode { font-family: var(--font-cond); font-size: 12.5px; font-weight: 500; opacity: .9; white-space: nowrap; font-variant-numeric: tabular-nums; }
 .seek { position: relative; flex: 1; height: 22px; cursor: pointer; display: flex; align-items: center; }
 .seek .track { width: 100%; height: 5px; border-radius: 99px; background: rgba(243,237,225,.22); overflow: hidden; }

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,6 +8,12 @@
 <body>
 <x-dc>
 <helmet>
+<!-- #10: identity. The runtime renders the body, so the document has no title
+     of its own until something sets one. This is the pre-mount fallback; once
+     the course is resolved componentDidMount replaces it with the course name,
+     which is the useful, unique title for this page. -->
+<title>Lesson player · Crystal's Art School</title>
+<meta name="description" content="Watch a Crystal's Art School course lesson by lesson: the film, the lesson notes, the downloadable course materials, and your progress through the course.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600;6..96,700&family=Oswald:wght@300;400;500;600&family=Archivo:wght@400;500;600;700&family=Saira+Stencil+One&family=Arizonia&display=swap" rel="stylesheet">
@@ -38,12 +44,21 @@
    the wrap. Only the cover and the body copy share the float. */
 .course-desc h1 { font-family: var(--font-marker); font-weight: 700; font-size: clamp(26px, 2.8vw, 38px); line-height: 1.14; color: var(--ink); margin: 0 0 16px; }
 .course-desc .cd-body::after { content: ""; display: block; clear: both; }
-.course-desc .cd-cover { float: left; width: min(42%, 320px); margin: 4px 24px 14px 0; border-radius: var(--radius-card); box-shadow: var(--shadow-sm); }
+/* height:auto is load-bearing, not tidiness. #17 puts real width/height
+   attributes on this image so the slot is reserved before it loads, and those
+   attributes are PRESENTATIONAL HINTS for the width and height properties. The
+   author `width` above beats the width hint; nothing here beat the height hint,
+   so the cover painted 320px wide and 1600px tall. Measured. */
+.course-desc .cd-cover { float: left; width: min(42%, 320px); height: auto; margin: 4px 24px 14px 0; border-radius: var(--radius-card); box-shadow: var(--shadow-sm); }
 .course-desc p { font-size: 16px; line-height: 1.72; color: var(--muted); margin: 0; }
 @media (max-width: 620px) { .course-desc .cd-cover { float: none; width: 100%; margin: 0 0 14px; } }
 /* 1.4.9: nested part rows, indented under their lesson in the phase list */
-.part-row { display: flex; align-items: center; gap: 10px; width: 100%; text-align: left; border: 0; background: none; cursor: pointer;
-  padding: 8px 10px 8px 46px; border-radius: 9px; font-family: var(--font-cond); color: var(--muted); transition: background .15s, color .15s; }
+/* #18: the row is a real control in a list, not a link inside a sentence, so it
+   carries the 44px minimum rather than the inline-text exemption. It measured
+   36px; the padding goes up rather than a min-height alone so the touch area and
+   the painted row are the same rectangle. */
+.part-row { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 44px; text-align: left; border: 0; background: none; cursor: pointer;
+  padding: 12px 10px 12px 46px; border-radius: 9px; font-family: var(--font-cond); color: var(--muted); transition: background .15s, color .15s; }
 .part-row:hover { background: var(--cream); color: var(--ink); }
 .part-row .pr-tick { flex: none; width: 6px; height: 6px; border-radius: 50%; background: currentColor; opacity: .5; }
 .part-row .pr-t { flex: 1; min-width: 0; font-size: 13px; font-weight: 500; }
@@ -95,6 +110,12 @@
 .materials-card .ch { font-size: 21px; font-family: var(--font-marker); font-weight: 600;
   letter-spacing: normal; text-transform: none; color: var(--ink); padding: 4px 10px 14px; }
 .materials-card .res-all-note { font-family: var(--font-cond); font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); }
+/* #14: the disclosure the script has always written was addressed to an element
+   that did not exist, so on the three courses with no materials the card painted
+   as a heading over 88px of nothing. The element exists now; it is empty until
+   the script fills it, and an empty one takes no space. */
+.materials-card .res-note { margin: 0; padding: 0 10px 14px; font-family: var(--font-cond); font-size: 13.5px; line-height: 1.5; color: var(--muted); }
+.materials-card .res-note:empty { display: none; }
 /* real video: Google Drive preview iframe fills the stage above the poster.
    The unit-flag stays visible but must not steal clicks from the player UI. */
 .stage .gdrive-frame { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: none; z-index: 6; background: #000; }
@@ -105,85 +126,31 @@
 .stage.is-vertical .gdrive-frame,
 .stage.is-vertical > img { left: 50%; right: auto; width: auto; height: 100%; aspect-ratio: 9 / 16; transform: translateX(-50%); }
 .stage.has-video .gdrive-frame { display: block; }
-.stage.has-video .veil, .stage.has-video .sheen { display: none; }
 .stage .unit-flag { pointer-events: none; z-index: 7; }
 .stage-missing { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); z-index: 6; display: none; font-family: var(--font-cond); font-size: 12.5px; font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; color: #f3ede1; background: rgba(20,17,13,.72); border-radius: 999px; padding: 7px 16px; backdrop-filter: blur(3px); white-space: nowrap; }
 .stage.is-missing .stage-missing { display: block; }
-.stage.is-missing .veil, .stage.is-missing .sheen { display: none; }
-/* multi-part lessons: part selector pills under the player */
-/* emulated fullscreen for the demo player */
-.player.fs { position: fixed; inset: 0; z-index: 600; margin: 0; border-radius: 0; background: #0d0b08; display: flex; flex-direction: column; }
-.player.fs .stage { flex: 1; min-height: 0; border-radius: 0; aspect-ratio: auto; }
-.player.fs .stage .poster { width: 100%; height: 100%; object-fit: contain; background: #000; }
-.player.fs .controls { border-radius: 0; }
+/* #19: the simulated player is gone — the controls row was set to display:none
+   on every single load, and the veil and the sheen were hidden in both of the
+   only two states applyVideo can produce. The emulated-fullscreen rules went
+   with the button that drove them. */
 /* small screens */
 @media (max-width: 640px) {
-  .player .controls { flex-wrap: wrap; row-gap: 6px; }
   .lesson-meta-row { font-size: 12.5px; gap: 6px 12px; }
   .page-hero .crumbs { font-size: 12.5px; }
 }
 </style>
 </helmet>
 <div class="cas-root" data-theme="D">
+<!-- #10: first tab stop on the page, ahead of the brand and the eight nav
+     links. #content carries tabindex="-1" so the jump moves focus and not just
+     the viewport. Styling belongs to css/industrial-3.css. -->
+<a class="skip-link" href="#content">Skip to content</a>
 <div class="glow-layer" aria-hidden="true"></div>
 
-<nav class="site-nav" aria-label="Main">
-  <div class="nav-top">
-    <div class="inner">
-      <a class="nav-brand" href="index.html">
-        <img src="img/lau-logo.png" alt="Lau. — Crystal's Art School">
-      </a>
-      <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="Lessons.dc.html" class="active">Courses</a></li>
-        <li><a href="Gallery.dc.html">Gallery</a></li>
-        <li><a href="Showcase.dc.html">Showcase</a></li>
-        <li><a href="Blog.dc.html">Blog</a></li>
-        <li><a href="About.dc.html">About</a></li>
-        <li><a href="FreeVideos.dc.html">Free video</a></li>
-        <li><a href="Blog.dc.html?tag=Tools">Tools</a></li>
-        <li><a href="FAQ.dc.html">FAQ</a></li>
-      </ul>
-      <div class="nav-auth">
-        <a class="cart-btn" href="Checkout.dc.html" aria-label="Shopping cart">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M2 3h3.2l2.5 12.2a1.5 1.5 0 0 0 1.5 1.2h9a1.5 1.5 0 0 0 1.5-1.2L21.5 7H6.5"></path></svg>
-          <span class="cart-badge">0</span>
-        </a>
-        <a class="btn ghost" href="Login.dc.html">Log in</a>
-        <a class="btn primary" href="Signup.dc.html">Sign up</a>
-        <button class="nav-burger" type="button" aria-label="Menu" aria-expanded="false">☰</button>
-      </div>
-    </div>
-  </div>
-  <div class="nav-cats">
-    <div class="inner">
-      <ul class="nav-cat-links">
-        <li><a href="Lessons.dc.html?cat=Watercolour">Watercolour</a></li>
-        <li><a href="Lessons.dc.html?cat=Oil">Oils</a></li>
-        <li><a href="Lessons.dc.html?cat=Drawing">Drawing</a></li>
-        <li><a href="Lessons.dc.html?cat=Ink">Ink</a></li>
-        <li><a href="Lessons.dc.html?cat=Beginners">Beginners</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="nav-sheet">
-    <a href="index.html">Home</a>
-    <a href="Lessons.dc.html">Courses</a>
-    <a href="Gallery.dc.html">Gallery</a>
-    <a href="Showcase.dc.html">Showcase</a>
-    <a href="Blog.dc.html">Blog</a>
-    <a href="About.dc.html">About</a>
-    <a href="FreeVideos.dc.html">Free video</a>
-    <a href="Blog.dc.html?tag=Tools">Tools</a>
-    <a href="FAQ.dc.html">FAQ</a>
-    <a href="Lessons.dc.html?cat=Watercolour">Watercolour</a>
-    <a href="Lessons.dc.html?cat=Oil">Oils</a>
-    <a href="Lessons.dc.html?cat=Drawing">Drawing</a>
-    <a href="Lessons.dc.html?cat=Ink">Ink</a>
-    <a href="Lessons.dc.html?cat=Beginners">Beginners</a>
-    <a href="Login.dc.html">Log in / Sign up</a>
-  </div>
-</nav>
+<!-- #19: js/site-nav.js does `nav.innerHTML = buildNav()` on every page, so a
+     hand-written bar here is never rendered — it only drifts. The element stays
+     because that is what the script looks for. -->
+<nav class="site-nav" aria-label="Main"></nav>
 
 <header class="page-hero">
   <div class="container">
@@ -195,38 +162,41 @@
          identical paragraphs on one page read as a mistake. The crumb above
          still names the course, and the meta row below still identifies it. -->
     <div class="lesson-meta-row" id="lx-meta"></div>
-    <div class="logo2"><img src="img/logo2.png" alt="Crystal Lau Art" loading="lazy" decoding="async"></div>
+    <!-- #17: in the page hero, above the fold at every width, so not lazy.
+         No srcset: brand marks ship exactly as the client supplied them. -->
+    <div class="logo2"><img src="img/logo2.png" alt="Crystal Lau Art" width="1400" height="950" decoding="async"></div>
   </div>
 </header>
 
-<main class="container" id="content" style="padding-bottom:30px;">
+<main class="container" id="content" tabindex="-1" style="padding-bottom:30px;">
   <div class="lesson-cols">
 
     <div>
       <div class="player">
         <div class="stage" id="stage">
-          <img class="poster" id="stage-poster" src="img/cover2.jpg" alt="Lesson video">
+          <!-- #17: no src here. The poster is always replaced by the lesson's own
+               cover in loadUnit, so a hard-coded one is a 298KB fetch that is
+               never painted; and the default course's first lesson has no cover
+               at all, so the element ends the load with nothing in it. An EMPTY
+               src is not the same thing — that makes the browser request the
+               document itself. The attribute is simply absent. -->
+          <!-- #17: the stage poster is the LCP candidate on this page — 938px wide
+               above 1200 and the first thing above the fold. It is eager (no
+               loading attribute) and now says so to the preload scanner. src,
+               srcset and sizes are all written by loadUnit(). -->
+          <img class="poster" id="stage-poster" alt="" fetchpriority="high" decoding="async">
           <iframe class="gdrive-frame" id="gdrive-frame" title="Lesson video player" allow="autoplay; fullscreen" allowfullscreen loading="lazy"></iframe>
           <div class="stage-missing" id="stage-missing">Video coming soon</div>
-          <div class="sheen" aria-hidden="true"></div>
           <span class="unit-flag" id="unit-flag">Lesson 1</span>
-          <div class="veil" id="stage-veil">
-            <button class="big-play" id="big-play" type="button" aria-label="Play video">▶</button>
-          </div>
           <div class="done-toast" id="done-toast">Lesson complete ✓</div>
         </div>
-        <div class="controls">
-          <button class="ctl-btn" id="play-btn" type="button" aria-label="Play / pause">▶</button>
-          <span class="timecode"><span id="t-cur">0:00</span> / <span id="t-dur">4:12</span></span>
-          <div class="seek" id="seek" role="slider" aria-label="Seek" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
-            <div class="track"><div class="fill" id="seek-fill"></div></div>
-            <div class="knob" id="seek-knob"></div>
-          </div>
-          <span class="spd">demo ×12</span>
-          <button class="ctl-btn" id="fs-btn" type="button" aria-label="Toggle fullscreen" title="Fullscreen">⛶</button>
-        </div>
       </div>
-      <p class="demo-note" id="demo-note">(prototype — the video is simulated and plays at 12× speed, so you can feel the whole journey in a few minutes)</p>
+      <!-- #19: this carried "the video is simulated and plays at 12x speed",
+           which described the player that has just been deleted and was in any
+           case overwritten by setVideoMode on the first load, so it never
+           reached a reader. Left empty; the script fills it with the note that
+           belongs to the lesson being shown. -->
+      <p class="demo-note" id="demo-note"></p>
 
       <div class="finish-card" id="finish-card">
         <span class="fc-star">✦</span>
@@ -271,6 +241,11 @@
         <div class="res-all" id="res-all"></div>
         <!-- ASSET PENDING:  -->
         <div class="res-list" id="res-list" style="padding:0 4px 8px;"></div>
+        <!-- #14: the script has always written its disclosure to #res-note. The
+             element was never in the markup, so the sentence explaining that the
+             files are placeholders — or that a course has none yet — went
+             nowhere, and the card rendered as a heading over an empty body. -->
+        <p class="res-note" id="res-note"></p>
       </div>
     </div>
 
@@ -280,7 +255,10 @@
           <span class="pc-label">Your progress</span>
           <span class="pc-count"><span id="done-count">0</span> of <span id="lx-total">0</span></span>
         </div>
-        <div class="pbar"><div class="pfill" id="pfill"></div></div>
+        <!-- #22: it was a pair of coloured divs. The role and the values are kept
+             in step by renderProgress(), and aria-valuetext carries the lesson
+             count because a bare percentage is not what the label promises. -->
+        <div class="pbar" id="pbar" role="progressbar" aria-label="Course progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><div class="pfill" id="pfill"></div></div>
         <button class="pc-reset" id="reset-btn" type="button">restart course</button>
       </div>
 
@@ -289,7 +267,12 @@
       </div>
 
       <div class="teach-card">
-        <img src="img/ProfilePic.jpg" alt="Crystal Lau" loading="lazy" decoding="async">
+        <!-- #17: the slot is 54x54 at every width. The full file is 1514px wide
+             and 283KB; the 96px derivative covers 1x and the 160px one covers 3x. -->
+        <img src="img/ProfilePic-96.jpg"
+             srcset="img/ProfilePic-96.jpg 96w, img/ProfilePic-160.jpg 160w, img/ProfilePic-384.jpg 384w"
+             sizes="54px" width="96" height="96"
+             alt="Crystal Lau" loading="lazy" decoding="async">
         <div class="tq">"Take it slowly. The paint dries at its own speed, and so do we." — Crystal</div>
       </div>
     </aside>
@@ -297,7 +280,12 @@
 
   <section class="section next-band">
     <div class="band-forest">
-      <div class="thumb"><img src="img/cover4.jpg" alt="Loading a brush properly — course cover" loading="lazy" decoding="async"></div>
+      <!-- #17: the tile is 200x200 at every width. cover4.jpg is 1600x2322 and
+           740KB — the 224px derivative covers 1x, the 448px one covers 2x. -->
+      <div class="thumb"><img src="img/cover4-224.jpg"
+             srcset="img/cover4-224.jpg 224w, img/cover4-448.jpg 448w, img/cover4.jpg 1600w"
+             sizes="200px" width="224" height="325"
+             alt="Loading a brush properly — course cover" loading="lazy" decoding="async"></div>
       <div style="flex:1;min-width:200px;">
         <div class="eyebrow"><span class="star">✦</span> Paint along</div>
         <h2 class="marker-title font-a" style="font-size:clamp(29px,3.1vw,42px);">Share your skies with the studio</h2>
@@ -351,6 +339,14 @@ class Component extends DCLogic {
       note: l.subtitle,
       pending: !!l.pending,
       img: l.poster,
+      /* #17: the responsive set the asset pipeline generates for this poster.
+         The widths come from the data; the SLOT is a property of this page's
+         layout, so `sizes` is written where the slot is used, not carried in
+         the data — the same poster is a 78px sidebar thumbnail here and a much
+         larger picture on course.dc.html. */
+      srcset: l.srcset || '',
+      w: l.w || 0,
+      h: l.h || 0,
       video: l.video || null,  // part 1's Drive preview URL, or null = missing
       portrait: !!l.portrait,  // 1.4.12: measured from the file at import
       parts: (l.videos && l.videos.length > 1) ? l.videos : null
@@ -372,7 +368,22 @@ class Component extends DCLogic {
       return h ? (m ? h + 'h ' + m + 'm' : h + 'h') : m + 'm';
     };
     const courseHref = 'course.dc.html?id=' + encodeURIComponent(COURSE.id);
-    document.title = COURSE.title + " · Crystal's Art School";
+    /* #10: the helmet block carries a generic title so the document is never
+       nameless before the course resolves. The useful title is the course, and
+       it has to WIN — the runtime re-runs the helmet on every re-render and
+       writes the generic string back over this one, which is why setting it here
+       alone measured as the fallback on a settled page. The observer re-asserts
+       ours whenever the runtime does that; it cannot loop, because it only
+       writes when the value is already wrong. */
+    const wantTitle = COURSE.title + " · Crystal's Art School";
+    document.title = wantTitle;
+    try {
+      const titleEl = document.querySelector('head title');
+      if (titleEl && window.MutationObserver) {
+        new MutationObserver(() => { if (document.title !== wantTitle) document.title = wantTitle; })
+          .observe(titleEl, { childList: true, characterData: true, subtree: true });
+      }
+    } catch (e) {}
     const link = document.getElementById('lx-course-link');
     if (link) { link.href = courseHref; link.textContent = COURSE.title; }
     const setText = (id, txt) => { const el = document.getElementById(id); if (el) el.textContent = txt; };
@@ -403,12 +414,12 @@ class Component extends DCLogic {
         fact('Taught by', 'Crystal Lau');
     }
 
-    const SPEED = 12;
+    /* #19: SPEED drove the simulated player's 12x clock. There is no clock. */
     /* progress is namespaced per course — a shared key made lesson 3 of every
        course go green as soon as lesson 3 of one course was finished */
     const KEY = 'cas-progress-' + COURSE.id;
 
-    const blankState = () => ({ unit: 0, t: 0, done: new Array(N).fill(false) });
+    const blankState = () => ({ unit: 0, done: new Array(N).fill(false) });
     let state = blankState();
     try { const sv = JSON.parse(localStorage.getItem(KEY) || 'null'); if (sv && sv.done && sv.done.length === N) state = sv; } catch (e) {}
     const save = () => { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch (e) {} };
@@ -428,12 +439,19 @@ class Component extends DCLogic {
          the wrap. Only the cover and the body text share the float.
          It is the page's h1: the banner no longer carries a heading, because a
          second copy of this same title and paragraph up there read as a mistake. */
+      /* #17: measured slot for .cd-cover is 320px above 1200, ~296-299px between
+         620 and 1200, and 366px at 390 (it is min(42%, 320px) of the left column,
+         and full width below 620). */
+      const coverImg = COURSE.cover
+        ? '<img class="cd-cover" src="' + escl(COURSE.cover) + '"'
+          + (COURSE.srcset ? ' srcset="' + escl(COURSE.srcset) + '" sizes="(max-width: 620px) 94vw, 320px"' : '')
+          + (COURSE.w && COURSE.h ? ' width="' + COURSE.w + '" height="' + COURSE.h + '"' : '')
+          /* #17: above the fold at every width, so not lazy. */
+          + ' alt="' + escl(COURSE.title) + '" decoding="async">'
+        : '';
       host.innerHTML =
         '<h1>' + escl(COURSE.title) + '</h1>' +
-        '<div class="cd-body">' +
-          (COURSE.cover ? '<img class="cd-cover" src="' + escl(COURSE.cover) + '" alt="' + escl(COURSE.title) + '" loading="lazy" decoding="async">' : '') +
-          '<p>' + escl(blurb) + '</p>' +
-        '</div>';
+        '<div class="cd-body">' + coverImg + '<p>' + escl(blurb) + '</p></div>';
     })();
     const fmt0 = (s) => Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
     document.getElementById('notes-holder').innerHTML = UNITS.map((u, i) =>
@@ -454,8 +472,17 @@ class Component extends DCLogic {
          so counting children broke the alternation after every header.
          One thumbnail per lesson, and nothing at all when there is none. */
       '<button class="unit-row" data-unit="' + i + '" data-odd="' + (i % 2) + '" type="button"><span class="st">' + (i + 1) + '</span>' +
+        /* #17: these are painted 78x48 and were being served at 1280x1280 —
+           twelve of them, 3.44MB of a 6.28MB page, and the same bytes again at
+           390px. The slot is 78px wide at every width the page has, so `sizes`
+           is a constant here; the candidate widths come from the pipeline. */
         (u.img
-          ? '<span class="uthumb-wrap"><img class="uthumb" src="' + escl(u.img) + '" alt="" loading="lazy" decoding="async">'
+          ? '<span class="uthumb-wrap"><img class="uthumb" src="' + escl(u.img) + '"'
+            + (u.srcset ? ' srcset="' + escl(u.srcset) + '" sizes="78px"' : '')
+            + (u.w && u.h ? ' width="' + u.w + '" height="' + u.h + '"' : '')
+            /* #17: the first six rows are above the fold at 1692x900; the
+               rest stay lazy. Each is a 96px derivative of a few KB. */
+            + (i < 6 ? ' decoding="async">' : ' loading="lazy" decoding="async">')
             + '<span class="now" hidden><span class="now-dot" aria-hidden="true"></span>Now playing</span></span>'
           : '<span class="uthumb-wrap is-empty"><span class="now" hidden><span class="now-dot" aria-hidden="true"></span>Now playing</span></span>') +
         '<span class="ut">' + escl(u.title) + '</span><span class="ud">' + fmt0(u.dur) + '</span></button>' +
@@ -470,53 +497,54 @@ class Component extends DCLogic {
     ).join('');
 
     const $ = (id) => document.getElementById(id);
-    const stage = $('stage'), poster = $('stage-poster'), flag = $('unit-flag'), veil = $('stage-veil'), playBtn = $('play-btn');
-    const tCur = $('t-cur'), tDur = $('t-dur'), seek = $('seek'), seekFill = $('seek-fill'), seekKnob = $('seek-knob');
+    const stage = $('stage'), poster = $('stage-poster'), flag = $('unit-flag');
     const toast = $('done-toast'), completeBtn = $('complete-btn'), doneTag = $('done-tag'), finishCard = $('finish-card');
-    const pfill = $('pfill'), doneCount = $('done-count');
+    const pfill = $('pfill'), pbar = $('pbar'), doneCount = $('done-count');
     const rows = document.querySelectorAll('.unit-row'), notes = document.querySelectorAll('.unit-notes');
 
-    let playing = false, raf = null, lastTick = 0;
-    const fmt = (s) => { s = Math.max(0, Math.round(s)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
+    /* #22: window.CasAnnounce lives in js/site-extras.js. Guarded because a page
+       that loads without it should still work, just silently. `booted` keeps the
+       first render — which is not a change the reader made — out of the region.
+       `quiet` exists because the live region is a single element: two calls a few
+       hundred ms apart overwrite each other, so a step that ends in a second step
+       (mark complete, then advance) has to silence the inner one and say both
+       things once. Measured: without it the "lesson complete" sentence was
+       replaced by the next lesson's title 250ms later. */
+    let booted = false, quiet = false;
+    const say = (msg) => { if (booted && !quiet && msg && window.CasAnnounce) window.CasAnnounce(msg); };
+
     const doneTotal = () => state.done.reduce((n, d) => n + (d ? 1 : 0), 0);
 
     const renderProgress = () => {
       const n = doneTotal();
       doneCount.textContent = n;
+      const pct = Math.round(n / N * 100);
       pfill.style.width = (n / N * 100) + '%';
+      if (pbar) {
+        pbar.setAttribute('aria-valuenow', pct);
+        pbar.setAttribute('aria-valuetext', n + ' of ' + N + (N === 1 ? ' lesson' : ' lessons') + ' complete');
+      }
       rows.forEach((row, i) => {
         row.classList.toggle('done', state.done[i]);
         row.classList.toggle('current', i === state.unit);
         row.querySelector('.st').textContent = state.done[i] ? '✓' : (i + 1);
         row.querySelector('.now').hidden = i !== state.unit;
+        /* the tick and the "now playing" flag are colour and a badge on a
+           picture; the row's own name has to carry them too */
+        row.setAttribute('aria-current', i === state.unit ? 'true' : 'false');
       });
       doneTag.hidden = !state.done[state.unit];
       completeBtn.innerHTML = state.unit < N - 1 ? 'Mark complete &amp; continue <span class="arr" aria-hidden="true">→</span>' : 'Mark complete &amp; finish <span class="arr" aria-hidden="true">→</span>';
       if (n === N) finishCard.classList.add('show'); else finishCard.classList.remove('show');
     };
 
-    const renderTime = () => {
-      const u = UNITS[state.unit];
-      const pct = Math.min(100, state.t / u.dur * 100);
-      tCur.textContent = fmt(state.t);
-      seekFill.style.width = pct + '%';
-      seekKnob.style.left = pct + '%';
-      seek.setAttribute('aria-valuenow', Math.round(pct));
-    };
-
-    const setPlaying = (on) => {
-      playing = on;
-      stage.classList.toggle('is-playing', on);
-      playBtn.textContent = on ? '❚❚' : '▶';
-      playBtn.setAttribute('aria-label', on ? 'Pause' : 'Play');
-      if (on) { lastTick = performance.now(); if (!raf) raf = requestAnimationFrame(tick); }
-    };
-
     /* Real videos stream from Google Drive in an iframe. The Drive player
-       exposes no JS API, so the simulated clock/seek bar is hidden for those
-       units and progress is driven by "Mark complete & continue" alone. */
+       exposes no JS API, so there is no clock and no seek bar — progress is
+       driven by "Mark complete & continue" alone. The simulated player that
+       used to sit under the stage was hidden on every single load; it and its
+       clock, seek handle, speed label and emulated-fullscreen button are gone
+       (#19). */
     const gframe = $('gdrive-frame');
-    const controlsRow = document.querySelector('.player .controls');
     const demoNote = $('demo-note');
     let curPart = 0;
 
@@ -548,17 +576,18 @@ class Component extends DCLogic {
         const want = real ? src : 'about:blank';
         if (gframe.getAttribute('src') !== want) gframe.setAttribute('src', want);
       }
-      const partDur = u.parts ? ((u.parts[curPart] && u.parts[curPart].dur) || 0) : u.dur;
-      tDur.textContent = fmt(partDur);
       flag.textContent = 'Lesson ' + (state.unit + 1) + ' — ' + u.title
         + (u.parts ? ' · Part ' + (curPart + 1) + ' of ' + u.parts.length : '');
       renderPartBar(u);
+      /* #22: the stage swaps between a video and a "Video coming soon" chip with
+         nothing said about it. Both states are announced, and the flag's text is
+         the same sentence a sighted reader gets. */
+      say(flag.textContent + (real ? '' : ' — video coming soon.'));
     };
 
     const setVideoMode = (u) => {
       /* real -> Drive iframe (part-aware); missing -> cover photo with a
-         "coming soon" chip. The old simulated demo player is retired. */
-      if (controlsRow) controlsRow.style.display = 'none';
+         "coming soon" chip. */
       renderPartBar(u);
       applyVideo(u);
       /* Drive's embedded player needs third-party cookies; Incognito, Safari,
@@ -576,64 +605,120 @@ class Component extends DCLogic {
       }
     };
 
-    const loadUnit = (i, autoplay) => {
+    /* #20: the lesson you are on has to survive a reload and a Back press. The
+       page took ?u= on arrival and then never wrote it again, so refreshing threw
+       you back to the lesson you first opened and Back left the page entirely.
+       replaceState, not pushState: choosing a lesson is not a navigation, and a
+       twelve-deep history of one page would make Back useless in the other
+       direction. */
+    const syncUrl = () => {
+      try {
+        const q = new URLSearchParams(location.search);
+        q.set('c', COURSE.id);
+        q.set('u', String(state.unit));
+        history.replaceState(history.state, '', location.pathname + '?' + q.toString() + location.hash);
+      } catch (e) {}
+    };
+
+    const loadUnit = (i) => {
       state.unit = Math.max(0, Math.min(N - 1, i));
-      state.t = 0;
       const u = UNITS[state.unit];
       curPart = 0;
       /* 8.3: a lesson without a cover shows nothing in its place — no default
          image. Assigning a null src would request "/null" and leave a broken
          image box behind the player. */
-      if (u.img) { poster.src = u.img; poster.style.display = ''; }
-      else { poster.removeAttribute('src'); poster.style.display = 'none'; }
+      if (u.img) {
+        /* #17: the stage is 938px wide above 1200, ~704-712px between 620 and
+           1200, and the full column below that. */
+        if (u.srcset) { poster.setAttribute('srcset', u.srcset); poster.setAttribute('sizes', '(max-width: 1024px) 94vw, (max-width: 1280px) 64vw, 56vw'); }
+        else { poster.removeAttribute('srcset'); poster.removeAttribute('sizes'); }
+        poster.src = u.img;
+        poster.style.display = '';
+      } else {
+        poster.removeAttribute('srcset'); poster.removeAttribute('sizes');
+        poster.removeAttribute('src'); poster.style.display = 'none';
+      }
       poster.alt = 'Lesson ' + (state.unit + 1) + ' — ' + u.title;
       notes.forEach(a => a.classList.toggle('active', parseInt(a.dataset.unit, 10) === state.unit));
       setVideoMode(u);
-      setPlaying(false);
-      renderTime();
       renderProgress();
       save();
+      syncUrl();
     };
 
-    const markDone = (viaVideo) => {
-      if (!state.done[state.unit]) {
+    const markDone = () => {
+      const first = !state.done[state.unit];
+      if (first) {
         state.done[state.unit] = true;
         save();
-        if (viaVideo) { toast.classList.add('show'); setTimeout(() => toast.classList.remove('show'), 1300); }
+        /* #19 + #22: the toast used to fire only from the simulated player's
+           end-of-video tick, which never ran, so it never appeared. It now fires
+           from the one path that actually completes a lesson, and says so out
+           loud as well as on the stage. */
+        toast.classList.add('show');
+        setTimeout(() => toast.classList.remove('show'), 1300);
       }
       renderProgress();
-      /* no auto-advance: a finished video stays put; "Mark complete & continue"
-         moves to the next lesson but never autoplays it */
-      if (!viaVideo && state.unit < N - 1) {
-        setTimeout(() => loadUnit(state.unit + 1, false), 250);
+      const n = doneTotal();
+      const head = (first ? 'Lesson ' + (state.unit + 1) + ' complete. ' : '')
+        + n + ' of ' + N + (N === 1 ? ' lesson' : ' lessons') + ' complete.'
+        + (n === N ? ' Course finished.' : '');
+      /* no auto-advance from the video itself; "Mark complete & continue" moves
+         to the next lesson but never autoplays it */
+      if (state.unit < N - 1) {
+        quiet = true;
+        setTimeout(() => {
+          loadUnit(state.unit + 1);
+          quiet = false;
+          say(head + ' Now on ' + flag.textContent + '.');
+        }, 250);
+      } else {
+        say(head);
       }
-      if (doneTotal() === N) { setPlaying(false); save(); renderProgress(); }
     };
 
-    const tick = (now) => {
-      raf = null;
-      if (!playing) return;
-      const dt = (now - lastTick) / 1000 * SPEED;
-      lastTick = now;
-      state.t += dt;
-      const u = UNITS[state.unit];
-      if (state.t >= u.dur) { state.t = u.dur; renderTime(); setPlaying(false); markDone(true); return; }
-      renderTime();
-      raf = requestAnimationFrame(tick);
+    /* #20: on one column the lesson list sits up to 2,275px BELOW the player it
+       drives, so tapping a row changed the stage entirely off-screen and looked
+       like nothing had happened. Two separate problems, two separate fixes:
+       first hold the tapped row still while the notes above it change height
+       (they differ by up to ~157px, which otherwise yanks the list out from
+       under the finger), then bring the player into view. */
+    const reduced = () => { try { return window.matchMedia('(prefers-reduced-motion: reduce)').matches; } catch (e) { return false; } };
+    /* "in view" is deliberately generous. A strict "fully visible" test nudged the
+       page on a 1692px desktop where 74% of the stage was already on screen, which
+       is a scroll the reader did not ask for. Half the player visible is enough to
+       see it change; the case this exists for is one column, where the stage
+       measured 2,222px above the row that was tapped. */
+    const revealStage = () => {
+      const r = stage.getBoundingClientRect();
+      const vh = window.innerHeight || document.documentElement.clientHeight;
+      const shown = Math.max(0, Math.min(r.bottom, vh) - Math.max(r.top, 0));
+      if (r.height && shown / r.height >= 0.5) return;
+      try { stage.scrollIntoView({ behavior: reduced() ? 'auto' : 'smooth', block: 'center' }); }
+      catch (e) { stage.scrollIntoView(); }
+    };
+    const pickFrom = (el, fn) => {
+      const before = el ? el.getBoundingClientRect().top : 0;
+      fn();
+      if (el) {
+        const delta = el.getBoundingClientRect().top - before;
+        if (delta) window.scrollBy(0, delta);
+      }
+      revealStage();
     };
 
-    veil.addEventListener('click', () => setPlaying(true));
-    playBtn.addEventListener('click', () => setPlaying(!playing));
-    const seekTo = (e) => { const r = seek.getBoundingClientRect(); const k = Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)); state.t = UNITS[state.unit].dur * k; renderTime(); save(); };
-    seek.addEventListener('click', seekTo);
-    rows.forEach(row => row.addEventListener('click', () => loadUnit(parseInt(row.dataset.unit, 10), false)));
+    rows.forEach(row => row.addEventListener('click', () => {
+      pickFrom(row, () => loadUnit(parseInt(row.dataset.unit, 10)));
+    }));
     /* 1.4.9: a nested part row selects its lesson first, then that part. */
     document.querySelectorAll('.part-row').forEach((b) => b.addEventListener('click', () => {
       const u = parseInt(b.dataset.unit, 10), pt = parseInt(b.dataset.part, 10);
-      if (state.unit !== u) { curPart = pt; loadUnit(u, false); }
-      else if (curPart !== pt) { curPart = pt; applyVideo(UNITS[u]); }
+      pickFrom(b, () => {
+        if (state.unit !== u) { curPart = pt; loadUnit(u); }
+        else if (curPart !== pt) { curPart = pt; applyVideo(UNITS[u]); }
+      });
     }));
-    completeBtn.addEventListener('click', () => markDone(false));
+    completeBtn.addEventListener('click', () => markDone());
 
     /* 8.1 item 4: "同時支援打包下載及逐項下載". On the real site this is one zip
        built server-side; in the prototype the button fires each per-item link in
@@ -682,27 +767,33 @@ class Component extends DCLogic {
         all.addEventListener('click', () => {
           items.forEach((a, i) => setTimeout(() => a.click(), i * 250));
           const label = all.innerHTML;
+          const msg = 'Downloading ' + items.length + (items.length === 1 ? ' file' : ' files') + '.';
           all.innerHTML = 'Downloading ' + items.length + ' files…';
           all.disabled = true;
-          setTimeout(() => { all.innerHTML = label; all.disabled = false; }, items.length * 250 + 600);
+          /* #22: the button relabels itself and then goes disabled — the only
+             signal that anything happened, and it was silent. */
+          say(msg);
+          setTimeout(() => { all.innerHTML = label; all.disabled = false; say('Downloads started.'); }, items.length * 250 + 600);
         });
       }
     })();
-    $('reset-btn').addEventListener('click', () => { state = blankState(); save(); loadUnit(0, false); });
-    $('watch-again').addEventListener('click', () => { state = blankState(); save(); loadUnit(0, false); try { stage.scrollIntoView({ behavior: 'smooth', block: 'center' }); } catch (e) {} });
+    $('reset-btn').addEventListener('click', () => {
+      state = blankState(); save(); loadUnit(0); revealStage();
+      say('Course progress cleared. Back to lesson 1 of ' + N + '.');
+    });
+    $('watch-again').addEventListener('click', () => {
+      state = blankState(); save(); loadUnit(0);
+      try { stage.scrollIntoView({ behavior: reduced() ? 'auto' : 'smooth', block: 'center' }); } catch (e) {}
+      say('Course progress cleared. Back to lesson 1 of ' + N + '.');
+    });
 
-    /* emulated fullscreen */
-    const player = document.querySelector('.player');
-    const fsBtn = $('fs-btn');
-    const setFs = (on) => { player.classList.toggle('fs', on); document.body.style.overflow = on ? 'hidden' : ''; fsBtn.textContent = on ? '✕' : '⛶'; fsBtn.setAttribute('aria-label', on ? 'Exit fullscreen' : 'Toggle fullscreen'); };
-    if (fsBtn && player) {
-      fsBtn.addEventListener('click', () => setFs(!player.classList.contains('fs')));
-      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && player.classList.contains('fs')) setFs(false); });
-    }
+    /* #19: the emulated-fullscreen block went with the controls row that carried
+       its button. Full screen is the embedded Drive player's own control. */
 
     let startAt = state.unit;
     try { const uq = parseInt(new URLSearchParams(location.search).get('u'), 10); if (!isNaN(uq)) startAt = Math.max(0, Math.min(N - 1, uq)); } catch (e) {}
-    loadUnit(startAt, false);
+    loadUnit(startAt);
+    booted = true;
   }
 }
 </script>

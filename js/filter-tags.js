@@ -76,7 +76,13 @@ window.CasFilters = (function () {
       }
       html += c;
     });
-    el.innerHTML = html;
+    /* Rebuild only when the markup actually changes. populate() holds no state
+       and binds no listeners of its own — 50 consecutive calls add and remove
+       exactly zero — but it does replace the chip nodes, and callers bind their
+       click handlers to those nodes directly (Lessons.dc.html:390 and :449),
+       so an unconditional rewrite would silently unbind the whole rail. Caching
+       the emitted string makes a repeat call a true no-op. */
+    if (el.__casChipsHTML !== html) { el.innerHTML = html; el.__casChipsHTML = html; }
     var group = opts.groupEl || null;
     if (group) group.style.display = (opts.scale || present.length) ? "" : "none";
     return present;

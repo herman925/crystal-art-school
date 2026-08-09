@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,6 +8,8 @@
 <body>
 <x-dc>
 <helmet>
+<title>Course catalogue &middot; Crystal's Art School</title>
+<meta name="description" content="Every online painting course from Crystal's Art School, in one catalogue &mdash; filter by medium, theme, difficulty, length and price.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600;6..96,700&family=Oswald:wght@300;400;500;600&family=Archivo:wght@400;500;600;700&family=Saira+Stencil+One&family=Arizonia&display=swap" rel="stylesheet">
@@ -23,76 +25,26 @@
 <script src="js/motion.js"></script>
 </helmet>
 <div class="cas-root" data-theme="D">
+<a class="skip-link" href="#content">Skip to content</a>
 <div class="glow-layer" aria-hidden="true"></div>
 
-<nav class="site-nav" aria-label="Main">
-  <div class="nav-top">
-    <div class="inner">
-      <a class="nav-brand" href="index.html">
-        <img src="img/lau-logo.png" alt="Lau. — Crystal's Art School">
-      </a>
-      <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="Lessons.dc.html" class="active">Courses</a></li>
-        <li><a href="Gallery.dc.html">Gallery</a></li>
-        <li><a href="Showcase.dc.html">Showcase</a></li>
-        <li><a href="Blog.dc.html">Blog</a></li>
-        <li><a href="About.dc.html">About</a></li>
-        <li><a href="FreeVideos.dc.html">Free video</a></li>
-        <li><a href="Blog.dc.html?tag=Tools">Tools</a></li>
-        <li><a href="FAQ.dc.html">FAQ</a></li>
-      </ul>
-      <div class="nav-auth">
-        <a class="cart-btn" href="Checkout.dc.html" aria-label="Shopping cart">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M2 3h3.2l2.5 12.2a1.5 1.5 0 0 0 1.5 1.2h9a1.5 1.5 0 0 0 1.5-1.2L21.5 7H6.5"></path></svg>
-          <span class="cart-badge">0</span>
-        </a>
-        <a class="btn ghost" href="Login.dc.html">Log in</a>
-        <a class="btn primary" href="Signup.dc.html">Sign up</a>
-        <button class="nav-burger" type="button" aria-label="Menu" aria-expanded="false">☰</button>
-      </div>
-    </div>
-  </div>
-  <div class="nav-cats">
-    <div class="inner">
-      <ul class="nav-cat-links">
-        <li><a href="Lessons.dc.html?cat=Watercolour">Watercolour</a></li>
-        <li><a href="Lessons.dc.html?cat=Oil">Oils</a></li>
-        <li><a href="Lessons.dc.html?cat=Drawing">Drawing</a></li>
-        <li><a href="Lessons.dc.html?cat=Ink">Ink</a></li>
-        <li><a href="Lessons.dc.html?cat=Beginners">Beginners</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="nav-sheet">
-    <a href="index.html">Home</a>
-    <a href="Lessons.dc.html">Courses</a>
-    <a href="Gallery.dc.html">Gallery</a>
-    <a href="Showcase.dc.html">Showcase</a>
-    <a href="Blog.dc.html">Blog</a>
-    <a href="About.dc.html">About</a>
-    <a href="FreeVideos.dc.html">Free video</a>
-    <a href="Blog.dc.html?tag=Tools">Tools</a>
-    <a href="FAQ.dc.html">FAQ</a>
-    <a href="Lessons.dc.html?cat=Watercolour">Watercolour</a>
-    <a href="Lessons.dc.html?cat=Oil">Oils</a>
-    <a href="Lessons.dc.html?cat=Drawing">Drawing</a>
-    <a href="Lessons.dc.html?cat=Ink">Ink</a>
-    <a href="Lessons.dc.html?cat=Beginners">Beginners</a>
-    <a href="Login.dc.html">Log in / Sign up</a>
-  </div>
-</nav>
+<!-- nav markup lives in js/site-nav.js — single source of truth. The element is
+     left empty on purpose: buildNav() replaces its children on load, so any
+     markup written here never renders and only drifts. -->
+<nav class="site-nav" aria-label="Main"></nav>
 
 <header class="page-hero">
   <div class="wash" aria-hidden="true"></div>
   <div class="container">
-    <div class="eyebrow reveal-one"><span class="star">✦</span> Course catalog</div>
+    <div class="eyebrow reveal-one"><span class="star">&#10038;</span> Course catalog</div>
     <h1 class="marker-title font-a reveal-one" style="font-size:clamp(44px,6vw,80px);">Pick up a brush.</h1>
-    <div class="logo2"><img src="img/logo2.png" alt="Crystal Lau Art" loading="lazy" decoding="async"></div>
+    <!-- #17: in the page hero, above the fold at every width, so not lazy.
+         No srcset: brand marks ship exactly as the client supplied them. -->
+    <div class="logo2"><img src="img/logo2.png" alt="Crystal Lau Art" decoding="async"></div>
   </div>
 </header>
 
-<main class="container" id="content">
+<main class="container" id="content" tabindex="-1">
 
   <!-- 4.1 "Most popular" was removed on the client's instruction 2026-08-08.
        The section is still specified: §4.1 asks for five items ranked by number
@@ -113,105 +65,85 @@
       <aside class="filter-panel sort-panel" aria-label="Sort lessons">
         <div class="fp-head"><span class="fp-title">Sort by</span></div>
         <div class="fg-opts" id="lesson-sort">
-          <button class="fopt active" type="button" data-val="featured">Featured</button>
-          <button class="fopt" type="button" data-val="price-asc">Price ↑</button>
-          <button class="fopt" type="button" data-val="price-desc">Price ↓</button>
+          <button class="fopt active" type="button" data-val="featured" aria-pressed="true">Featured</button>
+          <button class="fopt" type="button" data-val="price-asc" aria-pressed="false">Price &uarr;</button>
+          <button class="fopt" type="button" data-val="price-desc" aria-pressed="false">Price &darr;</button>
         </div>
       </aside>
       <aside class="filter-panel" aria-label="Filter lessons">
         <div class="fp-head"><span class="fp-title">Filter</span><button class="fp-clear" type="button" id="fp-clear">Clear all</button></div>
+        <!-- Every chip row below is EMPTY on purpose. CasFilters.populate()
+             (js/filter-tags.js) builds the options from the tags actually
+             carried by the courses in the grid, and does it before first paint —
+             hand-written chips here never rendered, and three of them named
+             media no course carries. -->
         <div class="fgroup" data-group="medium">
           <div class="fg-title">Medium</div>
-          <div class="fg-opts">
-            <button class="fopt active" type="button" data-val="all">Any</button>
-            <button class="fopt" type="button" data-val="watercolour">Watercolour</button>
-            <button class="fopt" type="button" data-val="oil">Oil</button>
-            <button class="fopt" type="button" data-val="pencils">Pencils</button>
-            <button class="fopt" type="button" data-val="pastel">Pastel</button>
-            <button class="fopt" type="button" data-val="ink">Ink</button>
-          </div>
+          <div class="fg-opts"></div>
         </div>
         <div class="fgroup" data-group="theme">
           <div class="fg-title">Theme</div>
-          <div class="fg-opts">
-            <button class="fopt active" type="button" data-val="all">Any</button>
-            <button class="fopt" type="button" data-val="landscape">Landscape</button>
-            <button class="fopt" type="button" data-val="cityscape">Cityscape</button>
-            <button class="fopt" type="button" data-val="still-life">Still life</button>
-            <button class="fopt" type="button" data-val="portrait">Portrait</button>
-            <button class="fopt" type="button" data-val="animal">Animal</button>
-            <button class="fopt" type="button" data-val="illustration">Illustration</button>
-            <button class="fopt" type="button" data-val="perspective">Perspective</button>
-          </div>
+          <div class="fg-opts"></div>
         </div>
         <div class="fgroup" data-group="difficulty">
           <div class="fg-title">Difficulty</div>
-          <div class="fg-opts">
-            <button class="fopt active" type="button" data-val="all">Any</button>
-            <button class="fopt" type="button" data-val="beginner">Beginner</button>
-            <button class="fopt" type="button" data-val="intermediate">Intermediate</button>
-            <button class="fopt" type="button" data-val="advanced">Advanced</button>
-            <button class="fopt" type="button" data-val="all-levels">All levels</button>
-          </div>
+          <div class="fg-opts"></div>
         </div>
         <div class="fgroup">
           <div class="fg-title">Max price</div>
           <div class="price-val" id="lesson-price-val">Any price</div>
           <div class="slider-wrap">
-            <div class="slider-ui">
-              <div class="slider-track"></div>
-              <div class="slider-fill"></div>
-              <input class="price-slider" id="lesson-price-slider" type="range" min="0" max="60" step="5" value="60">
-              <div class="slider-knob"></div>
-            </div>
-            <div class="price-scale"><span>Free</span><span>£60+</span></div>
+            <!-- The range input is built by script rather than written here.
+                 The dc-runtime owns template children and re-applies their
+                 attributes on every re-render, which pinned value="60" back on
+                 the input after the script had widened the range to £70: the
+                 track painted full while the value sat at 60, and every
+                 ArrowRight was undone before the next one. A node the runtime
+                 never templated cannot be re-pinned. -->
+            <div class="slider-ui" id="lesson-price-ui"></div>
+            <div class="price-scale" id="lesson-price-scale"></div>
           </div>
         </div>
         <div class="fgroup" data-group="duration">
           <div class="fg-title">Length</div>
-          <div class="fg-opts">
-            <button class="fopt active" type="button" data-val="all">Any</button>
-            <button class="fopt" type="button" data-val="short">Under 1h</button>
-            <button class="fopt" type="button" data-val="medium">1–2h</button>
-            <button class="fopt" type="button" data-val="long">2h+</button>
-          </div>
+          <div class="fg-opts"></div>
         </div>
         <div class="fgroup" data-group="offer">
           <div class="fg-title">Offers</div>
-          <div class="fg-opts">
-            <button class="fopt active" type="button" data-val="all">All</button>
-            <button class="fopt" type="button" data-val="sale">On sale</button>
-          </div>
+          <div class="fg-opts"></div>
         </div>
       </aside>
       </div>
 
       <div>
-        <div class="lesson-meta-bar"><span class="lesson-count" id="lesson-count"></span></div>
+        <div class="lesson-meta-bar">
+          <span class="lesson-count" id="lesson-count" aria-live="polite" aria-atomic="true"></span>
+          <span class="lesson-cat-note" id="lesson-cat-note" style="display:none;"></span>
+        </div>
         <!-- cards are rendered from window.CAS_COURSES (js/course-data.js) -->
         <div class="lesson-grid reveal" id="lesson-grid"></div>
-        <div class="no-results" id="no-results">No lessons match these filters — try clearing a few.</div>
+        <div class="no-results" id="no-results" role="status">No lessons match these filters &mdash; try clearing a few.</div>
       </div>
     </div>
   </section>
 
   <section class="section" id="membership">
     <div class="section-head reveal-one">
-      <div class="eyebrow"><span class="star">✦</span> Membership</div>
+      <div class="eyebrow"><span class="star">&#10038;</span> Membership</div>
       <h2 class="section-title is-left">Three ways to study</h2>
     </div>
-    <!-- ASSET PENDING: These three are Crystal’s own studio photographs, picked by me to
+    <!-- ASSET PENDING: These three are Crystal's own studio photographs, picked by me to
             show the treatment — §1.4.13 asks for three chosen for this block, dark or low
             in contrast so the tier text stays readable over them. -->
     <div class="tier-grid reveal">
       <div class="tier-card" style="background-image:url('img/Sketchbook.jpg');">
         <div class="tname">Wanderer</div>
         <div class="tprice">Free</div>
-        <p style="margin:0;font-size:14.5px;color:var(--muted);">Browse the blog and watch <em>Materials &amp; setting up</em> — the full free intro course.</p>
-        <a class="btn ghost" href="lesson.dc.html" style="margin-top:16px;">Start the free lesson <span class="arr" aria-hidden="true">→</span></a>
+        <p style="margin:0;font-size:14.5px;color:var(--muted);">Browse the blog and watch <em>Materials &amp; setting up</em> &mdash; the full free intro course.</p>
+        <a class="btn ghost" href="lesson.dc.html" style="margin-top:16px;">Start the free lesson <span class="arr" aria-hidden="true">&rarr;</span></a>
       </div>
       <div class="tier-card highlight" style="background-image:url('img/BrushA.jpg');">
-        <div class="tier-pick">most picked ✦</div>
+        <div class="tier-pick">most picked &#10038;</div>
         <div class="tname">Apprentice</div>
         <div class="tprice">Per-course purchase</div>
         <p style="margin:0;font-size:14.5px;">Full video access, downloadable materials, resume from anywhere.</p>
@@ -232,11 +164,11 @@
         <img src="img/cover3.jpg" alt="Free lesson preview" style="width:100%;height:100%;object-fit:cover;" loading="lazy" decoding="async">
       </div>
       <div style="flex:1;">
-        <div class="eyebrow"><span class="star">✦</span> Free trial</div>
+        <div class="eyebrow"><span class="star">&#10038;</span> Free trial</div>
         <h2 class="marker-title font-a" style="font-size:clamp(31px,3.1vw,44px);">Not sure where to start?</h2>
-        <p style="margin:0;max-width:54ch;">Watch <em>Materials &amp; setting up</em> free — all 6 units, notes and downloads included — then pick the course that matches where you are.</p>
+        <p style="margin:0;max-width:54ch;">Watch <em>Materials &amp; setting up</em> free &mdash; all 6 units, notes and downloads included &mdash; then pick the course that matches where you are.</p>
       </div>
-      <a class="btn-big" href="lesson.dc.html" style="flex:none;">Watch free lesson →</a>
+      <a class="btn-big" href="lesson.dc.html" style="flex:none;">Watch free lesson &rarr;</a>
     </div>
   </section>
 </main>
@@ -252,6 +184,8 @@ class Component extends DCLogic {
     const root = document.querySelector('.cas-root');
     if (!root) return;
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    /* one shared polite live region, owned by js/site-extras.js */
+    const say = (m) => { try { if (window.CasAnnounce) window.CasAnnounce(m); } catch (e) {} };
 
     /* theme — Light (A) / Dark (D) only. The toggle itself lives in js/site-nav.js.
        A stored or ?theme= value outside A|D is ignored and falls back to the default. */
@@ -262,31 +196,11 @@ class Component extends DCLogic {
     try { const __q = (new URLSearchParams(location.search).get('theme') || '').toUpperCase(); if (valid.indexOf(__q) >= 0) { __theme = __q; localStorage.setItem(THEME_KEY, __q); } } catch (e) {}
     root.setAttribute('data-theme', __theme);
 
-    /* mobile nav sheet */
-    /* burger handled by js/site-nav.js */
-
-    /* cart */
-    const CART = 'cas-cart';
-    const readCart = () => { try { return JSON.parse(localStorage.getItem(CART) || '[]'); } catch (e) { return []; } };
-    const writeCart = (c) => { try { localStorage.setItem(CART, JSON.stringify(c)); } catch (e) {} };
-    const renderCart = () => { const n = readCart().reduce((a, i) => a + i.qty, 0); document.querySelectorAll('.cart-badge').forEach(b => { b.textContent = n; b.style.display = n > 0 ? 'grid' : 'none'; }); };
-    renderCart();
-    document.addEventListener('click', (e) => {
-      const add = e.target.closest('[data-add-to-cart]');
-      if (!add) return;
-      e.preventDefault();
-      const cell = add.closest('.lesson-cell');
-      const title = cell ? (cell.querySelector('.scrim .t') || {}).textContent || 'Course' : 'Course';
-      const priceTxt = cell ? ((cell.querySelector('.price') || {}).textContent || '') : '';
-      const price = parseInt((priceTxt.match(/\d+/) || [0])[0], 10);
-      const img = cell ? ((cell.querySelector('.cover-card img') || {}).getAttribute('src') || '').replace('img/', '') : '';
-      const c = readCart();
-      const ex = c.find(x => x.title === title);
-      if (ex) ex.qty++; else c.push({ title, price, img, kind: 'Course', qty: 1 });
-      writeCart(c); renderCart();
-      const o = add.innerHTML; add.innerHTML = 'Added ✓'; add.disabled = true; setTimeout(() => { add.innerHTML = o; add.disabled = false; }, 1100);
-      document.querySelectorAll('.cart-btn').forEach(btn => { btn.style.transition = 'transform .18s'; btn.style.transform = 'translateY(-3px) rotate(-8deg)'; setTimeout(() => { btn.style.transform = ''; }, 220); });
-    });
+    /* burger, cart badge and the cart drawer are owned by js/site-nav.js and
+       js/site-extras.js. The page used to keep its own copy of the cart read /
+       write / badge code plus an [data-add-to-cart] click handler; site-extras
+       intercepts every one of those buttons in the CAPTURE phase and calls
+       stopPropagation, so the page's bubble-phase handler could never run. */
 
     /* ---- catalogue cards, rendered from window.CAS_COURSES ----
        Single source of truth is js/course-data.js. Nothing about a course is
@@ -302,14 +216,23 @@ class Component extends DCLogic {
     /* every medium a course is tagged with, lower-cased for matching */
     const mediaOf = (c) => String(c.tag || c.cat || '')
       .split(/\s*[&,\/]\s*/).map(s => s.trim().toLowerCase()).filter(Boolean);
-    const courseCard = (c) => {
+    const courseCard = (c, idx) => {
       const n = c.lessons.length;
       /* 4.3: left to right — total duration, lesson count, difficulty. The media
          tag is deliberately absent here; it now sits on the cover itself.
          Home shows two facts and this page shows three (1.4.7); do not unify. */
       const meta = ['~' + runtime(c.totalSeconds),
                     n + (n === 1 ? ' lesson' : ' lessons'),
-                    c.difficulty.replace('-', ' ')].join(' · ');
+                    c.difficulty.replace('-', ' ')].join(' \u00b7 ');
+      /* The first row of cards is above the fold at every width, so the first
+         card is eager and high priority and the rest stay lazy. srcset/sizes
+         come from js/course-data.js, where the pipeline computes them against
+         this exact slot. */
+      const resp = (c.srcset ? ' srcset="' + esc(c.srcset) + '"' : '')
+                 + (c.sizes ? ' sizes="' + esc(c.sizes) + '"' : '')
+                 + (c.w ? ' width="' + c.w + '" height="' + (c.h || c.w) + '"' : '');
+      const load = idx === 0 ? ' fetchpriority="high" decoding="async"'
+                             : ' loading="lazy" decoding="async"';
       return '' +
         /* data-media carries every medium named in the card's tag, split on & and ,
            — "Sketching & Watercolour" is two of them. data-cat holds one value,
@@ -321,7 +244,8 @@ class Component extends DCLogic {
              ' data-price="' + c.price + '" data-duration="' + esc(c.durationBucket) + '"' +
              (c.sale ? ' data-sale="1"' : '') + '>' +
           '<div class="cover-card">' +
-            '<img src="' + esc(c.cover) + '" alt="' + esc(c.title) + ' — ' + esc(c.tag) + ' course" loading="lazy">' +
+            '<img src="' + esc(c.cover) + '"' + resp + load +
+              ' alt="' + esc(c.title) + ' \u2014 ' + esc(c.tag) + ' course">' +
             '<div class="media-tag">' + esc(String(c.tag || '').split(/\s*[&,\/]\s*/)[0]) + '</div>' +
             (c.sale ? '<div class="sale-ribbon"><span>Sale</span></div>' : '') +
             '<div class="scrim"><div class="t">' + esc(c.title) + '</div></div>' +
@@ -330,13 +254,13 @@ class Component extends DCLogic {
                 ' data-title="' + esc(c.title) + '" data-price="' + c.price + '"' +
                 ' data-img="' + esc(c.cover.replace(/^img\//, '')) + '">' + CART_ICO + ' Add to cart</button>' +
               '<a class="cover-btn secondary" href="course.dc.html?id=' + encodeURIComponent(c.id) + '">' +
-                'View course <span class="arr" aria-hidden="true">→</span></a>' +
+                'View course <span class="arr" aria-hidden="true">\u2192</span></a>' +
             '</div>' +
           '</div>' +
           '<div class="meta"><span class="level">' + esc(meta) + '</span>' +
             /* 6: on sale the old price keeps its colour and gains a rule
                through it; only the new price turns marine. */
-            '<span class="price">' + (c.was ? '<s>£' + c.was + '</s> <b class="now">£' + c.price + '</b>' : '£' + c.price) + '</span></div>' +
+            '<span class="price">' + (c.was ? '<s>\u00a3' + c.was + '</s> <b class="now">\u00a3' + c.price + '</b>' : '\u00a3' + c.price) + '</span></div>' +
         '</div>';
     };
 
@@ -344,15 +268,38 @@ class Component extends DCLogic {
     const COURSES = window.CAS_COURSES || [];
     if (grid) grid.innerHTML = COURSES.map(courseCard).join('');
 
+    /* 06: on a coarse pointer the .actions row is faded out and pointer-events:
+       none until :hover, and it is where the only link into a course lives — a
+       tap at the centre of either button hit the title scrim instead. The
+       stylesheet unhide is the real fix; this makes the whole cover a target as
+       well, but ONLY where there is no hover, so the desktop card is unchanged.
+       Clicks that land on .actions are left alone so the two real controls keep
+       their own behaviour. */
+    if (grid && window.matchMedia && !window.matchMedia('(hover: hover)').matches) {
+      grid.addEventListener('click', (e) => {
+        if (e.target.closest('.actions')) return;
+        const card = e.target.closest('.cover-card');
+        if (!card) return;
+        const link = card.querySelector('.actions a[href]');
+        if (link) location.href = link.getAttribute('href');
+      });
+    }
 
     /* multi-group filter panel — options are built dynamically from the
        tags on the courses actually in the grid (shared js/filter-tags.js) */
     const cells = Array.from(document.querySelectorAll('.lesson-cell'));
+    /* selection is conveyed by a class only unless the button says so */
+    const syncPressed = (scope) => {
+      if (!scope) return;
+      scope.querySelectorAll('.fopt').forEach(o =>
+        o.setAttribute('aria-pressed', o.classList.contains('active') ? 'true' : 'false'));
+    };
     const popGroup = (group, get, allLabel, scale) => {
       const g = document.querySelector('.fgroup[data-group="' + group + '"]');
       if (!g || !window.CasFilters) return;
       window.CasFilters.populate(g.querySelector('.fg-opts'), cells, get,
         { allLabel: allLabel || 'Any', groupEl: g, scale: scale });
+      syncPressed(g);
     };
     popGroup('medium', c => (c.dataset.media || '').split('|').filter(Boolean));
     popGroup('theme', c => c.dataset.theme);
@@ -364,7 +311,7 @@ class Component extends DCLogic {
     popGroup('offer', c => (c.dataset.sale === '1' ? 'sale' : null), 'All');
     const groupEls = Array.from(document.querySelectorAll('.fgroup'));
     const sel = {};
-    groupEls.forEach(g => { sel[g.dataset.group] = 'all'; });
+    groupEls.forEach(g => { if (g.dataset.group) sel[g.dataset.group] = 'all'; });
     let maxPrice = 999;
     const countEl = document.getElementById('lesson-count');
     const noRes = document.getElementById('no-results');
@@ -379,6 +326,9 @@ class Component extends DCLogic {
       if (cell.dataset.price && (+cell.dataset.price) > maxPrice) return false;
       return true;
     };
+    /* #lesson-count is the live region for every filter change: it is the one
+       fact that changes on all of them, so announcing it here means the chips,
+       the slider and Clear all do not each need their own message. */
     const applyFilters = () => {
       let n = 0;
       cells.forEach(c => { const ok = matches(c); c.classList.toggle('hidden', !ok); if (ok) n++; });
@@ -390,31 +340,17 @@ class Component extends DCLogic {
       opts.forEach(o => o.addEventListener('click', () => {
         opts.forEach(x => x.classList.remove('active'));
         o.classList.add('active');
+        syncPressed(g);
         sel[g.dataset.group] = o.dataset.val;
         applyFilters();
       }));
     });
-    const clearBtn = document.getElementById('fp-clear');
-    if (clearBtn) clearBtn.addEventListener('click', () => {
-      groupEls.forEach(g => { sel[g.dataset.group] = 'all'; g.querySelectorAll('.fopt').forEach((o, i) => o.classList.toggle('active', i === 0)); });
-      maxPrice = 999; priceSlider.value = priceSlider.max; priceVal.textContent = 'Any price'; setPct();
-      applyFilters();
-    });
-    /* deep-link: ?cat= from the nav category row */
-    try {
-      const qp = (new URLSearchParams(location.search).get('cat') || '').toLowerCase();
-      if (qp) {
-        const CATMAP = { watercolour: ['medium', 'watercolour'], oil: ['medium', 'oil'], oils: ['medium', 'oil'], drawing: ['medium', 'pencils'], pencils: ['medium', 'pencils'], pastel: ['medium', 'pastel'], ink: ['medium', 'ink'], beginners: ['difficulty', 'beginner'], beginner: ['difficulty', 'beginner'] };
-        const m = CATMAP[qp] || ['medium', qp];
-        const btn = document.querySelector('.fgroup[data-group="' + m[0] + '"] .fopt[data-val="' + m[1] + '"]');
-        if (btn) btn.click();
-      }
-    } catch (e) {}
-    applyFilters();
 
-    /* price slider (dynamic range) */
-    const priceSlider = document.getElementById('lesson-price-slider');
+    /* ---- price slider ----
+       Built here rather than in the template: see the note beside #lesson-price-ui. */
+    const priceUI = document.getElementById('lesson-price-ui');
     const priceVal = document.getElementById('lesson-price-val');
+    const priceScale = document.getElementById('lesson-price-scale');
     const niceRange = (lo, hi) => {
       const span = Math.max(hi - lo, 1);
       const steps = [1, 2, 5, 10, 20, 25, 50, 100, 200];
@@ -423,37 +359,104 @@ class Component extends DCLogic {
       return { min: Math.floor(lo / step) * step, max: Math.ceil(hi / step) * step, step };
     };
     const lessonPrices = cells.map(c => +c.dataset.price).filter(n => !isNaN(n));
-    const pr = niceRange(Math.min(...lessonPrices), Math.max(...lessonPrices));
-    priceSlider.min = pr.min; priceSlider.max = pr.max; priceSlider.step = pr.step; priceSlider.value = pr.max;
-    const lScale = priceSlider.closest('.slider-wrap').querySelector('.price-scale');
-    if (lScale) lScale.innerHTML = '<span>' + (pr.min === 0 ? 'Free' : '£' + pr.min) + '</span><span>£' + pr.max + '+</span>';
-    const setPct = () => {
-      const pct = ((+priceSlider.value - +priceSlider.min) / (+priceSlider.max - +priceSlider.min)) * 100;
-      priceSlider.closest('.slider-ui').style.setProperty('--pct', pct + '%');
-    };
-    const onSlide = () => {
+    const pr = lessonPrices.length
+      ? niceRange(Math.min(...lessonPrices), Math.max(...lessonPrices))
+      : { min: 0, max: 0, step: 1 };
+    let priceSlider = null;
+    if (priceUI) {
+      priceUI.innerHTML =
+        '<div class="slider-track"></div><div class="slider-fill"></div>' +
+        '<input class="price-slider" id="lesson-price-slider" type="range"' +
+          ' min="' + pr.min + '" max="' + pr.max + '" step="' + pr.step + '" value="' + pr.max + '"' +
+          ' aria-label="Maximum price">' +
+        '<div class="slider-knob"></div>';
+      priceSlider = priceUI.querySelector('.price-slider');
+      priceSlider.value = pr.max;
+      if (priceScale) {
+        priceScale.innerHTML = '<span>' + (pr.min === 0 ? 'Free' : '\u00a3' + pr.min) + '</span>'
+                             + '<span>\u00a3' + pr.max + '+</span>';
+      }
+    }
+    const priceLabel = (v) => (v >= pr.max) ? 'Any price' : (v === 0 ? 'Free only' : 'Up to \u00a3' + v);
+    /* Reads the input, then writes every dependent thing from it — the value,
+       the printed label, the fill percentage and the announced value all come
+       from one place, so they cannot disagree the way they did when the fill
+       painted 100% over a value of 60. */
+    const syncPrice = () => {
+      if (!priceSlider) return;
       const v = +priceSlider.value;
-      priceVal.textContent = (v >= +priceSlider.max) ? 'Any price' : (v === 0 ? 'Free only' : ('Up to £' + v));
-      setPct();
-      maxPrice = (v >= +priceSlider.max) ? 999 : v;
-      applyFilters();
+      const label = priceLabel(v);
+      priceVal.textContent = label;
+      priceSlider.setAttribute('aria-valuetext', label);
+      priceSlider.setAttribute('value', String(v));
+      const span = (pr.max - pr.min) || 1;
+      priceUI.style.setProperty('--pct', (((v - pr.min) / span) * 100) + '%');
+      maxPrice = (v >= pr.max) ? 999 : v;
     };
-    priceSlider.addEventListener('input', onSlide);
-    priceSlider.addEventListener('change', onSlide);
-    setPct();
+    const onSlide = () => { syncPrice(); applyFilters(); };
+    if (priceSlider) {
+      priceSlider.addEventListener('input', onSlide);
+      priceSlider.addEventListener('change', onSlide);
+      syncPrice();
+    }
+
+    const clearBtn = document.getElementById('fp-clear');
+    if (clearBtn) clearBtn.addEventListener('click', () => {
+      groupEls.forEach(g => {
+        if (g.dataset.group) sel[g.dataset.group] = 'all';
+        g.querySelectorAll('.fopt').forEach((o, i) => o.classList.toggle('active', i === 0));
+        syncPressed(g);
+      });
+      if (priceSlider) { priceSlider.value = pr.max; syncPrice(); }
+      const note = document.getElementById('lesson-cat-note');
+      if (note) { note.textContent = ''; note.style.display = 'none'; }
+      applyFilters();
+    });
+
+    /* deep-link: ?cat= from the nav category row.
+       Three of the five nav categories name a medium no course carries, and the
+       lookup below simply found no chip — the catalogue then rendered
+       unfiltered with nothing to say the request had been dropped, because the
+       whole block sat inside a try/catch. Now it says so, on the page and to a
+       screen reader. */
+    let catParam = '';
+    try { catParam = new URLSearchParams(location.search).get('cat') || ''; } catch (e) { catParam = ''; }
+    if (catParam) {
+      const qp = catParam.toLowerCase();
+      const CATMAP = { watercolour: ['medium', 'watercolour'], oil: ['medium', 'oil'], oils: ['medium', 'oil'], drawing: ['medium', 'pencils'], pencils: ['medium', 'pencils'], pastel: ['medium', 'pastel'], ink: ['medium', 'ink'], beginners: ['difficulty', 'beginner'], beginner: ['difficulty', 'beginner'] };
+      const m = CATMAP[qp] || ['medium', qp];
+      const btn = document.querySelector('.fgroup[data-group="' + m[0] + '"] .fopt[data-val="' + m[1] + '"]:not([disabled])');
+      const note = document.getElementById('lesson-cat-note');
+      if (btn) {
+        btn.click();
+        say('Filtered by ' + btn.textContent.trim() + '.');
+      } else if (note) {
+        const pretty = catParam.charAt(0).toUpperCase() + catParam.slice(1);
+        note.textContent = 'Nothing in the catalogue is tagged \u201c' + pretty + '\u201d yet \u2014 showing every course.';
+        note.style.display = '';
+        say('No course is tagged ' + pretty + ' yet. Showing every course.');
+      }
+    }
+    applyFilters();
 
     /* sort (own card) */
-    const lessonGrid = document.getElementById('lesson-grid');
     const lessonSort = document.getElementById('lesson-sort');
     const origOrder = cells.slice();
+    const SORT_SAID = {
+      'featured': 'Sorted by featured order.',
+      'price-asc': 'Sorted by price, lowest first.',
+      'price-desc': 'Sorted by price, highest first.'
+    };
     if (lessonSort) lessonSort.querySelectorAll('.fopt').forEach(chip => chip.addEventListener('click', () => {
       lessonSort.querySelectorAll('.fopt').forEach(c => c.classList.remove('active'));
       chip.classList.add('active');
+      syncPressed(lessonSort);
       const v = chip.dataset.val;
       let arr = origOrder.slice();
       if (v === 'price-asc') arr.sort((a, b) => (+a.dataset.price) - (+b.dataset.price));
       else if (v === 'price-desc') arr.sort((a, b) => (+b.dataset.price) - (+a.dataset.price));
-      arr.forEach(c => lessonGrid.appendChild(c));
+      arr.forEach(c => grid.appendChild(c));
+      say(SORT_SAID[v] || 'Order changed.');
     }));
 
     /* scroll reveals (rect-based; IO is unreliable in the preview) */

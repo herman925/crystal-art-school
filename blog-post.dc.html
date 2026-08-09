@@ -1,13 +1,24 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- #10: the title lives in the real <head>, not in <helmet>, because this page
+     rewrites it from the post being read. The helmet manager keeps a live map of
+     the non-link/meta nodes it mounted and re-applies their textContent on every
+     re-render, so a <title> declared there is restored to the generic string a
+     moment after the script sets the article's own — measured: the post title
+     was set at mount and read back as the generic one 5.5s later. Nothing
+     re-renders the document <head>, so document.title stays where it is put.
+     <meta name="description"> is safe in <helmet>: metas are mounted once,
+     keyed, and never rewritten. -->
+<title>From the journal — Crystal's Art School</title>
 <script src="./support.js"></script>
 </head>
 <body>
 <x-dc>
 <helmet>
+<meta name="description" content="An article from Crystal Lau's studio journal — watercolour materials, technique and the practice behind the paintings.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600;6..96,700&family=Oswald:wght@300;400;500;600&family=Archivo:wght@400;500;600;700&family=Saira+Stencil+One&family=Arizonia&display=swap" rel="stylesheet">
@@ -21,10 +32,37 @@
 <script src="js/motion.js"></script>
 <script src="js/blog-data.js"></script>
 <style>
+/* ---- #20: the banner was 39% clipped between 701px and 1221px ----
+   `aspect-ratio: 48/9` with `width: auto` and `min-height: 220px` made Chrome
+   resolve the WIDTH from the min-height — a fixed 1173.3px at every width in
+   that band — so at a 760px viewport a 712px container held a 1173px banner and
+   .cas-root's `overflow-x: hidden` swallowed the overflow, which is why no
+   document-level overflow check ever caught it. A definite width takes the
+   inline size back off the aspect ratio; the ratio then only sets the height,
+   and min-height clamps it as intended. The <=700px rule in
+   css/industrial-3.css sizes the banner a different way and is untouched.
+   Requested from the CSS agent for css/industrial-3.css:73 — this page-scoped
+   copy is a no-op once that lands. */
+.post-banner { width: 100%; }
+
+/* ---- #20: three fixed columns holding two cards ----
+   `repeat(3, 1fr)` left a 452px hole at 1692px whenever the rail had fewer than
+   three cards, which it always does with three posts on the site. The rail now
+   takes one column per card and centres them, and a column is never wider than
+   the 452px a card gets in a full three-up row. The <=700px single-column rule
+   is mirrored here because this block loads after css/industrial.css. */
+.related-rail { grid-template-columns: repeat(var(--rel-cols, 3), minmax(0, 452px)); justify-content: center; }
+@media (max-width: 700px) { .related-rail { grid-template-columns: minmax(0, 1fr); } }
+
 /* ---- article layout variants (guide / essay) ---- */
 .bp-lede { font-size: 19px; line-height: 1.65; }
 /* Developer's note — TEMPORARY. Declares edits made to Crystal's text before she
-   signed off. Remove the `devnote` field in js/blog-data.js once approved. */
+   signed off. Give a post a `devnote` field in js/blog-data.js and this renders
+   at the top of the article; remove the field and it disappears.
+   2026-08-09 (#12): all three posts carry one again. The copy corrections they
+   declare are live, so the page cannot show the edits with the declaration
+   removed. Delete the FIELD, not this rule, when she approves — see the decision
+   recorded at the top of js/blog-data.js. */
 .bp-devnote { border: 1px dashed color-mix(in srgb, var(--coral) 55%, transparent); background: color-mix(in srgb, var(--coral) 7%, var(--surface)); border-radius: var(--radius-card); padding: 16px 20px; margin: 26px 0 8px; }
 .bp-devnote strong { font-family: var(--font-cond); font-size: 12.5px; font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--coral); display: block; margin-bottom: 6px; }
 .bp-devnote p { margin: 0; font-size: 14.5px; line-height: 1.6; }
@@ -40,83 +78,40 @@
 .bp-sec li .bp-n { font-family: var(--font-marker); font-weight: 600; font-size: 34px; line-height: 1; color: var(--coral); flex: none; width: 48px; padding-top: 2px; }
 .bp-sec li h3 { margin: 0 0 5px; font-size: 19px; }
 .bp-sec li p { margin: 0; }
+.bp-sec:focus { outline: none; }
 @media (max-width: 640px) { .bp-sec li { gap: 12px; } .bp-sec li .bp-n { width: 36px; font-size: 27px; } }
+/* #11: an unknown ?id= used to serve the first post silently. */
+.bp-404 { margin: 40px 0 20px; }
+.bp-404 p { margin: 0 0 18px; }
 </style>
 </helmet>
 <div class="cas-root" data-theme="D">
+<a class="skip-link" href="#content">Skip to content</a>
 <div class="glow-layer" aria-hidden="true"></div>
 
-<nav class="site-nav" aria-label="Main">
-  <div class="nav-top">
-    <div class="inner">
-      <a class="nav-brand" href="index.html">
-        <img src="img/lau-logo.png" alt="Lau. — Crystal's Art School">
-      </a>
-      <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="Lessons.dc.html">Courses</a></li>
-        <li><a href="Gallery.dc.html">Gallery</a></li>
-        <li><a href="Showcase.dc.html">Showcase</a></li>
-        <li><a href="Blog.dc.html" class="active">Blog</a></li>
-        <li><a href="About.dc.html">About</a></li>
-        <li><a href="FreeVideos.dc.html">Free video</a></li>
-        <li><a href="Blog.dc.html?tag=Tools">Tools</a></li>
-        <li><a href="FAQ.dc.html">FAQ</a></li>
-      </ul>
-      <div class="nav-auth">
-        <a class="cart-btn" href="Checkout.dc.html" aria-label="Shopping cart">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M2 3h3.2l2.5 12.2a1.5 1.5 0 0 0 1.5 1.2h9a1.5 1.5 0 0 0 1.5-1.2L21.5 7H6.5"></path></svg>
-          <span class="cart-badge">0</span>
-        </a>
-        <a class="btn ghost" href="Login.dc.html">Log in</a>
-        <a class="btn primary" href="Signup.dc.html">Sign up</a>
-        <button class="nav-burger" type="button" aria-label="Menu" aria-expanded="false">☰</button>
-      </div>
-    </div>
-  </div>
-  <div class="nav-cats">
-    <div class="inner">
-      <ul class="nav-cat-links">
-        <li><a href="Lessons.dc.html?cat=Watercolour">Watercolour</a></li>
-        <li><a href="Lessons.dc.html?cat=Oil">Oils</a></li>
-        <li><a href="Lessons.dc.html?cat=Drawing">Drawing</a></li>
-        <li><a href="Lessons.dc.html?cat=Ink">Ink</a></li>
-        <li><a href="Lessons.dc.html?cat=Beginners">Beginners</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="nav-sheet">
-    <a href="index.html">Home</a>
-    <a href="Lessons.dc.html">Courses</a>
-    <a href="Gallery.dc.html">Gallery</a>
-    <a href="Showcase.dc.html">Showcase</a>
-    <a href="Blog.dc.html">Blog</a>
-    <a href="About.dc.html">About</a>
-    <a href="FreeVideos.dc.html">Free video</a>
-    <a href="Blog.dc.html?tag=Tools">Tools</a>
-    <a href="FAQ.dc.html">FAQ</a>
-    <a href="Lessons.dc.html?cat=Watercolour">Watercolour</a>
-    <a href="Lessons.dc.html?cat=Oil">Oils</a>
-    <a href="Lessons.dc.html?cat=Drawing">Drawing</a>
-    <a href="Lessons.dc.html?cat=Ink">Ink</a>
-    <a href="Lessons.dc.html?cat=Beginners">Beginners</a>
-    <a href="Login.dc.html">Log in / Sign up</a>
-  </div>
-</nav>
+<!-- nav markup lives in js/site-nav.js — single source of truth (#19).
+     The hand-written copy that used to sit here was replaced at runtime by
+     nav.innerHTML = buildNav() on every load, so it never rendered. -->
+<nav class="site-nav" aria-label="Main"></nav>
 
 <div class="container" style="padding-top:28px;">
   <div class="logo2 is-center"><img src="img/logo2.png" alt="Crystal Lau Art"></div>
-  <header class="post-banner">
-    <img src="img/blog-kit-18-21.jpg" alt="" loading="lazy" decoding="async">
+  <!-- #17: the banner is the LCP image and it carried loading="lazy" while its
+       src pointed at a photograph that is no post's banner, so the page fetched
+       a 276KB file it never painted and then lazily fetched the 425KB one it
+       did. Source, ladder and alt are all set by the script below from the post
+       that is actually being read. -->
+  <header class="post-banner" id="post-banner">
+    <img alt="" fetchpriority="high" decoding="async">
     <div class="chip-h1"><div class="chip-inner"><h1></h1></div></div>
   </header>
 </div>
 
-<main class="container" id="content">
+<main class="container" id="content" tabindex="-1">
   <!-- article body is rendered from js/blog-data.js by the script below -->
   <div class="article"></div>
 
-  <section class="section">
+  <section class="section" id="keep-reading">
     <div class="section-head reveal-one" style="text-align:center;">
       <div class="eyebrow" style="justify-content:center;"><span class="star">✦</span> Keep reading</div>
       <h2 class="section-title">More from Crystal</h2>
@@ -138,23 +133,87 @@ class Component extends DCLogic {
 
     /* ---- multi-article: render from CAS_BLOG when ?id= names another post ---- */
     const POSTS = window.CAS_BLOG || [];
-    const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
-    const slug = (s) => esc(s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    /* #19: `>`, `"` and `'` were missing. Every value below is interpolated into
+       an attribute — alt, href, aria-label, src — and a bare `"` ends the
+       attribute it is sitting in while a bare `>` ends the tag. */
+    const esc = (s) => String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    /* slug() no longer runs its input through esc() first: it strips everything
+       that is not a-z0-9 anyway, and escaping first turned an apostrophe into
+       the letters of `&#39;`. */
+    const slug = (s) => String(s == null ? '' : s).toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    const say = (m) => { if (window.CasAnnounce) window.CasAnnounce(m); };
+
+    /* #11: an unknown ?id= used to fall through to POSTS[0], so a stale or
+       mistyped link served a different article under the reader's URL with
+       nothing to say it had. */
     let pid = (POSTS[0] || {}).id;
-    try { const q = new URLSearchParams(location.search).get('id'); if (q && POSTS.some(p => p.id === q)) pid = q; } catch (e) {}
-    const post = POSTS.find(p => p.id === pid);
+    let notFound = false;
+    try {
+      const q = new URLSearchParams(location.search).get('id');
+      if (q) { if (POSTS.some(p => p.id === q)) pid = q; else { notFound = true; pid = null; } }
+    } catch (e) {}
+    const post = notFound ? null : POSTS.find(p => p.id === pid);
+
+    /* #10: the skip link has to MOVE FOCUS, not just the viewport. Measured on
+       the plain anchor: activating it set location.hash to #content and scrolled
+       273px, but document.activeElement stayed on the link itself and the next
+       Tab went to the brand — i.e. the ten nav stops it exists to skip. <main>
+       carries tabindex="-1" so it can take focus; this puts it there.
+       REQUEST: this belongs in js/site-extras.js once, for all 15 pages. */
+    const skip = document.querySelector('.skip-link');
+    if (skip) skip.addEventListener('click', (e) => {
+      const t = document.getElementById('content');
+      if (!t) return;
+      e.preventDefault();
+      if (!t.hasAttribute('tabindex')) t.setAttribute('tabindex', '-1');
+      t.focus({ preventScroll: true });
+      t.scrollIntoView({ block: 'start' });
+      try { history.replaceState(null, '', '#content'); } catch (er) {}
+    });
+
+    const banner = document.getElementById('post-banner');
+    const article = document.querySelector('.article');
+    const setMeta = (t, d) => {
+      document.title = t;
+      const md = document.querySelector('meta[name="description"]');
+      if (md && d) md.setAttribute('content', d);
+    };
+
+    /* #17: the ladder (which files exist and how wide each is) belongs to the
+       asset pipeline and arrives with the post in js/blog-data.js. `sizes` is
+       the slot — how wide the picture is painted in THIS layout — so it is
+       written here, from measured widths:
+         banner   1392 @1692 · 1052 @1100 ·  712 @760 ·  358 @390
+         figure    531 @1692 ·  531 @1100 ·  550 @760 ·  358 @390
+         rail card 452 @1692 ·  452 @1100 · 100vw @<=700
+       The post's own `sizes` string still describes the pre-#20 banner, which
+       resolved to a fixed 1173px between 701 and 1221 — see the note in the
+       stylesheet above. */
+    const BANNER_SIZES = '(max-width: 700px) calc(100vw - 32px), (max-width: 1488px) calc(100vw - 48px), 1392px';
+    const REL_SIZES = '(max-width: 700px) calc(100vw - 32px), 452px';
+    const PROFILE_SS = 'img/ProfilePic-96.jpg 96w, img/ProfilePic-160.jpg 160w, img/ProfilePic-384.jpg 384w';
+    const ss = (o) => o && o.srcset ? ' srcset="' + esc(o.srcset) + '"' : '';
+    const wh = (o) => o && o.w && o.h ? ' width="' + esc(o.w) + '" height="' + esc(o.h) + '"' : '';
 
     if (post) {
-      const bannerImg = document.querySelector('.post-banner img');
-      if (bannerImg) { bannerImg.src = 'img/' + (post.banner || post.img); bannerImg.alt = post.title; }
-      const h1 = document.querySelector('.post-banner h1');
+      const bannerImg = banner ? banner.querySelector('img') : null;
+      if (bannerImg) {
+        bannerImg.src = 'img/' + (post.banner || post.img);
+        if (post.srcset) { bannerImg.srcset = post.srcset; bannerImg.sizes = BANNER_SIZES; }
+        /* #11: alt="" — the <h1> sits on top of this photograph and says the
+           same thing, so a described banner announced the headline twice. */
+        bannerImg.alt = '';
+      }
+      const h1 = banner ? banner.querySelector('h1') : null;
       if (h1) h1.textContent = post.title;
-      document.title = post.title + ' — Crystal\'s Art School';
+      setMeta(post.title + ' — Crystal\'s Art School', post.excerpt || '');
 
-      /* Developer's note — TEMPORARY. Declares edits made to Crystal's text before
-         she signed off. Delete the `devnote` field in js/blog-data.js to remove. */
+      /* Developer's note — see #12 and the stylesheet note above. Renders
+         whenever a post carries a `devnote`; all three posts do. */
       const devnote = post.devnote
-        ? '<div class="bp-devnote"><strong>Developer’s note</strong><p>' + esc(post.devnote) + '</p></div>'
+        ? '<div class="bp-devnote" role="note"><strong>Developer’s note</strong><p>' + esc(post.devnote) + '</p></div>'
         : '';
 
       let body = '';
@@ -162,15 +221,21 @@ class Component extends DCLogic {
         const lede = (post.intro || []).map((p, i) =>
           (i === 0 ? '<p class="bp-lede" style="margin-top:26px;">' : '<p>') + esc(p) + '</p>').join('');
         const hero = post.hero
-          ? '<div class="bp-hero"><img src="img/' + esc(post.hero) + '" alt="' + esc(post.title) + '" loading="lazy" decoding="async"></div>'
+          ? '<div class="bp-hero"><img src="img/' + esc(post.hero) + '"' + ss(post) + ' sizes="' + BANNER_SIZES + '"' + wh(post) + ' alt="" loading="lazy" decoding="async"></div>'
           : '';
         const toc = '<nav class="toc" aria-label="Contents"><div class="toc-title">Contents</div><ol>' +
           (post.sections || []).map(sec => '<li><a href="#' + slug(sec.t) + '">' + esc(sec.t) + '</a></li>').join('') +
           '</ol></nav>';
         const secs = (post.sections || []).map(sec => {
           let n = sec.start || 1;
-          return '<section class="bp-sec" id="' + slug(sec.t) + '"><h2>' + esc(sec.t) + '</h2>' +
-            (sec.src ? '<figure><img src="img/' + esc(sec.src) + '" alt="' + esc(sec.t) + '" loading="lazy" decoding="async"></figure>' : '') +
+          return '<section class="bp-sec" id="' + slug(sec.t) + '" tabindex="-1"><h2>' + esc(sec.t) + '</h2>' +
+            /* #11: alt="" — this photograph sat directly under a heading whose
+               text it repeated word for word. What each picture actually shows
+               is a caption Crystal has not written yet; an invented one is
+               worse than none. Listed for her in the report. */
+            (sec.src ? '<figure><img src="img/' + esc(sec.src) + '"' + ss(sec) +
+              (sec.sizes ? ' sizes="' + esc(sec.sizes) + '"' : '') + wh(sec) +
+              ' alt="" loading="lazy" decoding="async"></figure>' : '') +
             '<ol>' + sec.items.map(it =>
               '<li><div class="bp-n">' + (n++) + '</div><div><h3>' + esc(it.t) + '</h3><p>' + esc(it.d) + '</p></div></li>').join('') +
             '</ol></section>';
@@ -189,18 +254,25 @@ class Component extends DCLogic {
       const newer = at > 0 ? idx[at - 1] : null;
       const older = at < idx.length - 1 ? idx[at + 1] : null;
 
-      const article = document.querySelector('.article');
+      /* #11: the year was the literal string "2026", so a post dated 2027 would
+         have rendered 2026. It comes off the post's own ISO date now, and is
+         left out entirely when there isn't one. */
+      const yr = String(post.date || '').slice(0, 4);
+      const when = esc(post.d) + (/^\d{4}$/.test(yr) ? ' ' + yr : '');
+
       article.innerHTML =
-        '<div class="byline"><img src="img/ProfilePic.jpg" alt="Crystal Lau" loading="lazy" decoding="async"><strong>Crystal Lau</strong>' +
-        '<span class="hand-note">' + esc(post.d) + ' 2026 · ' + (post.mins || 4) + ' min read · ' + esc(post.tag) + '</span></div>' +
+        '<div class="byline"><img src="img/ProfilePic-96.jpg" srcset="' + PROFILE_SS + '" sizes="36px" alt="Crystal Lau" width="36" height="36" loading="lazy" decoding="async"><strong>Crystal Lau</strong>' +
+        '<span class="hand-note">' + when + ' · ' + (post.mins || 4) + ' min read · ' + esc(post.tag) + '</span></div>' +
         body +
         '<div class="card blush" style="display:flex;gap:16px;align-items:center;margin:40px 0;">' +
-          '<img src="img/ProfilePic.jpg" alt="Crystal Lau" style="width:72px;height:72px;border-radius:50%;object-fit:cover;flex:none;" loading="lazy" decoding="async">' +
+          '<img src="img/ProfilePic-96.jpg" srcset="' + PROFILE_SS + '" sizes="72px" alt="" style="width:72px;height:72px;border-radius:50%;object-fit:cover;flex:none;" loading="lazy" decoding="async">' +
           '<div><strong>Crystal Lau</strong><p style="margin:4px 0 0;font-size:14px;color:#5e4a3d;">Oils &amp; drawing teacher. Small studio in Hong Kong, eight years of small-group classes. <a class="link-squiggle" href="About.dc.html" style="font-weight:700;">More about me →</a></p></div></div>' +
         '<section><h2 style="margin-top:8px;">Comments</h2>' +
-          '<form class="card" id="comment-form" style="margin-top:8px;">' +
+          '<form class="card" id="comment-form" style="margin-top:8px;" novalidate="novalidate">' +
             '<label for="comment-box" style="font-family:var(--font-cond);font-weight:600;letter-spacing:var(--tracking-label);text-transform:uppercase;font-size:13px;display:block;margin-bottom:8px;color:var(--ink);">Join the conversation</label>' +
-            '<textarea id="comment-box" class="post-field" required rows="3" placeholder="Be kind, be curious…"></textarea>' +
+            /* #01: written required="required" rather than bare `required`,
+               because the .dc runtime drops valueless attributes. */
+            '<textarea id="comment-box" class="post-field" required="required" rows="3" placeholder="Be kind, be curious…"></textarea>' +
             '<div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;flex-wrap:wrap;gap:8px;">' +
               '<span class="hand-note" style="font-family:var(--font-cond);font-size:12px;text-transform:uppercase;color:var(--muted);">Log in to post — Wanderer tier is free.</span>' +
               '<button class="btn primary" type="submit">Post comment</button></div>' +
@@ -210,18 +282,36 @@ class Component extends DCLogic {
           (older ? '<a class="btn ghost" href="blog-post.dc.html?id=' + esc(older.id) + '">← ' + esc(older.title) + '</a>' : '<span></span>') +
           (newer ? '<a class="btn ghost" href="blog-post.dc.html?id=' + esc(newer.id) + '">' + esc(newer.title) + ' →</a>' : '') +
         '</div>';
+    } else {
+      /* #11: an honest 404 rather than a different article served silently. */
+      if (banner) banner.style.display = 'none';
+      setMeta('Post not found — Crystal\'s Art School',
+              'That article is not on the site. Browse the journal for what is.');
+      article.innerHTML =
+        '<div class="bp-404"><h1 style="margin:0 0 14px;">Post not found</h1>' +
+        '<p class="bp-lede">That article is not on the site — the link may be out of date, or the post may have been renamed.</p>' +
+        '<p><a class="btn primary" href="Blog.dc.html">Back to the journal</a></p></div>';
     }
 
-    /* "Keep reading" rail = 3 most-read posts, excluding the one on screen */
+    /* "Keep reading" rail = the newest posts, excluding the one on screen */
     const rail = document.getElementById('related-rail');
+    const railSection = document.getElementById('keep-reading');
     if (rail && POSTS.length) {
       const top3 = POSTS.slice().sort((a, b) => b.date.localeCompare(a.date)).filter(p => p.id !== pid).slice(0, 3);
+      /* #20: the rail took one column per card instead of always three, which
+         is what left a 452px hole beside two cards at 1692px. */
+      rail.style.setProperty('--rel-cols', String(top3.length || 1));
+      if (railSection) railSection.style.display = top3.length ? '' : 'none';
       rail.innerHTML = top3.map(p =>
         '<a class="cover-card" href="blog-post.dc.html?id=' + esc(p.id) + '" style="aspect-ratio:4/3;">' +
           /* 12.2: 文章圖片一律延遲載入 — the Keep reading thumbnails sit far below the
-             fold and were the one place still fetching on load. */
-          '<img src="img/' + esc(p.img) + '" alt="' + esc(p.title) + '" loading="lazy" decoding="async">' +
+             fold and were the one place still fetching on load.
+             #11: alt="" — the scrim under it already carries the title, which is
+             also this link's accessible name. */
+          '<img src="img/' + esc(p.img) + '"' + ss(p) + ' sizes="' + REL_SIZES + '" alt="" loading="lazy" decoding="async">' +
           '<div class="scrim"><div class="t">' + esc(p.title) + '</div></div></a>').join('');
+    } else if (railSection) {
+      railSection.style.display = 'none';
     }
 
     /* theme — Light (A) / Dark (D) only. The toggle itself lives in js/site-nav.js.
@@ -233,20 +323,49 @@ class Component extends DCLogic {
     try { const __q = (new URLSearchParams(location.search).get('theme') || '').toUpperCase(); if (valid.indexOf(__q) >= 0) { __theme = __q; localStorage.setItem(THEME_KEY, __q); } } catch (e) {}
     root.setAttribute('data-theme', __theme);
 
-    /* mobile nav sheet */
-    /* burger handled by js/site-nav.js */
-    document.querySelectorAll('.cart-badge').forEach(b => { try { const n = JSON.parse(localStorage.getItem('cas-cart') || '[]').reduce((a, i) => a + i.qty, 0); b.textContent = n; b.style.display = n > 0 ? 'grid' : 'none'; } catch (e) {} });
+    /* burger, cart badge and the light/dark toggle are owned by js/site-nav.js
+       and js/site-extras.js. The page's own cart-badge writer was a second
+       writer for one value and wrote it without the aria-hidden the shared one
+       sets (#19). */
 
-    /* smooth-scroll TOC */
+    /* smooth-scroll TOC.
+       #22: preventDefault() cancels the hash change too, so focus stayed on the
+       table of contents — the next Tab went to the next TOC entry rather than
+       into the section that had just been scrolled to. Focus is moved to the
+       section explicitly (preventScroll, so the smooth scroll still does the
+       travelling) and the address bar is kept in step. */
     document.querySelectorAll('.toc a[href^="#"]').forEach(a => a.addEventListener('click', (e) => {
       const id = a.getAttribute('href').slice(1);
       const target = document.getElementById(id);
-      if (target) { e.preventDefault(); const y = target.getBoundingClientRect().top + (window.pageYOffset || 0) - 80; window.scrollTo({ top: y, behavior: 'smooth' }); }
+      if (!target) return;
+      e.preventDefault();
+      const y = target.getBoundingClientRect().top + (window.pageYOffset || 0) - 80;
+      if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+      target.focus({ preventScroll: true });
+      try { history.replaceState(null, '', '#' + id); } catch (er) {}
+      window.scrollTo({ top: y, behavior: 'smooth' });
     }));
 
-    /* comment form */
+    /* comment form.
+       #01/#22: this used to preventDefault() and show the thank-you whatever was
+       in the box, so an empty comment "posted". Native validation messages are
+       not announced here, so the reason is spoken as well as focused. */
     const form = document.getElementById('comment-form');
-    if (form) form.addEventListener('submit', (e) => { e.preventDefault(); const s = form.querySelector('.sent'); if (s) s.style.display = 'block'; form.reset(); });
+    if (form) form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const box = form.querySelector('#comment-box');
+      if (!form.checkValidity()) {
+        const bad = form.querySelector('textarea:invalid, input:invalid, select:invalid');
+        if (bad) { bad.setAttribute('aria-invalid', 'true'); bad.focus(); }
+        say('Your comment is empty. Write something before posting.');
+        return;
+      }
+      if (box) box.removeAttribute('aria-invalid');
+      const s = form.querySelector('.sent');
+      if (s) s.style.display = 'block';
+      form.reset();
+      say('Thanks — your comment is waiting for review.');
+    });
 
     /* reveals */
     document.querySelectorAll('.reveal-one, .section-title').forEach(el => el.classList.add('in-view'));

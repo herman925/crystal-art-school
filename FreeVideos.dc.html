@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,6 +8,10 @@
 <body>
 <x-dc>
 <helmet>
+<!-- #10: the runtime copies <title> and <meta> out of the helmet into <head>.
+     Every page needs its own, and they must describe THIS page. -->
+<title>Free painting videos — Crystal's Art School</title>
+<meta name="description" content="Free full-length watercolour demos, short painting tips and vertical studio clips from Crystal Lau — no sign-up, nothing cut short.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600;6..96,700&family=Oswald:wght@300;400;500;600&family=Archivo:wght@400;500;600;700&family=Saira+Stencil+One&family=Arizonia&display=swap" rel="stylesheet">
@@ -31,11 +35,26 @@
    .page-hero does, so it reads as the same device rather than as a wide card.
    (client feedback 2026-08-09) */
 .fv-sec h2 { font-family: var(--font-marker); font-weight: 600; font-size: clamp(24px, 2.6vw, 32px); color: var(--ink); margin: 0 0 10px; }
+/* #09: these bands were `background-attachment: fixed`, so the pixels behind
+   every glyph CHANGED AS THE PAGE SCROLLED. Glyph-masked sampling of the Shorts
+   title in the light theme measured a 2.46:1 minimum at scrollY 1239, with
+   16.8% of the glyph pixels under 4.5:1, and 4.99:1 minimum 87px further down.
+   Arizonia is a hairline script and cannot survive a moving backdrop.
+   Two changes, both needed: the texture is anchored to the band (scroll), so
+   the backdrop is the same at every scroll position; and a flat scrim of the
+   band's own colour is laid over the grain as the first background layer, so
+   the ink meets a near-uniform field rather than the wood's dark figure. The
+   scrim is built from --banner-bg, which is per-theme, so one declaration
+   covers A and D. A ::after overlay could not do this job — a positioned
+   pseudo-element paints ABOVE the h2's own inline text, so it would wash the
+   letters out along with the wood. */
 .cas-root .fv-sec > h2 {
+  --fv-band-scrim: color-mix(in srgb, var(--banner-bg) 80%, transparent);
   position: relative; margin: 0 calc(50% - 50vw) 16px; padding: 16px calc(50vw - 50% + 0px);
-  background-color: var(--banner-bg); background-image: var(--banner-grain);
-  background-size: var(--banner-size, cover); background-position: center top;
-  background-attachment: fixed;
+  background-color: var(--banner-bg);
+  background-image: linear-gradient(var(--fv-band-scrim), var(--fv-band-scrim)), var(--banner-grain);
+  background-size: cover; background-position: center top;
+  background-repeat: no-repeat; background-attachment: scroll;
   color: var(--banner-ink); box-shadow: var(--shadow); text-align: left; }
 .cas-root .fv-sec > h2::before { content: ""; position: absolute; inset: 0; pointer-events: none;
   background: repeating-linear-gradient(0deg, transparent 0 56px, rgba(43,40,35,.1) 56px 57px); }
@@ -87,6 +106,9 @@
   gap: 30px 24px; margin-top: 26px; align-items: stretch;
   overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth;
   scrollbar-width: none; padding-bottom: 4px; }
+/* #21: the rail kept animating its scroll under prefers-reduced-motion. The
+   declaration is dropped here and the arrows ask for 'auto' explicitly. */
+@media (prefers-reduced-motion: reduce) { .fv-grid { scroll-behavior: auto; } }
 .fv-grid::-webkit-scrollbar { display: none; }
 .fv-card { display: flex; flex-direction: column; scroll-snap-align: start; }
 /* The arrows only exist when there is something off-screen to reach; the JS adds
@@ -147,10 +169,6 @@
 .fv-modal { position: fixed; inset: 0; z-index: 400; display: none; align-items: center; justify-content: center; padding: 22px; }
 .fvm-stage .gdrive-frame { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: none; z-index: 5; background: #000; }
 .fvm-stage.has-video .gdrive-frame { display: block; }
-.fvm-stage.has-video .fvm-veil { display: none; }
-.fvm-stage.is-missing .fvm-veil { display: none; }
-.fvm-missing { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); z-index: 6; display: none; font-family: var(--font-cond); font-size: 12.5px; font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; color: #f3ede1; background: rgba(20,17,13,.72); border-radius: 999px; padding: 7px 16px; backdrop-filter: blur(3px); white-space: nowrap; }
-.fvm-stage.is-missing .fvm-missing { display: block; }
 .fv-modal.open { display: flex; }
 .fvm-backdrop { position: absolute; inset: 0; background: rgba(15,12,9,.78); backdrop-filter: blur(4px); }
 .fvm-panel { position: relative; z-index: 1; width: min(880px, 100%); background: #181410; border-radius: 16px; overflow: hidden; box-shadow: 0 40px 90px rgba(0,0,0,.6); }
@@ -163,84 +181,45 @@
 .fvm-stage.is-vertical .gdrive-frame,
 .fvm-stage.is-vertical img { position: relative; inset: auto; width: auto; height: 100%; aspect-ratio: 9 / 16; margin: 0 auto; }
 .fvm-stage img { width: 100%; height: 100%; object-fit: cover; display: block; opacity: .92; }
-.fvm-veil { position: absolute; inset: 0; display: grid; place-items: center; background: linear-gradient(180deg, rgba(0,0,0,.12), rgba(0,0,0,.38)); cursor: pointer; transition: opacity .25s ease; }
-.fvm-stage.playing .fvm-veil { opacity: 0; pointer-events: none; }
-.fvm-big { width: 74px; height: 74px; border-radius: 50%; background: var(--coral, #9a6436); border: 2px solid rgba(243,237,225,.7); color: #f3ede1; font-size: 24px; padding-left: 5px; cursor: pointer; display: grid; place-items: center; box-shadow: 0 14px 34px rgba(0,0,0,.5); }
-.fvm-controls { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: #181410; }
-.fvm-controls button { background: none; border: 0; color: #f3ede1; font-size: 15px; cursor: pointer; width: 32px; height: 32px; flex: none; }
-.fvm-time { font-family: var(--font-cond); font-size: 12px; color: rgba(243,237,225,.75); min-width: 86px; }
-.fvm-seek { flex: 1; height: 15px; position: relative; cursor: pointer; }
-.fvm-seek .tr { position: absolute; top: 6px; left: 0; right: 0; height: 3px; background: rgba(243,237,225,.25); border-radius: 3px; }
-.fvm-seek .fl { position: absolute; top: 6px; left: 0; height: 3px; width: 0; background: var(--coral, #9a6436); border-radius: 3px; }
-.fvm-note { font-family: var(--font-cond); font-size: 12px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: rgba(243,237,225,.5); }
+/* #19: the simulated player is gone — the veil, its big play button, the
+   transport row (.fvm-controls, its button, .fvm-time, .fvm-seek and the two
+   bars inside it) and the .fvm-missing chip. Nothing on this page ever played a
+   file it could scrub; the stage holds a Google Drive iframe with its own
+   controls, and every card that opens the stage now has a file behind it.
+   #14: .fvm-note is the row that carries the "open in a new tab" recovery link.
+   It used to live INSIDE .fvm-controls, which openV() set to display:none on
+   every open — measured height 0 — so the only affordance a reader had when
+   Drive throttled or blocked the embed never painted. It is its own row now,
+   and it is NOT hidden below 560px: a phone is exactly where a blocked embed
+   needs the escape hatch. */
+.fvm-note { display: block; margin: 0; padding: 12px 16px; background: #181410;
+  font-family: var(--font-cond); font-size: 12px; letter-spacing: var(--tracking-label);
+  text-transform: uppercase; color: #cfc4b2; }
+.fvm-note a { color: #f3ede1; text-decoration: underline; text-underline-offset: 2px; }
 .fvm-body { padding: 14px 18px 18px; background: #181410; border-top: 1px solid rgba(243,237,225,.08); }
 .fvm-body h3 { margin: 0 0 4px; font-family: var(--font-marker); font-weight: 600; font-size: 19px; color: #f3ede1; }
 .fvm-body p { margin: 0; font-size: 13.5px; color: rgba(243,237,225,.65); }
-@media (max-width: 560px) { .fvm-note { display: none; } }
 </style>
 </helmet>
 <div class="cas-root" data-theme="D">
+<!-- #10: first tab stop on the page. It moves FOCUS, not just the viewport —
+     <main id="content"> carries tabindex="-1" so focus() actually lands. -->
+<a class="skip-link" href="#content">Skip to content</a>
 <div class="glow-layer" aria-hidden="true"></div>
 
-<nav class="site-nav" aria-label="Main">
-  <div class="nav-top">
-    <div class="inner">
-      <a class="nav-brand" href="index.html">
-        <img src="img/lau-logo.png" alt="Lau. — Crystal's Art School">
-      </a>
-      <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="Lessons.dc.html">Courses</a></li>
-        <li><a href="Gallery.dc.html">Gallery</a></li>
-        <li><a href="Showcase.dc.html">Showcase</a></li>
-        <li><a href="Blog.dc.html">Blog</a></li>
-        <li><a href="About.dc.html">About</a></li>
-        <li><a href="FreeVideos.dc.html" class="active">Free video</a></li>
-        <li><a href="Blog.dc.html?tag=Tools">Tools</a></li>
-        <li><a href="FAQ.dc.html">FAQ</a></li>
-      </ul>
-      <div class="nav-auth">
-        <a class="cart-btn" href="Checkout.dc.html" aria-label="Shopping cart">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M2 3h3.2l2.5 12.2a1.5 1.5 0 0 0 1.5 1.2h9a1.5 1.5 0 0 0 1.5-1.2L21.5 7H6.5"></path></svg>
-          <span class="cart-badge">0</span>
-        </a>
-        <a class="btn ghost" href="Login.dc.html">Log in</a>
-        <a class="btn primary" href="Signup.dc.html">Sign up</a>
-        <button class="nav-burger" type="button" aria-label="Menu" aria-expanded="false">☰</button>
-      </div>
-    </div>
-  </div>
-  <div class="nav-cats">
-    <div class="inner">
-      <ul class="nav-cat-links">
-        <li><a href="Lessons.dc.html?cat=Watercolour">Watercolour</a></li>
-        <li><a href="Lessons.dc.html?cat=Oil">Oils</a></li>
-        <li><a href="Lessons.dc.html?cat=Drawing">Drawing</a></li>
-        <li><a href="Lessons.dc.html?cat=Ink">Ink</a></li>
-        <li><a href="Lessons.dc.html?cat=Beginners">Beginners</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="nav-sheet">
-    <a href="index.html">Home</a>
-    <a href="Lessons.dc.html">Courses</a>
-    <a href="Gallery.dc.html">Gallery</a>
-    <a href="Showcase.dc.html">Showcase</a>
-    <a href="Blog.dc.html">Blog</a>
-    <a href="About.dc.html">About</a>
-    <a href="FreeVideos.dc.html">Free video</a>
-    <a href="Blog.dc.html?tag=Tools">Tools</a>
-    <a href="FAQ.dc.html">FAQ</a>
-    <a href="Login.dc.html">Log in / Sign up</a>
-  </div>
-</nav>
+<!-- #19: the nav markup used to be written out here as well, and js/site-nav.js
+     replaced every byte of it at runtime with buildNav(). The element stays
+     (the script fills it); the markup is gone. -->
+<nav class="site-nav" aria-label="Main"></nav>
 
 <header class="page-hero">
   <div class="wash" aria-hidden="true"></div>
   <div class="container">
     <div class="eyebrow reveal-one"><span class="star">✦</span> Watch, then paint along</div>
     <h1 class="marker-title font-a reveal-one" style="font-size:clamp(49px,6.5vw,88px);">Free videos</h1>
-    <div class="logo2"><img src="img/logo2.png" alt="Crystal Lau Art" loading="lazy" decoding="async"></div>
+    <!-- #17: in the page hero, above the fold at every width, so not lazy.
+         No srcset: brand marks ship exactly as the client supplied them. -->
+    <div class="logo2"><img src="img/logo2.png" alt="Crystal Lau Art" decoding="async"></div>
   </div>
 </header>
 
@@ -252,7 +231,7 @@
      page. Crystal's sentence now reads intact. (client feedback 2026-08-08) -->
 <div class="container page-lead-wrap"><p class="page-lead">Free painting video: including short Reels, lessons, tutorials and painting tips.</p></div>
 
-<main class="container" id="content" style="padding-bottom:70px;">
+<main class="container" id="content" tabindex="-1" style="padding-bottom:70px;">
 
   <!-- 15: one featured block and three sections. Cards render from
        window.CAS_FREE_VIDEOS (js/free-videos-data.js), grouped by section. -->
@@ -274,8 +253,8 @@
 
   <section class="fv-sec" data-section="Step-by-Step Demos">
     <h2 class="font-a">Step-by-step demos</h2>
-    <p class="fv-sec-intro">Complete tutorials, free to watch — no sign-up, no preview cut short. Paint along at your own pace, then pick up the <a class="link-squiggle" href="Lessons.dc.html">step-by-step courses</a> when you want the slow version.</p>
-    <div class="fv-rail"><div class="fv-grid" data-grid="Step-by-Step Demos"></div></div>
+    <p class="fv-sec-intro">Complete tutorials, free to watch — no sign-up, no preview cut short. Paint along at your own pace, then pick up the <a href="Lessons.dc.html" style="color:var(--ink);text-decoration:underline;text-underline-offset:2px;">step-by-step courses</a> when you want the slow version.</p>
+    <div class="fv-rail"><div class="fv-grid" data-grid="Step-by-Step Demos" role="group" tabindex="0" aria-label="Step-by-step demos, scrollable list of videos"></div></div>
     <p class="fv-sec-intro fv-empty" data-empty="Step-by-Step Demos" style="display:none;">Nothing published in this section yet.</p>
     <!-- ASSET PENDING: All three published films sit here for now. Which section each
             belongs to is Crystal’s call. -->
@@ -284,7 +263,7 @@
   <section class="fv-sec" data-section="Quick Inspiration">
     <h2 class="font-a">Quick inspiration &amp; bite-sized tips</h2>
     <p class="fv-sec-intro">Short on time? Browse our collection of quick painting tips, colour-mixing secrets, and plein air mini-demos. Perfect for a daily dose of creative inspiration or a quick refresh between paintings — 100% free, no sign-up needed.</p>
-    <div class="fv-rail"><div class="fv-grid" data-grid="Quick Inspiration"></div></div>
+    <div class="fv-rail"><div class="fv-grid" data-grid="Quick Inspiration" role="group" tabindex="0" aria-label="Quick inspiration and bite-sized tips, scrollable list of videos"></div></div>
     <p class="fv-sec-intro fv-empty" data-empty="Quick Inspiration" style="display:none;">Nothing published in this section yet.</p>
   </section>
 
@@ -294,7 +273,7 @@
   <section class="fv-sec" data-section="Shorts">
     <h2 class="font-a">Shorts</h2>
     <p class="fv-sec-intro">Quick vertical clips from the studio and from location, the same ones that go out on Instagram and YouTube Shorts.</p>
-    <div class="fv-rail"><div class="fv-grid is-vertical" data-grid="Shorts"></div></div>
+    <div class="fv-rail"><div class="fv-grid is-vertical" data-grid="Shorts" role="group" tabindex="0" aria-label="Shorts, scrollable list of videos"></div></div>
     <p class="fv-sec-intro fv-empty" data-empty="Shorts" style="display:none;">Nothing published in this section yet.</p>
     <!-- ASSET PENDING: Section name is a developer suggestion, not Crystal’s — Reels,
             Sketchbook Moments and In the Studio are the alternatives. The clips themselves
@@ -314,24 +293,27 @@
 
 </main>
 
-<div class="fv-modal" id="fv-modal" aria-hidden="true" role="dialog" aria-modal="true">
+<!-- #07: the dialog had no accessible name, took no focus, trapped none and
+     restored none — after Escape, activeElement was BODY. The name is the film's
+     own title; the script owns focus in, the Tab trap and the restore.
+     #19: the transport row is gone with the simulated player. What is left in
+     its place is the row the recovery link belongs in (#14). -->
+<div class="fv-modal" id="fv-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="fvm-title">
   <div class="fvm-backdrop" data-close></div>
   <div class="fvm-panel">
-    <button class="fvm-close" type="button" data-close aria-label="Close">✕</button>
+    <button class="fvm-close" type="button" data-close aria-label="Close video">✕</button>
     <div class="fvm-stage" id="fvm-stage">
-      <!-- filled in when a card is opened; hidden until then so it can never
-           sit in the stage with no source -->
+      <!-- Deliberately shipped with NO src, and the src is removed again on
+           close. Do not "fix" it by adding src="" — an empty src makes the
+           browser request the page itself and leaves a broken image behind the
+           player. It is the backdrop the Drive iframe paints over. -->
       <img id="fvm-poster" alt="" style="display:none;">
       <iframe class="gdrive-frame" id="fvm-frame" title="Video player" allow="autoplay; fullscreen" allowfullscreen loading="lazy"></iframe>
-      <div class="fvm-missing" id="fvm-missing">Video coming soon</div>
-      <div class="fvm-veil" id="fvm-veil"><button class="fvm-big" id="fvm-big" type="button" aria-label="Play">▶</button></div>
     </div>
-    <div class="fvm-controls">
-      <button id="fvm-play" type="button" aria-label="Play / pause">▶</button>
-      <span class="fvm-time"><span id="fvm-cur">0:00</span> / <span id="fvm-dur">0:00</span></span>
-      <div class="fvm-seek" id="fvm-seek"><div class="tr"></div><div class="fl" id="fvm-fill"></div></div>
-      <span class="fvm-note">demo player · final site: YouTube embed</span>
-    </div>
+    <!-- #14: this row is the ONLY affordance a reader has when Drive throttles
+         or blocks the embed. It used to be written into a child of a row that
+         openV() set to display:none on every open, so it never painted. -->
+    <p class="fvm-note" id="fvm-note"></p>
     <div class="fvm-body"><h3 id="fvm-title"></h3><p id="fvm-desc"></p></div>
   </div>
 </div>
@@ -363,36 +345,46 @@ class Component extends DCLogic {
     const renderCart = () => { let n = 0; try { n = JSON.parse(localStorage.getItem('cas-cart') || '[]').reduce((a, i) => a + (i.qty || 1), 0); } catch (e) {} document.querySelectorAll('.cart-badge').forEach(b => { b.textContent = n; b.style.display = n > 0 ? 'grid' : 'none'; }); };
     renderCart();
 
-    /* reveals fallback */
-    document.querySelectorAll('.reveal-one, .section-title, .reveal').forEach(el => el.classList.add('in-view'));
+    /* #10: a fragment jump moves Chrome's sequential-focus starting point but
+       does not reliably move FOCUS, even onto a tabindex="-1" target — measured:
+       after Enter on the skip link the page had scrolled and activeElement was
+       still the link. The skip link has to land the caret in the content. */
+    const skip = root.querySelector('.skip-link');
+    if (skip) skip.addEventListener('click', (e) => {
+      const sel = skip.getAttribute('href') || '';
+      const target = sel.charAt(0) === '#' ? document.getElementById(sel.slice(1)) : null;
+      if (!target) return;
+      e.preventDefault();
+      target.focus();
+      try { history.replaceState(null, '', sel); } catch (err) {}
+    });
 
-    /* ---- lightbox video player (simulated; final site swaps in YouTube iframes / backend video) ---- */
+    /* reveals fallback
+       #19: `.reveal` matched no rule in any stylesheet, so writing `in-view`
+       onto it animated nothing. Gone from the markup and from this selector. */
+    document.querySelectorAll('.reveal-one, .section-title').forEach(el => el.classList.add('in-view'));
+
+    /* ---- lightbox video player (Google Drive embeds) ----
+       #19: the simulated player is gone — dur/cur/playing/raf/lastT, fmt(),
+       renderT(), tick(), setPlaying(), the "N min" duration-string parse, the
+       veil, the big play button and the transport row's listeners. None of it
+       ever drove a file: the stage holds a Drive iframe with its own controls,
+       and openV() set the transport row to display:none on every single open.
+       #07: focus is moved in, trapped, and restored to whatever opened the
+       dialog. Measured before: activeElement was BODY after Escape. */
     const $id = (x) => document.getElementById(x);
     const modal = $id('fv-modal'), stage = $id('fvm-stage');
-    const poster = $id('fvm-poster'), fillEl = $id('fvm-fill');
-    const curEl = $id('fvm-cur'), durEl = $id('fvm-dur');
-    const playBtn = $id('fvm-play');
-    let dur = 0, cur = 0, playing = false, raf = null, lastT = 0;
-    const fmt = (s) => Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0');
-    const renderT = () => { curEl.textContent = fmt(cur); fillEl.style.width = (dur ? Math.min(100, cur / dur * 100) : 0) + '%'; };
-    const tick = (now) => {
-      raf = null;
-      if (!playing) return;
-      cur += (now - lastT) / 1000 * 12; /* demo ×12 speed */
-      lastT = now;
-      if (cur >= dur) { cur = dur; renderT(); setPlaying(false); return; }
-      renderT();
-      raf = requestAnimationFrame(tick);
-    };
-    const setPlaying = (on) => {
-      playing = on;
-      stage.classList.toggle('playing', on);
-      playBtn.textContent = on ? '❚❚' : '▶';
-      if (on) { lastT = performance.now(); if (!raf) raf = requestAnimationFrame(tick); }
-    };
+    const poster = $id('fvm-poster');
     const gframe = $id('fvm-frame');
-    const ctrlRow = document.querySelector('.fvm-controls');
-    const noteEl = document.querySelector('.fvm-note');
+    const noteEl = $id('fvm-note');
+    const closeBtn = modal.querySelector('.fvm-close');
+    const say = (msg, level) => { if (window.CasAnnounce) window.CasAnnounce(msg, level); };
+    const isOpen = () => modal.classList.contains('open');
+    let opener = null;
+    const focusables = () => Array.prototype.filter.call(
+      modal.querySelectorAll('a[href],button:not([disabled]),iframe,[tabindex]:not([tabindex="-1"])'),
+      (el) => el.getClientRects().length > 0);
+
     const openV = (card) => {
       const img = card.querySelector('.fv-thumb img');
       /* assigning '' would set src to the page URL and request the document
@@ -400,18 +392,19 @@ class Component extends DCLogic {
          lesson player hit with a null poster. */
       if (img && img.src) { poster.src = img.src; poster.style.display = ''; }
       else { poster.removeAttribute('src'); poster.style.display = 'none'; }
-      poster.alt = card.querySelector('h3').textContent;
-      $id('fvm-title').textContent = card.querySelector('h3').textContent;
+      const heading = card.querySelector('h3');
+      const title = heading ? heading.textContent : '';
+      poster.alt = title;
+      $id('fvm-title').textContent = title;
       const p = card.querySelector('p');
       $id('fvm-desc').textContent = p ? p.textContent : '';
 
-      /* real video? look the card up in the data by slug */
-      /* real -> Drive iframe; missing -> the poster stays as a static
-         placeholder with a "coming soon" chip. No simulated playback. */
+      /* Every card that reaches this point has a file behind it: a record with
+         no `video` is rendered as a plain tile, not a control (#11). The guard
+         stays because the DOM and the data can drift. */
       const rec = (window.CAS_FREE_VIDEOS || []).find((v) => v.slug === card.dataset.slug);
       const real = !!(rec && rec.video);
       stage.classList.toggle('has-video', real);
-      stage.classList.toggle('is-missing', !real);
       /* 1.4.12: one player, two container ratios. A vertical film keeps the
          stage height and is pillarboxed rather than letterboxed, so the modal
          does not jump size between a landscape and a portrait video. */
@@ -420,41 +413,77 @@ class Component extends DCLogic {
         const want = real ? rec.video : 'about:blank';
         if (gframe.getAttribute('src') !== want) gframe.setAttribute('src', want);
       }
-      if (ctrlRow) ctrlRow.style.display = 'none';
-      if (noteEl) {
-        if (real) {
-          noteEl.innerHTML = 'streams from Google Drive · <a href="' + rec.video.replace('/preview', '/view') + '" target="_blank" rel="noopener" style="color:inherit;text-decoration:underline;">trouble playing? open in a new tab ↗</a>';
-        } else {
-          noteEl.textContent = 'video not uploaded yet';
-        }
+      /* #14: written into a row that is always visible. */
+      if (real) {
+        noteEl.innerHTML = 'Streams from Google Drive · <a href="' +
+          rec.video.replace('/preview', '/view') +
+          '" target="_blank" rel="noopener">Trouble playing? Open in a new tab \u2197</a>';
+      } else {
+        noteEl.textContent = 'This film has not been uploaded yet.';
       }
 
-      const dtext = (card.querySelector('.fv-dur') || {}).textContent || '';
-      const m = dtext.match(/(\d+)\s*min/i);
-      dur = m ? (+m[1]) * 60 : 900;
-      durEl.textContent = fmt(dur);
-      cur = 0; renderT(); setPlaying(false);
+      opener = document.activeElement;
       modal.classList.add('open');
       modal.setAttribute('aria-hidden', 'false');
+      modal.removeAttribute('inert');
       document.body.style.overflow = 'hidden';
+      closeBtn.focus();
+      say(title + (real ? '' : ' — this film has not been uploaded yet.'));
     };
-    const closeV = () => { setPlaying(false); stage.classList.remove('has-video'); stage.classList.remove('is-missing'); if (gframe) gframe.setAttribute('src', 'about:blank'); modal.classList.remove('open'); modal.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; };
-    /* ---- cards from the generated data ----
-       Duration badges are only emitted as "N min" because the modal parses
-       them with /(\d+)\s*min/i and silently falls back to 900s otherwise. */
+    const closeV = () => {
+      stage.classList.remove('has-video');
+      if (gframe) gframe.setAttribute('src', 'about:blank');
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+      modal.setAttribute('inert', '');
+      document.body.style.overflow = '';
+      if (opener && document.contains(opener) && opener.focus) opener.focus();
+      opener = null;
+    };
+    modal.setAttribute('inert', '');
+    modal.addEventListener('keydown', (e) => {
+      if (e.key !== 'Tab' || !isOpen()) return;
+      const f = focusables();
+      if (!f.length) { e.preventDefault(); return; }
+      const first = f[0], last = f[f.length - 1], a = document.activeElement;
+      if (e.shiftKey && (a === first || !modal.contains(a))) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && a === last) { e.preventDefault(); first.focus(); }
+    });
+    document.addEventListener('focusin', (e) => {
+      if (!isOpen() || modal.contains(e.target)) return;
+      closeBtn.focus();
+    });
+    /* ---- cards from the generated data ---- */
     const fvEsc = (t) => String(t == null ? '' : t).replace(/[&<>"']/g, (ch) => (
       { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
     const FV = window.CAS_FREE_VIDEOS || [];
+    /* #11: every tile shipped href="#", so with JS unavailable the whole page
+       was a set of jump-to-top links. A tile with a film behind it now points at
+       that film's own Drive page — the click handler still intercepts and opens
+       the in-page player, so nothing changes with JS on, and the link is a real
+       destination with JS off. A record with NO video has no destination and is
+       not a control at all: it renders as a plain tile whose badge already reads
+       "Coming soon". No fabricated href, and no dead end behind a click.
+       The duration-string parse the old comment here described went with the
+       simulated player (#19); the badge is display only. */
     const fvCard = (v) => {
       const mins = v.dur ? Math.max(1, Math.round(v.dur / 60)) : null;
-      return '<a class="fv-card" href="#" data-slug="' + fvEsc(v.slug) + '">' +
-        '<span class="fv-thumb"><img src="' + fvEsc(v.poster) + '" alt="' + fvEsc(v.title) + '" loading="lazy">' +
-          '<span class="fv-playbtn"><span>▶</span></span>' +
+      const href = v.video ? v.video.replace('/preview', '/view') : null;
+      const tag = href ? 'a' : 'span';
+      const open = href
+        ? '<a class="fv-card" href="' + fvEsc(href) + '" data-slug="' + fvEsc(v.slug) + '">'
+        : '<span class="fv-card" data-slug="' + fvEsc(v.slug) + '">';
+      return open +
+        '<span class="fv-thumb"><img src="' + fvEsc(v.poster) + '" alt="' + fvEsc(v.title) + '" loading="lazy"' +
+          (v.srcset ? ' srcset="' + fvEsc(v.srcset) + '"' : '') +
+          (v.sizes ? ' sizes="' + fvEsc(v.sizes) + '"' : '') +
+          (v.w ? ' width="' + v.w + '" height="' + v.h + '"' : '') + '>' +
+          (href ? '<span class="fv-playbtn"><span>▶</span></span>' : '') +
           (mins ? '<span class="fv-dur">' + mins + ' min</span>' : '<span class="fv-dur">Coming soon</span>') +
         '</span>' +
         '<h3>' + fvEsc(v.title) + '</h3>' +
         '<p>' + fvEsc(v.desc) + '</p>' +
-      '</a>';
+      '</' + tag + '>';
     };
 
     /* A section with no films of its own shows the card shape instead of a
@@ -483,7 +512,9 @@ class Component extends DCLogic {
       const pad = Math.max(0, 6 - list.length);
       grid.innerHTML = list.map(fvCard).join('')
         + new Array(pad).fill(null).map(fvPlaceholder).join('');
-      grid.classList.toggle('is-placeholder', !list.length);
+      /* #19: `grid.classList.toggle('is-placeholder', ...)` used to be written
+         here. `.is-placeholder` matches no rule in any stylesheet or in this
+         file, so it decided nothing. Gone. */
       /* the sentence is redundant now the shapes are there, but it stays in the
          markup so removing the placeholders restores the old behaviour */
       const empty = document.querySelector('.fv-empty[data-empty="' + name + '"]');
@@ -525,8 +556,12 @@ class Component extends DCLogic {
         prev.disabled = grid.scrollLeft <= 2;
         next.disabled = grid.scrollLeft >= over - 2;
       };
-      prev.addEventListener('click', () => grid.scrollBy({ left: -step(), behavior: 'smooth' }));
-      next.addEventListener('click', () => grid.scrollBy({ left: step(), behavior: 'smooth' }));
+      /* #21: scrollBy asked for 'smooth' unconditionally, and .fv-grid declared
+         scroll-behavior: smooth on top of it, so a reduced-motion reader still
+         got an animated rail. Both are conditional now. */
+      const glide = () => (window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth');
+      prev.addEventListener('click', () => grid.scrollBy({ left: -step(), behavior: glide() }));
+      next.addEventListener('click', () => grid.scrollBy({ left: step(), behavior: glide() }));
       grid.addEventListener('scroll', sync);
       window.addEventListener('resize', () => { sync(); centreArrows(); });
       sync();
@@ -556,20 +591,24 @@ class Component extends DCLogic {
             '<button type="button" class="' + (i === fi ? 'active' : '') + '" aria-label="Show note ' + (i + 1) + '"></button>').join('');
           feat.querySelectorAll('.fv-card').forEach((c) => c.addEventListener('click', (e) => { e.preventDefault(); openV(c); }));
           if (featDots) featDots.querySelectorAll('button').forEach((btn, i) =>
-            btn.addEventListener('click', () => { fi = i; draw(); }));
+            btn.addEventListener('click', () => {
+              fi = i; draw();
+              /* #22: the stage swapped silently — a class change announces
+                 nothing, and the dots are the only visual cue. */
+              say('Studio note ' + (i + 1) + ' of ' + notes.length + ': ' + notes[fi].title + '.');
+            }));
         };
         draw();
       }
     }
 
-    /* :not(.is-ph) — a placeholder has no <h3> for openV to read, and opening a
-       player on a card that stands for nothing would be a dead end anyway. */
-    document.querySelectorAll('.fv-card:not(.is-ph)').forEach(c => c.addEventListener('click', (e) => { e.preventDefault(); openV(c); }));
-    $id('fvm-veil').addEventListener('click', () => setPlaying(true));
-    playBtn.addEventListener('click', () => setPlaying(!playing));
-    $id('fvm-seek').addEventListener('click', (e) => { const r = e.currentTarget.getBoundingClientRect(); cur = dur * Math.max(0, Math.min(1, (e.clientX - r.left) / r.width)); renderT(); });
+    /* Only the tiles that are links open the player: a placeholder has no <h3>
+       for openV to read, and a tile for an un-uploaded film has nowhere to go.
+       #19: the veil, the transport button and the seek-bar listeners went with
+       the simulated player. */
+    document.querySelectorAll('a.fv-card').forEach(c => c.addEventListener('click', (e) => { e.preventDefault(); openV(c); }));
     modal.querySelectorAll('[data-close]').forEach(el => el.addEventListener('click', closeV));
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.classList.contains('open')) closeV(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && isOpen()) closeV(); });
   }
 }
 </script>

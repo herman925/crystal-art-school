@@ -5,36 +5,72 @@
       "slug": "clouds-beginner",
       "folder": "01 - Courses/Course 01-Beginner",
       "cover": "img/courses/clouds-beginner/cover.jpg",
+      "coverMeta": {
+        "srcset": "img/courses/clouds-beginner/cover-224.jpg 224w, img/courses/clouds-beginner/cover-448.jpg 448w, img/courses/clouds-beginner/cover-896.jpg 896w, img/courses/clouds-beginner/cover.jpg 1600w",
+        "sizes": "(max-width: 600px) 366px, (max-width: 1000px) 420px, 373px",
+        "w": 1600,
+        "h": 1600
+      },
       "photos": [
         {
           "src": "CloudsLesson12.jpg",
           "img": "img/courses/clouds-beginner/p01.jpg",
           "w": 1600,
-          "h": 1600
+          "h": 1600,
+          "meta": {
+            "srcset": "img/courses/clouds-beginner/p01-128.jpg 128w, img/courses/clouds-beginner/p01-256.jpg 256w, img/courses/clouds-beginner/p01-448.jpg 448w, img/courses/clouds-beginner/p01-896.jpg 896w, img/courses/clouds-beginner/p01.jpg 1600w",
+            "sizes": "(max-width: 600px) 358px, (max-width: 1000px) 351px, 446px",
+            "w": 1600,
+            "h": 1600
+          }
         },
         {
           "src": "CloudsLesson12A.jpg",
           "img": "img/courses/clouds-beginner/p02.jpg",
           "w": 1600,
-          "h": 1131
+          "h": 1131,
+          "meta": {
+            "srcset": "img/courses/clouds-beginner/p02-128.jpg 128w, img/courses/clouds-beginner/p02-256.jpg 256w, img/courses/clouds-beginner/p02-448.jpg 448w, img/courses/clouds-beginner/p02-896.jpg 896w, img/courses/clouds-beginner/p02.jpg 1600w",
+            "sizes": "(max-width: 600px) 82px, (max-width: 1000px) 173px, 269px",
+            "w": 1600,
+            "h": 1131
+          }
         },
         {
           "src": "CloudsLesson12B.jpg",
           "img": "img/courses/clouds-beginner/p03.jpg",
           "w": 1600,
-          "h": 1139
+          "h": 1139,
+          "meta": {
+            "srcset": "img/courses/clouds-beginner/p03-128.jpg 128w, img/courses/clouds-beginner/p03-256.jpg 256w, img/courses/clouds-beginner/p03-448.jpg 448w, img/courses/clouds-beginner/p03-896.jpg 896w, img/courses/clouds-beginner/p03.jpg 1600w",
+            "sizes": "(max-width: 600px) 82px, (max-width: 1000px) 173px, 269px",
+            "w": 1600,
+            "h": 1139
+          }
         },
         {
           "src": "CloudsLesson12C.jpg",
           "img": "img/courses/clouds-beginner/p04.jpg",
           "w": 1600,
-          "h": 1140
+          "h": 1140,
+          "meta": {
+            "srcset": "img/courses/clouds-beginner/p04-128.jpg 128w, img/courses/clouds-beginner/p04-256.jpg 256w, img/courses/clouds-beginner/p04-448.jpg 448w, img/courses/clouds-beginner/p04-896.jpg 896w, img/courses/clouds-beginner/p04.jpg 1600w",
+            "sizes": "(max-width: 600px) 82px, (max-width: 1000px) 173px, 269px",
+            "w": 1600,
+            "h": 1140
+          }
         },
         {
           "src": "CloudsLesson12D.jpg",
           "img": "img/courses/clouds-beginner/p05.jpg",
           "w": 1600,
-          "h": 1129
+          "h": 1129,
+          "meta": {
+            "srcset": "img/courses/clouds-beginner/p05-128.jpg 128w, img/courses/clouds-beginner/p05-256.jpg 256w, img/courses/clouds-beginner/p05-448.jpg 448w, img/courses/clouds-beginner/p05-896.jpg 896w, img/courses/clouds-beginner/p05.jpg 1600w",
+            "sizes": "(max-width: 600px) 82px, (max-width: 1000px) 173px, 269px",
+            "w": 1600,
+            "h": 1129
+          }
         }
       ],
       "highlights": {
@@ -49,6 +85,7 @@
           "poster": null,
           "posterW": null,
           "posterH": null,
+          "posterMeta": null,
           "dur": 500,
           "videos": [
             {
@@ -66,6 +103,12 @@
           "poster": "img/courses/clouds-beginner/l02.jpg",
           "posterW": 1280,
           "posterH": 1280,
+          "posterMeta": {
+            "srcset": "img/courses/clouds-beginner/l02-96.jpg 96w, img/courses/clouds-beginner/l02-160.jpg 160w, img/courses/clouds-beginner/l02-384.jpg 384w, img/courses/clouds-beginner/l02-768.jpg 768w, img/courses/clouds-beginner/l02.jpg 1280w",
+            "sizes": "(max-width: 600px) 56px, 78px",
+            "w": 1280,
+            "h": 1280
+          },
           "dur": 781,
           "videos": [
             {
@@ -83,6 +126,12 @@
           "poster": "img/courses/clouds-beginner/l03.jpg",
           "posterW": 1280,
           "posterH": 1280,
+          "posterMeta": {
+            "srcset": "img/courses/clouds-beginner/l03-96.jpg 96w, img/courses/clouds-beginner/l03-160.jpg 160w, img/courses/clouds-beginner/l03-384.jpg 384w, img/courses/clouds-beginner/l03-768.jpg 768w, img/courses/clouds-beginner/l03.jpg 1280w",
+            "sizes": "(max-width: 600px) 56px, 78px",
+            "w": 1280,
+            "h": 1280
+          },
           "dur": 364,
           "videos": [
             {
@@ -100,6 +149,12 @@
           "poster": "img/courses/clouds-beginner/l04.jpg",
           "posterW": 1280,
           "posterH": 1280,
+          "posterMeta": {
+            "srcset": "img/courses/clouds-beginner/l04-96.jpg 96w, img/courses/clouds-beginner/l04-160.jpg 160w, img/courses/clouds-beginner/l04-384.jpg 384w, img/courses/clouds-beginner/l04-768.jpg 768w, img/courses/clouds-beginner/l04.jpg 1280w",
+            "sizes": "(max-width: 600px) 56px, 78px",
+            "w": 1280,
+            "h": 1280
+          },
           "dur": 2758,
           "videos": [
             {
@@ -122,6 +177,12 @@
           "poster": "img/courses/clouds-beginner/l05.jpg",
           "posterW": 1280,
           "posterH": 1280,
+          "posterMeta": {
+            "srcset": "img/courses/clouds-beginner/l05-96.jpg 96w, img/courses/clouds-beginner/l05-160.jpg 160w, img/courses/clouds-beginner/l05-384.jpg 384w, img/courses/clouds-beginner/l05-768.jpg 768w, img/courses/clouds-beginner/l05.jpg 1280w",
+            "sizes": "(max-width: 600px) 56px, 78px",
+            "w": 1280,
+            "h": 1280
+          },
           "dur": 874,
           "videos": [
             {
@@ -139,6 +200,12 @@
           "poster": "img/courses/clouds-beginner/l06.jpg",
           "posterW": 1280,
           "posterH": 1280,
+          "posterMeta": {
+            "srcset": "img/courses/clouds-beginner/l06-96.jpg 96w, img/courses/clouds-beginner/l06-160.jpg 160w, img/courses/clouds-beginner/l06-384.jpg 384w, img/courses/clouds-beginner/l06-768.jpg 768w, img/courses/clouds-beginner/l06.jpg 1280w",
+            "sizes": "(max-width: 600px) 56px, 78px",
+            "w": 1280,
+            "h": 1280
+          },
           "dur": 183,
           "videos": [
             {
@@ -156,6 +223,12 @@
           "poster": "img/courses/clouds-beginner/l07.jpg",
           "posterW": 915,
           "posterH": 1280,
+          "posterMeta": {
+            "srcset": "img/courses/clouds-beginner/l07-96.jpg 96w, img/courses/clouds-beginner/l07-160.jpg 160w, img/courses/clouds-beginner/l07-384.jpg 384w, img/courses/clouds-beginner/l07.jpg 915w",
+            "sizes": "(max-width: 600px) 56px, 78px",
+            "w": 915,
+            "h": 1280
+          },
           "dur": 468,
           "videos": [
             {
@@ -173,6 +246,12 @@
           "poster": "img/courses/clouds-beginner/l08.jpg",
           "posterW": 945,
           "posterH": 1280,
+          "posterMeta": {
+            "srcset": "img/courses/clouds-beginner/l08-96.jpg 96w, img/courses/clouds-beginner/l08-160.jpg 160w, img/courses/clouds-beginner/l08-384.jpg 384w, img/courses/clouds-beginner/l08.jpg 945w",
+            "sizes": "(max-width: 600px) 56px, 78px",
+            "w": 945,
+            "h": 1280
+          },
           "dur": 484,
           "videos": [
             {
@@ -190,6 +269,12 @@
           "poster": "img/courses/clouds-beginner/l09.jpg",
           "posterW": 1280,
           "posterH": 1280,
+          "posterMeta": {
+            "srcset": "img/courses/clouds-beginner/l09-96.jpg 96w, img/courses/clouds-beginner/l09-160.jpg 160w, img/courses/clouds-beginner/l09-384.jpg 384w, img/courses/clouds-beginner/l09-768.jpg 768w, img/courses/clouds-beginner/l09.jpg 1280w",
+            "sizes": "(max-width: 600px) 56px, 78px",
+            "w": 1280,
+            "h": 1280
+          },
           "dur": 885,
           "videos": [
             {
@@ -207,6 +292,12 @@
           "poster": "img/courses/clouds-beginner/l10.jpg",
           "posterW": 1280,
           "posterH": 1280,
+          "posterMeta": {
+            "srcset": "img/courses/clouds-beginner/l10-96.jpg 96w, img/courses/clouds-beginner/l10-160.jpg 160w, img/courses/clouds-beginner/l10-384.jpg 384w, img/courses/clouds-beginner/l10-768.jpg 768w, img/courses/clouds-beginner/l10.jpg 1280w",
+            "sizes": "(max-width: 600px) 56px, 78px",
+            "w": 1280,
+            "h": 1280
+          },
           "dur": 558,
           "videos": [
             {
@@ -224,6 +315,12 @@
           "poster": "img/courses/clouds-beginner/l11.jpg",
           "posterW": 1280,
           "posterH": 1280,
+          "posterMeta": {
+            "srcset": "img/courses/clouds-beginner/l11-96.jpg 96w, img/courses/clouds-beginner/l11-160.jpg 160w, img/courses/clouds-beginner/l11-384.jpg 384w, img/courses/clouds-beginner/l11-768.jpg 768w, img/courses/clouds-beginner/l11.jpg 1280w",
+            "sizes": "(max-width: 600px) 56px, 78px",
+            "w": 1280,
+            "h": 1280
+          },
           "dur": 400,
           "videos": [
             {
@@ -241,6 +338,12 @@
           "poster": "img/courses/clouds-beginner/l12.jpg",
           "posterW": 1280,
           "posterH": 1280,
+          "posterMeta": {
+            "srcset": "img/courses/clouds-beginner/l12-96.jpg 96w, img/courses/clouds-beginner/l12-160.jpg 160w, img/courses/clouds-beginner/l12-384.jpg 384w, img/courses/clouds-beginner/l12-768.jpg 768w, img/courses/clouds-beginner/l12.jpg 1280w",
+            "sizes": "(max-width: 600px) 56px, 78px",
+            "w": 1280,
+            "h": 1280
+          },
           "dur": 619,
           "videos": [
             {
@@ -258,6 +361,12 @@
           "poster": "img/courses/clouds-beginner/l13.jpg",
           "posterW": 1280,
           "posterH": 1280,
+          "posterMeta": {
+            "srcset": "img/courses/clouds-beginner/l13-96.jpg 96w, img/courses/clouds-beginner/l13-160.jpg 160w, img/courses/clouds-beginner/l13-384.jpg 384w, img/courses/clouds-beginner/l13-768.jpg 768w, img/courses/clouds-beginner/l13.jpg 1280w",
+            "sizes": "(max-width: 600px) 56px, 78px",
+            "w": 1280,
+            "h": 1280
+          },
           "dur": 461,
           "videos": [
             {
@@ -274,6 +383,12 @@
       "slug": "clouds-intermediate",
       "folder": "01 - Courses/Course 01-Intermediate",
       "cover": "img/courses/clouds-intermediate/cover.jpg",
+      "coverMeta": {
+        "srcset": "img/courses/clouds-intermediate/cover-224.jpg 224w, img/courses/clouds-intermediate/cover-448.jpg 448w, img/courses/clouds-intermediate/cover-896.jpg 896w, img/courses/clouds-intermediate/cover.jpg 1600w",
+        "sizes": "(max-width: 600px) 366px, (max-width: 1000px) 420px, 373px",
+        "w": 1600,
+        "h": 1600
+      },
       "photos": [],
       "highlights": {
         "file": "Intermediate Hightlights.mp4",
@@ -287,6 +402,12 @@
           "poster": "img/courses/clouds-intermediate/l01.jpg",
           "posterW": 1280,
           "posterH": 1280,
+          "posterMeta": {
+            "srcset": "img/courses/clouds-intermediate/l01-96.jpg 96w, img/courses/clouds-intermediate/l01-160.jpg 160w, img/courses/clouds-intermediate/l01-384.jpg 384w, img/courses/clouds-intermediate/l01-768.jpg 768w, img/courses/clouds-intermediate/l01.jpg 1280w",
+            "sizes": "(max-width: 600px) 56px, 78px",
+            "w": 1280,
+            "h": 1280
+          },
           "dur": 301,
           "videos": [
             {
@@ -304,6 +425,12 @@
           "poster": "img/courses/clouds-intermediate/l02.jpg",
           "posterW": 1280,
           "posterH": 1280,
+          "posterMeta": {
+            "srcset": "img/courses/clouds-intermediate/l02-96.jpg 96w, img/courses/clouds-intermediate/l02-160.jpg 160w, img/courses/clouds-intermediate/l02-384.jpg 384w, img/courses/clouds-intermediate/l02-768.jpg 768w, img/courses/clouds-intermediate/l02.jpg 1280w",
+            "sizes": "(max-width: 600px) 56px, 78px",
+            "w": 1280,
+            "h": 1280
+          },
           "dur": 721,
           "videos": [
             {
@@ -321,6 +448,12 @@
           "poster": "img/courses/clouds-intermediate/l03.jpg",
           "posterW": 1280,
           "posterH": 1280,
+          "posterMeta": {
+            "srcset": "img/courses/clouds-intermediate/l03-96.jpg 96w, img/courses/clouds-intermediate/l03-160.jpg 160w, img/courses/clouds-intermediate/l03-384.jpg 384w, img/courses/clouds-intermediate/l03-768.jpg 768w, img/courses/clouds-intermediate/l03.jpg 1280w",
+            "sizes": "(max-width: 600px) 56px, 78px",
+            "w": 1280,
+            "h": 1280
+          },
           "dur": 365,
           "videos": [
             {
@@ -338,6 +471,12 @@
           "poster": "img/courses/clouds-intermediate/l04.jpg",
           "posterW": 1280,
           "posterH": 1280,
+          "posterMeta": {
+            "srcset": "img/courses/clouds-intermediate/l04-96.jpg 96w, img/courses/clouds-intermediate/l04-160.jpg 160w, img/courses/clouds-intermediate/l04-384.jpg 384w, img/courses/clouds-intermediate/l04-768.jpg 768w, img/courses/clouds-intermediate/l04.jpg 1280w",
+            "sizes": "(max-width: 600px) 56px, 78px",
+            "w": 1280,
+            "h": 1280
+          },
           "dur": 646,
           "videos": [
             {
@@ -355,6 +494,12 @@
           "poster": "img/courses/clouds-intermediate/l05.jpg",
           "posterW": 1280,
           "posterH": 1280,
+          "posterMeta": {
+            "srcset": "img/courses/clouds-intermediate/l05-96.jpg 96w, img/courses/clouds-intermediate/l05-160.jpg 160w, img/courses/clouds-intermediate/l05-384.jpg 384w, img/courses/clouds-intermediate/l05-768.jpg 768w, img/courses/clouds-intermediate/l05.jpg 1280w",
+            "sizes": "(max-width: 600px) 56px, 78px",
+            "w": 1280,
+            "h": 1280
+          },
           "dur": 452,
           "videos": [
             {
@@ -372,6 +517,12 @@
           "poster": "img/courses/clouds-intermediate/l06.jpg",
           "posterW": 1280,
           "posterH": 1280,
+          "posterMeta": {
+            "srcset": "img/courses/clouds-intermediate/l06-96.jpg 96w, img/courses/clouds-intermediate/l06-160.jpg 160w, img/courses/clouds-intermediate/l06-384.jpg 384w, img/courses/clouds-intermediate/l06-768.jpg 768w, img/courses/clouds-intermediate/l06.jpg 1280w",
+            "sizes": "(max-width: 600px) 56px, 78px",
+            "w": 1280,
+            "h": 1280
+          },
           "dur": 752,
           "videos": [
             {
@@ -389,6 +540,12 @@
           "poster": "img/courses/clouds-intermediate/l07.jpg",
           "posterW": 1280,
           "posterH": 1280,
+          "posterMeta": {
+            "srcset": "img/courses/clouds-intermediate/l07-96.jpg 96w, img/courses/clouds-intermediate/l07-160.jpg 160w, img/courses/clouds-intermediate/l07-384.jpg 384w, img/courses/clouds-intermediate/l07-768.jpg 768w, img/courses/clouds-intermediate/l07.jpg 1280w",
+            "sizes": "(max-width: 600px) 56px, 78px",
+            "w": 1280,
+            "h": 1280
+          },
           "dur": 850,
           "videos": [
             {
@@ -405,6 +562,12 @@
       "slug": "little-house",
       "folder": "01 - Courses/Course 02",
       "cover": "img/courses/little-house/cover.jpg",
+      "coverMeta": {
+        "srcset": "img/courses/little-house/cover-224.jpg 224w, img/courses/little-house/cover.jpg 540w",
+        "sizes": "(max-width: 600px) 366px, (max-width: 1000px) 420px, 373px",
+        "w": 540,
+        "h": 540
+      },
       "photos": [],
       "highlights": null,
       "lessons": [
@@ -415,6 +578,12 @@
           "poster": "img/courses/little-house/l01.jpg",
           "posterW": 540,
           "posterH": 540,
+          "posterMeta": {
+            "srcset": "img/courses/little-house/l01-96.jpg 96w, img/courses/little-house/l01-160.jpg 160w, img/courses/little-house/l01-384.jpg 384w, img/courses/little-house/l01.jpg 540w",
+            "sizes": "(max-width: 600px) 56px, 78px",
+            "w": 540,
+            "h": 540
+          },
           "dur": 483,
           "videos": [
             {
@@ -431,6 +600,12 @@
       "slug": "urban-sketch",
       "folder": "01 - Courses/Course 03",
       "cover": "img/courses/urban-sketch/cover.jpg",
+      "coverMeta": {
+        "srcset": "img/courses/urban-sketch/cover-224.jpg 224w, img/courses/urban-sketch/cover-448.jpg 448w, img/courses/urban-sketch/cover-896.jpg 896w, img/courses/urban-sketch/cover.jpg 1600w",
+        "sizes": "(max-width: 600px) 366px, (max-width: 1000px) 420px, 373px",
+        "w": 1600,
+        "h": 1600
+      },
       "photos": [],
       "highlights": null,
       "lessons": [
@@ -441,6 +616,12 @@
           "poster": "img/courses/urban-sketch/l01.jpg",
           "posterW": 1280,
           "posterH": 1280,
+          "posterMeta": {
+            "srcset": "img/courses/urban-sketch/l01-96.jpg 96w, img/courses/urban-sketch/l01-160.jpg 160w, img/courses/urban-sketch/l01-384.jpg 384w, img/courses/urban-sketch/l01-768.jpg 768w, img/courses/urban-sketch/l01.jpg 1280w",
+            "sizes": "(max-width: 600px) 56px, 78px",
+            "w": 1280,
+            "h": 1280
+          },
           "dur": 673,
           "videos": [
             {
@@ -461,7 +642,13 @@
       "path": "img/gallery/g01.jpg",
       "w": 1161,
       "h": 1600,
-      "ratio": 1.3781
+      "ratio": 1.3781,
+      "meta": {
+        "srcset": "img/gallery/g01-320.jpg 320w, img/gallery/g01-640.jpg 640w, img/gallery/g01.jpg 1161w",
+        "sizes": "306px",
+        "w": 1161,
+        "h": 1600
+      }
     },
     {
       "img": "g02.jpg",
@@ -469,7 +656,13 @@
       "path": "img/gallery/g02.jpg",
       "w": 1029,
       "h": 1600,
-      "ratio": 1.5549
+      "ratio": 1.5549,
+      "meta": {
+        "srcset": "img/gallery/g02-320.jpg 320w, img/gallery/g02-640.jpg 640w, img/gallery/g02.jpg 1029w",
+        "sizes": "306px",
+        "w": 1029,
+        "h": 1600
+      }
     },
     {
       "img": "g03.jpg",
@@ -477,7 +670,13 @@
       "path": "img/gallery/g03.jpg",
       "w": 1153,
       "h": 1600,
-      "ratio": 1.3877
+      "ratio": 1.3877,
+      "meta": {
+        "srcset": "img/gallery/g03-320.jpg 320w, img/gallery/g03-640.jpg 640w, img/gallery/g03.jpg 1153w",
+        "sizes": "306px",
+        "w": 1153,
+        "h": 1600
+      }
     },
     {
       "img": "g04.jpg",
@@ -485,7 +684,13 @@
       "path": "img/gallery/g04.jpg",
       "w": 1600,
       "h": 1208,
-      "ratio": 0.755
+      "ratio": 0.755,
+      "meta": {
+        "srcset": "img/gallery/g04-320.jpg 320w, img/gallery/g04-640.jpg 640w, img/gallery/g04-960.jpg 960w, img/gallery/g04.jpg 1600w",
+        "sizes": "306px",
+        "w": 1600,
+        "h": 1208
+      }
     },
     {
       "img": "g05.jpg",
@@ -493,7 +698,13 @@
       "path": "img/gallery/g05.jpg",
       "w": 1062,
       "h": 1600,
-      "ratio": 1.5066
+      "ratio": 1.5066,
+      "meta": {
+        "srcset": "img/gallery/g05-320.jpg 320w, img/gallery/g05-640.jpg 640w, img/gallery/g05.jpg 1062w",
+        "sizes": "306px",
+        "w": 1062,
+        "h": 1600
+      }
     },
     {
       "img": "g06.jpg",
@@ -501,7 +712,13 @@
       "path": "img/gallery/g06.jpg",
       "w": 1214,
       "h": 1600,
-      "ratio": 1.318
+      "ratio": 1.318,
+      "meta": {
+        "srcset": "img/gallery/g06-320.jpg 320w, img/gallery/g06-640.jpg 640w, img/gallery/g06-960.jpg 960w, img/gallery/g06.jpg 1214w",
+        "sizes": "306px",
+        "w": 1214,
+        "h": 1600
+      }
     },
     {
       "img": "g07.jpg",
@@ -509,7 +726,13 @@
       "path": "img/gallery/g07.jpg",
       "w": 1168,
       "h": 1600,
-      "ratio": 1.3699
+      "ratio": 1.3699,
+      "meta": {
+        "srcset": "img/gallery/g07-320.jpg 320w, img/gallery/g07-640.jpg 640w, img/gallery/g07.jpg 1168w",
+        "sizes": "306px",
+        "w": 1168,
+        "h": 1600
+      }
     },
     {
       "img": "g08.jpg",
@@ -517,7 +740,13 @@
       "path": "img/gallery/g08.jpg",
       "w": 1157,
       "h": 1600,
-      "ratio": 1.3829
+      "ratio": 1.3829,
+      "meta": {
+        "srcset": "img/gallery/g08-320.jpg 320w, img/gallery/g08-640.jpg 640w, img/gallery/g08.jpg 1157w",
+        "sizes": "306px",
+        "w": 1157,
+        "h": 1600
+      }
     },
     {
       "img": "g09.jpg",
@@ -525,7 +754,13 @@
       "path": "img/gallery/g09.jpg",
       "w": 1149,
       "h": 1600,
-      "ratio": 1.3925
+      "ratio": 1.3925,
+      "meta": {
+        "srcset": "img/gallery/g09-320.jpg 320w, img/gallery/g09-640.jpg 640w, img/gallery/g09.jpg 1149w",
+        "sizes": "306px",
+        "w": 1149,
+        "h": 1600
+      }
     },
     {
       "img": "g10.jpg",
@@ -533,7 +768,13 @@
       "path": "img/gallery/g10.jpg",
       "w": 1600,
       "h": 1193,
-      "ratio": 0.7456
+      "ratio": 0.7456,
+      "meta": {
+        "srcset": "img/gallery/g10-320.jpg 320w, img/gallery/g10-640.jpg 640w, img/gallery/g10-960.jpg 960w, img/gallery/g10.jpg 1600w",
+        "sizes": "306px",
+        "w": 1600,
+        "h": 1193
+      }
     },
     {
       "img": "g11.jpg",
@@ -541,7 +782,13 @@
       "path": "img/gallery/g11.jpg",
       "w": 1600,
       "h": 1075,
-      "ratio": 0.6719
+      "ratio": 0.6719,
+      "meta": {
+        "srcset": "img/gallery/g11-320.jpg 320w, img/gallery/g11-640.jpg 640w, img/gallery/g11-960.jpg 960w, img/gallery/g11.jpg 1600w",
+        "sizes": "306px",
+        "w": 1600,
+        "h": 1075
+      }
     },
     {
       "img": "g12.jpg",
@@ -549,7 +796,13 @@
       "path": "img/gallery/g12.jpg",
       "w": 1203,
       "h": 1600,
-      "ratio": 1.33
+      "ratio": 1.33,
+      "meta": {
+        "srcset": "img/gallery/g12-320.jpg 320w, img/gallery/g12-640.jpg 640w, img/gallery/g12-960.jpg 960w, img/gallery/g12.jpg 1203w",
+        "sizes": "306px",
+        "w": 1203,
+        "h": 1600
+      }
     },
     {
       "img": "g13.jpg",
@@ -557,7 +810,13 @@
       "path": "img/gallery/g13.jpg",
       "w": 1206,
       "h": 1515,
-      "ratio": 1.2562
+      "ratio": 1.2562,
+      "meta": {
+        "srcset": "img/gallery/g13-320.jpg 320w, img/gallery/g13-640.jpg 640w, img/gallery/g13-960.jpg 960w, img/gallery/g13.jpg 1206w",
+        "sizes": "306px",
+        "w": 1206,
+        "h": 1515
+      }
     },
     {
       "img": "g14.jpg",
@@ -565,7 +824,13 @@
       "path": "img/gallery/g14.jpg",
       "w": 1600,
       "h": 1187,
-      "ratio": 0.7419
+      "ratio": 0.7419,
+      "meta": {
+        "srcset": "img/gallery/g14-320.jpg 320w, img/gallery/g14-640.jpg 640w, img/gallery/g14-960.jpg 960w, img/gallery/g14.jpg 1600w",
+        "sizes": "306px",
+        "w": 1600,
+        "h": 1187
+      }
     },
     {
       "img": "g15.jpg",
@@ -573,7 +838,13 @@
       "path": "img/gallery/g15.jpg",
       "w": 1206,
       "h": 1335,
-      "ratio": 1.107
+      "ratio": 1.107,
+      "meta": {
+        "srcset": "img/gallery/g15-320.jpg 320w, img/gallery/g15-640.jpg 640w, img/gallery/g15-960.jpg 960w, img/gallery/g15.jpg 1206w",
+        "sizes": "306px",
+        "w": 1206,
+        "h": 1335
+      }
     },
     {
       "img": "g16.jpg",
@@ -581,7 +852,13 @@
       "path": "img/gallery/g16.jpg",
       "w": 1600,
       "h": 1230,
-      "ratio": 0.7688
+      "ratio": 0.7688,
+      "meta": {
+        "srcset": "img/gallery/g16-320.jpg 320w, img/gallery/g16-640.jpg 640w, img/gallery/g16-960.jpg 960w, img/gallery/g16.jpg 1600w",
+        "sizes": "306px",
+        "w": 1600,
+        "h": 1230
+      }
     },
     {
       "img": "g17.jpg",
@@ -589,7 +866,13 @@
       "path": "img/gallery/g17.jpg",
       "w": 1166,
       "h": 1600,
-      "ratio": 1.3722
+      "ratio": 1.3722,
+      "meta": {
+        "srcset": "img/gallery/g17-320.jpg 320w, img/gallery/g17-640.jpg 640w, img/gallery/g17.jpg 1166w",
+        "sizes": "306px",
+        "w": 1166,
+        "h": 1600
+      }
     }
   ],
   "freeVideos": [
@@ -598,6 +881,12 @@
       "poster": "img/free/mountain.jpg",
       "posterW": 960,
       "posterH": 636,
+      "posterMeta": {
+        "srcset": "img/free/mountain-320.jpg 320w, img/free/mountain-480.jpg 480w, img/free/mountain.jpg 960w",
+        "sizes": "(max-width: 600px) 346px, (max-width: 1000px) 395px, 448px",
+        "w": 960,
+        "h": 636
+      },
       "srcVideo": "Mountain.MOV",
       "videoPresent": true,
       "dur": 1093
@@ -607,6 +896,12 @@
       "poster": "img/free/pink-floral.jpg",
       "posterW": 720,
       "posterH": 960,
+      "posterMeta": {
+        "srcset": "img/free/pink-floral-320.jpg 320w, img/free/pink-floral-480.jpg 480w, img/free/pink-floral.jpg 720w",
+        "sizes": "(max-width: 600px) 346px, (max-width: 1000px) 395px, 448px",
+        "w": 720,
+        "h": 960
+      },
       "srcVideo": "PinkFloral.MOV",
       "videoPresent": true,
       "dur": 437
@@ -616,11 +911,301 @@
       "poster": "img/free/watercolor-airport.jpg",
       "posterW": 1600,
       "posterH": 1200,
+      "posterMeta": {
+        "srcset": "img/free/watercolor-airport-320.jpg 320w, img/free/watercolor-airport-480.jpg 480w, img/free/watercolor-airport-896.jpg 896w, img/free/watercolor-airport.jpg 1600w",
+        "sizes": "(max-width: 600px) 346px, (max-width: 1000px) 395px, 448px",
+        "w": 1600,
+        "h": 1200
+      },
       "srcVideo": "Watercolor Airport 2.mov",
       "videoPresent": false,
       "dur": null
     }
   ],
+  "static": {
+    "img/blog-kit-all.jpg": {
+      "srcset": "img/blog-kit-all-192.jpg 192w, img/blog-kit-all-384.jpg 384w, img/blog-kit-all-768.jpg 768w, img/blog-kit-all.jpg 1600w",
+      "sizes": "(max-width: 600px) 358px, (max-width: 1000px) 1173px, 1392px",
+      "w": 1600,
+      "h": 1600
+    },
+    "img/blog-kit-1-4.jpg": {
+      "srcset": "img/blog-kit-1-4-384.jpg 384w, img/blog-kit-1-4-768.jpg 768w, img/blog-kit-1-4.jpg 1600w",
+      "sizes": "(max-width: 600px) 358px, (max-width: 1000px) 720px, 760px",
+      "w": 1600,
+      "h": 1066
+    },
+    "img/blog-kit-5-8.jpg": {
+      "srcset": "img/blog-kit-5-8-384.jpg 384w, img/blog-kit-5-8-768.jpg 768w, img/blog-kit-5-8.jpg 1600w",
+      "sizes": "(max-width: 600px) 358px, (max-width: 1000px) 720px, 760px",
+      "w": 1600,
+      "h": 1039
+    },
+    "img/blog-kit-9-11.jpg": {
+      "srcset": "img/blog-kit-9-11-384.jpg 384w, img/blog-kit-9-11-768.jpg 768w, img/blog-kit-9-11.jpg 1600w",
+      "sizes": "(max-width: 600px) 358px, (max-width: 1000px) 720px, 760px",
+      "w": 1600,
+      "h": 1158
+    },
+    "img/blog-kit-12-13.jpg": {
+      "srcset": "img/blog-kit-12-13-384.jpg 384w, img/blog-kit-12-13-768.jpg 768w, img/blog-kit-12-13.jpg 1600w",
+      "sizes": "(max-width: 600px) 358px, (max-width: 1000px) 720px, 760px",
+      "w": 1600,
+      "h": 998
+    },
+    "img/blog-kit-14-17.jpg": {
+      "srcset": "img/blog-kit-14-17-384.jpg 384w, img/blog-kit-14-17-768.jpg 768w, img/blog-kit-14-17.jpg 1600w",
+      "sizes": "(max-width: 600px) 358px, (max-width: 1000px) 720px, 760px",
+      "w": 1600,
+      "h": 1156
+    },
+    "img/blog-kit-18-21.jpg": {
+      "srcset": "img/blog-kit-18-21-384.jpg 384w, img/blog-kit-18-21-768.jpg 768w, img/blog-kit-18-21.jpg 1600w",
+      "sizes": "(max-width: 600px) 358px, (max-width: 1000px) 720px, 760px",
+      "w": 1600,
+      "h": 1076
+    },
+    "img/blog-stage-fright.jpg": {
+      "srcset": "img/blog-stage-fright-192.jpg 192w, img/blog-stage-fright-384.jpg 384w, img/blog-stage-fright-768.jpg 768w, img/blog-stage-fright.jpg 2048w",
+      "sizes": "(max-width: 600px) 358px, (max-width: 1000px) 720px, 452px",
+      "w": 2048,
+      "h": 1332
+    },
+    "img/blog-true-to-myself.jpg": {
+      "srcset": "img/blog-true-to-myself-192.jpg 192w, img/blog-true-to-myself-384.jpg 384w, img/blog-true-to-myself-768.jpg 768w, img/blog-true-to-myself.jpg 1600w",
+      "sizes": "(max-width: 600px) 358px, (max-width: 1000px) 720px, 452px",
+      "w": 1600,
+      "h": 1200
+    },
+    "img/ProfilePic.jpg": {
+      "srcset": "img/ProfilePic-96.jpg 96w, img/ProfilePic-160.jpg 160w, img/ProfilePic-384.jpg 384w, img/ProfilePic-640.jpg 640w, img/ProfilePic.jpg 1514w",
+      "sizes": "(max-width: 600px) 358px, (max-width: 1000px) 380px, 584px",
+      "w": 1514,
+      "h": 1519
+    },
+    "img/about/exhibition-1.jpg": {
+      "srcset": "img/about/exhibition-1-384.jpg 384w, img/about/exhibition-1-768.jpg 768w, img/about/exhibition-1.jpg 1600w",
+      "sizes": "(max-width: 600px) 352px, (max-width: 1000px) 725px, 708px",
+      "w": 1600,
+      "h": 900
+    },
+    "img/about/exhibition-2.jpg": {
+      "srcset": "img/about/exhibition-2-384.jpg 384w, img/about/exhibition-2-768.jpg 768w, img/about/exhibition-2.jpg 1600w",
+      "sizes": "(max-width: 600px) 352px, (max-width: 1000px) 725px, 708px",
+      "w": 1600,
+      "h": 984
+    },
+    "img/about/exhibition-3.jpg": {
+      "srcset": "img/about/exhibition-3-384.jpg 384w, img/about/exhibition-3-768.jpg 768w, img/about/exhibition-3.jpg 1600w",
+      "sizes": "(max-width: 600px) 352px, (max-width: 1000px) 725px, 708px",
+      "w": 1600,
+      "h": 1200
+    },
+    "img/about/exhibition-4.jpg": {
+      "srcset": "img/about/exhibition-4-384.jpg 384w, img/about/exhibition-4-768.jpg 768w, img/about/exhibition-4.jpg 1600w",
+      "sizes": "(max-width: 600px) 352px, (max-width: 1000px) 725px, 708px",
+      "w": 1600,
+      "h": 1200
+    },
+    "img/about/artful-living-1.jpg": {
+      "srcset": "img/about/artful-living-1-384.jpg 384w, img/about/artful-living-1.jpg 679w",
+      "sizes": "(max-width: 600px) 352px, (max-width: 1000px) 725px, 415px",
+      "w": 679,
+      "h": 1024
+    },
+    "img/about/artful-living-2.jpg": {
+      "srcset": "img/about/artful-living-2-384.jpg 384w, img/about/artful-living-2-768.jpg 768w, img/about/artful-living-2.jpg 1314w",
+      "sizes": "(max-width: 600px) 352px, (max-width: 1000px) 725px, 415px",
+      "w": 1314,
+      "h": 1366
+    },
+    "img/about/artful-living-3.jpg": {
+      "srcset": "img/about/artful-living-3-384.jpg 384w, img/about/artful-living-3-768.jpg 768w, img/about/artful-living-3.jpg 1158w",
+      "sizes": "(max-width: 600px) 352px, (max-width: 1000px) 725px, 415px",
+      "w": 1158,
+      "h": 1600
+    },
+    "img/about/artful-living-4.jpg": {
+      "srcset": "img/about/artful-living-4-384.jpg 384w, img/about/artful-living-4-768.jpg 768w, img/about/artful-living-4.jpg 1050w",
+      "sizes": "(max-width: 600px) 352px, (max-width: 1000px) 725px, 415px",
+      "w": 1050,
+      "h": 1600
+    },
+    "img/about/livedrawing-1.jpg": {
+      "srcset": "img/about/livedrawing-1-256.jpg 256w, img/about/livedrawing-1-384.jpg 384w, img/about/livedrawing-1.jpg 720w",
+      "sizes": "(max-width: 600px) 352px, (max-width: 1000px) 354px, 241px",
+      "w": 720,
+      "h": 960
+    },
+    "img/about/livedrawing-2.jpg": {
+      "srcset": "img/about/livedrawing-2-256.jpg 256w, img/about/livedrawing-2-384.jpg 384w, img/about/livedrawing-2-768.jpg 768w, img/about/livedrawing-2.jpg 1123w",
+      "sizes": "(max-width: 600px) 352px, (max-width: 1000px) 354px, 241px",
+      "w": 1123,
+      "h": 1600
+    },
+    "img/about/livedrawing-3.jpg": {
+      "srcset": "img/about/livedrawing-3-256.jpg 256w, img/about/livedrawing-3-384.jpg 384w, img/about/livedrawing-3-768.jpg 768w, img/about/livedrawing-3.jpg 1125w",
+      "sizes": "(max-width: 600px) 352px, (max-width: 1000px) 354px, 241px",
+      "w": 1125,
+      "h": 1574
+    },
+    "img/about/livedrawing-4.jpg": {
+      "srcset": "img/about/livedrawing-4-256.jpg 256w, img/about/livedrawing-4-384.jpg 384w, img/about/livedrawing-4.jpg 714w",
+      "sizes": "(max-width: 600px) 352px, (max-width: 1000px) 354px, 241px",
+      "w": 714,
+      "h": 960
+    },
+    "img/about/livedrawing-5.jpg": {
+      "srcset": "img/about/livedrawing-5-256.jpg 256w, img/about/livedrawing-5-384.jpg 384w, img/about/livedrawing-5-768.jpg 768w, img/about/livedrawing-5.jpg 1280w",
+      "sizes": "(max-width: 600px) 352px, (max-width: 1000px) 354px, 241px",
+      "w": 1280,
+      "h": 1600
+    },
+    "img/about/cert-accademia-2026.jpg": {
+      "srcset": "img/about/cert-accademia-2026-128.jpg 128w, img/about/cert-accademia-2026-256.jpg 256w, img/about/cert-accademia-2026.jpg 707w",
+      "sizes": "120px",
+      "w": 707,
+      "h": 1000
+    },
+    "img/about/cert-jiwi-2026.jpg": {
+      "srcset": "img/about/cert-jiwi-2026-128.jpg 128w, img/about/cert-jiwi-2026-256.jpg 256w, img/about/cert-jiwi-2026.jpg 1076w",
+      "sizes": "120px",
+      "w": 1076,
+      "h": 1522
+    },
+    "img/showcase/sw01.jpg": {
+      "srcset": "img/showcase/sw01-224.jpg 224w, img/showcase/sw01.jpg 445w",
+      "sizes": "(max-width: 600px) 298px, 215px",
+      "w": 445,
+      "h": 445
+    },
+    "img/showcase/sw02.jpg": {
+      "srcset": "img/showcase/sw02-224.jpg 224w, img/showcase/sw02.jpg 513w",
+      "sizes": "(max-width: 600px) 298px, 215px",
+      "w": 513,
+      "h": 513
+    },
+    "img/showcase/sw03.jpg": {
+      "srcset": "img/showcase/sw03-224.jpg 224w, img/showcase/sw03.jpg 314w",
+      "sizes": "(max-width: 600px) 298px, 215px",
+      "w": 314,
+      "h": 314
+    },
+    "img/showcase/sw04.jpg": {
+      "srcset": "img/showcase/sw04-224.jpg 224w, img/showcase/sw04.jpg 516w",
+      "sizes": "(max-width: 600px) 298px, 215px",
+      "w": 516,
+      "h": 516
+    },
+    "img/showcase/sw05.jpg": {
+      "srcset": "img/showcase/sw05-224.jpg 224w, img/showcase/sw05.jpg 500w",
+      "sizes": "(max-width: 600px) 298px, 215px",
+      "w": 500,
+      "h": 500
+    },
+    "img/showcase/sw06.jpg": {
+      "srcset": "img/showcase/sw06-224.jpg 224w, img/showcase/sw06-448.jpg 448w, img/showcase/sw06.jpg 664w",
+      "sizes": "(max-width: 600px) 298px, 215px",
+      "w": 664,
+      "h": 664
+    },
+    "img/showcase/sw07.jpg": {
+      "srcset": "img/showcase/sw07-224.jpg 224w, img/showcase/sw07-448.jpg 448w, img/showcase/sw07.jpg 688w",
+      "sizes": "(max-width: 600px) 298px, 215px",
+      "w": 688,
+      "h": 688
+    },
+    "img/showcase/sw08.jpg": {
+      "srcset": "img/showcase/sw08-224.jpg 224w, img/showcase/sw08-448.jpg 448w, img/showcase/sw08.jpg 652w",
+      "sizes": "(max-width: 600px) 298px, 215px",
+      "w": 652,
+      "h": 652
+    },
+    "img/showcase/sw09.jpg": {
+      "srcset": "img/showcase/sw09-224.jpg 224w, img/showcase/sw09-448.jpg 448w, img/showcase/sw09.jpg 649w",
+      "sizes": "(max-width: 600px) 298px, 215px",
+      "w": 649,
+      "h": 649
+    },
+    "img/showcase/sw10.jpg": {
+      "srcset": "img/showcase/sw10-224.jpg 224w, img/showcase/sw10.jpg 454w",
+      "sizes": "(max-width: 600px) 298px, 215px",
+      "w": 454,
+      "h": 454
+    },
+    "img/A1.jpeg": {
+      "srcset": "img/A1-256.jpeg 256w, img/A1.jpeg 562w",
+      "sizes": "(max-width: 600px) 251px, (max-width: 1000px) 504px, 487px",
+      "w": 562,
+      "h": 1600
+    },
+    "img/cover2.jpg": {
+      "srcset": "img/cover2-256.jpg 256w, img/cover2-512.jpg 512w, img/cover2-1024.jpg 1024w, img/cover2.jpg 1600w",
+      "sizes": "(max-width: 600px) 251px, (max-width: 1000px) 504px, 487px",
+      "w": 1600,
+      "h": 1128
+    },
+    "img/cover3.jpg": {
+      "srcset": "img/cover3-256.jpg 256w, img/cover3-512.jpg 512w, img/cover3-1024.jpg 1024w, img/cover3.jpg 1600w",
+      "sizes": "(max-width: 600px) 251px, (max-width: 1000px) 504px, 487px",
+      "w": 1600,
+      "h": 1052
+    },
+    "img/BrushA.jpg": {
+      "srcset": "img/BrushA-160.jpg 160w, img/BrushA-288.jpg 288w, img/BrushA-576.jpg 576w, img/BrushA.jpg 1600w",
+      "sizes": "(max-width: 600px) 136px, (max-width: 1000px) 274px, 280px",
+      "w": 1600,
+      "h": 1098
+    },
+    "img/BrushB.jpg": {
+      "srcset": "img/BrushB-160.jpg 160w, img/BrushB-288.jpg 288w, img/BrushB-576.jpg 576w, img/BrushB.jpg 1600w",
+      "sizes": "(max-width: 600px) 136px, (max-width: 1000px) 274px, 280px",
+      "w": 1600,
+      "h": 1114
+    },
+    "img/Liquidwatercolor.jpg": {
+      "srcset": "img/Liquidwatercolor-160.jpg 160w, img/Liquidwatercolor-288.jpg 288w, img/Liquidwatercolor-576.jpg 576w, img/Liquidwatercolor.jpg 1517w",
+      "sizes": "(max-width: 600px) 136px, (max-width: 1000px) 274px, 280px",
+      "w": 1517,
+      "h": 1359
+    },
+    "img/A2.jpeg": {
+      "srcset": "img/A2-192.jpeg 192w, img/A2-384.jpeg 384w, img/A2.jpeg 806w",
+      "sizes": "(max-width: 600px) 358px, (max-width: 1000px) 420px, 373px",
+      "w": 806,
+      "h": 1094
+    },
+    "img/A3.jpeg": {
+      "srcset": "img/A3-192.jpeg 192w, img/A3-384.jpeg 384w, img/A3-768.jpeg 768w, img/A3.jpeg 1152w",
+      "sizes": "(max-width: 600px) 358px, (max-width: 1000px) 420px, 373px",
+      "w": 1152,
+      "h": 2048
+    },
+    "img/A4.jpeg": {
+      "srcset": "img/A4-384.jpeg 384w, img/A4-768.jpeg 768w, img/A4.jpeg 1153w",
+      "sizes": "(max-width: 600px) 358px, (max-width: 1000px) 720px, 300px",
+      "w": 1153,
+      "h": 1600
+    },
+    "img/A6.jpeg": {
+      "srcset": "img/A6-192.jpeg 192w, img/A6-384.jpeg 384w, img/A6.jpeg 624w",
+      "sizes": "184px",
+      "w": 624,
+      "h": 716
+    },
+    "img/Rubber.jpg": {
+      "srcset": "img/Rubber-224.jpg 224w, img/Rubber-448.jpg 448w, img/Rubber.jpg 1438w",
+      "sizes": "200px",
+      "w": 1438,
+      "h": 890
+    },
+    "img/cover4.jpg": {
+      "srcset": "img/cover4-224.jpg 224w, img/cover4-448.jpg 448w, img/cover4.jpg 1600w",
+      "sizes": "200px",
+      "w": 1600,
+      "h": 2322
+    }
+  },
   "warnings": [
     "clouds-beginner/Lesson01 has a video but no cover photo — lesson kept, poster left empty",
     "clouds-beginner/Lesson05 is multi-part: CloudsLesson5A.mp4=1421s, CloudsLesson5B.mp4=1337s",

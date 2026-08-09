@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,6 +8,11 @@
 <body>
 <x-dc>
 <helmet>
+<!-- No <title> here on purpose. The helmet re-applies its own text on every
+     runtime re-render, which would clobber the per-course title the script
+     sets below; the <meta> branch, by contrast, mounts once and is never
+     touched again, so the description is safe to refine from script. -->
+<meta name="description" content="A painting course from Crystal's Art School — the syllabus lesson by lesson, what you'll learn, and who it is for.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600;6..96,700&family=Oswald:wght@300;400;500;600&family=Archivo:wght@400;500;600;700&family=Saira+Stencil+One&family=Arizonia&display=swap" rel="stylesheet">
@@ -22,83 +27,40 @@
 <script src="js/motion.js"></script>
 </helmet>
 <div class="cas-root" data-theme="D">
+<a class="skip-link" href="#content">Skip to content</a>
 <div class="glow-layer" aria-hidden="true"></div>
 
-<nav class="site-nav" aria-label="Main">
-  <div class="nav-top">
-    <div class="inner">
-      <a class="nav-brand" href="index.html">
-        <img src="img/lau-logo.png" alt="Lau. — Crystal's Art School">
-      </a>
-      <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="Lessons.dc.html" class="active">Courses</a></li>
-        <li><a href="Gallery.dc.html">Gallery</a></li>
-        <li><a href="Showcase.dc.html">Showcase</a></li>
-        <li><a href="Blog.dc.html">Blog</a></li>
-        <li><a href="About.dc.html">About</a></li>
-        <li><a href="FreeVideos.dc.html">Free video</a></li>
-        <li><a href="Blog.dc.html?tag=Tools">Tools</a></li>
-        <li><a href="FAQ.dc.html">FAQ</a></li>
-      </ul>
-      <div class="nav-auth">
-        <a class="cart-btn" href="Checkout.dc.html" aria-label="Shopping cart">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M2 3h3.2l2.5 12.2a1.5 1.5 0 0 0 1.5 1.2h9a1.5 1.5 0 0 0 1.5-1.2L21.5 7H6.5"></path></svg>
-          <span class="cart-badge">0</span>
-        </a>
-        <a class="btn ghost" href="Login.dc.html">Log in</a>
-        <a class="btn primary" href="Signup.dc.html">Sign up</a>
-        <button class="nav-burger" type="button" aria-label="Menu" aria-expanded="false">☰</button>
-      </div>
-    </div>
-  </div>
-  <div class="nav-cats">
-    <div class="inner">
-      <ul class="nav-cat-links">
-        <li><a href="Lessons.dc.html?cat=Watercolour">Watercolour</a></li>
-        <li><a href="Lessons.dc.html?cat=Oil">Oils</a></li>
-        <li><a href="Lessons.dc.html?cat=Drawing">Drawing</a></li>
-        <li><a href="Lessons.dc.html?cat=Ink">Ink</a></li>
-        <li><a href="Lessons.dc.html?cat=Beginners">Beginners</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="nav-sheet">
-    <a href="index.html">Home</a>
-    <a href="Lessons.dc.html">Courses</a>
-    <a href="Gallery.dc.html">Gallery</a>
-    <a href="Showcase.dc.html">Showcase</a>
-    <a href="Blog.dc.html">Blog</a>
-    <a href="About.dc.html">About</a>
-    <a href="FreeVideos.dc.html">Free video</a>
-    <a href="Blog.dc.html?tag=Tools">Tools</a>
-    <a href="FAQ.dc.html">FAQ</a>
-    <a href="Lessons.dc.html?cat=Watercolour">Watercolour</a>
-    <a href="Lessons.dc.html?cat=Oil">Oils</a>
-    <a href="Lessons.dc.html?cat=Drawing">Drawing</a>
-    <a href="Lessons.dc.html?cat=Ink">Ink</a>
-    <a href="Lessons.dc.html?cat=Beginners">Beginners</a>
-    <a href="Login.dc.html">Log in / Sign up</a>
-  </div>
-</nav>
+<!-- nav markup lives in js/site-nav.js — single source of truth. The element is
+     left empty on purpose: buildNav() replaces its children on load, so any
+     markup written here never renders and only drifts. -->
+<nav class="site-nav" aria-label="Main"></nav>
 
-<main class="container" id="content">
+<main class="container" id="content" tabindex="-1">
 
   <!-- JS-filled nodes start EMPTY: the dc-runtime (React) owns template children,
        and replacing them via textContent/innerHTML makes a later React re-render
        crash with removeChild-of-missing-node (seen in the Claude Design editor). -->
   <div class="logo2 is-center"><img src="img/logo2.png" alt="Crystal Lau Art"></div>
-  <div class="crumbs" style="padding-top:6px;"><a href="Lessons.dc.html">Courses</a> <span aria-hidden="true">→</span> <span id="crumb-title"></span></div>
+  <div class="crumbs" style="padding-top:6px;"><a href="Lessons.dc.html">Courses</a> <span aria-hidden="true">&rarr;</span> <span id="crumb-title"></span></div>
 
   <header class="course-hero">
     <div class="course-left reveal-one">
       <div class="course-cover">
-        <img id="co-cover" src="img/cover3.jpg" alt="">
-        <span class="free-flag" id="co-flag-free" style="display:none;">Free</span>
+        <!-- No src here. It used to carry img/cover3.jpg — 472KB fetched at the
+             highest priority on every course page and then replaced by the real
+             cover before it could ever paint. The script sets srcset, sizes and
+             src together, so exactly one image is ever requested. -->
+        <img id="co-cover" alt="" fetchpriority="high" decoding="async">
+        <!-- #co-flag-free deleted: it was display:none in the markup and no
+             script ever showed it — there is no course-level free flag in the
+             data. The sale flag below is real and is switched on by c.sale. -->
         <span class="sale-flag" id="co-flag-sale" style="display:none;">Sale</span>
       </div>
-      <!-- 7.1: four thumbnails, click to swap the large image. Not a carousel. -->
+      <!-- 7.1: the photo strip, click to swap the large image. Not a carousel.
+           It lists every image in the set, including the one currently enlarged,
+           so no photograph can become unreachable. -->
       <div class="co-thumbs" id="co-thumbs"></div>
+      <p class="co-thumbs-note course-terms-note" id="co-thumbs-note" style="display:none;">These are the lesson cover photographs, standing in until the course photographs are supplied.</p>
       <!-- 7.1: price and CTA live in the left column, under the images, so the
            call to action is visible without scrolling on desktop. The
            placeholder note sits below them rather than above — it is developer
@@ -113,10 +75,10 @@
            right-hand column where nobody found it. Developer scaffolding, not
            part of the shipped page. (client feedback 2026-08-08) -->
       <div class="own-test">
-        <span class="own-test-label">Client testing &mdash; view as</span>
-        <div class="fg-opts" id="own-toggle">
-          <button class="fopt" type="button" data-own="0">Not purchased</button>
-          <button class="fopt" type="button" data-own="1">Purchased</button>
+        <span class="own-test-label" id="own-test-label">Client testing &mdash; view as</span>
+        <div class="fg-opts" id="own-toggle" role="group" aria-labelledby="own-test-label">
+          <button class="fopt" type="button" data-own="0" aria-pressed="false">Not purchased</button>
+          <button class="fopt" type="button" data-own="1" aria-pressed="false">Purchased</button>
         </div>
       </div>
       <p class="course-tier-note"></p>
@@ -124,7 +86,7 @@
               supplied. -->
     </div>
     <div class="course-right reveal-one">
-      <div class="eyebrow"><span class="star">✦</span> <span id="co-tag"></span></div>
+      <div class="eyebrow"><span class="star">&#10038;</span> <span id="co-tag"></span></div>
       <!-- 7.1: title sits above the highlights video, sharing its left edge -->
       <h1 class="marker-title font-a" id="co-title" style="font-size:clamp(39px,4.9vw,65px);margin:6px 0 12px;"></h1>
       <div class="co-highlight" id="co-highlight">
@@ -147,7 +109,7 @@
 
   <section class="section" id="learn">
     <div class="section-head reveal-one" style="text-align:center;">
-      <div class="eyebrow" style="justify-content:center;"><span class="star">✦</span> By the end</div>
+      <div class="eyebrow" style="justify-content:center;"><span class="star">&#10038;</span> By the end</div>
       <h2 class="section-title">What you'll learn</h2>
     </div>
     <ul class="learn-list" id="co-learn"></ul>
@@ -155,15 +117,17 @@
 
   <section class="section" id="syllabus">
     <div class="section-head reveal-one" style="text-align:center;">
-      <div class="eyebrow" style="justify-content:center;"><span class="star">✦</span> Phase by phase, lesson by lesson</div>
+      <div class="eyebrow" style="justify-content:center;"><span class="star">&#10038;</span> Phase by phase, lesson by lesson</div>
       <h2 class="section-title">Syllabus</h2>
     </div>
     <div class="syllabus" id="co-syllabus"></div>
     <div class="course-teacher reveal-one">
-      <img src="img/ProfilePic.jpg" alt="Crystal Lau" loading="lazy" decoding="async">
+      <img src="img/ProfilePic.jpg" alt="Crystal Lau" loading="lazy" decoding="async"
+           srcset="img/ProfilePic-96.jpg 96w, img/ProfilePic-160.jpg 160w, img/ProfilePic-384.jpg 384w, img/ProfilePic-640.jpg 640w"
+           sizes="74px">
       <div>
         <h3 class="marker-title" style="font-size:19px;margin:0 0 6px;">Taught by Crystal Lau</h3>
-        <p style="margin:0;font-size:14px;color:var(--muted);">Hong Kong–based painter and teacher — eight years of small-group classes, now teaching the same slow, value-first way online. <a class="link-squiggle" href="About.dc.html" style="font-weight:700;">More about Crystal →</a></p>
+        <p style="margin:0;font-size:14px;color:var(--muted);">Hong Kong&ndash;based painter and teacher &mdash; eight years of small-group classes, now teaching the same slow, value-first way online. <a class="link-squiggle" href="About.dc.html" style="font-weight:700;">More about Crystal &rarr;</a></p>
       </div>
     </div>
   </section>
@@ -172,7 +136,7 @@
     <!-- Left-aligned, the eyebrow sitting directly above the title rather than
          centred over it. (client feedback 2026-08-08) -->
     <div class="section-head reveal-one">
-      <div class="eyebrow"><span class="star">✦</span> Is this you?</div>
+      <div class="eyebrow"><span class="star">&#10038;</span> Is this you?</div>
       <h2 class="section-title">Who this course is for</h2>
     </div>
     <div id="co-who" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin:30px auto 0;"></div>
@@ -181,14 +145,15 @@
   <section class="section">
     <div class="band-forest reveal-one">
       <div style="flex:0 0 180px;border-radius:var(--radius-card);overflow:hidden;aspect-ratio:1/1;position:relative;z-index:1;">
-        <img src="img/cover3.jpg" alt="Free videos preview" style="width:100%;height:100%;object-fit:cover;" loading="lazy" decoding="async">
+        <img src="img/cover3.jpg" alt="Free videos preview" style="width:100%;height:100%;object-fit:cover;" loading="lazy" decoding="async"
+             srcset="img/cover3-256.jpg 256w, img/cover3-512.jpg 512w, img/cover3-1024.jpg 1024w" sizes="180px">
       </div>
       <div style="flex:1;">
-        <div class="eyebrow"><span class="star">✦</span> Not ready to buy?</div>
+        <div class="eyebrow"><span class="star">&#10038;</span> Not ready to buy?</div>
         <h2 class="marker-title" style="font-size:clamp(24px,2.4vw,34px);">Try the free videos first.</h2>
-        <p style="margin:0;max-width:54ch;">Full tutorials on skies, colour mixing and materials — see exactly how Crystal teaches before you commit.</p>
+        <p style="margin:0;max-width:54ch;">Full tutorials on skies, colour mixing and materials &mdash; see exactly how Crystal teaches before you commit.</p>
       </div>
-      <a class="btn-big" href="FreeVideos.dc.html" style="flex:none;">Watch free videos →</a>
+      <a class="btn-big" href="FreeVideos.dc.html" style="flex:none;">Watch free videos &rarr;</a>
     </div>
   </section>
 </main>
@@ -216,6 +181,8 @@ class Component extends DCLogic {
     if (!root) return;
     const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     const $ = (id) => document.getElementById(id);
+    /* one shared polite live region, owned by js/site-extras.js */
+    const say = (m) => { try { if (window.CasAnnounce) window.CasAnnounce(m); } catch (e) {} };
 
     /* theme — Light (A) / Dark (D) only. The toggle itself lives in js/site-nav.js.
        A stored or ?theme= value outside A|D is ignored and falls back to the default. */
@@ -226,16 +193,15 @@ class Component extends DCLogic {
     try { const __q = (new URLSearchParams(location.search).get('theme') || '').toUpperCase(); if (valid.indexOf(__q) >= 0) { __theme = __q; localStorage.setItem(THEME_KEY, __q); } } catch (e) {}
     root.setAttribute('data-theme', __theme);
 
-    /* burger */
-    /* burger handled by js/site-nav.js */
-
-    /* cart badge */
-    const renderCart = () => { let n = 0; try { n = JSON.parse(localStorage.getItem('cas-cart') || '[]').reduce((a, i) => a + (i.qty || 1), 0); } catch (e) {} document.querySelectorAll('.cart-badge').forEach(b => { b.textContent = n; b.style.display = n > 0 ? 'grid' : 'none'; }); };
-    renderCart();
+    /* burger, cart badge and cart drawer: js/site-nav.js + js/site-extras.js */
 
     /* ---- the course named by ?id= (falls back, never throws) ---- */
     const c = this.course();
-    if (!c) { $('crumb-title').textContent = 'Course not found'; return; }
+    if (!c) {
+      document.title = "Course not found \u00b7 Crystal's Art School";
+      $('crumb-title').textContent = 'Course not found';
+      return;
+    }
 
     const LESSONS = c.lessons || [];
     /* Two different numbers, and conflating them was the "I thought there were
@@ -247,7 +213,7 @@ class Component extends DCLogic {
     const nRows = LESSONS.length;
     const nLessons = c.lessonCount || nRows;
     const clock = (secs) => {
-      if (secs == null) return '—';
+      if (secs == null) return '\u2014';
       const m = Math.floor(secs / 60), s = Math.floor(secs % 60);
       return m + ':' + (s < 10 ? '0' : '') + s;
     };
@@ -257,35 +223,106 @@ class Component extends DCLogic {
     };
     const levelLabel = c.difficulty.charAt(0).toUpperCase() + c.difficulty.slice(1).replace('-', ' ');
 
-    document.title = c.title + " · Crystal's Art School";
+    document.title = c.title + " \u00b7 Crystal's Art School";
+    /* the helmet mounts <meta name="description"> once and never rewrites it,
+       so refining it here with the client's own subline is safe */
+    const metaDesc = document.querySelector('meta[name="description"]');
+    if (metaDesc) {
+      const d = String(c.blurb || (c.about && c.about[0]) || c.subline || '').trim();
+      if (d) {
+        metaDesc.setAttribute('content',
+          d.length > 200 ? d.slice(0, 197).replace(/\s+\S*$/, '') + '…' : d);
+      }
+    }
     $('crumb-title').textContent = c.title;
-    /* 7.1: five photographs per course — one large plus four small, named per
-       1.4.10. When the set has been supplied the large image is photo one and
-       the strip is the other four; otherwise the lesson covers stand in and
-       the strip says so. */
+
+    /* ---- 7.1: the course photograph set ----
+       Five photographs per course, named per 1.4.10: one enlarged plus the
+       strip. When the set has not been supplied the course cover and the lesson
+       cover photographs stand in, and the strip says so — #co-thumbs-note was
+       written to by script but had never existed in the markup, so that
+       disclosure had never rendered once.
+       The strip lists EVERY image in the set, including the one currently
+       enlarged. It used to list photos 1..4 only, which meant photo 0 could not
+       be got back to after the first click, and every button was labelled
+       "Show image 2" ... "Show image 5" whether five images existed or one. */
     const supplied = (c.photos || []).length >= 5;
-    $('co-cover').src = supplied ? c.photos[0] : c.cover;
-    $('co-cover').alt = c.title;
+    /* The hero is one column below 900px and a clamp(300px, 31%, 446px) column
+       above it; the strip is a row of five. The pipeline's own `sizes` in
+       course-data.js are computed for the Lessons card and the lesson.dc.html
+       rail, so they under-serve the hero at 760px (351px asked for a 712px
+       slot) and over-serve the strip fourfold. Slot-accurate values here. */
+    const HERO_SIZES = '(max-width: 900px) 100vw, 446px';
+    const THUMB_SIZES = '(max-width: 900px) 18vw, 80px';
+    const shots = [];
+    if (supplied) {
+      c.photos.forEach((p, i) => {
+        const m = (c.photosMeta || [])[i] || {};
+        shots.push({
+          src: p, srcset: m.srcset || '', sizes: m.sizes || '',
+          label: 'photograph ' + (i + 1) + ' of ' + c.photos.length,
+          alt: i === 0 ? c.title : c.title + ' \u2014 photograph ' + (i + 1)
+        });
+      });
+    } else {
+      shots.push({
+        src: c.cover, srcset: c.srcset || '', sizes: c.sizes || '',
+        label: 'the course cover', alt: c.title
+      });
+      LESSONS.forEach((u) => {
+        if (!u.poster || shots.length >= 5) return;
+        shots.push({
+          src: u.poster, srcset: u.srcset || '', sizes: u.sizes || '',
+          label: 'the cover for lesson ' + (u.n || shots.length),
+          alt: c.title + ' \u2014 cover for lesson ' + (u.n || shots.length)
+        });
+      });
+    }
+
+    let shownIdx = 0;
+    const coverEl = $('co-cover');
+    const showShot = (i) => {
+      const s = shots[i];
+      if (!s || !coverEl) return;
+      shownIdx = i;
+      /* srcset and sizes before src, so the browser makes one choice and one
+         request rather than fetching the fallback first */
+      if (s.srcset) coverEl.setAttribute('srcset', s.srcset); else coverEl.removeAttribute('srcset');
+      coverEl.setAttribute('sizes', HERO_SIZES);
+      coverEl.setAttribute('src', s.src);
+      coverEl.alt = s.alt;
+      const strip = $('co-thumbs');
+      if (strip) strip.querySelectorAll('.co-thumb').forEach((b, bi) => {
+        const on = bi === i;
+        b.classList.toggle('is-active', on);
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+    };
 
     (function () {
       const strip = $('co-thumbs');
       if (!strip) return;
-      const shots = supplied
-        ? c.photos.slice(1, 5)
-        : (c.lessons || []).map((l) => l.poster).filter(Boolean).slice(0, 4);
-      if (!shots.length) { strip.style.display = 'none'; return; }
-      strip.innerHTML = shots.map((p, i) =>
-        '<button class="co-thumb" type="button"' +
-        ' data-src="' + esc(p) + '" aria-label="Show image ' + (i + 2) + '">' +
-        '<img src="' + esc(p) + '" alt="" loading="lazy" decoding="async"></button>').join('');
+      if (shots.length < 2) { strip.style.display = 'none'; }
+      else {
+        /* the column count follows the set rather than being fixed at four,
+           because the set is not always five images long */
+        strip.style.gridTemplateColumns = 'repeat(' + Math.min(shots.length, 5) + ', 1fr)';
+        strip.innerHTML = shots.map((s, i) =>
+          '<button class="co-thumb" type="button" aria-pressed="false"' +
+          ' data-i="' + i + '" aria-label="Show ' + esc(s.label) + '">' +
+          '<img src="' + esc(s.src) + '"' +
+          (s.srcset ? ' srcset="' + esc(s.srcset) + '" sizes="' + THUMB_SIZES + '"' : '') +
+          ' alt="" loading="lazy" decoding="async"></button>').join('');
+        strip.addEventListener('click', (e) => {
+          const b = e.target.closest('.co-thumb');
+          if (!b) return;
+          showShot(+b.dataset.i);
+          say('Showing ' + shots[shownIdx].label + '.');
+        });
+      }
       const note = $('co-thumbs-note');
       if (note) note.style.display = supplied ? 'none' : '';
-      strip.addEventListener('click', (e) => {
-        const b = e.target.closest('.co-thumb');
-        if (!b) return;
-        $('co-cover').src = b.dataset.src;
-        strip.querySelectorAll('.co-thumb').forEach((x) => x.classList.toggle('is-active', x === b));
-      });
+      showShot(0);
     })();
     /* 7.1: the course preview reel sits under the title in the right column.
        It is a real film from the client, streamed the same way the lessons are;
@@ -302,7 +339,7 @@ class Component extends DCLogic {
       host.innerHTML =
         '<iframe class="gdrive-frame" src="' + esc(pv.url) + '" title="Course preview" ' +
         'allow="autoplay; fullscreen" allowfullscreen loading="lazy"></iframe>' +
-        (mins ? '<span class="co-hl-dur">Preview · ' + mins + '</span>' : '');
+        (mins ? '<span class="co-hl-dur">Preview \u00b7 ' + mins + '</span>' : '');
     })();
 
     $('co-tag').textContent = c.tag + ' course';
@@ -349,7 +386,13 @@ class Component extends DCLogic {
     try { const q = new URLSearchParams(location.search).get('owned'); if (q === '1') owned = true; if (q === '0') owned = false; } catch (e) {}
 
     const doneArr = () => { try { const p = JSON.parse(localStorage.getItem(PROGRESS_KEY) || 'null'); return (p && p.done) ? p.done : []; } catch (e) { return []; } };
-    const LOCK = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true" style="opacity:.55;"><rect x="4" y="10" width="16" height="11" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg>';
+    /* The padlock is the only thing that said a row was locked, and it was an
+       aria-hidden SVG with no text alternative — so the accessible text of a
+       locked row said nothing about being locked, while the free row plainly
+       read FREE PREVIEW. It is a named image now. The dimming that used to sit
+       inline on the row (opacity:.72, painting 2.55:1) is a class, so the
+       stylesheet can set a legible tone for it. */
+    const LOCK = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" role="img" aria-label="Locked"><rect x="4" y="10" width="16" height="11" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg>';
     const PLAY = '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"></path></svg>';
 
     /* Focus / tools / outcome, straight from the client's course introduction
@@ -373,10 +416,13 @@ class Component extends DCLogic {
          with no JPEG (Lesson 1, film only) simply renders no thumbnail rather
          than a placeholder box. (client feedback 2026-08-08) */
       const thumb = u.poster
-        ? '<img class="syl-thumb" src="' + esc(u.poster) + '" alt="" loading="lazy" decoding="async">'
+        ? '<img class="syl-thumb" src="' + esc(u.poster) + '"' +
+          (u.srcset ? ' srcset="' + esc(u.srcset) + '"' : '') +
+          (u.sizes ? ' sizes="' + esc(u.sizes) + '"' : '') +
+          ' alt="" loading="lazy" decoding="async">'
         : '';
       const inner =
-        '<div class="syl-num">' + (isDone ? '✓' : num) + '</div>' +
+        '<div class="syl-num">' + (isDone ? '\u2713' : num) + '</div>' +
         '<div><div class="syl-title">' + esc(u.title) +
           (!owned && u.free ? ' <span style="font-family:var(--font-cond);font-size:12.5px;letter-spacing:var(--tracking-label);text-transform:uppercase;color:var(--teal-ink);margin-left:8px;">free preview</span>' : '') +
           (u.spans > 1 ? ' <span style="font-family:var(--font-cond);font-size:12.5px;letter-spacing:var(--tracking-label);text-transform:uppercase;color:var(--muted);margin-left:8px;">one film, two lessons</span>' : '') +
@@ -385,7 +431,7 @@ class Component extends DCLogic {
         thumb;
       const row = open
         ? '<a class="syl-row" href="lesson.dc.html?c=' + encodeURIComponent(c.id) + '&u=' + i + '" style="text-decoration:none;color:inherit;">' + inner + '</a>'
-        : '<div class="syl-row" style="opacity:.72;">' + inner + '</div>';
+        : '<div class="syl-row is-locked">' + inner + '</div>';
       if (!keys.length) return '<div class="syl-item" data-odd="' + (i % 2) + '">' + row + '</div>';
 
       const panelId = 'syld-' + c.id + '-' + i;
@@ -398,6 +444,19 @@ class Component extends DCLogic {
     };
 
     const renderSyllabus = () => {
+      const host = $('co-syllabus');
+      /* Whatever the reader had opened survives the rebuild. Flipping the
+         purchased switch rewrites this whole list, and it used to slam every
+         expanded phase and every open detail panel shut underneath them. Panel
+         ids do not depend on the purchased state, so they are a safe key. */
+      const wasOpen = [];
+      host.querySelectorAll('[aria-expanded="true"]').forEach(b => {
+        const id = b.getAttribute('aria-controls');
+        if (id) wasOpen.push(id);
+      });
+      const hadFocus = (document.activeElement && host.contains(document.activeElement))
+        ? document.activeElement.getAttribute('aria-controls') : null;
+
       const done = doneArr();
       const mods = c.modules || [];
       let html = '';
@@ -429,7 +488,17 @@ class Component extends DCLogic {
           '</section>';
         });
       }
-      $('co-syllabus').innerHTML = html;
+      host.innerHTML = html;
+
+      wasOpen.forEach(id => {
+        const panel = document.getElementById(id);
+        const btn = host.querySelector('[aria-controls="' + id + '"]');
+        if (panel && btn) { panel.hidden = false; btn.setAttribute('aria-expanded', 'true'); }
+      });
+      if (hadFocus) {
+        const back = host.querySelector('[aria-controls="' + hadFocus + '"]');
+        if (back) { try { back.focus(); } catch (e) {} }
+      }
     };
 
     /* Delegated, so it survives every renderSyllabus() re-render. */
@@ -440,6 +509,8 @@ class Component extends DCLogic {
         const openNow = phase.getAttribute('aria-expanded') !== 'true';
         phase.setAttribute('aria-expanded', String(openNow));
         if (body) body.hidden = !openNow;
+        const nm = phase.querySelector('.sp-name');
+        say((nm ? nm.textContent.trim() + ' ' : '') + (openNow ? 'expanded.' : 'collapsed.'));
         return;
       }
       const btn = ev.target.closest('.syl-more');
@@ -462,12 +533,12 @@ class Component extends DCLogic {
         while (next < nRows && done[next]) next++;
         if (next >= nRows) next = nRows - 1;
         cont.href = 'lesson.dc.html?c=' + encodeURIComponent(c.id) + '&u=' + next;
-        $('co-price').innerHTML = '<span style="font-size:16px;">Purchased ✓</span>';
+        $('co-price').innerHTML = '<span style="font-size:16px;">Purchased \u2713</span>';
         buy.style.display = 'none';
         cont.style.display = '';
         /* 7.2 names the purchased-state label literally: `View Course`, in the
            same place as `Add to Cart`. */
-        cont.innerHTML = 'View course <span class="arr" aria-hidden="true">→</span>';
+        cont.innerHTML = 'View course <span class="arr" aria-hidden="true">\u2192</span>';
         note.innerHTML = '<strong>' + dn + ' of ' + nRows + '</strong> '
           + (nRows === 1 ? 'film' : 'films')
           + ' complete — your progress is saved automatically.';
@@ -476,13 +547,17 @@ class Component extends DCLogic {
            through it; only the new price turns marine. A normal price is
            unchanged. */
         $('co-price').innerHTML = c.was
-          ? '<span class="was">£' + c.was + '</span><span class="now">£' + c.price + '</span>'
-          : '£' + c.price;
+          ? '<span class="was">\u00a3' + c.was + '</span><span class="now">\u00a3' + c.price + '</span>'
+          : '\u00a3' + c.price;
         buy.style.display = '';
         cont.style.display = 'none';
         note.innerHTML = 'Buy at <strong>Apprentice</strong> (course only) or <strong>Fellow</strong> (course + private Discord critique channel) — you\'ll pick when adding to cart.';
       }
-      document.querySelectorAll('#own-toggle .fopt').forEach(b => b.classList.toggle('active', (b.dataset.own === '1') === owned));
+      document.querySelectorAll('#own-toggle .fopt').forEach(b => {
+        const on = (b.dataset.own === '1') === owned;
+        b.classList.toggle('active', on);
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
       renderSyllabus();
     };
 
@@ -493,6 +568,10 @@ class Component extends DCLogic {
       owned = b.dataset.own === '1';
       try { localStorage.setItem(OWN_KEY, owned ? '1' : '0'); } catch (er) {}
       renderState();
+      const locked = document.querySelectorAll('#co-syllabus .syl-row.is-locked').length;
+      say('Viewing as ' + (owned ? 'purchased' : 'not purchased') + '. '
+        + (locked ? locked + (locked === 1 ? ' lesson is locked.' : ' lessons are locked.')
+                  : 'Every lesson is unlocked.'));
     });
 
     renderState();

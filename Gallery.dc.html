@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,6 +8,8 @@
 <body>
 <x-dc>
 <helmet>
+<title>Gallery — original paintings and prints | Crystal's Art School</title>
+<meta name="description" content="Original watercolour paintings and prints from Crystal Lau's studio. Filter by type or price, sort by date, and open a piece for its size and full-size photograph. Purchases are completed on Etsy.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600;6..96,700&family=Oswald:wght@300;400;500;600&family=Archivo:wght@400;500;600;700&family=Saira+Stencil+One&family=Arizonia&display=swap" rel="stylesheet">
@@ -25,20 +27,23 @@
 /* ---- the carved "deer" frame (deer-preview.html) in EVERY theme ----
    Light modes use the SAME carved frame as theme D, recoloured much lighter
    (pale warm oak) via CSS filters — swap for a real recoloured asset later.
-   --r = artwork ratio, --fs = frame scale; .land rotates the frame 90° for
-   landscape pieces. Everything stays inside the 1:1 wall tile. */
+   --r = artwork ratio; .land rotates the frame 90° for landscape pieces.
+   Everything stays inside the wall tile.
+   #14/#19: the --fs "frame scale" custom property is gone. It was set from
+   fsOf(), which matched /A5|A4|A3/ against p.size while every size in
+   js/gallery-data.js is metric ("30 × 40 cm") — measured --fs === "1" on all 17
+   frames, i.e. the multiplier never did anything. */
 .art-frame, .art-modal .am-frame { margin: 0; }
 
 /* carved-frame layout, all themes (was theme-D only) */
-.art-frame { background: transparent; border: 0; box-shadow: none; position: relative; aspect-ratio: 18426 / 21301; height: calc(92cqh * var(--fs, 1)); width: auto; max-width: 92cqw; max-height: 92cqh; }
-[data-theme="D"] .art-frame { height: calc(92cqh * var(--fs, 1)); }
+.art-frame { background: transparent; border: 0; box-shadow: none; position: relative; aspect-ratio: 18426 / 21301; height: 92cqh; width: auto; max-width: 92cqw; max-height: 92cqh; }
 .art-frame .art-img { position: absolute; top: 7.4%; bottom: 7.4%; left: 9.1%; right: 9.1%; height: auto; aspect-ratio: auto; box-shadow: inset 0 0 0 1px rgba(0,0,0,.35); }
 .art-ornate { display: block; position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; filter: drop-shadow(0 16px 26px rgba(0,0,0,.55)); }
 /* 9.2: a landscape piece is sized off the panel's WIDTH, so making the panel
    taller enlarged the portrait pieces and left these behind at 329px against a
    portrait's 370px. They take almost the full width now, which is the only
    dimension that governs them. */
-.art-frame.land { container-type: size; aspect-ratio: 21301 / 18426; width: calc(92cqw * var(--fs, 1)); height: auto; max-width: 92cqw; max-height: 92cqh; }
+.art-frame.land { container-type: size; aspect-ratio: 21301 / 18426; width: 92cqw; height: auto; max-width: 92cqw; max-height: 92cqh; }
 .art-frame.land .art-ornate { inset: auto; left: 50%; top: 50%; width: 100cqh; height: 100cqw; transform: translate(-50%, -50%) rotate(90deg); }
 .art-frame.land .art-img { top: 9.1%; bottom: 9.1%; left: 7.4%; right: 7.4%; }
 
@@ -55,82 +60,46 @@
 .cas-root:not([data-theme="D"]) .am-ornate {
   filter: brightness(2.15) sepia(.5) saturate(1.1) drop-shadow(0 12px 20px rgba(96,66,34,.38));
 }
+
+/* #23: the active-filter chips are real buttons now — they used to be <span>
+   with a click handler and tabIndex -1, so the only way to drop a filter was a
+   mouse. .active-tag in css/industrial-2.css still owns the look; this only
+   neutralises the UA button chrome it was never written against. */
+button.active-tag { margin: 0; border: 0; line-height: 1.25; font-weight: 500; -webkit-appearance: none; appearance: none; }
 </style>
 </helmet>
 <div class="cas-root" data-theme="D">
+<a class="skip-link" href="#content">Skip to content</a>
 <div class="glow-layer" aria-hidden="true"></div>
 
-<nav class="site-nav" aria-label="Main">
-  <div class="nav-top">
-    <div class="inner">
-      <a class="nav-brand" href="index.html">
-        <img src="img/lau-logo.png" alt="Lau. — Crystal's Art School">
-      </a>
-      <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="Lessons.dc.html">Courses</a></li>
-        <li><a href="Gallery.dc.html" class="active">Gallery</a></li>
-        <li><a href="Showcase.dc.html">Showcase</a></li>
-        <li><a href="Blog.dc.html">Blog</a></li>
-        <li><a href="About.dc.html">About</a></li>
-        <li><a href="FreeVideos.dc.html">Free video</a></li>
-        <li><a href="Blog.dc.html?tag=Tools">Tools</a></li>
-        <li><a href="FAQ.dc.html">FAQ</a></li>
-      </ul>
-      <div class="nav-auth">
-        <a class="cart-btn" href="Checkout.dc.html" aria-label="Shopping cart">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M2 3h3.2l2.5 12.2a1.5 1.5 0 0 0 1.5 1.2h9a1.5 1.5 0 0 0 1.5-1.2L21.5 7H6.5"></path></svg>
-          <span class="cart-badge">0</span>
-        </a>
-        <a class="btn ghost" href="Login.dc.html">Log in</a>
-        <a class="btn primary" href="Signup.dc.html">Sign up</a>
-        <button class="nav-burger" type="button" aria-label="Menu" aria-expanded="false">☰</button>
-      </div>
-    </div>
-  </div>
-  <div class="nav-cats">
-    <div class="inner">
-      <ul class="nav-cat-links">
-        <li><a href="Lessons.dc.html?cat=Watercolour">Watercolour</a></li>
-        <li><a href="Lessons.dc.html?cat=Oil">Oils</a></li>
-        <li><a href="Lessons.dc.html?cat=Drawing">Drawing</a></li>
-        <li><a href="Lessons.dc.html?cat=Ink">Ink</a></li>
-        <li><a href="Lessons.dc.html?cat=Beginners">Beginners</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="nav-sheet">
-    <a href="index.html">Home</a>
-    <a href="Lessons.dc.html">Courses</a>
-    <a href="Gallery.dc.html">Gallery</a>
-    <a href="Showcase.dc.html">Showcase</a>
-    <a href="Blog.dc.html">Blog</a>
-    <a href="About.dc.html">About</a>
-    <a href="FreeVideos.dc.html">Free video</a>
-    <a href="Blog.dc.html?tag=Tools">Tools</a>
-    <a href="FAQ.dc.html">FAQ</a>
-    <a href="Lessons.dc.html?cat=Watercolour">Watercolour</a>
-    <a href="Lessons.dc.html?cat=Oil">Oils</a>
-    <a href="Lessons.dc.html?cat=Drawing">Drawing</a>
-    <a href="Lessons.dc.html?cat=Ink">Ink</a>
-    <a href="Lessons.dc.html?cat=Beginners">Beginners</a>
-    <a href="Login.dc.html">Log in / Sign up</a>
-  </div>
-</nav>
+<!-- #19: the nav markup used to be hand-written here and in all 14 other pages,
+     and js/site-nav.js replaced every copy with buildNav() on load. Three copies
+     had already drifted apart unnoticed because none of them rendered. The empty
+     element below is the mount point the script looks for
+     (`document.querySelector('nav.site-nav')`); it fills it and stamps
+     data-cas-synced="1". -->
+<nav class="site-nav" aria-label="Main"></nav>
 
 <header class="page-hero">
   <div class="container">
     <div class="eyebrow reveal-one"><span class="star">✦</span> The gallery shop</div>
     <h1 class="marker-title font-a reveal-one" style="font-size:clamp(44px,6vw,80px);">Gallery Introduction</h1>
-    <div class="logo2"><img src="img/logo2.png" alt="Crystal Lau Art" loading="lazy" decoding="async"></div>
+    <!-- #17: in the page hero, above the fold at every width, so not lazy.
+         No srcset: brand marks ship exactly as the client supplied them. -->
+    <div class="logo2"><img src="img/logo2.png" alt="Crystal Lau Art" decoding="async"></div>
   </div>
 </header>
 
 <!-- The wood banner carries the page title and its eyebrow only; the
      introduction reads below it. (client feedback 2026-08-08) -->
-<div class="container page-lead-wrap"><p class="page-lead">Original artworks and limited-edition prints directly from the studio — each piece is signed by the artist and comes with a certificate of authenticity and elegant packaging. You can filter by medium, price, or date added, then head over to Etsy to make your purchase.</p></div>
+<!-- #11: the previous lead asserted that every piece "is signed by the artist and
+     comes with a certificate of authenticity and elegant packaging". None of
+     that is in js/gallery-data.js and none of it is covered by the placeholder
+     note over the grid, so it was an invented claim about a real transaction.
+     Fulfilment wording is a client deliverable (ticket 29). -->
+<div class="container page-lead-wrap"><p class="page-lead">Original artworks and prints directly from the studio. Filter by type or price, sort by date or price, then head over to Etsy to make your purchase.</p></div>
 
-<main class="container store-head" id="content">
+<main class="container store-head" id="content" tabIndex="-1">
   <div class="store-layout">
 
     <div class="filter-col">
@@ -145,13 +114,18 @@
     </aside>
     <aside class="filter-panel" id="filter-rail" aria-label="Filter artwork">
       <div class="fp-head"><span class="fp-title">Filter</span><button class="fp-clear" id="filter-clear" type="button">Clear all</button></div>
-      <div class="fgroup">
+      <!-- #14: a group whose values all appear on every piece cannot filter
+           anything, so each of these hides itself unless the data offers at
+           least two distinct values. "Subject" was also the wrong word: the
+           group is built from tags[1], which holds the product format
+           (Original painting / Art print / Pet drawing). -->
+      <div class="fgroup" id="medium-group">
         <div class="fg-title">Medium</div>
         <div class="fg-opts" id="medium-list"></div>
       </div>
-      <div class="fgroup">
-        <div class="fg-title">Subject</div>
-        <div class="fg-opts" id="subject-list"></div>
+      <div class="fgroup" id="format-group">
+        <div class="fg-title">Type</div>
+        <div class="fg-opts" id="format-list"></div>
       </div>
       <div class="fgroup">
         <div class="fg-title">Max price</div>
@@ -160,7 +134,15 @@
           <div class="slider-ui">
             <div class="slider-track"></div>
             <div class="slider-fill"></div>
-            <input class="price-slider" id="price-slider" type="range" min="40" max="400" step="10" value="400">
+            <!-- #25: no `value` attribute. The runtime renders this template
+                 through React, and a `value` on an <input> with no onChange is
+                 a CONTROLLED input: React restored the DOM value after every
+                 edit, so the range snapped back on every keypress and drag.
+                 Measured on the version in git HEAD: six ArrowLeft presses
+                 emitted input:340 / change:360 six times and left the slider at
+                 360 with the label unchanged. min/max/step/value are all set
+                 from the data at mount (niceRange), so nothing is lost. -->
+            <input class="price-slider" id="price-slider" type="range" min="40" max="400" step="10">
             <div class="slider-knob"></div>
           </div>
           <div class="price-scale"><span>£40</span><span>£400+</span></div>
@@ -171,7 +153,9 @@
 
     <section class="store-main">
       <div class="store-bar">
-        <span class="store-count" id="store-count">Loading…</span>
+        <!-- #22: the result count is the page's only feedback that a filter did
+             anything, and it was silent. It is a status region now. -->
+        <span class="store-count" id="store-count" role="status" aria-live="polite">Loading…</span>
         <div class="active-tags" id="active-tags"></div>
       </div>
       <!-- 18.1 / 18.2: the photographs are Crystal's own, but every title,
@@ -182,13 +166,17 @@
               supplies them. Buy on Etsy opens the shop front; §9.3 needs one listing URL per
               piece. -->
       <div class="store-grid" id="store-grid"></div>
-      <div class="store-empty" id="store-empty" style="display:none;">No pieces match those filters — try widening your search.</div>
+      <div class="store-empty" id="store-empty" role="status" style="display:none;">No pieces match those filters — try widening your search.</div>
     </section>
 
   </div>
 </main>
 
-<div class="art-modal" id="art-modal" aria-hidden="true" role="dialog" aria-modal="true">
+<!-- #07: role="dialog" aria-modal="true" with no accessible name and no focus
+     management — eight consecutive Tab presses after opening it all landed on
+     the cards behind. It is named from its own heading now, and the script
+     moves, traps and restores focus. -->
+<div class="art-modal" id="art-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="am-title">
   <div class="am-backdrop" data-close></div>
   <div class="am-panel">
     <button class="am-close" type="button" aria-label="Close" data-close>✕</button>
@@ -228,7 +216,8 @@ class Component extends DCLogic {
     const root = document.querySelector('.cas-root');
     if (!root) return;
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+    const esc = (s) => String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+    const say = (m) => { if (window.CasAnnounce) window.CasAnnounce(m); };
 
     /* theme — Light (A) / Dark (D) only. The toggle itself lives in js/site-nav.js.
        A stored or ?theme= value outside A|D is ignored and falls back to the default. */
@@ -242,48 +231,57 @@ class Component extends DCLogic {
     /* mobile nav sheet */
     /* burger handled by js/site-nav.js */
 
-    /* cart (array of items in localStorage) */
-    const CART = 'cas-cart';
-    const readCart = () => { try { return JSON.parse(localStorage.getItem(CART) || '[]'); } catch (e) { return []; } };
-    const writeCart = (c) => { try { localStorage.setItem(CART, JSON.stringify(c)); } catch (e) {} };
-    const renderCart = () => { const n = readCart().reduce((a, i) => a + i.qty, 0); document.querySelectorAll('.cart-badge').forEach(b => { b.textContent = n; b.style.display = n > 0 ? 'grid' : 'none'; }); };
-    renderCart();
-    document.addEventListener('click', (e) => {
-      const add = e.target.closest('[data-add-to-cart]');
-      if (!add) return;
+    /* #19: a private cart implementation used to live here — readCart/writeCart,
+       a badge renderer, and a delegated [data-add-to-cart] handler. Nothing on
+       this page carries data-add-to-cart (every artwork links out to Etsy), and
+       js/site-nav.js + js/site-extras.js already own the badge, which
+       js/site-nav.js explicitly asks pages not to bind to. All of it was dead. */
+
+    /* skip link — the fragment alone only moves the viewport in some engines,
+       and the ticket asks for focus. #content carries tabindex="-1". */
+    const skip = document.querySelector('.cas-root > .skip-link');
+    if (skip) skip.addEventListener('click', (e) => {
+      const t = document.getElementById('content');
+      if (!t) return;
       e.preventDefault();
-      const c = readCart();
-      const title = add.dataset.cartTitle || 'Item';
-      const ex = c.find(x => x.title === title);
-      if (ex) ex.qty++; else c.push({ title, price: +(add.dataset.cartPrice || 0), img: add.dataset.cartImg || '', kind: add.dataset.cartKind || 'Artwork', qty: 1 });
-      writeCart(c); renderCart();
-      if (add.tagName === 'BUTTON') { const o = add.textContent; add.textContent = 'Added ✓'; add.disabled = true; setTimeout(() => { add.textContent = o; add.disabled = false; }, 1100); }
-      document.querySelectorAll('.cart-btn').forEach(btn => { btn.style.transition = 'transform .18s'; btn.style.transform = 'translateY(-3px) rotate(-8deg)'; setTimeout(() => { btn.style.transform = ''; }, 220); });
+      t.focus({ preventScroll: true });
+      t.scrollIntoView({ block: 'start', behavior: reduce ? 'auto' : 'smooth' });
+      try { history.replaceState(null, '', '#content'); } catch (er) {}
     });
 
     /* ---- STORE ---- */
     const data = this.pieces();
     /* filter options come from the artworks' own tags (shared js/filter-tags.js):
-       tags[0] = medium, tags[1] = subject */
+       tags[0] = medium, tags[1] = the product FORMAT (Original painting / Art
+       print / Pet drawing). #14: the second group was labelled "Subject", which
+       those values are not, and the medium group offered exactly one value
+       across all 17 records — a chip that cannot change the result set. Both
+       groups now hide themselves below two distinct values and come back on
+       their own the moment the data carries more. */
     const MEDIUMS = window.CasFilters.collect(data, p => p.tags[0]);
-    const SUBJECTS = window.CasFilters.collect(data, p => p.tags[1]);
+    const FORMATS = window.CasFilters.collect(data, p => p.tags[1]);
+    const mediumLive = MEDIUMS.length > 1;
+    const formatLive = FORMATS.length > 1;
     const state = { media: [], subjects: [], maxPrice: 400, sort: 'new' };
 
-    // read ?tag= from URL (deep-link a medium or subject)
+    // read ?tag= from URL (deep-link a medium or a format) — only into a group
+    // that is actually on screen, so a filter can never be active invisibly
     try {
       const qt = new URLSearchParams(location.search).get('tag');
       if (qt) {
-        const m = MEDIUMS.find(t => t.toLowerCase() === qt.toLowerCase());
-        const s = SUBJECTS.find(t => t.toLowerCase() === qt.toLowerCase());
+        const m = mediumLive ? MEDIUMS.find(t => t.toLowerCase() === qt.toLowerCase()) : null;
+        const s = formatLive ? FORMATS.find(t => t.toLowerCase() === qt.toLowerCase()) : null;
         if (m) state.media.push(m); else if (s) state.subjects.push(s);
       }
     } catch (e) {}
 
     const mediumList = document.getElementById('medium-list');
-    const subjectList = document.getElementById('subject-list');
-    const chipsHTML = (arr, sel) => arr.map(t => '<button class="fopt' + (sel.includes(t) ? ' active' : '') + '" type="button" data-val="' + esc(t) + '">' + esc(t) + '</button>').join('');
+    const formatList = document.getElementById('format-list');
+    const chipsHTML = (arr, sel) => arr.map(t => '<button class="fopt' + (sel.includes(t) ? ' active' : '') + '" type="button" aria-pressed="' + (sel.includes(t) ? 'true' : 'false') + '" data-val="' + esc(t) + '">' + esc(t) + '</button>').join('');
     mediumList.innerHTML = chipsHTML(MEDIUMS, state.media);
-    subjectList.innerHTML = chipsHTML(SUBJECTS, state.subjects);
+    formatList.innerHTML = chipsHTML(FORMATS, state.subjects);
+    document.getElementById('medium-group').style.display = mediumLive ? '' : 'none';
+    document.getElementById('format-group').style.display = formatLive ? '' : 'none';
 
     const grid = document.getElementById('store-grid');
     const empty = document.getElementById('store-empty');
@@ -307,15 +305,12 @@ class Component extends DCLogic {
     if (galScale) galScale.innerHTML = '<span>' + (pr.min === 0 ? 'Free' : '£' + pr.min) + '</span><span>£' + pr.max + '+</span>';
     priceVal.textContent = 'Up to £' + pr.max + '+';
 
-    const cartSvg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1.6"></circle><circle cx="19" cy="21" r="1.6"></circle><path d="M2 3h3l2.6 12.6a1.8 1.8 0 0 0 1.8 1.4h8.9a1.8 1.8 0 0 0 1.8-1.4L22 7H6"></path></svg>';
-
-    /* 9.3: each piece needs its own Etsy listing URL from the client. Until that
-       field exists a search query is not a purchase link, so the button is shown
-       disabled rather than sending a buyer to a results page. */
-    /* 9.3 asks for one listing URL per piece and none has arrived yet. Rather
-       than an inert grey label, the button behaves exactly as it will and
-       opens the shop front; the note above the grid says the per-artwork links
-       are still to come. (client feedback 2026-08-08) */
+    /* 9.3 asks for one Etsy listing URL per piece and none has arrived yet
+       (ticket 29), so every Buy button opens the shop front. #14/#19: the
+       "Etsy link to come" branch behind this is deleted — `etsyUrl` cannot
+       return a falsy value, so the branch was unreachable and `.is-pending`
+       never rendered (measured: 0 nodes). It comes back with the data by
+       giving a record an `etsy` key, not by keeping dead markup. */
     const ETSY_SHOP = 'https://www.etsy.com/';
     const etsyUrl = (p) => p.etsy || ETSY_SHOP;
     /* --r is a CSS aspect-ratio, i.e. width / height, and it also decides the
@@ -323,23 +318,45 @@ class Component extends DCLogic {
        real file by tools/import-assets.py; the old lookup table was keyed by
        filename and silently fell back to 0.8, which squashed the artwork. */
     const rOf = (p) => (typeof p.ratio === 'number' && p.ratio > 0) ? p.ratio : 0.8;
-    const fsOf = (p) => /A5/.test(p.size) ? 0.62 : /A4/.test(p.size) ? 0.74 : /A3/.test(p.size) ? 0.86 : 1;
+    /* the format is real data (tags[1]); "Original" / "Limited print" derived
+       from p.orig was a second, coarser statement of the same thing printed
+       directly under the chip that already said it — and it contradicted it
+       ("Limited print" under a "Pet drawing" chip). One value, one place. */
+    const fmtOf = (p) => p.tags[1] || (p.orig ? 'Original' : 'Print');
+    const chipsOf = (p) => p.tags.filter(t => t !== fmtOf(p));
+    /* #11: the records say "Watercolor on paper" (US) and every chip, filter
+       and heading around them says "Watercolour" (UK). Normalised on the way
+       out until tools/content-meta.json is corrected at source. */
+    const ukText = (s) => String(s == null ? '' : s).replace(/Watercolor/g, 'Watercolour');
+    /* #17: srcset/sizes/w/h come from js/gallery-data.js, where
+       tools/import-assets.py computed them against this exact slot (.art-img
+       paints 241-306 at every viewport, so the ladder tops out at 960 and the
+       1600px master is only ever the last candidate). The page shipped none of
+       them: 39 images, 7.11 MB, g04 fetched at 5.5x the pixels it paints.
+       The first row is above the fold at every width — three cards at 1692,
+       one at 390 — so those three are eager and the first carries the
+       priority. `sizes` is a fixed 306px, which is correct at every width the
+       grid has, so no per-viewport override is needed here. */
+    const resp = (p) => (p.srcset ? ' srcset="' + esc(p.srcset) + '"' : '')
+                      + (p.sizes ? ' sizes="' + esc(p.sizes) + '"' : '')
+                      + (p.w ? ' width="' + p.w + '" height="' + (p.h || p.w) + '"' : '');
+    const loadAttr = (idx) => idx === 0 ? ' fetchpriority="high" decoding="async"'
+                            : idx < 3 ? ' decoding="async"'
+                            : ' loading="lazy" decoding="async"';
     const cardHTML = (p, idx) =>
       '<article class="art-card" data-idx="' + idx + '">' +
-        '<div class="art-frame-wrap">' + (p.was ? '<div class="sale-ribbon"><span>Sale</span></div>' : '') + '<figure class="art-frame' + (rOf(p) > 1.15 ? ' land' : '') + '" style="--fs:' + fsOf(p) + ';"><div class="art-img" style="--r:' + rOf(p) + '"><img src="img/' + p.img + '" alt="' + esc(p.title) + '" loading="lazy" decoding="async"></div><img class="art-ornate" src="img/deer-black.svg" alt="" aria-hidden="true" loading="lazy"></figure></div>' +
+        '<div class="art-frame-wrap">' + (p.was ? '<div class="sale-ribbon"><span>Sale</span></div>' : '') + '<figure class="art-frame' + (rOf(p) > 1.15 ? ' land' : '') + '"><div class="art-img" style="--r:' + rOf(p) + '"><img src="img/' + p.img + '" alt="' + esc(p.title) + '"' + resp(p) + loadAttr(idx) + '></div><img class="art-ornate" src="img/deer-black.svg" alt="" aria-hidden="true"' + (idx < 3 ? '' : ' loading="lazy"') + '></figure></div>' +
         '<div class="art-meta">' +
           '<h3 class="art-title">' + esc(p.title) + '</h3>' +
-          '<div class="art-sub">' + (p.orig ? 'Original' : 'Limited print') + '</div>' +
+          '<div class="art-sub">' + esc(fmtOf(p)) + '</div>' +
           '<div class="art-size">' + esc(p.size) + '</div>' +
-          '<div class="art-tagrow">' + p.tags.map(t => '<span class="art-tagchip">' + esc(t) + '</span>').join('') + '</div>' +
+          '<div class="art-tagrow">' + chipsOf(p).map(t => '<span class="art-tagchip">' + esc(t) + '</span>').join('') + '</div>' +
           '<div class="art-row">'
             + (p.was ? '<s class="art-was">£' + p.was + '</s>' : '')
             + '<span class="art-price">£' + p.price + '</span>' +
           '<div class="art-actions">' +
-            (etsyUrl(p)
-              ? '<a class="art-btn etsy" href="' + etsyUrl(p) + '" target="_blank" rel="noopener">Buy on Etsy</a>'
-              : '<span class="art-btn etsy is-pending" aria-disabled="true">Etsy link to come</span>') +
-            '<button class="art-btn detail" type="button" data-detail="' + idx + '">View details</button>' +
+            '<a class="art-btn etsy" href="' + esc(etsyUrl(p)) + '" target="_blank" rel="noopener" aria-label="Buy ' + esc(p.title) + ' on Etsy (opens in a new tab)">Buy on Etsy</a>' +
+            '<button class="art-btn detail" type="button" data-detail="' + idx + '" aria-label="View details of ' + esc(p.title) + '">View details</button>' +
           '</div></div>' +
         '</div>' +
       '</article>';
@@ -349,6 +366,14 @@ class Component extends DCLogic {
       priceSlider.closest('.slider-ui').style.setProperty('--pct', pct + '%');
     };
 
+    /* #25: `render()` used to rewrite the whole grid on every call, and the
+       price slider called it on every `input` event — 151 child nodes removed
+       and 135 re-created across 20 synthetic pointer samples, destroying and
+       re-fetching all 17 artwork images each time. Two guards now:
+       the slider filters on `change` only (which is what its own comment always
+       said), and `render()` compares the result set it is about to paint with
+       the one on screen and skips the rewrite when they are identical. */
+    let lastKey = null, firstPaint = true;
     const render = () => {
       let list = data.filter(p =>
         p.price <= state.maxPrice &&
@@ -360,54 +385,69 @@ class Component extends DCLogic {
       else if (state.sort === 'price-asc') list.sort((a, b) => a.price - b.price);
       else if (state.sort === 'price-desc') list.sort((a, b) => b.price - a.price);
 
-      grid.innerHTML = list.map(p => cardHTML(p, data.indexOf(p))).join('');
+      const key = state.sort + '|' + list.map(p => data.indexOf(p)).join(',');
+      if (key !== lastKey) {
+        lastKey = key;
+        grid.innerHTML = list.map(p => cardHTML(p, data.indexOf(p))).join('');
+        grid.querySelectorAll('[data-detail]').forEach(b => b.addEventListener('click', () => openModal(data[+b.dataset.detail], b)));
+        /* the entrance runs once, on the first paint — re-playing it on every
+           filter change made the grid flash on each chip press */
+        if (!reduce && firstPaint) {
+          grid.querySelectorAll('.art-card').forEach((c, i) => { c.style.animation = 'rise-in .55s var(--ease-out) ' + (i * 0.04) + 's'; });
+        }
+        firstPaint = false;
+      }
       empty.style.display = list.length ? 'none' : 'block';
       countEl.textContent = list.length + (list.length === 1 ? ' piece' : ' pieces');
-      grid.querySelectorAll('[data-detail]').forEach(b => b.addEventListener('click', () => openModal(data[+b.dataset.detail])));
 
       const active = state.media.concat(state.subjects);
-      activeWrap.innerHTML = active.map(t => '<span class="active-tag" data-tag="' + esc(t) + '">' + esc(t) + '</span>').join('');
+      /* #23: these were <span> with a click handler and tabIndex -1 — the only
+         way to drop a filter was a mouse. Real buttons, named for what they do. */
+      activeWrap.innerHTML = active.map(t => '<button class="active-tag" type="button" data-tag="' + esc(t) + '" aria-label="Remove filter: ' + esc(t) + '">' + esc(t) + '</button>').join('');
       activeWrap.querySelectorAll('.active-tag').forEach(el => el.addEventListener('click', () => {
         const t = el.dataset.tag;
         state.media = state.media.filter(x => x !== t);
         state.subjects = state.subjects.filter(x => x !== t);
-        [mediumList, subjectList].forEach(l => l.querySelectorAll('.fopt').forEach(c => { if (c.dataset.val === t) c.classList.remove('active'); }));
+        let back = null;
+        [mediumList, formatList].forEach(l => l.querySelectorAll('.fopt').forEach(c => {
+          if (c.dataset.val === t) { c.classList.remove('active'); c.setAttribute('aria-pressed', 'false'); back = c; }
+        }));
         render();
+        /* the chip that was clicked no longer exists, so focus would fall to
+           <body>; hand it to the rail chip this removal just un-pressed */
+        (back || document.getElementById('filter-clear')).focus();
       }));
-
-      if (!reduce) {
-        grid.querySelectorAll('.art-card').forEach((c, i) => { c.style.animation = 'rise-in .55s var(--ease-out) ' + (i * 0.04) + 's'; });
-      }
     };
 
-    /* medium + subject chip toggles (multi-select) */
+    /* medium + format chip toggles (multi-select) */
     const wireChips = (listEl, bucket) => listEl.querySelectorAll('.fopt').forEach(chip => chip.addEventListener('click', () => {
       const v = chip.dataset.val;
       const i = state[bucket].indexOf(v);
       if (i >= 0) { state[bucket].splice(i, 1); chip.classList.remove('active'); }
       else { state[bucket].push(v); chip.classList.add('active'); }
+      chip.setAttribute('aria-pressed', chip.classList.contains('active') ? 'true' : 'false');
       render();
     }));
     wireChips(mediumList, 'media');
-    wireChips(subjectList, 'subjects');
+    wireChips(formatList, 'subjects');
 
     /* price slider — live label + fill while dragging; filter only on release */
     const onSlide = () => {
       const v = +priceSlider.value;
       priceVal.textContent = (v >= sliderMax) ? ('Up to £' + sliderMax + '+') : ('Up to £' + v);
       setPct();
-      state.maxPrice = v;
-      render();
     };
+    const onRelease = () => { onSlide(); state.maxPrice = +priceSlider.value; render(); };
     priceSlider.addEventListener('input', onSlide);
-    priceSlider.addEventListener('change', onSlide);
+    priceSlider.addEventListener('change', onRelease);
     setPct();
 
     /* sort chips (single-select) */
     const sortList = document.getElementById('sort-list');
+    sortList.querySelectorAll('.fopt').forEach(chip => chip.setAttribute('aria-pressed', chip.classList.contains('active') ? 'true' : 'false'));
     sortList.querySelectorAll('.fopt').forEach(chip => chip.addEventListener('click', () => {
-      sortList.querySelectorAll('.fopt').forEach(c => c.classList.remove('active'));
-      chip.classList.add('active');
+      sortList.querySelectorAll('.fopt').forEach(c => { c.classList.remove('active'); c.setAttribute('aria-pressed', 'false'); });
+      chip.classList.add('active'); chip.setAttribute('aria-pressed', 'true');
       state.sort = chip.dataset.val;
       render();
     }));
@@ -415,39 +455,70 @@ class Component extends DCLogic {
     /* clear all */
     document.getElementById('filter-clear').addEventListener('click', () => {
       state.media = []; state.subjects = []; state.maxPrice = sliderMax; state.sort = 'new';
-      [mediumList, subjectList].forEach(l => l.querySelectorAll('.fopt').forEach(c => c.classList.remove('active')));
-      sortList.querySelectorAll('.fopt').forEach((c, i) => c.classList.toggle('active', i === 0));
+      [mediumList, formatList].forEach(l => l.querySelectorAll('.fopt').forEach(c => { c.classList.remove('active'); c.setAttribute('aria-pressed', 'false'); }));
+      sortList.querySelectorAll('.fopt').forEach((c, i) => { c.classList.toggle('active', i === 0); c.setAttribute('aria-pressed', i === 0 ? 'true' : 'false'); });
       priceSlider.value = sliderMax; priceVal.textContent = 'Up to £' + sliderMax + '+'; setPct();
       render();
+      say('Filters cleared.');
     });
 
     /* ---- quick-view modal ---- */
     const modal = document.getElementById('art-modal');
     const mImg = document.getElementById('am-img');
-    const openModal = (p) => {
+    const FOCUS_SEL = 'a[href],button:not([disabled]),[tabindex]:not([tabindex="-1"])';
+    const modalFocusables = () => Array.prototype.filter.call(
+      modal.querySelectorAll(FOCUS_SEL), el => el.getClientRects().length > 0);
+    let modalOpener = null;
+    const openModal = (p, opener) => {
+      /* #17: the quick-view frame is SMALLER than the card — 175 / 186 /
+         237 / 237 measured — so it reuses the ladder with its own `sizes`
+         rather than pulling the 1600px master the way it used to. Both
+         attributes are set before `src`, or the browser picks a candidate
+         from a srcset it has not been given yet. */
+      if (p.srcset) { mImg.srcset = p.srcset; mImg.sizes = '237px'; }
+      else { mImg.removeAttribute('srcset'); mImg.removeAttribute('sizes'); }
       mImg.src = 'img/' + p.img; mImg.alt = p.title; mImg.style.display = '';
       document.querySelector('.am-frame .am-img').style.aspectRatio = rOf(p);
       const amFrame = document.querySelector('.am-frame');
       amFrame.classList.toggle('land', rOf(p) > 1.15);
-      document.getElementById('am-sub').textContent = p.orig ? 'Original artwork' : 'Limited-edition print';
+      document.getElementById('am-sub').textContent = fmtOf(p);
       document.getElementById('am-title').textContent = p.title;
-      document.getElementById('am-tags').innerHTML = p.tags.map(t => '<span class="art-tagchip">' + esc(t) + '</span>').join('');
-      document.getElementById('am-desc').textContent = p.desc;
-      document.getElementById('am-spec').innerHTML =
-        '<dt>Type</dt><dd>' + (p.orig ? 'Original, one of a kind' : 'Signed limited print') + '</dd>' +
-        '<dt>Size</dt><dd>' + esc(p.size) + '</dd>' +
-        '<dt>Ships</dt><dd>Framed, 5–7 days</dd>';
+      document.getElementById('am-tags').innerHTML = chipsOf(p).map(t => '<span class="art-tagchip">' + esc(t) + '</span>').join('');
+      document.getElementById('am-desc').textContent = ukText(p.desc);
+      /* #11: this used to add "Ships — Framed, 5–7 days" and assert the piece
+         was a "Signed limited print". Neither is in the data and neither is
+         covered by the placeholder note; delivery and authenticity wording is a
+         client deliverable (ticket 29). Only the size is a fact here. */
+      document.getElementById('am-spec').innerHTML = '<dt>Size</dt><dd>' + esc(p.size) + '</dd>';
       document.getElementById('am-price').textContent = '£' + p.price;
       const amBuy = document.getElementById('am-buy');
-      const href = etsyUrl(p);
-      amBuy.href = href || '#';
-      amBuy.classList.toggle('is-pending', !href);
-      amBuy.textContent = href ? 'Buy on Etsy' : 'Etsy link to come';
+      amBuy.href = etsyUrl(p);
+      amBuy.setAttribute('aria-label', 'Buy ' + p.title + ' on Etsy (opens in a new tab)');
       modal.classList.add('open');
       modal.setAttribute('aria-hidden', 'false');
+      modalOpener = opener || document.activeElement;
+      const first = modal.querySelector('.am-close');
+      if (first) first.focus();
+      say(p.title + ' — details.');
     };
-    const closeModal = () => { modal.classList.remove('open'); modal.setAttribute('aria-hidden', 'true'); };
+    const closeModal = () => {
+      if (!modal.classList.contains('open')) return;
+      modal.classList.remove('open');
+      modal.setAttribute('aria-hidden', 'true');
+      if (modalOpener && modalOpener.focus) { try { modalOpener.focus(); } catch (e) {} }
+      modalOpener = null;
+    };
     modal.querySelectorAll('[data-close]').forEach(el => el.addEventListener('click', closeModal));
+    /* Tab trap — the dialog claimed aria-modal="true" while every Tab press
+       walked the cards behind it. */
+    modal.addEventListener('keydown', (e) => {
+      if (e.key !== 'Tab' || !modal.classList.contains('open')) return;
+      const f = modalFocusables();
+      if (!f.length) { e.preventDefault(); return; }
+      const first = f[0], last = f[f.length - 1], a = document.activeElement;
+      if (e.shiftKey && (a === first || !modal.contains(a))) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && (a === last || !modal.contains(a))) { e.preventDefault(); first.focus(); }
+    });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
 
     render();

@@ -11,20 +11,42 @@
     if (navigator.webdriver === true || /Headless/i.test(navigator.userAgent) || /[?&]nomotion=1/.test(location.search)) reduce = true;
   } catch (e) {}
 
-  /* the x-dc template mounts asynchronously — poll briefly for real content */
+  /* Reduced motion (and the automation gates above) bail out here, before any
+     listener is registered and before a single frame of work is scheduled. */
+  if (reduce) return;
+
+  /* Wait for the MOUNTED page, not merely for a page.
+     Two separate races used to make this fire against the wrong DOM:
+
+     1. This file is pulled in twice — once by the parser, from the literal
+        <helmet> inside <x-dc>, and once by the runtime's helmet manager after
+        it mounts. Whichever copy wins, `DOMContentLoaded` may already have
+        fired, in which case the old listener never ran at all. Hence the
+        readyState guard, the same one js/site-extras.js uses.
+     2. Worse, and invisible: `<x-dc>` is a full, parsed copy of the page that
+        the runtime later REPLACES (`dc.replaceWith(hostEl)` in support.js).
+        `.cas-root` and `#content` are both present in that doomed copy, so the
+        old check passed against it and every tween and ScrollTrigger was built
+        on nodes that were detached moments later. Measured over 8 loads of
+        About: 5 of them animated 74 triggers whose targets were all detached
+        (`isConnected === false`) and the headline split was thrown away.
+
+     `x-dc` is gone exactly when the runtime has mounted — or when support.js's
+     CDN fallback has promoted the authored markup — so that is the gate. */
   var tries = 0;
   function ready(fn) {
+    var pending = document.querySelector('x-dc');   /* runtime has not mounted yet */
     var root = document.querySelector('.cas-root');
     var main = document.getElementById('content') || document.querySelector('main');
-    if (root && main && main.children.length) { fn(); return; }
-    if (++tries > 100) return;
-    setTimeout(function () { ready(fn); }, 60);
+    if (!pending && root && main && main.children.length) { fn(); return; }
+    if (++tries > 240) return;                      /* ~12s, then give up quietly */
+    setTimeout(function () { ready(fn); }, 50);
   }
 
-  document.addEventListener('DOMContentLoaded', function () {
+  function start() {
     ready(function () {
       var g = window.gsap;
-      if (!g || reduce) return;
+      if (!g) return;
       var ST = window.ScrollTrigger;
       if (ST) g.registerPlugin(ST);
 
@@ -194,7 +216,7 @@
       /* grouped staggers — alternating drift directions so rows feel dealt, not faded */
       var GROUPS = [
         '.lesson-grid .lesson-cell', '.tier-grid .tier-card',
-        '.blog-grid .blog-card', '.store-grid .art-card', '.sw-grid .sw-tile',
+        '.blog-grid .blog-card', '.store-grid .art-card',
         '.acc-list .acc-item', '.contact-intro > *', '.bio-copy > *',
         '.syllabus .syl-item', '.mycourse-grid .mc-course', '.res-list .res-item',
         '.tc-grid .card', '.learn-list li', '.bc-row .bc-card', '.contact-channels li'
@@ -278,5 +300,8 @@
         }, 350);
       }
     });
-  });
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start);
+  else start();
 })();

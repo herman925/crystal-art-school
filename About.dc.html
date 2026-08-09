@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,6 +8,10 @@
 <body>
 <x-dc>
 <helmet>
+<!-- #10: the runtime copies <title> and <meta> out of the helmet into <head>.
+     Every page needs its own, and they must describe THIS page. -->
+<title>About Crystal Lau — Crystal's Art School</title>
+<meta name="description" content="Crystal Lau on plein air painting, teaching, and the studio behind Crystal's Art School — her artistic journey, honours, teaching philosophy and how to write to her.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600;6..96,700&family=Oswald:wght@300;400;500;600&family=Archivo:wght@400;500;600;700&family=Saira+Stencil+One&family=Arizonia&display=swap" rel="stylesheet">
@@ -15,71 +19,24 @@
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="js/static-images.js"></script>
 <script src="js/site-extras.js"></script>
 <script src="js/site-nav.js"></script>
 <script src="js/site-footer.js"></script>
 <script src="js/motion.js"></script>
 </helmet>
 <div class="cas-root" data-theme="D">
+<!-- #10: first tab stop on the page. It moves FOCUS, not just the viewport —
+     <main id="content"> carries tabindex="-1" so focus() actually lands. -->
+<a class="skip-link" href="#content">Skip to content</a>
 <div class="glow-layer" aria-hidden="true"></div>
 
-<nav class="site-nav" aria-label="Main">
-  <div class="nav-top">
-    <div class="inner">
-      <a class="nav-brand" href="index.html">
-        <img src="img/lau-logo.png" alt="Lau. — Crystal's Art School">
-      </a>
-      <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="Lessons.dc.html">Courses</a></li>
-        <li><a href="Gallery.dc.html">Gallery</a></li>
-        <li><a href="Showcase.dc.html">Showcase</a></li>
-        <li><a href="Blog.dc.html">Blog</a></li>
-        <li><a href="About.dc.html" class="active">About</a></li>
-        <li><a href="FreeVideos.dc.html">Free video</a></li>
-        <li><a href="Blog.dc.html?tag=Tools">Tools</a></li>
-        <li><a href="FAQ.dc.html">FAQ</a></li>
-      </ul>
-      <div class="nav-auth">
-        <a class="cart-btn" href="Checkout.dc.html" aria-label="Shopping cart">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M2 3h3.2l2.5 12.2a1.5 1.5 0 0 0 1.5 1.2h9a1.5 1.5 0 0 0 1.5-1.2L21.5 7H6.5"></path></svg>
-          <span class="cart-badge">0</span>
-        </a>
-        <a class="btn ghost" href="Login.dc.html">Log in</a>
-        <a class="btn primary" href="Signup.dc.html">Sign up</a>
-        <button class="nav-burger" type="button" aria-label="Menu" aria-expanded="false">☰</button>
-      </div>
-    </div>
-  </div>
-  <div class="nav-cats">
-    <div class="inner">
-      <ul class="nav-cat-links">
-        <li><a href="Lessons.dc.html?cat=Watercolour">Watercolour</a></li>
-        <li><a href="Lessons.dc.html?cat=Oil">Oils</a></li>
-        <li><a href="Lessons.dc.html?cat=Drawing">Drawing</a></li>
-        <li><a href="Lessons.dc.html?cat=Ink">Ink</a></li>
-        <li><a href="Lessons.dc.html?cat=Beginners">Beginners</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="nav-sheet">
-    <a href="index.html">Home</a>
-    <a href="Lessons.dc.html">Courses</a>
-    <a href="Gallery.dc.html">Gallery</a>
-    <a href="Showcase.dc.html">Showcase</a>
-    <a href="Blog.dc.html">Blog</a>
-    <a href="About.dc.html">About</a>
-    <a href="FreeVideos.dc.html">Free video</a>
-    <a href="Blog.dc.html?tag=Tools">Tools</a>
-    <a href="FAQ.dc.html">FAQ</a>
-    <a href="Lessons.dc.html?cat=Watercolour">Watercolour</a>
-    <a href="Lessons.dc.html?cat=Oil">Oils</a>
-    <a href="Lessons.dc.html?cat=Drawing">Drawing</a>
-    <a href="Lessons.dc.html?cat=Ink">Ink</a>
-    <a href="Lessons.dc.html?cat=Beginners">Beginners</a>
-    <a href="Login.dc.html">Log in / Sign up</a>
-  </div>
-</nav>
+<!-- #19: the nav markup used to be written out here as well, 2.6KB of it, and
+     js/site-nav.js replaced every byte of it at runtime with buildNav(). Three
+     pages' copies had already drifted apart without anyone noticing, because
+     none of them was ever rendered. The element stays (the script fills it);
+     the markup is gone. -->
+<nav class="site-nav" aria-label="Main"></nav>
 
 <!-- The "✦ About" eyebrow used to sit above the greeting inside the hero. It now
      sits in the wooden banner every other page carries, which is where an
@@ -88,11 +45,13 @@
   <div class="container">
     <div class="eyebrow reveal-one"><span class="star">✦</span> Meet the artist</div>
     <h1 class="marker-title font-a reveal-one" style="font-size:clamp(44px,6vw,80px);">About</h1>
-    <div class="logo2"><img src="img/logo2.png" alt="Crystal Lau Art" loading="lazy" decoding="async"></div>
+    <!-- #17: in the page hero, above the fold at every width, so not lazy.
+         No srcset: brand marks ship exactly as the client supplied them. -->
+    <div class="logo2"><img src="img/logo2.png" alt="Crystal Lau Art" decoding="async"></div>
   </div>
 </header>
 
-<main class="container" id="content">
+<main class="container" id="content" tabindex="-1">
 
 <!-- ===========================================================================
      DEV NOTE — About page copy
@@ -113,7 +72,10 @@
 
   <header class="about-hero">
     <div class="portrait-wrap reveal-one">
-      <div class="arch-duo in-view"><img src="img/ProfilePic.jpg" alt="Crystal Lau in her studio"></div>
+      <div class="arch-duo in-view"><img src="img/ProfilePic.jpg" alt="Crystal Lau in her studio"
+        srcset="img/ProfilePic-96.jpg 96w, img/ProfilePic-160.jpg 160w, img/ProfilePic-384.jpg 384w, img/ProfilePic-640.jpg 640w, img/ProfilePic.jpg 1514w"
+        sizes="(max-width: 600px) 358px, (max-width: 1000px) 380px, 584px"
+        width="1514" height="1519" fetchpriority="high" decoding="async"></div>
       <div class="portrait-note">that's me ✦</div>
     </div>
     <div>
@@ -162,8 +124,8 @@
        The bio-facts list that used to close this first block is deleted
        outright — the board marks it "delete" and all four items with it. -->
   <section class="section" id="biography">
-    <div class="bio-layout reveal">
-      <div class="ph-carousel" id="car-livedrawing" aria-label="Live drawing"></div>
+    <div class="bio-layout">
+      <div class="ph-carousel" id="car-livedrawing" role="group" aria-label="Live drawing"></div>
       <!-- The three biography blocks take the same engraved panel as the quote
            above, so the whole page reads as one device. The heading straddles
            the top rule exactly as About ref.jpg draws it; the paragraphs stay
@@ -199,7 +161,7 @@
   </section>
 
   <section class="section" id="community">
-    <div class="bio-layout bio-layout--flip reveal">
+    <div class="bio-layout bio-layout--flip">
       <div class="bio-copy engraved">
         <div class="eng-head">
           <span class="eng-rule"></span>
@@ -210,13 +172,13 @@
         <p>While painting is a personal form of expression, I believe art becomes truly powerful when shared. Over the years, my work has been featured in mainstream media, published in art collections, and acquired by institutional permanent collections, such as the Sun Museum. In 2018, I launched my YouTube channel, <strong>Crystal Lau Art</strong>, to share the joys of plein air sketching and art history with a broader audience. It showed me how art can bridge distances and connect people anywhere in the world.</p>
         </div>
       </div>
-      <div class="ph-carousel" id="car-exhibition" aria-label="Exhibitions"></div>
+      <div class="ph-carousel" id="car-exhibition" role="group" aria-label="Exhibitions"></div>
     </div>
   </section>
 
   <section class="section" id="instructor">
-    <div class="bio-layout reveal">
-      <div class="ph-carousel is-portrait" id="car-artful" aria-label="Artful Living"></div>
+    <div class="bio-layout">
+      <div class="ph-carousel is-portrait" id="car-artful" role="group" aria-label="Artful Living"></div>
       <div class="bio-copy engraved">
         <div class="eng-head">
           <span class="eng-rule"></span>
@@ -239,12 +201,12 @@
       <div class="eyebrow" style="justify-content:center;"><span class="star">✦</span> My teaching philosophy</div>
       <h2 class="section-title">Demystifying the process</h2>
     </div>
-    <div class="reveal" style="max-width:760px;margin:0 auto 26px;">
+    <div style="max-width:760px;margin:0 auto 26px;">
       <p style="color:var(--muted);font-size:15.5px;line-height:1.72;margin:0 0 14px;">Many people want to paint, but stop themselves before they even begin. They worry about "lacking natural talent," struggle with controlling unruly watercolours, or feel overwhelmed by the layers of oil painting.</p>
       <p style="color:var(--muted);font-size:15.5px;line-height:1.72;margin:0 0 14px;">Here is the truth: <strong style="color:var(--ink);">painting is not an exclusive privilege for a gifted few — it is a learnable, structured skill.</strong></p>
       <p style="color:var(--muted);font-size:15.5px;line-height:1.72;margin:0;">In my courses, you won't find overly academic jargon or intimidating rules. Instead, I focus on warm, practical, step-by-step guidance:</p>
     </div>
-    <div class="about-tri reveal">
+    <div class="about-tri">
       <div class="card">
         <h3 class="marker-title" style="font-size:19px;margin:0 0 8px;">Developing an artist's eye</h3>
         <p style="margin:0;font-size:14.5px;color:var(--muted);line-height:1.7;">Learn to see the world differently by understanding light, proportion, structure, and atmospheric depth.</p>
@@ -266,7 +228,7 @@
       <h2 class="section-title">A glimpse into the journey</h2>
       <p class="lead" style="font-size:16px;max-width:620px;margin:12px auto 0;">To give you complete confidence in learning with me, here is a glimpse into my journey as an artist and educator.</p>
     </div>
-    <div class="tc-grid reveal">
+    <div class="tc-grid">
       <div class="card">
         <h3 class="marker-title" style="font-size:19px;margin:0 0 8px;">Art education &amp; outreach</h3>
         <p style="margin:0;font-size:14.5px;color:var(--muted);line-height:1.7;">Founder of SKY GALLERY with over 10 years of teaching experience; recipient of the Outstanding Art Education Award; invited artist exchange at the Repin Academy of Fine Arts in Russia.</p>
@@ -276,7 +238,7 @@
         <p style="margin:0;font-size:14.5px;color:var(--muted);line-height:1.7;">Permanent collection at the Sun Museum; work featured on local magazine cover stories and dedicated art publications.</p>
       </div>
     </div>
-    <div class="card reveal" style="margin-top:18px;">
+    <div class="card" style="margin-top:18px;">
       <h3 class="marker-title" style="font-size:19px;margin:0 0 4px;">International honours &amp; exhibitions</h3>
       <!-- ONE table, not two. Her honours list WAS the table-style list all along;
            a second list of certificates underneath it repeated the same years
@@ -295,19 +257,34 @@
 
            NOTE on row 2: her honours list says 25th / 2025 while the scan itself
            says 26th / 2026. The row keeps her wording and the picture keeps the
-           scan's; neither is edited to agree with the other. Open with her. -->
+           scan's; neither is edited to agree with the other. Open with her.
+
+           #11: there were SIX scaffolding mounts under the four real honours,
+           each captioned only "Placeholder". Three are enough to do the two jobs
+           they exist for — push the table past its five visible rows, and show a
+           landscape, a portrait and a square scan all fitting the same mount —
+           and each now says in its own row that it is scaffolding rather than an
+           award. NO HONOUR IS INVENTED HERE and none may be: the four real rows
+           are the four Crystal supplied.
+           #23: role="list" is gone. The rows are <button>s, and a list whose
+           children are not listitems is a broken list; a named group is what this
+           actually is. -->
       <div class="cert-split">
-        <div class="cert-list" id="cert-list" role="list" aria-label="International honours and certificates"></div>
+        <div class="cert-list" id="cert-list" role="group" aria-label="International honours and certificates"></div>
         <div class="bc-row is-rail" id="cert-rail">
           <figure class="bc-card bc-card--cert" data-year="2026" data-honour="Top 18 Finalist, International Watercolor Academy Award (Accademia Internazionale dell'Acquarello, Italy)">
             <div class="cert-frame"><div class="cert-mat">
-              <img src="img/about/cert-accademia-2026.jpg" alt="Official Finalist certificate, International Watercolor Academy Award 2026, Accademia Internazionale dell'Acquarello, Italy" loading="lazy" decoding="async">
+              <img src="img/about/cert-accademia-2026.jpg" alt="Official Finalist certificate, International Watercolor Academy Award 2026, Accademia Internazionale dell'Acquarello, Italy"
+                   srcset="img/about/cert-accademia-2026-128.jpg 128w, img/about/cert-accademia-2026-256.jpg 256w, img/about/cert-accademia-2026.jpg 707w"
+                   sizes="120px" width="707" height="1000" loading="lazy" decoding="async">
             </div></div>
             <figcaption>Official Finalist · International Watercolor Academy Award 2026 · Italy</figcaption>
           </figure>
           <figure class="bc-card bc-card--cert" data-year="2025" data-honour="Selected, 25th International Watercolor Spring Exhibition (Japan International Watercolour Institute)">
             <div class="cert-frame"><div class="cert-mat">
-              <img src="img/about/cert-jiwi-2026.jpg" alt="Winning Work certificate, 26th JIWI Online Spring Exhibition, Japan International Watercolour Institute, for the painting City of Japan" loading="lazy" decoding="async">
+              <img src="img/about/cert-jiwi-2026.jpg" alt="Winning Work certificate, 26th JIWI Online Spring Exhibition, Japan International Watercolour Institute, for the painting City of Japan"
+                   srcset="img/about/cert-jiwi-2026-128.jpg 128w, img/about/cert-jiwi-2026-256.jpg 256w, img/about/cert-jiwi-2026.jpg 1076w"
+                   sizes="120px" width="1076" height="1522" loading="lazy" decoding="async">
             </div></div>
             <figcaption>Winning Work · 26th JIWI Online Spring Exhibition · 《City of Japan》</figcaption>
           </figure>
@@ -323,44 +300,29 @@
             </div></div>
             <figcaption>Scan not supplied</figcaption>
           </figure>
-          <figure class="bc-card bc-card--cert is-ph is-demo" data-year="—" data-honour="Placeholder — shows the table scrolling past its five visible rows">
+          <figure class="bc-card bc-card--cert is-ph is-demo" data-year="Demo" data-honour="Layout scaffolding, not an award — a landscape scan fitting the mount">
             <div class="cert-frame"><div class="cert-mat">
               <span class="cert-slot is-landscape">Landscape certificate</span>
             </div></div>
-            <figcaption>Placeholder</figcaption>
+            <figcaption>Layout scaffolding — not an award</figcaption>
           </figure>
-          <figure class="bc-card bc-card--cert is-ph is-demo" data-year="—" data-honour="Placeholder — shows the table scrolling past its five visible rows">
+          <figure class="bc-card bc-card--cert is-ph is-demo" data-year="Demo" data-honour="Layout scaffolding, not an award — a portrait scan fitting the mount">
             <div class="cert-frame"><div class="cert-mat">
               <span class="cert-slot is-portrait">Portrait certificate</span>
             </div></div>
-            <figcaption>Placeholder</figcaption>
+            <figcaption>Layout scaffolding — not an award</figcaption>
           </figure>
-          <figure class="bc-card bc-card--cert is-ph is-demo" data-year="—" data-honour="Placeholder — shows the table scrolling past its five visible rows">
+          <figure class="bc-card bc-card--cert is-ph is-demo" data-year="Demo" data-honour="Layout scaffolding, not an award — a square scan fitting the mount">
             <div class="cert-frame"><div class="cert-mat">
               <span class="cert-slot is-square">Square certificate</span>
             </div></div>
-            <figcaption>Placeholder</figcaption>
-          </figure>
-          <figure class="bc-card bc-card--cert is-ph is-demo" data-year="—" data-honour="Placeholder — shows the table scrolling past its five visible rows">
-            <div class="cert-frame"><div class="cert-mat">
-              <span class="cert-slot is-landscape">Landscape certificate</span>
-            </div></div>
-            <figcaption>Placeholder</figcaption>
-          </figure>
-          <figure class="bc-card bc-card--cert is-ph is-demo" data-year="—" data-honour="Placeholder — shows the table scrolling past its five visible rows">
-            <div class="cert-frame"><div class="cert-mat">
-              <span class="cert-slot is-portrait">Portrait certificate</span>
-            </div></div>
-            <figcaption>Placeholder</figcaption>
-          </figure>
-          <figure class="bc-card bc-card--cert is-ph is-demo" data-year="—" data-honour="Placeholder — shows the table scrolling past its five visible rows">
-            <div class="cert-frame"><div class="cert-mat">
-              <span class="cert-slot is-square">Square certificate</span>
-            </div></div>
-            <figcaption>Placeholder</figcaption>
+            <figcaption>Layout scaffolding — not an award</figcaption>
           </figure>
         </div><!-- /.bc-row.is-rail -->
       </div><!-- /.cert-split -->
+      <!-- inline, not a class: a new class with no rule behind it is the exact
+           dead-CSS problem #19 exists to clear up. -->
+      <p style="margin:14px 0 0;font-size:13px;line-height:1.6;color:var(--muted);max-width:70ch;">The four dated rows are Crystal's honours. The rows marked <strong>Demo</strong> are layout scaffolding — they show the table scrolling past its five visible rows and how a landscape, portrait or square scan fits the same mount. They are not awards and will be removed before launch.</p>
     </div><!-- /.card -->
   </section>
 
@@ -369,7 +331,7 @@
       <div class="eyebrow" style="justify-content:center;"><span class="star">✦</span> Whoever you are</div>
       <h2 class="section-title">Beginner or experienced artist</h2>
     </div>
-    <div class="tc-grid reveal">
+    <div class="tc-grid">
       <div class="card">
         <h3 class="marker-title" style="font-size:19px;margin:0 0 8px;">Stepping into art for the very first time</h3>
         <p style="margin:0;font-size:14.5px;color:var(--muted);line-height:1.7;">Welcome! Consider this studio your safe space to explore, experiment, and have fun without any pressure.</p>
@@ -379,14 +341,14 @@
         <p style="margin:0;font-size:14.5px;color:var(--muted);line-height:1.7;">Looking to refine your brushwork, master light and shadow, or deepen your plein air skills? You'll find structured, practical insights to help you break through to the next level.</p>
       </div>
     </div>
-    <div class="reveal" style="text-align:center;margin-top:30px;">
+    <div style="text-align:center;margin-top:30px;">
       <p style="font-family:var(--font-marker);font-weight:600;font-size:clamp(20px,2.2vw,26px);color:var(--teal-ink);margin:0;">Grab a cup of tea, set up your brushes, and let's enjoy the process of bringing colour to life!</p>
       <div class="sig-script" aria-hidden="true" style="margin-top:10px;"><img src="img/signature.png" alt=""></div>
     </div>
   </section>
 
   <section class="section" id="contact">
-    <div class="contact-wrap reveal">
+    <div class="contact-wrap">
       <div class="contact-intro">
         <div class="eyebrow"><span class="star">✦</span> Say hello</div>
         <h2 class="marker-title" style="font-size:clamp(26px,3vw,40px);margin:6px 0 12px;">Write to the studio.</h2>
@@ -410,24 +372,35 @@
           </li>
           <li>
             <span class="ch-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-7-5.1-7-11a7 7 0 0 1 14 0c0 5.9-7 11-7 11z"></path><circle cx="12" cy="10" r="2.6"></circle></svg></span>
-            <span><strong>Originals</strong><em>Gallery pieces ship worldwide via my <a class="link-squiggle" href="Gallery.dc.html" style="font-weight:700;">Etsy shop</a></em></span>
+            <!-- #11: the link text said "Etsy shop" and the href was
+                 Gallery.dc.html. There is no per-artwork Etsy URL yet (the
+                 Gallery's Buy buttons still resolve to the shop front), so the
+                 text now names where the link actually goes and says where
+                 buying happens without pretending to link there. -->
+            <span><strong>Originals</strong><em>Originals and prints are sold through Etsy — start in the <a href="Gallery.dc.html" style="color:var(--ink);text-decoration:underline;text-underline-offset:2px;">gallery</a></em></span>
           </li>
         </ul>
       </div>
-      <form class="contact-card" id="contact-form">
+      <!-- #01: `required` on its own is DROPPED by the .dc.html runtime, which
+           discards valueless attributes — the field rendered without it and an
+           empty form submitted. `required="required"` carries a value and
+           survives; the mount asserts it anyway. novalidate is deliberate: the
+           native bubble is not announced here, so the script owns the message. -->
+      <form class="contact-card" id="contact-form" novalidate>
         <div class="field">
           <label for="c-name">Name</label>
-          <input id="c-name" type="text" required placeholder="Your name">
+          <input id="c-name" name="name" type="text" required="required" autocomplete="name" placeholder="Your name">
         </div>
         <div class="field">
           <label for="c-email">Email</label>
-          <input id="c-email" type="email" required placeholder="you@example.com">
+          <input id="c-email" name="email" type="email" required="required" autocomplete="email" placeholder="you@example.com">
         </div>
         <div class="field">
           <label for="c-msg">Message</label>
-          <textarea id="c-msg" rows="6" required placeholder="A question about a course, a commission, anything…"></textarea>
+          <textarea id="c-msg" name="message" rows="6" required="required" placeholder="A question about a course, a commission, anything…"></textarea>
         </div>
         <button class="btn primary" type="submit">Send message <span class="arr" aria-hidden="true">→</span></button>
+        <p id="contact-error" style="display:none;margin:10px 0 0;font-family:var(--font-cond);font-size:13px;letter-spacing:var(--tracking-label);text-transform:uppercase;color:var(--coral-ink);"></p>
         <div class="sent hand-note" style="display:none;color:var(--teal-ink);margin-top:10px;">Sent — thank you! ✦</div>
       </form>
     </div>
@@ -441,7 +414,7 @@
       <div class="eyebrow" style="justify-content:center;"><span class="star">✦</span> The small print</div>
       <h2 class="section-title">Terms &amp; privacy</h2>
     </div>
-    <div class="acc-list reveal">
+    <div class="acc-list">
       <details class="acc-item">
         <summary>Purchases &amp; refunds<span class="acc-ico" aria-hidden="true">+</span></summary>
         <div class="acc-body">
@@ -476,10 +449,13 @@
 
 <!-- Certificates open here from the timeline's eye. On a phone this is the only
      way to see a scan, because the mounts are not rendered at that width. -->
-<div class="cert-lb" id="cert-lb" aria-hidden="true" role="dialog" aria-modal="true">
+<!-- #07: the dialog had no accessible name — aria-labelledby now points at the
+     caption, which is the certificate's own description, and a static fallback
+     label covers the frame between open and the caption being written. -->
+<div class="cert-lb" id="cert-lb" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Certificate" aria-labelledby="clb-cap">
   <div class="clb-backdrop" data-close></div>
   <div class="clb-panel">
-    <button class="clb-close" type="button" data-close aria-label="Close">✕</button>
+    <button class="clb-close" type="button" data-close aria-label="Close certificate">✕</button>
     <!-- Deliberately shipped with NO src, and the src is removed again on close.
          The dialog is display:none until it opens, so nothing is ever painted
          from this state. Do not "fix" it by adding src="" — an empty src makes
@@ -517,6 +493,35 @@ class Component extends DCLogic {
     /* cart */
     const renderCart = () => { let n = 0; try { n = JSON.parse(localStorage.getItem('cas-cart') || '[]').reduce((a, i) => a + i.qty, 0); } catch (e) {} document.querySelectorAll('.cart-badge').forEach(b => { b.textContent = n; b.style.display = n > 0 ? 'grid' : 'none'; }); };
     renderCart();
+
+    /* #25: ONE resize listener and ONE rAF for the whole page. There were four
+       before — three carousel relayouts and measureEngraved — every one of them
+       unthrottled, and measureEngraved read a rectangle and wrote a custom
+       property inside the same loop, forcing a synchronous layout per panel.
+       Everything that wants a resize registers here instead. */
+    const resizeJobs = [];
+    let resizeFrame = null;
+    const runResizeJobs = () => { resizeFrame = null; for (let i = 0; i < resizeJobs.length; i++) resizeJobs[i](); };
+    window.addEventListener('resize', () => {
+      if (resizeFrame == null) resizeFrame = requestAnimationFrame(runResizeJobs);
+    }, { passive: true });
+
+    const say = (msg, level) => { if (window.CasAnnounce) window.CasAnnounce(msg, level); };
+
+    /* #10: a fragment jump moves Chrome's sequential-focus starting point but
+       does not reliably move FOCUS, even onto a tabindex="-1" target — measured
+       here: after Enter on the skip link the page had scrolled to y=188 and
+       document.activeElement was still the link. The skip link has to land the
+       caret in the content, so it is done explicitly. */
+    const skip = root.querySelector('.skip-link');
+    if (skip) skip.addEventListener('click', (e) => {
+      const sel = skip.getAttribute('href') || '';
+      const target = sel.charAt(0) === '#' ? document.getElementById(sel.slice(1)) : null;
+      if (!target) return;
+      e.preventDefault();
+      target.focus();
+      try { history.replaceState(null, '', sel); } catch (err) {}
+    });
 
     /* The three photo carousels. Two photographs to a page — five live-drawing
        shots make three pages, the other two sets make two — advancing on their
@@ -559,7 +564,14 @@ class Component extends DCLogic {
       host.style.setProperty('--phc-per', per);
       host.innerHTML =
         '<div class="phc-viewport"><div class="phc-rail">' +
-          cfg.files.map((f, i) => '<figure class="phc-cell"><img src="' + cfg.dir + f + '" alt="' + cfg.alt + ' ' + (i + 1) + '" loading="lazy" decoding="async"></figure>').join('') +
+          /* #17: each strip's ladder and its measured `sizes` come from
+             js/static-images.js (generated from tools/asset-manifest.json), so
+             a cell painted at 241-708px stops fetching a 1600px master. The
+             lookup is keyed by the src this line already writes; a file the
+             pipeline has not seen yet returns '' and the <img> is unchanged. */
+          cfg.files.map((f, i) => '<figure class="phc-cell"><img src="' + cfg.dir + f + '"' +
+            (window.CAS_IMG_ATTRS ? window.CAS_IMG_ATTRS(cfg.dir + f) : '') +
+            ' alt="' + cfg.alt + ' ' + (i + 1) + '" loading="lazy" decoding="async"></figure>').join('') +
         '</div></div>' +
         /* Dots only. No arrows — the set advances by itself and the dots are
            there to jump, not to step. (client feedback 2026-08-08) */
@@ -567,12 +579,48 @@ class Component extends DCLogic {
       const rail = host.querySelector('.phc-rail');
       const cells = host.querySelectorAll('.phc-cell');
       const dotBox = host.querySelector('.phc-dots');
+      const navBox = host.querySelector('.phc-nav');
+      const title = host.getAttribute('aria-label') || 'Photo';
+
+      /* #21 (WCAG 2.2.2): these three advance by themselves for longer than five
+         seconds beside other content, so they need a control that is always
+         there — pausing on hover, on focus and on a hidden tab is not one.
+         Under prefers-reduced-motion nothing advances at all, so no control is
+         rendered: there is nothing to stop.
+         It carries its own declarations rather than a new class, because a class
+         with no rule behind it is the dead-CSS problem #19 exists to clear up.
+         The colours are custom properties, so it still follows the theme
+         toggle, and 44x44 keeps it inside #18. */
+      let playBtn = null;
+      if (!stillPlease) {
+        playBtn = document.createElement('button');
+        playBtn.type = 'button';
+        playBtn.setAttribute('data-phc-play', '');
+        playBtn.setAttribute('aria-label', 'Pause the ' + title + ' slideshow');
+        playBtn.style.cssText = 'display:inline-grid;place-items:center;width:44px;height:44px;flex:none;' +
+          'padding:0;border-radius:50%;cursor:pointer;font-size:11px;line-height:1;' +
+          'border:1px solid color-mix(in srgb, var(--ink) 30%, transparent);' +
+          'background:var(--surface);color:var(--ink);';
+        navBox.insertBefore(playBtn, dotBox);
+      }
+      const setPlayUI = () => {
+        if (!playBtn) return;
+        playBtn.textContent = paused ? '▶' : '❚❚';
+        playBtn.setAttribute('aria-pressed', paused ? 'true' : 'false');
+      };
+
       const drawDots = () => {
         dotBox.innerHTML = Array.from({ length: pages }, (_, i) =>
           '<button class="phc-dot" type="button" data-go="' + i + '" aria-label="Page ' + (i + 1) + ' of ' + pages + '"></button>').join('');
         dotBox.querySelectorAll('.phc-dot').forEach((d) =>
-          d.addEventListener('click', () => { go(Number(d.dataset.go)); start(); }));
-        host.querySelector('.phc-nav').style.display = pages > 1 ? '' : 'none';
+          d.addEventListener('click', () => {
+            const n = Number(d.dataset.go);
+            go(n); start();
+            /* #22: the dots were the only thing that changed, and a class change
+               announces nothing. */
+            say(title + ', page ' + (n + 1) + ' of ' + pages + '.');
+          }));
+        navBox.style.display = pages > 1 ? '' : 'none';
       };
       const apply = () => {
         rail.style.transform = 'translateX(' + (-page * 100) + '%)';
@@ -593,15 +641,23 @@ class Component extends DCLogic {
         page = Math.min(page, pages - 1);
         drawDots(); apply();
       };
-      window.addEventListener('resize', relayout);
+      /* #25: joins the shared rAF batch instead of adding a third raw resize
+         listener of its own. */
+      resizeJobs.push(relayout);
 
-      let timer = null, held = false;
+      let timer = null, held = false, paused = false;
       const stop = () => { if (timer) { clearInterval(timer); timer = null; } };
       const start = () => {
         stop();
-        if (stillPlease || held || pages < 2 || document.hidden) return;
+        if (stillPlease || paused || held || pages < 2 || document.hidden) return;
         timer = setInterval(() => go(page + 1), cfg.dwell);
       };
+      if (playBtn) playBtn.addEventListener('click', () => {
+        paused = !paused;
+        setPlayUI();
+        if (paused) stop(); else start();
+        say(title + ' slideshow ' + (paused ? 'paused' : 'playing') + '.');
+      });
       /* The dots are bound inside drawDots — they are rebuilt whenever the page
          count changes, so binding them here would attach to elements that are
          about to be replaced. A press there restarts the clock, so a page
@@ -614,6 +670,7 @@ class Component extends DCLogic {
       document.addEventListener('visibilitychange', () => document.hidden ? stop() : start());
       drawDots();
       apply();
+      setPlayUI();
       start();
     });
 
@@ -621,16 +678,25 @@ class Component extends DCLogic {
        body has to be pulled up by half the heading's height for the four edges
        to meet. Measured rather than guessed — the headings run to two lines at
        some widths and a fixed value would leave a step in the frame. */
+    /* #25: every rectangle is read first, then every property is written. The
+       loop used to alternate getBoundingClientRect() with style.setProperty(),
+       which forces a synchronous layout once per panel — and it ran on every
+       resize event, unthrottled. */
     const measureEngraved = () => {
-      document.querySelectorAll('.engraved').forEach((el) => {
+      const panels = Array.prototype.slice.call(document.querySelectorAll('.engraved'));
+      const sizes = panels.map((el) => {
         const head = el.querySelector('.eng-head');
         const foot = el.querySelector('.eng-foot');
-        if (head) el.style.setProperty('--eng-h', head.getBoundingClientRect().height + 'px');
-        if (foot) el.style.setProperty('--eng-f', foot.getBoundingClientRect().height + 'px');
+        return [head ? head.getBoundingClientRect().height : null,
+                foot ? foot.getBoundingClientRect().height : null];
+      });
+      panels.forEach((el, i) => {
+        if (sizes[i][0] != null) el.style.setProperty('--eng-h', sizes[i][0] + 'px');
+        if (sizes[i][1] != null) el.style.setProperty('--eng-f', sizes[i][1] + 'px');
       });
     };
     measureEngraved();
-    window.addEventListener('resize', measureEngraved);
+    resizeJobs.push(measureEngraved);
     if (document.fonts && document.fonts.ready) document.fonts.ready.then(measureEngraved);
 
     /* Pagination was built here and then removed: fixed-height sheets with the
@@ -664,11 +730,26 @@ class Component extends DCLogic {
            the markup) */
         const honour = fig.getAttribute('data-honour') || '';
         const year = fig.getAttribute('data-year') || '—';
-        return '<button class="cert-row' + (noScan ? ' is-pending' : '') + (demo ? ' is-demo' : '') +
-            '" type="button" role="listitem" data-i="' + i + '"' + (noScan ? ' disabled' : '') + '>' +
-          '<span class="cert-info" role="presentation" aria-hidden="true">i</span>' +
+        /* #23: role="listitem" on a <button> REPLACES the implicit button role,
+           so the two rows that actually do something announced as list items.
+           It is gone, and the container is a named group rather than a list —
+           a list whose children are not listitems is a broken list.
+           The info disc only goes on a row that HAS a scan to open. It is the
+           narrow-layout affordance, and it was painting a pointer cursor and a
+           hover state on all eight rows that cannot be opened at all. */
+        /* #11: the row no longer carries `is-demo`. `.cert-row.is-demo
+           .cert-name` in css/industrial-3.css sets `opacity: .55`, and glyph
+           masked sampling of that rule measured 2.16:1 in theme A and 3.00:1 in
+           theme D with 100% of the glyph pixels under 4.5 — so the sentence
+           saying "this is scaffolding, not an award" was itself unreadable,
+           which defeats the marking. The scaffolding is called out by the year
+           cell reading "Demo" (full-contrast --ink) and by the note under the
+           table; the italic that rule also carried is kept inline. */
+        return '<button class="cert-row' + (noScan ? ' is-pending' : '') +
+            '" type="button" data-i="' + i + '"' + (noScan ? ' disabled' : '') + '>' +
+          (noScan ? '' : '<span class="cert-info" aria-hidden="true">i</span>') +
           '<span class="cert-year">' + esc(year) + '</span>' +
-          '<span class="cert-name">' + esc(honour) + '</span>' +
+          '<span class="cert-name"' + (demo ? ' style="font-style:italic;"' : '') + '>' + esc(honour) + '</span>' +
         '</button>';
       }).join('');
 
@@ -710,41 +791,76 @@ class Component extends DCLogic {
 
       /* the lightbox — on the narrow layout, where the mounts are not rendered,
          this is the only route to a scan */
+      /* #07: it was role="dialog" aria-modal="true" with no accessible name, no
+         focus move-in, no trap and no restore on close. All four are here now.
+         The name comes from the caption (aria-labelledby in the markup); focus
+         goes to the close button on open and back to whatever opened it on
+         close; Tab cycles inside the panel; a focusin that lands outside while
+         it is open is pulled back. `inert` while closed is belt and braces —
+         the dialog is display:none, so nothing was tabbable, but the attribute
+         keeps the AX tree honest and matches js/site-extras.js's setHidden. */
       const lb = document.getElementById('cert-lb');
       const lbImg = document.getElementById('clb-img');
       const lbCap = document.getElementById('clb-cap');
+      const lbClose = lb.querySelector('.clb-close');
+      let lbOpener = null;
+      const lbOpen = () => lb.classList.contains('open');
+      const lbFocusable = () => Array.prototype.filter.call(
+        lb.querySelectorAll('a[href],button:not([disabled]),[tabindex]:not([tabindex="-1"])'),
+        (el) => el.getClientRects().length > 0);
       const openCert = (i) => {
         const fig = mounts[i];
         const img = fig && fig.querySelector('img');
         if (!img) return;
+        lbOpener = document.activeElement;
         lbImg.src = img.src;
         lbImg.alt = img.alt;
         lbCap.textContent = (fig.querySelector('figcaption') || {}).textContent || '';
         lb.classList.add('open');
         lb.setAttribute('aria-hidden', 'false');
+        lb.removeAttribute('inert');
         document.body.style.overflow = 'hidden';
+        lbClose.focus();
       };
       const closeCert = () => {
         lb.classList.remove('open');
         lb.setAttribute('aria-hidden', 'true');
+        lb.setAttribute('inert', '');
         lbImg.removeAttribute('src');
         document.body.style.overflow = '';
+        if (lbOpener && document.contains(lbOpener) && lbOpener.focus) lbOpener.focus();
+        lbOpener = null;
       };
+      lb.setAttribute('inert', '');
+      lb.addEventListener('keydown', (e) => {
+        if (e.key !== 'Tab' || !lbOpen()) return;
+        const f = lbFocusable();
+        if (!f.length) { e.preventDefault(); return; }
+        const first = f[0], last = f[f.length - 1], a = document.activeElement;
+        if (e.shiftKey && (a === first || !lb.contains(a))) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && a === last) { e.preventDefault(); first.focus(); }
+      });
+      document.addEventListener('focusin', (e) => {
+        if (!lbOpen() || lb.contains(e.target)) return;
+        lbClose.focus();
+      });
       const rows = Array.from(list.querySelectorAll('.cert-row'));
       rows.forEach((r, i) => {
         r.addEventListener('click', () => {
           if (r.classList.contains('is-pending')) return;
           openCert(i);
         });
-        /* hovering a row marks the matching mount, so the pairing is visible */
+        /* #14: the comment always said "hovering a row marks the matching
+           MOUNT"; the handler marked the row it was already hovering, which the
+           :hover rule covers on its own. The mount is what gets marked now. */
         r.addEventListener('pointerenter', () => {
-          rows.forEach((x, j) => x.classList.toggle('is-active', i === j));
+          mounts.forEach((m, j) => m.classList.toggle('is-active', i === j));
         });
       });
-      list.addEventListener('pointerleave', () => rows.forEach((x) => x.classList.remove('is-active')));
+      list.addEventListener('pointerleave', () => mounts.forEach((m) => m.classList.remove('is-active')));
       mounts.forEach((fig, i) => { if (!fig.classList.contains('is-ph')) fig.addEventListener('click', () => openCert(i)); });
       lb.querySelectorAll('[data-close]').forEach((el) => el.addEventListener('click', closeCert));
-      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && lb.classList.contains('open')) closeCert(); });
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && lbOpen()) closeCert(); });
     }
     if (rail) {
       let down = false, startX = 0, startLeft = 0, moved = 0;
@@ -769,12 +885,65 @@ class Component extends DCLogic {
       rail.addEventListener('click', (e) => { if (moved > 6) { e.preventDefault(); e.stopPropagation(); } }, true);
     }
 
-    /* contact form */
+    /* contact form
+       #01: an empty form used to submit and show "Sent — thank you!". The
+       attribute is `required="required"` in the markup because the .dc.html
+       runtime drops valueless attributes, and it is asserted again here so a
+       later markup edit cannot quietly take it away. The form is `novalidate`
+       and the script owns the message: the native bubble is not announced on
+       this runtime, and it cannot be styled to match the page.
+       #22: the reason is written into a real element AND spoken through the
+       shared live region, and focus moves to the first field at fault. */
     const form = document.getElementById('contact-form');
-    if (form) form.addEventListener('submit', (e) => { e.preventDefault(); const s = form.querySelector('.sent'); if (s) s.style.display = 'block'; form.reset(); });
+    if (form) {
+      const errEl = document.getElementById('contact-error');
+      const fields = ['c-name', 'c-email', 'c-msg'].map((x) => document.getElementById(x)).filter(Boolean);
+      fields.forEach((f) => { if (!f.hasAttribute('required')) f.setAttribute('required', 'required'); });
+      const labelOf = (f) => {
+        const lab = form.querySelector('label[for="' + f.id + '"]');
+        return lab ? lab.textContent.trim() : 'This field';
+      };
+      const why = (f) => {
+        if (f.validity.valueMissing) return labelOf(f) + ' is required.';
+        if (f.validity.typeMismatch) return 'Enter an email address in the form you@example.com.';
+        return labelOf(f) + ' needs checking.';
+      };
+      const mark = () => fields.forEach((f) => {
+        if (f.checkValidity()) { f.removeAttribute('aria-invalid'); f.removeAttribute('aria-describedby'); }
+        else { f.setAttribute('aria-invalid', 'true'); }
+      });
+      fields.forEach((f) => f.addEventListener('input', () => {
+        if (f.checkValidity()) { f.removeAttribute('aria-invalid'); f.removeAttribute('aria-describedby'); }
+      }));
+      form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const sent = form.querySelector('.sent');
+        const bad = fields.filter((f) => !f.checkValidity());
+        mark();
+        if (bad.length) {
+          const msg = why(bad[0]) + (bad.length > 1 ? ' ' + bad.length + ' fields still need filling in.' : '');
+          errEl.textContent = msg;
+          errEl.style.display = 'block';
+          if (sent) sent.style.display = 'none';
+          bad[0].setAttribute('aria-describedby', 'contact-error');
+          bad[0].focus();
+          say(msg, 'assertive');
+          return;
+        }
+        errEl.textContent = '';
+        errEl.style.display = 'none';
+        if (sent) sent.style.display = 'block';
+        form.reset();
+        mark();
+        say('Message sent — thank you.');
+      });
+    }
 
-    /* reveals */
-    document.querySelectorAll('.reveal-one, .section-title, .reveal').forEach(el => el.classList.add('in-view'));
+    /* reveals
+       #19: `.reveal` matched no rule in any stylesheet, so writing `in-view`
+       onto those elements animated nothing. The class is gone from the markup
+       and from this selector. */
+    document.querySelectorAll('.reveal-one, .section-title').forEach(el => el.classList.add('in-view'));
   }
 }
 </script>

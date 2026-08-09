@@ -83,6 +83,39 @@
 
   --fs-h2: clamp(26px, 3.5vw, 38px);
 
+  /* ---------- focus (#08) ----------
+     One ring, two bands, so it can land on any surface in the system without a
+     per-component colour. Which band does the work depends on what is behind it:
+     the pale band clears 3:1 on everything below luminance .267 and the near-black
+     band on everything above .117, and no surface in either theme falls between
+     the two — so at least one band always passes. The tightest measured case is
+     the Discord card's blurple at 4.20:1; every other surface in the system is
+     above 4.5:1 on one band or the other.
+     Do NOT give a component its own :focus-visible colour. If a new surface
+     lands between those luminances, widen the ring here instead. */
+  --focus-ring: #f9f4ea;
+  --focus-ring-edge: #12100c;
+  --focus-ring-w: 3px;
+
+  /* ---------- copper in its three roles (#09) ----------
+     --coral       the MATERIAL: gradients, progress fills, tints, hairlines.
+                   Never small text, never a fill under a light label.
+     --coral-ink   copper as TEXT on --cream / --surface / --paper. Per theme,
+                   because a mid copper cannot read on both a cream page and a
+                   near-black one. Already existed; this is what the fifteen
+                   failing text instances now point at.
+     --coral-fill  copper as a small FILL carrying --coral-fill-ink. One value
+                   for both themes: --coral is #9a6436 in A and #a96b38 in D and
+                   NEITHER clears 4.5:1 under a cream label (measured 4.24:1 and
+                   3.36:1 off the painted pixels). This is the same hue two steps
+                   down, and it measures 5.73:1 under --coral-fill-ink.
+     The split exists because the two roles pull in opposite directions: text on
+     a dark page wants a LIGHTER copper, a fill under a light label wants a
+     DARKER one. One token cannot do both, which is why fifteen instances failed
+     at once rather than fifteen times for fifteen reasons. */
+  --coral-fill: #8a5528;
+  --coral-fill-ink: #fdf6ea;
+
   /* shadows */
   --shadow-soft: var(--shadow);
   --shadow-sm: 0 1px 3px rgba(20,17,13,.10);
@@ -139,10 +172,25 @@
      --marine-ink; the inks stay in the warm brown family so they still read as
      coral and linen rather than as neutral black.
      The ratios below were measured off the rendered pixels, not calculated from
-     this value, and the two are a long way apart: the layers stacked on top of
-     #d0a877 in .blog-feature take it down to #a28869 on screen, which is a third
-     of the luminance gone. The first pass at these inks was calculated from the
-     token and every number was wrong. Sample the screenshot. */
+     this value, and the two are a long way apart. The first pass at these inks
+     was calculated from the token and every number was wrong. Sample the
+     screenshot.
+
+     #28 — WHAT THESE TWO TOKENS ARE. --leather and --leather-a are the BASE FILL
+     under five texture layers, not the colour of the cover. Measured off the
+     painted card, children hidden:
+
+       --leather   #d0a877  L .427  ->  paints #a98e6d  L .289   card-vs-page 5.36:1 (D)
+       --leather-a #d2cec7  L .620  ->  paints #a99d8d  L .345   card-vs-page 2.41:1 (A)
+
+     So neither token can be read as "the colour of the card", and no ratio may
+     be derived from them. The light cover's 2.41:1 against the cream page is
+     deliberate and is NOT a text or control contrast: it is one card against the
+     page, and the card is additionally bounded by --shadow, a 1px inner rim and
+     the stitched dashed border. Darkening --leather-a to force 3:1 there would
+     overturn "the cover turns to pale grey leather" (client feedback
+     2026-08-08). Every INK on the cover does have to pass, and does — see the
+     measured values on each token below. */
   --leather: #d0a877;
   --leather-ink: #33241a;      /* headline, 4.45:1 solid / 3.42:1 at the .92 it ships at */
   --leather-label: #2b1d10;    /* kicker and links, 4.87:1 */
@@ -165,7 +213,13 @@
   --steel-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='160'%3E%3Cfilter id='st'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012 0.92' numOctaves='2' seed='9' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.40 0 0 0 0 0.41 0 0 0 0 0.44 0 0 0 0.20 0'/%3E%3C/filter%3E%3Crect width='240' height='160' filter='url(%23st)'/%3E%3C/svg%3E");
   --steel: linear-gradient(96deg,#bdb8b0,#e9e5de 17%,#aaa49b 41%,#dbd7d0 59%,#a09a91 82%,#c9c4bc);
   --blacksteel: linear-gradient(180deg,#3c372f,#26231d 55%,#19160f);
-  --copper-metal: linear-gradient(180deg,#b67c46 0%,#9a6436 46%,#7c4a26 100%);
+  /* #09: the copper was #b67c46 -> #9a6436 -> #7c4a26 with a 40% cream highlight
+     over the top of it, and under the label of a .btn.primary that painted as
+     light as #b28154 — 2.92:1 against the #f8ecd8 label, measured off the pixels.
+     (The audit's 4.23 was an average across the whole face; the top of the
+     gradient is where it actually fails.) Same hue, two steps down, and the
+     highlight cut from .40 to .22 in the two rules that lay it over this. */
+  --copper-metal: linear-gradient(180deg,#8d5f33 0%,#7a4a1c 46%,#5f3616 100%);
   --olive-metal: linear-gradient(180deg,#5d7733 0%,#4d6625 50%,#3c511c 100%);
   --iron: #2b2823;
 
@@ -206,6 +260,15 @@
   --shape-arch-duo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 240'%3E%3Crect x='0' y='0' width='104' height='240' rx='52'/%3E%3Crect x='96' y='0' width='104' height='240' rx='52'/%3E%3C/svg%3E");
 }
 
+/* #08: the theme lives on .cas-root, but the DOCUMENT scrollbar is drawn by the
+   root element and takes its scheme from there — so declaring color-scheme in
+   the theme blocks below covers every control inside the page and leaves the
+   scrollbar light on a dark site. :has() reads the theme back up to :root, which
+   is the only way to reach it from CSS while the attribute stays where the
+   runtime puts it. */
+:root:has(.cas-root[data-theme="A"]) { color-scheme: light; }
+:root:has(.cas-root[data-theme="D"]) { color-scheme: dark; }
+
 /* ============================================================
    THEMES — override the ORIGINAL token names per [data-theme].
    Every ported component inherits these, so the A ⇄ D switch
@@ -217,6 +280,14 @@
 
 /* A — Light Oak Atelier */
 [data-theme="A"] {
+  /* #08: without this both :root and body computed `normal`, so a dark page got
+     light-mode UA chrome — scrollbars, the default focus ring, select popups and
+     date pickers all drawn for a white page. It belongs with the palette, not on
+     :root, because the palette is what decides which one is right. */
+  color-scheme: light;
+  /* #28: the danger colour has to be legible on the theme's own surface. #9a3b2f
+     measures 6.24:1 on the light page and 2.40:1 on the dark one, so it moves. */
+  --danger: #9a3b2f;
   --cream:#f8f3e9; --paper-2:#cdc7bd; --paper:#f3ede1; --surface:#f6f0e4; --warm-white:#e3dac9;
   --blush:#d8c39c; --sand:#cab389;
   --teal:#8a9a6b; --teal-ink:#4d6625; --mint:#cdd9b0;
@@ -232,6 +303,8 @@
 }
 /* D — Moody Loft (dark, daylight glow) */
 [data-theme="D"] {
+  color-scheme: dark;
+  --danger: #e08a7c;   /* 5.66:1 on --surface, 6.60:1 on --cream */
   --cream:#211e1a; --paper-2:#2b2823; --paper:#ede1d0; --surface:#2b2823; --warm-white:#33302a;
   --blush:#876d5c; --sand:#9a7d54;
   --teal:#8a9a6b; --teal-ink:#cab389; --mint:#cab389;
@@ -291,10 +364,10 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 /* ---------- typography helpers ---------- */
 .eyebrow {
   font-family: var(--font-cond); font-weight: 600; font-size: 12px;
-  letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--coral);
+  letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--coral-ink);
   display: flex; align-items: center; gap: 8px;
 }
-.eyebrow .star { color: var(--coral); font-size: 14px; display: inline-block; }
+.eyebrow .star { color: var(--coral-ink); font-size: 14px; display: inline-block; }
 .section-title {
   font-family: var(--font-display-serif); font-weight: 600;
   font-size: var(--fs-h2); letter-spacing: var(--tracking-display); text-transform: uppercase;
@@ -344,12 +417,16 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 .btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
 /* primary = brushed copper (design_base: "copper acts") — all themes */
 .btn.primary, a.btn.primary {
-  background-color: #9a6436;
-  background-image: linear-gradient(118deg, rgba(255,236,210,.40), transparent 42%), repeating-linear-gradient(95deg, rgba(0,0,0,.12) 0 1px, transparent 1px 3px), var(--copper-metal);
+  background-color: #8a5528;
+  background-image: linear-gradient(118deg, rgba(255,236,210,.14), transparent 42%), repeating-linear-gradient(95deg, rgba(0,0,0,.12) 0 1px, transparent 1px 3px), var(--copper-metal);
   color: #f8ecd8 !important; -webkit-text-fill-color: #f8ecd8 !important;
   box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(255,236,210,.45), inset 0 -1px 0 rgba(60,30,10,.4);
 }
-.btn.primary:hover { filter: brightness(1.06); }
+/* #09: was brightness(1.06), which took the label from 4.73:1 to 4.31:1 the
+   moment you pointed at it — a hover state is a real state and has to pass too.
+   Saturate enriches the copper without raising its luminance, and .btn:hover
+   already supplies the lift and the deeper shadow that read as feedback. */
+.btn.primary:hover { filter: saturate(1.18); }
 /* olive metal (design_base "BOOK" green machined finish) */
 .btn.teal { background-color: #4d6625; background-image: linear-gradient(118deg, rgba(240,245,220,.30), transparent 42%), repeating-linear-gradient(95deg, rgba(0,0,0,.10) 0 1px, transparent 1px 3px), var(--olive-metal); color: #f1f3e6; box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(240,245,220,.35), inset 0 -1px 0 rgba(20,30,8,.4); }
 .btn.teal:hover { filter: brightness(1.07); }
@@ -371,8 +448,8 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
   display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-cond);
   font-weight: 500; font-size: 13px; letter-spacing: var(--tracking-label); text-transform: uppercase;
   padding: 14px 28px; border-radius: var(--radius-pill);
-  background-color: #9a6436;
-  background-image: linear-gradient(118deg, rgba(255,236,210,.40), transparent 42%), repeating-linear-gradient(95deg, rgba(0,0,0,.12) 0 1px, transparent 1px 3px), var(--copper-metal);
+  background-color: #8a5528;
+  background-image: linear-gradient(118deg, rgba(255,236,210,.14), transparent 42%), repeating-linear-gradient(95deg, rgba(0,0,0,.12) 0 1px, transparent 1px 3px), var(--copper-metal);
   color: #f8ecd8;
   border: 0; box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(255,236,210,.45), inset 0 -1px 0 rgba(60,30,10,.4); cursor: pointer; transition: transform var(--dur-fast), box-shadow var(--dur-base);
 }
@@ -398,7 +475,21 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
    positioned to the row's full height, so an 84px mark inside a 72px row
    centres to y=-6 and the top of the L's ascender is cut off at the viewport
    edge. The row is tall enough to hold the mark whole. */
-.nav-top .inner { position: static; display: grid; grid-template-columns: minmax(200px, 1fr) auto minmax(200px, 1fr); align-items: center; gap: 18px; padding: 26px var(--gutter) 20px; }
+/* #20: the third track is minmax(max-content, 1fr), not minmax(200px, 1fr).
+   The auth cluster (Log in, Sign up, cart, theme) is 261px wide once both pills
+   show, and between 1081 and 1240 its 1fr share fell to 214-246px — so it
+   overflowed its own column to the LEFT, under the centred links. Measured
+   overlaps: FAQ x cart 5px at 1200, 25px at 1100, 28px at 1081.
+   A max-content floor means the column can never be smaller than what is in it;
+   the link group gives up the difference and sits a few pixels off centre
+   instead, which is the right trade.
+   Track one keeps a floor even though nothing is IN it: .nav-brand is
+   absolutely positioned over that column, so the track is what reserves room
+   for the mark. Dropping the floor to 0 let the links start at x=110 against a
+   brand whose right edge is 124 — measured at 900px. The floors are the mark's
+   measured width plus a little: 149px at full size, 100px below 1180 where
+   .nav-brand img drops to 56px tall. */
+.nav-top .inner { position: static; display: grid; grid-template-columns: minmax(160px, 1fr) auto minmax(max-content, 1fr); align-items: center; gap: 18px; padding: 26px var(--gutter) 20px; }
 .nav-brand { position: absolute; z-index: 6; top: 0; bottom: 0; left: max(var(--gutter), calc((100% - var(--site-max)) / 2 + var(--gutter))); display: flex; align-items: center; gap: 12px; }
 /* 3.1: "現有 Logo 及導覽文字均明顯放大；允許頁首高度增加" — the nav text was raised
    but the mark was left at its old 66px, so only half the clause was done. The
@@ -423,9 +514,12 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
    than a finish (design direction §3.1 specifies a solid fill): Sign Up in marine, Log in in
    linen. So they drop the copper and oak they used to carry, and they are scoped
    to .site-nav — .btn.primary keeps its copper everywhere else on the site.
-   Note: white on #598493 is 4.08:1. That clears AA for UI and large text but sits
-   just under the 4.5:1 for body-size text. The colour is the client's, so it
-   stands as specified rather than being quietly darkened to pass. */
+   STALE COMMENT CORRECTED (#09). This used to read "white on #598493 is 4.08:1
+   … just under the 4.5:1 for body-size text", which described a rule that no
+   longer exists: the label here is --marine-ink (#0b1418), not white, and it
+   measures 4.56:1 off the painted pixels — it passes. The 4.08 figure belongs to
+   the note on --marine-ink in the token block above, which explains why the ink
+   moved off white in the first place. */
 .site-nav .btn.primary, .site-nav a.btn.primary {
   background-color: var(--marine); background-image: none;
   color: var(--marine-ink) !important; -webkit-text-fill-color: var(--marine-ink) !important;
@@ -445,7 +539,7 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 .cart-btn { position: relative; width: 40px; height: 40px; border-radius: 50%; border: 0; background-color: #c9c4bc; background-image: linear-gradient(180deg, rgba(255,255,255,.30), transparent 55%), var(--steel); box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(255,255,255,.5), inset 0 -1px 0 rgba(0,0,0,.22); cursor: pointer; display: grid; place-items: center; transition: transform .18s var(--ease-pop); color: #2b2823; }
 .cart-btn:hover { transform: translateY(-2px) rotate(-4deg); }
 .cart-btn svg { width: 19px; height: 19px; }
-.cart-badge { position: absolute; top: -4px; right: -5px; min-width: 18px; height: 18px; border-radius: var(--radius-pill); background: var(--coral); color: var(--paper); font-family: var(--font-cond); font-size: 12.5px; font-weight: 600; display: grid; place-items: center; padding: 0 4px; }
+.cart-badge { position: absolute; top: -4px; right: -5px; min-width: 18px; height: 18px; border-radius: var(--radius-pill); background: var(--coral-fill); color: var(--coral-fill-ink); font-family: var(--font-cond); font-size: 12.5px; font-weight: 600; display: grid; place-items: center; padding: 0 4px; }
 .nav-burger { display: none; width: 42px; height: 42px; border: 0; border-radius: 50%; background: var(--surface); box-shadow: var(--shadow-sm); cursor: pointer; font-size: 20px; line-height: 1; color: var(--ink); }
 .nav-sheet { display: none; }
 
@@ -505,14 +599,34 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 
 /* ---------- responsive nav ---------- */
 @media (max-width: 1280px) { .nav-links a { padding: 9px 11px; } }
-@media (max-width: 1180px) { .nav-top .inner, .nav-cats .inner { grid-template-columns: minmax(170px, 1fr) auto minmax(170px, 1fr); gap: 12px; } .nav-links { gap: 2px; } .nav-links a { padding: 8px 9px; font-size: 14px; } .nav-brand img { height: 56px; } }
-@media (max-width: 1080px) { .nav-auth .btn { display: none; } }
-@media (max-width: 860px) {
-  .nav-links { display: none; }
+/* #20: between roughly 1080 and 1240 the centred link group is wider than the
+   track it sits in and paints over the controls either side. Measured before
+   this rule: FAQ x cart 37px at 1200; Free videos x cart 24px, FAQ x cart 12px,
+   FAQ x Log in 17px at 1100.
+   The cause is not the link sizes — it is that .nav-links is a nowrap flex row,
+   so its min-content width equals its max-content width and the `auto` grid
+   track it sits in has no smaller size to fall back to. It overflows the track
+   rather than shrinking. Allowing the group to wrap gives the track a real
+   minimum, so the row takes a second line before it takes anyone else's space. */
+@media (max-width: 1240px) {
+  .nav-links { flex-wrap: wrap; justify-content: center; row-gap: 2px; }
+  .nav-top .inner { column-gap: 10px; }
+}
+@media (max-width: 1180px) { .nav-top .inner { grid-template-columns: minmax(112px, 1fr) auto minmax(max-content, 1fr); gap: 12px; } .nav-links { gap: 2px; } .nav-links a { padding: 8px 9px; font-size: 14px; } .nav-brand img { height: 56px; } }
+/* #14: the auth buttons are the first thing dropped when the bar runs out of
+   room, and Log out is one of them — so the burger sheet, which is the only
+   other place those actions live, has to appear at the SAME width they leave.
+   It used to wait for 860px, which left 861-1080 with no Log in and no Log out
+   anywhere on the page. */
+@media (max-width: 1080px) {
+  .nav-auth .btn { display: none; }
   .nav-burger { display: block; }
   .nav-sheet { position: absolute; top: 100%; left: 0; right: 0; background: var(--cream); box-shadow: var(--shadow-lift); padding: 10px var(--gutter) 22px; border-bottom: 1px solid var(--line); }
   .nav-sheet.open { display: block; }
   .nav-sheet a { display: block; padding: 13px 6px; font-family: var(--font-cond); font-weight: 500; font-size: 16px; text-transform: uppercase; color: var(--ink); border-bottom: 1px solid var(--line); }
+}
+@media (max-width: 860px) {
+  .nav-links { display: none; }
 }
 
 /* ---------- reveals ---------- */
@@ -563,10 +677,14 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 .hero__cta { display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-cond); font-weight: 500; font-size: 13px; letter-spacing: var(--tracking-label); text-transform: uppercase; padding: 13px 26px; border-radius: var(--radius-pill); background: var(--marine); color: var(--marine-ink); box-shadow: var(--shadow-sm); transition: transform .18s var(--ease-pop), filter .18s; }
 .hero__cta:hover { transform: translateY(-2px); filter: brightness(1.08); }
 .hero__scroll { position: absolute; left: 4.2%; bottom: 7%; z-index: 6; display: flex; align-items: center; gap: 9px; background: none; border: 0; color: var(--ink); font-family: var(--font-cond); font-weight: 600; font-size: 12px; letter-spacing: var(--tracking-label); text-transform: uppercase; cursor: pointer; }
-.hero__scroll .ast { color: var(--coral); font-size: 17px; display: inline-block; animation: ast-spin 9s linear infinite; }
+.hero__scroll .ast { color: var(--coral-ink); font-size: 17px; display: inline-block; animation: ast-spin 9s linear infinite; }
 @keyframes ast-spin { to { transform: rotate(360deg); } }
 .hero__nav { position: absolute; right: 3.4%; bottom: 3.5%; z-index: 6; display: flex; align-items: center; gap: 16px; }
-.hero__arrow { background: none; border: 0; color: var(--ink); cursor: pointer; padding: 6px 2px; transition: transform .18s; }
+.hero__arrow { position: relative; background: none; border: 0; color: var(--ink); cursor: pointer; padding: 6px 2px; transition: transform .18s; }
+/* #18: the drawn arrow is a 58x12 rule and stays that way — the direction asks
+   for the thin line. The HIT AREA is grown to 44px tall around it instead, so
+   the control is 62x44 while the paint is unchanged. */
+.hero__arrow::after { content: ""; position: absolute; left: 50%; top: 50%; width: 100%; min-width: 44px; height: 44px; transform: translate(-50%, -50%); }
 .hero__arrow:hover { transform: scale(1.12); }
 .hero__arrow svg { width: 58px; height: 12px; display: block; }
 .hero__counter { font-family: var(--font-cond); font-weight: 500; font-size: 16px; color: var(--ink); }
@@ -613,7 +731,7 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 .free-video:hover img { transform: scale(1.06); }
 .free-video .fv-veil { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; background: linear-gradient(to top, rgba(20,17,13,.66), rgba(20,17,13,.2) 55%, rgba(20,17,13,.32)); color: #f3ede1; text-align: center; padding: 28px; transition: background .45s var(--ease-out); }
 .free-video:hover .fv-veil { background: linear-gradient(to top, rgba(20,17,13,.8), rgba(20,17,13,.44) 60%, rgba(20,17,13,.32)); }
-.fv-play { width: 62px; height: 62px; border-radius: 50%; background: var(--coral); color: #f3ede1; display: grid; place-items: center; font-size: 20px; box-shadow: var(--shadow-md); transition: transform var(--dur-fast) var(--ease-out); }
+.fv-play { width: 62px; height: 62px; border-radius: 50%; background: var(--coral-fill); color: var(--coral-fill-ink); display: grid; place-items: center; font-size: 20px; box-shadow: var(--shadow-md); transition: transform var(--dur-fast) var(--ease-out); }
 .free-video:hover .fv-play { transform: scale(1.09); }
 .fv-veil strong { font-family: var(--font-marker); font-weight: 600; font-size: clamp(34px,4.3vw,56px); line-height: 1.05; text-shadow: 0 2px 18px rgba(20,17,13,.55); }
 .fv-veil span { font-family: var(--font-body); font-weight: 500; font-size: clamp(13px,1.15vw,15px); line-height: 1.5; color: #efe3d4;
@@ -654,6 +772,17 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 .cover-card:hover .scrim .t { transform: translateY(-46px); }
 .cover-card .actions { position: absolute; inset: auto 0 0 0; z-index: 3; display: flex; gap: 8px; justify-content: center; padding: 0 14px 16px; opacity: 0; transform: translateY(10px); transition: opacity .25s, transform .25s var(--ease-pop); pointer-events: none; }
 .cover-card:hover .actions, .cover-card:focus-within .actions { opacity: 1; transform: none; pointer-events: auto; }
+/* 06: with no hover there is no gesture that can reveal this row, and the only
+   link into a course lives inside it — a tap at the centre of either button
+   landed on the title scrim and Playwright's click timed out. Shown at rest
+   where there is no hover, with the title lifted by the same 46px the hover
+   state uses so the two do not sit on top of each other. Four other components
+   in these stylesheets already ship this exact unhide (.fv-veil span above,
+   .gallery-tile .gt-sub below, industrial-2.css:54 and :259). */
+@media (hover: none) {
+  .cover-card .actions { opacity: 1; transform: none; pointer-events: auto; }
+  .cover-card .scrim .t { transform: translateY(-46px); }
+}
 /* Tracking held at .1em, and font-size at 11.5px: named by the brief under
    direction §3.5.2, and one of the sizes the 12px floor pass left alone. (#20) */
 .cover-btn { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-cond); font-weight: 500; font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; padding: 9px 14px; border-radius: var(--radius-pill); border: 0; cursor: pointer; transition: transform .15s var(--ease-pop), background .15s, color .15s; }
@@ -676,7 +805,7 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 .arch-duo > img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s var(--ease-out); }
 .arch-link:hover .arch-duo > img, .arch-link:focus-visible .arch-duo > img { transform: scale(1.05); }
 .arch-cap { text-align: center; margin-top: 14px; }
-.arch-cap .eyebrow-lbl { font-family: var(--font-display-serif); font-size: 16px; font-weight: 600; letter-spacing: var(--tracking-display); text-transform: uppercase; color: var(--coral); }
+.arch-cap .eyebrow-lbl { font-family: var(--font-display-serif); font-size: 16px; font-weight: 600; letter-spacing: var(--tracking-display); text-transform: uppercase; color: var(--coral-ink); }
 .arch-visit { display: inline-block; margin-top: 6px; }
 @media (max-width: 860px) {
   .release-trio > [class*="span-"] { grid-column: span 12; width: 100%; max-width: 420px; margin: 0 auto; }

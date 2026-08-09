@@ -257,6 +257,15 @@ the opposite of the arrangement recorded when the corrections were made.
 - [ ] If the note stays dead, the CSS and the render branch are deleted rather than left
 - [ ] The decision is recorded with a date
 
+**Decision, 2026-08-09:** the note renders again on all three posts and the copy
+corrections stay. Reverting them would publish a known error — "masking fluid" is
+what the client's own painted label reads, and Winsor & Newton and Claessens are
+the manufacturers' spellings. The wording of the note is new, not the original:
+that text was removed on 2026-08-07 (`ff37d09`) because it described the source
+material, and this repository is public. Each note now states what was changed and
+that it is not yet approved, and nothing else. Recorded in the header of
+`js/blog-data.js`, beside the field that drives it.
+
 ### 13 — Showcase has no student data
 
 **Status:** ready-for-agent · **P1** · **Blocked by:** none

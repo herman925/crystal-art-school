@@ -20,8 +20,12 @@
   var css = ''
     + '.mc-backdrop{position:fixed;inset:0;z-index:1400;background:rgba(20,17,13,.46);opacity:0;pointer-events:none;transition:opacity .35s ease;backdrop-filter:blur(2px);-webkit-backdrop-filter:blur(2px);}'
     + '.mc-backdrop.open{opacity:1;pointer-events:auto;}'
-    + '.mc-drawer{position:fixed;top:0;left:0;right:0;z-index:1401;transform:translateY(-104%);transition:transform .42s cubic-bezier(.22,.61,.36,1);background-color:var(--surface);background-image:var(--concrete-grain);background-size:200px 200px;color:var(--ink);box-shadow:0 18px 50px rgba(20,17,13,.4);border-bottom:2px solid color-mix(in srgb,var(--banner-bracket,#2b2823) 45%,transparent);}'
-    + '.mc-drawer.open{transform:translateY(0);}'
+    /* visibility, not just transform: a drawer parked off-screen is still in the
+       tab order, and a live tab walk landed on its close button on every page. */
+    + '.mc-drawer{position:fixed;top:0;left:0;right:0;z-index:1401;transform:translateY(-104%);visibility:hidden;transition:transform .42s cubic-bezier(.22,.61,.36,1),visibility 0s linear .42s;background-color:var(--surface);background-image:var(--concrete-grain);background-size:200px 200px;color:var(--ink);box-shadow:0 18px 50px rgba(20,17,13,.4);border-bottom:2px solid color-mix(in srgb,var(--banner-bracket,#2b2823) 45%,transparent);}'
+    + '.mc-drawer.open{transform:translateY(0);visibility:visible;transition:transform .42s cubic-bezier(.22,.61,.36,1),visibility 0s;}'
+    /* shared polite live region for CasAnnounce() */
+    + '.cas-sr-live{position:absolute!important;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);white-space:nowrap;border:0;}'
     + '.mc-inner{max-width:960px;margin:0 auto;padding:22px 26px 26px;}'
     + '.mc-head{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:14px;}'
     + '.mc-title{font-family:var(--font-display-serif,serif);font-weight:600;font-size:22px;letter-spacing:var(--tracking-display);text-transform:uppercase;color:var(--ink);display:flex;align-items:center;gap:.5em;}'
@@ -60,23 +64,23 @@
     + '[data-theme="D"] .cas-root a,[data-theme="D"] .cas-root button,[data-theme="D"] .cas-root [role="button"],[data-theme="D"] .cas-root .cover-card,[data-theme="D"] .cas-root summary{cursor:url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'30\' height=\'30\'%3E%3Ccircle cx=\'15\' cy=\'15\' r=\'7\' fill=\'%23d98a5c\' fill-opacity=\'.95\'/%3E%3Ccircle cx=\'15\' cy=\'15\' r=\'12\' fill=\'none\' stroke=\'%23d98a5c\' stroke-opacity=\'.5\'/%3E%3C/svg%3E") 15 15, pointer;}'
     + '.mc-chalk-dust{position:fixed;width:7px;height:7px;border-radius:50%;background:#f3ede1;pointer-events:none;z-index:2000;opacity:.0;}'
     /* ---------- GDPR cookie consent ---------- */
-    + '.ck-bar{position:fixed;left:0;right:0;bottom:0;z-index:1500;transform:translateY(115%);transition:transform .5s cubic-bezier(.22,.61,.36,1);background-color:var(--surface);background-image:var(--concrete-grain);background-size:200px 200px;color:var(--ink);box-shadow:0 -14px 44px rgba(20,17,13,.34);border-top:2px solid color-mix(in srgb,var(--banner-bracket,#2b2823) 45%,transparent);}'
-    + '.ck-bar.show{transform:translateY(0);}'
+    + '.ck-bar{position:fixed;left:0;right:0;bottom:0;z-index:1500;transform:translateY(115%);visibility:hidden;transition:transform .5s cubic-bezier(.22,.61,.36,1),visibility 0s linear .5s;background-color:var(--surface);background-image:var(--concrete-grain);background-size:200px 200px;color:var(--ink);box-shadow:0 -14px 44px rgba(20,17,13,.34);border-top:2px solid color-mix(in srgb,var(--banner-bracket,#2b2823) 45%,transparent);}'
+    + '.ck-bar.show{transform:translateY(0);visibility:visible;transition:transform .5s cubic-bezier(.22,.61,.36,1),visibility 0s;}'
     + '.ck-in{max-width:1180px;margin:0 auto;padding:20px 26px;display:grid;grid-template-columns:1fr auto;gap:20px 30px;align-items:center;}'
     + '.ck-txt{font-family:var(--font-cond,sans-serif);font-size:13.5px;line-height:1.5;color:var(--ink);max-width:74ch;}'
     + '.ck-txt b{font-family:var(--font-display-serif,serif);font-weight:600;font-size:14px;letter-spacing:var(--tracking-display);text-transform:uppercase;display:flex;align-items:center;gap:.5em;margin-bottom:5px;}'
     + '.ck-txt b .ast{color:#7e9b46;font-size:12px;}'
     + '.ck-txt a{color:var(--coral);-webkit-text-fill-color:var(--coral);text-decoration:underline;text-underline-offset:2px;cursor:pointer;}'
     + '.ck-acts{display:flex;gap:10px;align-items:center;flex-wrap:wrap;justify-content:flex-end;}'
-    + '.ck-btn{font-family:var(--font-cond,sans-serif);font-weight:500;font-size:12px;letter-spacing:var(--tracking-label);text-transform:uppercase;padding:13px 22px;border-radius:2px;border:0;cursor:pointer;white-space:nowrap;transition:transform .15s,background .15s,filter .15s;}'
+    + '.ck-btn{font-family:var(--font-cond,sans-serif);font-weight:500;font-size:12px;letter-spacing:var(--tracking-label);text-transform:uppercase;padding:13px 22px;border-radius:2px;border:0;cursor:pointer;white-space:nowrap;transition:transform .15s,background .15s,filter .15s;/* #18: 13+13 padding over a 17px uppercase line box is 43px. */min-height:44px;display:inline-flex;align-items:center;justify-content:center;}'
     + '.ck-btn.primary{background:var(--coral);color:var(--paper);-webkit-text-fill-color:var(--paper);}'
     + '.ck-btn.primary:hover{transform:translateY(-2px);filter:brightness(1.06);}'
     + '.ck-btn.ghost{background:transparent;color:var(--ink);-webkit-text-fill-color:var(--ink);box-shadow:inset 0 0 0 1px var(--line);}'
     + '.ck-btn.ghost:hover{background:var(--ink);color:var(--paper);-webkit-text-fill-color:var(--paper);}'
     + '@media (max-width:760px){.ck-in{grid-template-columns:1fr;}.ck-acts{justify-content:stretch;}.ck-btn{flex:1;text-align:center;}}'
     /* data-rights / preferences modal */
-    + '.ck-modal{position:fixed;inset:0;z-index:1600;display:grid;place-items:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .3s ease;}'
-    + '.ck-modal.show{opacity:1;pointer-events:auto;}'
+    + '.ck-modal{position:fixed;inset:0;z-index:1600;display:grid;place-items:center;padding:24px;opacity:0;pointer-events:none;visibility:hidden;transition:opacity .3s ease,visibility 0s linear .3s;}'
+    + '.ck-modal.show{opacity:1;pointer-events:auto;visibility:visible;transition:opacity .3s ease,visibility 0s;}'
     + '.ck-modal-bg{position:absolute;inset:0;background:rgba(20,17,13,.5);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);}'
     + '.ck-card{position:relative;width:min(560px,100%);max-height:88vh;overflow:auto;background-color:var(--surface);background-image:var(--concrete-grain);background-size:200px 200px;color:var(--ink);border-radius:6px;box-shadow:0 26px 70px rgba(20,17,13,.5);border:1px solid var(--line);transform:translateY(14px) scale(.98);transition:transform .3s ease;}'
     + '.ck-modal.show .ck-card{transform:none;}'
@@ -100,8 +104,8 @@
     + '.ck-x{position:absolute;top:16px;right:16px;width:34px;height:34px;border-radius:50%;border:0;background:color-mix(in srgb,var(--ink) 10%,transparent);color:var(--ink);font-size:16px;cursor:pointer;display:grid;place-items:center;transition:background .15s,transform .15s;}'
     + '.ck-x:hover{background:var(--ink);color:var(--paper);transform:rotate(90deg);}'
     /* ---------- per-course tier picker ---------- */
-    + '.tp-pop{position:absolute;z-index:1450;width:300px;background-color:var(--surface);background-image:var(--concrete-grain);background-size:200px 200px;color:var(--ink);border:1px solid var(--line);border-radius:8px;box-shadow:0 22px 60px rgba(20,17,13,.42);opacity:0;transform:translateY(-8px) scale(.98);transform-origin:top center;transition:opacity .2s ease,transform .2s ease;pointer-events:none;}'
-    + '.tp-pop.show{opacity:1;transform:none;pointer-events:auto;}'
+    + '.tp-pop{position:absolute;z-index:1450;width:300px;background-color:var(--surface);background-image:var(--concrete-grain);background-size:200px 200px;color:var(--ink);border:1px solid var(--line);border-radius:8px;box-shadow:0 22px 60px rgba(20,17,13,.42);opacity:0;transform:translateY(-8px) scale(.98);transform-origin:top center;visibility:hidden;transition:opacity .2s ease,transform .2s ease,visibility 0s linear .2s;pointer-events:none;}'
+    + '.tp-pop.show{opacity:1;transform:none;pointer-events:auto;visibility:visible;transition:opacity .2s ease,transform .2s ease,visibility 0s;}'
     + '.tp-in{padding:14px 14px 15px;}'
     + '.tp-h{font-family:var(--font-cond,sans-serif);font-weight:600;font-size:12.5px;letter-spacing:var(--tracking-label);text-transform:uppercase;color:var(--muted);margin-bottom:10px;display:flex;align-items:center;gap:.5em;}'
     + '.tp-h .ast{color:#7e9b46;}'
@@ -115,11 +119,81 @@
 
   function injectStyles() { var s = document.createElement('style'); s.id = 'mc-styles'; s.textContent = css; document.head.appendChild(s); }
 
+  /* ---------- shared accessibility plumbing ----------
+     One polite live region for the whole site, and one pair of helpers for
+     "this thing is off-screen / faded out, so it must be out of the tab order
+     and out of the accessibility tree too". Page scripts call
+     window.CasAnnounce(message) rather than each inventing a region of their
+     own — before this there was exactly one aria-live element on the site (the
+     cookie notice's #ck-note), so nothing else announced at all. */
+  var liveEl = null, liveTimer = null, liveQueue = [];
+  function ensureLive() {
+    if (liveEl || !document.body) return liveEl;
+    liveEl = document.createElement('div');
+    liveEl.className = 'cas-sr-live';
+    liveEl.setAttribute('aria-live', 'polite');
+    liveEl.setAttribute('aria-atomic', 'true');
+    liveEl.setAttribute('role', 'status');
+    document.body.appendChild(liveEl);
+    return liveEl;
+  }
+  function announce(msg, politeness) {
+    if (msg == null || msg === '') return;
+    msg = String(msg);
+    if (!ensureLive()) { liveQueue.push([msg, politeness]); return; }
+    liveEl.setAttribute('aria-live', politeness === 'assertive' ? 'assertive' : 'polite');
+    /* clear first: an identical string written twice is not re-announced */
+    liveEl.textContent = '';
+    clearTimeout(liveTimer);
+    liveTimer = setTimeout(function () { if (liveEl) liveEl.textContent = msg; }, 60);
+  }
+  window.CasAnnounce = announce;
+  /* Anything queued before <body> existed is flushed once it does. */
+  function flushLive() { var q = liveQueue.slice(); liveQueue.length = 0; q.forEach(function (a) { announce(a[0], a[1]); }); }
+
+  /* inert + aria-hidden, matched to the visual state. `inert` alone is enough in
+     current Chromium, but the CSS visibility rules and aria-hidden keep older
+     engines and the AX tree honest as well. */
+  function setHidden(el, hidden) {
+    if (!el) return;
+    if (hidden) { el.setAttribute('inert', ''); el.setAttribute('aria-hidden', 'true'); }
+    else { el.removeAttribute('inert'); el.removeAttribute('aria-hidden'); }
+  }
+
+  var FOCUS_SEL = 'a[href],button:not([disabled]),input:not([disabled]),select:not([disabled]),' +
+                  'textarea:not([disabled]),[tabindex]:not([tabindex="-1"])';
+  function focusables(root) {
+    return Array.prototype.filter.call(root.querySelectorAll(FOCUS_SEL), function (el) {
+      if (el.getAttribute('aria-hidden') === 'true' || el.hasAttribute('inert')) return false;
+      var cs = window.getComputedStyle(el);
+      if (cs.visibility === 'hidden' || cs.display === 'none') return false;
+      return el.getClientRects().length > 0;
+    });
+  }
+  /* Shared Tab trap. `isOpen` is read live so the handler can stay bound. */
+  function trapFocus(el, isOpen) {
+    el.addEventListener('keydown', function (e) {
+      if (e.key !== 'Tab' || !isOpen()) return;
+      var f = focusables(el);
+      if (!f.length) { e.preventDefault(); return; }
+      var first = f[0], last = f[f.length - 1], a = document.activeElement;
+      if (e.shiftKey && (a === first || !el.contains(a))) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && a === last) { e.preventDefault(); first.focus(); }
+    });
+    /* Focus can also arrive from outside the page (address bar, extensions).
+       Pull it back in rather than letting it land behind the overlay. */
+    document.addEventListener('focusin', function (e) {
+      if (!isOpen() || el.contains(e.target)) return;
+      var f = focusables(el);
+      if (f.length) f[0].focus();
+    });
+  }
+
   /* ---------- drawer DOM ---------- */
   var backdrop, drawer, listEl, footEl;
   function build() {
     backdrop = document.createElement('div'); backdrop.className = 'mc-backdrop';
-    drawer = document.createElement('div'); drawer.className = 'mc-drawer'; drawer.setAttribute('role', 'dialog'); drawer.setAttribute('aria-label', 'Shopping cart');
+    drawer = document.createElement('div'); drawer.className = 'mc-drawer'; drawer.setAttribute('role', 'dialog'); drawer.setAttribute('aria-modal', 'true'); drawer.setAttribute('aria-label', 'Shopping cart');
     drawer.innerHTML = '<div class="mc-inner">'
       + '<div class="mc-head"><div class="mc-title"><span class="ast">✦</span> Your basket</div>'
       + '<button class="mc-close" type="button" aria-label="Close cart">✕</button></div>'
@@ -128,8 +202,10 @@
     listEl = drawer.querySelector('.mc-list'); footEl = drawer.querySelector('.mc-footwrap');
     backdrop.addEventListener('click', close);
     drawer.querySelector('.mc-close').addEventListener('click', close);
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') close(); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && drawer.classList.contains('open')) close(); });
     listEl.addEventListener('click', onListClick);
+    setHidden(drawer, true);
+    trapFocus(drawer, function () { return drawer.classList.contains('open'); });
   }
 
   /* stamp() skips a write when the value already matches, so these can never feed
@@ -163,18 +239,57 @@
 
   function onListClick(e) {
     var t = e.target.closest('[data-inc],[data-dec],[data-rm]'); if (!t) return;
-    var c = read(); var i;
-    if (t.hasAttribute('data-inc')) { i = +t.getAttribute('data-inc'); c[i].qty = (c[i].qty || 1) + 1; }
-    else if (t.hasAttribute('data-dec')) { i = +t.getAttribute('data-dec'); c[i].qty = (c[i].qty || 1) - 1; if (c[i].qty < 1) c.splice(i, 1); }
-    else if (t.hasAttribute('data-rm')) { i = +t.getAttribute('data-rm'); c.splice(i, 1); }
+    var c = read(); var i, said = '';
+    if (t.hasAttribute('data-inc')) {
+      i = +t.getAttribute('data-inc'); c[i].qty = (c[i].qty || 1) + 1;
+      said = c[i].title + ', quantity ' + c[i].qty;
+    } else if (t.hasAttribute('data-dec')) {
+      i = +t.getAttribute('data-dec'); c[i].qty = (c[i].qty || 1) - 1;
+      said = c[i].qty < 1 ? c[i].title + ' removed from your basket' : c[i].title + ', quantity ' + c[i].qty;
+      if (c[i].qty < 1) c.splice(i, 1);
+    } else if (t.hasAttribute('data-rm')) {
+      i = +t.getAttribute('data-rm'); said = c[i].title + ' removed from your basket'; c.splice(i, 1);
+    }
     write(c); render();
+    var sub = c.reduce(function (a, x) { return a + (x.price || 0) * (x.qty || 1); }, 0);
+    announce(said + (c.length ? '. Subtotal ' + money(sub) + '.' : '. Your basket is empty.'));
   }
 
-  function updateBadges() { var n = count(); document.querySelectorAll('.cart-badge').forEach(function (b) { b.textContent = n; b.style.display = n > 0 ? 'grid' : 'none'; }); }
+  /* The badge used to be the only place the count existed, and the button's own
+     aria-label ("Shopping cart") made it presentational — the AX tree reported
+     the badge ignored while its textContent read "3". The count now lives in the
+     button's name, and the badge is marked decorative so it is not read twice. */
+  function updateBadges() {
+    var n = count();
+    document.querySelectorAll('.cart-badge').forEach(function (b) {
+      b.textContent = n; b.style.display = n > 0 ? 'grid' : 'none'; b.setAttribute('aria-hidden', 'true');
+    });
+    document.querySelectorAll('.cart-btn').forEach(function (b) {
+      b.setAttribute('aria-label', n === 0 ? 'Shopping cart, empty'
+        : 'Shopping cart, ' + n + (n === 1 ? ' item' : ' items'));
+    });
+  }
 
   var lastFocus = null;
-  function open() { syncTheme(); render(); backdrop.classList.add('open'); drawer.classList.add('open'); document.body.style.overflow = 'hidden'; lastFocus = document.activeElement; var cb = drawer.querySelector('.mc-close'); if (cb) cb.focus(); }
-  function close() { backdrop.classList.remove('open'); drawer.classList.remove('open'); document.body.style.overflow = ''; if (lastFocus && lastFocus.focus) try { lastFocus.focus(); } catch (e) {} }
+  function open() {
+    syncTheme(); render();
+    backdrop.classList.add('open'); drawer.classList.add('open');
+    setHidden(drawer, false);
+    document.body.style.overflow = 'hidden';
+    lastFocus = document.activeElement;
+    var cb = drawer.querySelector('.mc-close'); if (cb) cb.focus();
+    var c = read(), sub = c.reduce(function (a, i) { return a + (i.price || 0) * (i.qty || 1); }, 0);
+    announce(c.length ? 'Basket opened. ' + count() + (count() === 1 ? ' item' : ' items') + ', subtotal ' + money(sub) + '.'
+                      : 'Basket opened. Your basket is empty.');
+  }
+  function close() {
+    if (!drawer.classList.contains('open')) return;
+    backdrop.classList.remove('open'); drawer.classList.remove('open');
+    setHidden(drawer, true);
+    document.body.style.overflow = '';
+    if (lastFocus && lastFocus.focus) try { lastFocus.focus(); } catch (e) {}
+    announce('Basket closed.');
+  }
 
   /* ---------- intercept cart buttons (delegation: works regardless of stream timing) ---------- */
   document.addEventListener('click', function (e) {
@@ -279,15 +394,47 @@
     });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && ckModal.classList.contains('show')) closeCkModal(); });
 
-    ckSyncTheme();
-    if (!ckRead()) setTimeout(function () { ckBar.classList.add('show'); }, 700);
-  }
-  function saveConsent(p) { ckWrite({ analytics: !!p.analytics, marketing: !!p.marketing, ts: Date.now() }); ckBar.classList.remove('show'); closeCkModal(); }
-  function openCkModal() { ckSyncTheme(); ckModal.classList.add('show'); document.body.style.overflow = 'hidden'; }
-  function closeCkModal() { ckModal.classList.remove('show'); if (!ckBar.classList.contains('show')) document.body.style.overflow = ''; }
-  window.casOpenPrivacy = function () { if (ckBar) ckBar.classList.add('show'); openCkModal(); };
+    /* Both start out of the tab order. The bar carried 3 tabbable controls and
+       the modal 8 on every page of the site while neither was on screen. */
+    setHidden(ckBar, true);
+    setHidden(ckModal, true);
+    trapFocus(ckModal, function () { return ckModal.classList.contains('show'); });
 
-  /* ---------- global logged-in nav state ---------- */
+    ckSyncTheme();
+    if (!ckRead()) setTimeout(showCkBar, 700);
+  }
+  function showCkBar() { if (!ckBar) return; ckBar.classList.add('show'); setHidden(ckBar, false); }
+  function hideCkBar() { if (!ckBar) return; ckBar.classList.remove('show'); setHidden(ckBar, true); }
+  function saveConsent(p) {
+    ckWrite({ analytics: !!p.analytics, marketing: !!p.marketing, ts: Date.now() });
+    hideCkBar(); closeCkModal();
+    announce('Cookie preferences saved.');
+  }
+  var ckLastFocus = null;
+  function openCkModal() {
+    ckSyncTheme(); ckModal.classList.add('show'); setHidden(ckModal, false);
+    document.body.style.overflow = 'hidden';
+    ckLastFocus = document.activeElement;
+    var f = ckModal.querySelector('.ck-x'); if (f) f.focus();
+  }
+  function closeCkModal() {
+    if (!ckModal.classList.contains('show')) return;
+    ckModal.classList.remove('show'); setHidden(ckModal, true);
+    if (!ckBar.classList.contains('show')) document.body.style.overflow = '';
+    if (ckLastFocus && ckLastFocus.focus) try { ckLastFocus.focus(); } catch (e) {}
+  }
+  window.casOpenPrivacy = function () { showCkBar(); openCkModal(); };
+
+  /* ---------- global logged-in nav state ----------
+     This used to run exactly once, from init(), and lose every time:
+     site-nav.js rebuilds the whole bar with `nav.innerHTML = buildNav()` and
+     keeps a guard interval doing it again whenever the runtime re-renders, so
+     the chip and the Log out button were thrown away before they were ever
+     painted (.nav-user measured 0 at 500/1500/3000/6000ms on three pages —
+     i.e. there was no way to log out anywhere on the site).
+     It is now exported and site-nav.js re-applies it after every render, and
+     the Log out click is delegated rather than bound to a node that is about
+     to be replaced. */
   function applyAuthNav() {
     var u = null; try { u = JSON.parse(localStorage.getItem('cas-user') || 'null'); } catch (e) { u = null; }
     if (!u || !u.name) return;
@@ -302,15 +449,33 @@
       chip.innerHTML = '<img src="img/ProfilePic.jpg" alt=""><span class="nm">' + first.replace(/[<>&]/g, '') + '</span>';
       var out = document.createElement('a');
       out.className = 'btn ghost'; out.href = 'index.html'; out.textContent = 'Log out';
-      out.addEventListener('click', function (e) { e.preventDefault(); try { localStorage.removeItem('cas-user'); } catch (er) {} window.location.href = 'index.html'; });
+      out.setAttribute('data-cas-logout', '');
       if (signup) { signup.parentNode.insertBefore(chip, signup); signup.remove(); }
       if (login) { login.parentNode.insertBefore(out, login); login.remove(); }
     });
-    // mobile sheet
-    document.querySelectorAll('.nav-sheet a[href="Login.dc.html"]').forEach(function (a) {
-      a.textContent = 'My dashboard'; a.href = 'Dashboard.dc.html';
+    /* mobile sheet. Rewriting the Log in link is not enough: Log out is a
+       .nav-auth .btn, and that whole row is display:none from 1080px down, so
+       the sheet is the ONLY place a logged-in reader on a phone or tablet can
+       sign out. It was not there. (#14) */
+    document.querySelectorAll('.nav-sheet').forEach(function (sh) {
+      sh.querySelectorAll('a[href="Login.dc.html"]').forEach(function (a) {
+        a.textContent = 'My dashboard'; a.href = 'Dashboard.dc.html';
+      });
+      if (sh.querySelector('[data-cas-logout]')) return;
+      var so = document.createElement('a');
+      so.href = 'index.html'; so.textContent = 'Log out';
+      so.setAttribute('data-cas-logout', '');
+      sh.appendChild(so);
     });
   }
+  window.casApplyAuthNav = applyAuthNav;
+  document.addEventListener('click', function (e) {
+    var out = e.target.closest && e.target.closest('[data-cas-logout]');
+    if (!out) return;
+    e.preventDefault();
+    try { localStorage.removeItem('cas-user'); } catch (er) {}
+    window.location.href = 'index.html';
+  });
 
   /* ---------- per-course tier picker ---------- */
   var FELLOW_MULT = 1.8; // Fellow = 80% more than Apprentice (course + Discord)
@@ -329,7 +494,11 @@
     return { title: 'Course', price: +d.price || 0, img: (d.img || '').replace(/^img\//, '') };
   }
   function buildTierPicker() {
-    tpPop = document.createElement('div'); tpPop.className = 'tp-pop'; tpPop.setAttribute('role', 'menu');
+    /* not role="menu": it holds two plain buttons and implements none of the
+       menu keyboard contract. A named group is what it actually is. */
+    tpPop = document.createElement('div'); tpPop.className = 'tp-pop';
+    tpPop.setAttribute('role', 'group'); tpPop.setAttribute('aria-label', 'Choose your tier');
+    setHidden(tpPop, true);
     document.body.appendChild(tpPop);
   }
   function openTierPop(btn) {
@@ -358,9 +527,17 @@
     tpPop.style.top = top + 'px'; tpPop.style.left = left + 'px';
     var ax = (r.left + window.scrollX + r.width / 2) - left - 6;
     tpPop.style.setProperty('--ax', Math.max(14, Math.min(ax, 272)) + 'px');
-    requestAnimationFrame(function () { tpPop.classList.add('show'); });
+    setHidden(tpPop, false);
+    requestAnimationFrame(function () {
+      tpPop.classList.add('show');
+      var f = tpPop.querySelector('[data-tier]'); if (f) f.focus();
+    });
   }
-  function closeTierPop() { if (tpPop) tpPop.classList.remove('show'); tpBtn = null; }
+  function closeTierPop() {
+    if (tpPop) { tpPop.classList.remove('show'); setHidden(tpPop, true); }
+    if (tpBtn && tpBtn.focus && tpPop && tpPop.contains(document.activeElement)) { try { tpBtn.focus(); } catch (e) {} }
+    tpBtn = null;
+  }
   function addCourse(item, tier, price, btn) {
     var c = read();
     var ex = c.find(function (x) { return x.title === item.title && x.tier === tier; });
@@ -408,7 +585,7 @@
     });
   }
 
-  function init() { injectStyles(); build(); buildCookie(); buildTierPicker(); applyAuthNav(); syncTheme(); watchTheme(); updateBadges();
+  function init() { injectStyles(); ensureLive(); flushLive(); build(); buildCookie(); buildTierPicker(); applyAuthNav(); syncTheme(); watchTheme(); updateBadges();
     window.addEventListener('scroll', function () { if (tpPop && tpPop.classList.contains('show')) closeTierPop(); }, { passive: true });
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && tpPop && tpPop.classList.contains('show')) closeTierPop(); });
     // keep badge fresh when theme/cart changes elsewhere

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,6 +8,8 @@
 <body>
 <x-dc>
 <helmet>
+<title>The journal — Crystal's Art School</title>
+<meta name="description" content="Crystal Lau's studio journal: notes on watercolour materials, technique and the slow practice of drawing, filterable by topic.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600;6..96,700&family=Oswald:wght@300;400;500;600&family=Archivo:wght@400;500;600;700&family=Saira+Stencil+One&family=Arizonia&display=swap" rel="stylesheet">
@@ -24,71 +26,22 @@
 <style>
 /* 13.5px so the reading time still sits on the same line as .bc-date, which went
    up with the rest of the listing card on 2026-08-08. The feature card's own
-   .bf-reads keeps its larger 14px override in css/industrial-2.css. */
+   .bf-reads keeps its larger 14px override in css/industrial-2.css.
+   The `.bc-reads svg / .bf-reads svg` sizing rule that used to sit here went with
+   the `eye` SVG constant below (#19) — the reading time has been plain text since
+   the fabricated view counters were removed, so nothing ever matched it. */
 .bc-reads, .bf-reads { display:inline-flex; align-items:center; gap:5px; font-family: var(--font-cond); font-size: 13.5px; font-weight:600; letter-spacing:var(--tracking-label); text-transform:uppercase; color: var(--linen-ink); }
-.bc-reads svg, .bf-reads svg { width:13px; height:13px; flex:none; }
 </style>
 </helmet>
 <div class="cas-root" data-theme="D">
+<a class="skip-link" href="#content">Skip to content</a>
 <div class="glow-layer" aria-hidden="true"></div>
 
-<nav class="site-nav" aria-label="Main">
-  <div class="nav-top">
-    <div class="inner">
-      <a class="nav-brand" href="index.html">
-        <img src="img/lau-logo.png" alt="Lau. — Crystal's Art School">
-      </a>
-      <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="Lessons.dc.html">Courses</a></li>
-        <li><a href="Gallery.dc.html">Gallery</a></li>
-        <li><a href="Showcase.dc.html">Showcase</a></li>
-        <li><a href="Blog.dc.html" class="active">Blog</a></li>
-        <li><a href="About.dc.html">About</a></li>
-        <li><a href="FreeVideos.dc.html">Free video</a></li>
-        <li><a href="Blog.dc.html?tag=Tools">Tools</a></li>
-        <li><a href="FAQ.dc.html">FAQ</a></li>
-      </ul>
-      <div class="nav-auth">
-        <a class="cart-btn" href="Checkout.dc.html" aria-label="Shopping cart">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M2 3h3.2l2.5 12.2a1.5 1.5 0 0 0 1.5 1.2h9a1.5 1.5 0 0 0 1.5-1.2L21.5 7H6.5"></path></svg>
-          <span class="cart-badge">0</span>
-        </a>
-        <a class="btn ghost" href="Login.dc.html">Log in</a>
-        <a class="btn primary" href="Signup.dc.html">Sign up</a>
-        <button class="nav-burger" type="button" aria-label="Menu" aria-expanded="false">☰</button>
-      </div>
-    </div>
-  </div>
-  <div class="nav-cats">
-    <div class="inner">
-      <ul class="nav-cat-links">
-        <li><a href="Lessons.dc.html?cat=Watercolour">Watercolour</a></li>
-        <li><a href="Lessons.dc.html?cat=Oil">Oils</a></li>
-        <li><a href="Lessons.dc.html?cat=Drawing">Drawing</a></li>
-        <li><a href="Lessons.dc.html?cat=Ink">Ink</a></li>
-        <li><a href="Lessons.dc.html?cat=Beginners">Beginners</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="nav-sheet">
-    <a href="index.html">Home</a>
-    <a href="Lessons.dc.html">Courses</a>
-    <a href="Gallery.dc.html">Gallery</a>
-    <a href="Showcase.dc.html">Showcase</a>
-    <a href="Blog.dc.html">Blog</a>
-    <a href="About.dc.html">About</a>
-    <a href="FreeVideos.dc.html">Free video</a>
-    <a href="Blog.dc.html?tag=Tools">Tools</a>
-    <a href="FAQ.dc.html">FAQ</a>
-    <a href="Lessons.dc.html?cat=Watercolour">Watercolour</a>
-    <a href="Lessons.dc.html?cat=Oil">Oils</a>
-    <a href="Lessons.dc.html?cat=Drawing">Drawing</a>
-    <a href="Lessons.dc.html?cat=Ink">Ink</a>
-    <a href="Lessons.dc.html?cat=Beginners">Beginners</a>
-    <a href="Login.dc.html">Log in / Sign up</a>
-  </div>
-</nav>
+<!-- nav markup lives in js/site-nav.js — single source of truth (#19).
+     The hand-written copy that used to sit here was replaced at runtime by
+     nav.innerHTML = buildNav() on every load, so it never rendered; three
+     variants of it had already drifted apart across the site unnoticed. -->
+<nav class="site-nav" aria-label="Main"></nav>
 
 <header class="page-hero">
   <div class="container">
@@ -100,7 +53,9 @@
          :not(:has(h1.font-a)) rule in css/industrial-1.css, which is what brings
          the banner signature up to the size the other pages use. -->
     <h1 class="marker-title font-a reveal-one" style="font-size:clamp(44px,6vw,80px);">The journal.</h1>
-    <div class="logo2"><img src="img/logo2.png" alt="Crystal Lau Art" loading="lazy" decoding="async"></div>
+    <!-- #17: in the page hero, above the fold at every width, so not lazy.
+         No srcset: brand marks ship exactly as the client supplied them. -->
+    <div class="logo2"><img src="img/logo2.png" alt="Crystal Lau Art" decoding="async"></div>
   </div>
 </header>
 
@@ -108,11 +63,15 @@
      introduction reads below it. (client feedback 2026-08-08) -->
 <div class="container page-lead-wrap"><p class="page-lead">Notes on materials, technique and the slow practice of drawing — filterable by topic, with the most-read posts pinned on the home page.</p></div>
 
-<main class="container" id="content" style="padding-bottom:70px;">
+<main class="container" id="content" tabindex="-1" style="padding-bottom:70px;">
   <section class="section" style="padding-top:24px;">
     <div class="filter-row" id="blog-filters" role="group" aria-label="Filter posts"></div>
     <div class="blog-feature" id="blog-feature"></div>
     <div class="blog-grid" id="blog-grid"></div>
+    <!-- #14: reachable. `?tag=` used to be ignored unless it matched a chip, and
+         the chips are built from the tags the posts actually carry — so the list
+         could never be empty and this panel could never paint. An unrecognised
+         topic now selects itself and this is the answer. -->
     <div class="store-empty" id="blog-empty" style="display:none;">No posts under that topic yet — pick another.</div>
     <!-- 12.2: no ceiling — keeps loading six at a time to the last post. -->
     <div class="blog-more" id="blog-more" style="display:none;">
@@ -133,7 +92,31 @@ class Component extends DCLogic {
   componentDidMount() {
     const root = document.querySelector('.cas-root');
     if (!root) return;
-    const esc = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+    /* #19: `>` and `'` were missing. Every value below is interpolated into an
+       attribute (alt, href, aria-label, data-tag), and a bare `>` closes the tag
+       that is being written. */
+    const esc = (s) => String(s == null ? '' : s)
+      .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    /* #22: one shared polite live region, from js/site-extras.js. */
+    const say = (m) => { if (window.CasAnnounce) window.CasAnnounce(m); };
+
+    /* #10: the skip link has to MOVE FOCUS, not just the viewport. Measured on
+       the plain anchor: activating it set location.hash to #content and scrolled
+       273px, but document.activeElement stayed on the link and the next Tab went
+       to the brand — i.e. the ten nav stops it exists to skip. <main> carries
+       tabindex="-1" so it can take focus; this puts it there.
+       REQUEST: this belongs in js/site-extras.js once, for all 15 pages. */
+    const skip = document.querySelector('.skip-link');
+    if (skip) skip.addEventListener('click', (e) => {
+      const t = document.getElementById('content');
+      if (!t) return;
+      e.preventDefault();
+      if (!t.hasAttribute('tabindex')) t.setAttribute('tabindex', '-1');
+      t.focus({ preventScroll: true });
+      t.scrollIntoView({ block: 'start' });
+      try { history.replaceState(null, '', '#content'); } catch (er) {}
+    });
 
     /* theme — Light (A) / Dark (D) only. The toggle itself lives in js/site-nav.js.
        A stored or ?theme= value outside A|D is ignored and falls back to the default. */
@@ -144,21 +127,23 @@ class Component extends DCLogic {
     try { const __q = (new URLSearchParams(location.search).get('theme') || '').toUpperCase(); if (valid.indexOf(__q) >= 0) { __theme = __q; localStorage.setItem(THEME_KEY, __q); } } catch (e) {}
     root.setAttribute('data-theme', __theme);
 
-    /* mobile nav sheet */
-    /* burger handled by js/site-nav.js */
-
-    /* cart */
-    const renderCart = () => { const n = (()=>{try{return JSON.parse(localStorage.getItem('cas-cart')||'[]').reduce((a,i)=>a+i.qty,0)}catch(e){return 0}})(); document.querySelectorAll('.cart-badge').forEach(b => { b.textContent = n; b.style.display = n > 0 ? 'grid' : 'none'; }); };
-    renderCart();
+    /* burger, cart badge and the light/dark toggle are all owned by
+       js/site-nav.js + js/site-extras.js. The page used to keep its own
+       renderCart() copy, which wrote the same number back without the
+       aria-hidden the shared one sets — a second writer for one value (#19). */
 
     /* ---- BLOG ---- */
     const all = this.posts().slice().sort((a, b) => b.date.localeCompare(a.date));
-    const rf = (n) => n >= 1000 ? ((n / 1000).toFixed(1).replace(/\.0$/, '') + 'k') : String(n);
-    const eye = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7z"></path><circle cx="12" cy="12" r="3"></circle></svg>';
     /* topics come from the posts' own tags (shared js/filter-tags.js) */
     const tags = ['All'].concat(window.CasFilters ? window.CasFilters.collect(all, p => p.tag) : []);
     let active = 'All';
-    try { const u = new URLSearchParams(location.search); const qt = u.get('tag'); if (qt) { const m = tags.find(t => t.toLowerCase() === qt.toLowerCase()); if (m) active = m; } } catch (e) {}
+    try {
+      const qt = new URLSearchParams(location.search).get('tag');
+      if (qt) {
+        const m = tags.find(t => t.toLowerCase() === qt.toLowerCase());
+        active = m || qt;   /* #14: an unknown topic selects itself, and shows the empty state */
+      }
+    } catch (e) {}
 
     const filters = document.getElementById('blog-filters');
     const feature = document.getElementById('blog-feature');
@@ -167,16 +152,33 @@ class Component extends DCLogic {
     const moreWrap = document.getElementById('blog-more');
     const moreBtn = document.getElementById('blog-more-btn');
 
-    filters.innerHTML = tags.map(t => '<button class="chip' + (t === active ? ' active' : '') + '" type="button" data-tag="' + esc(t) + '">' + esc(t) + '</button>').join('');
+    /* #23: selection was carried by a class alone, so a screen reader was told
+       nothing about which topic was on. */
+    filters.innerHTML = tags.map(t =>
+      '<button class="chip' + (t === active ? ' active' : '') + '" type="button"' +
+      ' aria-pressed="' + (t === active ? 'true' : 'false') + '"' +
+      ' data-tag="' + esc(t) + '">' + esc(t) + '</button>').join('');
+
+    /* #17: the ladder (which files exist, and how wide each one is) belongs to
+       the asset pipeline and arrives in js/blog-data.js. The slot — how wide the
+       picture is painted on THIS page — belongs to this page, so `sizes` is
+       written here from measured widths:
+         feature 736 @1692 · 550 @1100 · 679 @760 · 324 @390
+         card    454 @1692 · 339 @1100 · 349 @760 · 364 @390                   */
+    const FEAT_SIZES = '(max-width: 760px) 92vw, (max-width: 1100px) 50vw, 736px';
+    const CARD_SIZES = '(max-width: 560px) 92vw, (max-width: 980px) 46vw, 30vw';
+    const ss = (p) => p && p.srcset ? ' srcset="' + esc(p.srcset) + '"' : '';
 
     /* 12.2: six at a time, with no ceiling — Load More keeps going to the last
        post in the list. Six is a developer default, not a number the client
        asked for, so it lives here as one constant that is easy to change. */
     const PER_PAGE = 6;
     let shown = PER_PAGE;
+    let listLen = 0;
 
     const render = () => {
       const list = active === 'All' ? all : all.filter(p => p.tag === active);
+      listLen = list.length;
       empty.style.display = list.length ? 'none' : 'block';
 
       if (list.length) {
@@ -185,8 +187,15 @@ class Component extends DCLogic {
         /* 12.1: the title sits in a debossed frame — pressed into the card
            rather than painted onto it, so no new background colour is
            introduced. The vertical ribbon on the right carries the category. */
+        /* #11: the same headline used to be announced four times over — the
+           image link's aria-label, the image's own alt, the <h2>, and then the
+           "Read the post" link to the identical href. The picture is decorative
+           beside its own title, and the link wrapping it is a duplicate mouse
+           target, so it leaves the accessibility tree and the tab order; the
+           <h2> carries the title once and the CTA names its destination. */
         feature.innerHTML =
-          '<a class="bf-img" href="blog-post.dc.html?id=' + esc(f.id) + '" aria-label="' + esc(f.title) + '"><img src="img/' + f.img + '" alt="' + esc(f.title) + '" loading="lazy" decoding="async"></a>' +
+          '<a class="bf-img" href="blog-post.dc.html?id=' + esc(f.id) + '" tabindex="-1" aria-hidden="true">' +
+            '<img src="img/' + esc(f.img) + '"' + ss(f) + ' sizes="' + FEAT_SIZES + '" alt="" fetchpriority="high" decoding="async"></a>' +
           '<div class="bf-body"><span class="bf-kicker">Latest · ' + esc(f.tag) + ' · ' + esc(f.d) + '</span>' +
           /* 12.2: the board draws the feature card as kicker, framed title,
              reading time and the link — 作者不顯示，摘要不顯示. The excerpt is
@@ -204,20 +213,23 @@ class Component extends DCLogic {
             + '<span class="bf-quote is-close" aria-hidden="true"></span>'
           + '</div>' +
           '<span class="bf-reads">' + (f.mins || 4) + ' min read</span>' +
-          '<a class="bf-cta" href="blog-post.dc.html?id=' + esc(f.id) + '">Read the post <span class="arr" aria-hidden="true">→</span></a></div>' +
+          '<a class="bf-cta" href="blog-post.dc.html?id=' + esc(f.id) + '" aria-label="Read the post: ' + esc(f.title) + '">Read the post <span class="arr" aria-hidden="true">→</span></a></div>' +
           /* --rib-len lets the ribbon size its own type to the tag it is given;
              the tag is per-post and will be whatever the CMS supplies. */
           '<span class="bf-ribbon" aria-hidden="true" style="--rib-len:' + String(f.tag || '').length + '">'
             + '<span>' + esc(f.tag) + '</span></span>';
       } else {
         feature.style.display = 'none';
+        feature.innerHTML = '';
       }
 
       const rest = list.slice(1);
       const page = rest.slice(0, shown);
       grid.innerHTML = page.map(p =>
         '<a class="blog-card" href="blog-post.dc.html?id=' + esc(p.id) + '">' +
-          '<div class="bc-img"><img src="img/' + p.img + '" alt="' + esc(p.title) + '" loading="lazy" decoding="async"></div>' +
+          /* #11: alt="" — the title is the next thing inside this same link, so
+             an alt that repeats it says the headline twice per card. */
+          '<div class="bc-img"><img src="img/' + esc(p.img) + '"' + ss(p) + ' sizes="' + CARD_SIZES + '" alt="" loading="lazy" decoding="async"></div>' +
           '<div class="bc-body"><span class="bc-tag">' + esc(p.tag) + '</span>' +
           '<h3>' + esc(p.title) + '</h3><p>' + esc(p.excerpt) + '</p>' +
           '<span class="bc-date">' + esc(p.d) + ' · <span class="bc-reads">' + (p.mins || 4) + ' min</span></span></div>' +
@@ -231,58 +243,118 @@ class Component extends DCLogic {
       }
     };
 
-    filters.querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => {
-      filters.querySelectorAll('.chip').forEach(x => x.classList.remove('active'));
-      c.classList.add('active');
-      active = c.dataset.tag;
-      shown = PER_PAGE;   /* a new filter starts from the first page again */
-      render();
-    }));
-
-    if (moreBtn) moreBtn.addEventListener('click', () => { shown += PER_PAGE; render(); });
-
-    render();
-    document.querySelectorAll('.reveal-one').forEach(el => el.classList.add('in-view'));
-
-    /* ---- GSAP: roll posts in one-by-one as they scroll into view ---- */
+    /* ---- GSAP: roll posts in one-by-one as they scroll into view ----
+       #25: one binding for the life of the page. This used to add a
+       document-capture scroll listener and a resize listener on every filter
+       change and remove neither — `document._blogDrive` was assigned nowhere, so
+       its removal could never fire and the resize binding had no removal at all.
+       Instrumented over six chip clicks: document scroll went 3 → 9 and resize
+       8 → 14, each one running getBoundingClientRect() over every card. The
+       document-capture copy was also a duplicate of the window binding, so
+       drive() ran twice per scroll event even before any of that.
+       #20: arming is now part of the same synchronous task as render(), not a
+       setTimeout 20ms behind it. Cards used to paint at opacity 1 and then be
+       set back to 0 and re-faded — sampled every 8ms it read 1, 1, then 0 at
+       26ms. Nothing paints between innerHTML and gsap.set() now. */
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const rollIn = () => {
-      const g = window.gsap;
-      const cards = Array.from(grid.querySelectorAll('.blog-card'));
-      const feat = feature.style.display !== 'none' ? [feature] : [];
-      const items = feat.concat(cards);
+    const g = window.gsap;
+    let watch = [];
+    let bound = false;
+
+    const drive = () => {
+      if (!watch.length) return;
+      const vh = window.innerHeight || document.documentElement.clientHeight;
+      for (let i = 0; i < watch.length; i++) {
+        const w = watch[i];
+        if (w.done) continue;
+        const r = w.el.getBoundingClientRect();
+        if (r.top < vh * 0.9 && r.bottom > 20) {
+          w.done = true;
+          g.fromTo(w.el,
+            { opacity: 0, x: w.left ? -60 : 60, y: 28, rotateZ: w.left ? -3 : 3, transformOrigin: 'center top' },
+            { opacity: 1, x: 0, y: 0, rotateZ: 0, duration: .7, ease: 'power3.out' });
+        }
+      }
+    };
+
+    const arm = (items) => {
+      /* finished and detached entries drop out, so the list cannot grow across
+         filter changes the way the listeners used to */
+      watch = watch.filter(w => !w.done && w.el.isConnected);
       if (!items.length) return;
       if (!g || reduce) { items.forEach(el => { el.style.opacity = '1'; el.style.transform = 'none'; }); return; }
       g.set(items, { opacity: 0 });
-      const watch = items.map(el => ({ el, done: false }));
-      const drive = () => {
-        const vh = window.innerHeight || document.documentElement.clientHeight;
-        watch.forEach((w, i) => {
-          if (w.done) return;
-          const r = w.el.getBoundingClientRect();
-          if (r.top < vh * 0.9 && r.bottom > 20) {
-            w.done = true;
-            const fromLeft = i % 2 === 0;
-            g.fromTo(w.el,
-              { opacity: 0, x: fromLeft ? -60 : 60, y: 28, rotateZ: fromLeft ? -3 : 3, transformOrigin: 'center top' },
-              { opacity: 1, x: 0, y: 0, rotateZ: 0, duration: .7, ease: 'power3.out' });
-          }
-        });
-      };
+      /* js/motion.js lists '.blog-grid .blog-card' among its stagger GROUPS and
+         skips anything already carrying __casM. Claiming them here keeps the two
+         systems off the same elements — and only this one survives a filter
+         change, because motion.js runs once and these nodes are rebuilt. */
+      items.forEach((el, i) => { el.__casM = 1; watch.push({ el: el, done: false, left: i % 2 === 0 }); });
       drive();
-      grid._blogDrive && window.removeEventListener('scroll', grid._blogDrive);
-      document._blogDrive && document.removeEventListener('scroll', document._blogDrive, true);
-      grid._blogDrive = drive;
-      window.addEventListener('scroll', drive, { passive: true });
-      document.addEventListener('scroll', drive, true);
-      window.addEventListener('resize', drive);
+      if (!bound) {
+        bound = true;
+        window.addEventListener('scroll', drive, { passive: true });
+        window.addEventListener('resize', drive, { passive: true });
+      }
       setTimeout(drive, 180);
     };
-    rollIn();
 
-    /* re-arm the roll-in after any filter change */
-    const origRender = render;
-    filters.querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => { setTimeout(rollIn, 20); }));
+    /* #07: a card waiting below the fold is at opacity 0 and still tabbable.
+       Focusing it does scroll it into view, which drives the roll-in — but
+       measured, it sat at opacity 0 for the first ~150ms and only cleared 0.98
+       at 400ms, so for that window the keyboard focus was on something invisible.
+       Arriving by keyboard finishes the reveal outright. Bound to the two
+       containers, which outlive every re-render, so this is two listeners for
+       the life of the page, not one per filter change. */
+    const revealNow = (node) => {
+      for (let i = 0; i < watch.length; i++) {
+        const w = watch[i];
+        if (w.done || !(w.el === node || w.el.contains(node))) continue;
+        w.done = true;
+        if (g) g.set(w.el, { opacity: 1, x: 0, y: 0, rotateZ: 0 });
+        else { w.el.style.opacity = '1'; w.el.style.transform = 'none'; }
+      }
+    };
+    grid.addEventListener('focusin', (e) => revealNow(e.target));
+    feature.addEventListener('focusin', (e) => revealNow(e.target));
+
+    const cards = () => Array.prototype.slice.call(grid.querySelectorAll('.blog-card'));
+    const allTargets = () => (feature.style.display !== 'none' ? [feature] : []).concat(cards());
+    const countedAs = (n) => n + (n === 1 ? ' post' : ' posts');
+
+    filters.querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => {
+      filters.querySelectorAll('.chip').forEach(x => {
+        x.classList.remove('active');
+        x.setAttribute('aria-pressed', 'false');
+      });
+      c.classList.add('active');
+      c.setAttribute('aria-pressed', 'true');
+      active = c.dataset.tag;
+      shown = PER_PAGE;   /* a new filter starts from the first page again */
+      render();
+      arm(allTargets());
+      /* #22: the result count was conveyed by the grid redrawing and nothing else */
+      say(listLen ? active + ': ' + countedAs(listLen) + '.' : 'No posts under ' + active + '.');
+    }));
+
+    if (moreBtn) moreBtn.addEventListener('click', () => {
+      const had = cards().length;
+      shown += PER_PAGE;
+      render();
+      const now = cards();
+      arm(now.slice(had));   /* only the new tail animates; the rest stay put */
+      const added = now.length - had;
+      /* #22: on the last press the button hides itself out from under the user's
+         focus, which dropped focus to <body> with nothing announced. */
+      if (moreWrap.style.display === 'none') {
+        const landing = now[had] || now[now.length - 1];
+        if (landing) landing.focus();
+      }
+      say(countedAs(added) + ' loaded. Showing ' + Math.min(listLen, now.length + 1) + ' of ' + countedAs(listLen) + '.');
+    });
+
+    render();
+    arm(allTargets());
+    document.querySelectorAll('.reveal-one').forEach(el => el.classList.add('in-view'));
   }
 }
 </script>

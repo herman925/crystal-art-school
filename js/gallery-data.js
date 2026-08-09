@@ -16,7 +16,11 @@ window.CAS_GALLERY = [
     "orig": true,
     "size": "30 × 40 cm",
     "desc": "Watercolor on paper",
-    "ratio": 0.726
+    "ratio": 0.726,
+    "srcset": "img/gallery/g01-320.jpg 320w, img/gallery/g01-640.jpg 640w, img/gallery/g01.jpg 1161w",
+    "sizes": "306px",
+    "w": 1161,
+    "h": 1600
   },
   {
     "title": "Art print No.1",
@@ -31,7 +35,11 @@ window.CAS_GALLERY = [
     "orig": false,
     "size": "40 × 60 cm",
     "desc": "Watercolor on paper",
-    "ratio": 0.643
+    "ratio": 0.643,
+    "srcset": "img/gallery/g02-320.jpg 320w, img/gallery/g02-640.jpg 640w, img/gallery/g02.jpg 1029w",
+    "sizes": "306px",
+    "w": 1029,
+    "h": 1600
   },
   {
     "title": "Pet drawing No.1",
@@ -46,7 +54,11 @@ window.CAS_GALLERY = [
     "orig": false,
     "size": "30 × 40 cm",
     "desc": "Watercolor on paper",
-    "ratio": 0.721
+    "ratio": 0.721,
+    "srcset": "img/gallery/g03-320.jpg 320w, img/gallery/g03-640.jpg 640w, img/gallery/g03.jpg 1153w",
+    "sizes": "306px",
+    "w": 1153,
+    "h": 1600
   },
   {
     "title": "Original painting No.2",
@@ -61,7 +73,11 @@ window.CAS_GALLERY = [
     "orig": true,
     "size": "40 × 60 cm",
     "desc": "Watercolor on paper",
-    "ratio": 1.325
+    "ratio": 1.325,
+    "srcset": "img/gallery/g04-320.jpg 320w, img/gallery/g04-640.jpg 640w, img/gallery/g04-960.jpg 960w, img/gallery/g04.jpg 1600w",
+    "sizes": "306px",
+    "w": 1600,
+    "h": 1208
   },
   {
     "title": "Art print No.2",
@@ -76,7 +92,11 @@ window.CAS_GALLERY = [
     "orig": false,
     "size": "30 × 40 cm",
     "desc": "Watercolor on paper",
-    "ratio": 0.664
+    "ratio": 0.664,
+    "srcset": "img/gallery/g05-320.jpg 320w, img/gallery/g05-640.jpg 640w, img/gallery/g05.jpg 1062w",
+    "sizes": "306px",
+    "w": 1062,
+    "h": 1600
   },
   {
     "title": "Pet drawing No.2",
@@ -91,7 +111,11 @@ window.CAS_GALLERY = [
     "orig": false,
     "size": "40 × 60 cm",
     "desc": "Watercolor on paper",
-    "ratio": 0.759
+    "ratio": 0.759,
+    "srcset": "img/gallery/g06-320.jpg 320w, img/gallery/g06-640.jpg 640w, img/gallery/g06-960.jpg 960w, img/gallery/g06.jpg 1214w",
+    "sizes": "306px",
+    "w": 1214,
+    "h": 1600
   },
   {
     "title": "Original painting No.3",
@@ -106,7 +130,11 @@ window.CAS_GALLERY = [
     "orig": true,
     "size": "30 × 40 cm",
     "desc": "Watercolor on paper",
-    "ratio": 0.73
+    "ratio": 0.73,
+    "srcset": "img/gallery/g07-320.jpg 320w, img/gallery/g07-640.jpg 640w, img/gallery/g07.jpg 1168w",
+    "sizes": "306px",
+    "w": 1168,
+    "h": 1600
   },
   {
     "title": "Art print No.3",
@@ -121,7 +149,11 @@ window.CAS_GALLERY = [
     "orig": false,
     "size": "40 × 60 cm",
     "desc": "Watercolor on paper",
-    "ratio": 0.723
+    "ratio": 0.723,
+    "srcset": "img/gallery/g08-320.jpg 320w, img/gallery/g08-640.jpg 640w, img/gallery/g08.jpg 1157w",
+    "sizes": "306px",
+    "w": 1157,
+    "h": 1600
   },
   {
     "title": "Pet drawing No.3",
@@ -136,7 +168,11 @@ window.CAS_GALLERY = [
     "orig": false,
     "size": "30 × 40 cm",
     "desc": "Watercolor on paper",
-    "ratio": 0.718
+    "ratio": 0.718,
+    "srcset": "img/gallery/g09-320.jpg 320w, img/gallery/g09-640.jpg 640w, img/gallery/g09.jpg 1149w",
+    "sizes": "306px",
+    "w": 1149,
+    "h": 1600
   },
   {
     "title": "Original painting No.4",
@@ -151,7 +187,11 @@ window.CAS_GALLERY = [
     "orig": true,
     "size": "40 × 60 cm",
     "desc": "Watercolor on paper",
-    "ratio": 1.341
+    "ratio": 1.341,
+    "srcset": "img/gallery/g10-320.jpg 320w, img/gallery/g10-640.jpg 640w, img/gallery/g10-960.jpg 960w, img/gallery/g10.jpg 1600w",
+    "sizes": "306px",
+    "w": 1600,
+    "h": 1193
   },
   {
     "title": "Art print No.4",
@@ -166,7 +206,11 @@ window.CAS_GALLERY = [
     "orig": false,
     "size": "30 × 40 cm",
     "desc": "Watercolor on paper",
-    "ratio": 1.488
+    "ratio": 1.488,
+    "srcset": "img/gallery/g11-320.jpg 320w, img/gallery/g11-640.jpg 640w, img/gallery/g11-960.jpg 960w, img/gallery/g11.jpg 1600w",
+    "sizes": "306px",
+    "w": 1600,
+    "h": 1075
   },
   {
     "title": "Pet drawing No.4",
@@ -181,7 +225,11 @@ window.CAS_GALLERY = [
     "orig": false,
     "size": "40 × 60 cm",
     "desc": "Watercolor on paper",
-    "ratio": 0.752
+    "ratio": 0.752,
+    "srcset": "img/gallery/g12-320.jpg 320w, img/gallery/g12-640.jpg 640w, img/gallery/g12-960.jpg 960w, img/gallery/g12.jpg 1203w",
+    "sizes": "306px",
+    "w": 1203,
+    "h": 1600
   },
   {
     "title": "Original painting No.5",
@@ -196,7 +244,11 @@ window.CAS_GALLERY = [
     "orig": true,
     "size": "30 × 40 cm",
     "desc": "Watercolor on paper",
-    "ratio": 0.796
+    "ratio": 0.796,
+    "srcset": "img/gallery/g13-320.jpg 320w, img/gallery/g13-640.jpg 640w, img/gallery/g13-960.jpg 960w, img/gallery/g13.jpg 1206w",
+    "sizes": "306px",
+    "w": 1206,
+    "h": 1515
   },
   {
     "title": "Art print No.5",
@@ -211,7 +263,11 @@ window.CAS_GALLERY = [
     "orig": false,
     "size": "40 × 60 cm",
     "desc": "Watercolor on paper",
-    "ratio": 1.348
+    "ratio": 1.348,
+    "srcset": "img/gallery/g14-320.jpg 320w, img/gallery/g14-640.jpg 640w, img/gallery/g14-960.jpg 960w, img/gallery/g14.jpg 1600w",
+    "sizes": "306px",
+    "w": 1600,
+    "h": 1187
   },
   {
     "title": "Pet drawing No.5",
@@ -226,7 +282,11 @@ window.CAS_GALLERY = [
     "orig": false,
     "size": "30 × 40 cm",
     "desc": "Watercolor on paper",
-    "ratio": 0.903
+    "ratio": 0.903,
+    "srcset": "img/gallery/g15-320.jpg 320w, img/gallery/g15-640.jpg 640w, img/gallery/g15-960.jpg 960w, img/gallery/g15.jpg 1206w",
+    "sizes": "306px",
+    "w": 1206,
+    "h": 1335
   },
   {
     "title": "Original painting No.6",
@@ -241,7 +301,11 @@ window.CAS_GALLERY = [
     "orig": true,
     "size": "40 × 60 cm",
     "desc": "Watercolor on paper",
-    "ratio": 1.301
+    "ratio": 1.301,
+    "srcset": "img/gallery/g16-320.jpg 320w, img/gallery/g16-640.jpg 640w, img/gallery/g16-960.jpg 960w, img/gallery/g16.jpg 1600w",
+    "sizes": "306px",
+    "w": 1600,
+    "h": 1230
   },
   {
     "title": "Art print No.6",
@@ -256,6 +320,10 @@ window.CAS_GALLERY = [
     "orig": false,
     "size": "30 × 40 cm",
     "desc": "Watercolor on paper",
-    "ratio": 0.729
+    "ratio": 0.729,
+    "srcset": "img/gallery/g17-320.jpg 320w, img/gallery/g17-640.jpg 640w, img/gallery/g17.jpg 1166w",
+    "sizes": "306px",
+    "w": 1166,
+    "h": 1600
   }
 ];

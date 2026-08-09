@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -8,6 +8,8 @@
 <body>
 <x-dc>
 <helmet>
+<title>Student showcase — work from the studio | Crystal's Art School</title>
+<meta name="description" content="A pinboard of paintings made by students of Crystal's Art School. Open any print to see it full size.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:opsz,wght@6..96,500;6..96,600;6..96,700&family=Oswald:wght@300;400;500;600&family=Archivo:wght@400;500;600;700&family=Saira+Stencil+One&family=Arizonia&display=swap" rel="stylesheet">
@@ -15,6 +17,7 @@
 <link rel="icon" type="image/x-icon" href="favicon.ico">
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.12.5/dist/ScrollTrigger.min.js"></script>
+<script src="js/static-images.js"></script>
 <script src="js/site-extras.js"></script>
 <script src="js/site-nav.js"></script>
 <script src="js/site-footer.js"></script>
@@ -44,7 +47,13 @@
   border-radius: 5px;
   /* dark seam where cork meets the frame + soft cork inset */
   box-shadow: 0 0 0 2px rgba(84,56,22,.6), inset 0 3px 22px rgba(60,40,16,.35), inset 0 -2px 12px rgba(60,40,16,.2); }
-.pol-row { display:flex; flex-wrap:wrap; justify-content:center; gap: 28px 14px; }
+/* #13: `align-items` was left at its `stretch` default, so a tile with a
+   negative --mt was stretched to the row's height and the extra space landed in
+   the polaroid chin below the photo — a chin designed at 48px measured 48-73px,
+   different on every reload because --mt is random. flex-start makes every tile
+   its own intrinsic height, which is the stable-row-height the direction asks
+   for; --mt still offsets where a print HANGS, which is the pinned-up look. */
+.pol-row { display:flex; flex-wrap:wrap; justify-content:center; align-items:flex-start; gap: 28px 14px; }
 .pol-tile { position:relative; display:block; border:0; cursor:pointer; background:#f6f1e6; padding:11px 11px 48px; width:216px;
   margin: var(--mt, 0) var(--mx, 0) 0; z-index: var(--z, 1);
   box-shadow: 0 22px 34px rgba(40,26,12,.42), 0 6px 12px rgba(40,26,12,.28);
@@ -73,72 +82,22 @@
 </style>
 </helmet>
 <div class="cas-root" data-theme="D">
+<a class="skip-link" href="#content">Skip to content</a>
 <div class="glow-layer" aria-hidden="true"></div>
 
-<nav class="site-nav" aria-label="Main">
-  <div class="nav-top">
-    <div class="inner">
-      <a class="nav-brand" href="index.html">
-        <img src="img/lau-logo.png" alt="Lau. — Crystal's Art School">
-      </a>
-      <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="Lessons.dc.html">Courses</a></li>
-        <li><a href="Gallery.dc.html">Gallery</a></li>
-        <li><a href="Showcase.dc.html" class="active">Showcase</a></li>
-        <li><a href="Blog.dc.html">Blog</a></li>
-        <li><a href="About.dc.html">About</a></li>
-        <li><a href="FreeVideos.dc.html">Free video</a></li>
-        <li><a href="Blog.dc.html?tag=Tools">Tools</a></li>
-        <li><a href="FAQ.dc.html">FAQ</a></li>
-      </ul>
-      <div class="nav-auth">
-        <a class="cart-btn" href="Checkout.dc.html" aria-label="Shopping cart">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1.4"></circle><circle cx="18" cy="20" r="1.4"></circle><path d="M2 3h3.2l2.5 12.2a1.5 1.5 0 0 0 1.5 1.2h9a1.5 1.5 0 0 0 1.5-1.2L21.5 7H6.5"></path></svg>
-          <span class="cart-badge">0</span>
-        </a>
-        <a class="btn ghost" href="Login.dc.html">Log in</a>
-        <a class="btn primary" href="Signup.dc.html">Sign up</a>
-        <button class="nav-burger" type="button" aria-label="Menu" aria-expanded="false">☰</button>
-      </div>
-    </div>
-  </div>
-  <div class="nav-cats">
-    <div class="inner">
-      <ul class="nav-cat-links">
-        <li><a href="Lessons.dc.html?cat=Watercolour">Watercolour</a></li>
-        <li><a href="Lessons.dc.html?cat=Oil">Oils</a></li>
-        <li><a href="Lessons.dc.html?cat=Drawing">Drawing</a></li>
-        <li><a href="Lessons.dc.html?cat=Ink">Ink</a></li>
-        <li><a href="Lessons.dc.html?cat=Beginners">Beginners</a></li>
-      </ul>
-    </div>
-  </div>
-  <div class="nav-sheet">
-    <a href="index.html">Home</a>
-    <a href="Lessons.dc.html">Courses</a>
-    <a href="Gallery.dc.html">Gallery</a>
-    <a href="Showcase.dc.html">Showcase</a>
-    <a href="Blog.dc.html">Blog</a>
-    <a href="About.dc.html">About</a>
-    <a href="FreeVideos.dc.html">Free video</a>
-    <a href="Blog.dc.html?tag=Tools">Tools</a>
-    <a href="FAQ.dc.html">FAQ</a>
-    <a href="Lessons.dc.html?cat=Watercolour">Watercolour</a>
-    <a href="Lessons.dc.html?cat=Oil">Oils</a>
-    <a href="Lessons.dc.html?cat=Drawing">Drawing</a>
-    <a href="Lessons.dc.html?cat=Ink">Ink</a>
-    <a href="Lessons.dc.html?cat=Beginners">Beginners</a>
-    <a href="Login.dc.html">Log in / Sign up</a>
-  </div>
-</nav>
+<!-- #19: the hand-written nav that used to sit here never rendered —
+     js/site-nav.js replaces the whole element with buildNav() on load. This is
+     the mount point it looks for. -->
+<nav class="site-nav" aria-label="Main"></nav>
 
 <header class="page-hero">
   <div class="wash" aria-hidden="true"></div>
   <div class="container">
     <div class="eyebrow reveal-one"><span class="star">✦</span> Student showcase</div>
     <h1 class="marker-title font-a reveal-one" style="font-size:clamp(44px,6vw,80px);">Look at their learning outcomes</h1>
-    <div class="logo2"><img src="img/logo2.png" alt="Crystal Lau Art" loading="lazy" decoding="async"></div>
+    <!-- #17: in the page hero, above the fold at every width, so not lazy.
+         No srcset: brand marks ship exactly as the client supplied them. -->
+    <div class="logo2"><img src="img/logo2.png" alt="Crystal Lau Art" decoding="async"></div>
   </div>
 </header>
 
@@ -146,14 +105,18 @@
      instruction 2026-08-08. §11 keeps the existing layout and asks only for
      new material, so nothing in the direction is left unimplemented. -->
 
-<main class="container" id="content">
+<main class="container" id="content" tabIndex="-1">
 
-  <section class="section" style="padding-top:18px;">
-    <div class="filter-rail reveal-one" style="margin-bottom:18px;">
-      <div class="fg-opts" id="sw-filter"></div>
-    </div>
-    <div class="pol-frame reveal"><div class="pol-wall" id="sw-grid" aria-label="Student artwork wall"></div></div>
-    <div class="no-results" id="sw-empty" style="display:none;">Nothing in this medium yet — check back after the next critique night.</div>
+  <!-- #13/#19: the medium filter rail and the "nothing in this medium" empty
+       state used to be written out here. Every record in this page's data ships
+       med:'' (student names, titles and media are a client deliverable, ticket
+       29), so the rail rendered exactly one chip — "All" — which cannot change
+       what is on the wall, and the empty state could never be reached. Both are
+       built by the script instead, and only once the data carries more than one
+       medium. Nothing is hidden: when the media arrive, the rail appears. -->
+  <section class="section" id="sw-section" style="padding-top:18px;">
+    <!-- #23: aria-label on a bare <div> with no role is discarded. -->
+    <div class="pol-frame reveal"><div class="pol-wall" id="sw-grid" role="group" aria-label="Student artwork wall"></div></div>
   </section>
 
   <section class="section">
@@ -168,11 +131,16 @@
   </section>
 </main>
 
-<div class="sw-modal" id="sw-modal" aria-hidden="true" role="dialog" aria-modal="true">
+<!-- #07: this declared role="dialog" aria-modal="true" with no accessible name,
+     never moved focus into itself and could be tabbed straight out of. The
+     script names it per piece and moves, traps and restores focus.
+     #swm-img deliberately ships with NO src: it is written when a print is
+     opened, and src="" would make the browser fetch this document as the image. -->
+<div class="sw-modal" id="sw-modal" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Student artwork">
   <button class="sw-close" type="button" aria-label="Close">✕</button>
   <figure>
     <img id="swm-img" alt="">
-    <figcaption><span class="sw-ava" id="swm-ava"></span><span id="swm-cap"></span></figcaption>
+    <figcaption id="swm-figcap"><span class="sw-ava" id="swm-ava"></span><span id="swm-cap"></span></figcaption>
   </figure>
 </div>
 
@@ -218,9 +186,22 @@ class Component extends DCLogic {
     /* burger */
     /* burger handled by js/site-nav.js */
 
-    /* cart badge */
-    const renderCart = () => { let n = 0; try { n = JSON.parse(localStorage.getItem('cas-cart') || '[]').reduce((a, i) => a + (i.qty || 1), 0); } catch (e) {} document.querySelectorAll('.cart-badge').forEach(b => { b.textContent = n; b.style.display = n > 0 ? 'grid' : 'none'; }); };
-    renderCart();
+    /* #19: a private cart-badge renderer used to run here. js/site-nav.js and
+       js/site-extras.js both own that badge already, and site-nav.js asks pages
+       not to bind to it. Removed. */
+
+    /* skip link — the fragment alone only moves the viewport in some engines,
+       and the ticket asks for focus. #content carries tabindex="-1". */
+    const reduceQ = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const skip = document.querySelector('.cas-root > .skip-link');
+    if (skip) skip.addEventListener('click', (e) => {
+      const t = document.getElementById('content');
+      if (!t) return;
+      e.preventDefault();
+      t.focus({ preventScroll: true });
+      t.scrollIntoView({ block: 'start', behavior: reduceQ ? 'auto' : 'smooth' });
+      try { history.replaceState(null, '', '#content'); } catch (er) {}
+    });
 
     /* ---- the wall ---- */
     const AVA_COLORS = ['#9a6436', '#4d6625', '#5e4a3d', '#a96b38', '#6b7a4a', '#876d5c', '#7e4c27', '#8a9a6b'];
@@ -245,10 +226,30 @@ class Component extends DCLogic {
       const mt = rnd(-10, 22);
       const z = isMate ? 0 : 1 + Math.floor(Math.random() * 9);
       const pin = PINS[Math.floor(Math.random() * PINS.length)];
-      return '<button class="pol-tile' + extra + '" type="button" style="--rot:' + rot.toFixed(2) + 'deg;--mx:' + (+mx).toFixed(0) + 'px;--mt:' + mt.toFixed(0) + 'px;--z:' + z + ';--pinx:' + pinx + ';--pin:' + pin + ';" data-i="' + i + '" data-med="' + esc(p.med) + '" aria-label="' + esc(p.title) + ' by ' + esc(p.name) + '">' +
-        '<span class="pol-photo"><img src="img/' + esc(p.img) + '" alt="' + esc(p.title) + ' — student work by ' + esc(p.name) + '" loading="lazy">' +
-        '<span class="pol-med">' + esc(p.med) + '</span></span>' +
-        '<span class="pol-cap"><em>' + esc(p.title) + '</em><span>' + esc(p.name) + '</span></span>' +
+      /* #13: title, name and med are all '' on every record until the client
+         supplies them (ticket 29). Nothing here fills that gap with invented
+         copy: an absent field renders NOTHING rather than an empty chip, a
+         bare "·" separator or an accessible name of " by ". The button still
+         has to be nameable, so with no title it is named for what it is and
+         where it is on the wall. */
+      const caption = [p.title, p.name].filter(Boolean).join(' by ');
+      const label = 'View ' + (caption || 'student artwork ' + (i + 1));
+      return '<button class="pol-tile' + extra + '" type="button" style="--rot:' + rot.toFixed(2) + 'deg;--mx:' + (+mx).toFixed(0) + 'px;--mt:' + mt.toFixed(0) + 'px;--z:' + z + ';--pinx:' + pinx + ';--pin:' + pin + ';" data-i="' + i + '"' +
+        (p.med ? ' data-med="' + esc(p.med) + '"' : '') +
+        ' aria-label="' + esc(label) + '">' +
+        /* alt="" — the button above carries the name, so an alt here would read
+           the same thing twice */
+        /* #17: ladder + measured `sizes` from js/static-images.js. The whole
+           wall is above the fold at 1692, so the first row is eager and the
+           first tile carries the priority. */
+        '<span class="pol-photo"><img src="img/' + esc(p.img) + '"' +
+          (window.CAS_IMG_ATTRS ? window.CAS_IMG_ATTRS('img/' + p.img) : '') +
+          (i === 0 ? ' fetchpriority="high" decoding="async"' : ' decoding="async"') + ' alt="">' +
+        (p.med ? '<span class="pol-med">' + esc(p.med) + '</span>' : '') + '</span>' +
+        (caption
+          ? '<span class="pol-cap">' + (p.title ? '<em>' + esc(p.title) + '</em>' : '') +
+            (p.name ? '<span>' + esc(p.name) + '</span>' : '') + '</span>'
+          : '') +
       '</button>';
     });
     grid.innerHTML =
@@ -338,40 +339,109 @@ class Component extends DCLogic {
       requestAnimationFrame(step);
     }
 
-    /* medium filter — chips built from the pieces' own tags (shared js/filter-tags.js) */
-    const filter = $('sw-filter');
-    if (window.CasFilters) window.CasFilters.populate(filter, pieces, p => p.med, { allLabel: 'All' });
-    filter.addEventListener('click', (e) => {
-      const btn = e.target.closest('.fopt');
-      if (!btn) return;
-      filter.querySelectorAll('.fopt').forEach(b => b.classList.toggle('active', b === btn));
-      const val = btn.dataset.val;
-      let shown = 0;
-      grid.querySelectorAll('.pol-tile').forEach(t => {
-        const show = val === 'all' || t.dataset.med === val;
-        t.style.display = show ? '' : 'none';
-        if (show) shown++;
+    /* medium filter — chips built from the pieces' own media (shared
+       js/filter-tags.js). #13/#19: this used to render unconditionally, and with
+       every med:'' it produced a rail holding one chip ("All") that could not
+       change what was on the wall, plus an empty state that was unreachable
+       because no chip could ever hide a tile. The rail and the empty state are
+       built here instead, and only when the data offers a real choice — so the
+       moment the client's media arrive both appear, with nothing to re-wire. */
+    const MEDS = window.CasFilters ? window.CasFilters.collect(pieces, p => p.med) : [];
+    if (MEDS.length > 1) {
+      const section = $('sw-section');
+      const rail = document.createElement('div');
+      rail.className = 'filter-rail';
+      rail.style.marginBottom = '18px';
+      const filter = document.createElement('div');
+      filter.className = 'fg-opts';
+      filter.id = 'sw-filter';
+      rail.appendChild(filter);
+      section.insertBefore(rail, section.querySelector('.pol-frame'));
+
+      const emptyEl = document.createElement('div');
+      emptyEl.className = 'no-results';
+      emptyEl.id = 'sw-empty';
+      emptyEl.setAttribute('role', 'status');
+      emptyEl.style.display = 'none';
+      emptyEl.textContent = 'Nothing in this medium yet.';
+      section.appendChild(emptyEl);
+
+      window.CasFilters.populate(filter, pieces, p => p.med, { allLabel: 'All' });
+      /* #22/#23: selection was carried by a class alone. */
+      filter.querySelectorAll('.fopt').forEach(b => b.setAttribute('aria-pressed', b.classList.contains('active') ? 'true' : 'false'));
+      filter.addEventListener('click', (e) => {
+        const btn = e.target.closest('.fopt');
+        if (!btn) return;
+        filter.querySelectorAll('.fopt').forEach(b => {
+          b.classList.toggle('active', b === btn);
+          b.setAttribute('aria-pressed', b === btn ? 'true' : 'false');
+        });
+        const val = btn.dataset.val;
+        let shown = 0;
+        grid.querySelectorAll('.pol-tile').forEach(t => {
+          const show = val === 'all' || t.dataset.med === val;
+          t.style.display = show ? '' : 'none';
+          if (show) shown++;
+        });
+        emptyEl.style.display = shown ? 'none' : 'block';
+        if (window.CasAnnounce) window.CasAnnounce(shown ? shown + (shown === 1 ? ' print' : ' prints') + ' shown.' : 'Nothing in this medium yet.');
+        try { window.dispatchEvent(new Event('resize')); } catch (er) {} /* re-find overlaps for the physics */
       });
-      $('sw-empty').style.display = shown ? 'none' : 'block';
-      try { window.dispatchEvent(new Event('resize')); } catch (er) {} /* re-find overlaps for the physics */
-    });
+    }
 
     /* lightbox */
     const modal = $('sw-modal');
-    const open = (i) => {
+    const swFocusables = () => Array.prototype.filter.call(
+      modal.querySelectorAll('a[href],button:not([disabled]),[tabindex]:not([tabindex="-1"])'),
+      el => el.getClientRects().length > 0);
+    let opener = null;
+    const open = (i, from) => {
       const p = pieces[i];
+      /* #13: with no title, name or medium the caption used to read " ·  · ",
+         the avatar disc painted an initial-less blob and the alt read
+         " — student work by ". Absent fields are simply not written. */
+      const bits = [p.title, p.name, p.med].filter(Boolean);
+      /* #17: the modal paints 330-445, which the 224/448 rungs already
+         cover; set the ladder before the src so the browser has it. */
+      var swAttrs = (window.CAS_IMG || {})['img/' + p.img];
+      if (swAttrs) { $('swm-img').srcset = swAttrs.srcset; $('swm-img').sizes = '445px'; }
       $('swm-img').src = 'img/' + p.img;
-      $('swm-img').alt = p.title + ' — student work by ' + p.name;
-      $('swm-ava').textContent = p.name[0];
-      $('swm-ava').style.background = avaColor(p.name);
-      $('swm-cap').textContent = p.title + ' · ' + p.name + ' · ' + p.med;
+      $('swm-img').alt = p.title
+        ? (p.title + (p.name ? ' — student work by ' + p.name : ''))
+        : 'Student artwork ' + (i + 1);
+      const ava = $('swm-ava');
+      if (p.name) { ava.textContent = p.name.charAt(0); ava.style.background = avaColor(p.name); ava.style.display = ''; }
+      else { ava.textContent = ''; ava.style.display = 'none'; }
+      $('swm-cap').textContent = bits.join(' · ');
+      $('swm-figcap').style.display = bits.length ? '' : 'none';
+      modal.setAttribute('aria-label', p.title ? p.title + ' — student artwork' : 'Student artwork ' + (i + 1));
       modal.classList.add('show');
       modal.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
+      opener = from || document.activeElement;
+      const first = modal.querySelector('.sw-close');
+      if (first) first.focus();
     };
-    const close = () => { modal.classList.remove('show'); modal.setAttribute('aria-hidden', 'true'); document.body.style.overflow = ''; };
-    grid.addEventListener('click', (e) => { const t = e.target.closest('.pol-tile'); if (t) open(+t.dataset.i); });
+    const close = () => {
+      if (!modal.classList.contains('show')) return;
+      modal.classList.remove('show');
+      modal.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      if (opener && opener.focus) { try { opener.focus(); } catch (er) {} }
+      opener = null;
+    };
+    grid.addEventListener('click', (e) => { const t = e.target.closest('.pol-tile'); if (t) open(+t.dataset.i, t); });
     modal.addEventListener('click', (e) => { if (e.target === modal || e.target.closest('.sw-close')) close(); });
+    /* #07: the dialog claimed aria-modal="true" and Tab walked straight out of
+       it into the wall behind. */
+    modal.addEventListener('keydown', (e) => {
+      if (e.key !== 'Tab' || !modal.classList.contains('show')) return;
+      const f = swFocusables();
+      if (!f.length) { e.preventDefault(); return; }
+      const first = f[0], last = f[f.length - 1], a = document.activeElement;
+      if (e.shiftKey && (a === first || !modal.contains(a))) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && (a === last || !modal.contains(a))) { e.preventDefault(); first.focus(); }
+    });
     document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.classList.contains('show')) close(); });
 
     /* reveals fallback */

@@ -10,7 +10,11 @@ window.CAS_FREE_VIDEOS = [
     "section": "Step-by-Step Demos",
     "poster": "img/free/mountain.jpg",
     "dur": 1093,
-    "video": "https://drive.google.com/file/d/19gim-YbmRfvOiaSkOCIUNubtv_D2GFBm/preview"
+    "video": "https://drive.google.com/file/d/19gim-YbmRfvOiaSkOCIUNubtv_D2GFBm/preview",
+    "srcset": "img/free/mountain-320.jpg 320w, img/free/mountain-480.jpg 480w, img/free/mountain.jpg 960w",
+    "sizes": "(max-width: 600px) 346px, (max-width: 1000px) 395px, 448px",
+    "w": 960,
+    "h": 636
   },
   {
     "slug": "pink-floral",
@@ -19,7 +23,11 @@ window.CAS_FREE_VIDEOS = [
     "section": "Step-by-Step Demos",
     "poster": "img/free/pink-floral.jpg",
     "dur": 437,
-    "video": "https://drive.google.com/file/d/1aMfibqZAB38cuNw7qkPIrnhP4nlk8hQe/preview"
+    "video": "https://drive.google.com/file/d/1aMfibqZAB38cuNw7qkPIrnhP4nlk8hQe/preview",
+    "srcset": "img/free/pink-floral-320.jpg 320w, img/free/pink-floral-480.jpg 480w, img/free/pink-floral.jpg 720w",
+    "sizes": "(max-width: 600px) 346px, (max-width: 1000px) 395px, 448px",
+    "w": 720,
+    "h": 960
   },
   {
     "slug": "watercolor-airport",
@@ -28,6 +36,10 @@ window.CAS_FREE_VIDEOS = [
     "section": "Step-by-Step Demos",
     "poster": "img/free/watercolor-airport.jpg",
     "dur": null,
-    "video": null
+    "video": null,
+    "srcset": "img/free/watercolor-airport-320.jpg 320w, img/free/watercolor-airport-480.jpg 480w, img/free/watercolor-airport-896.jpg 896w, img/free/watercolor-airport.jpg 1600w",
+    "sizes": "(max-width: 600px) 346px, (max-width: 1000px) 395px, 448px",
+    "w": 1600,
+    "h": 1200
   }
 ];
