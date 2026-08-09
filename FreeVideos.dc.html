@@ -486,17 +486,36 @@ class Component extends DCLogic {
       '</' + tag + '>';
     };
 
-    /* A section with no films of its own shows the card shape instead of a
-       sentence, so the layout reads as intended before Crystal's clips arrive.
-       The cards are deliberately blank — hatched thumbnail, grey title bars, no
-       invented titles and no thumbnail borrowed from another section. */
-    const fvPlaceholder = () =>
-      '<span class="fv-card is-ph" aria-hidden="true">' +
-        '<span class="fv-thumb"><span class="fv-ph-label">Coming soon</span></span>' +
-        '<span class="fv-ph-bar"></span>' +
-        '<span class="fv-ph-bar w2"></span>' +
-        '<span class="fv-ph-bar w3"></span>' +
+    /* PLACEHOLDER TITLES — invented, not Crystal's. Two of the three sections
+       have no films at all, so blank tiles left the page impossible to judge.
+       Sample titles and run-times stand in; the [PLACEHOLDER] banner above each
+       affected section says so on the page, and every card keeps the hatched
+       thumbnail, is aria-hidden, and is excluded from the click binding, so a
+       sample can never be mistaken for a film. Delete PH_TITLES and this
+       function's title argument when the real clips arrive. */
+    const PH_TITLES = {
+      'Quick Inspiration': [
+        ['Three greys from one blue', '4 min'], ['Loading the brush', '3 min'],
+        ['A wash that will not streak', '6 min'], ['Lifting out a highlight', '2 min'],
+        ['Warm shadow, cool light', '5 min'], ['Salt, and when not to', '4 min'],
+      ],
+      'Shorts': [
+        ['One-minute cloud', '1 min'], ['Brush on its side', '1 min'],
+        ['Too much water', '1 min'], ['The paper decides', '1 min'],
+        ['Mixing green properly', '2 min'], ['Stop before you fiddle', '1 min'],
+      ],
+    };
+    const fvPlaceholder = (section, i) => {
+      const spec = (PH_TITLES[section] || [])[i];
+      return '<span class="fv-card is-ph" aria-hidden="true">' +
+        '<span class="fv-thumb"><span class="fv-ph-label">Sample</span>' +
+          (spec ? '<span class="fv-dur">' + fvEsc(spec[1]) + '</span>' : '') +
+        '</span>' +
+        (spec
+          ? '<h3>' + fvEsc(spec[0]) + '</h3><p>Placeholder — not a real film.</p>'
+          : '<span class="fv-ph-bar"></span><span class="fv-ph-bar w2"></span><span class="fv-ph-bar w3"></span>') +
       '</span>';
+    };
 
     /* 15: one grid per section, filled from the video's own section field.
        A section with nothing in it still renders rather than collapsing away —
@@ -511,7 +530,18 @@ class Component extends DCLogic {
          section, so a placeholder never reads as a film. */
       const pad = Math.max(0, 6 - list.length);
       grid.innerHTML = list.map(fvCard).join('')
-        + new Array(pad).fill(null).map(fvPlaceholder).join('');
+        + new Array(pad).fill(null).map((_, i) => fvPlaceholder(name, list.length + i)).join('');
+      /* the on-page marker, only where the section has no real film at all */
+      if (!list.length) {
+        const sec = grid.closest('.fv-sec');
+        if (sec && !sec.querySelector('.ph-banner')) {
+          const p = document.createElement('p');
+          p.className = 'ph-banner';
+          p.textContent = '[PLACEHOLDER] Every card in this section is an invented sample, '
+            + 'not a real film. Crystal has not supplied clips for it yet.';
+          sec.insertBefore(p, sec.querySelector('.fv-rail'));
+        }
+      }
       /* #19: `grid.classList.toggle('is-placeholder', ...)` used to be written
          here. `.is-placeholder` matches no rule in any stylesheet or in this
          file, so it decided nothing. Gone. */

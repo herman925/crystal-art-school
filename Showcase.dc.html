@@ -116,6 +116,7 @@
        medium. Nothing is hidden: when the media arrive, the rail appears. -->
   <section class="section" id="sw-section" style="padding-top:18px;">
     <!-- #23: aria-label on a bare <div> with no role is discarded. -->
+    <p class="ph-banner">[PLACEHOLDER] The names, titles and media below are invented samples, not real students. Crystal has supplied the photographs only; the real credits are still to come.</p>
     <div class="pol-frame reveal"><div class="pol-wall" id="sw-grid" role="group" aria-label="Student artwork wall"></div></div>
   </section>
 
@@ -155,16 +156,22 @@ class Component extends DCLogic {
     /* ar = presented aspect ratio (tiles crop via object-fit to mix portrait /
        landscape / square rows the way the real student wall will) */
     return [
-      { img: 'showcase/sw01.jpg', ar: 1.00, name: '', med: '', title: '' },
-      { img: 'showcase/sw02.jpg', ar: 1.00, name: '', med: '', title: '' },
-      { img: 'showcase/sw03.jpg', ar: 1.00, name: '', med: '', title: '' },
-      { img: 'showcase/sw04.jpg', ar: 1.00, name: '', med: '', title: '' },
-      { img: 'showcase/sw05.jpg', ar: 1.00, name: '', med: '', title: '' },
-      { img: 'showcase/sw06.jpg', ar: 1.00, name: '', med: '', title: '' },
-      { img: 'showcase/sw07.jpg', ar: 1.00, name: '', med: '', title: '' },
-      { img: 'showcase/sw08.jpg', ar: 1.00, name: '', med: '', title: '' },
-      { img: 'showcase/sw09.jpg', ar: 1.00, name: '', med: '', title: '' },
-      { img: 'showcase/sw10.jpg', ar: 1.00, name: '', med: '', title: '' }
+      /* PLACEHOLDER DATA — invented, not real students. Crystal supplied the ten
+         photographs and nothing else: no names, no titles, no media. Empty
+         strings rendered " by " as every tile's accessible name and " · · " as
+         every lightbox caption, so sample values stand in until the real credits
+         arrive (tracker tickets 13 and 29). The banner above the wall says so on
+         the page. Replace all ten rows together; do not ship these names. */
+      { img: 'showcase/sw01.jpg', ar: 1.00, name: 'Amara Osei', med: 'Watercolour', title: 'Low tide, late light' },
+      { img: 'showcase/sw02.jpg', ar: 1.00, name: 'Ben Halloran', med: 'Watercolour', title: 'The allotment shed' },
+      { img: 'showcase/sw03.jpg', ar: 1.00, name: 'Chen Wai-lam', med: 'Ink and wash', title: 'Tram stop, morning' },
+      { img: 'showcase/sw04.jpg', ar: 1.00, name: 'Dara Ferreira', med: 'Watercolour', title: 'Two pears and a jug' },
+      { img: 'showcase/sw05.jpg', ar: 1.00, name: 'Elin Marsden', med: 'Gouache', title: 'Rooftops after rain' },
+      { img: 'showcase/sw06.jpg', ar: 1.00, name: 'Farid Haddad', med: 'Watercolour', title: 'The long field' },
+      { img: 'showcase/sw07.jpg', ar: 1.00, name: 'Grace Nakamura', med: 'Watercolour', title: 'Harbour wall' },
+      { img: 'showcase/sw08.jpg', ar: 1.00, name: 'Hana Petrova', med: 'Ink and wash', title: 'Winter hedgerow' },
+      { img: 'showcase/sw09.jpg', ar: 1.00, name: 'Iris Bello', med: 'Gouache', title: 'Kitchen window, six' },
+      { img: 'showcase/sw10.jpg', ar: 1.00, name: 'Jonah Whitfield', med: 'Watercolour', title: 'Estuary, low cloud' }
     ];
   }
 

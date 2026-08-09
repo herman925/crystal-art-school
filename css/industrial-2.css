@@ -663,6 +663,16 @@
 /* #19: the .nav-cats second nav row and its five rules are gone. buildNav()
    emits no such block, so they matched nothing on any page at any width. */
 
+/* A visible, deliberately plain marker for content that is invented and must
+   not ship. It is not styled to be pretty — it is styled to be noticed, and to
+   look wrong enough that nobody forgets to remove it. */
+.ph-banner { margin: 0 auto 18px; max-width: 74ch; padding: 10px 14px;
+  border: 1px dashed color-mix(in srgb, var(--coral) 60%, transparent);
+  border-radius: var(--r-sharp);
+  background: color-mix(in srgb, var(--coral) 8%, transparent);
+  font-family: var(--font-cond); font-size: 13.5px; line-height: 1.5;
+  letter-spacing: var(--tracking-label); color: var(--ink); text-align: center; }
+
 /* ---------- social strip (Follow along) ---------- */
 .social-strip { display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 6px 0 10px; }
 /* Tracking held at .3em pending issue #22. It is the furthest value from the

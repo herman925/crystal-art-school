@@ -143,12 +143,12 @@ window.CAS_BLOG = [
     sizes: '(max-width: 600px) 358px, (max-width: 1000px) 720px, 452px',
     w: 2048, h: 1332,
     tag: 'Journal', date: '2026-07-23', d: 'Jul 23', mins: 2,
-    devnote: "This post has not been approved yet. Crystal supplied the text; it has been rewritten in the first person for publication. No claim has been changed. Two sentences are ours and are not in her original: “The first time I painted in front of a crowd I expected the same panic — and it never arrived” and “Neither of those was true about me ten years ago.” This note stays until she signs it off.",
+    devnote: "This post has not been approved yet. Crystal supplied the text; it has been rewritten from the passive into the first person for publication. Every sentence here is a rewording of one of hers — no claim has been added, removed or changed, and nothing invented remains: two sentences that were ours have been deleted. This note stays until she signs it off.",
 
     body: [
       'I am introverted, and not especially good in a room full of people. For most of my life, standing up to speak meant a pounding heart and a mind that went completely blank. Friends who knew me then still ask how on earth I ended up teaching.',
-      'Live demonstrations are what changed it. The first time I painted in front of a crowd I expected the same panic — and it never arrived. Once I was inside the work, the room simply stopped existing. I could paint, explain what I was doing, and answer questions at the same time, and none of it made me nervous.',
-      'Now invitations to speak turn up regularly, and I say yes to them. I like going somewhere I have never been. I like the hours spent making the thing. Neither of those was true about me ten years ago.',
+      'Live demonstrations are what changed it. Once I was inside the work, the room simply stopped existing. I could paint, explain what I was doing, and answer questions at the same time, and none of it made me nervous.',
+      'Now invitations to speak turn up regularly, and I say yes to them. I like going somewhere I have never been. I like the hours spent making the thing.',
       "Did art change me? I genuinely don't know. But painting has given me a great deal, and I am grateful for all of it."
     ],
     quote: 'Once I was inside the work, the room simply stopped existing.'
@@ -162,14 +162,14 @@ window.CAS_BLOG = [
     sizes: '(max-width: 600px) 358px, (max-width: 1000px) 720px, 452px',
     w: 1600, h: 1200,
     tag: 'Journal', date: '2026-07-23', d: 'Jul 23', mins: 2,
-    devnote: "This post has not been approved yet. Crystal supplied the text; it has been rewritten in the first person for publication. No claim has been changed. One clause is ours — “and I have stopped worrying about whether the body of work looks consistent” — and the pull-quote was tightened from “What is the point of creating when it goes against one's core?” to the line shown. This note stays until she signs it off.",
+    devnote: "This post has not been approved yet. Crystal supplied the text; it has been rewritten from the passive into the first person for publication. Every sentence here is a rewording of one of hers — no claim has been added, removed or changed, and nothing invented remains: one clause that was ours has been deleted and the pull-quote is her own sentence, verbatim. This note stays until she signs it off.",
 
     body: [
       'A lot of artists pick one subject and stay with it. It builds a recognisable identity, and for plenty of people it works — you can see the results.',
       'I spent a long time trying to work out which subject that should be for me. What do people want to see? What tends to win prizes? I turned it over for months, and all it produced was confusion. Eventually I had lost sight of why I was painting at all.',
-      'Painting is supposed to make me happy. That is the whole of it. So now I paint whatever I respond to, and I have stopped worrying about whether the body of work looks consistent. A style comes out of the practice on its own, in its own time — it isn’t something you can decide in advance.',
+      'Painting is supposed to make me happy. That is the whole of it. So now I paint whatever I respond to. A style comes out of the practice on its own, in its own time — it isn’t something you can decide in advance.',
       'Following my instincts and working honestly is the only real conversation I have with myself. The person on the paper turns out to be the actual one.'
     ],
-    quote: 'What is the point of making something if it goes against who you are?'
+    quote: 'What is the point of creating when it goes against one\u2019s core?'
   }
 ];
