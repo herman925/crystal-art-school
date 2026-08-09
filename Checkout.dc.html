@@ -249,7 +249,9 @@ class Component extends DCLogic {
               '<span class="qv">' + (Number(it.qty) || 1) + '</span>' +
               '<button type="button" data-inc="' + i + '" aria-label="Increase quantity of ' + esc(it.title) + '">+</button>' +
             '</div></div>' +
-          '<div class="li-right"><div class="li-price">' + money((Number(it.price) || 0) * (Number(it.qty) || 1)) + '</div>' +
+          '<div class="li-right"><div class="li-price">' +
+          (Number(it.was) ? '<s>' + money(Number(it.was) * (Number(it.qty) || 1)) + '</s> <b class="now">' + money((Number(it.price) || 0) * (Number(it.qty) || 1)) + '</b>'
+                          : money((Number(it.price) || 0) * (Number(it.qty) || 1))) + '</div>' +
             '<button class="li-remove" type="button" data-rm="' + i + '" aria-label="Remove ' + esc(it.title) + ' from your basket">Remove</button></div>' +
         '</div>'
       ).join('');

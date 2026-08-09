@@ -304,9 +304,14 @@ class Component extends DCLogic {
       if (!strip) return;
       if (shots.length < 2) { strip.style.display = 'none'; }
       else {
-        /* the column count follows the set rather than being fixed at four,
-           because the set is not always five images long */
-        strip.style.gridTemplateColumns = 'repeat(' + Math.min(shots.length, 5) + ', 1fr)';
+        /* 7.1 caps this strip's height so the buy button stays on the first
+           screen. The column count is fixed at five and does NOT follow the
+           set size: with two fallback images, two columns of 1fr each made
+           every thumbnail nearly three times taller, so the strip grew by
+           ~99px precisely when a course had fewer photographs and pushed ADD
+           TO CART off the bottom of a laptop screen. Short sets leave the
+           trailing columns empty. */
+        strip.style.gridTemplateColumns = 'repeat(5, 1fr)';
         strip.innerHTML = shots.map((s, i) =>
           '<button class="co-thumb" type="button" aria-pressed="false"' +
           ' data-i="' + i + '" aria-label="Show ' + esc(s.label) + '">' +

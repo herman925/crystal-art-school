@@ -863,21 +863,31 @@ class Component extends DCLogic {
       document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && lbOpen()) closeCert(); });
     }
     if (rail) {
-      let down = false, startX = 0, startLeft = 0, moved = 0;
+      let down = false, startX = 0, startLeft = 0, moved = 0, held = false;
       rail.addEventListener('pointerdown', (e) => {
-        down = true; moved = 0; startX = e.clientX; startLeft = rail.scrollLeft;
-        rail.classList.add('is-dragging'); rail.setPointerCapture(e.pointerId);
+        down = true; moved = 0; held = false; startX = e.clientX; startLeft = rail.scrollLeft;
+        rail.classList.add('is-dragging');
       });
       rail.addEventListener('pointermove', (e) => {
         if (!down) return;
         const dx = e.clientX - startX;
         moved = Math.max(moved, Math.abs(dx));
+        /* Capture only once this is genuinely a drag, past the same 6px
+           threshold the click guard below uses. Capturing on pointerdown
+           retargets the click that follows to the rail, which meant a plain
+           click on a certificate never reached the mount's own handler and
+           the pictures could not be opened at all. */
+        if (!held && moved > 6) {
+          held = true;
+          try { rail.setPointerCapture(e.pointerId); } catch (err) {}
+        }
         rail.scrollLeft = startLeft - dx;
       });
       const release = (e) => {
         if (!down) return;
         down = false; rail.classList.remove('is-dragging');
-        try { rail.releasePointerCapture(e.pointerId); } catch (err) {}
+        if (held) { try { rail.releasePointerCapture(e.pointerId); } catch (err) {} }
+        held = false;
       };
       rail.addEventListener('pointerup', release);
       rail.addEventListener('pointercancel', release);

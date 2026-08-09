@@ -130,7 +130,7 @@
   <section class="section" id="membership">
     <div class="section-head reveal-one">
       <div class="eyebrow"><span class="star">&#10038;</span> Membership</div>
-      <h2 class="section-title is-left">Three ways to study</h2>
+      <h2 class="section-title is-left">Three Ways to Study</h2>
     </div>
     <!-- ASSET PENDING: These three are Crystal's own studio photographs, picked by me to
             show the treatment — §1.4.13 asks for three chosen for this block, dark or low
@@ -251,6 +251,7 @@ class Component extends DCLogic {
             '<div class="scrim"><div class="t">' + esc(c.title) + '</div></div>' +
             '<div class="actions">' +
               '<button class="cover-btn primary" type="button" data-add-to-cart data-tiered' +
+              (c.was ? ' data-was="' + c.was + '"' : '') +
                 ' data-title="' + esc(c.title) + '" data-price="' + c.price + '"' +
                 ' data-img="' + esc(c.cover.replace(/^img\//, '')) + '">' + CART_ICO + ' Add to cart</button>' +
               '<a class="cover-btn secondary" href="course.dc.html?id=' + encodeURIComponent(c.id) + '">' +

@@ -359,13 +359,11 @@
 
   <section class="pg-section" style="padding-bottom:36px;">
     <div class="pg-wrap">
-      <!-- #11: the heading here was "Real hands, real progress" over three
-           cards reading "@username" and "Administrator-entered comment appears
-           here". No student comment has been supplied, so the heading claimed
-           something the page could not show. The section is kept because
-           removing it needs the client's agreement (ticket 29), but it now says
-           what it is, on the page rather than in a comment. -->
-      <h2 class="section-title">Student comments</h2>
+      <!-- 3.9 opens with an instruction to keep this heading, so it stays.
+           The three cards below are invented placeholders until real comments
+           are supplied; the banner under this heading says so on the page,
+           which is where the honesty belongs — not in a reworded title. -->
+      <h2 class="section-title">Real hands, real progress</h2>
       <p class="ph-banner">[PLACEHOLDER] These three comments are invented, not from real students. Each card will carry a member&rsquo;s username and their own profile picture, with the comment typed in by an administrator.</p>
       <div class="testi-grid">
         <div class="testi-card reveal-up" style="--i:0">
@@ -433,7 +431,13 @@ class Component extends DCLogic {
       title: c.title,
       tag: c.tag,
       date: c.date || ('2026-07-' + String(28 - i * 3).padStart(2, '0')),
-      price: c.price
+      price: c.price,
+      /* 6: a reduced price must read as reduced on every surface it appears on,
+         not only in the catalogue. Dropping these two here was why the home
+         card, the cart, the checkout and the dashboard all printed a bare
+         reduced figure with nothing to compare it against. */
+      was: c.was || null,
+      sale: !!c.sale
     }));
   }
 
@@ -821,8 +825,12 @@ class Component extends DCLogic {
         card.innerHTML = '<a class="cc-cover" href="' + href + '" aria-label="' + esc(c.title) + '"><img src="img/' + esc(c.img) + '"' + imgAttrs(slotSizes(c.imgMeta)) + ' alt="' + esc(c.title) + '" loading="lazy" decoding="async"></a>' +
           '<div class="cc-pad"><div class="cc-meta">' + esc(c.tag) + '</div>' +
           '<h3><a href="' + href + '" style="color:inherit;text-decoration:none;">' + esc(c.title) + '</a></h3>' +
-          '<div class="cc-row"><span class="cc-price">£' + c.price + '</span>' +
-          '<button class="cc-btn primary" type="button" data-add-to-cart data-tiered data-title="' + esc(c.title) + '" data-price="' + c.price + '" data-img="' + esc(c.img) + '">' + cartSvg + ' Add</button></div></div>' +
+          '<div class="cc-row"><span class="cc-price">' +
+          (c.was ? '<s>£' + c.was + '</s> <b class="now">£' + c.price + '</b>' : '£' + c.price) +
+          '</span>' +
+          '<button class="cc-btn primary" type="button" data-add-to-cart data-tiered data-title="' + esc(c.title) + '" data-price="' + c.price + '"' +
+          (c.was ? ' data-was="' + c.was + '"' : '') +
+          ' data-img="' + esc(c.img) + '">' + cartSvg + ' Add</button></div></div>' +
           '<a class="cc-photo" href="' + href + '" aria-label="' + esc(c.title) + '">' + stripImgs + '</a>';
         shopRail.appendChild(card);
       });

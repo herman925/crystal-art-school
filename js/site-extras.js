@@ -44,6 +44,8 @@
     + '.mc-qty span{min-width:26px;text-align:center;font-family:var(--font-cond,sans-serif);font-weight:600;font-size:13px;}'
     + '.mc-right{display:flex;flex-direction:column;align-items:flex-end;gap:8px;}'
     + '.mc-price{font-family:var(--font-cond,sans-serif);font-weight:600;font-size:15px;color:var(--coral);}'
+    + '.mc-price s{opacity:.72;font-weight:400;}'
+    + '.mc-price .now{color:var(--marine,#598493);}'
     + '.mc-rm{border:0;background:none;color:var(--muted);font-family:var(--font-cond,sans-serif);font-size:12.5px;letter-spacing:var(--tracking-label);text-transform:uppercase;cursor:pointer;}'
     + '.mc-rm:hover{color:var(--coral);text-decoration:underline;}'
     + '.mc-foot{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line);flex-wrap:wrap;}'
@@ -226,7 +228,9 @@
         + '<div class="mc-thumb">' + (it.img ? '<img src="' + esc(imgsrc(it.img)) + '" alt="">' : '') + '</div>'
         + '<div><div class="mc-name">' + esc(it.title) + '</div><div class="mc-kind">' + esc(it.kind || 'Artwork') + '</div>'
         + '<div class="mc-qty"><button type="button" data-dec="' + i + '" aria-label="Decrease">−</button><span>' + (it.qty || 1) + '</span><button type="button" data-inc="' + i + '" aria-label="Increase">+</button></div></div>'
-        + '<div class="mc-right"><div class="mc-price">' + money(line) + '</div><button class="mc-rm" type="button" data-rm="' + i + '">Remove</button></div>'
+        + '<div class="mc-right"><div class="mc-price">'
+        + (it.was ? '<s>' + money(it.was * (it.qty || 1)) + '</s> <b class="now">' + money(line) + '</b>' : money(line))
+        + '</div><button class="mc-rm" type="button" data-rm="' + i + '">Remove</button></div>'
         + '</div>';
     }).join('');
     var sub = c.reduce(function (a, i) { return a + (i.price || 0) * (i.qty || 1); }, 0);
@@ -482,11 +486,12 @@
   var tpPop, tpBtn = null;
   function tpResolve(btn) {
     var d = btn.dataset;
-    if (d.title != null && d.price != null) return { title: d.title, price: +d.price || 0, img: (d.img || '').replace(/^img\//, '') };
+    if (d.title != null && d.price != null) return { title: d.title, price: +d.price || 0, was: +d.was || 0, img: (d.img || '').replace(/^img\//, '') };
     var cell = btn.closest('.lesson-cell');
     if (cell) return {
       title: ((cell.querySelector('.scrim .t') || {}).textContent || 'Course').trim(),
       price: +cell.dataset.price || 0,
+      was: +cell.dataset.was || 0,
       img: ((cell.querySelector('img') || {}).getAttribute('src') || '').replace(/^img\//, '')
     };
     var rel = btn.closest('.rel-slide');
@@ -506,6 +511,10 @@
     tpBtn = btn;
     var item = tpResolve(btn);
     var appr = item.price, fell = Math.round(item.price * FELLOW_MULT);
+    /* the old price scales by the same multiplier as the new one, so the
+       saving shown against a Fellow line is the Fellow saving and not the
+       Apprentice one */
+    var wasAppr = item.was || 0, wasFell = item.was ? Math.round(item.was * FELLOW_MULT) : 0;
     tpPop.setAttribute('data-theme', curTheme());
     tpPop.innerHTML = '<div class="tp-arrow"></div><div class="tp-in">'
       + '<div class="tp-h"><span class="ast">✦</span> Choose your tier</div>'
@@ -515,7 +524,7 @@
     tpPop.querySelectorAll('[data-tier]').forEach(function (o) {
       o.addEventListener('click', function () {
         var tier = o.getAttribute('data-tier');
-        addCourse(item, tier, tier === 'Fellow' ? fell : appr, btn);
+        addCourse(item, tier, tier === 'Fellow' ? fell : appr, btn, tier === 'Fellow' ? wasFell : wasAppr);
         closeTierPop();
       });
     });
@@ -538,11 +547,11 @@
     if (tpBtn && tpBtn.focus && tpPop && tpPop.contains(document.activeElement)) { try { tpBtn.focus(); } catch (e) {} }
     tpBtn = null;
   }
-  function addCourse(item, tier, price, btn) {
+  function addCourse(item, tier, price, btn, was) {
     var c = read();
     var ex = c.find(function (x) { return x.title === item.title && x.tier === tier; });
     if (ex) ex.qty = (ex.qty || 1) + 1;
-    else c.push({ title: item.title, price: price, tier: tier, kind: 'Course · ' + tier, img: item.img, qty: 1 });
+    else c.push({ title: item.title, price: price, was: was || 0, tier: tier, kind: 'Course · ' + tier, img: item.img, qty: 1 });
     write(c); updateBadges();
     if (btn) {
       var o = btn.innerHTML; btn.innerHTML = 'Added ✓'; btn.disabled = true;

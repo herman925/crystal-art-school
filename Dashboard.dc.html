@@ -298,7 +298,9 @@ class Component extends DCLogic {
       .slice(0, 3);
     $('recommend-grid').innerHTML = recs.length ? recs.map(c =>
       '<div class="mc-course"><div class="cov">' + coverImg(c, '') + '</div>' +
-      '<div class="body"><div class="meta">' + esc(c.tag || c.cat) + ' \u00b7 \u00a3' + c.price + '</div><h3>' + esc(c.title) + '</h3>' +
+      '<div class="body"><div class="meta">' + esc(c.tag || c.cat) + ' \u00b7 ' +
+      (c.was ? '<s>\u00a3' + c.was + '</s> <b class="now">\u00a3' + c.price + '</b>' : '\u00a3' + c.price) +
+      '</div><h3>' + esc(c.title) + '</h3>' +
       '<a class="btn ghost" href="' + courseHref(c.id) + '">View course \u2192</a></div></div>').join('')
       : '<div class="dash-card" style="grid-column:1/-1;"><p style="margin:0;font-size:14.5px;color:var(--muted);">You own every course in the catalogue.</p></div>';
 
