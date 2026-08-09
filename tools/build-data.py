@@ -163,7 +163,14 @@ def build_courses(manifest, meta, links):
                 "video": parts[0]["url"] if parts else None,
                 "portrait": bool(parts and parts[0].get("portrait")),
                 "videos": parts if len(parts) > 1 else [],
-                "free": i == 0,                   # lesson 1 is the free preview
+                # Lesson 1 is the free preview — but ONLY where there is
+                # something left behind the paywall. little-house and
+                # urban-sketch each hold a single lesson, so marking it free
+                # gave away the whole GBP24 product: the syllabus rendered one
+                # unlocked row badged FREE PREVIEW beside a live Add to cart,
+                # and lockedRows was 0. A one-lesson course has no preview.
+                # (audit ticket 15, 2026-08-09)
+                "free": i == 0 and len(a_lessons) > 1,
                 "src": al.get("srcVideo"),        # provenance only, never fetched
                 "srcFolder": al["srcFolder"],
             }

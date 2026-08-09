@@ -243,7 +243,19 @@ these was measured in the rendered page:
 
 ### 12 — Blog: the copy note and the copy it declares
 
-**Status:** ready-for-agent · **P1** · **Blocked by:** none
+**Status:** MECHANISM FIXED 2026-08-09 · decision still with the client · **P1**
+
+The note renders again, and it now names every change rather than gesturing at
+them: the six material and instruction corrections on post 1, the two sentences
+on post 2 that are ours, and the one clause plus the tightened pull-quote on
+post 3. Each note ends "This note stays until she signs it off."
+
+Verified against her source documents: all six corrections are present on the
+site and her original wording is gone in every case, and the three sentences the
+notes claim as ours appear in none of her three documents.
+
+**Still with the client:** approve the corrections, or the copy is restored to
+her wording. The note must not be deleted before one of those happens.
 
 **What to build:** a decision, then the code to match. The "Developer's note" callout is
 dead — no post in `js/blog-data.js` carries a `devnote` field, and `.bp-devnote` matches
@@ -319,7 +331,13 @@ does not do. Each is measured:
 
 ### 15 — Commerce data integrity
 
-**Status:** ready-for-agent · **P1** · **Blocked by:** none
+**Status:** DONE 2026-08-09 · **P1** · **Blocked by:** none
+
+**Decided:** these are paid courses, not free samplers. A one-lesson course now
+gets no free preview: `tools/build-data.py` marks lesson 1 free only where the
+course has more than one lesson, so there is something left behind the paywall.
+Measured after rebuild — clouds-beginner 13 lessons / 1 free, clouds-intermediate
+7 / 1, little-house 1 / 0, urban-sketch 1 / 0.
 
 **What to build:** the two £24 courses (`little-house`, `urban-sketch`) each have exactly
 one lesson, and that lesson is flagged `free: true`. Rendered: `£24`, a live Add to cart,
@@ -616,7 +634,23 @@ Added by this audit:
 
 ### 30 — Type legibility: two held tracking rows
 
-**Status:** blocked · **Blocked by:** the client
+**Status:** DECIDED 2026-08-09, without the client · **Blocked by:** none
+
+Both rows now use `--tracking-label` (0.06em). Reasoning is in the CSS beside
+each, so it travels with the code:
+
+* **The home social strip label** was 0.3em on a 12px two-word label — five times
+  the scale and 64% above the measured 0.183em legibility ceiling. Past about
+  0.10em the letters stop grouping into words, which is the only job that label
+  has. This IS a departure from §3, which holds home-page elements the board did
+  not name; the judgement is that 0.3em is a legibility fault rather than a
+  design statement. One value, trivially reverted.
+* **The New Release chip** was 0.14em. §5.2 asks for the chip to be enlarged and
+  it already is — 14px against 12px on every sibling chip — so the objection to
+  tightening (that on an eleven-character string tighter tracking and smaller
+  type read alike) no longer applies. Size deliberately unchanged.
+
+Measured after: both render at their token value in both themes, no overflow.
 
 Migrated from GitHub issue #22 on 2026-08-09. **The default is hold** — both rows are
 currently untouched and stay that way unless the answer is yes.

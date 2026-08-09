@@ -238,7 +238,14 @@
    the direction rules Font A out for this label. */
 /* Tracking held at .14em pending issue #22 — the client has not yet been asked.
    §5.2 asks for this chip to be enlarged, so any cut needs ~+1px of size. (#20) */
-.rel-chip { position: absolute; top: 12px; left: 12px; z-index: 3; font-family: var(--font-cond); font-size: 14px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; background: var(--marine); color: var(--marine-ink); border-radius: var(--r-sharp); padding: 6px 13px; box-shadow: var(--shadow-sm); }
+/* Held row 2 of 2, decided 2026-08-09 without the client. The direction §5.2
+   asks for this chip to be ENLARGED, and it already is — 14px against the 12px
+   of every sibling chip. That was the objection to tightening it: on an
+   eleven-character string, tighter tracking and smaller type read alike, so
+   tightening alone risked looking like the opposite of what was asked. The
+   enlargement is already visible, so the objection no longer stands, and the
+   chip joins the token scale. Size deliberately unchanged. */
+.rel-chip { position: absolute; top: 12px; left: 12px; z-index: 3; font-family: var(--font-cond); font-size: 14px; font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; background: var(--marine); color: var(--marine-ink); border-radius: var(--r-sharp); padding: 6px 13px; box-shadow: var(--shadow-sm); }
 /* 5.1: the short topic, at the course-title face rather than Font A. It steps
    down a size as the topic gets longer so a long one still reads on one line. */
 .rel-title { position: absolute; left: 16px; right: 16px; bottom: 58px; z-index: 3; color: #f3ede1; font-family: var(--font-marker); font-weight: 600; font-size: 38px; line-height: 1.14; text-shadow: 0 2px 12px rgba(0,0,0,.55); }
@@ -660,7 +667,16 @@
 .social-strip { display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 6px 0 10px; }
 /* Tracking held at .3em pending issue #22. It is the furthest value from the
    measured ceiling, but §3 holds home-page elements her board never named. (#20) */
-.social-strip .ss-label { font-family: var(--font-cond); font-weight: 600; font-size: 12px; letter-spacing: .3em; text-transform: uppercase; color: var(--muted); }
+/* Held row 1 of 2, decided 2026-08-09 without the client. .3em on a 12px
+   two-word label is 5x the token scale and 64% above the measured legibility
+   ceiling of .183em; past about .10em the letters stop grouping into words at a
+   glance, which is the whole job of a two-word label. The design direction §3
+   holds home-page elements the client's board did not name, and this one was
+   never named — so this IS a departure from that rule. It is recorded here
+   rather than buried: the judgement is that .3em is a legibility fault on a
+   supporting label, not a design statement worth protecting. One value; revert
+   to .3em if she disagrees. */
+.social-strip .ss-label { font-family: var(--font-cond); font-weight: 600; font-size: 12px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); }
 .ss-icons { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
 .ss-btn { width: 54px; height: 54px; border-radius: 50%; display: grid; place-items: center; background-color: #876d5c; background-image: linear-gradient(118deg, rgba(231,221,203,.16), transparent 46%), var(--walnut-grain); background-size: 100% 100%, 200px 90px; color: #f4e7cf; box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(231,221,203,.2); transition: transform .2s var(--ease-pop), filter .2s; }
 .ss-btn:hover { transform: translateY(-4px); filter: brightness(1.08); }
