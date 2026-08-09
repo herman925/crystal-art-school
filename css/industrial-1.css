@@ -665,7 +665,29 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
    subtitle and CTA came to 427px inside 416px of room, so the bottom of the
    CTA pill was cut off. Centring on the box instead of pinning to a percentage
    from the top keeps the column inside the frame whatever the title height. */
-.hero__text { position: absolute; left: 4.2%; top: 50%; transform: translateY(-50%); width: 50%; z-index: 5; }
+/* Top-anchored, not centred. Centred put the headline's second line straight
+   through the small photograph's vertical band: the title occupied 83..243 of a
+   489px hero while the photo starts at 166. The text was never covered — it is
+   z-index 5 against the photo's 2 — it was cream painted on a cream photograph,
+   1.20:1 at worst with 86% of the glyph pixels in the overlap under 3:1.
+
+   The cause is that the hero is a FIXED 1168x489 inside a 1216px wrapper, while
+   the title's clamp(39px, 5.1vw, 84px) keys off the VIEWPORT. Container still,
+   type growing: at 1280 the title is 65px and fits, at 1650+ it reaches the 84px
+   cap and runs into the photo.
+
+   Two more interesting fixes were measured and both lost. A dark halo moved the
+   median only 1.55 -> 1.72, because a halo works at the glyph edge and these
+   glyphs are cream right through. mix-blend-mode: difference — read the backdrop
+   and invert, which is the right instinct — changed NOTHING, byte for byte,
+   because this very rule's z-index isolates a stacking context and leaves no
+   backdrop to blend against. Third time that has bitten on this project.
+
+   Lifting the block clears the photo's band entirely: 0px vertical overlap, so
+   the 142px of horizontal overlap no longer matters — there is only dark wood
+   behind the text at that height. The photograph does not move.
+   (client feedback 2026-08-09) */
+.hero__text { position: absolute; left: 4.2%; top: 1%; width: 50%; z-index: 5; }
 .hero__title { font-family: var(--font-marker); font-weight: 600; font-size: clamp(30px,4.4vw,72px); line-height: 1.02; margin: 0 0 12px; color: var(--ink); }
 .hero__subtitle { font-family: var(--font-body); font-size: clamp(14px,1.15vw,18px); color: var(--muted); margin: 0 0 18px; max-width: 38ch; }
 .hero__img { position: absolute; margin: 0; overflow: hidden; background: var(--paper-2); }
