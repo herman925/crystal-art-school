@@ -180,7 +180,12 @@
       if (ph && ST) {
         g.to(ph, { backgroundPositionY: '65%', ease: 'none', scrollTrigger: { trigger: ph, start: 'top top', end: 'bottom top', scrub: 1 } });
         var phc = ph.querySelector('.container');
-        if (phc) g.to(phc, { yPercent: 22, opacity: .35, ease: 'none', scrollTrigger: { trigger: ph, start: 'top top', end: 'bottom top', scrub: 1 } });
+        /* The container holds the eyebrow, the page title and the brand mark.
+           This tween used to scrub its opacity down to .35 as the band left the
+           viewport, so the title turned see-through after roughly two wheel
+           notches — the band is only ~230px tall. The drift stays, the fade
+           does not: nothing in the wood band renders below full strength. */
+        if (phc) g.to(phc, { yPercent: 22, ease: 'none', scrollTrigger: { trigger: ph, start: 'top top', end: 'bottom top', scrub: 1 } });
       }
 
       /* ============================================================

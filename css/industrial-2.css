@@ -87,12 +87,14 @@
    paragraph in it too the band grew tall enough to push the content below the
    fold. The introduction now reads under the band, in body colour.
    (client feedback 2026-08-08) */
-.page-hero .eyebrow { color: var(--banner-ink); opacity: .85; font-size: 14px; }
+/* Text in the wood band is painted at full strength; where it sits back from
+   the title it does so through size and colour, never through opacity. */
+.page-hero .eyebrow { color: var(--banner-ink); font-size: 14px; }
 .page-lead-wrap { padding-top: 28px; padding-bottom: 2px; }
 .page-lead { margin: 0; max-width: 74ch; font-size: 17px; line-height: 1.62; color: var(--muted); }
 .page-hero .eyebrow .star { color: var(--banner-ink); }
 .page-hero .marker-title { color: var(--banner-ink); }
-.page-hero .lead { color: var(--banner-ink); opacity: .82; }
+.page-hero .lead { color: var(--banner-ink); }
 .page-hero .wash { display: none; }
 
 .filter-row { display: flex; flex-wrap: wrap; gap: 10px; margin: 26px 0 8px; }
@@ -1178,7 +1180,8 @@
 /* ============================================================
    LESSON PLAYER (simulated student journey)
    ============================================================ */
-.crumbs { font-family: var(--font-cond); font-size: 14px; font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--banner-ink); opacity: .85; margin-bottom: 10px; }
+/* No opacity here either — see the note on .page-hero .eyebrow. */
+.crumbs { font-family: var(--font-cond); font-size: 14px; font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--banner-ink); margin-bottom: 10px; }
 .crumbs a:hover { color: var(--banner-ink); text-decoration: underline; }
 .free-pill { display: inline-block; font-family: var(--font-cond); font-size: 12.5px; font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; background: var(--coral-fill); color: var(--coral-fill-ink); border-radius: var(--r-sharp); padding: 5px 14px; box-shadow: var(--shadow-sm); }
 /* The banner is 1440px wide and was carrying four facts as one 13px
@@ -1189,8 +1192,8 @@
 .lesson-meta-row .lf { display: flex; flex-direction: column; gap: 3px;
   font-family: var(--font-cond); font-weight: 600; font-size: 18px; line-height: 1.2; }
 .lesson-meta-row .lf i { font-style: normal; font-weight: 500; font-size: 12px;
-  letter-spacing: var(--tracking-label); text-transform: uppercase; opacity: .68; }
-.lesson-meta-row .dot { color: var(--coral-deep); opacity: .7; }
+  letter-spacing: var(--tracking-label); text-transform: uppercase; }
+.lesson-meta-row .dot { color: var(--coral-deep); }
 .lesson-cols { display: grid; grid-template-columns: 2.2fr 1fr; gap: 28px; align-items: start; margin-top: 28px; }
 @media (max-width: 1024px) { .lesson-cols { grid-template-columns: 1fr; } }
 
