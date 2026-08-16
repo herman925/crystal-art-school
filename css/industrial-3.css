@@ -535,6 +535,13 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
 /* 7.1: the preview reel, once the client has supplied one. */
 .co-highlight.has-video { display: block; }
 .co-highlight .gdrive-frame { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #000; }
+/* The poster the client named for this reel, under the lazy iframe. Same
+   arrangement the lesson stage uses: the frame is on top and opaque once Drive
+   answers, so this is what the visitor looks at until then, instead of the black
+   rectangle Drive shows while it decides. z-index rather than DOM order because
+   the iframe is written after it and would otherwise win on stacking alone. */
+.co-highlight .co-hl-poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+.co-highlight .gdrive-frame { z-index: 1; }
 .co-hl-dur { position: absolute; right: 10px; bottom: 10px; z-index: 2; pointer-events: none;
   font-family: var(--font-cond); font-size: 12.5px; font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase;
   color: #f3ede1; background: rgba(20,17,13,.72); padding: 4px 10px; border-radius: var(--r-sharp); }

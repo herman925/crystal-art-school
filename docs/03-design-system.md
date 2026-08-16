@@ -235,10 +235,12 @@ surface, measured off the painted pixels, not calculated from the token.
 | Steel (`.chip.active`, `.fopt.active`, `.cart-btn`) | `--steel` gradient | `#2b2823` | 8.59:1 |
 | Copper (`.btn.primary`, `.btn-big`) | `--copper-metal` | `#f8ecd8` | see note below |
 | Marine — **client-named**, design direction §1.4.2 (`.rel-chip`, `.cmc.is-filter`, `.media-tag`, `.bc-tag`) | `--marine` `#598493` | `--marine-ink` `#0b1418` | 4.56:1 |
-| Rouge — **client-named**, 2026-08-08 (`.sale-ribbon`, `.sale-flag`) | `--rouge` `#a8463f` + `--rouge-metal` | `#fdf3ef` | 5.30:1 |
+| Rouge, flat — **client-named**, 2026-08-08 (`.sale-flag`) | `--rouge` `#a8463f` | `#fdf3ef` | 5.33:1 |
+| Rouge, machined — same colour under `--rouge-metal` (`.sale-ribbon`) | `#c05a51` → `#a8463f` → `#84332e` | `#fdf3ef` | **3.99:1 at the lightest stop**, 5.33 flat, 7.72 at the darkest — see the note |
 | Linen — **client-named** (`.cmc.is-fact`, `.btn.linen`, `.portrait-note`) | `--linen` `#d3c2bb` | `#2b2823` | 8.53:1 |
 | Mauve — **client-named** (`.teach-card`) | `#a498a6` | `#191419` | 6.60:1 |
-| Machined marine — the marine fills that carry a metal gradient and a rake (`.btn.marine`, `.btn-big.btn-marine`, `.blog-feature .bf-ribbon`) | `--marine-metal` under a 10% black rake | `--marine-ink-metal` `#04080a` | 4.78:1 |
+| Machined marine — the marine fills that carry a metal gradient and a rake (`.btn.marine`, `.btn-big.btn-marine`) | `--marine-metal` under a 10% black rake | `--marine-ink-metal` `#04080a` | 4.78:1 |
+| Blog ribbon (`.blog-feature .bf-ribbon`) — NOT a marine fill: its own `#6f9dad` under a sheen and `--leather-pores` | `#6f9dad` + sheen | `--marine-ink-metal` `#04080a` | 4.49:1 with `--marine-ink`, hence the darker ink |
 | Leather (`.blog-feature`) | `--leather` / `--leather-a` | the four `--leather-*` inks | 4.77–13.39:1 |
 | Certificate frame (`.cert-frame`) | `#8a6f3d` on `#f7f2e5` | — | decorative border |
 | Video chrome (`.player`, `.stage`, `.controls`, `.co-highlight.has-video`) | `#1b1814` | `#ede1d0` | letterbox black |

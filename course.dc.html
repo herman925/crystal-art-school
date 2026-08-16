@@ -341,7 +341,23 @@ class Component extends DCLogic {
       const mins = pv.dur ? (pv.dur >= 60 ? Math.floor(pv.dur / 60) + 'm ' + (pv.dur % 60) + 's'
                                           : pv.dur + 's') : '';
       host.classList.add('has-video');
+      /* 2026-08-17: the client named a poster frame for this reel — the file the
+         importer lands as highlightPoster. Before this the visitor saw whatever
+         still Drive picked, which for the beginner course was a black frame.
+         Optional: a course she named no poster for keeps the old behaviour. */
+      const poster = c.highlightPoster
+        ? '<img class="co-hl-poster" src="' + esc(c.highlightPoster) + '"' +
+          (window.CAS_IMG_ATTRS ? '' : '') +
+          (c.highlightPosterMeta && c.highlightPosterMeta.srcset
+            ? ' srcset="' + esc(c.highlightPosterMeta.srcset) + '" sizes="(max-width: 900px) 92vw, 640px"'
+            : '') +
+          (c.highlightPosterMeta && c.highlightPosterMeta.w
+            ? ' width="' + c.highlightPosterMeta.w + '" height="' + c.highlightPosterMeta.h + '"'
+            : '') +
+          ' alt="" loading="lazy" decoding="async">'
+        : '';
       host.innerHTML =
+        poster +
         '<iframe class="gdrive-frame" src="' + esc(pv.url) + '" title="Course preview" ' +
         'allow="autoplay; fullscreen" allowfullscreen loading="lazy"></iframe>' +
         (mins ? '<span class="co-hl-dur">Preview \u00b7 ' + mins + '</span>' : '');

@@ -455,7 +455,7 @@ arrival.
 
 Added by this audit:
 
-- [ ] Transparent brand artwork (SVG → transparent PNG → AI). All three marks are currently 0.0% transparent, which is why the light-theme invert rules are commented out and why the signature draws a white box. `tools/verify-round-2.py` fails automatically when transparency arrives, so this cannot be forgotten.
+- [x] Transparent brand artwork — **two of three delivered 2026-08-16**. `Logo.webp` (98.9% transparent) and `Logo2.webp` (96.8%) shipped as the nav and banner marks, and the light-theme treatment is live again. **The signature is the one still outstanding**: `Signature.jpg` is a JPEG and cannot carry alpha at all, so the footer mark keeps its white ground until she supplies a cut-out. `tools/verify-round-2.py` passes.
 - [ ] Student names, artwork titles and media for the Showcase wall (ticket 13)
 - [ ] Whether `little-house` and `urban-sketch` are free samplers or paid courses (ticket 15)
 - [ ] Real testimonials, or agreement to remove the section (ticket 11)
@@ -518,7 +518,7 @@ brand marks, and three instructional films. The per-area breakdown is in the tic
 
 ### 59 — index: imagery swap
 
-**Status:** blocked · **Blocked by:** 58, 53
+**Status:** done · f09acc0 · **Blocked by:** none — 58 closed 2026-08-16
 
 **What to build:** the home page carries the photographs the client chose rather than the
 stand-ins and empty slots it shows today: both hero images, the tools tile, the free-videos
@@ -538,7 +538,7 @@ orphaned in the review tool and will need re-pinning from the extension.
 
 ### 60 — course and lesson: imagery, per-lesson covers, syllabus thumbnails
 
-**Status:** blocked · **Blocked by:** 58
+**Status:** partly done · b3c0a24, f09acc0 · **Blocked by:** none — 58 closed 2026-08-16. The course covers, the intermediate strip and the highlights posters are in; what remains is per-lesson cover coverage for the intermediate course, which has one image per lesson rather than a cover and a still
 
 **What to build:** the intermediate course carries its own highlights cover and its five
 detail photographs instead of borrowing the beginner course's; the beginner highlights film
@@ -557,7 +557,7 @@ Review threads: Te67016, T66f863, Td20890, T4b80da, Ta27f4c.
 
 ### 61 — Lessons: the three tier photographs
 
-**Status:** blocked · **Blocked by:** 58
+**Status:** done · f09acc0 · **Blocked by:** none — 58 closed 2026-08-16
 
 **What to build:** the Wanderer, Apprentice and Fellow cards on the catalogue each carry
 their own photograph, and the free-trial band carries its own.
@@ -602,7 +602,7 @@ commented out and this ticket does not close it.
 
 ### 64 — Video wiring: instructional films, shorts, reference photos
 
-**Status:** blocked · **Blocked by:** 58
+**Status:** partly done · b3c0a24, f09acc0 · **Blocked by:** the client, for two items only — 58 closed 2026-08-16. The twelve YouTube links and the three course films are wired; outstanding are the Tram link she has not supplied and the Material reference photographs
 
 **What to build:** the three watercolour-tools films are wired into the beginner course's
 resources, the reference photographs are linked from the course materials, and the two
@@ -830,8 +830,11 @@ with no accessible name, no focus move-in, no trap, and no focus restore on clos
 
 **Verified 2026-08-17.** The bar, the drawer and the modal take `inert` + `aria-hidden` from `js/site-extras.js:156-169`, with
 the tabbability check at `:169`; inactive carousel slides do the same at `index.html:483-487`. All four
-lightboxes carry an accessible name and `inert`: `Gallery.dc.html:179`, `Showcase.dc.html:142`,
-`FreeVideos.dc.html:319`, `About.dc.html:506`.
+lightboxes carry an accessible name. Two of them also carry `inert` —
+`FreeVideos.dc.html` and `About.dc.html`. **Gallery and Showcase do not**: they are removed from the
+tree by `display: none` (`css/industrial-2.css:849`) instead, which is sufficient here but is a
+different mechanism, and the earlier wording of this line claimed all four used `inert`. Corrected
+2026-08-17 after a review found the claim was untrue.
 
 ### 08 — A real focus indicator, and stop clipping it
 
@@ -990,8 +993,11 @@ ticket 60).
 - [x] "Locked" is still conveyed in text, not by the image treatment alone
 - [x] The change is verified in the default not-purchased view, not only when signed in
 
-**Verified 2026-08-17.** No saturation or grayscale filter is applied to any thumbnail — the only
-`filter` left in the three stylesheets is `.btn.primary:hover` (`css/industrial-1.css:438`). "Locked"
+**Verified 2026-08-17.** No `grayscale` filter exists anywhere in the three stylesheets, and no
+saturation filter is applied to any thumbnail; the single `saturate` is on `.btn.primary:hover`
+(`css/industrial-1.css:438`). An earlier wording of this line said that was the ONLY `filter` left
+in the three stylesheets, which is untrue — there are 21, most of them `drop-shadow`. Corrected
+2026-08-17. "Locked"
 stays textual through the padlock's `role="img" aria-label="Locked"` (`course.dc.html:400`) and the
 `.syl-row.is-locked` treatment (`css/industrial-3.css:715-726`).
 
