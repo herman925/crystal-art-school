@@ -497,24 +497,46 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
    for the mark. Dropping the floor to 0 let the links start at x=110 against a
    brand whose right edge is 124 — measured at 900px. The floors are the mark's
    measured width plus a little: 149px at full size, 100px below 1180 where
-   .nav-brand img drops to 56px tall. */
-.nav-top .inner { position: static; display: grid; grid-template-columns: minmax(160px, 1fr) auto minmax(max-content, 1fr); align-items: center; gap: 18px; padding: 26px var(--gutter) 20px; }
+   .nav-brand img drops to 56px tall.
+   2026-08-16: the client's final mark is a different shape. Cropped to its ink
+   it is aspect 2.115 against the old file's 1.778, so at 84px it measures 178px
+   wide and at 56px 118px. The floors move with it. */
+.nav-top .inner { position: static; display: grid; grid-template-columns: minmax(190px, 1fr) auto minmax(max-content, 1fr); align-items: center; gap: 18px; padding: 26px var(--gutter) 20px; }
 .nav-brand { position: absolute; z-index: 6; top: 0; bottom: 0; left: max(var(--gutter), calc((100% - var(--site-max)) / 2 + var(--gutter))); display: flex; align-items: center; gap: 12px; }
 /* 3.1: "現有 Logo 及導覽文字均明顯放大；允許頁首高度增加" — the nav text was raised
    but the mark was left at its old 66px, so only half the clause was done. The
    header is allowed to grow to take it. */
 .nav-brand img { height: 84px; width: auto; object-fit: contain; filter: drop-shadow(0 2px 6px rgba(0,0,0,.45)); }
-/* signature reads black on the light wood (A); stays cream on the dark walnut (D) */
-/* 2026-08-08: the invert is OFF while Crystal's own uploads are in place. It is
-   correct for a cut-out mark and wrong for an opaque rectangle — brightness(0)
-   turns the whole white box black, which reads as a rendering bug rather than as
-   a missing asset. §2.3 puts the de-backgrounding on her side; the cut-outs we
-   had made are kept in docs/asset-cutouts/ and the method is written up in
-   docs/03-design-system.md (public) and, for the scope reasoning,
-   docs/20260807_About_Copy_Provenance.md (gitignored).
-   RE-ENABLE BOTH RULES the moment real transparent artwork arrives, or the light
-   theme loses the inversion it needs. */
-/* [data-theme="A"] .nav-brand img { filter: brightness(0) opacity(.85) drop-shadow(0 1px 2px rgba(255,255,255,.25)); } */
+/* ============================================================
+   BRAND MARK TREATMENT (2026-08-16)
+   The transparent artwork the old note was waiting for has arrived, so the
+   filters are live again — but not in the form that was parked here.
+
+   The parked rule assumed ONE cream cut-out serving both themes: native on the
+   dark walnut, crushed to ink by brightness(0) on the pale wood. Her two files
+   break that assumption in opposite directions. Lau. is drawn in WHITE (unusable
+   on the light theme: 1.43:1 on #e6d6b8) and the Crystal Lau ART lockup is drawn
+   in BLACK (unusable on the dark theme: 2.31:1 on #5a4433 before the band's own
+   overlay). One rule cannot serve both if it depends on the ink colour.
+
+   So the treatment normalises instead of inverting: brightness(0) crushes ANY
+   ink to solid black while leaving alpha alone, and invert(1) after it yields
+   white. What colour she drew in stops mattering, and a future re-export cannot
+   silently break a theme. Measured: 14.7:1 in A, ~13:1 in D.
+
+   drop-shadow stays LAST in both. Before invert(1) it would have its own colour
+   inverted along with the mark.
+
+   The SIGNATURE is deliberately excluded. img/signature.png is still an opaque
+   JPEG export with a white ground, and brightness(0) on an opaque rectangle
+   makes a black box rather than a legible mark — worse than the white one. It
+   keeps its slab until transparent artwork for it arrives. See the note at
+   css/industrial-3.css:429.
+   ============================================================ */
+[data-theme="A"] .nav-brand img,
+[data-theme="A"] .logo2 img { filter: brightness(0) opacity(.88) drop-shadow(0 1px 2px rgba(255,255,255,.25)); }
+[data-theme="D"] .nav-brand img,
+[data-theme="D"] .logo2 img { filter: brightness(0) invert(1) drop-shadow(0 2px 6px rgba(0,0,0,.45)); }
 .nav-links { grid-column: 2; display: flex; gap: 4px; list-style: none; margin: 0; padding: 0; }
 .nav-links a { display: block; padding: 9px 14px; font-family: var(--font-cond); font-weight: 500; font-size: 15px; letter-spacing: var(--tracking-label); text-transform: uppercase; border-radius: var(--radius-pill); color: var(--banner-ink); transition: background .15s; }
 .nav-links a:hover { background: color-mix(in srgb, var(--banner-bracket) 16%, transparent); }
@@ -580,8 +602,13 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
    positioned it is centred against the whole text block and contributes nothing
    to it, and the container reserves its width as padding so a long title still
    cannot run underneath. (client feedback 2026-08-08) */
-.page-hero .container { position: relative; padding-right: 296px; }
-.page-hero .container:not(:has(h1.font-a)) { padding-right: 246px; }
+/* Reserves widened 2026-08-16 for the client's final lockup: cropped to its
+   ink it is aspect 1.911 against the old file's 1.474, so at 160px it measures
+   306px wide and at 126px 241px, plus the 24px right offset below. Under the
+   old 296/246 the long titles on Gallery, Showcase and Free Videos ran beneath
+   the mark. */
+.page-hero .container { position: relative; padding-right: 336px; }
+.page-hero .container:not(:has(h1.font-a)) { padding-right: 272px; }
 .page-hero .container > .logo2 {
   position: absolute; right: 24px; top: 50%; transform: translateY(-50%);
   margin: 0; line-height: 0; }
@@ -621,7 +648,7 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
   .nav-links { flex-wrap: wrap; justify-content: center; row-gap: 2px; }
   .nav-top .inner { column-gap: 10px; }
 }
-@media (max-width: 1180px) { .nav-top .inner { grid-template-columns: minmax(112px, 1fr) auto minmax(max-content, 1fr); gap: 12px; } .nav-links { gap: 2px; } .nav-links a { padding: 8px 9px; font-size: 14px; } .nav-brand img { height: 56px; } }
+@media (max-width: 1180px) { .nav-top .inner { grid-template-columns: minmax(128px, 1fr) auto minmax(max-content, 1fr); gap: 12px; } .nav-links { gap: 2px; } .nav-links a { padding: 8px 9px; font-size: 14px; } .nav-brand img { height: 56px; } }
 /* #14: the auth buttons are the first thing dropped when the bar runs out of
    room, and Log out is one of them — so the burger sheet, which is the only
    other place those actions live, has to appear at the SAME width they leave.
