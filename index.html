@@ -37,12 +37,14 @@
    Sits below the course cards so the products still lead the section. */
 .overview { margin-top: 54px; padding-top: 40px; border-top: 1px solid color-mix(in srgb, var(--ink) 12%, transparent); }
 /* 52: the heading takes the wood plaque every other section sign on this page
-   already sits on. Face and size come from the Font A ramp in industrial-3. */
+   already sits on. Face and size come from the Font A ramp in industrial-3.
+   The WOOD itself is set in css/industrial-3.css and deliberately not here —
+   see the note beside that rule. Geometry can live in this file; the grain
+   cannot. */
 .overview-h { color: var(--banner-ink); margin: 0 auto 18px; text-align: center;
   display: flex; align-items: center; justify-content: center; gap: .45em;
   width: fit-content; max-width: 100%;
   padding: 10px 30px; border-radius: 14px;
-  background-color: var(--banner-bg); background-image: var(--banner-grain); background-size: var(--banner-size, 300px 120px);
   box-shadow: var(--shadow); position: relative; }
 .overview-lede { max-width: 68ch; margin: 0 auto 16px; text-align: center; font-size: 17.5px; line-height: 1.62; color: var(--muted); }
 .overview-lede:last-of-type { margin-bottom: 38px; }

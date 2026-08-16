@@ -52,7 +52,10 @@
   --fv-band-scrim: color-mix(in srgb, var(--banner-bg) 80%, transparent);
   position: relative; margin: 0 calc(50% - 50vw) 16px; padding: 16px calc(50vw - 50% + 0px);
   background-color: var(--banner-bg);
-  background-image: linear-gradient(var(--fv-band-scrim), var(--fv-band-scrim)), var(--banner-grain);
+  /* The wood is applied from css/industrial-3.css, not here — a url() inside a
+     custom property resolves against the DOCUMENT when it is substituted into a
+     page's own <style>, so `../img/` escapes the site on any host that serves it
+     from a subdirectory. See the note beside that rule. */
   background-size: cover; background-position: center top;
   background-repeat: no-repeat; background-attachment: scroll;
   color: var(--banner-ink); box-shadow: var(--shadow); text-align: left; }

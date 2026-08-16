@@ -1154,6 +1154,38 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
    three lines instead of two. (client feedback 2026-08-08) */
 .cas-root .hero__title.font-a { font-size: clamp(39px, 5.1vw, 84px); line-height: .95; }
 
+/* ============================================================
+   WOOD ON RULES THAT ARE WRITTEN IN A PAGE'S OWN <style>
+   --banner-grain and --wall-grain are the only two grain tokens holding a FILE
+   url(); the other five are inline data URIs and are immune to this.
+
+   A relative url() inside a custom property is resolved when the variable is
+   SUBSTITUTED, against the document — not against the stylesheet that declared
+   it. So `url("../img/wood-creamy.jpg")` is correct for every rule inside
+   css/*.css (css/../img/ = img/) and WRONG for a rule in a page's own <style>,
+   where it becomes ../img/ relative to the page.
+
+   That is invisible in local development, because the dev server serves the
+   site from the domain root and `../` clamps harmlessly to /img/. It only
+   appears once the site is served from a subdirectory — on GitHub Pages the
+   home page's plaque was requesting
+   herman925.github.io/img/wood-creamy.jpg (404) instead of
+   herman925.github.io/crystal-art-school/img/wood-creamy.jpg (200), so it
+   rendered as flat --banner-bg with no grain at all. Reported from the live
+   site 2026-08-16; every local check had passed.
+
+   Both offenders are therefore served from here. Geometry may stay in the page;
+   the grain may not.
+   ============================================================ */
+.cas-root .overview-h {
+  background-color: var(--banner-bg);
+  background-image: var(--banner-grain);
+  background-size: var(--banner-size, 300px 120px);
+}
+.cas-root .fv-sec > h2 {
+  background-image: linear-gradient(var(--fv-band-scrim), var(--fv-band-scrim)), var(--banner-grain);
+}
+
 /* 42-48, the sizes. Each of these replaces a face at roughly 1.3x, per the
    ramp described above. The ones that already carry an inline clamp() are
    resized in their own markup instead — an inline size wins over anything
