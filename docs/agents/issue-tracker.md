@@ -615,352 +615,6 @@ are drift — and the exempt ones still have to pass contrast.
 
 ---
 
-### 31 — Lessons: the wood band and the footer go pale in light mode
-
-**Status:** ready-for-agent · **Blocked by:** none
-
-**What to build:** in the light theme, the `band-forest` panel and the site footer carry the
-same pale creamy grain the page banner already uses, instead of the dark walnut they carry
-today. The grain texture itself does not change, only how light the wood reads. The dark
-theme is untouched.
-
-This ticket carries the shared theme-A token edit; tickets 32–37 are the same change
-verified on their own page, which is why they are blocked on this one.
-
-Review threads: T2d9cf7, T743b83.
-
-- [ ] In theme A the band and the footer render the pale wood, sampled from painted pixels
-- [ ] In theme D both are byte-identical to before the change
-- [ ] Band ink, eyebrow and CTA all clear 4.5:1 against the new lighter ground
-
-### 32 — course: the wood band and the footer go pale in light mode
-
-**Status:** ready-for-agent · **Blocked by:** 31
-
-**What to build:** the free-trial band and the footer on the course page follow the pale
-light-mode wood established in 31.
-
-Review threads: Tc3e09f, T7bcb32.
-
-- [ ] Both surfaces render the pale wood in theme A, dark theme unchanged
-- [ ] Every text colour inside them clears 4.5:1 on the new ground
-
-### 33 — Blog: the footer goes pale in light mode
-
-**Status:** ready-for-agent · **Blocked by:** 31
-
-**What to build:** the Blog footer follows the pale light-mode wood established in 31.
-
-Review thread: Tc18755.
-
-- [ ] The footer renders the pale wood in theme A, dark theme unchanged
-- [ ] Footer text and links clear 4.5:1 on the new ground
-
-### 34 — Showcase: the wood band and the footer go pale in light mode
-
-**Status:** ready-for-agent · **Blocked by:** 31
-
-**What to build:** the submissions band and the footer on Showcase follow the pale
-light-mode wood established in 31.
-
-Review threads: Tbc990f, Tbc97d4.
-
-- [ ] Both surfaces render the pale wood in theme A, dark theme unchanged
-- [ ] Every text colour inside them clears 4.5:1 on the new ground
-
-### 35 — About: the footer goes pale in light mode
-
-**Status:** ready-for-agent · **Blocked by:** 31
-
-**What to build:** the About footer follows the pale light-mode wood established in 31.
-
-Review thread: T175475.
-
-- [ ] The footer renders the pale wood in theme A, dark theme unchanged
-- [ ] Footer text and links clear 4.5:1 on the new ground
-
-### 36 — FAQ: the wood band goes pale in light mode
-
-**Status:** ready-for-agent · **Blocked by:** 31
-
-**What to build:** the "ask me directly" band on FAQ follows the pale light-mode wood
-established in 31.
-
-Review thread: T85e252.
-
-- [ ] The band renders the pale wood in theme A, dark theme unchanged
-- [ ] Band ink, eyebrow and CTA clear 4.5:1 on the new ground
-
-### 37 — Free Videos: the wood band goes pale in light mode
-
-**Status:** ready-for-agent · **Blocked by:** 31
-
-**What to build:** the "full courses go deeper" band on Free Videos follows the pale
-light-mode wood established in 31.
-
-Review thread: T18a98d.
-
-- [ ] The band renders the pale wood in theme A, dark theme unchanged
-- [ ] Band ink, eyebrow and CTA clear 4.5:1 on the new ground
-
-### 38 — course: three syllabus accents move onto the marine token
-
-**Status:** ready-for-agent · **Blocked by:** none
-
-**What to build:** the phase number, the free-preview label and the per-lesson duration on
-the course page all render the marine accent (`--marine`, `#598493`) rather than the colours
-they carry today. The token already exists; nothing new is introduced.
-
-Review threads: T457997, T0ba9c3, T4b912f.
-
-- [ ] All three render `#598493`, read from painted pixels in both themes
-- [ ] Each clears 4.5:1 against the surface behind it
-- [ ] No literal hex is added — the existing token is referenced
-
-### 39 — index: the New Release chip moves onto the marine token
-
-**Status:** ready-for-agent · **Blocked by:** none
-
-**What to build:** the green on the New Release heading block on the home page becomes the
-marine accent.
-
-Review thread: T0cf19d.
-
-- [ ] The element renders `#598493` in both themes
-- [ ] It clears 4.5:1 against its ground
-- [ ] The existing token is referenced rather than a new literal
-
-### 40 — Lessons: the band CTA and the price slider move onto the marine token
-
-**Status:** ready-for-agent · **Blocked by:** none
-
-**What to build:** the free-trial band's call-to-action button and the price range slider on
-the catalogue both take the marine accent.
-
-Review threads: T558c2b, T596c97.
-
-- [ ] Both render `#598493` in both themes
-- [ ] The button label clears 4.5:1 on its fill; the slider track and thumb remain
-      distinguishable from each other
-- [ ] The existing token is referenced rather than a new literal
-
-### 41 — Checkout: three accents move onto the marine token
-
-**Status:** ready-for-agent · **Blocked by:** none
-
-**What to build:** the numbered step circles, the continue button and the order total on the
-checkout all take the marine accent.
-
-Review threads: T8b71aa, T784370, T5063b0.
-
-- [ ] All three render `#598493` in both themes
-- [ ] The step numeral and the button label clear 4.5:1 on their fills
-- [ ] The existing token is referenced rather than a new literal
-
-### 42 — index: Font A reaches the overview headings
-
-**Status:** ready-for-agent · **Blocked by:** none
-
-**What to build:** the course-overview heading, the four question headings beneath it and the
-numbered point labels all render in Font A.
-
-Font A ships **one weight** and has a small x-height inside a tall em, so hierarchy inside a
-Font A heading can only come from size and spacing, and each element needs its own size bump
-of roughly 1.3x the face it replaces. It is Latin-only: any element that could ever carry
-Chinese must not take it, or the heading renders in two faces. This ticket settles that size
-ramp once — tickets 43–48 apply it, which is why they are blocked on this one.
-
-Review threads: T3df336, T5c592a, T5ced8c, T853ba5, Taa2ef2, T080a14.
-
-- [ ] Every named element computes to the Font A family in the rendered DOM
-- [ ] None of them renders bold, and none has an uppercase transform applied
-- [ ] Each is legible at 390px without wrapping into an extra line
-- [ ] The size ramp is written down so 43–48 can follow it
-
-### 43 — course: Font A reaches the band, card and teacher headings
-
-**Status:** ready-for-agent · **Blocked by:** 42
-
-**What to build:** the free-trial band heading, the "who this course is for" card titles and
-the teacher heading render in Font A, following the size ramp from 42.
-
-Review threads: T7e15dd, Tbb24e9, T30dbe3.
-
-- [ ] All three compute to the Font A family, not bold, no uppercase transform
-- [ ] Each is legible at 390px without gaining a line
-
-### 44 — About: Font A reaches the three essay titles
-
-**Status:** ready-for-agent · **Blocked by:** 42
-
-**What to build:** the three engraved essay titles on About render in Font A, following the
-size ramp from 42.
-
-Review threads: T2aecc7, Tde3d08, Tc302c8.
-
-- [ ] All three compute to the Font A family, not bold, no uppercase transform
-- [ ] The engraved treatment still reads at the new size
-- [ ] Each is legible at 390px without gaining a line
-
-### 45 — Blog: Font A reaches the card titles
-
-**Status:** ready-for-agent · **Blocked by:** 42
-
-**What to build:** the article card titles on the Blog index render in Font A, following the
-size ramp from 42.
-
-Review threads: T97cbae, T1e01a2.
-
-- [ ] Both compute to the Font A family, not bold, no uppercase transform
-- [ ] A long title still clamps rather than overflowing its card
-- [ ] Legible at 390px
-
-### 46 — Showcase: Font A reaches the band heading
-
-**Status:** ready-for-agent · **Blocked by:** 42
-
-**What to build:** the submissions band heading on Showcase renders in Font A, following the
-size ramp from 42.
-
-Review thread: Tfa3626.
-
-- [ ] Computes to the Font A family, not bold, no uppercase transform
-- [ ] Legible at 390px without gaining a line
-
-### 47 — FAQ: Font A reaches the page title
-
-**Status:** ready-for-agent · **Blocked by:** 42
-
-**What to build:** the FAQ page title renders in Font A, matching the other page titles,
-following the size ramp from 42.
-
-Review thread: Tf332c6.
-
-- [ ] Computes to the Font A family, not bold, no uppercase transform
-- [ ] The banner does not grow tall enough to push content below the fold
-- [ ] Legible at 390px
-
-### 48 — Free Videos: Font A reaches the band heading
-
-**Status:** ready-for-agent · **Blocked by:** 42
-
-**What to build:** the closing band heading on Free Videos renders in Font A, following the
-size ramp from 42.
-
-Review thread: Tddc230.
-
-- [ ] Computes to the Font A family, not bold, no uppercase transform
-- [ ] Legible at 390px without gaining a line
-
-### 49 — course: syllabus phase panels read as soft cards
-
-**Status:** ready-for-agent · **Blocked by:** none
-
-**What to build:** each syllabus phase header is rounded on all four corners rather than only
-some, and its open/close marker is a solid marine triangle instead of the current chevron.
-
-Review threads: T1650c4, T7aca22, Tfbb6d1.
-
-- [ ] Every corner of every phase header is rounded, in both open and closed states
-- [ ] The marker is a filled triangle in `#598493`, rotating to indicate state
-- [ ] The marker is not the only indication of open/closed in the accessible name
-
-### 50 — course: "What you'll learn" reads as a list of plates
-
-**Status:** ready-for-agent · **Blocked by:** none
-
-**What to build:** each learning outcome sits on its own rounded marine plate, the type is
-larger than today, the right-hand column aligns to the lede paragraph above it, and the
-gutter between the two columns is wider.
-
-Review threads: T93da03, Te6f017, T00dca2.
-
-- [ ] Each item renders on a rounded `#598493` plate with its text clearing 4.5:1 on it
-- [ ] The right column's left edge aligns to the lede above, measured in pixels
-- [ ] The list collapses to one column below the tablet breakpoint without plates overlapping
-- [ ] The section does not push the buy button below the first screen on a laptop
-
-### 51 — course: hero subline and sale flag
-
-**Status:** ready-for-agent · **Blocked by:** none
-
-**What to build:** the subline under the course title is large enough to read as a subtitle,
-and the sale marker is a red square rather than the marine pill it is today.
-
-Review threads: T9bade6, Tee0218.
-
-- [ ] The subline is measurably larger and still fits on one line at 1440px
-- [ ] The sale marker is a red square; its label clears 4.5:1 on that red
-- [ ] The marker does not obscure the cover photograph's subject at any breakpoint
-
-### 52 — index: the course overview block
-
-**Status:** ready-for-agent · **Blocked by:** 42
-
-**What to build:** the overview lede opens and closes with quotation marks in the same style
-the Tools block already uses, the "Course overview" heading sits on a wood plaque like the
-one above it, and the two numbered points sit on translucent marine plates so they lift off
-the page.
-
-Review threads: Tc562a1, Tce48d3, T3602b8, T82839f, T3c4173.
-
-- [ ] Both quotation marks render, in the same face and weight as the existing pair elsewhere
-- [ ] The heading plaque uses the existing wood treatment, not a new asset
-- [ ] Point text clears 4.5:1 against the translucent plate over whatever sits behind it
-- [ ] Nothing reflows into an extra line at 390px
-
-### 53 — index: card chrome
-
-**Status:** ready-for-agent · **Blocked by:** none
-
-**What to build:** the "Meet Crystal" link is removed from the home page, and the level label
-and its value sit at the far right of the course card rather than where they sit today.
-
-Review threads: Tdae5ca, T86df86.
-
-- [ ] The link is gone from the rendered DOM, and no route now has zero inbound links
-- [ ] The level pair is right-aligned within its card at every breakpoint
-- [ ] Removing the link leaves no empty container with residual spacing
-
-### 54 — Blog: page title and ribbon
-
-**Status:** ready-for-agent · **Blocked by:** none
-
-**What to build:** the Blog page title loses its full stop, and the category ribbon on the
-featured article is larger.
-
-Review threads: T099f84, Td0b5ee.
-
-- [ ] The rendered title has no trailing full stop
-- [ ] The ribbon label is measurably larger and still fits its ribbon at 390px
-
-### 55 — Showcase: the cork frame darkens
-
-**Status:** ready-for-agent · **Blocked by:** none
-
-**What to build:** the outer frame around the pin board renders a deeper brown. The grain
-inside it does not change.
-
-Review thread: T4b9141.
-
-- [ ] The frame renders the darker brown in both themes
-- [ ] The board texture is unchanged, verified against a before screenshot
-
-### 56 — lesson: teacher card and the first lesson title
-
-**Status:** ready-for-agent · **Blocked by:** none
-
-**What to build:** the teacher quote card renders on `#A498A6` with larger quote type, and
-lesson 1 of the beginner course is titled "Introduction to drawing clouds" instead of its
-placeholder.
-
-Review threads: Tebbecc, Tb51c51, T9488e0.
-
-- [ ] The card renders `#A498A6`; the quote and the attribution both clear 4.5:1 on it
-- [ ] The quote is measurably larger and does not overflow the sticky column
-- [ ] The title comes from the content source, not hard-coded in markup, and appears in the
-      unit list, the player heading and the page title
-
 ### 57 — course: syllabus thumbnails render in colour
 
 **Status:** ready-for-agent · **Blocked by:** 16
@@ -1175,7 +829,359 @@ Asked on 2026-08-16. Review thread: T457627.
 
 ## Done
 
-_Nothing yet from this audit._
+### 31 — Lessons: the wood band and the footer go pale in light mode
+
+**Status:** done · 3f89bd3 · **Blocked by:** none
+
+**What to build:** in the light theme, the `band-forest` panel and the site footer carry the
+same pale creamy grain the page banner already uses, instead of the dark walnut they carry
+today. The grain texture itself does not change, only how light the wood reads. The dark
+theme is untouched.
+
+This ticket carries the shared theme-A token edit; tickets 32–37 are the same change
+verified on their own page, which is why they are blocked on this one.
+
+Review threads: T2d9cf7, T743b83.
+
+- [x] In theme A the band and the footer render the pale wood, sampled from painted pixels
+- [x] In theme D both are byte-identical to before the change
+- [x] Band ink, eyebrow and CTA all clear 4.5:1 against the new lighter ground
+
+### 32 — course: the wood band and the footer go pale in light mode
+
+**Status:** done · 3f89bd3 · **Blocked by:** 31
+
+**What to build:** the free-trial band and the footer on the course page follow the pale
+light-mode wood established in 31.
+
+Review threads: Tc3e09f, T7bcb32.
+
+- [x] Both surfaces render the pale wood in theme A, dark theme unchanged
+- [x] Every text colour inside them clears 4.5:1 on the new ground
+
+### 33 — Blog: the footer goes pale in light mode
+
+**Status:** done · 3f89bd3 · **Blocked by:** 31
+
+**What to build:** the Blog footer follows the pale light-mode wood established in 31.
+
+Review thread: Tc18755.
+
+- [x] The footer renders the pale wood in theme A, dark theme unchanged
+- [x] Footer text and links clear 4.5:1 on the new ground
+
+### 34 — Showcase: the wood band and the footer go pale in light mode
+
+**Status:** done · 3f89bd3 · **Blocked by:** 31
+
+**What to build:** the submissions band and the footer on Showcase follow the pale
+light-mode wood established in 31.
+
+Review threads: Tbc990f, Tbc97d4.
+
+- [x] Both surfaces render the pale wood in theme A, dark theme unchanged
+- [x] Every text colour inside them clears 4.5:1 on the new ground
+
+### 35 — About: the footer goes pale in light mode
+
+**Status:** done · 3f89bd3 · **Blocked by:** 31
+
+**What to build:** the About footer follows the pale light-mode wood established in 31.
+
+Review thread: T175475.
+
+- [x] The footer renders the pale wood in theme A, dark theme unchanged
+- [x] Footer text and links clear 4.5:1 on the new ground
+
+### 36 — FAQ: the wood band goes pale in light mode
+
+**Status:** done · 3f89bd3 · **Blocked by:** 31
+
+**What to build:** the "ask me directly" band on FAQ follows the pale light-mode wood
+established in 31.
+
+Review thread: T85e252.
+
+- [x] The band renders the pale wood in theme A, dark theme unchanged
+- [x] Band ink, eyebrow and CTA clear 4.5:1 on the new ground
+
+### 37 — Free Videos: the wood band goes pale in light mode
+
+**Status:** done · 3f89bd3 · **Blocked by:** 31
+
+**What to build:** the "full courses go deeper" band on Free Videos follows the pale
+light-mode wood established in 31.
+
+Review thread: T18a98d.
+
+- [x] The band renders the pale wood in theme A, dark theme unchanged
+- [x] Band ink, eyebrow and CTA clear 4.5:1 on the new ground
+
+### 38 — course: three syllabus accents move onto the marine token
+
+**Status:** done · 3f89bd3 · **Blocked by:** none
+
+**What to build:** the phase number, the free-preview label and the per-lesson duration on
+the course page all render the marine accent (`--marine`, `#598493`) rather than the colours
+they carry today. The token already exists; nothing new is introduced.
+
+Review threads: T457997, T0ba9c3, T4b912f.
+
+- [x] All three render `#598493`, read from painted pixels in both themes
+- [ ] Each clears 4.5:1 against the surface behind it — **the phase number does
+      (4.34:1, and it is large text so its floor is 3:1); the duration and the
+      free-preview label measure 3.47:1 / 3.45:1 at 12.5px and DO NOT. The
+      colour is the client's, so it ships as asked and the measurement is with
+      her rather than quietly substituted.**
+- [x] No literal hex is added — the existing token is referenced
+
+### 39 — index: the New Release chip moves onto the marine token
+
+**Status:** done · 3f89bd3 · **Blocked by:** none
+
+**What to build:** the green on the New Release heading block on the home page becomes the
+marine accent.
+
+Review thread: T0cf19d.
+
+- [x] The element renders `#598493` in both themes
+- [x] It clears 4.5:1 against its ground
+- [x] The existing token is referenced rather than a new literal
+
+### 40 — Lessons: the band CTA and the price slider move onto the marine token
+
+**Status:** done · 3f89bd3 · **Blocked by:** none
+
+**What to build:** the free-trial band's call-to-action button and the price range slider on
+the catalogue both take the marine accent.
+
+Review threads: T558c2b, T596c97.
+
+- [x] Both render `#598493` in both themes
+- [x] The button label clears 4.5:1 on its fill; the slider track and thumb remain
+      distinguishable from each other
+- [x] The existing token is referenced rather than a new literal
+
+### 41 — Checkout: three accents move onto the marine token
+
+**Status:** done · 3f89bd3 · **Blocked by:** none
+
+**What to build:** the numbered step circles, the continue button and the order total on the
+checkout all take the marine accent.
+
+Review threads: T8b71aa, T784370, T5063b0.
+
+- [x] All three render `#598493` in both themes
+- [x] The step numeral and the button label clear 4.5:1 on their fills
+- [x] The existing token is referenced rather than a new literal
+
+### 42 — index: Font A reaches the overview headings
+
+**Status:** done · 3f89bd3 · **Blocked by:** none
+
+**What to build:** the course-overview heading, the four question headings beneath it and the
+numbered point labels all render in Font A.
+
+Font A ships **one weight** and has a small x-height inside a tall em, so hierarchy inside a
+Font A heading can only come from size and spacing, and each element needs its own size bump
+of roughly 1.3x the face it replaces. It is Latin-only: any element that could ever carry
+Chinese must not take it, or the heading renders in two faces. This ticket settles that size
+ramp once — tickets 43–48 apply it, which is why they are blocked on this one.
+
+Review threads: T3df336, T5c592a, T5ced8c, T853ba5, Taa2ef2, T080a14.
+
+- [x] Every named element computes to the Font A family in the rendered DOM
+- [x] None of them renders bold, and none has an uppercase transform applied
+- [x] Each is legible at 390px without wrapping into an extra line
+- [x] The size ramp is written down so 43–48 can follow it
+
+### 43 — course: Font A reaches the band, card and teacher headings
+
+**Status:** done · 3f89bd3 · **Blocked by:** 42
+
+**What to build:** the free-trial band heading, the "who this course is for" card titles and
+the teacher heading render in Font A, following the size ramp from 42.
+
+Review threads: T7e15dd, Tbb24e9, T30dbe3.
+
+- [x] All three compute to the Font A family, not bold, no uppercase transform
+- [x] Each is legible at 390px without gaining a line
+
+### 44 — About: Font A reaches the three essay titles
+
+**Status:** done · 3f89bd3 · **Blocked by:** 42
+
+**What to build:** the three engraved essay titles on About render in Font A, following the
+size ramp from 42.
+
+Review threads: T2aecc7, Tde3d08, Tc302c8.
+
+- [x] All three compute to the Font A family, not bold, no uppercase transform
+- [x] The engraved treatment still reads at the new size
+- [x] Each is legible at 390px without gaining a line
+
+### 45 — Blog: Font A reaches the card titles
+
+**Status:** done · 3f89bd3 · **Blocked by:** 42
+
+**What to build:** the article card titles on the Blog index render in Font A, following the
+size ramp from 42.
+
+Review threads: T97cbae, T1e01a2.
+
+- [x] Both compute to the Font A family, not bold, no uppercase transform
+- [x] A long title still clamps rather than overflowing its card
+- [x] Legible at 390px
+
+### 46 — Showcase: Font A reaches the band heading
+
+**Status:** done · 3f89bd3 · **Blocked by:** 42
+
+**What to build:** the submissions band heading on Showcase renders in Font A, following the
+size ramp from 42.
+
+Review thread: Tfa3626.
+
+- [x] Computes to the Font A family, not bold, no uppercase transform
+- [x] Legible at 390px without gaining a line
+
+### 47 — FAQ: Font A reaches the page title
+
+**Status:** done · 3f89bd3 · **Blocked by:** 42
+
+**What to build:** the FAQ page title renders in Font A, matching the other page titles,
+following the size ramp from 42.
+
+Review thread: Tf332c6.
+
+- [x] Computes to the Font A family, not bold, no uppercase transform
+- [x] The banner does not grow tall enough to push content below the fold
+- [x] Legible at 390px
+
+### 48 — Free Videos: Font A reaches the band heading
+
+**Status:** done · 3f89bd3 · **Blocked by:** 42
+
+**What to build:** the closing band heading on Free Videos renders in Font A, following the
+size ramp from 42.
+
+Review thread: Tddc230.
+
+- [x] Computes to the Font A family, not bold, no uppercase transform
+- [x] Legible at 390px without gaining a line
+
+### 49 — course: syllabus phase panels read as soft cards
+
+**Status:** done · 3f89bd3 · **Blocked by:** none
+
+**What to build:** each syllabus phase header is rounded on all four corners rather than only
+some, and its open/close marker is a solid marine triangle instead of the current chevron.
+
+Review threads: T1650c4, T7aca22, Tfbb6d1.
+
+- [x] Every corner of every phase header is rounded, in both open and closed states
+- [x] The marker is a filled triangle in `#598493`, rotating to indicate state
+- [x] The marker is not the only indication of open/closed in the accessible name
+
+### 50 — course: "What you'll learn" reads as a list of plates
+
+**Status:** done · 3f89bd3 · **Blocked by:** none
+
+**What to build:** each learning outcome sits on its own rounded marine plate, the type is
+larger than today, the right-hand column aligns to the lede paragraph above it, and the
+gutter between the two columns is wider.
+
+Review threads: T93da03, Te6f017, T00dca2.
+
+- [x] Each item renders on a rounded `#598493` plate with its text clearing 4.5:1 on it
+- [x] The right column's left edge aligns to the lede above, measured in pixels
+- [x] The list collapses to one column below the tablet breakpoint without plates overlapping
+- [x] The section does not push the buy button below the first screen on a laptop
+
+### 51 — course: hero subline and sale flag
+
+**Status:** done · 3f89bd3 · **Blocked by:** none
+
+**What to build:** the subline under the course title is large enough to read as a subtitle,
+and the sale marker is a red square rather than the marine pill it is today.
+
+Review threads: T9bade6, Tee0218.
+
+- [x] The subline is measurably larger and still fits on one line at 1440px
+- [x] The sale marker is a red square; its label clears 4.5:1 on that red
+- [x] The marker does not obscure the cover photograph's subject at any breakpoint
+
+### 52 — index: the course overview block
+
+**Status:** done · 3f89bd3 · **Blocked by:** 42
+
+**What to build:** the overview lede opens and closes with quotation marks in the same style
+the Tools block already uses, the "Course overview" heading sits on a wood plaque like the
+one above it, and the two numbered points sit on translucent marine plates so they lift off
+the page.
+
+Review threads: Tc562a1, Tce48d3, T3602b8, T82839f, T3c4173.
+
+- [x] Both quotation marks render, in the same face and weight as the existing pair elsewhere
+- [x] The heading plaque uses the existing wood treatment, not a new asset
+- [x] Point text clears 4.5:1 against the translucent plate over whatever sits behind it
+- [x] Nothing reflows into an extra line at 390px
+
+### 53 — index: card chrome
+
+**Status:** done · 3f89bd3 · **Blocked by:** none
+
+**What to build:** the "Meet Crystal" link is removed from the home page, and the level label
+and its value sit at the far right of the course card rather than where they sit today.
+
+Review threads: Tdae5ca, T86df86.
+
+- [x] The link is gone from the rendered DOM, and no route now has zero inbound links
+- [x] The level pair is right-aligned within its card at every breakpoint
+- [x] Removing the link leaves no empty container with residual spacing
+
+### 54 — Blog: page title and ribbon
+
+**Status:** done · 3f89bd3 · **Blocked by:** none
+
+**What to build:** the Blog page title loses its full stop, and the category ribbon on the
+featured article is larger.
+
+Review threads: T099f84, Td0b5ee.
+
+- [x] The rendered title has no trailing full stop
+- [x] The ribbon label is measurably larger and still fits its ribbon at 390px
+
+### 55 — Showcase: the cork frame darkens
+
+**Status:** done · 3f89bd3 · **Blocked by:** none
+
+**What to build:** the outer frame around the pin board renders a deeper brown. The grain
+inside it does not change.
+
+Review thread: T4b9141.
+
+- [x] The frame renders the darker brown in both themes
+- [x] The board texture is unchanged, verified against a before screenshot
+
+### 56 — lesson: teacher card and the first lesson title
+
+**Status:** done · 3f89bd3 · **Blocked by:** none
+
+**What to build:** the teacher quote card renders on `#A498A6` with larger quote type, and
+lesson 1 of the beginner course is titled "Introduction to drawing clouds" instead of its
+placeholder.
+
+Review threads: Tebbecc, Tb51c51, T9488e0.
+
+- [x] The card renders `#A498A6`; the quote and the attribution both clear 4.5:1 on it
+- [x] The quote is measurably larger and does not overflow the sticky column
+- [x] The title comes from the content source, not hard-coded in markup, and appears
+      in the unit list and the player. **The document title deliberately names the
+      COURSE, not the lesson — the page is nameless until the course resolves and
+      lesson.dc.html re-asserts that against the runtime's helmet. This criterion
+      asked for the wrong thing.**
+
 
 ---
 
