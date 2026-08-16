@@ -51,7 +51,7 @@
 .unit-row .now { display: inline-block; font-family: var(--font-cond); font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--coral-deep); }
 /* 56: the client's mauve replaces the olive. It is a light mid-tone, so the
    ink flips dark — the cream that read on olive measures 2.1:1 on this. */
-.teach-card { background-color: #A498A6; color: #191419; border-radius: var(--radius-card); padding: 18px 20px; box-shadow: var(--shadow-sm); display: flex; gap: 14px; align-items: center; }
+.teach-card { background-color: #a498a6; color: #191419; border-radius: var(--radius-card); padding: 18px 20px; box-shadow: var(--shadow-sm); display: flex; gap: 14px; align-items: center; }
 .teach-card img { width: 54px; height: 54px; border-radius: 50%; object-fit: cover; flex: none; }
 .teach-card .tq { font-family: var(--font-body); font-style: italic; font-size: 16.5px; line-height: 1.5; }
 

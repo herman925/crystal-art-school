@@ -660,7 +660,7 @@ are drift — and the exempt ones still have to pass contrast.
 
 ### 57 — course: syllabus thumbnails render in colour
 
-**Status:** ready-for-agent · **Blocked by:** 16
+**Status:** done · 1f05692 · **Blocked by:** 16 (which turned out to be already satisfied — the padlock carries role="img" aria-label="Locked", so the locked state was announced before the colour cue was removed)
 
 **What to build:** every syllabus thumbnail renders in full colour, whether or not the lesson
 has been bought. Locked rows currently desaturate their thumbnail.
@@ -735,7 +735,7 @@ compensating size bump risks reading as the opposite). Full reasoning is in
 
 ### 58 — The 2026-08 asset drop lands in `assets/` and imports
 
-**Status:** blocked · **Blocked by:** the client
+**Status:** done · b3c0a24 · **Blocked by:** none — the drop arrived 2026-08-16
 
 **What to build:** the round of images the client prepared after the 2026-08-15 review is in
 `assets/`, the importer has picked it up, and the manifest and data layer are regenerated.
@@ -808,7 +808,7 @@ Review threads: Tcdf2de, Tf171ca, Tb9c441, T9779e5.
 
 ### 62 — About: sixth live drawing, landscape certificates, article background
 
-**Status:** blocked · **Blocked by:** 58
+**Status:** done · b3c0a24, 9f024b5 · **Blocked by:** 58 (cleared) — EXCEPT the anti-piracy masking, which is still outstanding and is now live unmasked; see the last criterion
 
 **What to build:** the live-drawing carousel gains its sixth photograph; the two landscape
 certificates fill the two slots that read "Scan not supplied"; and both essay bodies sit on
@@ -825,7 +825,7 @@ re-pinning from the extension if she is to see them answered in place.
 
 ### 63 — The final brand marks
 
-**Status:** blocked · **Blocked by:** 58
+**Status:** done for the two logos · 1f05692 · **Blocked by:** the client, for the signature only
 
 **What to build:** the header mark and the banner mark are replaced with the client's final
 webp exports. Both were already acknowledged in the review as coming in this round.
@@ -930,7 +930,13 @@ verified on their own page, which is why they are blocked on this one.
 Review threads: T2d9cf7, T743b83.
 
 - [x] In theme A the band and the footer render the pale wood, sampled from painted pixels
-- [x] In theme D both are byte-identical to before the change
+- [x] The dark theme's WOOD is unchanged. Its TEXT is not: the same commit also
+      removed three un-scoped opacities — `.site-footer a` .85, `.footer-meta` .72
+      and `.band-forest p` .92 — none of which sat inside `[data-theme="A"]`, so
+      footer links, footer meta and band body copy went to full strength in BOTH
+      themes. That was the client's 不要半透明字 instruction applied where it also
+      applied, not an accident, but this box originally read "byte-identical" and
+      was ticked anyway. Corrected on review, 2026-08-16.
 - [x] Band ink, eyebrow and CTA all clear 4.5:1 against the new lighter ground
 
 ### 32 — course: the wood band and the footer go pale in light mode
@@ -942,7 +948,7 @@ light-mode wood established in 31.
 
 Review threads: Tc3e09f, T7bcb32.
 
-- [x] Both surfaces render the pale wood in theme A, dark theme unchanged
+- [x] Both surfaces render the pale wood in theme A, the dark theme's wood unchanged (see 31 on its text)
 - [x] Every text colour inside them clears 4.5:1 on the new ground
 
 ### 33 — Blog: the footer goes pale in light mode
@@ -953,7 +959,7 @@ Review threads: Tc3e09f, T7bcb32.
 
 Review thread: Tc18755.
 
-- [x] The footer renders the pale wood in theme A, dark theme unchanged
+- [x] The footer renders the pale wood in theme A, the dark theme's wood unchanged (see 31 on its text)
 - [x] Footer text and links clear 4.5:1 on the new ground
 
 ### 34 — Showcase: the wood band and the footer go pale in light mode
@@ -965,7 +971,7 @@ light-mode wood established in 31.
 
 Review threads: Tbc990f, Tbc97d4.
 
-- [x] Both surfaces render the pale wood in theme A, dark theme unchanged
+- [x] Both surfaces render the pale wood in theme A, the dark theme's wood unchanged (see 31 on its text)
 - [x] Every text colour inside them clears 4.5:1 on the new ground
 
 ### 35 — About: the footer goes pale in light mode
@@ -976,7 +982,7 @@ Review threads: Tbc990f, Tbc97d4.
 
 Review thread: T175475.
 
-- [x] The footer renders the pale wood in theme A, dark theme unchanged
+- [x] The footer renders the pale wood in theme A, the dark theme's wood unchanged (see 31 on its text)
 - [x] Footer text and links clear 4.5:1 on the new ground
 
 ### 36 — FAQ: the wood band goes pale in light mode
@@ -988,7 +994,7 @@ established in 31.
 
 Review thread: T85e252.
 
-- [x] The band renders the pale wood in theme A, dark theme unchanged
+- [x] The band renders the pale wood in theme A, the dark theme's wood unchanged (see 31 on its text)
 - [x] Band ink, eyebrow and CTA clear 4.5:1 on the new ground
 
 ### 37 — Free Videos: the wood band goes pale in light mode
@@ -1000,7 +1006,7 @@ light-mode wood established in 31.
 
 Review thread: T18a98d.
 
-- [x] The band renders the pale wood in theme A, dark theme unchanged
+- [x] The band renders the pale wood in theme A, the dark theme's wood unchanged (see 31 on its text)
 - [x] Band ink, eyebrow and CTA clear 4.5:1 on the new ground
 
 ### 38 — course: three syllabus accents move onto the marine token
