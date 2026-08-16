@@ -870,6 +870,49 @@ Asked on 2026-08-16. Review thread: T457627.
 
 ---
 
+## Replies filed on the client review, 2026-08-16
+
+All 93 threads from the 2026-08-15 round now carry a reply: **63 resolved, 30 left
+open**. Filed through the review tool's admin panel — `PanelAPI.replyToThread` and
+`PanelAPI.setThreadStatus`, same-origin so the CSRF guard is satisfied by the browser's
+own `Origin` header, throttled under the 60-writes-per-minute ceiling.
+
+Summarised here in English on purpose. The verbatim replies are in the review tool,
+which is private; this file is public, so it records *what was answered*, not the
+correspondence itself.
+
+**Resolved — the work is live**
+
+| Threads | Answered with |
+|---|---|
+| 17 | Font A on the section and card headings; hierarchy comes from size, not weight |
+| 10 | Light-mode wood matched to the page banner; dark theme unchanged |
+| 7 | The named accents on `#598493` |
+| 5 | Home overview: quote marks, wood plaque, translucent plates |
+| 3 | Syllabus phase panels rounded, solid marine marker — and the light bar lightened, because her marine measured 1.53:1 against the old one |
+| 3 | "What you'll learn" on plates, wider gutter, aligned to the block above |
+| 2 each | Hero subline + red sale flag · Meet Crystal removed + level right · Blog full stop + ribbon · teacher card mauve · essay leather · brand marks |
+| 1 each | Cork frame · Lesson 1 title · Free Trial photograph · sixth live drawing · the withdrawn fourth card |
+
+**Left open — each one asks her something**
+
+| Threads | Waiting on |
+|---|---|
+| 11 | Home imagery: received and imported, wiring next round |
+| 4 | Course and lesson imagery, incl. which image leads the intermediate strip |
+| 3 | Hero pair — six supplied, the first pair chosen, hers to confirm |
+| 3 | Tier photographs, wiring next round |
+| 2 | `#598493` at 12.5px measures 3.47:1 against a 4.5:1 standard — her colour, her call |
+| 2 | Certificate 4 is the exhibition poster, not a certificate; and the scan is unmasked |
+| 2 | Free Videos: "Tram" has no link, and whether the Shorts belong in her own second section |
+| 2 | The three tools films need uploading before they can be keyed |
+| 1 | Locked thumbnails now full colour — the lock cue is weaker for it |
+
+Nothing was reported as done that is not live. Where a file had arrived but the page
+does not read it yet, the reply says so.
+
+---
+
 ## Done
 
 ### 31 — Lessons: the wood band and the footer go pale in light mode
