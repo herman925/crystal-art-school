@@ -211,7 +211,9 @@ class Component extends DCLogic {
       setMeta(post.title + ' — Crystal\'s Art School', post.excerpt || '');
 
       /* Developer's note — see #12 and the stylesheet note above. Renders
-         whenever a post carries a `devnote`; all three posts do. */
+         whenever a post carries a `devnote`. No post carries one now — the three
+         were removed on 2026-08-17, when the client took CMS control of her own
+         copy — so this branch is dormant, kept for the next unapproved rewrite. */
       const devnote = post.devnote
         ? '<div class="bp-devnote" role="note"><strong>Developer’s note</strong><p>' + esc(post.devnote) + '</p></div>'
         : '';

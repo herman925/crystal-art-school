@@ -51,6 +51,26 @@ window.CAS_COURSES = [
         "icon": "palette"
       }
     ],
+    "films": [
+      {
+        "title": "Watercolour card",
+        "desc": "",
+        "url": "https://drive.google.com/file/d/1PWB555O936Byv6JEzNQmfy8i_qhPpr1J/preview",
+        "src": "watercolorcard.mp4"
+      },
+      {
+        "title": "Watercolour tools: how I made my palette",
+        "desc": "",
+        "url": "https://drive.google.com/file/d/1MEvjlIJ5l481xEK6O9rlWhr03gGjYQl-/preview",
+        "src": "WatercolortoolsHowi madepalette.mp4"
+      },
+      {
+        "title": "Beginner watercolour tools (English, with captions)",
+        "desc": "",
+        "url": "https://drive.google.com/file/d/1d49RqN2NjZMMrrR58x1Af031wv-uZcDL/preview",
+        "src": "初班水彩工具-English_(United_States)_with_captions.mp4"
+      }
+    ],
     "preview": {
       "url": "https://drive.google.com/file/d/1UfBuUEiX_C1UJxxyw50Zwb3of017cBgR/preview",
       "dur": 56,
@@ -477,6 +497,7 @@ window.CAS_COURSES = [
     "sale": false,
     "cover": "img/courses/clouds-intermediate/cover.jpg",
     "materials": [],
+    "films": [],
     "preview": {
       "url": "https://drive.google.com/file/d/1VTfbsZWgj4c-aWEmCNvHx4D3M7kerw-v/preview",
       "dur": 52,
@@ -768,6 +789,7 @@ window.CAS_COURSES = [
     "sale": false,
     "cover": "img/courses/little-house/cover.jpg",
     "materials": [],
+    "films": [],
     "preview": null,
     "photos": [],
     "photosMeta": [],
@@ -854,6 +876,7 @@ window.CAS_COURSES = [
     "sale": false,
     "cover": "img/courses/urban-sketch/cover.jpg",
     "materials": [],
+    "films": [],
     "preview": null,
     "photos": [],
     "photosMeta": [],

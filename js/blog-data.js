@@ -11,21 +11,15 @@
      guide  — lede + hero photo + numbered sections, each with its own photo
      essay  — paragraphs + one pull-quote
 
-   `devnote` renders a visible amber "Developer's note" callout at the top of the
-   article, declaring edits made to Crystal's text before she signed off. DELETE
-   the field (not the post) once she approves. See docs/blog-drafts/.
-
-   2026-08-09 (ticket 12) — DECISION: the note renders again on all three posts,
-   and the copy corrections stay. Reverting them would publish a known error:
-   "masking fluid" is what Crystal's own painted label reads, and Winsor &
-   Newton / Claessens are the manufacturers' spellings. So the page cannot carry
-   the edits with the declaration removed, which is the state this ticket was
-   raised about.
-   The wording is NOT the original note. That text was removed on 2026-08-07
-   (ff37d09) because it described her source material, and this repository is
-   public — the page and its source are readable by anyone. Each note now states
-   what was changed and that she has not signed it off, and nothing about how
-   the source arrived. The internal list stays in the gitignored working notes.
+   2026-08-17 — the `devnote` field is GONE from all three posts. It rendered an
+   amber "not approved yet" callout at the top of the article; corrections to the
+   copy now belong in the CMS, where Crystal edits her own words directly, so a
+   standing declaration on the published page no longer has a job to do.
+   The corrected wording itself STAYS and must not be reverted — reverting would
+   publish a known error: "masking fluid" is what Crystal's own painted label
+   reads, and Winsor & Newton / Claessens are the manufacturers' spellings.
+   blog-post.dc.html still supports the field: give any post a `devnote` string
+   and the callout comes back. Nothing else reads it.
 
    2026-08-09 (ticket 17): `srcset` / `sizes` / `w` / `h` accompany every image.
    Unlike `img`, `banner` and a section's `src` — which are bare filenames the
@@ -52,7 +46,6 @@ window.CAS_BLOG = [
     sizes: '(max-width: 600px) 358px, (max-width: 1000px) 1173px, 1392px',
     w: 1600, h: 1600,
     tag: 'Tools', date: '2026-07-23', d: 'Jul 23', mins: 8,
-    devnote: "This post has not been approved yet. Crystal supplied the text and the paintings; the wording published here has been edited. Four material names were corrected against her own painted labels and the manufacturers' spellings — masking fluid (items 7 and 8), Winsor & Newton, Claessens, and squirrel hair (items 17 and 18) — two instructions were corrected (item 5 “after use”, item 6 “still damp”), and an unverified “artist-grade” claim was dropped. The title, the opening and closing paragraphs and the six section headings are ours: her original was a numbered list of twenty-one items. She has the full list and this note stays until she signs it off.",
 
     intro: [
       'People ask what I use far more often than they ask how I paint. So I painted my whole kit — every tube, brush, block and bottle — cut each one out, and laid them all on the table. Twenty-one things. This is honestly what comes with me.',
@@ -143,7 +136,6 @@ window.CAS_BLOG = [
     sizes: '(max-width: 600px) 358px, (max-width: 1000px) 720px, 452px',
     w: 2048, h: 1332,
     tag: 'Journal', date: '2026-07-23', d: 'Jul 23', mins: 2,
-    devnote: "This post has not been approved yet. Crystal supplied the text; it has been rewritten from the passive into the first person for publication. Every sentence here is a rewording of one of hers — no claim has been added, removed or changed, and nothing invented remains: two sentences that were ours have been deleted. This note stays until she signs it off.",
 
     body: [
       'I am introverted, and not especially good in a room full of people. For most of my life, standing up to speak meant a pounding heart and a mind that went completely blank. Friends who knew me then still ask how on earth I ended up teaching.',
@@ -162,7 +154,6 @@ window.CAS_BLOG = [
     sizes: '(max-width: 600px) 358px, (max-width: 1000px) 720px, 452px',
     w: 1600, h: 1200,
     tag: 'Journal', date: '2026-07-23', d: 'Jul 23', mins: 2,
-    devnote: "This post has not been approved yet. Crystal supplied the text; it has been rewritten from the passive into the first person for publication. Every sentence here is a rewording of one of hers — no claim has been added, removed or changed, and nothing invented remains: one clause that was ours has been deleted and the pull-quote is her own sentence, verbatim. This note stays until she signs it off.",
 
     body: [
       'A lot of artists pick one subject and stay with it. It builds a recognisable identity, and for plenty of people it works — you can see the results.',

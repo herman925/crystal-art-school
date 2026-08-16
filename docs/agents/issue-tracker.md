@@ -7,6 +7,11 @@ Work the **frontier**: any ticket whose blockers are all done. Tick the acceptan
 criteria as they land; move the ticket to "Done" with its commit SHA when every box
 is ticked.
 
+Four places a ticket can be: **Ready** (work it), **Carried to the WordPress build** (real,
+but only measurable on the deliverable — do not work it here), **Blocked on the client**, and
+**Done**. A ticket that has been fixed and not ticked is worse than no tracker at all, because
+it inflates the queue: 2026-08-17 found thirteen of those.
+
 ## Repository visibility — read before writing anything here
 
 This repository is **PUBLIC**. It serves the demo at
@@ -86,149 +91,34 @@ thread bodies themselves are client correspondence and stay out of this file.
 
 ---
 
+## What this round settled, 2026-08-17
+
+Recorded here because it changes how the queue below should be read.
+
+- **The prototype is a design-agreement artefact; WordPress is the deliverable.** The design is
+  agreed off these pages. The site that ships is a WordPress build, so a ticket whose acceptance
+  is a measurement of prototype code closes as carried-forward rather than staying open against
+  code that will be discarded. Six went that way — see "Carried to the WordPress build".
+- **The blog developer's notes come down.** The client gets CMS control of post bodies, so an
+  on-page note declaring an unapproved correction is no longer the right mechanism. The copy
+  corrections themselves stand. The `devnote` field, its CSS and its render branch stay in the
+  page unused so a future post can carry one; ticket 12 carries the correction to what this file
+  used to say about that.
+- **Prices stay as placeholders.** Every figure on the site is a stand-in until the client sets
+  them. Nothing here treats a price as agreed, and none should be quoted onward as one.
+- **One red, not two.** The sale marker and the alert role share a single red rather than each
+  carrying its own; the prototype had `--rouge` and `--danger` diverging
+  (`css/industrial-1.css:242`, `:296`, `:313`).
+- **The certificate ships unmasked, and that is a knowing choice.** The anti-piracy masking is
+  still outstanding and the scan is live without it, pending the client's decision — ticket 62's
+  last criterion stays open and says so. Note also that her legal name is in that image's alt
+  text (`About.dc.html:323`), which is correct for accessibility and is a second thing the same
+  decision has to cover, not a separate defect.
+
+
+---
+
 ## Ready
-
-### 01 — Forms actually validate
-
-**Status:** ready-for-agent · **P0** · **Blocked by:** none
-
-**What to build:** every form on the site refuses to submit when a required field is
-empty, and says why. Today an entirely empty login authenticates you as "Friend" and
-redirects to the dashboard; an entirely empty checkout places an order.
-
-The cause is the `.dc.html` runtime dropping valueless attributes, so `required` is
-present in source and absent from the rendered DOM (`minlength="8"`, which carries a
-value, survives). Restoring the attribute is necessary but not sufficient — native
-validation messages are not announced, and `Checkout.dc.html` has no JS validation path
-at all.
-
-- [ ] `hasAttribute('required')` is true in the rendered DOM for all 7 checkout inputs, both auth pages, and the comment form
-- [ ] `form.checkValidity()` returns false on an empty form on every one of those
-- [ ] An invalid submit moves focus to the first invalid field and announces the reason
-- [ ] Empty login does not write `cas-user`; empty checkout does not reach the confirmation step
-
-### 02 — Typed text is visible in the dark theme
-
-**Status:** ready-for-agent · **P0** · **Blocked by:** none
-
-**What to build:** text you type into a field is legible. `.co-field input` sets
-`color: #2b2823` **and** `-webkit-text-fill-color: #2b2823` over `var(--cream)`, which in
-theme D is `#211e1a` — measured **1.13:1**, proven by pixel sampling (no pixel in a filled
-field is darker than its background). Dark is the default theme. The same construct is
-duplicated for `.field input, .field textarea`.
-
-Affects the card number, address and password fields.
-
-- [ ] Field text and placeholder both clear 4.5:1 in themes A and D, measured from painted pixels
-- [ ] The dead first `color` declaration in that rule is removed rather than left shadowed
-- [ ] Both copies of the construct are fixed, not just the first
-
-### 03 — `motion.js` runs every time, or not at all
-
-**Status:** ready-for-agent · **P0** · **Blocked by:** none
-
-**What to build:** the motion layer behaves the same on every page load. It binds to
-`DOMContentLoaded`, but the runtime injects it after that event has fired, so it is a
-race: instrumented over 10 loads it ran **2/10** on About and **3/10** on Lessons.
-Dispatching a synthetic `DOMContentLoaded` on a losing load immediately produced the
-missing 42 ScrollTriggers and the headline word-split.
-
-This is silent — the page looks finished either way — which is why it has survived.
-`js/site-extras.js` already does this correctly with a `readyState` check; copy that.
-
-- [ ] 20 consecutive loads of About and Lessons produce an identical ScrollTrigger count
-- [ ] The fix is a `readyState` guard, matching `site-extras.js`
-- [ ] Reduced-motion still bails out before any of it runs
-
-**Note for whoever takes this:** `motion.js` also disables itself when
-`navigator.webdriver` is true or the UA contains "Headless". Any Playwright check of
-motion must spoof both, or it measures a static page and passes for the wrong reason.
-
-### 04 — The basket and the payment screen agree
-
-**Status:** ready-for-agent · **P0** · **Blocked by:** none
-
-**What to build:** one source of truth for the cart. The header mini-cart drawer and
-`Checkout.dc.html` both write `cas-cart`, and the page has no listener for the drawer's
-writes (the `storage` event only fires cross-tab). Reproduced: open the drawer on the
-checkout page, increment a line, close it — the drawer reads £230, the page still reads
-**£200**, `localStorage` holds `[3,1]`, and the payment step then reads **£248**.
-
-- [ ] Changing quantity in the drawer updates the checkout totals in the same tab, immediately
-- [ ] The reviewed total and the charged total are provably the same value, not two computations
-- [ ] `#ship-1` does not show £18 on an empty basket
-
-### 05 — The checkout is honest about being a demo
-
-**Status:** ready-for-agent · **P0** · **Blocked by:** none
-
-**What to build:** nothing on the purchase flow should read as a real transaction.
-The "Demo only — no real payment is taken" note lives on step 2 and is gone by step 3,
-which renders an order number, a total, and *"A confirmation is on its way to your inbox"* —
-there is no email field anywhere in the form.
-
-Separately, `£18 Shipping (framed, insured)` and *"ships framed and insured within 5–7
-days"* are applied to whatever is in `cas-cart`, which `site-extras.js` also fills with
-video courses. Two courses currently total £182 + £18 postage.
-
-- [ ] The demo marking is present on every step including the confirmation
-- [ ] No claim about email, delivery or fulfilment appears unless it is true of what was bought
-- [ ] Shipping is not charged on digital items
-- [ ] A terms/privacy link is reachable from the checkout (the `checkout` footer variant drops the column that carries it)
-
-### 06 — The catalogue works on a touch device
-
-**Status:** ready-for-agent · **P0** · **Blocked by:** none
-
-**What to build:** on `Lessons.dc.html`, tapping a course card opens the course. Today
-`.cover-card .actions` is `opacity: 0; pointer-events: none` until `:hover`, and the only
-link into a course lives inside it. At 390px with a coarse pointer, `elementFromPoint` at
-the centre of both buttons returns the title scrim and a click times out.
-
-Four other components in the same stylesheets already ship an `@media (hover: none)`
-unhide (`industrial-1.css:625, 714`; `industrial-2.css:54, 260`).
-
-- [ ] At 390px with `hover: none`, both card buttons are hit-testable and a click navigates
-- [ ] The same check passes on every component that hides an action behind `:hover`
-- [ ] Desktop hover behaviour is unchanged
-
-### 07 — Nothing invisible is in the tab order
-
-**Status:** ready-for-agent · **P1** · **Blocked by:** none
-
-**What to build:** hidden UI is hidden from the keyboard too. Measured on every page: 12
-tabbable controls inside `.ck-modal` (`opacity: 0; pointer-events: none`, full-viewport
-rect), `.ck-bar` (translated off-screen) and the closed `.mc-drawer`. None carries `inert`,
-`aria-hidden`, `visibility: hidden` or `display: none`.
-
-Also here: inactive carousel slides on `index.html` keep 6 tabbable controls, and the
-Gallery, Showcase, FreeVideos and About lightboxes are all `role="dialog" aria-modal="true"`
-with no accessible name, no focus move-in, no trap, and no focus restore on close.
-
-- [ ] A live tab walk from the top of each page never lands on a control whose computed opacity chain is 0 or that is outside the viewport
-- [ ] Every lightbox takes focus on open, traps it, restores it on close, and has an accessible name
-- [ ] The cart drawer traps focus (it already moves and restores it correctly)
-
-### 08 — A real focus indicator, and stop clipping it
-
-**Status:** ready-for-agent · **P1** · **Blocked by:** none
-
-**What to build:** a designed `:focus-visible` treatment in the design system. There is
-currently no `:focus-visible` rule anywhere in `css/` except form fields, so every link,
-button and summary falls through to Chromium's default ring — and two places clip it:
-
-- `details.acc-item { overflow: hidden }` removes the ring's white band entirely, leaving
-  **1.35:1** against the card in dark theme. A/B proof: 5564 ring pixels with
-  `overflow: visible`, 1764 as shipped, none above the element's top edge.
-- `.syl-item { overflow: hidden }` on `course.dc.html` clips it completely — **0 of
-  103,008 pixels change on focus** as shipped, 5,948 with `overflow: visible`.
-
-`color-scheme` also computes to `normal` on `:root` and `body`, which is why a dark page
-gets a light-mode UA ring.
-
-- [ ] A tokened focus style, ≥3:1 against every surface it lands on, in both themes
-- [ ] Pixel-diff proves a ring paints on `a.syl-row` and on `summary.acc-item`
-- [ ] `color-scheme` is declared per theme
 
 ### 09 — Fix the coral contrast family
 
@@ -250,21 +140,16 @@ Note `industrial-1.css:427` carries a stale comment claiming 4.08 for a value th
 measures 4.56.
 
 - [ ] Every instance in the table clears 4.5:1 in both themes, measured from painted pixels
-- [ ] The fix is at the token/role level, not 15 local overrides
+- [x] The fix is at the token/role level, not 15 local overrides
 - [ ] Stale ratio comments in the CSS are corrected to what actually paints
 
-### 10 — Page identity: title, lang, skip link
-
-**Status:** ready-for-agent · **P1** · **Blocked by:** none
-
-**What to build:** `document.title` is `""` and `documentElement.lang` is `null` on **all
-15 pages**; no page has a `meta description`; no page has a skip link, though every one
-has `<main id="content">`. First focusable element is the brand, then 8 nav links — 10 tab
-stops to reach content, on every page.
-
-- [ ] Every page has a unique, descriptive `<title>` and a `lang`
-- [ ] A skip link is the first tab stop on every page and moves focus, not just the viewport
-- [ ] `blog-post.dc.html` sets its title from the post data
+**Partly landed, 2026-08-17.** The role split exists and every instance in the table above now
+consumes it rather than `--coral` directly: `--coral` is the material, `--coral-ink` is copper as
+text and is per theme, `--coral-fill` / `--coral-fill-ink` is copper as a small fill — declared and
+explained at `css/industrial-1.css:101-117`, `:300`, `:317`, and consumed at `industrial-1.css:373`,
+`:573`, `industrial-2.css:149`, `industrial-3.css:116`, `:238`. What is **not** done is the
+re-measurement: the box above stays open until each of the fifteen is read from painted pixels in
+both themes.
 
 ### 11 — Remove fabricated content
 
@@ -287,36 +172,49 @@ these was measured in the rendered page:
   tells a brand-new account it joined last month.
 
 - [ ] No invented person, email, credential or metric renders anywhere
-- [ ] Placeholder content is visibly marked as placeholder, or absent
-- [ ] Demo state is not written into storage keys that real state would use
+- [x] Placeholder content is visibly marked as placeholder, or absent
+- [x] Demo state is not written into storage keys that real state would use
+
+**Partly landed, 2026-08-17.** Gone outright: the fabricated Google sign-in identity
+(`Login.dc.html:245`, `Signup.dc.html:253`), the verify-your-email claim on a form with no email
+(`Signup.dc.html:103`), the invented shipping and authenticity assertions on every Gallery piece
+(`Gallery.dc.html:488`), and the seeded `cas-enrolled` / `cas-orders` writes and the invented join
+date (`Dashboard.dc.html:208`, `:257`). What **remains on the page, declared** — each carrying a
+`.ph-banner` that says so — is the three home testimonial cards (`index.html:384-388`), the ten
+Showcase names and titles (`Showcase.dc.html:121`, `:160-176`) and the three `is-demo` certificate
+rows (`About.dc.html:355-377`). The first box therefore stays open on purpose: these are honest
+placeholders waiting on ticket 29, not undeclared fabrications.
 
 ### 12 — Blog: the copy note and the copy it declares
 
-**Status:** MECHANISM FIXED 2026-08-09 · decision still with the client · **P1**
+**Status:** SETTLED 2026-08-17 · the corrections stay with the client · **P1**
 
-The note renders again, and it now names every change rather than gesturing at
-them: the six material and instruction corrections on post 1, the two sentences
-on post 2 that are ours, and the one clause plus the tightened pull-quote on
-post 3. Each note ends "This note stays until she signs it off."
+The six material and instruction corrections on post 1, the two sentences on post 2 that are
+ours and the one clause plus the tightened pull-quote on post 3 were verified against her source
+documents in 2026-08-09: all six corrections are present on the site, her original wording is
+gone in every case, and the three sentences the notes claimed as ours appear in none of her three
+documents. **None of that changes.** What changed on 2026-08-17 is only the declaration mechanism.
 
-Verified against her source documents: all six corrections are present on the
-site and her original wording is gone in every case, and the three sentences the
-notes claim as ours appear in none of her three documents.
+**Correction, 2026-08-17.** The paragraph that used to sit here said the callout was dead —
+that no post in `js/blog-data.js` carried a `devnote` field and that `.bp-devnote` matched zero
+elements on all three posts — and ticket 19 listed `.bp-devnote` among the dead CSS on that
+basis. **That was not true when it was written:** all three posts carried a `devnote` and the
+callout rendered. It becomes true this round for an entirely different reason, deliberately —
+see the 2026-08-17 entry above: the notes come down because the client gets CMS control of post
+bodies, not because the mechanism failed. The field, its CSS (`blog-post.dc.html:66-68`) and its
+render branch (`:214-216`) stay in place unused, which `blog-post.dc.html:60` says explicitly, so
+a future post can carry one. The sentence is corrected here rather than quietly deleted, because
+it was wrong in both directions and the record should show that.
 
-**Still with the client:** approve the corrections, or the copy is restored to
-her wording. The note must not be deleted before one of those happens.
+**What is left:** nothing in the code. The copy corrections the callout existed to declare
+(masking fluid, Winsor, Claessens, squirrel) are live and stay live; the only open item is the
+client's approval of them, which ticket 29 already carries.
 
-**What to build:** a decision, then the code to match. The "Developer's note" callout is
-dead — no post in `js/blog-data.js` carries a `devnote` field, and `.bp-devnote` matches
-zero elements on all three posts — while the copy corrections it existed to declare
-(masking fluid, Winsor, Claessens, squirrel) **are live**.
-
-So the client's text is altered on the page with the on-page declaration removed. That is
-the opposite of the arrangement recorded when the corrections were made.
-
-- [ ] Either the note renders again on the posts it describes, or the corrections are reverted to her wording
-- [ ] If the note stays dead, the CSS and the render branch are deleted rather than left
-- [ ] The decision is recorded with a date
+- [x] The on-page notes are gone from all three posts — zero `devnote:` fields in `js/blog-data.js`, and the reasoning is in its header at `:14-22`
+- [x] The mechanism is **kept, not deleted** — `.bp-devnote` (`blog-post.dc.html:66-68`) and its render branch (`:214-216`) stand ready for a future post, which `:60` states
+- [x] The corrections themselves are unchanged, and reverting them is ruled out in writing in both places
+- [x] The decision is recorded with a date — twice below
+- [ ] The client approves the corrected wording (carried on ticket 29, which already lists it)
 
 **Decision, 2026-08-09:** the note renders again on all three posts and the copy
 corrections stay. Reverting them would publish a known error — "masking fluid" is
@@ -326,6 +224,16 @@ that text was removed on 2026-08-07 (`ff37d09`) because it described the source
 material, and this repository is public. Each note now states what was changed and
 that it is not yet approved, and nothing else. Recorded in the header of
 `js/blog-data.js`, beside the field that drives it.
+
+**Decision, 2026-08-17 — supersedes the mechanism, not the copy:** the notes come down. The
+client gets CMS control of post bodies, so corrections belong where she edits her own words
+rather than in a standing declaration on the published page; a note that outlives its purpose
+reads as an unresolved defect to every visitor. The corrected wording **stays and must not be
+reverted** — reverting would publish a known error, for the reasons given in the 2026-08-09 entry
+above, and both `js/blog-data.js:18-20` and this ticket say so. The field and its rendering are
+left in place unused. The 2026-08-09 sentence "the note must not be deleted before one of those
+happens" is therefore superseded, and is kept above only so the reversal is visible rather than
+silent.
 
 ### 13 — Showcase has no student data
 
@@ -343,40 +251,17 @@ in a fixed square tile, and the mixed-aspect collage CSS (`.sw-grid`, `.sw-tile`
 `js/motion.js` still lists `.sw-grid .sw-tile` as a stagger target.
 
 - [ ] Real captions, or an honest empty state that does not render blank separators
-- [ ] No element renders a background chip with no content
-- [ ] The collage question is settled: either the data carries mixed ratios and the collage CSS is used, or that CSS and its motion target are deleted
+- [x] No element renders a background chip with no content
+- [x] The collage question is settled: either the data carries mixed ratios and the collage CSS is used, or that CSS and its motion target are deleted
 
-### 14 — Stated behaviours that do not happen
-
-**Status:** ready-for-agent · **P1** · **Blocked by:** none
-
-**What to build:** a sweep of features whose code or comments promise something the page
-does not do. Each is measured:
-
-- **No way to log out, anywhere.** `applyAuthNav()` builds the logged-in chip and Log out
-  button, is called from `init()`, and `site-nav.js:134` `nav.innerHTML = buildNav()`
-  overwrites it. `.nav-user` count is 0 at 500/1500/3000/6000ms on three pages.
-- **Dashboard "Save changes" throws.** `TypeError` on `#nav-user-name`, an element
-  referenced twice and created nowhere. The write to storage happens first, so the data
-  saves but the greeting never updates and no toast fires.
-- **About's row→mount pairing marks the wrong element.** The comment says hovering a row
-  marks its certificate; the handler toggles the class on the row. There is also no
-  `.bc-card--cert.is-active` rule, so a corrected class would still paint nothing.
-- **FreeVideos' Drive recovery link never paints.** `openV()` sets `.fvm-controls` to
-  `display:none` on every open, then writes the "open in a new tab" fallback into
-  `.fvm-note`, a child of that row. Measured height 0.
-- **`#co-thumbs-note` and `#res-note` do not exist.** Both are written to by JS; the
-  documented fallback disclosures never render.
-- **`.nav-cats` never renders** at any width on any page — `buildNav()` emits no such
-  block, so the hand-written second row is deleted on load, along with its 5 CSS rules.
-- **The Gallery's `is-pending` Etsy branch is unreachable** — no record has an `etsy` key,
-  so all 17 links resolve to the shop front and "Etsy link to come" can never show.
-- **The Gallery's `--fs` frame-scale system is inert** — it matches on `A5|A4|A3` and every
-  size in the data is metric.
-
-- [ ] Each item above is either made to work or removed, with the comment corrected
-- [ ] Logging out is possible from every page
-- [ ] No JS references an element id that does not exist
+**Partly landed, 2026-08-17.** `.pol-med` renders only when there is a medium to put in it
+(`Showcase.dc.html:257`), and the filter rail and empty state are built only when the data offers a
+real choice (`:352-359`) — so no blank chip and no unreachable state. The collage question was
+settled by deletion: the `.sw-*` rules are gone from `css/industrial-3.css` (the reason is left at
+`:483-486`) and `js/motion.js` no longer lists `.sw-grid .sw-tile`. The first box stays open: the
+ten names, titles and media are invented stand-ins, marked as such on the page and in the data
+(`Showcase.dc.html:121`, `:160-176`), until the real credits arrive under ticket 29. **Replace all
+ten together; do not ship these names.**
 
 ### 15 — Commerce data integrity
 
@@ -398,23 +283,6 @@ This may be an intended sampler rather than a defect; the page cannot answer tha
 - [ ] Confirmed with the client whether these are free samplers or paid courses
 - [ ] The price, the cart button and the lock state agree with the answer
 
-### 16 — Locked lessons: contrast and announcement
-
-**Status:** ready-for-agent · **P1** · **Blocked by:** 08
-
-**What to build:** `course.dc.html` emits `style="opacity:.72"` inline on every locked
-syllabus row — 12 of 13 rows in the default not-purchased view. Painted contrast **2.55:1**
-(theme A) / 3.00:1 (theme D) against 4.80 / 6.13 for the unlocked row. Being inline, it
-outranks every stylesheet remedy.
-
-The padlock is an `aria-hidden` SVG with no text alternative, so the accessible text of a
-locked row contains no indication that it is locked — while the free row does say
-"FREE PREVIEW".
-
-- [ ] Locked rows clear 4.5:1 in both themes, measured from painted pixels
-- [ ] "Locked" is in the accessible name or an adjacent text node
-- [ ] The dimming is not an inline style
-
 ### 17 — Image delivery
 
 **Status:** ready-for-agent · **P1** · **Blocked by:** none
@@ -434,22 +302,13 @@ oversampling and weight:
 - [ ] `cover3.jpg` is not fetched on the course page
 - [ ] Per-page image budget agreed and met
 
-### 18 — Touch targets
-
-**Status:** ready-for-agent · **P2** · **Blocked by:** none
-
-**What to build:** measured at 390px, essentially every control on the site is under
-44×44. Worst: `.rel-dots button` 8×8, `.phc-dot` 9×9, `.li-remove` 21px tall,
-`.qty button` 28×28, `.social-btn` 30–36px, `.cart-btn` and `.mode-toggle` 38×38,
-`.nav-burger` 40×40, `.fopt` 39px, `.cover-btn` 36px. `industrial-3.css:365-368` sets
-`min-height: 40px/42px` under a coarse pointer — deliberately below 44.
-
-The carousel dots also fail as indicators: measured 1.56:1 (A) / 2.08:1 (D) against the
-page, under the 3:1 needed for a non-text control.
-
-- [ ] Every interactive control is ≥44×44 at 390px, or has a ≥44×44 hit area
-- [ ] The coarse-pointer minimums are raised to 44
-- [ ] Pagination dots clear 3:1 in both themes
+**Partly landed, 2026-08-17.** The site is no longer at zero: `srcset` is present on twelve pages
+and in all five data files (`js/static-images.js` 56 uses, `js/course-data.js` 48, `js/gallery-data.js`
+17, `js/free-videos-data.js` 15, `js/blog-data.js` 11), `fetchpriority` on nine pages, and the
+derivative ladder is generated rather than hand-kept. The boxes stay open because each asks for a
+measurement of the rendered page — which slot each source is actually painted into, which image is
+the LCP candidate at each width, and a budget that has been **agreed** and not merely met. Note the
+budget half is a decision, not a measurement, and can be taken now.
 
 ### 19 — Dead code sweep
 
@@ -465,54 +324,28 @@ the live DOM:
 - `FreeVideos.dc.html` — the simulated-player block, `.fvm-veil` and its five dependent rules, `.is-placeholder`
 - `Gallery.dc.html` — the `is-pending` branch, the `--fs` system, a duplicated `.art-frame` block that is fully overridden, `cartSvg`
 - `Blog.dc.html` — `rf`, `eye`, `origRender`, `document._blogDrive`, `.blog-card.hidden`, `.bc-reads svg`
-- `blog-post.dc.html` — `.bp-devnote`, `.bp-hero`, `.toc ol ol`, `.article figcaption`
+- `blog-post.dc.html` — `.bp-hero`, `.toc ol ol`, `.article figcaption`. **`.bp-devnote` was
+  listed here in error and is not to be deleted** — see the correction on ticket 12; the rule
+  (`:66-68`) and its render branch (`:214-216`) are kept deliberately for a future post.
 - `About.dc.html` — 12 elements carrying a `reveal` class that matches no rule; `.cert-grid`, `.cert-card`, `.story-layout`, `.about-social`
 - `Showcase.dc.html` — the `.sw-*` collage rules and `#sw-empty`
 - `Lessons.dc.html` — 16 hand-written filter chips overwritten before paint; `.price .was`
-- `Dashboard.dc.html` — `.nav-user` rules, `logout-btn`, `logout-sheet`
+- `Dashboard.dc.html` — `logout-btn`, `logout-sheet`. **`.nav-user` is live now** and must stay:
+  ticket 14 restored the logged-in chip, so `css/industrial-3.css:342-344` and `:389-390` render.
 
 - [ ] Each item is deleted or made live, none left in place
 - [ ] After deletion, a brace-balance check passes on all three stylesheets
-- [ ] The nav markup exists in exactly one place
+- [x] The nav markup exists in exactly one place
 
-### 20 — Responsive breaks
-
-**Status:** ready-for-agent · **P2** · **Blocked by:** none
-
-**What to build:** four measured layout failures that no overflow check catches, because
-`.cas-root { overflow-x: hidden }` swallows them.
-
-- **`blog-post.dc.html` banner is 39% clipped between 701 and 1221px.** `aspect-ratio: 48/9`
-  plus `min-height: 220px` makes Chrome resolve width *from* the min-height — a fixed
-  1173px. At 760px the container is 712px.
-- **`index.html` New Release title overlaps its own metadata by 31px on touch**, at 390,
-  760 and 1100. Both sit at `bottom: 58px`; the lift is `:hover`/`:focus-within` only,
-  while `@media (hover: none)` forces the facts visible.
-- **`About.dc.html` portrait carousel ignores its mobile height.**
-  `.ph-carousel.is-portrait .phc-cell img { height: 560px }` (0,3,2) outranks the 900px
-  media query (0,2,2) — 560px in a 358px cell at 390px.
-- **`course.dc.html` syllabus collapses at laptop width** — 560px of content with 270px of
-  empty gutter each side at 1100px, because the left column is pinned until the 900px
-  breakpoint.
-
-Also: the nav collides with itself at 1100px (`Free videos` × cart 24px, `FAQ` × cart 12px,
-`FAQ` × `Log in` 17px), and the Dashboard tab rail scrolls off-screen with no affordance.
-
-- [ ] Each of the above measures correctly at 390 / 760 / 1100 / 1692 in both themes
-- [ ] A width sweep checks element rects against their containers, not just document scrollWidth
-
-### 21 — Autoplay needs a stop
-
-**Status:** ready-for-agent · **P2** · **Blocked by:** none
-
-**What to build:** WCAG 2.2.2 — moving content over 5 seconds shown alongside other
-content needs a user-operable pause. Three auto-advancing carousels on About (measured
-5.3s / 6.7s / 8.1s), two on `index.html` (6s each). They correctly pause on hover, focus
-and hidden tab, and correctly do not run under reduced motion — but there is no persistent
-control.
-
-- [ ] A visible, keyboard-operable pause/play on every auto-advancing component
-- [ ] State is exposed (`aria-pressed`), and the dots expose `aria-current`
+**Partly landed, 2026-08-17.** The hand-written `<nav>` is gone from all fifteen pages — each now
+carries an empty `<nav class="site-nav" aria-label="Main">` that `buildNav()` fills, so the three
+drifting variants cannot recur. Also confirmed deleted, each with the reason left in place:
+`.nav-cats` and its five rules (`css/industrial-2.css:675`), the simulated player on
+`lesson.dc.html:132` and on `FreeVideos.dc.html`, the Gallery `is-pending` branch and `--fs` system
+(`Gallery.dc.html:32-34`, `:310-313`), the `.sw-*` collage rules (`css/industrial-3.css:483-486`)
+and `.story-layout` / `.cert-grid` (`css/industrial-2.css:657`). **Two entries in the list above
+were wrong and are corrected inline** — `.bp-devnote` and `.nav-user` are both live and must stay.
+The first box stays open until the remainder is walked item by item.
 
 ### 22 — Announce what changes
 
@@ -531,150 +364,79 @@ class only.
 
 - [ ] Every asynchronous state change is announced once, in the right politeness level
 - [ ] Focus is never dropped to `<body>` by a step or stage change
-- [ ] Toggle controls expose their state
+- [x] Toggle controls expose their state
 
-### 23 — Tabs, lists and dialogs that lie about what they are
+**Partly landed, 2026-08-17.** There is now one shared polite live region rather than a per-page
+invention: `window.CasAnnounce(message, politeness)` at `js/site-extras.js:128-152`, called from
+fourteen pages. Filter chips carry `aria-pressed` on Lessons, Gallery, Blog and Showcase, and the
+auth and checkout stages take focus rather than dropping it (`Login.dc.html:175`, `:192`,
+`Checkout.dc.html:321`, `:337`, `:384`). The first two boxes stay open because they ask for a sweep
+of every asynchronous change on every surface, once each and at the right politeness — that has not
+been walked, and "announces somewhere" is not the same claim.
 
-**Status:** ready-for-agent · **P2** · **Blocked by:** none
-
-**What to build:** correct roles. Measured:
-
-- **Dashboard** — `role="tablist"` wraps six plain buttons: no `role="tab"`, no
-  `aria-selected`, no `role="tabpanel"`, arrow keys dead, and the active tab differs from
-  the inactive ones by colour alone. Putting `role="tablist"` on the `<aside>` also
-  destroys its `complementary` landmark.
-- **About** — `role="listitem"` on `<button>` overwrites the implicit button role on all 10
-  certificate rows, so the two working controls announce as list items.
-- **About** — `.cert-info` is the mobile affordance but ships as
-  `<span role="presentation" aria-hidden="true">` styled with `cursor: pointer` and a hover
-  state, while the real control gets `cursor: default` at the same breakpoint. It also
-  shows a pointer on the 8 disabled rows.
-- **Shared nav** — `role="menu"` + 6 × `role="menuitem"` on plain links, with no
-  `aria-haspopup`, no `aria-expanded`, and no arrow-key handling. The drawer opens on
-  `mouseover`/touch only, so it is unreachable by keyboard above 860px.
-- **Showcase** — `aria-label` on a bare `<div>` with no role, so the name is discarded.
-- **Gallery** — active-filter removal chips are `<span>` with a click handler,
-  `tabIndex: -1`.
-
-- [ ] Roles match behaviour, or are removed
-- [ ] The Courses drawer is keyboard-reachable
-- [ ] Every control with a pointer cursor is a control
-
-### 24 — Escape and outside-click close the burger sheet
+### 26 — Fonts are hosted by a third party
 
 **Status:** ready-for-agent · **P2** · **Blocked by:** none
 
-**What to build:** at 390px the mobile sheet stays open after `Escape` and after a real
-bubbling click on `<main>` — verified on three pages in both themes. `aria-expanded` stays
-`"true"`. Only a second burger tap closes it. There is no keydown handler and no
-outside-click branch.
+**What to build:** the typefaces come from this site, not from Google. There are **zero**
+`@font-face` rules anywhere in the repository, and five families are fetched from
+`fonts.googleapis.com` at `index.html:15` and the equivalent line on every other page —
+Bodoni Moda, Oswald, Archivo, Saira Stencil One and Arizonia — with `fonts.gstatic.com`
+behind them for the font files themselves. There is no local fallback stack: block those two
+origins and every page falls back to the browser's defaults, at sizes and tracking chosen for
+faces that are no longer there.
 
-- [ ] Escape closes the sheet and returns focus to the burger
-- [ ] A click outside closes it
-- [ ] `aria-expanded` tracks the real state (it already does for the button itself)
+Two reasons this outlives the prototype:
 
-### 25 — Leaks and layout thrash
+- **It is a hosting decision the real site inherits.** Whatever the WordPress build stands on
+  makes the same choice, and it is cheaper to make it once, now, than to re-do a type ramp
+  later.
+- **It is a privacy question in the UK.** Hot-linking Google Fonts sends every visitor's IP
+  address to a third party before any consent is expressed. The site's own privacy copy already
+  speaks to UK GDPR and to cookie choice (`About.dc.html:487`, `:493`) — and ticket 29 still has
+  the trading jurisdiction open, so this is not settled by assuming the UK either way. Whatever
+  the copy ends up saying about third parties and what the pages actually request have to agree.
 
-**Status:** ready-for-agent · **P2** · **Blocked by:** none
+**The React half of this ticket is done.** `support.js` still loads React and ReactDOM from
+`unpkg.com`, but there is now a hand-written fallback beside the loader: `staticFallback()` at
+`support.js:1487-1500` promotes the already-parsed `<x-dc>` copy of the page, and the `.catch()`
+that calls it is at `support.js:1636-1639`. The blank page the original ticket described cannot
+happen for React any more. GSAP from `cdn.jsdelivr.net` was already found to degrade gracefully,
+so neither is part of what is left here.
 
-**What to build:** three measured runtime problems.
+One thing to check before committing to a family: `fonts/AwesomeLathusca.ttf` sits in the repo
+and is referenced by nothing — no `@font-face`, no `font-family`. Establish whether it is a
+display face someone intended to use before self-hosting the five that are.
 
-- **Blog leaks a listener per filter click.** `document._blogDrive` is assigned nowhere, so
-  the removal never fires, and the resize binding has no removal at all. Instrumented: 6
-  chip clicks took document-capture scroll listeners from 3 to 9 and resize from 3 to 9,
-  each calling `getBoundingClientRect()` on every card. `drive()` already runs twice per
-  scroll at baseline from double-binding.
-- **Gallery rebuilds the entire grid on every slider `input`.** 20 synthetic events =
-  316 nodes removed, 101.5ms, 5.08ms each, all 34 images destroyed and recreated per
-  pointer sample. The source comment says "filter only on release"; the handler is wired to
-  `input` as well as `change`.
-- **About's resize handlers interleave reads and writes** — `measureEngraved` loops
-  `getBoundingClientRect()` then `style.setProperty`, and `relayout` is registered three
-  times, all unthrottled.
-
-Also: the nav guard leaves a permanent 400ms interval, after 300 ticks of `querySelector`
-in the first 15 seconds.
-
-- [ ] Listener counts are stable across 20 filter interactions
-- [ ] The price slider filters on release, as its comment says
-- [ ] Resize work is batched into one rAF
-
-### 26 — The site survives a CDN outage
-
-**Status:** ready-for-agent · **P2** · **Blocked by:** none
-
-**What to build:** `support.js` loads React and ReactDOM from `unpkg.com` and mounts the
-entire `<x-dc>` body. With `unpkg.com` blocked, `document.body.scrollHeight === 0` and the
-page contains only the cookie banner. By contrast, blocking `cdn.jsdelivr.net` (GSAP)
-degrades gracefully — everything renders at opacity 1.
-
-Five external origins on a fully static site: unpkg, jsdelivr, and two Google Fonts hosts.
-
-- [ ] The pages render their content without a third-party CDN, or the dependency is vendored
-- [ ] Verified by blocking each origin in turn
-
-### 27 — Reading measure on the article pages
-
-**Status:** ready-for-agent · **P3** · **Blocked by:** none
-
-**What to build:** `blog-post.dc.html` body copy measures **104 characters per line** at
-1692px, counted with `Range.getClientRects()` rather than estimated. `.article`'s 760px at
-16.5px is ~46em, roughly 40% above the 65–75 ceiling for sustained reading. FAQ answers
-measure 118 characters. Mobile is fine (45–48).
-
-`.page-lead` on the same FAQ page is correctly capped at `74ch`, so the target already
-exists in the same file.
-
-- [ ] Body copy on the two Read-mode surfaces measures 65–75 characters at every width ≥900px
-- [ ] Heading sizes do not invert (`Comments` at 34px currently outranks every content section heading at 26px)
-
-### 28 — Theming holes
-
-**Status:** ready-for-agent · **P3** · **Blocked by:** 09
-
-**What to build:** components that do not respond to the theme toggle. Each measured
-byte-identical in A and D, or measured painting far from its own token:
-
-- **Showcase's entire wall** — 14 literal colours, 0 token references in 40 lines
-- **The Courses mega drawer** — hard-coded `#26221e` / `#cf9457` / `#ede1d0` in
-  `site-nav.js`; a near-black panel on a cream nav bar
-- **FreeVideos' lightbox** — 35 raw literals against 44 token uses; A and D screenshots
-  differ only in the corner antialias
-- **Dashboard's settings fields** — `#f3ede1` / `#2b2823`, cream in both themes, with a
-  border at ~1.03:1 against their own fill; and the danger zone at **2.40:1** in dark
-- **`course.dc.html`'s `.co-highlight`** — `#1b1814`, a 900×506 black rectangle above the
-  fold on the cream theme
-- **Blog's leather** — only `background-color` is themed; the light token `#d2cec7`
-  (L 0.620) paints at `#a39787` (L 0.317), so the card sits at 2.52:1 against the light page
-- **Lessons** — 6 component families frozen, including hard-coded `-webkit-text-fill-color`
-- **blog-post's author card and pull-quote** — `#cab389` / `#5e4a3d`, light tan on the dark page
-
-Some of these are the documented "material exemption" (copper, oak, leather hold their
-colour). That rule needs restating so it is clear which of the above are exempt and which
-are drift — and the exempt ones still have to pass contrast.
-
-- [ ] Every component above is either tokened or listed as a material exemption with a measured contrast pass
-- [ ] The material-exemption rule is written down in `docs/03-design-system.md`
+- [ ] The five families are served from the site's own origin, declared in `@font-face`, each with a real local fallback stack
+- [ ] No request leaves for `fonts.googleapis.com` or `fonts.gstatic.com` on any page, verified by blocking both origins in turn
+- [ ] What the privacy copy says about third parties matches what the pages actually request
+- [ ] Licensing for self-hosting each of the five is confirmed
+- [x] The site renders without its JS CDN — `support.js:1487-1500` and `:1636-1639`
 
 ---
 
-### 57 — course: syllabus thumbnails render in colour
+## Carried to the WordPress build
 
-**Status:** done · 1f05692 · **Blocked by:** 16 (which turned out to be already satisfied — the padlock carries role="img" aria-label="Locked", so the locked state was announced before the colour cue was removed)
+The prototype is how the design was agreed; WordPress is the deliverable. Six tickets from the
+2026-08-09 audit accept only on a **measurement of the running page** — painted contrast,
+element rects, listener counts, characters per line box. Measuring those against prototype code
+that is about to be replaced proves nothing about what ships, so they close here as
+carried-forward rather than sitting in the open queue misrepresenting how much work is left.
 
-**What to build:** every syllabus thumbnail renders in full colour, whether or not the lesson
-has been bought. Locked rows currently desaturate their thumbnail.
+None of them is abandoned. Each names the thing to measure once there is a WordPress page to
+measure it on, and the prototype work already done against each is the starting point rather
+than something to redo from nothing. The full audit text for all six is in this file's history
+at `3940777`.
 
-That desaturation is one of the cues that a row is locked, so this ticket depends on 16
-having made the locked state textual first — otherwise removing it leaves the padlock and
-the price as the only indication, and the padlock is currently `aria-hidden`.
-
-Review thread: Ta27f4c (colour half; the "these should be the lesson cover photos" half is
-ticket 60).
-
-- [ ] No thumbnail has a saturation filter applied in either state
-- [ ] "Locked" is still conveyed in text, not by the image treatment alone
-- [ ] The change is verified in the default not-purchased view, not only when signed in
+| # | What it is | What has to be measured on the WordPress build |
+|---|---|---|
+| 18 | Touch targets | Every interactive control's rect at 390px against 44×44, and the pagination dots against the 3:1 a non-text control needs. The prototype raised its coarse-pointer minimums to 44 (`css/industrial-3.css:1240-1290`); a theme will ship its own. |
+| 20 | Responsive breaks | Element rects against their own containers at 390 / 760 / 1100 / 1692 in both themes. A document `scrollWidth` check cannot see these — `overflow-x: hidden` swallows them, which is why they survived every earlier overflow sweep. |
+| 23 | Roles that do not match behaviour | An accessibility-tree dump per template, comparing announced role against actual behaviour, plus a keyboard walk of the courses drawer. The prototype's rewrites (`Dashboard.dc.html:55-61`, `About.dc.html:799-816`, `js/site-nav.js:41-42`) are the pattern to carry over; a theme's own widgets need the same pass. |
+| 25 | Leaks and layout thrash | Listener counts across twenty filter interactions, node churn per slider sample, and whether resize work lands in one rAF. Plugin-supplied filters, sliders and carousels are where this will reappear. |
+| 27 | Reading measure | Characters per line box with `Range.getClientRects()` at every width ≥900px, and that heading sizes do not invert. The prototype settled on `min(760px, 55ch)` measuring 70-73 (`css/industrial-3.css:96-101`) — `ch` is face-specific, so the number has to be re-measured in whatever face the theme ships. |
+| 28 | Theming holes | Per-component screenshots in both themes, and a painted contrast reading for every component claimed under the material exemption. The rule itself is written down and travels: `docs/03-design-system.md:211`. |
 
 ---
 
@@ -914,6 +676,324 @@ does not read it yet, the reply says so.
 ---
 
 ## Done
+
+### 01 — Forms actually validate
+
+**Status:** done · c47b861 · **P0** · **Blocked by:** none
+
+**What to build:** every form on the site refuses to submit when a required field is
+empty, and says why. Today an entirely empty login authenticates you as "Friend" and
+redirects to the dashboard; an entirely empty checkout places an order.
+
+The cause is the `.dc.html` runtime dropping valueless attributes, so `required` is
+present in source and absent from the rendered DOM (`minlength="8"`, which carries a
+value, survives). Restoring the attribute is necessary but not sufficient — native
+validation messages are not announced, and `Checkout.dc.html` has no JS validation path
+at all.
+
+- [x] `hasAttribute('required')` is true in the rendered DOM for all 7 checkout inputs, both auth pages, and the comment form
+- [x] `form.checkValidity()` returns false on an empty form on every one of those
+- [x] An invalid submit moves focus to the first invalid field and announces the reason
+- [x] Empty login does not write `cas-user`; empty checkout does not reach the confirmation step
+
+**Verified 2026-08-17.** `novalidate` plus `required="required"` — a valued attribute, which is exactly the class of
+attribute the ticket notes the runtime keeps — on `Login.dc.html:44`, `Signup.dc.html:45`,
+`Checkout.dc.html:82,86-102`, `blog-post.dc.html:271-275` and `About.dc.html:440-451`. The invalid
+path names the field, moves focus to it (`Login.dc.html:132`, `Checkout.dc.html:175`) and announces
+through the shared live region. The empty-form behaviour was measured in `c47b861`.
+
+### 02 — Typed text is visible in the dark theme
+
+**Status:** done · c47b861 · **P0** · **Blocked by:** none
+
+**What to build:** text you type into a field is legible. `.co-field input` sets
+`color: #2b2823` **and** `-webkit-text-fill-color: #2b2823` over `var(--cream)`, which in
+theme D is `#211e1a` — measured **1.13:1**, proven by pixel sampling (no pixel in a filled
+field is darker than its background). Dark is the default theme. The same construct is
+duplicated for `.field input, .field textarea`.
+
+Affects the card number, address and password fields.
+
+- [x] Field text and placeholder both clear 4.5:1 in themes A and D, measured from painted pixels
+- [x] The dead first `color` declaration in that rule is removed rather than left shadowed
+- [x] Both copies of the construct are fixed, not just the first
+
+**Verified 2026-08-17.** `.field input, .field textarea` at `css/industrial-2.css:1198` and `.co-field input, .co-field select`
+at `css/industrial-3.css:174` both resolve to `var(--ink)`; the shadowed first `color` declaration is
+gone from both, with the reason left beside each (`industrial-2.css:1194`, `industrial-3.css:169-171`).
+Painted-glyph ratios across seven fields on three pages were measured in `c47b861`.
+
+### 03 — `motion.js` runs every time, or not at all
+
+**Status:** done · c47b861 · **P0** · **Blocked by:** none
+
+**What to build:** the motion layer behaves the same on every page load. It binds to
+`DOMContentLoaded`, but the runtime injects it after that event has fired, so it is a
+race: instrumented over 10 loads it ran **2/10** on About and **3/10** on Lessons.
+Dispatching a synthetic `DOMContentLoaded` on a losing load immediately produced the
+missing 42 ScrollTriggers and the headline word-split.
+
+This is silent — the page looks finished either way — which is why it has survived.
+`js/site-extras.js` already does this correctly with a `readyState` check; copy that.
+
+- [x] 20 consecutive loads of About and Lessons produce an identical ScrollTrigger count
+- [x] The fix is a `readyState` guard, matching `site-extras.js`
+- [x] Reduced-motion still bails out before any of it runs
+
+**Note for whoever takes this:** `motion.js` also disables itself when
+`navigator.webdriver` is true or the UA contains "Headless". Any Playwright check of
+motion must spoof both, or it measures a static page and passes for the wrong reason.
+
+**Verified 2026-08-17.** `js/motion.js:310` is the `readyState` guard, the same construct as `js/site-extras.js:604`. The
+reduced-motion and automation gates return at `js/motion.js:16`, before a listener is registered or a
+frame of work is scheduled. The twenty-load determinism run is `c47b861`'s.
+
+### 04 — The basket and the payment screen agree
+
+**Status:** done · c47b861 · **P0** · **Blocked by:** none
+
+**What to build:** one source of truth for the cart. The header mini-cart drawer and
+`Checkout.dc.html` both write `cas-cart`, and the page has no listener for the drawer's
+writes (the `storage` event only fires cross-tab). Reproduced: open the drawer on the
+checkout page, increment a line, close it — the drawer reads £230, the page still reads
+**£200**, `localStorage` holds `[3,1]`, and the payment step then reads **£248**.
+
+- [x] Changing quantity in the drawer updates the checkout totals in the same tab, immediately
+- [x] The reviewed total and the charged total are provably the same value, not two computations
+- [x] `#ship-1` does not show £18 on an empty basket
+
+**Verified 2026-08-17.** `Checkout.dc.html:181-200` reads storage in one place and computes money in one place; the drawer's
+synchronous write is picked up by the bubble-phase listener at `:287-290` in the same frame, with
+`storage` / `focus` / `pageshow` as backstops. `#ship-1` is fed from that same totals object (`:222`)
+and its row starts hidden (`:67`).
+
+### 05 — The checkout is honest about being a demo
+
+**Status:** done · c47b861 · **P0** · **Blocked by:** none
+
+**What to build:** nothing on the purchase flow should read as a real transaction.
+The "Demo only — no real payment is taken" note lives on step 2 and is gone by step 3,
+which renders an order number, a total, and *"A confirmation is on its way to your inbox"* —
+there is no email field anywhere in the form.
+
+Separately, `£18 Shipping (framed, insured)` and *"ships framed and insured within 5–7
+days"* are applied to whatever is in `cas-cart`, which `site-extras.js` also fills with
+video courses. Two courses currently total £182 + £18 postage.
+
+- [x] The demo marking is present on every step including the confirmation
+- [x] No claim about email, delivery or fulfilment appears unless it is true of what was bought
+- [x] Shipping is not charged on digital items
+- [x] A terms/privacy link is reachable from the checkout (the `checkout` footer variant drops the column that carries it)
+
+**Verified 2026-08-17.** Demo marking on step 2 (`Checkout.dc.html:104`), on the confirmation (`:130`) and in the spoken
+confirmation (`:443`). The inbox and despatch claims are gone, with the old wording recorded at
+`:126-128`. Shipping is gated on `isDigital` (`:197`) and the rate is labelled unconfirmed
+(`:67`, `:192-195`). Terms and privacy are reachable at `:115` and `:140`.
+
+### 06 — The catalogue works on a touch device
+
+**Status:** done · c47b861 · **P0** · **Blocked by:** none
+
+**What to build:** on `Lessons.dc.html`, tapping a course card opens the course. Today
+`.cover-card .actions` is `opacity: 0; pointer-events: none` until `:hover`, and the only
+link into a course lives inside it. At 390px with a coarse pointer, `elementFromPoint` at
+the centre of both buttons returns the title scrim and a click times out.
+
+Four other components in the same stylesheets already ship an `@media (hover: none)`
+unhide (`industrial-1.css:625, 714`; `industrial-2.css:54, 260`).
+
+- [x] At 390px with `hover: none`, both card buttons are hit-testable and a click navigates
+- [x] The same check passes on every component that hides an action behind `:hover`
+- [x] Desktop hover behaviour is unchanged
+
+**Verified 2026-08-17.** `css/industrial-1.css:840-843` unhides `.cover-card .actions` and lifts the title under
+`@media (hover: none)`; the four sibling components that already shipped this unhide are at
+`industrial-1.css:801`, `:901` and `industrial-2.css:60`, `:278`. Hit-testing and the 44px button
+height were measured in `c47b861`.
+
+### 07 — Nothing invisible is in the tab order
+
+**Status:** done · c47b861 · **P1** · **Blocked by:** none
+
+**What to build:** hidden UI is hidden from the keyboard too. Measured on every page: 12
+tabbable controls inside `.ck-modal` (`opacity: 0; pointer-events: none`, full-viewport
+rect), `.ck-bar` (translated off-screen) and the closed `.mc-drawer`. None carries `inert`,
+`aria-hidden`, `visibility: hidden` or `display: none`.
+
+Also here: inactive carousel slides on `index.html` keep 6 tabbable controls, and the
+Gallery, Showcase, FreeVideos and About lightboxes are all `role="dialog" aria-modal="true"`
+with no accessible name, no focus move-in, no trap, and no focus restore on close.
+
+- [x] A live tab walk from the top of each page never lands on a control whose computed opacity chain is 0 or that is outside the viewport
+- [x] Every lightbox takes focus on open, traps it, restores it on close, and has an accessible name
+- [x] The cart drawer traps focus (it already moves and restores it correctly)
+
+**Verified 2026-08-17.** The bar, the drawer and the modal take `inert` + `aria-hidden` from `js/site-extras.js:156-169`, with
+the tabbability check at `:169`; inactive carousel slides do the same at `index.html:483-487`. All four
+lightboxes carry an accessible name and `inert`: `Gallery.dc.html:179`, `Showcase.dc.html:142`,
+`FreeVideos.dc.html:319`, `About.dc.html:506`.
+
+### 08 — A real focus indicator, and stop clipping it
+
+**Status:** done · c47b861 · **P1** · **Blocked by:** none
+
+**What to build:** a designed `:focus-visible` treatment in the design system. There is
+currently no `:focus-visible` rule anywhere in `css/` except form fields, so every link,
+button and summary falls through to Chromium's default ring — and two places clip it:
+
+- `details.acc-item { overflow: hidden }` removes the ring's white band entirely, leaving
+  **1.35:1** against the card in dark theme. A/B proof: 5564 ring pixels with
+  `overflow: visible`, 1764 as shipped, none above the element's top edge.
+- `.syl-item { overflow: hidden }` on `course.dc.html` clips it completely — **0 of
+  103,008 pixels change on focus** as shipped, 5,948 with `overflow: visible`.
+
+`color-scheme` also computes to `normal` on `:root` and `body`, which is why a dark page
+gets a light-mode UA ring.
+
+- [x] A tokened focus style, ≥3:1 against every surface it lands on, in both themes
+- [x] Pixel-diff proves a ring paints on `a.syl-row` and on `summary.acc-item`
+- [x] `color-scheme` is declared per theme
+
+**Verified 2026-08-17.** The tokened ring is `css/industrial-3.css:1288-1336`, covering links, buttons, `summary`, fields and
+the named components. `details.acc-item` (`:453`) and `.syl-item` (`:636`) now use `overflow: clip`
+with `overflow-clip-margin: 8px`, so the ring paints outside the box instead of being cut off.
+`color-scheme` is declared per theme at `industrial-1.css:275-276`, `:293`, `:312`. The pixel-diff is
+`c47b861`'s.
+
+### 10 — Page identity: title, lang, skip link
+
+**Status:** done · c47b861 · **P1** · **Blocked by:** none
+
+**What to build:** `document.title` is `""` and `documentElement.lang` is `null` on **all
+15 pages**; no page has a `meta description`; no page has a skip link, though every one
+has `<main id="content">`. First focusable element is the brand, then 8 nav links — 10 tab
+stops to reach content, on every page.
+
+- [x] Every page has a unique, descriptive `<title>` and a `lang`
+- [x] A skip link is the first tab stop on every page and moves focus, not just the viewport
+- [x] `blog-post.dc.html` sets its title from the post data
+
+**Verified 2026-08-17.** All fifteen site pages carry a `<title>`, a `lang`, a `meta description` and a `.skip-link` as the first
+tab stop. The three data-driven pages set their title from the data — `blog-post.dc.html:179`,
+`course.dc.html:226`, `lesson.dc.html:428` — and each records why the helmet has to be re-asserted
+(`blog-post.dc.html:9-15`, `lesson.dc.html:432`).
+
+### 14 — Stated behaviours that do not happen
+
+**Status:** done · c47b861 · **P1** · **Blocked by:** none
+
+**What to build:** a sweep of features whose code or comments promise something the page
+does not do. Each is measured:
+
+- **No way to log out, anywhere.** `applyAuthNav()` builds the logged-in chip and Log out
+  button, is called from `init()`, and `site-nav.js:134` `nav.innerHTML = buildNav()`
+  overwrites it. `.nav-user` count is 0 at 500/1500/3000/6000ms on three pages.
+- **Dashboard "Save changes" throws.** `TypeError` on `#nav-user-name`, an element
+  referenced twice and created nowhere. The write to storage happens first, so the data
+  saves but the greeting never updates and no toast fires.
+- **About's row→mount pairing marks the wrong element.** The comment says hovering a row
+  marks its certificate; the handler toggles the class on the row. There is also no
+  `.bc-card--cert.is-active` rule, so a corrected class would still paint nothing.
+- **FreeVideos' Drive recovery link never paints.** `openV()` sets `.fvm-controls` to
+  `display:none` on every open, then writes the "open in a new tab" fallback into
+  `.fvm-note`, a child of that row. Measured height 0.
+- **`#co-thumbs-note` and `#res-note` do not exist.** Both are written to by JS; the
+  documented fallback disclosures never render.
+- **`.nav-cats` never renders** at any width on any page — `buildNav()` emits no such
+  block, so the hand-written second row is deleted on load, along with its 5 CSS rules.
+- **The Gallery's `is-pending` Etsy branch is unreachable** — no record has an `etsy` key,
+  so all 17 links resolve to the shop front and "Etsy link to come" can never show.
+- **The Gallery's `--fs` frame-scale system is inert** — it matches on `A5|A4|A3` and every
+  size in the data is metric.
+
+- [x] Each item above is either made to work or removed, with the comment corrected
+- [x] Logging out is possible from every page
+- [x] No JS references an element id that does not exist
+
+**Verified 2026-08-17.** Log out survives every nav re-render: `js/site-nav.js:171` re-applies `window.casApplyAuthNav`
+(`js/site-extras.js:442`, `:475`) after each `innerHTML` write. `#nav-user-name` is gone
+(`Dashboard.dc.html:400-404`). `.cert-row.is-active` has a rule (`industrial-3.css:1018-1019`) and the
+handler marks the mount (`About.dc.html:923`). `.fvm-note` is out of the hidden controls row
+(`FreeVideos.dc.html:200-206`, `:347`). `#co-thumbs-note` (`course.dc.html:63`) and `#res-note`
+(`lesson.dc.html:248`) exist. `.nav-cats`, the `is-pending` Etsy branch and the `--fs` system are
+deleted (`industrial-2.css:675`, `Gallery.dc.html:32-34`, `:310-313`).
+
+### 16 — Locked lessons: contrast and announcement
+
+**Status:** done · c47b861 · **P1** · **Blocked by:** 08
+
+**What to build:** `course.dc.html` emits `style="opacity:.72"` inline on every locked
+syllabus row — 12 of 13 rows in the default not-purchased view. Painted contrast **2.55:1**
+(theme A) / 3.00:1 (theme D) against 4.80 / 6.13 for the unlocked row. Being inline, it
+outranks every stylesheet remedy.
+
+The padlock is an `aria-hidden` SVG with no text alternative, so the accessible text of a
+locked row contains no indication that it is locked — while the free row does say
+"FREE PREVIEW".
+
+- [x] Locked rows clear 4.5:1 in both themes, measured from painted pixels
+- [x] "Locked" is in the accessible name or an adjacent text node
+- [x] The dimming is not an inline style
+
+**Verified 2026-08-17.** The inline opacity is a class — `.syl-row.is-locked` at `course.dc.html:444`, with `--locked-ink` and
+its consumers at `css/industrial-3.css:715-726`. "Locked" is announced: the padlock carries
+`role="img" aria-label="Locked"` (`course.dc.html:400`).
+
+### 21 — Autoplay needs a stop
+
+**Status:** done · c47b861 · **P2** · **Blocked by:** none
+
+**What to build:** WCAG 2.2.2 — moving content over 5 seconds shown alongside other
+content needs a user-operable pause. Three auto-advancing carousels on About (measured
+5.3s / 6.7s / 8.1s), two on `index.html` (6s each). They correctly pause on hover, focus
+and hidden tab, and correctly do not run under reduced motion — but there is no persistent
+control.
+
+- [x] A visible, keyboard-operable pause/play on every auto-advancing component
+- [x] State is exposed (`aria-pressed`), and the dots expose `aria-current`
+
+**Verified 2026-08-17.** A pause button with `aria-pressed` on both home carousels (`index.html:191`, `:225`, state written at
+`:517-518`) and on the About carousels (`About.dc.html:665`, `:675`). Dots expose `aria-current`
+(`index.html:790`, `:801`; `About.dc.html:696`).
+
+### 24 — Escape and outside-click close the burger sheet
+
+**Status:** done · c47b861 · **P2** · **Blocked by:** none
+
+**What to build:** at 390px the mobile sheet stays open after `Escape` and after a real
+bubbling click on `<main>` — verified on three pages in both themes. `aria-expanded` stays
+`"true"`. Only a second burger tap closes it. There is no keydown handler and no
+outside-click branch.
+
+- [x] Escape closes the sheet and returns focus to the burger
+- [x] A click outside closes it
+- [x] `aria-expanded` tracks the real state (it already does for the button itself)
+
+**Verified 2026-08-17.** `js/site-nav.js:250-266` closes the sheet on Escape and returns focus to the burger. The outside-click
+branch is at `:245-247`, scoped so a click inside the sheet or on the burger is not treated as outside.
+
+### 57 — course: syllabus thumbnails render in colour
+
+**Status:** done · 1f05692 · **Blocked by:** 16 (which turned out to be already satisfied — the padlock carries role="img" aria-label="Locked", so the locked state was announced before the colour cue was removed)
+
+**What to build:** every syllabus thumbnail renders in full colour, whether or not the lesson
+has been bought. Locked rows currently desaturate their thumbnail.
+
+That desaturation is one of the cues that a row is locked, so this ticket depends on 16
+having made the locked state textual first — otherwise removing it leaves the padlock and
+the price as the only indication, and the padlock is currently `aria-hidden`.
+
+Review thread: Ta27f4c (colour half; the "these should be the lesson cover photos" half is
+ticket 60).
+
+- [x] No thumbnail has a saturation filter applied in either state
+- [x] "Locked" is still conveyed in text, not by the image treatment alone
+- [x] The change is verified in the default not-purchased view, not only when signed in
+
+**Verified 2026-08-17.** No saturation or grayscale filter is applied to any thumbnail — the only
+`filter` left in the three stylesheets is `.btn.primary:hover` (`css/industrial-1.css:438`). "Locked"
+stays textual through the padlock's `role="img" aria-label="Locked"` (`course.dc.html:400`) and the
+`.syl-row.is-locked` treatment (`css/industrial-3.css:715-726`).
 
 ### 31 — Lessons: the wood band and the footer go pale in light mode
 

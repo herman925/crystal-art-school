@@ -162,12 +162,23 @@
 .lesson-meta-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; min-height: 18px; }
 .lesson-count { font-family: var(--font-cond); font-size: 13px; color: var(--muted); }
 .no-results { display: none; padding: 44px 0; text-align: center; color: var(--muted); font-size: 15px; }
-/* Sale ribbon takes marine to match the reduced price it announces. Flat fill,
-   no texture to exempt, so it is a straight substitution. */
-/* 51: a red square, not a marine pill. The red is fixed rather than --danger,
-   which is a salmon in the dark theme and would read as two different flags on
-   the same product between themes. White on it measures 5.94:1. */
-.sale-flag { position: absolute; top: 12px; right: 12px; z-index: 3; font-family: var(--font-cond); font-size: 12.5px; font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; background: #b3382c; color: #fff; padding: 6px 10px; border-radius: 0; }
+/* 51: a red square, not a marine pill, and not --danger either — that token is
+   a salmon in the dark theme and would read as two different flags on the same
+   product between themes. The red was a one-off #b3382c, which made two reds on
+   one site; it now takes --rouge with --rouge-metal and #fdf3ef ink, the same
+   treatment `.cover-card .sale-ribbon span` and `.art-frame-wrap .sale-ribbon
+   span` already carry, so there is one red. Shape is untouched: square corners,
+   6px 10px.
+
+   The FILL is flat --rouge and deliberately not --rouge-metal, which is what the
+   two ribbons use. Measured, not assumed: #fdf3ef is 5.33:1 on flat #a8463f, but
+   --rouge-metal runs #c05a51 -> #a8463f -> #84332e, and against that lightest
+   stop the same ink is 3.99:1. No light ink clears 4.5 there — pure white is
+   4.41:1 — so on an element this small, where a 27px gradient reads as a flat
+   colour anyway, the gradient buys nothing and costs the threshold. The ribbons
+   keep theirs: they are several times taller, so their label never sits in the
+   top stop. */
+.sale-flag { position: absolute; top: 12px; right: 12px; z-index: 3; font-family: var(--font-cond); font-size: 12.5px; font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; background-color: var(--rouge); background-image: none; color: #fdf3ef; padding: 6px 10px; border-radius: 0; }
 @media (max-width: 1100px) { .catalog-layout .lesson-grid { grid-template-columns: repeat(2,1fr); } }
 @media (max-width: 880px) { .catalog-layout { grid-template-columns: 1fr; } .filter-panel { position: static; } }
 @media (max-width: 480px) { .catalog-layout .lesson-grid { grid-template-columns: 1fr; } }
@@ -211,7 +222,13 @@
 .tier-card.highlight::after { background: linear-gradient(180deg, rgba(52,84,96,.86) 0%, rgba(30,52,60,.90) 100%); }
 .tier-card.highlight { color: #f4fbfd; }
 .tier-card.highlight p { color: rgba(244,251,253,.94) !important; }
-.tier-card.fellow { position: relative; overflow: hidden; color: var(--band-ink); }
+/* The Fellow card is a PHOTOGRAPH under the .tier-card::after scrim, not a wood
+   band. It used to take var(--band-ink), which is cream in theme D and #474138 in
+   theme A — so on the light theme its title and price painted dark ink on a dark
+   scrim and measured 1.08:1, i.e. invisible, while its paragraph (forced cream
+   below) stayed readable. It now simply inherits the base card's light ink, the
+   way .highlight already does. */
+.tier-card.fellow { position: relative; overflow: hidden; }
 .tier-card.fellow p { color: rgba(231,221,203,.9) !important; }
 /* 1.4.8: all three cards enlarged together */
 .tier-card .tname { font-family: var(--font-stencil); font-size: 31px; letter-spacing: var(--tracking-stamp); }
@@ -944,10 +961,13 @@
    They move with it deliberately: leaving them on wood-natural would put two
    near-identical pale woods on one page, which is a worse outcome than
    changing a surface nobody asked about. */
+/* .tier-card.fellow is deliberately NOT in these two groups. It carries its own
+   photograph inline, so the wood never paints; all membership did was hand it a
+   --band-ink and a color meant for wood, which is what made its heading
+   unreadable on the light theme. */
 [data-theme="A"] .band-forest,
 [data-theme="A"] .signup-band,
-[data-theme="A"] .dash-hero,
-[data-theme="A"] .tier-card.fellow {
+[data-theme="A"] .dash-hero {
   --band-ink:#474138; --band-eyebrow:#7e4c27; --band-bg:#e6d6b8;
   background-color: #e6d6b8;
   background-image: url("../img/wood-creamy.jpg");
@@ -957,8 +977,7 @@
 }
 [data-theme="D"] .band-forest,
 [data-theme="D"] .signup-band,
-[data-theme="D"] .dash-hero,
-[data-theme="D"] .tier-card.fellow {
+[data-theme="D"] .dash-hero {
   --band-bg:#17130e;
   background-color: #17130e;
   background-image: url("../img/wood-black.jpg");

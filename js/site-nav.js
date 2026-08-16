@@ -77,7 +77,13 @@
         '<a class="cart-btn" href="Checkout.dc.html" aria-label="Shopping cart">' + CART_SVG + '<span class="cart-badge">0</span></a>' +
         '<a class="btn ghost" href="Login.dc.html">Log in</a>' +
         '<a class="btn primary" href="Signup.dc.html">Sign up</a>' +
-        '<button class="mode-toggle" type="button" aria-label="Switch between light and dark mode" title="Light / dark mode">' + SUN_SVG + MOON_SVG + '</button>' +
+        /* aria-pressed, not just an aria-label: a toggle has to say which way it is
+       currently set, not only what pressing it does. Initialised from the theme
+       already on .cas-root and kept in step by the handler below. */
+      '<button class="mode-toggle" type="button" aria-pressed="' +
+      ((document.querySelector('.cas-root') || {}).getAttribute &&
+        document.querySelector('.cas-root').getAttribute('data-theme') === 'D' ? 'true' : 'false') +
+      '" aria-label="Dark mode" title="Light / dark mode">' + SUN_SVG + MOON_SVG + '</button>' +
         '<button class="nav-burger" type="button" aria-label="Menu" aria-expanded="false">☰</button>' +
       '</div></div></div>' +
       '<div class="nav-sheet">' + sheet + '</div>';
@@ -221,6 +227,7 @@
       if (root) {
         var next = root.getAttribute('data-theme') === 'D' ? 'A' : 'D';
         root.setAttribute('data-theme', next);
+        mode.setAttribute('aria-pressed', next === 'D' ? 'true' : 'false');
         try { localStorage.setItem('cas-theme', next); } catch (er) {}
         if (window.CasAnnounce) window.CasAnnounce(next === 'D' ? 'Dark mode on.' : 'Light mode on.');
       }

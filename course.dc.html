@@ -419,12 +419,26 @@ class Component extends DCLogic {
       /* Her own lesson number, not the row index: one film can carry two of
          them, and that card is labelled "2 & 3". */
       const num = u.spans > 1 ? (u.n + ' & ' + (u.n + u.spans - 1)) : String(u.n || (i + 1));
-      /* ASSET PENDING / CMS: the thumbnail is the lesson's own cover photograph,
-         square with a rounded corner. It comes from the JPEG sitting beside the
-         film in the lesson folder — in the CMS this becomes an upload field on
-         the lesson record, so Crystal can set or change it herself. A lesson
-         with no JPEG (Lesson 1, film only) simply renders no thumbnail rather
-         than a placeholder box. (client feedback 2026-08-08) */
+      /* ASSET PENDING / CMS: the thumbnail is the lesson's own cover
+         photograph. `u.poster` is not a stand-in for it — it IS it. The
+         pipeline sets a lesson's poster to the first image, in natural
+         filename order, of that lesson's folder (import-assets.py
+         import_courses), and the client's covers are named BeginnerLesson*.JPG
+         / BeginnerLesson*Cover.JPG, which sort ahead of every other file she
+         puts there (CloudsLesson*, Lesson*refphoto) because "b" precedes "c"
+         and "l". So her cover wins in all thirteen beginner folders; the
+         intermediate folders hold one image each, which is that lesson's
+         picture. Verified against the folders 2026-08-17. In the CMS this
+         becomes an upload field on the lesson record rather than a filename
+         race, so Crystal can set it herself.
+         Two things follow that are worth knowing rather than fixing here:
+         .syl-thumb is 76x76 with object-fit:cover (industrial-3.css:642), so a
+         16:9 cover is CENTRE-CROPPED to a square — if a cover's subject sits
+         off-centre it will be cut; and a lesson folder with no JPEG at all
+         renders no thumbnail rather than a placeholder box (8.3). The beginner
+         course no longer has such a lesson — Lesson01, which used to be
+         film-only, now carries BeginnerLesson1Cover.JPG.
+         (client feedback 2026-08-08) */
       const thumb = u.poster
         ? '<img class="syl-thumb" src="' + esc(u.poster) + '"' +
           (u.srcset ? ' srcset="' + esc(u.srcset) + '"' : '') +

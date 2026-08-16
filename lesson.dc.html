@@ -116,6 +116,37 @@
    the script fills it, and an empty one takes no space. */
 .materials-card .res-note { margin: 0; padding: 0 10px 14px; font-family: var(--font-cond); font-size: 13.5px; line-height: 1.5; color: var(--muted); }
 .materials-card .res-note:empty { display: none; }
+/* Course-level films — the tools / palette introductions that belong to the
+   whole course and to no lesson. Same card chrome as Course materials, but a
+   play row rather than a download row, because these stream from Drive and are
+   140-215 MB files (measured on disk) that must never be offered as a download. The card is [hidden]
+   until the data says otherwise, and .curr-card sets no `display`, so the UA
+   rule is enough; the explicit one is here so a future display: on .curr-card
+   cannot silently reveal an empty card. */
+.films-card[hidden] { display: none; }
+.films-card .ch { font-size: 21px; font-family: var(--font-marker); font-weight: 600;
+  letter-spacing: normal; text-transform: none; color: var(--ink); padding: 4px 10px 14px; }
+.films-card .films-note { margin: 0; padding: 0 10px 12px; font-family: var(--font-cond); font-size: 13.5px; line-height: 1.5; color: var(--muted); }
+.films-card .films-note:empty { display: none; }
+.films-card .films-list { display: grid; gap: 10px; padding: 0 4px 8px; }
+/* #18: a real control, so the 44px minimum applies here as it does to .part-row. */
+.film-row { display: flex; align-items: center; gap: 14px; width: 100%; min-height: 44px; text-align: left; cursor: pointer;
+  border: 0; background: var(--surface); border-radius: var(--radius-card); padding: 12px 16px; box-shadow: var(--shadow-sm);
+  color: var(--ink); font-family: var(--font-cond); transition: transform .15s var(--ease-pop), box-shadow .15s; }
+.film-row:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.film-row .film-play { flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center;
+  background: color-mix(in srgb, var(--marine) 22%, transparent); }
+.film-row[aria-expanded="true"] .film-play { background: var(--marine); color: #f3ede1; }
+.film-row .film-t { flex: 1; min-width: 0; font-size: 15px; font-weight: 600; }
+.film-row .film-d { flex: none; font-size: 12.5px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.film-sub { margin: 0; padding: 6px 16px 0; font-family: var(--font-cond); font-size: 13px; line-height: 1.5; color: var(--muted); }
+.film-sub:empty { display: none; }
+/* All three films are 1920x1080, so the frame is 16:9 and the Drive player
+   letterboxes anything that is not — the stage-level pillarbox trick is not
+   repeated here, because nothing in this list is portrait. */
+.film-frame { position: relative; margin: 10px 0 0; border-radius: var(--radius-card); overflow: hidden; background: #000; aspect-ratio: 16 / 9; }
+.film-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.film-esc { display: block; padding: 8px 4px 2px; font-family: var(--font-cond); font-size: 12.5px; line-height: 1.5; color: var(--muted); }
 /* real video: Google Drive preview iframe fills the stage above the poster.
    The unit-flag stays visible but must not steal clicks from the player UI. */
 .stage .gdrive-frame { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: none; z-index: 6; background: #000; }
@@ -246,6 +277,24 @@
              files are placeholders — or that a course has none yet — went
              nowhere, and the card rendered as a heading over an empty body. -->
         <p class="res-note" id="res-note"></p>
+      </div>
+
+      <!-- The client's three tools films are COURSE-level: they introduce the
+           tools and the palette for the whole beginner course, they sit at the
+           ROOT of her course folder beside the highlights reel, and they belong
+           to no lesson. So they are NOT in UNITS, they never touch the stage,
+           the lesson flag or the progress bar, and they are not attached to one
+           arbitrary lesson. They sit under Course materials because that card is
+           already the course-level shelf on this page — but as play rows, not
+           downloads: the files are 140-215 MB and stream from Drive.
+           Data: content-meta.json courses.<slug>.films[] -> COURSE.films.
+           A course with no films renders nothing at all — the card stays
+           [hidden] rather than showing an empty state, because unlike materials
+           there is no promise anywhere on the site that a course has any. -->
+      <div class="curr-card films-card" id="films-card" hidden>
+        <div class="ch">Course films</div>
+        <p class="films-note" id="films-note"></p>
+        <div class="films-list" id="films-list"></div>
       </div>
     </div>
 
@@ -777,6 +826,68 @@ class Component extends DCLogic {
         });
       }
     })();
+
+    /* Course-level films (COURSE.films). Three tools/palette introductions that
+       belong to the whole course, so they are deliberately kept OUT of UNITS:
+       putting them in would have added phantom lessons to N, to the progress
+       bar, to the finish card and to every "n of N" sentence on the page.
+       Each row opens its own inline Drive player. Only ONE is ever open — a
+       second iframe is a second Drive stream against the same quota, and the
+       lesson stage may be playing as well, so the previous pane is emptied
+       rather than just hidden. */
+    (function () {
+      const card = document.getElementById('films-card');
+      const list = document.getElementById('films-list');
+      if (!card || !list) return;
+      /* A film with no Drive url is nothing to show — the same rule the lesson
+         parts follow, except there is no poster to fall back to here. */
+      const films = (COURSE.films || []).filter((f) => f && f.url);
+      if (!films.length) return;                 // card stays hidden
+      const PLAY = '<svg width="11" height="11" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M7 4.5v15l13-7.5z"></path></svg>';
+      card.hidden = false;
+      const note = document.getElementById('films-note');
+      if (note) {
+        note.textContent = films.length + (films.length === 1 ? ' film' : ' films')
+          + ' that belong to the whole course rather than to any one lesson, so they are not counted in your progress.';
+      }
+      list.innerHTML = films.map((f, i) =>
+        '<div class="film-item">' +
+          '<button class="film-row" type="button" data-film="' + i + '" aria-expanded="false" aria-controls="film-pane-' + i + '">' +
+            '<span class="film-play">' + PLAY + '</span>' +
+            '<span class="film-t">' + escl(f.title) + '</span>' +
+            (f.dur ? '<span class="film-d">' + fmt0(f.dur) + '</span>' : '') +
+          '</button>' +
+          '<p class="film-sub">' + escl(f.desc || '') + '</p>' +
+          '<div id="film-pane-' + i + '" hidden></div>' +
+        '</div>').join('');
+
+      list.querySelectorAll('.film-row').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const i = Number(btn.dataset.film);
+          const f = films[i];
+          const pane = document.getElementById('film-pane-' + i);
+          if (!pane) return;
+          const wasOpen = btn.getAttribute('aria-expanded') === 'true';
+          /* close every pane first, including this one, so the toggle and the
+             one-stream-at-a-time rule are the same line of code */
+          list.querySelectorAll('.film-row').forEach((b) => b.setAttribute('aria-expanded', 'false'));
+          list.querySelectorAll('[id^="film-pane-"]').forEach((p) => { p.innerHTML = ''; p.hidden = true; });
+          if (wasOpen) { say('Closed ' + f.title + '.'); return; }
+          btn.setAttribute('aria-expanded', 'true');
+          pane.hidden = false;
+          /* Same third-party-cookie escape hatch the lesson stage carries: the
+             Drive embed shows "Unable to load video" in Incognito, Safari and
+             strict-privacy Chrome, and /view opens first-party for everyone. */
+          pane.innerHTML =
+            '<div class="film-frame"><iframe src="' + escl(f.url) + '" title="' + escl(f.title) + '" ' +
+              'allow="autoplay; fullscreen" allowfullscreen loading="lazy"></iframe></div>' +
+            '<a class="film-esc" href="' + escl(String(f.url).replace('/preview', '/view')) + '" target="_blank" rel="noopener">' +
+              'If it says “Unable to load video”, your browser is blocking third-party cookies — watch it in a new tab ↗</a>';
+          say('Playing ' + f.title + '.');
+        });
+      });
+    })();
+
     $('reset-btn').addEventListener('click', () => {
       state = blankState(); save(); loadUnit(0); revealStage();
       say('Course progress cleared. Back to lesson 1 of ' + N + '.');

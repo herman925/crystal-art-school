@@ -160,6 +160,24 @@
           "icon": "palette"
         }
       ],
+      "_films": "COURSE-LEVEL films. The three files at the ROOT of assets/01 - Courses/Course 01-Beginner (watercolorcard.mp4, \"WatercolortoolsHowi madepalette.mp4\", 初班水彩工具-English_(United_States)_with_captions.mp4) are tools/palette introductions for the WHOLE course - they sit beside Beginner Highlights.mp4 and in no lesson folder, so they are not lesson parts and must not be attached to one. Referenced by SOURCE FILENAME, exactly as lesson parts are, so the Drive id stays in tools/video-links.json and nowhere else. Titles below are normalised readings of Crystal's OWN filenames and nothing else - no claim is made about what is in the films, and NONE of the three is client-approved. \"Watercolour card\" in particular is only what watercolorcard.mp4 says; ask her what that film actually is, and whether the English-captioned file is a translation of the other tools film or a separate one. No dur: runtimes come from ffprobe via tools/asset-manifest.json, never from this file.",
+      "films": [
+        {
+          "src": "watercolorcard.mp4",
+          "title": "Watercolour card",
+          "desc": ""
+        },
+        {
+          "src": "WatercolortoolsHowi madepalette.mp4",
+          "title": "Watercolour tools: how I made my palette",
+          "desc": ""
+        },
+        {
+          "src": "初班水彩工具-English_(United_States)_with_captions.mp4",
+          "title": "Beginner watercolour tools (English, with captions)",
+          "desc": ""
+        }
+      ],
       "subline": "HD video lessons with English voiceover and subtitles",
       "about": [
         "Beginner’s Guide to Drawing & Painting Clouds is a structured online masterclass thoughtfully designed for aspiring artists and beginners. Featuring high-definition video demonstration lessons, this course comes with clear English voiceovers and subtitles, making your learning experience seamless and accessible.",

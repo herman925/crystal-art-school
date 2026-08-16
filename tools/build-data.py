@@ -104,6 +104,20 @@ def duration_bucket(total_seconds):
     return "xl"
 
 
+def _films(entries, links, slug):
+    """Resolve course-level films to playable urls, dropping any that cannot play."""
+    out = []
+    for f in entries:
+        url = links.get(f["src"])
+        if not url:
+            print("  ! %s: film %r has no Drive id in tools/video-links.json, not shipped"
+                  % (slug, f["src"]))
+            continue
+        out.append({"title": f["title"], "desc": f.get("desc") or "", "url": url,
+                    "src": f["src"]})
+    return out
+
+
 def build_courses(manifest, meta, links):
     by_slug = {c["slug"]: c for c in manifest["courses"]}
     out = []
@@ -214,6 +228,19 @@ def build_courses(manifest, meta, links):
             # 8.1's bundled + per-item download behaviour is demonstrable, and
             # the others render the empty state rather than borrowing its files.
             "materials": copy.get("materials") or [],
+            # Course-level FILMS (2026-08-17). Three instructional videos the
+            # client supplied for the beginner course. They belong to no lesson
+            # folder — they sit at the course root beside the highlights reel —
+            # so they are neither lesson parts nor downloadable materials: the
+            # files are 140-215 MB and stream from Drive.
+            #
+            # content-meta.json names them by SOURCE FILENAME only. The Drive id
+            # stays in video-links.json, exactly as every lesson part does, so
+            # there is one place a re-upload has to be re-looked-up. A film whose
+            # filename is not in that lookup is DROPPED with a warning rather
+            # than shipped with a dead url, because a play button that opens an
+            # empty Drive frame looks like a broken lesson, not a missing file.
+            "films": _films(copy.get("films") or [], links, slug),
             # 7.1: the preview reel for the right-hand column, and the five
             # course photographs (one large, four small) for the thumbnail row.
             "preview": (

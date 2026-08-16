@@ -235,13 +235,15 @@ surface, measured off the painted pixels, not calculated from the token.
 | Steel (`.chip.active`, `.fopt.active`, `.cart-btn`) | `--steel` gradient | `#2b2823` | 8.59:1 |
 | Copper (`.btn.primary`, `.btn-big`) | `--copper-metal` | `#f8ecd8` | see note below |
 | Marine — **client-named**, design direction §1.4.2 (`.rel-chip`, `.cmc.is-filter`, `.media-tag`, `.bc-tag`) | `--marine` `#598493` | `--marine-ink` `#0b1418` | 4.56:1 |
-| Rouge — **client-named**, 2026-08-08 (`.sale-ribbon`) | `--rouge` `#a8463f` | `#fdf3ef` | 5.30:1 |
+| Rouge — **client-named**, 2026-08-08 (`.sale-ribbon`, `.sale-flag`) | `--rouge` `#a8463f` + `--rouge-metal` | `#fdf3ef` | 5.30:1 |
 | Linen — **client-named** (`.cmc.is-fact`, `.btn.linen`, `.portrait-note`) | `--linen` `#d3c2bb` | `#2b2823` | 8.53:1 |
+| Mauve — **client-named** (`.teach-card`) | `#a498a6` | `#191419` | 6.60:1 |
+| Machined marine — the marine fills that carry a metal gradient and a rake (`.btn.marine`, `.btn-big.btn-marine`, `.blog-feature .bf-ribbon`) | `--marine-metal` under a 10% black rake | `--marine-ink-metal` `#04080a` | 4.78:1 |
 | Leather (`.blog-feature`) | `--leather` / `--leather-a` | the four `--leather-*` inks | 4.77–13.39:1 |
 | Certificate frame (`.cert-frame`) | `#8a6f3d` on `#f7f2e5` | — | decorative border |
 | Video chrome (`.player`, `.stage`, `.controls`, `.co-highlight.has-video`) | `#1b1814` | `#ede1d0` | letterbox black |
 
-Two of those have a caveat worth keeping in view:
+Three of those have a caveat worth keeping in view:
 
 - **Leather.** `--leather` and `--leather-a` are the **base fill under five texture
   layers**, not the colour of the card. `--leather-a` is `#d2cec7` (L .620) and paints
@@ -249,6 +251,13 @@ Two of those have a caveat worth keeping in view:
   The light cover sits at 2.41:1 against the cream page; that is a card boundary, not a
   text or control contrast, and it is additionally bounded by `--shadow`, an inset rim
   and the stitched border.
+- **Machined marine.** The row above is a *second* marine row on purpose. A machined
+  marine fill is not the flat `--marine` token: `--marine-metal` runs down to `#456b78`
+  and a repeating 10%-black rake sits over it, so the pixels under a label average
+  darker than the token does. `--marine-ink` `#0b1418` measures 4.56:1 on the token and
+  **4.29:1 on the painted fill** — a pass if you check the swatch and a fail if you check
+  the screen. `--marine-ink-metal` exists for those fills and only those. Never carry a
+  ratio across from the flat row.
 - **Video chrome** is exempt because the black IS the letterbox. `.co-highlight` without
   a film in it is not — it was `#1b1814` in both themes and put a 900×506 black
   rectangle above the fold on the cream page. The empty state is now `var(--surface)`
