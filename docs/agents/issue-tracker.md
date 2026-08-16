@@ -35,6 +35,12 @@ Checkout 10 · Blog 11 · About 11 · FreeVideos 11 · FAQ 14.
 Severities below are the audit's: **P0** blocks a task, **P1** serious, **P2** moderate,
 **P3** minor.
 
+A second source joins the list on 2026-08-16: a client review round recorded in the
+webpage-review tool, 93 threads across ten pages. Ninety-two of them became tickets
+**31-65**; the ninety-third was answered and resolved during the review round itself.
+Each ticket names the thread keys it answers so a reply can be posted against them; the
+thread bodies themselves are client correspondence and stay out of this file.
+
 ---
 
 ## Ready
@@ -609,6 +615,372 @@ are drift — and the exempt ones still have to pass contrast.
 
 ---
 
+### 31 — Lessons: the wood band and the footer go pale in light mode
+
+**Status:** ready-for-agent · **Blocked by:** none
+
+**What to build:** in the light theme, the `band-forest` panel and the site footer carry the
+same pale creamy grain the page banner already uses, instead of the dark walnut they carry
+today. The grain texture itself does not change, only how light the wood reads. The dark
+theme is untouched.
+
+This ticket carries the shared theme-A token edit; tickets 32–37 are the same change
+verified on their own page, which is why they are blocked on this one.
+
+Review threads: T2d9cf7, T743b83.
+
+- [ ] In theme A the band and the footer render the pale wood, sampled from painted pixels
+- [ ] In theme D both are byte-identical to before the change
+- [ ] Band ink, eyebrow and CTA all clear 4.5:1 against the new lighter ground
+
+### 32 — course: the wood band and the footer go pale in light mode
+
+**Status:** ready-for-agent · **Blocked by:** 31
+
+**What to build:** the free-trial band and the footer on the course page follow the pale
+light-mode wood established in 31.
+
+Review threads: Tc3e09f, T7bcb32.
+
+- [ ] Both surfaces render the pale wood in theme A, dark theme unchanged
+- [ ] Every text colour inside them clears 4.5:1 on the new ground
+
+### 33 — Blog: the footer goes pale in light mode
+
+**Status:** ready-for-agent · **Blocked by:** 31
+
+**What to build:** the Blog footer follows the pale light-mode wood established in 31.
+
+Review thread: Tc18755.
+
+- [ ] The footer renders the pale wood in theme A, dark theme unchanged
+- [ ] Footer text and links clear 4.5:1 on the new ground
+
+### 34 — Showcase: the wood band and the footer go pale in light mode
+
+**Status:** ready-for-agent · **Blocked by:** 31
+
+**What to build:** the submissions band and the footer on Showcase follow the pale
+light-mode wood established in 31.
+
+Review threads: Tbc990f, Tbc97d4.
+
+- [ ] Both surfaces render the pale wood in theme A, dark theme unchanged
+- [ ] Every text colour inside them clears 4.5:1 on the new ground
+
+### 35 — About: the footer goes pale in light mode
+
+**Status:** ready-for-agent · **Blocked by:** 31
+
+**What to build:** the About footer follows the pale light-mode wood established in 31.
+
+Review thread: T175475.
+
+- [ ] The footer renders the pale wood in theme A, dark theme unchanged
+- [ ] Footer text and links clear 4.5:1 on the new ground
+
+### 36 — FAQ: the wood band goes pale in light mode
+
+**Status:** ready-for-agent · **Blocked by:** 31
+
+**What to build:** the "ask me directly" band on FAQ follows the pale light-mode wood
+established in 31.
+
+Review thread: T85e252.
+
+- [ ] The band renders the pale wood in theme A, dark theme unchanged
+- [ ] Band ink, eyebrow and CTA clear 4.5:1 on the new ground
+
+### 37 — Free Videos: the wood band goes pale in light mode
+
+**Status:** ready-for-agent · **Blocked by:** 31
+
+**What to build:** the "full courses go deeper" band on Free Videos follows the pale
+light-mode wood established in 31.
+
+Review thread: T18a98d.
+
+- [ ] The band renders the pale wood in theme A, dark theme unchanged
+- [ ] Band ink, eyebrow and CTA clear 4.5:1 on the new ground
+
+### 38 — course: three syllabus accents move onto the marine token
+
+**Status:** ready-for-agent · **Blocked by:** none
+
+**What to build:** the phase number, the free-preview label and the per-lesson duration on
+the course page all render the marine accent (`--marine`, `#598493`) rather than the colours
+they carry today. The token already exists; nothing new is introduced.
+
+Review threads: T457997, T0ba9c3, T4b912f.
+
+- [ ] All three render `#598493`, read from painted pixels in both themes
+- [ ] Each clears 4.5:1 against the surface behind it
+- [ ] No literal hex is added — the existing token is referenced
+
+### 39 — index: the New Release chip moves onto the marine token
+
+**Status:** ready-for-agent · **Blocked by:** none
+
+**What to build:** the green on the New Release heading block on the home page becomes the
+marine accent.
+
+Review thread: T0cf19d.
+
+- [ ] The element renders `#598493` in both themes
+- [ ] It clears 4.5:1 against its ground
+- [ ] The existing token is referenced rather than a new literal
+
+### 40 — Lessons: the band CTA and the price slider move onto the marine token
+
+**Status:** ready-for-agent · **Blocked by:** none
+
+**What to build:** the free-trial band's call-to-action button and the price range slider on
+the catalogue both take the marine accent.
+
+Review threads: T558c2b, T596c97.
+
+- [ ] Both render `#598493` in both themes
+- [ ] The button label clears 4.5:1 on its fill; the slider track and thumb remain
+      distinguishable from each other
+- [ ] The existing token is referenced rather than a new literal
+
+### 41 — Checkout: three accents move onto the marine token
+
+**Status:** ready-for-agent · **Blocked by:** none
+
+**What to build:** the numbered step circles, the continue button and the order total on the
+checkout all take the marine accent.
+
+Review threads: T8b71aa, T784370, T5063b0.
+
+- [ ] All three render `#598493` in both themes
+- [ ] The step numeral and the button label clear 4.5:1 on their fills
+- [ ] The existing token is referenced rather than a new literal
+
+### 42 — index: Font A reaches the overview headings
+
+**Status:** ready-for-agent · **Blocked by:** none
+
+**What to build:** the course-overview heading, the four question headings beneath it and the
+numbered point labels all render in Font A.
+
+Font A ships **one weight** and has a small x-height inside a tall em, so hierarchy inside a
+Font A heading can only come from size and spacing, and each element needs its own size bump
+of roughly 1.3x the face it replaces. It is Latin-only: any element that could ever carry
+Chinese must not take it, or the heading renders in two faces. This ticket settles that size
+ramp once — tickets 43–48 apply it, which is why they are blocked on this one.
+
+Review threads: T3df336, T5c592a, T5ced8c, T853ba5, Taa2ef2, T080a14.
+
+- [ ] Every named element computes to the Font A family in the rendered DOM
+- [ ] None of them renders bold, and none has an uppercase transform applied
+- [ ] Each is legible at 390px without wrapping into an extra line
+- [ ] The size ramp is written down so 43–48 can follow it
+
+### 43 — course: Font A reaches the band, card and teacher headings
+
+**Status:** ready-for-agent · **Blocked by:** 42
+
+**What to build:** the free-trial band heading, the "who this course is for" card titles and
+the teacher heading render in Font A, following the size ramp from 42.
+
+Review threads: T7e15dd, Tbb24e9, T30dbe3.
+
+- [ ] All three compute to the Font A family, not bold, no uppercase transform
+- [ ] Each is legible at 390px without gaining a line
+
+### 44 — About: Font A reaches the three essay titles
+
+**Status:** ready-for-agent · **Blocked by:** 42
+
+**What to build:** the three engraved essay titles on About render in Font A, following the
+size ramp from 42.
+
+Review threads: T2aecc7, Tde3d08, Tc302c8.
+
+- [ ] All three compute to the Font A family, not bold, no uppercase transform
+- [ ] The engraved treatment still reads at the new size
+- [ ] Each is legible at 390px without gaining a line
+
+### 45 — Blog: Font A reaches the card titles
+
+**Status:** ready-for-agent · **Blocked by:** 42
+
+**What to build:** the article card titles on the Blog index render in Font A, following the
+size ramp from 42.
+
+Review threads: T97cbae, T1e01a2.
+
+- [ ] Both compute to the Font A family, not bold, no uppercase transform
+- [ ] A long title still clamps rather than overflowing its card
+- [ ] Legible at 390px
+
+### 46 — Showcase: Font A reaches the band heading
+
+**Status:** ready-for-agent · **Blocked by:** 42
+
+**What to build:** the submissions band heading on Showcase renders in Font A, following the
+size ramp from 42.
+
+Review thread: Tfa3626.
+
+- [ ] Computes to the Font A family, not bold, no uppercase transform
+- [ ] Legible at 390px without gaining a line
+
+### 47 — FAQ: Font A reaches the page title
+
+**Status:** ready-for-agent · **Blocked by:** 42
+
+**What to build:** the FAQ page title renders in Font A, matching the other page titles,
+following the size ramp from 42.
+
+Review thread: Tf332c6.
+
+- [ ] Computes to the Font A family, not bold, no uppercase transform
+- [ ] The banner does not grow tall enough to push content below the fold
+- [ ] Legible at 390px
+
+### 48 — Free Videos: Font A reaches the band heading
+
+**Status:** ready-for-agent · **Blocked by:** 42
+
+**What to build:** the closing band heading on Free Videos renders in Font A, following the
+size ramp from 42.
+
+Review thread: Tddc230.
+
+- [ ] Computes to the Font A family, not bold, no uppercase transform
+- [ ] Legible at 390px without gaining a line
+
+### 49 — course: syllabus phase panels read as soft cards
+
+**Status:** ready-for-agent · **Blocked by:** none
+
+**What to build:** each syllabus phase header is rounded on all four corners rather than only
+some, and its open/close marker is a solid marine triangle instead of the current chevron.
+
+Review threads: T1650c4, T7aca22, Tfbb6d1.
+
+- [ ] Every corner of every phase header is rounded, in both open and closed states
+- [ ] The marker is a filled triangle in `#598493`, rotating to indicate state
+- [ ] The marker is not the only indication of open/closed in the accessible name
+
+### 50 — course: "What you'll learn" reads as a list of plates
+
+**Status:** ready-for-agent · **Blocked by:** none
+
+**What to build:** each learning outcome sits on its own rounded marine plate, the type is
+larger than today, the right-hand column aligns to the lede paragraph above it, and the
+gutter between the two columns is wider.
+
+Review threads: T93da03, Te6f017, T00dca2.
+
+- [ ] Each item renders on a rounded `#598493` plate with its text clearing 4.5:1 on it
+- [ ] The right column's left edge aligns to the lede above, measured in pixels
+- [ ] The list collapses to one column below the tablet breakpoint without plates overlapping
+- [ ] The section does not push the buy button below the first screen on a laptop
+
+### 51 — course: hero subline and sale flag
+
+**Status:** ready-for-agent · **Blocked by:** none
+
+**What to build:** the subline under the course title is large enough to read as a subtitle,
+and the sale marker is a red square rather than the marine pill it is today.
+
+Review threads: T9bade6, Tee0218.
+
+- [ ] The subline is measurably larger and still fits on one line at 1440px
+- [ ] The sale marker is a red square; its label clears 4.5:1 on that red
+- [ ] The marker does not obscure the cover photograph's subject at any breakpoint
+
+### 52 — index: the course overview block
+
+**Status:** ready-for-agent · **Blocked by:** 42
+
+**What to build:** the overview lede opens and closes with quotation marks in the same style
+the Tools block already uses, the "Course overview" heading sits on a wood plaque like the
+one above it, and the two numbered points sit on translucent marine plates so they lift off
+the page.
+
+Review threads: Tc562a1, Tce48d3, T3602b8, T82839f, T3c4173.
+
+- [ ] Both quotation marks render, in the same face and weight as the existing pair elsewhere
+- [ ] The heading plaque uses the existing wood treatment, not a new asset
+- [ ] Point text clears 4.5:1 against the translucent plate over whatever sits behind it
+- [ ] Nothing reflows into an extra line at 390px
+
+### 53 — index: card chrome
+
+**Status:** ready-for-agent · **Blocked by:** none
+
+**What to build:** the "Meet Crystal" link is removed from the home page, and the level label
+and its value sit at the far right of the course card rather than where they sit today.
+
+Review threads: Tdae5ca, T86df86.
+
+- [ ] The link is gone from the rendered DOM, and no route now has zero inbound links
+- [ ] The level pair is right-aligned within its card at every breakpoint
+- [ ] Removing the link leaves no empty container with residual spacing
+
+### 54 — Blog: page title and ribbon
+
+**Status:** ready-for-agent · **Blocked by:** none
+
+**What to build:** the Blog page title loses its full stop, and the category ribbon on the
+featured article is larger.
+
+Review threads: T099f84, Td0b5ee.
+
+- [ ] The rendered title has no trailing full stop
+- [ ] The ribbon label is measurably larger and still fits its ribbon at 390px
+
+### 55 — Showcase: the cork frame darkens
+
+**Status:** ready-for-agent · **Blocked by:** none
+
+**What to build:** the outer frame around the pin board renders a deeper brown. The grain
+inside it does not change.
+
+Review thread: T4b9141.
+
+- [ ] The frame renders the darker brown in both themes
+- [ ] The board texture is unchanged, verified against a before screenshot
+
+### 56 — lesson: teacher card and the first lesson title
+
+**Status:** ready-for-agent · **Blocked by:** none
+
+**What to build:** the teacher quote card renders on `#A498A6` with larger quote type, and
+lesson 1 of the beginner course is titled "Introduction to drawing clouds" instead of its
+placeholder.
+
+Review threads: Tebbecc, Tb51c51, T9488e0.
+
+- [ ] The card renders `#A498A6`; the quote and the attribution both clear 4.5:1 on it
+- [ ] The quote is measurably larger and does not overflow the sticky column
+- [ ] The title comes from the content source, not hard-coded in markup, and appears in the
+      unit list, the player heading and the page title
+
+### 57 — course: syllabus thumbnails render in colour
+
+**Status:** ready-for-agent · **Blocked by:** 16
+
+**What to build:** every syllabus thumbnail renders in full colour, whether or not the lesson
+has been bought. Locked rows currently desaturate their thumbnail.
+
+That desaturation is one of the cues that a row is locked, so this ticket depends on 16
+having made the locked state textual first — otherwise removing it leaves the padlock and
+the price as the only indication, and the padlock is currently `aria-hidden`.
+
+Review thread: Ta27f4c (colour half; the "these should be the lesson cover photos" half is
+ticket 60).
+
+- [ ] No thumbnail has a saturation filter applied in either state
+- [ ] "Locked" is still conveyed in text, not by the image treatment alone
+- [ ] The change is verified in the default not-purchased view, not only when signed in
+
+---
+
 ## Blocked on the client
 
 ### 29 — Client deliverables: assets, copy and decisions
@@ -663,6 +1035,141 @@ compensating size bump risks reading as the opposite). Full reasoning is in
 
 - [ ] Client answers on both rows
 - [ ] If yes on the chip, roughly +1px of font size covers the lost width
+
+### 58 — The 2026-08 asset drop lands in `assets/` and imports
+
+**Status:** blocked · **Blocked by:** the client
+
+**What to build:** the round of images the client prepared after the 2026-08-15 review is in
+`assets/`, the importer has picked it up, and the manifest and data layer are regenerated.
+Everything from 59 to 64 is waiting on this and on nothing else.
+
+None of the files named in that review round are in `assets/` today — checked file by file
+on 2026-08-16. They were prepared in a different store, so this is a sync, not a re-export.
+
+Roughly twenty-five files across six areas: home imagery, course and per-lesson covers, the
+three tier photographs, two About items plus an article background texture, the two final
+brand marks, and three instructional films. The per-area breakdown is in the tickets below.
+
+- [ ] Every file named in the review round resolves under `assets/`
+- [ ] `tools/import-assets.py` then `tools/build-data.py` run clean
+- [ ] The private-filename filter in the importer still excludes the client's own working
+      material — that filter is not to be relaxed to let a file through
+- [ ] Nothing that is not artwork for the site enters `img/`
+
+### 59 — index: imagery swap
+
+**Status:** blocked · **Blocked by:** 58, 53
+
+**What to build:** the home page carries the photographs the client chose rather than the
+stand-ins and empty slots it shows today: both hero images, the tools tile, the free-videos
+tile, the fellow-tier band image, and a cover plus a photograph for each of the four course
+cards, two of which currently render "Course photographs to come".
+
+Waits on 53 as well as 58, because both edit the same course-card markup.
+
+Review threads: Tfa64cc, T167af0, Tdfd7af, Tfcd76d, T3db3d2, T6b24af, Tc65b08, T94ddfd,
+Tb4b116, Tbb59e6, Tc5300b, Tfde1d8, T47d464, T93881b — fourteen in all. Four of them are
+orphaned in the review tool and will need re-pinning from the extension.
+
+- [ ] No `cc-photo-empty` placeholder remains on the home page
+- [ ] Every image has a meaningful alt attribute, not a filename
+- [ ] Each is delivered at a sensible size for its slot rather than full resolution
+- [ ] The hero pair still holds its composition at 390px
+
+### 60 — course and lesson: imagery, per-lesson covers, syllabus thumbnails
+
+**Status:** blocked · **Blocked by:** 58
+
+**What to build:** the intermediate course carries its own highlights cover and its five
+detail photographs instead of borrowing the beginner course's; the beginner highlights film
+gets its proper cover; every lesson shows the cover photograph that sits in its own folder;
+and each syllabus thumbnail is that lesson's cover photograph rather than whatever frame it
+shows today.
+
+The colour half of the thumbnail request is ticket 57 and does not wait on this.
+
+Review threads: Te67016, T66f863, Td20890, T4b80da, Ta27f4c.
+
+- [ ] Each course page shows its own highlights cover, not another course's
+- [ ] Every lesson resolves a cover from its own folder; none falls back to a sibling
+- [ ] Each syllabus thumbnail matches the cover shown on that lesson's page
+- [ ] No lesson still shows the "cover to come" state
+
+### 61 — Lessons: the three tier photographs
+
+**Status:** blocked · **Blocked by:** 58
+
+**What to build:** the Wanderer, Apprentice and Fellow cards on the catalogue each carry
+their own photograph, and the free-trial band carries its own.
+
+Review threads: Tcdf2de, Tf171ca, Tb9c441, T9779e5.
+
+- [ ] Each of the three tier cards shows a distinct image with a meaningful alt
+- [ ] The band image is the one chosen for it, not a repeat of a tier card
+- [ ] The cards keep equal height across the row at every breakpoint
+
+### 62 — About: sixth live drawing, landscape certificates, article background
+
+**Status:** blocked · **Blocked by:** 58
+
+**What to build:** the live-drawing carousel gains its sixth photograph; the two landscape
+certificates fill the two slots that read "Scan not supplied"; and both essay bodies sit on
+the dotted leather texture used by the Tools highlight instead of the draughting-paper
+ground they use today.
+
+Review threads: T66b8e7, T67f9a8, T558d29, Tc42d1f, Ta26ecb. Three of these are orphaned in the review tool and will need
+re-pinning from the extension if she is to see them answered in place.
+
+- [ ] The carousel holds six items and its dots match
+- [ ] No certificate slot still reads "Scan not supplied"
+- [ ] Both essays render the leather texture; body text clears 4.5:1 over it in both themes
+- [ ] The anti-piracy masking the certificates need is applied before they ship
+
+### 63 — The final brand marks
+
+**Status:** blocked · **Blocked by:** 58
+
+**What to build:** the header mark and the banner mark are replaced with the client's final
+webp exports. Both were already acknowledged in the review as coming in this round.
+
+Review threads: Tce2f9f, T16b3b6. Note that ticket 29 records the transparency problem on the current
+marks — if the new exports are also fully opaque, the light-theme invert rules stay
+commented out and this ticket does not close it.
+
+- [ ] Both marks render from the new files at every breakpoint
+- [ ] Transparency is measured, and `tools/verify-round-2.py` is run
+- [ ] The old files are removed, not left orphaned in `img/`
+
+### 64 — Video wiring: instructional films, shorts, reference photos
+
+**Status:** blocked · **Blocked by:** 58
+
+**What to build:** the three watercolour-tools films are wired into the beginner course's
+resources, the reference photographs are linked from the course materials, and the two
+Free Videos rails that currently show placeholder cards carry real clips.
+
+Review threads: Tc465bc, T91c20d, T0cfb1e, T8675c3. Two were already answered in the review round: the Free Videos rails
+were agreed to wait for the next drop, so this ticket is the record of that promise.
+
+- [ ] Each film resolves to a live file ID, verified against the store rather than assumed
+- [ ] No rail still renders a card marked as not a real film
+- [ ] `tools/video-links.json` is re-looked-up rather than edited from memory — a re-upload
+      mints a new ID and the old one 404s silently inside the player frame
+
+### 65 — One review thread needs the client to choose
+
+**Status:** blocked · **Blocked by:** the client
+
+**What to build:** a fourth card on the course page's "who this course is for" block,
+covering colour mixing plates. The review round asks for it in one comment and appears to
+withdraw it in the next, so the request is held rather than guessed at.
+
+Asked on 2026-08-16. Review thread: T457627.
+
+- [ ] The client confirms whether the fourth card is wanted
+- [ ] If yes, it is built to match the three beside it and the block still holds its row at
+      every breakpoint
 
 ---
 
