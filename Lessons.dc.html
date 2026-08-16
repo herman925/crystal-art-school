@@ -161,7 +161,12 @@
   <section class="section">
     <div class="band-forest is-trial reveal-one">
       <div style="flex:0 0 180px;border-radius:var(--radius-card);overflow:hidden;aspect-ratio:1/1;position:relative;z-index:1;">
-        <img src="img/cover3.jpg" alt="Free lesson preview" style="width:100%;height:100%;object-fit:cover;" loading="lazy" decoding="async">
+        <!-- Her own Free Trial photograph. It gets its OWN filename rather than
+             overwriting img/cover3.jpg, which three unrelated slots share: the
+             third home hero slide, this band, and the free-videos preview on a
+             course page. Landing a new picture on that name would have changed
+             two places nobody asked about. -->
+        <img src="img/free-trial.jpg" alt="Free lesson preview" style="width:100%;height:100%;object-fit:cover;" loading="lazy" decoding="async">
       </div>
       <div style="flex:1;">
         <div class="eyebrow"><span class="star">&#10038;</span> Free trial</div>

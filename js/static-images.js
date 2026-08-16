@@ -141,11 +141,23 @@ window.CAS_IMG = {
     "w": 1280,
     "h": 1600
   },
+  "img/about/livedrawing-6.jpg": {
+    "srcset": "img/about/livedrawing-6-256.jpg 256w, img/about/livedrawing-6-384.jpg 384w, img/about/livedrawing-6-768.jpg 768w, img/about/livedrawing-6.jpg 1000w",
+    "sizes": "(max-width: 600px) 352px, (max-width: 1000px) 354px, 241px",
+    "w": 1000,
+    "h": 1290
+  },
   "img/about/cert-accademia-2026.jpg": {
     "srcset": "img/about/cert-accademia-2026-128.jpg 128w, img/about/cert-accademia-2026-256.jpg 256w, img/about/cert-accademia-2026.jpg 707w",
     "sizes": "120px",
     "w": 707,
     "h": 1000
+  },
+  "img/about/cert-iws-hk-2016.jpg": {
+    "srcset": "img/about/cert-iws-hk-2016-128.jpg 128w, img/about/cert-iws-hk-2016-256.jpg 256w, img/about/cert-iws-hk-2016.jpg 1400w",
+    "sizes": "120px",
+    "w": 1400,
+    "h": 985
   },
   "img/about/cert-jiwi-2026.jpg": {
     "srcset": "img/about/cert-jiwi-2026-128.jpg 128w, img/about/cert-jiwi-2026-256.jpg 256w, img/about/cert-jiwi-2026.jpg 1076w",

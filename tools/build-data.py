@@ -20,7 +20,9 @@ Every record that carries an image also carries the four fields a responsive
 They describe the record's PRIMARY image — a course's `cover`, a lesson's
 `poster`, a gallery piece's `img`, a free video's `poster`. Where a record has
 more than one image the extras get their own object with the same four keys:
-`photosMeta[i]` lines up with `photos[i]`.
+`photosMeta[i]` lines up with `photos[i]`, and a course's `cardCoverMeta`,
+`cardPhotoMeta` and `highlightPosterMeta` line up with `cardCover`, `cardPhoto`
+and `highlightPoster`.
 
 Usage:  python tools/build-data.py
 """
@@ -224,6 +226,21 @@ def build_courses(manifest, meta, links):
             # index-for-index with `photos`. photosMeta[0] is written for the
             # 446px lead shot, the rest for the 104px thumbnail strip.
             "photosMeta": [img_fields(p.get("meta")) for p in asset.get("photos") or []],
+            # 2026-08-16 asset drop. Three images the client named for one slot
+            # each: the two the HOME course card paints (its cover and the photo
+            # under it) and the poster frame for the course's highlights video.
+            # Each is optional — a course the client named no file for carries
+            # null here and the four img_fields keys are null too, so a page
+            # branches on `if (c.cardCover)` exactly as it does on `c.srcset`.
+            # Paths, not attributes: `cardCover` etc. are site-relative srcs and
+            # the ladder lives in the matching *Meta object, the same split as
+            # `photos` / `photosMeta`.
+            "cardCover": asset.get("cardCover"),
+            "cardCoverMeta": img_fields(asset.get("cardCoverMeta")),
+            "cardPhoto": asset.get("cardPhoto"),
+            "cardPhotoMeta": img_fields(asset.get("cardPhotoMeta")),
+            "highlightPoster": asset.get("highlightPoster"),
+            "highlightPosterMeta": img_fields(asset.get("highlightPosterMeta")),
             "blurb": copy["blurb"],
             # 7.1: `about` is her ABOUT THIS COURSE section as she wrote it,
             # paragraph by paragraph. `blurb` stays a single string because the
@@ -246,27 +263,66 @@ def build_courses(manifest, meta, links):
 
 
 def build_free_videos(manifest, meta, links):
+    """Free videos come from TWO places now, so the copy leads and the manifest follows.
+
+    Until 2026-08-16 every free video was a file the client had uploaded, so
+    walking the manifest and looking the copy up by slug was the same thing as
+    walking the copy. Then she supplied twelve films as YouTube links rather than
+    files. A YouTube record has no file, so it has no manifest entry, so under the
+    old loop it could never be emitted no matter what was written about it — the
+    records existed in content-meta.json and the page rendered nothing.
+
+    The order of the rails is therefore the order of `content-meta.json`, which is
+    the file a human edits, and the manifest supplies posters and durations for
+    the records that have one.
+    """
     out = []
-    for fv in manifest["freeVideos"]:
-        copy = meta["freeVideos"].get(fv["slug"])
-        if not copy:
-            print("  ! no copy for free video %s" % fv["slug"])
-            continue
-        if not fv["videoPresent"]:
-            print("  ! %s: source video missing, shipping poster-only" % fv["slug"])
+    by_slug = {fv["slug"]: fv for fv in manifest["freeVideos"]}
+    for slug, copy in meta["freeVideos"].items():
+        if slug.startswith("_"):
+            continue               # a note, or a record parked pending client input
+        host = copy.get("host", "drive")
         item = {
-            "slug": fv["slug"],
+            "slug": slug,
             "title": copy["title"],
-            "desc": copy["desc"],
+            "desc": copy.get("desc", ""),
             "section": copy["section"],
-            "poster": fv["poster"],
-            "dur": fv["dur"],          # None -> the card renders no duration badge
-            "video": links.get(fv["srcVideo"]),
+            "host": host,
         }
-        # srcset/sizes/w/h describe `poster`. `sizes` is the 395-448px card
-        # thumbnail; the 880px modal stage sets its own.
-        item.update(img_fields(fv.get("posterMeta")))
+        if host == "youtube":
+            # No poster and no duration: the embed brings its own thumbnail, and
+            # inventing a running time for a film we have never opened is exactly
+            # the kind of made-up number this project has had to strip out before.
+            item.update({
+                "youtubeId": copy["youtubeId"],
+                "watch": copy.get("watch"),
+                "ratio": copy.get("ratio", "16:9"),
+                "poster": None, "dur": None, "video": None,
+            })
+            item.update(img_fields(None))
+        else:
+            fv = by_slug.get(slug)
+            if not fv:
+                print("  ! %s: host is drive but the importer found no such video" % slug)
+                continue
+            if not fv["videoPresent"]:
+                print("  ! %s: source video missing, shipping poster-only" % slug)
+            item.update({
+                "poster": fv["poster"],
+                "dur": fv["dur"],      # None -> the card renders no duration badge
+                "video": links.get(fv["srcVideo"]),
+                "ratio": copy.get("ratio", "16:9"),
+                "youtubeId": None, "watch": None,
+            })
+            # srcset/sizes/w/h describe `poster`. `sizes` is the 395-448px card
+            # thumbnail; the 880px modal stage sets its own.
+            item.update(img_fields(fv.get("posterMeta")))
         out.append(item)
+
+    seen = {i["slug"] for i in out}
+    for slug in by_slug:
+        if slug not in seen:
+            print("  ! %s: imported but no copy in content-meta.json, not shipped" % slug)
     return out
 
 

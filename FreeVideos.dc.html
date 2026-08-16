@@ -165,7 +165,11 @@
 @media (max-width: 900px) { .fv-grid { grid-auto-columns: calc((100% - 24px) / 2); } }
 @media (max-width: 620px) { .fv-grid { grid-auto-columns: 84%; }
   .fv-rail .fv-arrow { display: none !important; } }
-/* ---- lightbox video player (stand-in for the YouTube / backend embeds) ---- */
+/* ---- lightbox video player ----
+   One stage, two hosts: a Google Drive /preview iframe for the films Crystal
+   uploaded as files, and a youtube-nocookie.com embed for the ones she supplied
+   as links. Both load into the same #fvm-frame and share every rule below,
+   including the 9:16 pillarbox. */
 .fv-modal { position: fixed; inset: 0; z-index: 400; display: none; align-items: center; justify-content: center; padding: 22px; }
 .fvm-stage .gdrive-frame { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: none; z-index: 5; background: #000; }
 .fvm-stage.has-video .gdrive-frame { display: block; }
@@ -260,8 +264,12 @@
     <p class="fv-sec-intro">Complete tutorials, free to watch — no sign-up, no preview cut short. Paint along at your own pace, then pick up the <a href="Lessons.dc.html" style="color:var(--ink);text-decoration:underline;text-underline-offset:2px;">step-by-step courses</a> when you want the slow version.</p>
     <div class="fv-rail"><div class="fv-grid" data-grid="Step-by-Step Demos" role="group" tabindex="0" aria-label="Step-by-step demos, scrollable list of videos"></div></div>
     <p class="fv-sec-intro fv-empty" data-empty="Step-by-Step Demos" style="display:none;">Nothing published in this section yet.</p>
-    <!-- ASSET PENDING: All three published films sit here for now. Which section each
-            belongs to is Crystal’s call. -->
+    <!-- ASSET PENDING: Crystal's three uploaded files plus the five long YouTube films
+            from LinkofShorts_FreeVideo.docx sit here. Which section each belongs to is
+            still Crystal’s call — Quick Inspiration below has nothing in it.
+            "Tram Watercolor" is NOT here: her document lists it against the same YouTube
+            id as "Doggie Watercolor", and that id resolves to the dog tutorial, so the
+            tram film has no link. Awaiting one from the client. -->
   </section>
 
   <section class="fv-sec" data-section="Quick Inspiration">
@@ -280,8 +288,11 @@
     <div class="fv-rail"><div class="fv-grid is-vertical" data-grid="Shorts" role="group" tabindex="0" aria-label="Shorts, scrollable list of videos"></div></div>
     <p class="fv-sec-intro fv-empty" data-empty="Shorts" style="display:none;">Nothing published in this section yet.</p>
     <!-- ASSET PENDING: Section name is a developer suggestion, not Crystal’s — Reels,
-            Sketchbook Moments and In the Studio are the alternatives. The clips themselves
-            are YouTube links still to be supplied. -->
+            Sketchbook Moments and In the Studio are the alternatives.
+            The clips are here: seven YouTube Shorts, supplied as links (not files) in
+            assets/05 - Free Videos/LinkofShorts_FreeVideo.docx and transcribed into
+            tools/content-meta.json on 2026-08-16. Titles are her own labels from that
+            document; she sent no blurbs, so the cards carry none. -->
   </section>
 
   <section class="section" style="margin-top:54px;">
@@ -310,9 +321,22 @@
       <!-- Deliberately shipped with NO src, and the src is removed again on
            close. Do not "fix" it by adding src="" — an empty src makes the
            browser request the page itself and leaves a broken image behind the
-           player. It is the backdrop the Drive iframe paints over. -->
+           player. It is the backdrop the embedded player paints over. -->
       <img id="fvm-poster" alt="" style="display:none;">
-      <iframe class="gdrive-frame" id="fvm-frame" title="Video player" allow="autoplay; fullscreen" allowfullscreen loading="lazy"></iframe>
+      <!-- The class name is the CSS hook and it is shared with course.dc.html
+           and lesson.dc.html (css/industrial-3.css), so it keeps its name even
+           though this frame now carries a YouTube embed as often as a Drive one.
+           The name is historical; fvSrc() below decides what actually loads.
+           `title` here is a fallback only — openV() replaces it with the film's
+           own title on every open, because an embedded player is a tab stop and
+           its accessible name is the only thing that tells one film from another.
+           `allow` lists what BOTH players need: Drive wants autoplay and
+           fullscreen; YouTube additionally wants encrypted-media (its DRM path)
+           and picture-in-picture. -->
+      <iframe class="gdrive-frame" id="fvm-frame" title="Video player"
+              allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
+              referrerpolicy="strict-origin-when-cross-origin"
+              allowfullscreen loading="lazy"></iframe>
     </div>
     <!-- #14: this row is the ONLY affordance a reader has when Drive throttles
          or blocks the embed. It used to be written into a child of a row that
@@ -368,11 +392,11 @@ class Component extends DCLogic {
        onto it animated nothing. Gone from the markup and from this selector. */
     document.querySelectorAll('.reveal-one, .section-title').forEach(el => el.classList.add('in-view'));
 
-    /* ---- lightbox video player (Google Drive embeds) ----
+    /* ---- lightbox video player (Google Drive and YouTube embeds) ----
        #19: the simulated player is gone — dur/cur/playing/raf/lastT, fmt(),
        renderT(), tick(), setPlaying(), the "N min" duration-string parse, the
        veil, the big play button and the transport row's listeners. None of it
-       ever drove a file: the stage holds a Drive iframe with its own controls,
+       ever drove a file: the stage holds a real iframe with its own controls,
        and openV() set the transport row to display:none on every single open.
        #07: focus is moved in, trapped, and restored to whatever opened the
        dialog. Measured before: activeElement was BODY after Escape. */
@@ -388,6 +412,51 @@ class Component extends DCLogic {
     const focusables = () => Array.prototype.filter.call(
       modal.querySelectorAll('a[href],button:not([disabled]),iframe,[tabindex]:not([tabindex="-1"])'),
       (el) => el.getClientRects().length > 0);
+
+    /* ---- one record, two hosts ----
+       Crystal supplied YouTube links rather than files for twelve of the free
+       videos (assets/05 - Free Videos/LinkofShorts_FreeVideo.docx, 2026-08-16),
+       so a record on this page is no longer necessarily a Google Drive file.
+       `host` is written in tools/content-meta.json and carried through by
+       tools/build-data.py. A record from before the field existed has none, and
+       every free video was a Drive file until that document arrived, so a
+       missing host means Drive. Nothing else on the site reads `host`: the
+       lesson pages and the course highlights are Drive files and are untouched
+       by any of this. */
+    const fvHost = (v) => (v && v.host) || 'drive';
+    /* What the modal iframe loads.
+       YouTube: youtube-nocookie.com — the same player served from the domain
+       that does not set a tracking cookie until the reader actually presses
+       play. The embed URL is built HERE rather than in the data so the privacy
+       choice lives in one place and the generator only has to pass the id
+       through; `v.video` is still honoured if a generator does build the URL.
+       rel=0 keeps the end-card suggestions inside Crystal's own channel;
+       playsinline stops iOS hijacking the page into its own full-screen player,
+       which would defeat the pillarbox below.
+       Drive: the record already holds the /preview URL build-data.py made from
+       tools/video-links.json — unchanged. */
+    const fvSrc = (v) => {
+      if (!v) return null;
+      if (fvHost(v) === 'youtube') {
+        return v.youtubeId
+          ? 'https://www.youtube-nocookie.com/embed/' + encodeURIComponent(v.youtubeId)
+            + '?rel=0&playsinline=1'
+          : (v.video || null);
+      }
+      return v.video || null;
+    };
+    /* Where the "open in a new tab" escape hatch goes when the embed is blocked.
+       Drive's /preview and /view are two players over one file, so swapping the
+       segment is safe. A YouTube watch page is a different URL, and it is NOT
+       derived here: `watch` is Crystal's own link, transcribed from her
+       document — her seven Shorts are /shorts/ URLs and her five long films are
+       /watch?v= URLs, and guessing one form from the other would drop a reader
+       into the wrong player. */
+    const fvWatch = (v) => {
+      if (!v) return null;
+      if (fvHost(v) === 'youtube') return v.watch || fvSrc(v);
+      return v.video ? v.video.replace('/preview', '/view') : null;
+    };
 
     const openV = (card) => {
       const img = card.querySelector('.fv-thumb img');
@@ -407,21 +476,39 @@ class Component extends DCLogic {
          no `video` is rendered as a plain tile, not a control (#11). The guard
          stays because the DOM and the data can drift. */
       const rec = (window.CAS_FREE_VIDEOS || []).find((v) => v.slug === card.dataset.slug);
-      const real = !!(rec && rec.video);
+      const src = fvSrc(rec);
+      const real = !!src;
       stage.classList.toggle('has-video', real);
       /* 1.4.12: one player, two container ratios. A vertical film keeps the
          stage height and is pillarboxed rather than letterboxed, so the modal
-         does not jump size between a landscape and a portrait video. */
+         does not jump size between a landscape and a portrait video.
+         This is the SAME test and the SAME CSS for both hosts. Crystal's seven
+         YouTube Shorts carry ratio "9:16" in the data and sit in the Shorts
+         section besides, so they pillarbox through the rule that was already
+         here (.fvm-stage.is-vertical, which mirrors lesson.dc.html). There is
+         deliberately no second vertical implementation for YouTube. */
       stage.classList.toggle('is-vertical', !!(rec && (rec.ratio === '9:16' || rec.section === 'Shorts')));
       if (gframe) {
-        const want = real ? rec.video : 'about:blank';
+        const want = real ? src : 'about:blank';
         if (gframe.getAttribute('src') !== want) gframe.setAttribute('src', want);
+        /* The frame's accessible name was the constant "Video player" for every
+           film on the page. An embedded player is a tab stop, and its name is
+           the only thing a screen reader has to tell one film from another, so
+           it carries the film's own title. */
+        gframe.setAttribute('title', title ? title + ' — video player' : 'Video player');
       }
-      /* #14: written into a row that is always visible. */
+      /* #14: written into a row that is always visible. It now names the host,
+         because "trouble playing" has a different cause and a different fix on
+         each one: Drive throttles under load, YouTube tends to be blocked
+         outright on a school or office network. */
       if (real) {
-        noteEl.innerHTML = 'Streams from Google Drive · <a href="' +
-          rec.video.replace('/preview', '/view') +
-          '" target="_blank" rel="noopener">Trouble playing? Open in a new tab \u2197</a>';
+        const away = fvWatch(rec);
+        const yt = fvHost(rec) === 'youtube';
+        noteEl.innerHTML = (yt ? 'Plays from YouTube' : 'Streams from Google Drive')
+          + (away
+              ? ' · <a href="' + fvEsc(away) + '" target="_blank" rel="noopener">Trouble playing? '
+                + (yt ? 'Open on YouTube' : 'Open in a new tab') + ' \u2197</a>'
+              : '');
       } else {
         noteEl.textContent = 'This film has not been uploaded yet.';
       }
@@ -472,26 +559,47 @@ class Component extends DCLogic {
        simulated player (#19); the badge is display only. */
     const fvCard = (v) => {
       const mins = v.dur ? Math.max(1, Math.round(v.dur / 60)) : null;
-      const href = v.video ? v.video.replace('/preview', '/view') : null;
+      /* A tile is a link only when there is something to play. fvSrc() answers
+         that for either host; fvWatch() supplies the destination the link points
+         at with JS off. watercolor-airport has no film on either host, so it is
+         still a plain <span> tile badged "Coming soon" — unchanged. */
+      const play = fvSrc(v);
+      const href = play ? fvWatch(v) : null;
       const tag = href ? 'a' : 'span';
       const open = href
         ? '<a class="fv-card" href="' + fvEsc(href) + '" data-slug="' + fvEsc(v.slug) + '">'
         : '<span class="fv-card" data-slug="' + fvEsc(v.slug) + '">';
+      /* A Drive record's poster is a local file cut from the video by
+         tools/import-assets.py. A YouTube record has no local file to cut one
+         from, so it can arrive with no poster; the thumbnail then paints its own
+         dark ground rather than requesting src="null" and leaving a broken image
+         under the play button. No poster URL is invented here. */
+      const pic = v.poster
+        ? '<img src="' + fvEsc(v.poster) + '" alt="' + fvEsc(v.title) + '" loading="lazy"' +
+            (v.srcset ? ' srcset="' + fvEsc(v.srcset) + '"' : '') +
+            (v.sizes ? ' sizes="' + fvEsc(v.sizes) + '"' : '') +
+            (v.w ? ' width="' + v.w + '" height="' + v.h + '"' : '') + '>'
+        : '';
       return open +
-        '<span class="fv-thumb"><img src="' + fvEsc(v.poster) + '" alt="' + fvEsc(v.title) + '" loading="lazy"' +
-          (v.srcset ? ' srcset="' + fvEsc(v.srcset) + '"' : '') +
-          (v.sizes ? ' sizes="' + fvEsc(v.sizes) + '"' : '') +
-          (v.w ? ' width="' + v.w + '" height="' + v.h + '"' : '') + '>' +
+        '<span class="fv-thumb">' + pic +
           (href ? '<span class="fv-playbtn"><span>▶</span></span>' : '') +
-          (mins ? '<span class="fv-dur">' + mins + ' min</span>' : '<span class="fv-dur">Coming soon</span>') +
+          /* "Coming soon" belongs only on a tile with nothing behind it. A
+             run-time is measured by ffprobe from a local file, so a YouTube
+             record has none — and badging a film that plays perfectly well as
+             "Coming soon" would be a lie on twelve of Crystal's cards. No
+             duration and no film: "Coming soon". No duration but a film: no
+             badge at all, rather than an invented run-time. */
+          (mins ? '<span class="fv-dur">' + mins + ' min</span>'
+                : (href ? '' : '<span class="fv-dur">Coming soon</span>')) +
         '</span>' +
         '<h3>' + fvEsc(v.title) + '</h3>' +
         '<p>' + fvEsc(v.desc) + '</p>' +
       '</' + tag + '>';
     };
 
-    /* PLACEHOLDER TITLES — invented, not Crystal's. Two of the three sections
-       have no films at all, so blank tiles left the page impossible to judge.
+    /* PLACEHOLDER TITLES — invented, not Crystal's. Quick Inspiration is now the
+       only section with no films at all (Shorts was filled by her twelve YouTube
+       links on 2026-08-16), and blank tiles left the page impossible to judge.
        Sample titles and run-times stand in; the [PLACEHOLDER] banner above each
        affected section says so on the page, and every card keeps the hatched
        thumbnail, is aria-hidden, and is excluded from the click binding, so a
@@ -503,11 +611,10 @@ class Component extends DCLogic {
         ['A wash that will not streak', '6 min'], ['Lifting out a highlight', '2 min'],
         ['Warm shadow, cool light', '5 min'], ['Salt, and when not to', '4 min'],
       ],
-      'Shorts': [
-        ['One-minute cloud', '1 min'], ['Brush on its side', '1 min'],
-        ['Too much water', '1 min'], ['The paper decides', '1 min'],
-        ['Mixing green properly', '2 min'], ['Stop before you fiddle', '1 min'],
-      ],
+      /* The Shorts row of invented samples is deleted: Crystal supplied seven
+         real Shorts as YouTube links on 2026-08-16, the rail is full, and the
+         samples would now sit beside real films. Quick Inspiration is the only
+         section she has still put nothing in. */
     };
     const fvPlaceholder = (section, i) => {
       const spec = (PH_TITLES[section] || [])[i];

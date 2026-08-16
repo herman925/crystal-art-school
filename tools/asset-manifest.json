@@ -82,10 +82,15 @@
           "n": 1,
           "spans": 1,
           "srcFolder": "Lesson01",
-          "poster": null,
-          "posterW": null,
-          "posterH": null,
-          "posterMeta": null,
+          "poster": "img/courses/clouds-beginner/l01.jpg",
+          "posterW": 1280,
+          "posterH": 720,
+          "posterMeta": {
+            "srcset": "img/courses/clouds-beginner/l01-96.jpg 96w, img/courses/clouds-beginner/l01-160.jpg 160w, img/courses/clouds-beginner/l01-384.jpg 384w, img/courses/clouds-beginner/l01-768.jpg 768w, img/courses/clouds-beginner/l01.jpg 1280w",
+            "sizes": "(max-width: 600px) 56px, 78px",
+            "w": 1280,
+            "h": 720
+          },
           "dur": 500,
           "videos": [
             {
@@ -377,7 +382,28 @@
           ],
           "srcVideo": "CloudsLesson14.mp4"
         }
-      ]
+      ],
+      "cardCover": "img/courses/clouds-beginner/card-cover.jpg",
+      "cardCoverMeta": {
+        "srcset": "img/courses/clouds-beginner/card-cover-224.jpg 224w, img/courses/clouds-beginner/card-cover-448.jpg 448w, img/courses/clouds-beginner/card-cover-896.jpg 896w, img/courses/clouds-beginner/card-cover.jpg 1600w",
+        "sizes": "(max-width: 600px) 366px, (max-width: 1000px) 420px, 373px",
+        "w": 1600,
+        "h": 1600
+      },
+      "cardPhoto": "img/courses/clouds-beginner/card-photo.jpg",
+      "cardPhotoMeta": {
+        "srcset": "img/courses/clouds-beginner/card-photo-128.jpg 128w, img/courses/clouds-beginner/card-photo-256.jpg 256w, img/courses/clouds-beginner/card-photo-448.jpg 448w, img/courses/clouds-beginner/card-photo-896.jpg 896w, img/courses/clouds-beginner/card-photo.jpg 1600w",
+        "sizes": "(max-width: 600px) 82px, (max-width: 1000px) 173px, 269px",
+        "w": 1600,
+        "h": 910
+      },
+      "highlightPoster": "img/courses/clouds-beginner/highlight-poster.jpg",
+      "highlightPosterMeta": {
+        "srcset": "img/courses/clouds-beginner/highlight-poster-320.jpg 320w, img/courses/clouds-beginner/highlight-poster-480.jpg 480w, img/courses/clouds-beginner/highlight-poster-896.jpg 896w, img/courses/clouds-beginner/highlight-poster.jpg 1600w",
+        "sizes": "(max-width: 600px) 346px, (max-width: 1000px) 395px, 448px",
+        "w": 1600,
+        "h": 900
+      }
     },
     {
       "slug": "clouds-intermediate",
@@ -389,7 +415,68 @@
         "w": 1600,
         "h": 1600
       },
-      "photos": [],
+      "photos": [
+        {
+          "src": "Intermediate小圖書5.JPG",
+          "img": "img/courses/clouds-intermediate/p01.jpg",
+          "w": 1486,
+          "h": 1105,
+          "meta": {
+            "srcset": "img/courses/clouds-intermediate/p01-128.jpg 128w, img/courses/clouds-intermediate/p01-256.jpg 256w, img/courses/clouds-intermediate/p01-448.jpg 448w, img/courses/clouds-intermediate/p01-896.jpg 896w, img/courses/clouds-intermediate/p01.jpg 1486w",
+            "sizes": "(max-width: 600px) 358px, (max-width: 1000px) 351px, 446px",
+            "w": 1486,
+            "h": 1105
+          }
+        },
+        {
+          "src": "Intermediate小圖1.jpg",
+          "img": "img/courses/clouds-intermediate/p02.jpg",
+          "w": 1492,
+          "h": 1054,
+          "meta": {
+            "srcset": "img/courses/clouds-intermediate/p02-128.jpg 128w, img/courses/clouds-intermediate/p02-256.jpg 256w, img/courses/clouds-intermediate/p02-448.jpg 448w, img/courses/clouds-intermediate/p02-896.jpg 896w, img/courses/clouds-intermediate/p02.jpg 1492w",
+            "sizes": "(max-width: 600px) 82px, (max-width: 1000px) 173px, 269px",
+            "w": 1492,
+            "h": 1054
+          }
+        },
+        {
+          "src": "Intermediate小圖2.jpg",
+          "img": "img/courses/clouds-intermediate/p03.jpg",
+          "w": 1475,
+          "h": 1052,
+          "meta": {
+            "srcset": "img/courses/clouds-intermediate/p03-128.jpg 128w, img/courses/clouds-intermediate/p03-256.jpg 256w, img/courses/clouds-intermediate/p03-448.jpg 448w, img/courses/clouds-intermediate/p03-896.jpg 896w, img/courses/clouds-intermediate/p03.jpg 1475w",
+            "sizes": "(max-width: 600px) 82px, (max-width: 1000px) 173px, 269px",
+            "w": 1475,
+            "h": 1052
+          }
+        },
+        {
+          "src": "Intermediate小圖3.jpg",
+          "img": "img/courses/clouds-intermediate/p04.jpg",
+          "w": 1468,
+          "h": 1049,
+          "meta": {
+            "srcset": "img/courses/clouds-intermediate/p04-128.jpg 128w, img/courses/clouds-intermediate/p04-256.jpg 256w, img/courses/clouds-intermediate/p04-448.jpg 448w, img/courses/clouds-intermediate/p04-896.jpg 896w, img/courses/clouds-intermediate/p04.jpg 1468w",
+            "sizes": "(max-width: 600px) 82px, (max-width: 1000px) 173px, 269px",
+            "w": 1468,
+            "h": 1049
+          }
+        },
+        {
+          "src": "Intermediate小圖4.jpg",
+          "img": "img/courses/clouds-intermediate/p05.jpg",
+          "w": 768,
+          "h": 768,
+          "meta": {
+            "srcset": "img/courses/clouds-intermediate/p05-128.jpg 128w, img/courses/clouds-intermediate/p05-256.jpg 256w, img/courses/clouds-intermediate/p05-448.jpg 448w, img/courses/clouds-intermediate/p05.jpg 768w",
+            "sizes": "(max-width: 600px) 82px, (max-width: 1000px) 173px, 269px",
+            "w": 768,
+            "h": 768
+          }
+        }
+      ],
       "highlights": {
         "file": "Intermediate Hightlights.mp4",
         "dur": 52
@@ -556,7 +643,28 @@
           ],
           "srcVideo": "CloudsLesson21.mp4"
         }
-      ]
+      ],
+      "cardCover": "img/courses/clouds-intermediate/card-cover.jpg",
+      "cardCoverMeta": {
+        "srcset": "img/courses/clouds-intermediate/card-cover-224.jpg 224w, img/courses/clouds-intermediate/card-cover-448.jpg 448w, img/courses/clouds-intermediate/card-cover-896.jpg 896w, img/courses/clouds-intermediate/card-cover.jpg 1600w",
+        "sizes": "(max-width: 600px) 366px, (max-width: 1000px) 420px, 373px",
+        "w": 1600,
+        "h": 1600
+      },
+      "cardPhoto": "img/courses/clouds-intermediate/card-photo.jpg",
+      "cardPhotoMeta": {
+        "srcset": "img/courses/clouds-intermediate/card-photo-128.jpg 128w, img/courses/clouds-intermediate/card-photo-256.jpg 256w, img/courses/clouds-intermediate/card-photo-448.jpg 448w, img/courses/clouds-intermediate/card-photo-896.jpg 896w, img/courses/clouds-intermediate/card-photo.jpg 1600w",
+        "sizes": "(max-width: 600px) 82px, (max-width: 1000px) 173px, 269px",
+        "w": 1600,
+        "h": 892
+      },
+      "highlightPoster": "img/courses/clouds-intermediate/highlight-poster.jpg",
+      "highlightPosterMeta": {
+        "srcset": "img/courses/clouds-intermediate/highlight-poster-320.jpg 320w, img/courses/clouds-intermediate/highlight-poster-480.jpg 480w, img/courses/clouds-intermediate/highlight-poster-896.jpg 896w, img/courses/clouds-intermediate/highlight-poster.jpg 1600w",
+        "sizes": "(max-width: 600px) 346px, (max-width: 1000px) 395px, 448px",
+        "w": 1600,
+        "h": 1071
+      }
     },
     {
       "slug": "little-house",
@@ -594,7 +702,18 @@
           ],
           "srcVideo": "LittleHouse.mov"
         }
-      ]
+      ],
+      "cardCover": null,
+      "cardCoverMeta": null,
+      "cardPhoto": "img/courses/little-house/card-photo.jpg",
+      "cardPhotoMeta": {
+        "srcset": "img/courses/little-house/card-photo-128.jpg 128w, img/courses/little-house/card-photo-256.jpg 256w, img/courses/little-house/card-photo-448.jpg 448w, img/courses/little-house/card-photo-896.jpg 896w, img/courses/little-house/card-photo.jpg 1600w",
+        "sizes": "(max-width: 600px) 82px, (max-width: 1000px) 173px, 269px",
+        "w": 1600,
+        "h": 909
+      },
+      "highlightPoster": null,
+      "highlightPosterMeta": null
     },
     {
       "slug": "urban-sketch",
@@ -632,7 +751,18 @@
           ],
           "srcVideo": "Urban.mov"
         }
-      ]
+      ],
+      "cardCover": null,
+      "cardCoverMeta": null,
+      "cardPhoto": "img/courses/urban-sketch/card-photo.jpg",
+      "cardPhotoMeta": {
+        "srcset": "img/courses/urban-sketch/card-photo-128.jpg 128w, img/courses/urban-sketch/card-photo-256.jpg 256w, img/courses/urban-sketch/card-photo-448.jpg 448w, img/courses/urban-sketch/card-photo-896.jpg 896w, img/courses/urban-sketch/card-photo.jpg 1600w",
+        "sizes": "(max-width: 600px) 82px, (max-width: 1000px) 173px, 269px",
+        "w": 1600,
+        "h": 967
+      },
+      "highlightPoster": null,
+      "highlightPosterMeta": null
     }
   ],
   "gallery": [
@@ -1061,11 +1191,23 @@
       "w": 1280,
       "h": 1600
     },
+    "img/about/livedrawing-6.jpg": {
+      "srcset": "img/about/livedrawing-6-256.jpg 256w, img/about/livedrawing-6-384.jpg 384w, img/about/livedrawing-6-768.jpg 768w, img/about/livedrawing-6.jpg 1000w",
+      "sizes": "(max-width: 600px) 352px, (max-width: 1000px) 354px, 241px",
+      "w": 1000,
+      "h": 1290
+    },
     "img/about/cert-accademia-2026.jpg": {
       "srcset": "img/about/cert-accademia-2026-128.jpg 128w, img/about/cert-accademia-2026-256.jpg 256w, img/about/cert-accademia-2026.jpg 707w",
       "sizes": "120px",
       "w": 707,
       "h": 1000
+    },
+    "img/about/cert-iws-hk-2016.jpg": {
+      "srcset": "img/about/cert-iws-hk-2016-128.jpg 128w, img/about/cert-iws-hk-2016-256.jpg 256w, img/about/cert-iws-hk-2016.jpg 1400w",
+      "sizes": "120px",
+      "w": 1400,
+      "h": 985
     },
     "img/about/cert-jiwi-2026.jpg": {
       "srcset": "img/about/cert-jiwi-2026-128.jpg 128w, img/about/cert-jiwi-2026-256.jpg 256w, img/about/cert-jiwi-2026.jpg 1076w",
@@ -1207,7 +1349,6 @@
     }
   },
   "warnings": [
-    "clouds-beginner/Lesson01 has a video but no cover photo — lesson kept, poster left empty",
     "clouds-beginner/Lesson05 is multi-part: CloudsLesson5A.mp4=1421s, CloudsLesson5B.mp4=1337s",
     "free video not on disk (Drive sync?): Watercolor Airport 2.mov"
   ]

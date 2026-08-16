@@ -333,20 +333,138 @@
     }
   },
   "freeVideos": {
+    "_note": "Every record carries `host`. \"drive\" means the film is one of the .MOV/.mp4 files under assets/05 - Free Videos/, uploaded to Google Drive and keyed by source filename in tools/video-links.json. \"youtube\" means Crystal supplied a link rather than a file: the id is in `youtubeId` and `watch` is her own URL, transcribed character-for-character from assets/05 - Free Videos/LinkofShorts_FreeVideo.docx (2026-08-16). A YouTube record has NO entry in tools/asset-manifest.json - there is no local file to probe - so it has no duration and no local poster, and tools/build-data.py does not yet emit it: it must learn `host`/`youtubeId`/`watch` and must iterate this map, not only the manifest. `desc` is deliberately empty on every YouTube record: Crystal supplied a title and a link and nothing else, and a blurb written here would be invented.",
     "mountain": {
       "title": "Mountains in watercolour",
       "desc": "A full mountain study, wet-on-wet from the sky down — the same value thinking as the cloud course, applied to rock.",
-      "section": "Step-by-Step Demos"
+      "section": "Step-by-Step Demos",
+      "host": "drive"
     },
     "pink-floral": {
       "title": "Loose pink florals",
       "desc": "Petals in three strokes. A short, forgiving demo for anyone nervous about painting flowers.",
-      "section": "Step-by-Step Demos"
+      "section": "Step-by-Step Demos",
+      "host": "drive"
     },
     "watercolor-airport": {
       "title": "Watercolour airport sketch",
       "desc": "An on-location sketch from an airport window — line and wash, thirty minutes, nothing precious.",
-      "section": "Step-by-Step Demos"
+      "section": "Step-by-Step Demos",
+      "host": "drive"
+    },
+
+    "clouds-watercolor": {
+      "title": "Clouds Watercolor",
+      "desc": "",
+      "section": "Step-by-Step Demos",
+      "host": "youtube",
+      "youtubeId": "-PeMky90CmQ",
+      "watch": "https://www.youtube.com/watch?v=-PeMky90CmQ",
+      "ratio": "16:9"
+    },
+    "causeway-bay-watercolor": {
+      "title": "CausewayBay Watercolor",
+      "desc": "",
+      "section": "Step-by-Step Demos",
+      "host": "youtube",
+      "youtubeId": "9CsHkm3ySVI",
+      "watch": "https://www.youtube.com/watch?v=9CsHkm3ySVI",
+      "ratio": "16:9"
+    },
+    "doggie-watercolor": {
+      "title": "Doggie Watercolor",
+      "desc": "",
+      "section": "Step-by-Step Demos",
+      "host": "youtube",
+      "youtubeId": "FxMU1a_oU8A",
+      "watch": "https://www.youtube.com/watch?v=FxMU1a_oU8A",
+      "ratio": "16:9"
+    },
+    "austria-watercolor": {
+      "title": "Austria Watercolor",
+      "desc": "",
+      "section": "Step-by-Step Demos",
+      "host": "youtube",
+      "youtubeId": "obvS7jDWsB0",
+      "watch": "https://www.youtube.com/watch?v=obvS7jDWsB0",
+      "ratio": "16:9"
+    },
+    "tai-kok-tsui-cityscape": {
+      "title": "Tai Kok Tsui Cityscape",
+      "desc": "",
+      "section": "Step-by-Step Demos",
+      "host": "youtube",
+      "youtubeId": "fy-LtOTR9sY",
+      "watch": "https://www.youtube.com/watch?v=fy-LtOTR9sY",
+      "ratio": "16:9",
+      "_titleNote": "Her document types the district as \"Taki Kok Tsui\". Kept as Tai Kok Tsui (大角咀), the spelling of the place itself - a transliteration slip, corrected the same way Windsor -> Winsor was in the blog. Nothing else about the title is changed."
+    },
+    "_tram-watercolor": {
+      "_pending": "NO URL. Crystal's document lists \"Tram Watercolor\" against the SAME id as \"Doggie Watercolor\" (FxMU1a_oU8A), and resolving that id proves the video is the dog tutorial. The tram film therefore has no link. It is NOT shipped: no record, no card, no duplicate of the dog video under a second name. Awaiting a link from the client. Leading underscore keeps it out of the build; delete it and fill in youtubeId/watch when she sends one."
+    },
+
+    "urban-sunset": {
+      "title": "Urban Sunset",
+      "desc": "",
+      "section": "Shorts",
+      "host": "youtube",
+      "youtubeId": "Qu_zdWEfr1o",
+      "watch": "https://www.youtube.com/shorts/Qu_zdWEfr1o",
+      "ratio": "9:16"
+    },
+    "floral-watercolor": {
+      "title": "Floral watercolor",
+      "desc": "",
+      "section": "Shorts",
+      "host": "youtube",
+      "youtubeId": "ehS3SkW6rU4",
+      "watch": "https://www.youtube.com/shorts/ehS3SkW6rU4",
+      "ratio": "9:16"
+    },
+    "embroidery": {
+      "title": "Embroidery",
+      "desc": "",
+      "section": "Shorts",
+      "host": "youtube",
+      "youtubeId": "wSMeVq6AqIY",
+      "watch": "https://www.youtube.com/shorts/wSMeVq6AqIY",
+      "ratio": "9:16"
+    },
+    "sushi": {
+      "title": "Sushi",
+      "desc": "",
+      "section": "Shorts",
+      "host": "youtube",
+      "youtubeId": "1rAVkluKC2U",
+      "watch": "https://www.youtube.com/shorts/1rAVkluKC2U",
+      "ratio": "9:16"
+    },
+    "sketching-hand": {
+      "title": "Sketching (Hand)",
+      "desc": "",
+      "section": "Shorts",
+      "host": "youtube",
+      "youtubeId": "5dsmaVylN2U",
+      "watch": "https://www.youtube.com/shorts/5dsmaVylN2U",
+      "ratio": "9:16"
+    },
+    "oil-painting-iron-man": {
+      "title": "Oil painting (Iron Man)",
+      "desc": "",
+      "section": "Shorts",
+      "host": "youtube",
+      "youtubeId": "GJ3b9oK5j7o",
+      "watch": "https://www.youtube.com/shorts/GJ3b9oK5j7o",
+      "ratio": "9:16"
+    },
+    "coloured-pencil-eye": {
+      "title": "Coloured pencil (Eye)",
+      "desc": "",
+      "section": "Shorts",
+      "host": "youtube",
+      "youtubeId": "R7bfwUY1iXo",
+      "watch": "https://www.youtube.com/shorts/R7bfwUY1iXo",
+      "ratio": "9:16"
     }
   },
   "gallery": {

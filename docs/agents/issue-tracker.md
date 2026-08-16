@@ -22,6 +22,49 @@ and search-indexed, including by the client.
 
 ---
 
+## How a client asset becomes a file in `img/`
+
+Her filenames are not our filenames, and the translation is deliberate. Written down
+2026-08-16, after a near-miss.
+
+**The names change.** Files arrive with spaces, full-width CJK parentheses, commas and
+inconsistent case — `Hero（左）1.jpg`, `Beginner HighlightCover.JPG`,
+`CloudsLesson12,13,14colorPalette.jpg`, `WatercolortoolsHowi madepalette.mp4` (that
+space is inside the word, and it is real). Anything shipped is renamed to lower-case
+ASCII with hyphens. A filename that needs percent-encoding in an `src` attribute does
+not ship.
+
+**Never rename in her tree to make ours easier.** The one exception so far was
+`Material/Lesson03ref.JPG`, renamed to `Lesson03Reference.JPG` because it collided with
+the private-content filter — the file is genuine content she asked to be shown, and the
+filter matches `ref.` The filter was not weakened to accommodate it. Renaming her file
+was the smaller change; weakening the filter is how her handwritten feedback boards
+reach the public site.
+
+**Two routes into `img/`, and they are not interchangeable.**
+
+* *Pipeline* — anything under a folder `tools/import-assets.py` walks. It re-encodes,
+  generates the `-192/-384/-768` derivative ladder, and records the result in
+  `tools/asset-manifest.json`. Used for course, lesson, gallery and free-video imagery.
+* *By hand* — the brand marks and the About imagery. Copied in, sized once, no ladder.
+  `tools/import-assets.py` says so explicitly and never lists the assets root.
+
+Where a file sits in a folder the importer does not walk, give the importer an
+**explicit relative path** rather than teaching it to walk that folder. Not because a
+private file sits there today — everything private currently in `00 - Home/` IS caught
+by the filter — but because the filter is a filename heuristic rather than a guarantee,
+and that folder gains files between rounds. `Website 最底部REF（FOOTER).png`, at the
+assets **root**, carries none of the filter's markers and would sail through if anything
+ever walked the root. An explicit path imports exactly what is named; a directory walk
+imports whatever she puts there next.
+
+**Never overwrite a name that is already in use.** `img/cover3.jpg` is shared by three
+unrelated slots — the third home hero slide, the Lessons free-trial band, and the course
+page's free-videos preview. Her Free Trial photograph went in as `img/free-trial.jpg`
+for that reason. Grep the name before you write it.
+
+---
+
 ## Where these came from
 
 A 16-surface technical audit on 2026-08-09 (15 pages plus the shared nav/footer/motion

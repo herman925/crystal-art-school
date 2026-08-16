@@ -739,6 +739,141 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
 .ob-step p { margin: 0; font-size: 13px; color: var(--muted); }
 @media (max-width: 760px) { .ob-steps { grid-template-columns: 1fr; } .dash-onboard .ob-hero { flex-direction: column; align-items: flex-start; } }
 
+/* ---------- the essay sheets: leather, not ruled notepaper ------------------
+   (client feedback 2026-08-16, reference asset "About Article background.jpg")
+
+   WHAT WAS THERE BEFORE, precisely, because the client called it "the draughting
+   paper" and that is not what the code calls it:
+     - the SHEET is `.engraved` in css/industrial-2.css (~line 509). It paints
+       background-color: var(--note-paper) — #f6f1e2 light / #cdbb98 under
+       [data-theme="D"] — under two radial gradients plus var(--note-tooth) and
+       var(--note-fibre) (both defined in css/industrial-1.css ~line 133).
+     - the RULING is a separate rule, `.engraved .eng-body` (~line 570): a
+       repeating-linear-gradient of var(--note-rule) blue lines at --note-line
+       pitch, plus the single var(--note-margin) red margin line at 43-44px.
+   Those two rules together are the ground being replaced. Both stay untouched —
+   see the scoping note below.
+
+   WHAT REPLACES IT: the same hide the blog feature card is bound in — the
+   --leather* tokens in css/industrial-1.css (~line 140). "Dotted" in the client's
+   note is the PORE layer (--leather-pores), the fine pebble that makes it read as
+   calfskin; it is not a stitched border, and none is added here. The five layers
+   and the 1px pore/shine offset are copied from `.blog-feature` deliberately: that
+   offset is what lights each pebble from one side, and without it the grain
+   averages out to flat card (the token comment records this being got wrong once).
+
+   SCOPING — the important part. This is hung on `.bio-copy`, NOT on `.engraved`:
+     - `.engraved` is also the QUOTE panel at the top of About (`.engraved.is-quote`),
+       which the client did not ask to change and which deliberately has no ground
+       at all (`background-image: none`).
+     - `.bio-copy` and `.engraved` were both grepped across every .html and .js in
+       the repo: both appear in About.dc.html and nowhere else. index.html's only
+       match for "engraved" is a CSS comment in its <style> saying it deliberately
+       does NOT use this block, and index.html has no --leather consumer either.
+       So the home page cannot be reached from here — not because the selector is
+       careful, but because the class is not on it.
+   Everything below therefore carries a .cas-root prefix purely to outrank
+   `[data-theme="D"] .engraved …` (0,2,0 / 0,3,0), not to add reach.
+
+   CONTRAST — measured, not calculated, and the distinction matters here. The
+   --leather token comment states the rule for this material: the base token is the
+   fill UNDER five texture layers, so no ratio may be derived from it. The painted
+   values it records are #a98e6d (tan, L .289) and #a99d8d (pale grey, L .345).
+   Recomputing that comment's own four measured ink ratios against those painted
+   values came out a consistent +0.34..+0.40 HIGH — the gap between sampling a flat
+   average and glyph-masked sampling of real antialiased type on a mottled ground.
+   So the figures below are computed against the painted value and then discounted
+   by 0.40 before being called a pass:
+
+     theme D, tan cover #a98e6d
+       body/sub/heading  --leather-label   #2b1d10   5.27 computed -> 4.87 expected
+     theme A, pale cover #a99d8d
+       body/sub/heading  --leather-a-label #241f19   6.14 computed -> 5.74 expected
+
+   Both clear 4.5:1 with the discount applied. Two consequences worth recording:
+     - the client's reference image sets this copy in WHITE. White measures 3.10:1
+       on the tan and 2.66:1 on the pale grey — it fails 4.5:1 by a wide margin in
+       BOTH themes and is not used. The ground is hers; the ink is not.
+     - the previous --note-ink values (#3d372e / #33291d) also fail on leather
+       (3.80:1 and 4.59:1 computed, i.e. 3.40 / 4.19 expected), so re-inking was not
+       optional cosmetics — carrying the paper inks over would have shipped a fail.
+   These are the site's own already-measured tokens for text on this exact
+   material, not new colours invented for this panel. Re-measure with the Playwright
+   harness's glyph-masked sampling before trusting the discount. */
+.cas-root .bio-copy.engraved {
+  --essay-ink: var(--leather-label);
+  color: var(--essay-ink);
+  background-color: var(--leather);
+  background-image:
+    radial-gradient(115% 78% at 18% -4%, rgba(255,238,206,.30), rgba(255,238,206,0) 56%),
+    linear-gradient(163deg, rgba(255,241,214,.10) 0%, rgba(48,29,15,0) 38%, rgba(44,26,13,.17) 100%),
+    var(--leather-pores),
+    var(--leather-shine),
+    var(--leather-hide);
+  background-position: 0 0, 0 0, 1px 1px, 0 0, 0 0;
+  background-size: 100% 100%, 100% 100%, 150px 150px, 150px 150px, 520px 520px;
+  box-shadow:
+    var(--shadow),
+    inset 0 1px 0 rgba(255,242,216,.34),
+    inset 0 -2px 0 rgba(38,21,10,.42),
+    inset 0 0 0 1px rgba(44,26,13,.38),
+    inset 0 0 44px rgba(44,26,13,.20);
+}
+/* The pale grey hide, exactly as .blog-feature swaps it: same pores, shine and
+   grain images, only the fill and the ink change. */
+/* .cas-root is the element that CARRIES data-theme, so the attribute goes on it,
+   not on an ancestor. (0,4,0) — outranks the base rule above outright rather than
+   relying on source order to break a tie. */
+.cas-root[data-theme="A"] .bio-copy.engraved {
+  --essay-ink: var(--leather-a-label);
+  background-color: var(--leather-a);
+}
+/* The ruling goes. Blue feint and a red margin line drawn on a leather cover is
+   two materials at once — and the 62px left padding existed ONLY to set the text
+   past that red line at 43-44px, so it goes with it and the sheet becomes
+   symmetrical. The top padding is untouched: it still reserves the heading's
+   overhang (--eng-h is measured in About.dc.html's componentDidMount) plus one
+   clear line, which is what keeps the gap under a one-line and a two-line heading
+   equal. --note-line survives as the body's line-height; it no longer registers
+   against anything, it is just a 27px rhythm now. */
+.cas-root .bio-copy .eng-body {
+  background-image: none;
+  padding: calc(var(--eng-h, 40px) / 2 + var(--note-line)) 26px 8px;
+}
+/* Ink. Body copy also drops the 88% alpha the paper sheets carry: on paper that
+   softened the ink, on a mid-tone hide it composites the text back TOWARDS the
+   ground, which is exactly the wrong direction on a surface this dark. */
+.cas-root .bio-copy .eng-body p,
+.cas-root .bio-copy .eng-body .bio-sub,
+.cas-root .bio-copy .eng-body em,
+.cas-root .bio-copy .eng-body strong,
+.cas-root .bio-copy .eng-title { color: var(--essay-ink); }
+/* Blind-tooled rather than pressed into paper: the frame and the two rules either
+   side of the heading keep the engraved device, restated in the hide's own ink.
+   Only border-COLOR is set, so the 3-sided geometry (border-top: 0) and the
+   narrow-width override that restores the top edge both still apply. */
+.cas-root .bio-copy .eng-body::before {
+  border-color: color-mix(in srgb, var(--essay-ink) 46%, transparent);
+}
+.cas-root .bio-copy .eng-rule {
+  background: color-mix(in srgb, var(--essay-ink) 46%, transparent);
+}
+/* Leather takes an impression the other way up from paper: the lit edge sits
+   ABOVE the glyphs on a stamped hide, not below. Written with .engraved in the
+   chain to make this (0,4,0), because industrial-2.css sets this same property in
+   BOTH `.engraved .eng-title` (0,2,0) and `[data-theme="D"] .engraved .eng-title`
+   (0,3,0) — the second of which a plain (0,3,0) rule would only beat on source
+   order. One selector covers both themes: the hide looks the same under each. */
+.cas-root .bio-copy.engraved .eng-title {
+  text-shadow: 0 1px 0 rgba(255,240,212,.22), 0 -1px 0 rgba(38,21,10,.34);
+}
+/* The 620px block in industrial-2.css re-pads .eng-body at (0,2,0); the base rule
+   above is (0,3,0) and would outrank it at every width, so the phone padding is
+   restated here. Media queries add no specificity — this trap is why. */
+@media (max-width: 620px) {
+  .cas-root .bio-copy .eng-body { padding: 24px 16px 6px; }
+}
+
 /* ---------- bio credentials (polaroids inside Artist biography) ---------- */
 /* Tracking held at .2em: below About's §13/§14 freeze line. It will read looser
    than its retuned siblings; cheaper than breaching the freeze. (#20) */
@@ -754,9 +889,30 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
    forcing a second frame size. That is what keeps a mixed set looking like a
    wall of certificates rather than an assortment. (client feedback 2026-08-08)
 
-   The scans supplied so far are both portrait, so the row also carries one
-   empty mount at landscape proportions — it demonstrates the fitting without
-   inventing a certificate that does not exist. */
+   2026-08-16 — THE MIXED SET IS NOW REAL, and no rule below needed changing to
+   take it. Two landscape scans landed (cert-iws-hk-2016 2003x1409 and
+   poster-iws-hk-2016 1932x1330) beside the two portrait ones already here
+   (cert-accademia-2026 707x1000, cert-jiwi-2026 1076x1522 — both ~1:1.414, A-series
+   portrait; the new pair are ~1.42:1, the same ratio on its side).
+
+   WHY THE ROW HEIGHT CANNOT JUMP, stated once so nobody re-solves it: the mount's
+   height is set by `.cert-frame { aspect-ratio: 3 / 4 }` and its width by the fixed
+   flex basis on `.bc-card--cert` — both independent of the scan. `.cert-mat img` is
+   then width:100% height:100% object-fit:contain with `aspect-ratio: auto` (which is
+   what overrides the 4/3 that `.bc-card img` imposes on the polaroids). So the IMG
+   BOX is always the full opening and only the picture inside it letterboxes: a
+   portrait scan fills the opening, a landscape one sits centred with mat above and
+   below. Nothing in the row is content-sized, so no scan can resize a neighbour.
+   Do not "fix" the letterbox by giving landscape scans their own aspect-ratio —
+   that reintroduces the second frame size this mount exists to avoid.
+
+   The empty landscape mount is now redundant as a demonstration (two real scans do
+   the job) but is left in place: it is one of the three `is-demo` mounts that also
+   push the table past its five visible rows, and those go as a set before launch.
+
+   FREEZE: About's §13/§14 freeze covers this block. Lifted by the client on
+   2026-08-16 for the two scans above ONLY; it otherwise still stands, which is why
+   the tracking and 11px caption size below are still held at their frozen values. */
 /* A fixed basis, not a max-width: .bc-row is a flex row, so max-width alone let
    each mount size to its own content and the set came out 236 / 245 / 179px
    wide — the one thing a matched set of frames must not do.

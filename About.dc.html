@@ -155,9 +155,10 @@
         </div>
       </div>
     </div>
-    <!-- ASSET PENDING: Live drawing carousel — five photographs supplied, six needed. The
-            carousel moves two at a time, so an odd set would repeat one photograph on the
-            last page. -->
+    <!-- ASSET PENDING cleared 2026-08-16: the sixth live-drawing photograph was
+         supplied (Livedrawing6.JPG) and is in the set. The carousel moves two at
+         a time and six divides exactly, so no page is half empty and no
+         photograph repeats. -->
   </section>
 
   <section class="section" id="community">
@@ -266,6 +267,13 @@
            and each now says in its own row that it is scaffolding rather than an
            award. NO HONOUR IS INVENTED HERE and none may be: the four real rows
            are the four Crystal supplied.
+
+           2026-08-16: the 2016 row's scan arrived and that row is no longer
+           pending, and an EIGHTH mount was added which is NOT an honour — the 2016
+           exhibition poster. The honour count is therefore still FOUR; the poster
+           is a fifth dated row that says on its face that it is a poster. Read
+           the row count and the honour count as different numbers from here on,
+           and keep the note under the table in step with both.
            #23: role="list" is gone. The rows are <button>s, and a list whose
            children are not listitems is a broken list; a named group is what this
            actually is. -->
@@ -294,11 +302,54 @@
             </div></div>
             <figcaption>Scan not supplied</figcaption>
           </figure>
-          <figure class="bc-card bc-card--cert is-ph" data-year="2016" data-honour="Selected, 1st Hong Kong International Biennial Exhibition">
+          <!-- FREEZE: §13/§14 (「下面開始 不用修改」) covers this area. It was LIFTED
+               BY THE CLIENT on 2026-08-16 for THIS CHANGE ONLY — landing the two
+               scans below (Certificate3.jpg, Certificate4.jpg). The freeze
+               otherwise still stands over everything under the §13/§14 line: do
+               not treat this edit as a general reopening, and do not retune
+               anything here that the change did not require. -->
+
+          <!-- This row was "Scan not supplied". The scan for it has now arrived:
+               Certificate3.jpg IS this honour's certificate — it reads
+               「第一屆香港國際水彩雙年展 / 1st International Watercolor Biennale
+               Hong Kong 2016」, issued by IWS Hong Kong. Her honours list calls the
+               same show "1st Hong Kong International Biennial Exhibition"; per the
+               convention already set on row 2, data-honour keeps HER wording and
+               the caption keeps the SCAN's. Neither is edited to agree with the
+               other. -->
+          <figure class="bc-card bc-card--cert" data-year="2016" data-honour="Selected, 1st Hong Kong International Biennial Exhibition">
             <div class="cert-frame"><div class="cert-mat">
-              <span class="cert-slot is-portrait">Scan not supplied</span>
+              <img src="img/about/cert-iws-hk-2016.jpg" alt="Certificate presented to Lau Siu Fung, marked 入選, for participating in Love . United, the 1st International Watercolor Biennale Hong Kong 2016, signed by Atanur Dogan, IWS Founder and President, and Ze Ze Lai, Country Head, IWS Hong Kong; date of issue 14 October 2016"
+                   srcset="img/about/cert-iws-hk-2016-128.jpg 128w, img/about/cert-iws-hk-2016-256.jpg 256w, img/about/cert-iws-hk-2016.jpg 1400w"
+                   sizes="120px" width="1400" height="985" loading="lazy" decoding="async">
             </div></div>
-            <figcaption>Scan not supplied</figcaption>
+            <figcaption>Certificate · Love . United · 1st International Watercolor Biennale Hong Kong 2016</figcaption>
+          </figure>
+
+          <!-- NOT A CERTIFICATE, and it must never be captioned as one.
+               Certificate4.jpg is the printed EXHIBITION POSTER for the same 2016
+               show as the row above: it carries the show's dates (13–16/10/2016),
+               the venue (Leung Fong Oi Wan Art Gallery 梁方靄雲藝術廊) and the
+               organiser credits, and it bears NO recipient name and no award
+               wording. It was supplied as one of two "certificates"; the decision
+               to show it anyway was taken on our side on 2026-08-16 and has NOT
+               been put to the client, so it is here with the word "poster" first
+               in both the row and the caption, and she is being asked.
+
+               It carries no marker class: `is-ph` means "no scan" (the row would
+               be disabled — this one has a scan and should open) and `is-demo`
+               means "layout scaffolding" (the note under the table would then call
+               a real printed artefact scaffolding). A fourth class with no rule
+               behind it is the dead-CSS problem #19 exists to clear up, so the
+               distinction is carried by the TEXT, which is where a reader gets
+               it. -->
+          <figure class="bc-card bc-card--cert" data-year="2016" data-honour="Exhibition poster for Love . United, 1st International Watercolor Biennale Hong Kong — the printed poster for the show above, not an award">
+            <div class="cert-frame"><div class="cert-mat">
+              <img src="img/about/poster-iws-hk-2016.jpg" alt="Printed exhibition poster for Love . United, the 1st International Watercolor Biennale Hong Kong 2016, held 13 to 16 October 2016 at Leung Fong Oi Wan Art Gallery; organised by the International Watercolor Society of Hong Kong, co-organised by Lingnan University Chaplain's Office"
+                   srcset="img/about/poster-iws-hk-2016-128.jpg 128w, img/about/poster-iws-hk-2016-256.jpg 256w, img/about/poster-iws-hk-2016.jpg 1400w"
+                   sizes="120px" width="1400" height="964" loading="lazy" decoding="async">
+            </div></div>
+            <figcaption>Exhibition poster · Love . United · 13–16 October 2016 · Leung Fong Oi Wan Art Gallery</figcaption>
           </figure>
           <figure class="bc-card bc-card--cert is-ph is-demo" data-year="Demo" data-honour="Layout scaffolding, not an award — a landscape scan fitting the mount">
             <div class="cert-frame"><div class="cert-mat">
@@ -322,7 +373,7 @@
       </div><!-- /.cert-split -->
       <!-- inline, not a class: a new class with no rule behind it is the exact
            dead-CSS problem #19 exists to clear up. -->
-      <p style="margin:14px 0 0;font-size:13px;line-height:1.6;color:var(--muted);max-width:70ch;">The four dated rows are Crystal's honours. The rows marked <strong>Demo</strong> are layout scaffolding — they show the table scrolling past its five visible rows and how a landscape, portrait or square scan fits the same mount. They are not awards and will be removed before launch.</p>
+      <p style="margin:14px 0 0;font-size:13px;line-height:1.6;color:var(--muted);max-width:70ch;">Four of the dated rows are Crystal's honours. The <strong>2016 exhibition poster</strong> is the printed poster for the show listed above it — it is not an award. The rows marked <strong>Demo</strong> are layout scaffolding — they show the table scrolling past its five visible rows and how a landscape, portrait or square scan fits the same mount. They are not awards and will be removed before launch.</p>
     </div><!-- /.card -->
   </section>
 
@@ -539,9 +590,24 @@ class Component extends DCLogic {
        the background, and entirely under prefers-reduced-motion. */
     const CAROUSELS = {
       /* per = photographs to a page. Live drawing is the only two-up set:
-         5 photographs, 3 pages. The other two are one-up: 4 photographs,
-         4 pages each. (client feedback 2026-08-08) */
-      'car-livedrawing': { dir: 'img/about/', per: 2, files: ['livedrawing-1.jpg','livedrawing-2.jpg','livedrawing-3.jpg','livedrawing-4.jpg','livedrawing-5.jpg'], alt: 'Crystal drawing on location', dwell: 5300 },
+         6 photographs, 3 pages. The other two are one-up: 4 photographs,
+         4 pages each. (client feedback 2026-08-08)
+
+         The sixth photograph arrived 2026-08-16 and closes the set: at two to a
+         page an odd count left the last page half empty while the dots still
+         claimed three full pages. Six is the first count above five that the
+         two-up layout can fill exactly, which is why the pending note asked for
+         six rather than "one or two more". Below 620px per drops to 1 and the
+         same six make six pages — still exact, because 6 divides by 1 and 2.
+         Keep this set EVEN. Adding a seventh reopens the half-empty last page.
+
+         livedrawing-6.jpg is copied into img/about/ by hand like the rest of
+         About's imagery, but it is NOT outside the pipeline: STATIC_SLOTS already
+         carries a glob for img/about/livedrawing-*.jpg, so the next importer run
+         generates its 256/384/768 ladder and registers it, and CAS_IMG_ATTRS
+         serves a srcset for it exactly as it does for the other five. Nothing
+         here needs a per-file entry. */
+      'car-livedrawing': { dir: 'img/about/', per: 2, files: ['livedrawing-1.jpg','livedrawing-2.jpg','livedrawing-3.jpg','livedrawing-4.jpg','livedrawing-5.jpg','livedrawing-6.jpg'], alt: 'Crystal drawing on location', dwell: 5300 },
       'car-exhibition':  { dir: 'img/about/', per: 1, files: ['exhibition-1.jpg','exhibition-2.jpg','exhibition-3.jpg','exhibition-4.jpg'], alt: 'Exhibition', dwell: 6700 },
       'car-artful':      { dir: 'img/about/', per: 1, files: ['artful-living-1.jpg','artful-living-2.jpg','artful-living-3.jpg','artful-living-4.jpg'], alt: 'Artful Living', dwell: 8100 }
     };

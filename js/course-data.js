@@ -95,6 +95,27 @@ window.CAS_COURSES = [
         "h": 1129
       }
     ],
+    "cardCover": "img/courses/clouds-beginner/card-cover.jpg",
+    "cardCoverMeta": {
+      "srcset": "img/courses/clouds-beginner/card-cover-224.jpg 224w, img/courses/clouds-beginner/card-cover-448.jpg 448w, img/courses/clouds-beginner/card-cover-896.jpg 896w, img/courses/clouds-beginner/card-cover.jpg 1600w",
+      "sizes": "(max-width: 600px) 366px, (max-width: 1000px) 420px, 373px",
+      "w": 1600,
+      "h": 1600
+    },
+    "cardPhoto": "img/courses/clouds-beginner/card-photo.jpg",
+    "cardPhotoMeta": {
+      "srcset": "img/courses/clouds-beginner/card-photo-128.jpg 128w, img/courses/clouds-beginner/card-photo-256.jpg 256w, img/courses/clouds-beginner/card-photo-448.jpg 448w, img/courses/clouds-beginner/card-photo-896.jpg 896w, img/courses/clouds-beginner/card-photo.jpg 1600w",
+      "sizes": "(max-width: 600px) 82px, (max-width: 1000px) 173px, 269px",
+      "w": 1600,
+      "h": 910
+    },
+    "highlightPoster": "img/courses/clouds-beginner/highlight-poster.jpg",
+    "highlightPosterMeta": {
+      "srcset": "img/courses/clouds-beginner/highlight-poster-320.jpg 320w, img/courses/clouds-beginner/highlight-poster-480.jpg 480w, img/courses/clouds-beginner/highlight-poster-896.jpg 896w, img/courses/clouds-beginner/highlight-poster.jpg 1600w",
+      "sizes": "(max-width: 600px) 346px, (max-width: 1000px) 395px, 448px",
+      "w": 1600,
+      "h": 900
+    },
     "blurb": "Beginner’s Guide to Drawing & Painting Clouds is a structured online masterclass thoughtfully designed for aspiring artists and beginners. Featuring high-definition video demonstration lessons, this course comes with clear English voiceovers and subtitles, making your learning experience seamless and accessible. The curriculum follows an intuitive step-by-step progression, starting from foundational pencil sketching and simple perspective principles to help you grasp the three-dimensional volume of clouds. You will dive into a systematic breakdown of line work, composition, light and shadow placement, colour mixing, and essential water control. As you move into watercolour painting, you will master the medium’s core techniques, including flat washes, colour blending, wet-on-wet, dry-on-dry, and negative space painting. Whether you are picking up a paintbrush for the very first time or seeking to enhance the atmospheric depth of your artwork, this course will empower you to capture the fleeting beauty of skies and clouds with total technical confidence.",
     "about": [
       "Beginner’s Guide to Drawing & Painting Clouds is a structured online masterclass thoughtfully designed for aspiring artists and beginners. Featuring high-definition video demonstration lessons, this course comes with clear English voiceovers and subtitles, making your learning experience seamless and accessible.",
@@ -144,17 +165,17 @@ window.CAS_COURSES = [
         "pending": true,
         "detail": {},
         "dur": 500,
-        "poster": null,
+        "poster": "img/courses/clouds-beginner/l01.jpg",
         "video": "https://drive.google.com/file/d/1td6YrUyrOeE6oD72j_moBfaViRVM_vlJ/preview",
         "portrait": true,
         "videos": [],
         "free": true,
         "src": "1.CloudsLesson1.mp4",
         "srcFolder": "Lesson01",
-        "srcset": null,
-        "sizes": null,
-        "w": null,
-        "h": null
+        "srcset": "img/courses/clouds-beginner/l01-96.jpg 96w, img/courses/clouds-beginner/l01-160.jpg 160w, img/courses/clouds-beginner/l01-384.jpg 384w, img/courses/clouds-beginner/l01-768.jpg 768w, img/courses/clouds-beginner/l01.jpg 1280w",
+        "sizes": "(max-width: 600px) 56px, 78px",
+        "w": 1280,
+        "h": 720
       },
       {
         "n": 2,
@@ -461,8 +482,66 @@ window.CAS_COURSES = [
       "dur": 52,
       "src": "Intermediate Hightlights.mp4"
     },
-    "photos": [],
-    "photosMeta": [],
+    "photos": [
+      "img/courses/clouds-intermediate/p01.jpg",
+      "img/courses/clouds-intermediate/p02.jpg",
+      "img/courses/clouds-intermediate/p03.jpg",
+      "img/courses/clouds-intermediate/p04.jpg",
+      "img/courses/clouds-intermediate/p05.jpg"
+    ],
+    "photosMeta": [
+      {
+        "srcset": "img/courses/clouds-intermediate/p01-128.jpg 128w, img/courses/clouds-intermediate/p01-256.jpg 256w, img/courses/clouds-intermediate/p01-448.jpg 448w, img/courses/clouds-intermediate/p01-896.jpg 896w, img/courses/clouds-intermediate/p01.jpg 1486w",
+        "sizes": "(max-width: 600px) 358px, (max-width: 1000px) 351px, 446px",
+        "w": 1486,
+        "h": 1105
+      },
+      {
+        "srcset": "img/courses/clouds-intermediate/p02-128.jpg 128w, img/courses/clouds-intermediate/p02-256.jpg 256w, img/courses/clouds-intermediate/p02-448.jpg 448w, img/courses/clouds-intermediate/p02-896.jpg 896w, img/courses/clouds-intermediate/p02.jpg 1492w",
+        "sizes": "(max-width: 600px) 82px, (max-width: 1000px) 173px, 269px",
+        "w": 1492,
+        "h": 1054
+      },
+      {
+        "srcset": "img/courses/clouds-intermediate/p03-128.jpg 128w, img/courses/clouds-intermediate/p03-256.jpg 256w, img/courses/clouds-intermediate/p03-448.jpg 448w, img/courses/clouds-intermediate/p03-896.jpg 896w, img/courses/clouds-intermediate/p03.jpg 1475w",
+        "sizes": "(max-width: 600px) 82px, (max-width: 1000px) 173px, 269px",
+        "w": 1475,
+        "h": 1052
+      },
+      {
+        "srcset": "img/courses/clouds-intermediate/p04-128.jpg 128w, img/courses/clouds-intermediate/p04-256.jpg 256w, img/courses/clouds-intermediate/p04-448.jpg 448w, img/courses/clouds-intermediate/p04-896.jpg 896w, img/courses/clouds-intermediate/p04.jpg 1468w",
+        "sizes": "(max-width: 600px) 82px, (max-width: 1000px) 173px, 269px",
+        "w": 1468,
+        "h": 1049
+      },
+      {
+        "srcset": "img/courses/clouds-intermediate/p05-128.jpg 128w, img/courses/clouds-intermediate/p05-256.jpg 256w, img/courses/clouds-intermediate/p05-448.jpg 448w, img/courses/clouds-intermediate/p05.jpg 768w",
+        "sizes": "(max-width: 600px) 82px, (max-width: 1000px) 173px, 269px",
+        "w": 768,
+        "h": 768
+      }
+    ],
+    "cardCover": "img/courses/clouds-intermediate/card-cover.jpg",
+    "cardCoverMeta": {
+      "srcset": "img/courses/clouds-intermediate/card-cover-224.jpg 224w, img/courses/clouds-intermediate/card-cover-448.jpg 448w, img/courses/clouds-intermediate/card-cover-896.jpg 896w, img/courses/clouds-intermediate/card-cover.jpg 1600w",
+      "sizes": "(max-width: 600px) 366px, (max-width: 1000px) 420px, 373px",
+      "w": 1600,
+      "h": 1600
+    },
+    "cardPhoto": "img/courses/clouds-intermediate/card-photo.jpg",
+    "cardPhotoMeta": {
+      "srcset": "img/courses/clouds-intermediate/card-photo-128.jpg 128w, img/courses/clouds-intermediate/card-photo-256.jpg 256w, img/courses/clouds-intermediate/card-photo-448.jpg 448w, img/courses/clouds-intermediate/card-photo-896.jpg 896w, img/courses/clouds-intermediate/card-photo.jpg 1600w",
+      "sizes": "(max-width: 600px) 82px, (max-width: 1000px) 173px, 269px",
+      "w": 1600,
+      "h": 892
+    },
+    "highlightPoster": "img/courses/clouds-intermediate/highlight-poster.jpg",
+    "highlightPosterMeta": {
+      "srcset": "img/courses/clouds-intermediate/highlight-poster-320.jpg 320w, img/courses/clouds-intermediate/highlight-poster-480.jpg 480w, img/courses/clouds-intermediate/highlight-poster-896.jpg 896w, img/courses/clouds-intermediate/highlight-poster.jpg 1600w",
+      "sizes": "(max-width: 600px) 346px, (max-width: 1000px) 395px, 448px",
+      "w": 1600,
+      "h": 1071
+    },
     "blurb": "The techniques that separate a study from a painting. Wet-on-wet edges, gradient washes, guarded whites — then three full scenes where all of it runs at once.",
     "about": [],
     "subline": "",
@@ -692,6 +771,27 @@ window.CAS_COURSES = [
     "preview": null,
     "photos": [],
     "photosMeta": [],
+    "cardCover": null,
+    "cardCoverMeta": {
+      "srcset": null,
+      "sizes": null,
+      "w": null,
+      "h": null
+    },
+    "cardPhoto": "img/courses/little-house/card-photo.jpg",
+    "cardPhotoMeta": {
+      "srcset": "img/courses/little-house/card-photo-128.jpg 128w, img/courses/little-house/card-photo-256.jpg 256w, img/courses/little-house/card-photo-448.jpg 448w, img/courses/little-house/card-photo-896.jpg 896w, img/courses/little-house/card-photo.jpg 1600w",
+      "sizes": "(max-width: 600px) 82px, (max-width: 1000px) 173px, 269px",
+      "w": 1600,
+      "h": 909
+    },
+    "highlightPoster": null,
+    "highlightPosterMeta": {
+      "srcset": null,
+      "sizes": null,
+      "w": null,
+      "h": null
+    },
     "blurb": "A single, self-contained study: one small house, start to finish, in one sitting.",
     "about": [],
     "subline": "",
@@ -757,6 +857,27 @@ window.CAS_COURSES = [
     "preview": null,
     "photos": [],
     "photosMeta": [],
+    "cardCover": null,
+    "cardCoverMeta": {
+      "srcset": null,
+      "sizes": null,
+      "w": null,
+      "h": null
+    },
+    "cardPhoto": "img/courses/urban-sketch/card-photo.jpg",
+    "cardPhotoMeta": {
+      "srcset": "img/courses/urban-sketch/card-photo-128.jpg 128w, img/courses/urban-sketch/card-photo-256.jpg 256w, img/courses/urban-sketch/card-photo-448.jpg 448w, img/courses/urban-sketch/card-photo-896.jpg 896w, img/courses/urban-sketch/card-photo.jpg 1600w",
+      "sizes": "(max-width: 600px) 82px, (max-width: 1000px) 173px, 269px",
+      "w": 1600,
+      "h": 967
+    },
+    "highlightPoster": null,
+    "highlightPosterMeta": {
+      "srcset": null,
+      "sizes": null,
+      "w": null,
+      "h": null
+    },
     "blurb": "Line and wash on location — buildings, street and figures, painted quickly and loosely.",
     "about": [],
     "subline": "",

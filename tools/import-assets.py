@@ -230,6 +230,9 @@ COURSES = [
         "highlights": "Beginner Highlights.mp4",
         "photos": ["CloudsLesson12.jpg", "CloudsLesson12A.jpg", "CloudsLesson12B.jpg",
                    "CloudsLesson12C.jpg", "CloudsLesson12D.jpg"],
+        "card_cover": "00 - Home/CloudsLesson14.jpg",
+        "card_photo": "00 - Home/Beginnertools.jpg",
+        "highlight_poster": "01 - Courses/Course 01-Beginner/Beginner HighlightCover.JPG",
     },
     {
         "slug": "clouds-intermediate",
@@ -237,7 +240,23 @@ COURSES = [
         # source folders keep the old global numbering; display order is 1..7
         "lesson_folders": ["Lesson %d" % n for n in range(13, 20)],
         "highlights": "Intermediate Hightlights.mp4",   # client's spelling
-        "photos": [],
+        # The client supplied five 小圖 for this course and no 大圖. The beginner
+        # course has a named large image (1.4.10 records cloudslesson12.jpg as its
+        # 大圖); nothing in her material names one here, so the order below is OURS
+        # — her file numbering, taken as given. photos[0] becomes the lead at
+        # 446px, so if she wanted a different one leading, this is the line.
+        # Her fifth file's stem is 小圖書5 rather than 小圖5 — verbatim, not normalised.
+        # Her fifth file leads. Looked at side by side, 小圖1..4 are in-progress
+        # stills of one painting shot from the same angle — hand, brush, half-laid
+        # wash — and 小圖書5 is the finished piece styled with the brushes and paint
+        # pots. photos[0] is painted at 446px and is excluded from the small strip,
+        # so the composed shot belongs there and a mid-stroke still does not.
+        "photos": ["Intermediate小圖書5.JPG", "Intermediate小圖1.jpg", "Intermediate小圖2.jpg",
+                   "Intermediate小圖3.jpg", "Intermediate小圖4.jpg"],
+        "card_cover": "00 - Home/CloudsLesson20.jpg",
+        "card_photo": "00 - Home/Intermediatetools.jpg",
+        "highlight_poster":
+            "01 - Courses/Course 01-Intermediate/CloudsPaintingForIntermediates.JPG",
     },
     {
         "slug": "little-house",
@@ -245,6 +264,9 @@ COURSES = [
         "lesson_folders": [""],          # flat folder, single lesson
         "highlights": None,
         "photos": [],
+        # no card_cover: this course owns a single image, which is already the
+        # cover, so the home card would show the same picture twice.
+        "card_photo": "00 - Home/LittleHousetools.jpg",
     },
     {
         "slug": "urban-sketch",
@@ -252,7 +274,47 @@ COURSES = [
         "lesson_folders": [""],
         "highlights": None,
         "photos": [],
+        "card_photo": "00 - Home/UrbanSketchingtools.jpg",
     },
+]
+
+# --------------------------------------------------------------------------
+# 2026-08-16 asset drop: images the client named for a specific slot, which do
+# NOT live under the course folder (three of the four sit in "00 - Home").
+#
+# Each COURSES value is a path RELATIVE TO THE ASSETS ROOT and is imported
+# literally — the pipeline never walks "00 - Home". The reason is not that a
+# private file sits there today: every private file currently in that folder IS
+# caught by PRIVATE_PATTERNS. It is that the folder is one the client adds to
+# between rounds, and the filter is a filename heuristic, not a guarantee —
+# "Website 最底部REF（FOOTER).png" at the assets ROOT carries none of its markers
+# and would sail straight through if anything ever walked the root. Naming one
+# file per slot imports exactly what was asked for and nothing else.
+#
+# Every key is OPTIONAL: a course that omits one imports exactly as before and
+# gets nulls in the manifest. A named file that is not on disk is a warning,
+# never an exception.
+#
+#   course key         img/courses/<slug>/ stem   SLOTS row            manifest key
+#   ---------------------------------------------------------------------------
+#   card_cover         card-cover                 course-cover         cardCover
+#   card_photo         card-photo                 course-photo-thumb   cardPhoto
+#   highlight_poster   highlight-poster           free-poster          highlightPoster
+#
+# Slot choices are the closest EXISTING measured rows, not new numbers:
+#   * card_cover fills index's `.cc-cover`, which is one of the three widths
+#     "course-cover" was measured for (269 desktop).
+#   * card_photo fills index's `.cc-photo` at 269 — named in the
+#     "course-photo-thumb" comment as the slot that already reuses those files.
+#   * highlight_poster is a video poster frame; "free-poster" is the site's
+#     video-poster row (448 card / 896 modal), and the course preview column is
+#     the same size as the free-video card.
+# --------------------------------------------------------------------------
+
+NAMED_COURSE_IMAGES = [
+    ("card_cover", "card-cover", "course-cover", "cardCover"),
+    ("card_photo", "card-photo", "course-photo-thumb", "cardPhoto"),
+    ("highlight_poster", "highlight-poster", "free-poster", "highlightPoster"),
 ]
 
 GALLERY_FOLDER = "02 - Gallery"
@@ -631,9 +693,31 @@ def import_courses(force):
             else:
                 warn("%s: preview reel %s not on disk" % (course["slug"], hl))
 
-        out.append({"slug": course["slug"], "folder": course["folder"],
-                    "cover": cover_rel, "coverMeta": cover_meta, "photos": photos,
-                    "highlights": highlights, "lessons": lessons})
+        # The client-named per-slot images (see NAMED_COURSE_IMAGES). Optional
+        # to the last detail: a course that names none of them contributes the
+        # same six null fields and nothing else changes.
+        named = {}
+        for key, stem, slot, out_key in NAMED_COURSE_IMAGES:
+            named[out_key], named[out_key + "Meta"] = None, None
+            rel_src = course.get(key)
+            if not rel_src:
+                continue
+            src = os.path.join(ASSETS_DIR, rel_src.replace("/", os.sep))
+            if not os.path.isfile(src):
+                warn("%s: %s %s not on disk" % (course["slug"], key, rel_src))
+                continue
+            drel = "img/courses/%s/%s.jpg" % (course["slug"], stem)
+            nm = encode_image(src, os.path.join(SITE_DIR, drel), MAX_EDGE_GALLERY,
+                              force, slot=slot)
+            named[out_key], named[out_key + "Meta"] = drel, img_meta(nm)
+            print("   %-16s %-38s %dx%d" % (stem, os.path.basename(rel_src),
+                                            nm["w"], nm["h"]))
+
+        record = {"slug": course["slug"], "folder": course["folder"],
+                  "cover": cover_rel, "coverMeta": cover_meta, "photos": photos,
+                  "highlights": highlights, "lessons": lessons}
+        record.update(named)
+        out.append(record)
     return out
 
 
