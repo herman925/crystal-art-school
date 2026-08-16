@@ -598,7 +598,11 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
    width where the hero collapses to one column the cap is simply 900px again,
    because both are then bounded by the container. */
 :root { --prose-max: 900px; }
-.learn-list, .syllabus, #co-who, .course-teacher { max-width: var(--prose-max); margin-left: auto; margin-right: auto; }
+/* The section signs travel with the content they head. Pinning the blocks to
+   the right column without them left each plaque centred on the full container
+   while its own list sat to the right of it, which reads as a mistake. */
+.learn-list, .syllabus, #co-who, .course-teacher,
+#learn .section-head, #syllabus .section-head, #who .section-head { max-width: var(--prose-max); margin-left: auto; margin-right: auto; }
 .course-right #co-blurb { max-width: var(--prose-max); }
 @media (min-width: 901px) {
   /* 50: these already borrowed the hero right column's WIDTH, but they were
@@ -607,7 +611,8 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
      leftover space. Pinning the right edge puts them under that column exactly.
      All four move together: aligning only the learn list would leave it out of
      step with the syllabus directly beneath it. */
-  .learn-list, .syllabus, #co-who, .course-teacher { max-width: min(var(--prose-max), calc(100% - var(--course-left) - var(--course-gap))); margin-left: auto; margin-right: 0; }
+  .learn-list, .syllabus, #co-who, .course-teacher,
+  #learn .section-head, #syllabus .section-head, #who .section-head { max-width: min(var(--prose-max), calc(100% - var(--course-left) - var(--course-gap))); margin-left: auto; margin-right: 0; }
 }
 /* 7.5 / 1.4.10: the SYLLABUS heading is enlarged; the other section headings on
    this page keep the shared size. */
