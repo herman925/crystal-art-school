@@ -139,8 +139,8 @@ window.CAS_COURSES = [
       {
         "n": 1,
         "spans": 1,
-        "title": "Lesson 1",
-        "subtitle": "Crystal has supplied the film; the title and description are still to come.",
+        "title": "Introduction to drawing clouds",
+        "subtitle": "Crystal has supplied the film; the description is still to come.",
         "pending": true,
         "detail": {},
         "dur": 500,

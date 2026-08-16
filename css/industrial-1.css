@@ -254,7 +254,13 @@
      UI component or large text, short of the 4.5:1 that 12-15px labels need. No
      light value clears it; only near-black does. So the ink moves and the client's
      colour does not, the same trade already made for --linen-ink above. */
-  --marine-ink: #0b1418;   /* 4.56:1 on --marine */
+  --marine-ink: #0b1418;   /* 4.56:1 on flat --marine */
+  /* The machined variants are NOT flat marine: --marine-metal ends at #456b78
+     and a repeating 10%-black rake sits over it, so the painted fill under a
+     label averages darker than the token. Measured with --marine-ink on it:
+     4.29:1, which reads as a pass if you only check the token and is not one.
+     This is the ink for those, and only those. */
+  --marine-ink-metal: #04080a;   /* 4.78:1 on the machined fill, measured */
 
   /* twin-arch portrait mask — the "butterfly": two round-top columns (kept 1:1) */
   --shape-arch-duo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 240'%3E%3Crect x='0' y='0' width='104' height='240' rx='52'/%3E%3Crect x='96' y='0' width='104' height='240' rx='52'/%3E%3C/svg%3E");
@@ -382,7 +388,10 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
    than the other section signs — the rename alone was done, the enlargement
    was not. */
 .section-title.is-blog { font-size: clamp(34px, 3.9vw, 52px); padding: 14px 34px; }
-.section-title::before { content: '✦'; font-size: .56em; color: #7e9b46; display: inline-block; }
+/* 39: the ornament was the only green on the site and the client named it on
+   the home page's New Release heading. It is one mark used in eight places,
+   so it changes everywhere rather than leaving one page's star odd. */
+.section-title::before { content: '✦'; font-size: .56em; color: var(--marine); display: inline-block; }
 .section-title.in-view::before { animation: ornament-in var(--dur-base) var(--ease-out) both; }
 .section-title.is-left { justify-content: flex-start; text-align: left; font-size: clamp(22px,2.6vw,30px); margin: 0; }
 /* 3.5.1: the lede sits directly under a centred section title and reads as part
@@ -432,7 +441,7 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 .btn.teal:hover { filter: brightness(1.07); }
 /* marine metal — the finish a textured element takes when the client names it.
    Same construction as .btn.teal above, so the two read as one hardware family. */
-.btn.marine { background-color: var(--marine); background-image: linear-gradient(118deg, rgba(226,242,247,.30), transparent 42%), repeating-linear-gradient(95deg, rgba(0,0,0,.10) 0 1px, transparent 1px 3px), var(--marine-metal); color: var(--marine-ink) !important; -webkit-text-fill-color: var(--marine-ink) !important; box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(226,242,247,.38), inset 0 -1px 0 rgba(10,35,45,.4); }
+.btn.marine { background-color: var(--marine); background-image: linear-gradient(118deg, rgba(226,242,247,.30), transparent 42%), repeating-linear-gradient(95deg, rgba(0,0,0,.10) 0 1px, transparent 1px 3px), var(--marine-metal); color: var(--marine-ink-metal) !important; -webkit-text-fill-color: var(--marine-ink-metal) !important; box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(226,242,247,.38), inset 0 -1px 0 rgba(10,35,45,.4); }
 .btn.marine:hover { filter: brightness(1.07); }
 /* linen metal — the supporting-information counterpart */
 .btn.linen { background-color: var(--linen); background-image: linear-gradient(118deg, rgba(255,252,248,.34), transparent 42%), repeating-linear-gradient(95deg, rgba(0,0,0,.07) 0 1px, transparent 1px 3px), var(--linen-metal); color: #2b2823 !important; -webkit-text-fill-color: #2b2823 !important; box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(255,252,248,.5), inset 0 -1px 0 rgba(90,70,60,.28); }
@@ -456,7 +465,7 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 .btn-big:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
 /* 8.5: named in the client's written feedback, so it changes colour despite the
    material exemption — and as a machined finish, not a flat fill (1.4.2). */
-.btn-big.btn-marine { background-color: var(--marine); background-image: linear-gradient(118deg, rgba(226,242,247,.30), transparent 42%), repeating-linear-gradient(95deg, rgba(0,0,0,.10) 0 1px, transparent 1px 3px), var(--marine-metal); color: var(--marine-ink); box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(226,242,247,.38), inset 0 -1px 0 rgba(10,35,45,.4); }
+.btn-big.btn-marine { background-color: var(--marine); background-image: linear-gradient(118deg, rgba(226,242,247,.30), transparent 42%), repeating-linear-gradient(95deg, rgba(0,0,0,.10) 0 1px, transparent 1px 3px), var(--marine-metal); color: var(--marine-ink-metal); box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(226,242,247,.38), inset 0 -1px 0 rgba(10,35,45,.4); }
 .btn-outline {
   display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-cond);
   font-weight: 500; font-size: 13px; letter-spacing: var(--tracking-label); text-transform: uppercase;
@@ -896,3 +905,11 @@ a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !impor
 .band-forest .eyebrow { color: var(--band-eyebrow); }
 .band-forest .star { color: var(--band-eyebrow); }
 .band-forest .marker-title, .band-forest h2 { font-family: var(--font-marker); font-weight: 600; font-size: clamp(22px,2.4vw,32px); margin: 0 0 8px; color: var(--band-ink); }
+
+/* The light theme's band wood is set in industrial-2.css, in the block that
+   already owns the real wood photographs. Do not add a second one here: this
+   file is imported first, so anything written here loses to it silently. */
+/* The scanline overlay is tuned for a dark ground; at .12 black it reads as
+   dirt on the pale wood the light theme now uses, so it is lightened rather
+   than removed — the ruled lines are what make the surface read as planks. */
+[data-theme="A"] .band-forest::before { background: repeating-linear-gradient(0deg, transparent 0 52px, rgba(94,74,61,.10) 52px 53px); }

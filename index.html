@@ -28,27 +28,47 @@
   font-family: var(--font-cond); font-size: 12px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); }
 .course-card .cc-photo img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .5s var(--ease-out); }
 .course-card .cc-photo::after { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(20,17,13,.82) 0%, rgba(20,17,13,.34) 46%, transparent 72%); pointer-events: none; }
-.course-card .cc-facts { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; display: flex; gap: 22px; padding: 12px 16px; color: #f6f0e4; }
+/* 53: lessons stay left, the level pair goes to the far right. */
+.course-card .cc-facts { position: absolute; left: 0; right: 0; bottom: 0; z-index: 2; display: flex; justify-content: space-between; gap: 22px; padding: 12px 16px; color: #f6f0e4; }
 .course-card .cc-facts span { display: flex; flex-direction: column; gap: 1px; font-family: var(--font-cond); font-weight: 600; font-size: 15px; line-height: 1.15; }
 .course-card .cc-facts i { font-style: normal; font-size: 12px; font-weight: 500; letter-spacing: var(--tracking-label); text-transform: uppercase; opacity: .8; }
 /* Her Course Overview, laid out rather than dumped: a lede, the two principles
    as numbered points, then the four questions she answers as a two-up grid.
    Sits below the course cards so the products still lead the section. */
 .overview { margin-top: 54px; padding-top: 40px; border-top: 1px solid color-mix(in srgb, var(--ink) 12%, transparent); }
-.overview-h { font-family: var(--font-display-serif); font-weight: 600; font-size: clamp(24px, 2.5vw, 34px);
-  letter-spacing: var(--tracking-display); text-transform: uppercase; color: var(--ink); margin: 0 0 14px; text-align: center; }
+/* 52: the heading takes the wood plaque every other section sign on this page
+   already sits on. Face and size come from the Font A ramp in industrial-3. */
+.overview-h { color: var(--banner-ink); margin: 0 auto 18px; text-align: center;
+  display: flex; align-items: center; justify-content: center; gap: .45em;
+  width: fit-content; max-width: 100%;
+  padding: 10px 30px; border-radius: 14px;
+  background-color: var(--banner-bg); background-image: var(--banner-grain); background-size: var(--banner-size, 300px 120px);
+  box-shadow: var(--shadow); position: relative; }
 .overview-lede { max-width: 68ch; margin: 0 auto 16px; text-align: center; font-size: 17.5px; line-height: 1.62; color: var(--muted); }
 .overview-lede:last-of-type { margin-bottom: 38px; }
+/* 52: opening and closing marks around the introduction, in the same inline
+   treatment the questions below already use — not the engraved quote block,
+   which is a whole component and would outweigh two short paragraphs. */
+.overview-lede:first-of-type::before { content: '“'; color: var(--marine); font-size: 1.3em; line-height: 0; vertical-align: -.12em; margin-right: 3px; }
+.overview-lede:last-of-type::after { content: '”'; color: var(--marine); font-size: 1.3em; line-height: 0; vertical-align: -.12em; margin-left: 3px; }
 /* #20: `minmax(380px, …)` below is a hard floor — at 390px the wrap is 358px
    wide, so the Q&A column was laid out 380px wide and hung 6px past .cas-root,
    which hides it with overflow-x rather than fixing it. min(px, 100%) lets the
    track shrink on the widths that cannot hold it. */
 .overview-points { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr)); gap: 20px; margin-bottom: 44px; }
-.ov-point { position: relative; background: var(--surface); border-radius: var(--radius-card); padding: 24px 26px 22px 68px; box-shadow: var(--shadow-sm); }
+/* 52: a translucent marine plate rather than the flat surface, so the two
+   principles read as the thing to notice in the block. Mixed with --surface
+   rather than set as an alpha so it stays opaque over any ground and the ink
+   above it can be measured. */
+.ov-point { position: relative; background: color-mix(in srgb, var(--marine) 20%, var(--surface)); border-radius: var(--radius-card); padding: 24px 26px 22px 68px; box-shadow: var(--shadow-sm); }
 .ov-n { position: absolute; left: 24px; top: 22px; font-family: var(--font-stencil); font-size: 22px; color: var(--marine); }
 .ov-point strong { display: block; font-family: var(--font-cond); font-weight: 600; font-size: 17px;
   letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--ink); margin-bottom: 6px; }
-.ov-point p { margin: 0; font-size: 16px; line-height: 1.55; color: var(--muted); }
+/* --muted is chosen against --surface and measured 3.96:1 once the plate above
+   went marine. The body takes the full ink and stays subordinate to the label
+   by size and face instead — the same trade already made for the syllabus
+   lesson count. */
+.ov-point p { margin: 0; font-size: 16px; line-height: 1.55; color: var(--ink); }
 .overview-qa { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(380px, 100%), 1fr)); gap: 22px 34px; }
 .ov-q h4 { font-family: var(--font-marker); font-weight: 600; font-size: 21px; line-height: 1.25; color: var(--ink); margin: 0 0 10px; }
 .ov-q h4::before { content: '“'; color: var(--marine); margin-right: 2px; }
@@ -218,7 +238,6 @@
           </a>
           <div class="arch-cap">
             <div class="eyebrow-lbl">About Crystal</div>
-            <a class="link-squiggle arch-visit" href="About.dc.html">Meet Crystal →</a>
             <div class="social-row" data-cas-social="social-btn"></div>
           </div>
         </div>

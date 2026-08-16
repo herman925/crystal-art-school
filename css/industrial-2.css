@@ -1,5 +1,5 @@
 /* 1.4.8: the board marks this band as too small — enlarged with the heading. */
-.band-forest p { margin: 0; font-size: 17px; line-height: 1.6; opacity: .92; max-width: 54ch; }
+.band-forest p { margin: 0; font-size: 17px; line-height: 1.6; max-width: 54ch; }
 /* 3.8: every piece of text in the community block scales up together —
    eyebrow, title, description and the button label — without touching the
    copy or the layout, which the section rules out. */
@@ -39,8 +39,14 @@
 
 /* ---------- footer (walnut planks) ---------- */
 .site-footer { position: relative; overflow: hidden; margin-top: 70px; background-color: #4a3a2f; background-image: linear-gradient(180deg, rgba(30,20,12,.48), rgba(24,16,10,.58)), url("../img/wood-rustic.jpg"); background-size: cover; color: var(--band-ink); }
-[data-theme="A"] .site-footer { --band-ink:#4a3a26; --band-eyebrow:#7e4c27; background-color: #e3d2ac; background-image: linear-gradient(180deg, rgba(255,248,232,.10), rgba(120,90,50,.18)), url("../img/wood-natural.jpg"); background-size: cover; color: #4a3a26; }
-[data-theme="A"] .site-footer .footer-meta { border-top-color: rgba(74,58,38,.28); }
+/* 31-37: the light footer takes the banner's pale grain, matching the band —
+   it used to be wood-natural under a brown wash, which read a step darker than
+   the header on the same page. The wash is gone rather than lightened: it was
+   there to pull wood-natural down toward the band, and the band is now pale. */
+[data-theme="A"] .site-footer { --band-ink:#474138; --band-eyebrow:#7e4c27; background-color: #e6d6b8; background-image: url("../img/wood-creamy.jpg"); background-size: cover; background-position: center; color: #474138; }
+[data-theme="A"] .site-footer .footer-meta { border-top-color: rgba(71,65,56,.28); }
+/* Same overlay problem as the band: .17 black is soot on pale wood. */
+[data-theme="A"] .site-footer::before { background: repeating-linear-gradient(0deg, transparent 0 62px, rgba(94,74,61,.12) 62px 63px); }
 [data-theme="D"] .site-footer { background-color: #17130e; background-image: url("../img/wood-black.jpg"); background-size: cover; }
 .site-footer::before { content: ""; position: absolute; inset: 0; z-index: 0; background: repeating-linear-gradient(0deg, transparent 0 62px, rgba(0,0,0,.17) 62px 63px), linear-gradient(180deg, rgba(231,221,203,.05), transparent 18%); pointer-events: none; }
 .site-footer .inner { position: relative; z-index: 1; max-width: var(--site-max); margin: 0 auto; padding: 46px var(--gutter) 26px; }
@@ -57,8 +63,9 @@
 .hero__panel { overflow: hidden; }
 .footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 26px; }
 .site-footer h4 { font-family: var(--font-cond); font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; font-size: 12px; margin: 0 0 10px; color: var(--band-eyebrow); }
-.site-footer a { opacity: .85; display: block; padding: 3px 0; font-size: 14px; }
-.site-footer a:hover { opacity: 1; color: var(--band-eyebrow); }
+/* Full strength, like every other text in the wood. */
+.site-footer a { display: block; padding: 3px 0; font-size: 14px; }
+.site-footer a:hover { color: var(--band-eyebrow); }
 .site-footer .social-btn { display: grid; place-items: center; padding: 0; }
 .footer-brand { font-family: var(--font-stencil); font-size: 20px; letter-spacing: var(--tracking-stamp); margin-bottom: 8px; }
 /* The signature replaces the stencilled wordmark. (client feedback 2026-08-08)
@@ -72,7 +79,7 @@
    client's instruction (2026-08-09). */
 .footer-sig { line-height: 0; margin-bottom: 12px; display: inline-block; }
 .footer-sig img { display: block; width: clamp(150px, 15vw, 200px); height: auto; }
-.footer-meta { margin-top: 30px; padding-top: 16px; border-top: 1px solid rgba(244,231,207,.22); display: flex; justify-content: space-between; font-family: var(--font-cond); font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; opacity: .72; flex-wrap: wrap; gap: 8px; }
+.footer-meta { margin-top: 30px; padding-top: 16px; border-top: 1px solid rgba(244,231,207,.22); display: flex; justify-content: space-between; font-family: var(--font-cond); font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; flex-wrap: wrap; gap: 8px; }
 @media (max-width: 900px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
 @media (max-width: 540px) { .footer-grid { grid-template-columns: 1fr; } }
 
@@ -157,7 +164,10 @@
 .no-results { display: none; padding: 44px 0; text-align: center; color: var(--muted); font-size: 15px; }
 /* Sale ribbon takes marine to match the reduced price it announces. Flat fill,
    no texture to exempt, so it is a straight substitution. */
-.sale-flag { position: absolute; top: 12px; right: 12px; z-index: 3; font-family: var(--font-cond); font-size: 12.5px; font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; background: var(--marine); color: var(--marine-ink); padding: 4px 9px; border-radius: var(--r-sharp); }
+/* 51: a red square, not a marine pill. The red is fixed rather than --danger,
+   which is a salmon in the dark theme and would read as two different flags on
+   the same product between themes. White on it measures 5.94:1. */
+.sale-flag { position: absolute; top: 12px; right: 12px; z-index: 3; font-family: var(--font-cond); font-size: 12.5px; font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; background: #b3382c; color: #fff; padding: 6px 10px; border-radius: 0; }
 @media (max-width: 1100px) { .catalog-layout .lesson-grid { grid-template-columns: repeat(2,1fr); } }
 @media (max-width: 880px) { .catalog-layout { grid-template-columns: 1fr; } .filter-panel { position: static; } }
 @media (max-width: 480px) { .catalog-layout .lesson-grid { grid-template-columns: 1fr; } }
@@ -727,8 +737,10 @@
 .slider-wrap { padding: 8px 0 4px; }
 .slider-ui { position: relative; height: 20px; margin: 0 10px; }
 .slider-track { position: absolute; top: 7px; left: 0; right: 0; height: 6px; border-radius: 6px; background: color-mix(in srgb, var(--ink) 18%, transparent); pointer-events: none; }
-.slider-fill { position: absolute; top: 7px; left: 0; height: 6px; border-radius: 6px; background: var(--coral); width: var(--pct, 100%); pointer-events: none; }
-.slider-knob { position: absolute; top: 0; left: var(--pct, 100%); width: 20px; height: 20px; border-radius: 50%; background: var(--coral); border: 3px solid var(--surface); box-shadow: 0 1px 5px rgba(0,0,0,.32); transform: translateX(-50%); transition: transform .12s; pointer-events: none; }
+/* 40: the filled part of the track and its knob take the client's marine. The
+   unfilled track is left as it was, so the two halves still read apart. */
+.slider-fill { position: absolute; top: 7px; left: 0; height: 6px; border-radius: 6px; background: var(--marine); width: var(--pct, 100%); pointer-events: none; }
+.slider-knob { position: absolute; top: 0; left: var(--pct, 100%); width: 20px; height: 20px; border-radius: 50%; background: var(--marine); border: 3px solid var(--surface); box-shadow: 0 1px 5px rgba(0,0,0,.32); transform: translateX(-50%); transition: transform .12s; pointer-events: none; }
 .price-slider { position: absolute; top: 0; left: 0; right: 0; width: auto; height: 20px; margin: 0; padding: 0; -webkit-appearance: none; appearance: none; background: transparent; cursor: pointer; z-index: 2; }
 .price-slider:active + .slider-knob, .slider-ui:hover .slider-knob { transform: translateX(-50%) scale(1.14); }
 .price-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 24px; height: 24px; background: transparent; border: 0; cursor: pointer; }
@@ -918,19 +930,30 @@
    var(--surface) in every theme, matching .blog-card below it. */
 
 /* ---------- real wood photos on the dark/wood bands (2026-07) ----------
-   Light (A): natural pale wood — band text flips DARK so it stays readable.
+   Light (A): the page banner's pale wood — band text flips DARK so it stays readable.
    Dark (D): near-black wood — keeps the cream band ink.
-   Scoped to the band components so the footer (fixed dark) keeps cream text. */
+   Scoped to the band components so the footer (fixed dark) keeps cream text.
+
+   31-37: the light band was wood-natural under a brown wash, which sat a step
+   darker than the banner at the top of the same page and read as a second,
+   unrelated timber. It now carries the banner's own photograph, and the wash
+   is gone rather than lightened — the wash existed to pull wood-natural down,
+   and there is nothing left to pull down.
+
+   The three surfaces beside .band-forest were not named in the client's round.
+   They move with it deliberately: leaving them on wood-natural would put two
+   near-identical pale woods on one page, which is a worse outcome than
+   changing a surface nobody asked about. */
 [data-theme="A"] .band-forest,
 [data-theme="A"] .signup-band,
 [data-theme="A"] .dash-hero,
 [data-theme="A"] .tier-card.fellow {
-  --band-ink:#4a3a26; --band-eyebrow:#7e4c27; --band-bg:#dcc79e;
-  background-color: #dcc79e;
-  background-image: linear-gradient(180deg, rgba(255,248,232,.08), rgba(120,90,50,.16)), url("../img/wood-natural.jpg");
+  --band-ink:#474138; --band-eyebrow:#7e4c27; --band-bg:#e6d6b8;
+  background-color: #e6d6b8;
+  background-image: url("../img/wood-creamy.jpg");
   background-size: cover;
   background-position: center;
-  color: #4a3a26;
+  color: #474138;
 }
 [data-theme="D"] .band-forest,
 [data-theme="D"] .signup-band,
@@ -1066,7 +1089,11 @@
     linear-gradient(101deg, rgba(255,255,255,.16), rgba(255,255,255,0) 46%, rgba(0,0,0,.18)),
     var(--leather-pores);
   background-size: 100% 100%, 110px 110px;
-  color: var(--marine-ink);
+  /* Same machined-fill problem as the marine buttons: a sheen and a leather
+     pore layer sit over the colour, so --marine-ink measured 4.49:1 here. The
+     ribbon's tag can be long enough to shrink the type back to 14px, where
+     that is a fail rather than a large-text pass, so it takes the darker ink. */
+  color: var(--marine-ink-metal);
   box-shadow: var(--shadow-md), inset 0 0 0 1px rgba(255,255,255,.18), inset 0 -2px 6px rgba(0,0,0,.22);
   clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - 20px), 0 100%);
   display: flex; justify-content: center; padding: 20px 0 44px;
@@ -1077,7 +1104,10 @@
      instead of assuming a short word. --rib-len is the character count, set on
      the element by the template. (client feedback 2026-08-08) */
   font-family: var(--font-cond); font-weight: 600;
-  font-size: clamp(11px, calc(150px / max(var(--rib-len, 5), 5)), 19px);
+  /* 54: the whole ramp moves up a step. It still scales itself to the tag's
+     length, because the tag is whatever the post carries — a fixed size would
+     overflow the ribbon on a long one. */
+  font-size: clamp(14px, calc(190px / max(var(--rib-len, 5), 5)), 24px);
   letter-spacing: var(--tracking-label); text-transform: uppercase;
 }
 @media (max-width: 760px) { .blog-feature .bf-ribbon { right: 16px; } }

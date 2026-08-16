@@ -49,9 +49,11 @@
 .unit-row .ud { flex: none; font-family: var(--font-cond); font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
 .unit-row.current .ud { color: #5e4a3d; }
 .unit-row .now { display: inline-block; font-family: var(--font-cond); font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--coral-deep); }
-.teach-card { background-color: #4d6625; color: #f1f3e6; border-radius: var(--radius-card); padding: 18px 20px; box-shadow: var(--shadow-sm); display: flex; gap: 14px; align-items: center; }
+/* 56: the client's mauve replaces the olive. It is a light mid-tone, so the
+   ink flips dark — the cream that read on olive measures 2.1:1 on this. */
+.teach-card { background-color: #A498A6; color: #191419; border-radius: var(--radius-card); padding: 18px 20px; box-shadow: var(--shadow-sm); display: flex; gap: 14px; align-items: center; }
 .teach-card img { width: 54px; height: 54px; border-radius: 50%; object-fit: cover; flex: none; }
-.teach-card .tq { font-family: var(--font-body); font-style: italic; font-size: 14px; line-height: 1.45; }
+.teach-card .tq { font-family: var(--font-body); font-style: italic; font-size: 16.5px; line-height: 1.5; }
 
 .finish-card { display: none; position: relative; overflow: hidden; text-align: center; background: var(--surface); border-radius: var(--radius-card); box-shadow: var(--shadow); padding: 54px 30px 46px; margin-top: 26px; }
 .finish-card.show { display: block; }
@@ -134,7 +136,9 @@
 .step { display: flex; align-items: center; gap: 9px; font-family: var(--font-cond); font-size: 12px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); }
 .step .sn { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: var(--surface); color: var(--muted); font-weight: 600; box-shadow: var(--shadow-sm); }
 .step.active { color: var(--ink); }
-.step.active .sn { background: var(--coral-fill); color: var(--coral-fill-ink); }
+/* 41: the live step's disc is the client's marine, with the ink the token
+   block already pairs with it. */
+.step.active .sn { background: var(--marine); color: var(--marine-ink); }
 .step.done .sn { background: #4d6625; color: #f1f3e6; }
 .step-arrow { color: var(--muted); opacity: .5; }
 .line-item { display: grid; grid-template-columns: 78px 1fr auto; gap: 16px; align-items: center; background: var(--surface); border-radius: var(--radius-card); padding: 14px; box-shadow: var(--shadow-sm); margin-bottom: 14px; }
@@ -157,7 +161,7 @@
 .sum-row.muted { color: var(--muted); }
 .sum-total { display: flex; justify-content: space-between; align-items: baseline; margin-top: 12px; padding-top: 14px; border-top: 1px solid var(--line); }
 .sum-total .l { font-family: var(--font-cond); font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; font-size: 13px; color: var(--ink); }
-.sum-total .v { font-family: var(--font-marker); font-weight: 600; font-size: 26px; color: var(--coral-ink); }
+.sum-total .v { font-family: var(--font-marker); font-weight: 600; font-size: 26px; color: var(--marine); }
 .cart-empty { text-align: center; padding: 60px 20px; color: var(--muted); }
 .co-field { margin-bottom: 14px; }
 .co-field label { font-family: var(--font-cond); font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; font-size: 12.5px; display: block; margin-bottom: 6px; color: var(--ink); }
@@ -240,7 +244,7 @@
 .dash-panel.active { display: block; }
 .dash-panel-head { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; margin-bottom: 16px; flex-wrap: wrap; }
 .dash-panel-head h2 { font-family: var(--font-display-serif); font-weight: 600; font-size: 22px; letter-spacing: var(--tracking-display); text-transform: uppercase; color: var(--ink); margin: 0; display: flex; align-items: center; gap: .5em; }
-.dash-panel-head h2 .ast { color: #7e9b46; font-size: .7em; }
+.dash-panel-head h2 .ast { color: var(--marine); font-size: .7em; }
 .dash-panel-head p { margin: 0; font-size: 13.5px; color: var(--muted); }
 
 .dash-card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px 22px; box-shadow: var(--shadow-sm); }
@@ -569,7 +573,8 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
 .course-price .now { color: var(--marine); }
 .course-tier-note { font-size: 13px; color: var(--muted); max-width: 34ch; }
 /* Her own line under the course title. */
-.co-subline { font-family: var(--font-cond); font-weight: 600; font-size: 13.5px;
+/* 51: 13.5px was too small to read as the course's subtitle. */
+.co-subline { font-family: var(--font-cond); font-weight: 600; font-size: 18px;
   letter-spacing: var(--tracking-label); text-transform: uppercase;
   color: var(--teal-ink); margin: 0 0 12px; }
 /* #09: --muted is already the quiet step; the extra .85 took it to 3.75:1 on
@@ -596,15 +601,25 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
 .learn-list, .syllabus, #co-who, .course-teacher { max-width: var(--prose-max); margin-left: auto; margin-right: auto; }
 .course-right #co-blurb { max-width: var(--prose-max); }
 @media (min-width: 901px) {
-  .learn-list, .syllabus, #co-who, .course-teacher { max-width: min(var(--prose-max), calc(100% - var(--course-left) - var(--course-gap))); }
+  /* 50: these already borrowed the hero right column's WIDTH, but they were
+     centred in the container while the introduction and the title above them
+     start at the column's left edge, so the two blocks were offset by half the
+     leftover space. Pinning the right edge puts them under that column exactly.
+     All four move together: aligning only the learn list would leave it out of
+     step with the syllabus directly beneath it. */
+  .learn-list, .syllabus, #co-who, .course-teacher { max-width: min(var(--prose-max), calc(100% - var(--course-left) - var(--course-gap))); margin-left: auto; margin-right: 0; }
 }
 /* 7.5 / 1.4.10: the SYLLABUS heading is enlarged; the other section headings on
    this page keep the shared size. */
 #syllabus h2.section-title { font-size: clamp(32px, 3.7vw, 50px); padding: 14px 34px; }
-.learn-list { list-style: none; margin: 26px auto 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 10px 22px; }
-.learn-list li { display: flex; gap: 10px; align-items: baseline; font-size: 14.5px; color: var(--ink); }
-.learn-list li::before { content: "✦"; color: var(--teal-ink); font-size: 12px; flex: none; }
-.syllabus { margin: 26px auto 0; display: grid; gap: 10px; }
+/* 50: each outcome sits on its own rounded plate in the client's marine, the
+   type is a step larger, and the gutter between the columns is close to double
+   what it was — at 22px the two columns read as one wrapped paragraph. */
+.learn-list { list-style: none; margin: 26px 0 0 auto; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 14px 40px; }
+.learn-list li { display: flex; gap: 10px; align-items: baseline; font-size: 16.5px; line-height: 1.45;
+  background: var(--marine); color: var(--marine-ink); border-radius: 14px; padding: 14px 18px; }
+.learn-list li::before { content: "✦"; color: var(--marine-ink); font-size: 12px; flex: none; }
+.syllabus { margin: 26px 0 0 auto; display: grid; gap: 10px; }
 /* 7.5: odd and even rows are distinguished for readability. The box colour
    itself is deliberately unchanged — the direction says so explicitly — so this
    is a light tint over it rather than a different fill. */
@@ -628,13 +643,22 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
    (client feedback 2026-08-08) */
 .syl-phase { margin: 30px 0 10px; }
 .syl-phase:first-of-type { margin-top: 4px; }
+/* 49: rounded on all four corners rather than the near-square --r-sharp, so
+   the phase reads as a card rather than a slab. */
 .syl-phase-btn { display: flex; align-items: center; gap: 14px; width: 100%; cursor: pointer;
-  border: 0; text-align: left; padding: 16px 20px; border-radius: var(--r-sharp);
+  border: 0; text-align: left; padding: 16px 20px; border-radius: 16px;
   background: rgba(20,17,13,.5); color: #f4e7cf; }
-[data-theme="A"] .syl-phase-btn { background: color-mix(in srgb, var(--ink) 82%, transparent); color: var(--paper); }
+/* 38 + 49: the light theme's bar used to be an 82%-ink slab, near-black on a
+   pale page. Two of the three things the client asked for on this bar are
+   marine — the phase number and the open/close marker — and marine measures
+   1.53:1 against that slab, which is not a contrast problem so much as an
+   invisible one. The bar therefore goes light in the light theme, which is also
+   what makes it read as the soft card 49 asks for. The dark theme keeps its
+   dark bar: marine reads there already. */
+[data-theme="A"] .syl-phase-btn { background: color-mix(in srgb, var(--ink) 7%, var(--surface)); color: var(--ink); box-shadow: inset 0 0 0 1px var(--line); }
 .syl-phase-btn .sp-n { font-family: var(--font-cond); font-weight: 600;
   font-size: clamp(19px, 2.1vw, 26px); letter-spacing: var(--tracking-label);
-  text-transform: uppercase; flex: none; }
+  text-transform: uppercase; flex: none; color: var(--marine); }
 .syl-phase-btn .sp-name { font-family: var(--font-marker); font-weight: 600;
   font-size: clamp(16px, 1.6vw, 21px); flex: 1; opacity: .92; }
 /* #09: at opacity .7 over the phase bar this measured 3.49:1 on theme A, and
@@ -645,7 +669,10 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
    14.50:1 in D) and stays subordinate by being 13px against the name's 16-21. */
 .syl-phase-btn .sp-count { font-family: var(--font-cond); font-size: 13px;
   letter-spacing: var(--tracking-label); text-transform: uppercase; flex: none; }
-.syl-phase-btn svg { transition: transform .2s ease; flex: none; }
+/* 49: a filled triangle in the client's marine, not the outline chevron. The
+   rotation still carries the state visually and aria-expanded carries it to
+   assistive technology, so the shape is not the only signal. */
+.syl-phase-btn svg { transition: transform .2s ease; flex: none; color: var(--marine); fill: var(--marine); }
 .syl-phase-btn[aria-expanded="true"] svg { transform: rotate(180deg); }
 .syl-phase-body { display: grid; gap: 10px; margin-top: 10px; }
 .syl-phase-body[hidden] { display: none; }
@@ -663,7 +690,7 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
 .syl-num { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-family: var(--font-cond); font-weight: 600; font-size: 13px; background: color-mix(in srgb, var(--coral) 16%, transparent); color: var(--coral-ink); }
 .syl-title { font-family: var(--font-marker); font-weight: 600; font-size: 18.5px; color: var(--ink); }
 .syl-sub { font-size: 14.5px; color: var(--muted); margin-top: 3px; }
-.syl-len { font-family: var(--font-cond); font-size: 12.5px; color: var(--muted); }
+.syl-len { font-family: var(--font-cond); font-size: 12.5px; color: var(--marine); }
 /* ---- #16: locked rows ----
    course.dc.html used to emit style="opacity:.72" inline on twelve of thirteen
    rows, which painted 2.55:1 (A) / 3.00:1 (D) and, being inline, could not be
@@ -688,7 +715,7 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
   color: color-mix(in srgb, var(--ink) 70%, var(--muted)); }
 .syl-row.is-locked .syl-thumb { filter: grayscale(.85) contrast(.95); }
 .syl-row.is-locked svg { color: var(--locked-ink); }
-.course-teacher { display: flex; gap: 20px; align-items: center; margin: 30px auto 0; background-color: var(--surface); background-image: var(--concrete-grain); background-size: 220px 220px; border-radius: var(--radius-card); box-shadow: var(--shadow-sm); padding: 20px 24px; }
+.course-teacher { display: flex; gap: 20px; align-items: center; margin: 30px 0 0 auto; background-color: var(--surface); background-image: var(--concrete-grain); background-size: 220px 220px; border-radius: var(--radius-card); box-shadow: var(--shadow-sm); padding: 20px 24px; }
 .course-teacher img { width: 74px; height: 74px; border-radius: 50%; object-fit: cover; flex: none; box-shadow: var(--shadow-sm); }
 @media (max-width: 900px) { .course-hero { grid-template-columns: 1fr; gap: 26px; } .learn-list { grid-template-columns: 1fr; } }
 
@@ -906,7 +933,31 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
    Latin only: no CJK glyphs. Chinese in a Font A heading falls through to the
    serif behind it and the heading renders in two faces.
    ============================================================ */
-.cas-root .font-a {
+/* 42-48 extend the face to the section and card headings the client named in
+   the 2026-08-15 round. They are listed as selectors rather than by adding a
+   class in seven files: three of them (the band headings on course, Showcase
+   and Free Videos) are the same component, and several are built by script, so
+   a class would have to be threaded through the builder as well as the markup.
+
+   THE SIZE RAMP, settled here once (ticket 42) and reused by 43-48:
+     * roughly 1.3x whatever face it replaces, because Arizonia's x-height is
+       small inside a tall em and a same-size swap reads a step smaller;
+     * weight 400 always — the face has one weight, so a 600 declaration is
+       synthesised bold and thickens the joins;
+     * text-transform none — a connected script in capitals stops joining;
+     * line-height 1.24, or 1.15 on anything that was already display-sized.
+   Nothing here is applied to an element that can carry Chinese: Arizonia has no
+   CJK glyphs, so such a heading would render in two faces. */
+.cas-root .font-a,
+.cas-root .overview-h,
+.cas-root .ov-q h4,
+.cas-root .ov-point strong,
+.cas-root .band-forest h2,
+.cas-root .band-forest .marker-title,
+.cas-root .course-teacher h3,
+.cas-root #co-who h3,
+.cas-root h2.eng-title,
+.cas-root .blog-card h3 {
   font-family: var(--font-a);
   font-weight: 400;
   font-style: normal;
@@ -922,6 +973,19 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
    widens, because at 38% the second line wrapped and the heading rendered as
    three lines instead of two. (client feedback 2026-08-08) */
 .cas-root .hero__title.font-a { font-size: clamp(39px, 5.1vw, 84px); line-height: .95; }
+
+/* 42-48, the sizes. Each of these replaces a face at roughly 1.3x, per the
+   ramp described above. The ones that already carry an inline clamp() are
+   resized in their own markup instead — an inline size wins over anything
+   declared here, and a value in two places drifts. */
+.cas-root .overview-h { font-size: clamp(31px, 3.2vw, 44px); }
+.cas-root .ov-q h4 { font-size: 28px; }
+.cas-root .ov-point strong { font-size: 23px; margin-bottom: 2px; }
+.cas-root .band-forest h2, .cas-root .band-forest .marker-title { font-size: clamp(29px, 3vw, 42px); }
+.cas-root .course-teacher h3 { font-size: 27px; }
+.cas-root .blog-card h3 { font-size: 25px; }
+/* The essay titles keep the engraved treatment; only the face and size move.
+   Their inline clamp is in About.dc.html. */
 
 /* ============================================================
    ACCESSIBILITY LAYER — touch targets, focus, skip link (#08, #18)

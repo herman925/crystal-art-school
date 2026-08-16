@@ -126,7 +126,7 @@
            srcset="img/ProfilePic-96.jpg 96w, img/ProfilePic-160.jpg 160w, img/ProfilePic-384.jpg 384w, img/ProfilePic-640.jpg 640w"
            sizes="74px">
       <div>
-        <h3 class="marker-title" style="font-size:19px;margin:0 0 6px;">Taught by Crystal Lau</h3>
+        <h3 class="marker-title" style="font-size:27px;margin:0 0 6px;">Taught by Crystal Lau</h3>
         <p style="margin:0;font-size:14px;color:var(--muted);">Hong Kong&ndash;based painter and teacher &mdash; eight years of small-group classes, now teaching the same slow, value-first way online. <a class="link-squiggle" href="About.dc.html" style="font-weight:700;">More about Crystal &rarr;</a></p>
       </div>
     </div>
@@ -139,7 +139,7 @@
       <div class="eyebrow"><span class="star">&#10038;</span> Is this you?</div>
       <h2 class="section-title">Who this course is for</h2>
     </div>
-    <div id="co-who" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin:30px auto 0;"></div>
+    <div id="co-who" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:18px;margin:30px 0 0 auto;"></div>
   </section>
 
   <section class="section">
@@ -150,7 +150,7 @@
       </div>
       <div style="flex:1;">
         <div class="eyebrow"><span class="star">&#10038;</span> Not ready to buy?</div>
-        <h2 class="marker-title" style="font-size:clamp(24px,2.4vw,34px);">Try the free videos first.</h2>
+        <h2 class="marker-title" style="font-size:clamp(31px,3.1vw,44px);">Try the free videos first.</h2>
         <p style="margin:0;max-width:54ch;">Full tutorials on skies, colour mixing and materials &mdash; see exactly how Crystal teaches before you commit.</p>
       </div>
       <a class="btn-big" href="FreeVideos.dc.html" style="flex:none;">Watch free videos &rarr;</a>
@@ -377,7 +377,7 @@ class Component extends DCLogic {
     $('co-learn').innerHTML = c.learn.map(l => '<li>' + esc(l) + '</li>').join('');
     $('co-who').innerHTML = c.who.map(w =>
       '<div class="card" style="padding:22px;">' +
-        '<h3 class="marker-title" style="font-size:19px;margin:0 0 8px;">' + esc(w[0]) + '</h3>' +
+        '<h3 class="marker-title" style="font-size:25px;margin:0 0 6px;">' + esc(w[0]) + '</h3>' +
         '<p style="margin:0;font-size:14.5px;color:var(--muted);">' + esc(w[1]) + '</p>' +
       '</div>').join('');
 
@@ -406,6 +406,11 @@ class Component extends DCLogic {
        the row is an <a>, and a button inside a link is not operable. */
     const DETAIL_LABELS = { focus: 'Focus', tools: 'Tools & techniques', outcome: 'Learning outcome' };
     const CHEV = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"></path></svg>';
+    /* 49: the phase header takes a solid triangle rather than the outline
+       chevron. Deliberately not a second use of CHEV: that constant is also the
+       "what you will cover" toggle inside a lesson, which the client did not
+       ask to change, and one shared constant would have moved both. */
+    const TRI = '<svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor" stroke="none" aria-hidden="true"><path d="M4 8h16L12 18z"></path></svg>';
 
     const lessonRow = (u, i, done) => {
       const isDone = owned && done[i];
@@ -429,7 +434,7 @@ class Component extends DCLogic {
       const inner =
         '<div class="syl-num">' + (isDone ? '\u2713' : num) + '</div>' +
         '<div><div class="syl-title">' + esc(u.title) +
-          (!owned && u.free ? ' <span style="font-family:var(--font-cond);font-size:12.5px;letter-spacing:var(--tracking-label);text-transform:uppercase;color:var(--teal-ink);margin-left:8px;">free preview</span>' : '') +
+          (!owned && u.free ? ' <span style="font-family:var(--font-cond);font-size:12.5px;letter-spacing:var(--tracking-label);text-transform:uppercase;color:var(--marine);margin-left:8px;">free preview</span>' : '') +
           (u.spans > 1 ? ' <span style="font-family:var(--font-cond);font-size:12.5px;letter-spacing:var(--tracking-label);text-transform:uppercase;color:var(--muted);margin-left:8px;">one film, two lessons</span>' : '') +
         '</div><div class="syl-sub">' + esc(u.subtitle) + '</div></div>' +
         '<div class="syl-len" style="display:inline-flex;align-items:center;gap:7px;">' + (open ? PLAY : LOCK) + ' ' + esc(clock(u.dur)) + '</div>' +
@@ -487,7 +492,7 @@ class Component extends DCLogic {
               '<span class="sp-n">Phase ' + (mi + 1) + '</span>' +
               '<span class="sp-name">' + esc(m.name) + '</span>' +
               '<span class="sp-count">' + count + (count === 1 ? ' lesson' : ' lessons') + '</span>' +
-              CHEV +
+              TRI +
             '</button>' +
             '<div class="syl-phase-body" id="' + bodyId + '" hidden>' + rows + '</div>' +
           '</section>';
