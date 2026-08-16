@@ -169,6 +169,17 @@ STATIC_SLOTS = [
      "widths": [224, 448],
      "sizes": "(max-width: 600px) 298px, 215px"},
     # index `.hero__img--large`: 251 / 504 / 487 / 487.
+    # The client's own hero photographs, 2026-08-16 — one pair per carousel
+    # slide. --large is the right-hand figure (右), --small the one overlapping
+    # in front of it (左); the CSS at industrial-1.css:731-732 is what makes
+    # that so, not the filenames. One glob covers all three of each, because the
+    # painted size is identical on every slide.
+    {"glob": "img/hero-[123]-large.jpg", "widths": [256, 512, 1024],
+     "sizes": "(max-width: 600px) 251px, (max-width: 1000px) 504px, 487px"},
+    {"glob": "img/hero-[123]-small.jpg", "widths": [160, 288, 576],
+     "sizes": "(max-width: 600px) 136px, (max-width: 1000px) 274px, 280px"},
+    # The three photographs these replaced are kept: cover3.jpg in particular is
+    # still the Lessons free-trial band and the course free-videos preview.
     {"glob": "img/A1.jpeg", "widths": [256, 512, 1024],
      "sizes": "(max-width: 600px) 251px, (max-width: 1000px) 504px, 487px"},
     {"glob": "img/cover2.jpg", "widths": [256, 512, 1024],

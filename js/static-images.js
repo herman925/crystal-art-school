@@ -225,6 +225,42 @@ window.CAS_IMG = {
     "w": 454,
     "h": 454
   },
+  "img/hero-1-large.jpg": {
+    "srcset": "img/hero-1-large-256.jpg 256w, img/hero-1-large-512.jpg 512w, img/hero-1-large.jpg 908w",
+    "sizes": "(max-width: 600px) 251px, (max-width: 1000px) 504px, 487px",
+    "w": 908,
+    "h": 735
+  },
+  "img/hero-2-large.jpg": {
+    "srcset": "img/hero-2-large-256.jpg 256w, img/hero-2-large-512.jpg 512w, img/hero-2-large-1024.jpg 1024w, img/hero-2-large.jpg 1600w",
+    "sizes": "(max-width: 600px) 251px, (max-width: 1000px) 504px, 487px",
+    "w": 1600,
+    "h": 1297
+  },
+  "img/hero-3-large.jpg": {
+    "srcset": "img/hero-3-large-256.jpg 256w, img/hero-3-large-512.jpg 512w, img/hero-3-large-1024.jpg 1024w, img/hero-3-large.jpg 1600w",
+    "sizes": "(max-width: 600px) 251px, (max-width: 1000px) 504px, 487px",
+    "w": 1600,
+    "h": 1469
+  },
+  "img/hero-1-small.jpg": {
+    "srcset": "img/hero-1-small-160.jpg 160w, img/hero-1-small-288.jpg 288w, img/hero-1-small-576.jpg 576w, img/hero-1-small.jpg 1600w",
+    "sizes": "(max-width: 600px) 136px, (max-width: 1000px) 274px, 280px",
+    "w": 1600,
+    "h": 1396
+  },
+  "img/hero-2-small.jpg": {
+    "srcset": "img/hero-2-small-160.jpg 160w, img/hero-2-small-288.jpg 288w, img/hero-2-small-576.jpg 576w, img/hero-2-small.jpg 1600w",
+    "sizes": "(max-width: 600px) 136px, (max-width: 1000px) 274px, 280px",
+    "w": 1600,
+    "h": 1380
+  },
+  "img/hero-3-small.jpg": {
+    "srcset": "img/hero-3-small-160.jpg 160w, img/hero-3-small-288.jpg 288w, img/hero-3-small-576.jpg 576w, img/hero-3-small.jpg 1600w",
+    "sizes": "(max-width: 600px) 136px, (max-width: 1000px) 274px, 280px",
+    "w": 1600,
+    "h": 1053
+  },
   "img/A1.jpeg": {
     "srcset": "img/A1-256.jpeg 256w, img/A1.jpeg 562w",
     "sizes": "(max-width: 600px) 251px, (max-width: 1000px) 504px, 487px",
