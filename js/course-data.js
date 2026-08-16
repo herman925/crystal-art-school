@@ -460,7 +460,7 @@ window.CAS_COURSES = [
     "srcset": "img/courses/clouds-beginner/cover-224.jpg 224w, img/courses/clouds-beginner/cover-448.jpg 448w, img/courses/clouds-beginner/cover-896.jpg 896w, img/courses/clouds-beginner/cover.jpg 1600w",
     "sizes": "(max-width: 600px) 366px, (max-width: 1000px) 420px, 373px",
     "w": 1600,
-    "h": 1600
+    "h": 900
   },
   {
     "id": "clouds-intermediate",
@@ -751,7 +751,7 @@ window.CAS_COURSES = [
     "srcset": "img/courses/clouds-intermediate/cover-224.jpg 224w, img/courses/clouds-intermediate/cover-448.jpg 448w, img/courses/clouds-intermediate/cover-896.jpg 896w, img/courses/clouds-intermediate/cover.jpg 1600w",
     "sizes": "(max-width: 600px) 366px, (max-width: 1000px) 420px, 373px",
     "w": 1600,
-    "h": 1600
+    "h": 1071
   },
   {
     "id": "little-house",

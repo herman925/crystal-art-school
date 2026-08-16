@@ -819,6 +819,21 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
     inset 0 0 0 1px rgba(44,26,13,.38),
     inset 0 0 44px rgba(44,26,13,.20);
 }
+/* The saddle stitch, lifted from .blog-feature::before unchanged — same 8px
+   inset, same 2px dashed rule at the same alpha, same drop-shadow underneath.
+   The shadow is the part that matters: without it a dashed border reads as a
+   dotted CSS border rather than as thread, because each stitch needs its own
+   groove. Copied rather than shared: .blog-feature's rule is one selector on
+   one component, and pulling both onto a common class would mean touching the
+   Blog listing to restyle About.
+   `position: relative` is already on .engraved (industrial-2.css:509 block), so
+   the inset resolves against the panel and not the page. */
+.cas-root .bio-copy.engraved::before {
+  content: ""; position: absolute; inset: 8px; border-radius: 11px; z-index: 2;
+  border: 2px dashed rgba(255,240,212,.52);
+  filter: drop-shadow(0 1.5px 0 rgba(40,22,10,.62));
+  pointer-events: none;
+}
 /* The pale grey hide, exactly as .blog-feature swaps it: same pores, shine and
    grain images, only the fill and the ink change. */
 /* .cas-root is the element that CARRIES data-theme, so the attribute goes on it,

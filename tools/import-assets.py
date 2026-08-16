@@ -228,6 +228,7 @@ COURSES = [
         # 7.1: the course preview reel, and the one-large-four-small photo set
         # (naming convention per 1.4.10), both at the course root.
         "highlights": "Beginner Highlights.mp4",
+        "cover": "01 - Courses/Course 01-Beginner/Beginner HighlightCover.JPG",
         "photos": ["CloudsLesson12.jpg", "CloudsLesson12A.jpg", "CloudsLesson12B.jpg",
                    "CloudsLesson12C.jpg", "CloudsLesson12D.jpg"],
         "card_cover": "00 - Home/CloudsLesson14.jpg",
@@ -240,6 +241,7 @@ COURSES = [
         # source folders keep the old global numbering; display order is 1..7
         "lesson_folders": ["Lesson %d" % n for n in range(13, 20)],
         "highlights": "Intermediate Hightlights.mp4",   # client's spelling
+        "cover": "01 - Courses/Course 01-Intermediate/CloudsPaintingForIntermediates.JPG",
         # The client supplied five 小圖 for this course and no 大圖. The beginner
         # course has a named large image (1.4.10 records cloudslesson12.jpg as its
         # 大圖); nothing in her material names one here, so the order below is OURS
@@ -645,15 +647,29 @@ def import_courses(force):
 
         # course cover = first lesson poster that exists, at gallery size
         cover_rel = "img/courses/%s/cover.jpg" % course["slug"]
+        # The cover is normally derived — the first image, in natural order, of
+        # the first lesson folder that has one. That is a fallback, not a
+        # decision: it picks whatever happens to sort first. Where the client
+        # has supplied a cover on purpose, "cover" names it and wins. Her
+        # HighlightCover files are exactly that (2026-08-16).
         cover_src = None
-        for entry in course["lesson_folders"]:
-            # entries may be ("folder", spans) — see the note on lesson_folders
-            sub = entry[0] if isinstance(entry, tuple) else entry
-            d = os.path.join(root, sub) if sub else root
-            imgs = pick(list_dir(d), IMAGE_EXTS)
-            if imgs:
-                cover_src = os.path.join(d, imgs[0])
-                break
+        named = course.get("cover")
+        if named:
+            cand = os.path.join(ASSETS_DIR, named)
+            if os.path.exists(cand):
+                cover_src = cand
+            else:
+                warn("%s: named cover %s not on disk, falling back to the first lesson image"
+                     % (course["slug"], named))
+        if not cover_src:
+            for entry in course["lesson_folders"]:
+                # entries may be ("folder", spans) — see the note on lesson_folders
+                sub = entry[0] if isinstance(entry, tuple) else entry
+                d = os.path.join(root, sub) if sub else root
+                imgs = pick(list_dir(d), IMAGE_EXTS)
+                if imgs:
+                    cover_src = os.path.join(d, imgs[0])
+                    break
         cover_meta = None
         if cover_src:
             cover_meta = img_meta(encode_image(
