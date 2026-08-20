@@ -38,4 +38,12 @@ __pycache__/
 # Scope and commercial reasoning, and the cut-outs the client did not supply.
 # The repo is public with Issues enabled — neither belongs in it.
 /docs/*_Transparency_Work_*
+
+# Drafts of messages TO the client, and replies filed against her review threads.
+# Same rule as the thread bodies themselves: this repo is public and search-indexed,
+# so outgoing correspondence does not live in it either. These drafts belong beside
+# the meeting minutes at "Crystal Education Project/docs/client-messages/", which is
+# outside any git repository. (2026-08-21 — a draft was committed here and pushed
+# before this line existed; see the commit that added it.)
+/docs/client-messages/
 /docs/asset-cutouts/
