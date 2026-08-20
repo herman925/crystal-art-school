@@ -1483,3 +1483,44 @@ body .mc-btn.primary, body .ck-btn.primary {
 .phc-stack .ph-carousel { --phc-h: clamp(416px, calc(868px - 31.4vw), 520px); }
 .phc-stack .phc-cell img { object-position: 50% 75%; }
 @media (max-width: 900px) { .phc-stack .ph-carousel { --phc-h: min(62vw, 500px); } }
+
+/* ---------- the highlighted certificate ------------------------------------
+   (client feedback 2026-08-16, ticket I010.)
+
+   One certificate, shown on its own above the table-and-rail, larger than a rail
+   mount and beside its own caption rather than under it — at this size a caption
+   set under a 340px frame leaves a long empty column to its right.
+
+   The mount keeps every rule `.bc-card--cert` already gives it: the engraved
+   gold border, the mat, `object-fit: contain` so a landscape scan letterboxes
+   inside the same opening rather than being cropped. Only the WIDTH is
+   overridden, because the rail sizes its mounts by a flex basis computed from
+   how many show at once, and that basis means nothing outside the rail.
+
+   `.cert-highlight[hidden]` is stated: `display: flex` on a `[hidden]` element
+   beats the UA's `display: none`, and without this the block would still take
+   its margin when there is no highlight to show. */
+/* The FIGURE becomes the flex row, not this wrapper: `figcaption` has to stay
+   inside its `figure` to mean anything, so laying the frame and the caption side
+   by side is a job for the figure itself. Sizing the frame here rather than the
+   figure matters too — `.cert-frame`'s 3/4 aspect-ratio is what gives the mount
+   its height, so a basis on the figure would leave the frame sized by content. */
+.cert-highlight { display: block; margin: 0 0 26px; }
+.cert-highlight[hidden] { display: none; }
+.cert-highlight .bc-card--cert { display: flex; align-items: center; gap: 30px; max-width: 900px; }
+.cert-highlight .cert-frame { flex: 0 0 340px; }
+.cert-highlight figcaption { flex: 1 1 auto; text-align: left; display: grid; gap: 10px; }
+.cert-highlight .cert-hi-eyebrow { display: flex; align-items: center; gap: 8px;
+  font-family: var(--font-cond); font-size: 13px; font-weight: 600;
+  letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--marine); }
+.cert-highlight .cert-hi-year { color: var(--muted); }
+.cert-highlight .cert-hi-honour { font-family: var(--font-marker); font-weight: 600;
+  font-size: clamp(19px, 2vw, 25px); line-height: 1.3; color: var(--ink); text-transform: none;
+  letter-spacing: normal; }
+.cert-highlight .cert-hi-cap { font-size: 13px; line-height: 1.6; color: var(--muted);
+  text-transform: none; letter-spacing: normal; }
+@media (max-width: 700px) {
+  .cert-highlight .bc-card--cert { flex-direction: column; align-items: stretch; gap: 14px; }
+  .cert-highlight .cert-frame { flex: 0 0 auto; max-width: 300px; margin-inline: auto; width: 100%; }
+  .cert-highlight figcaption { text-align: center; max-width: none; }
+}

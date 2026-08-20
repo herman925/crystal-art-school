@@ -290,10 +290,31 @@
            #23: role="list" is gone. The rows are <button>s, and a list whose
            children are not listitems is a broken list; a named group is what this
            actually is. -->
+      <!-- HIGHLIGHT (client feedback 2026-08-16, ticket I010: "Hightlight", then
+           "自定Hightlight Certificate").
+
+           One certificate is shown on its own, larger, above the rest. Which one
+           is a single `data-highlight` attribute on a mount below — move the
+           attribute, and the page follows; delete it, and this block disappears
+           and the rail carries all of them again.
+
+           WHICH ONE IS A DEFAULT, NOT HER CHOICE. It is on the 2026 Accademia
+           Internazionale dell'Acquarello finalist certificate because that is the
+           most recent and the most widely recognised of the four, and something
+           had to be picked to build against. Put it to her.
+
+           WHAT THIS DOES NOT DO: her note may instead have meant a control that
+           lets her pick the highlight herself from the CMS. That is a different
+           build — this is the fixed one, set once. Also put to her.
+
+           The highlighted mount is REMOVED from the rail rather than repeated in
+           it: the same certificate appearing twice on one page reads as a mistake,
+           and the table below is already the full index of all of them. -->
+      <div class="cert-highlight" id="cert-highlight" hidden></div>
       <div class="cert-split">
         <div class="cert-list" id="cert-list" role="group" aria-label="International honours and certificates"></div>
         <div class="bc-row is-rail" id="cert-rail">
-          <figure class="bc-card bc-card--cert" data-year="2026" data-honour="Top 18 Finalist, International Watercolor Academy Award (Accademia Internazionale dell'Acquarello, Italy)">
+          <figure class="bc-card bc-card--cert" data-highlight data-year="2026" data-honour="Top 18 Finalist, International Watercolor Academy Award (Accademia Internazionale dell'Acquarello, Italy)">
             <div class="cert-frame"><div class="cert-mat">
               <img src="img/about/cert-accademia-2026.jpg" alt="Official Finalist certificate, International Watercolor Academy Award 2026, Accademia Internazionale dell'Acquarello, Italy"
                    srcset="img/about/cert-accademia-2026-128.jpg 128w, img/about/cert-accademia-2026-256.jpg 256w, img/about/cert-accademia-2026.jpg 707w"
@@ -894,6 +915,31 @@ class Component extends DCLogic {
          the table scrolls the pictures. There is no second horizontal strip of
          text — that existed only to force the sync and was not wanted.
          (client feedback 2026-08-09) */
+      /* The highlight is pulled out FIRST, so the row order in the table below
+         matches the rail exactly as it always has — minus the one that has been
+         promoted, which gets its own row back at the top. */
+      const hiSlot = document.getElementById('cert-highlight');
+      const hiFig = rail.querySelector('.bc-card--cert[data-highlight]');
+      if (hiSlot && hiFig) {
+        hiSlot.hidden = false;
+        hiSlot.appendChild(hiFig);
+        /* Beside a 340px frame, the one-line caption a 240px rail mount carries
+           leaves most of the row empty. The rest of the panel is built from what
+           the mount ALREADY holds — her honour as she words it in the table
+           (data-honour) and the year — so nothing here is written for the
+           occasion. The caption stays as the second line: it describes the scan,
+           and the two do not always agree, which is the point of keeping both. */
+        const cap = hiFig.querySelector('figcaption');
+        if (cap) {
+          const year = hiFig.getAttribute('data-year') || '';
+          const honour = hiFig.getAttribute('data-honour') || '';
+          cap.innerHTML =
+            '<span class="cert-hi-eyebrow"><span class="star" aria-hidden="true">✦</span> Highlight' +
+              (year ? ' <span class="cert-hi-year">' + year + '</span>' : '') + '</span>' +
+            (honour ? '<span class="cert-hi-honour">' + honour + '</span>' : '') +
+            '<span class="cert-hi-cap">' + cap.innerHTML + '</span>';
+        }
+      }
       const mounts = Array.from(rail.querySelectorAll('.bc-card--cert'));
       const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (ch) => (
         { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
