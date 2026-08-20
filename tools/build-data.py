@@ -4,6 +4,7 @@ build-data.py — merges the machine facts with the human copy.
 
     tools/asset-manifest.json   (durations, posters, pixel dimensions)
   + tools/content-meta.json     (titles, blurbs, prices, gallery placeholders)
+  + tools/youtube-thumbs.json   (cover photos for the films supplied as links)
   ->  js/course-data.js         window.CAS_COURSES
   ->  js/gallery-data.js        window.CAS_GALLERY
 
@@ -289,7 +290,7 @@ def build_courses(manifest, meta, links):
     return out
 
 
-def build_free_videos(manifest, meta, links):
+def build_free_videos(manifest, meta, links, yt_thumbs):
     """Free videos come from TWO places now, so the copy leads and the manifest follows.
 
     Until 2026-08-16 every free video was a file the client had uploaded, so
@@ -317,16 +318,30 @@ def build_free_videos(manifest, meta, links):
             "host": host,
         }
         if host == "youtube":
-            # No poster and no duration: the embed brings its own thumbnail, and
-            # inventing a running time for a film we have never opened is exactly
-            # the kind of made-up number this project has had to strip out before.
+            # The cover comes from tools/fetch-youtube-thumbs.py, which downloads
+            # the one YouTube publishes for the id and puts it through the same
+            # encoder as every other image on the site. This used to emit
+            # poster: None on the reasoning that "the embed brings its own
+            # thumbnail" -- true of the player once it opens, and not true of the
+            # CARD, which is what a visitor actually sees. Twelve empty tiles.
+            # (client feedback 2026-08-21)
+            #
+            # Still no duration. YouTube does not publish one on a thumbnail URL,
+            # and inventing a running time for a film we have never opened is
+            # exactly the kind of made-up number this project has had to strip
+            # out before. A card with no duration shows no badge.
+            thumb = yt_thumbs.get(slug)
+            if not thumb:
+                print("  ! %s: no local cover — run tools/fetch-youtube-thumbs.py"
+                      % slug)
             item.update({
                 "youtubeId": copy["youtubeId"],
                 "watch": copy.get("watch"),
                 "ratio": copy.get("ratio", "16:9"),
-                "poster": None, "dur": None, "video": None,
+                "poster": thumb["poster"] if thumb else None,
+                "dur": None, "video": None,
             })
-            item.update(img_fields(None))
+            item.update(img_fields(thumb.get("posterMeta") if thumb else None))
         else:
             fv = by_slug.get(slug)
             if not fv:
@@ -414,9 +429,18 @@ def main():
 
     links = load_video_links()
     print("video links: %d mapped" % len(links))
+
+    # Optional, and its absence is a warning rather than an error: the file needs
+    # the network to produce and a contributor without it should still be able to
+    # rebuild the data. Missing means the YouTube cards ship without covers, and
+    # build_free_videos says so per film.
+    yt_path = os.path.join(TOOLS, "youtube-thumbs.json")
+    yt_thumbs = load(yt_path).get("thumbs", {}) if os.path.exists(yt_path) else {}
+    print("youtube covers: %d" % len(yt_thumbs))
+
     print("courses:")
     courses = build_courses(manifest, meta, links)
-    free = build_free_videos(manifest, meta, links)
+    free = build_free_videos(manifest, meta, links, yt_thumbs)
     gallery = build_gallery(manifest, meta)
 
     helpers = (

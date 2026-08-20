@@ -113,6 +113,18 @@ SLOTS = {
         "widths": [320, 480, 896],
         "sizes": "(max-width: 600px) 346px, (max-width: 1000px) 395px, 448px",
     },
+    # The same tile in the 9:16 rail (`.fv-grid.is-vertical .fv-thumb`), which is
+    # a different width entirely because more of them fit across. Measured in
+    # Chromium: 186 at 390, 233 at 480, 287 at 600, 221 at 760, 171 at 1000,
+    # 227 at 1280, 259 from 1440 up. The bands are not monotonic with viewport
+    # width -- the rail changes how many tiles it shows -- so each band takes the
+    # WIDEST value inside it, not the value at its edge.
+    # Only tools/fetch-youtube-thumbs.py uses this slot: every 9:16 film Crystal
+    # has supplied is a YouTube link, so the importer never sees one.
+    "free-poster-vertical": {
+        "widths": [320, 640],
+        "sizes": "(max-width: 600px) 290px, (max-width: 1000px) 225px, 260px",
+    },
 }
 
 # Images that are already checked into img/ and are written into the pages by

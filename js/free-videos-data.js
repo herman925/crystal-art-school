@@ -63,13 +63,13 @@ window.CAS_FREE_VIDEOS = [
     "youtubeId": "-PeMky90CmQ",
     "watch": "https://www.youtube.com/watch?v=-PeMky90CmQ",
     "ratio": "16:9",
-    "poster": null,
+    "poster": "img/free/clouds-watercolor.jpg",
     "dur": null,
     "video": null,
-    "srcset": null,
-    "sizes": null,
-    "w": null,
-    "h": null
+    "srcset": "img/free/clouds-watercolor-320.jpg 320w, img/free/clouds-watercolor-480.jpg 480w, img/free/clouds-watercolor-896.jpg 896w, img/free/clouds-watercolor.jpg 1280w",
+    "sizes": "(max-width: 600px) 346px, (max-width: 1000px) 395px, 448px",
+    "w": 1280,
+    "h": 720
   },
   {
     "slug": "causeway-bay-watercolor",
@@ -80,13 +80,13 @@ window.CAS_FREE_VIDEOS = [
     "youtubeId": "9CsHkm3ySVI",
     "watch": "https://www.youtube.com/watch?v=9CsHkm3ySVI",
     "ratio": "16:9",
-    "poster": null,
+    "poster": "img/free/causeway-bay-watercolor.jpg",
     "dur": null,
     "video": null,
-    "srcset": null,
-    "sizes": null,
-    "w": null,
-    "h": null
+    "srcset": "img/free/causeway-bay-watercolor-320.jpg 320w, img/free/causeway-bay-watercolor-480.jpg 480w, img/free/causeway-bay-watercolor-896.jpg 896w, img/free/causeway-bay-watercolor.jpg 1280w",
+    "sizes": "(max-width: 600px) 346px, (max-width: 1000px) 395px, 448px",
+    "w": 1280,
+    "h": 720
   },
   {
     "slug": "doggie-watercolor",
@@ -97,13 +97,13 @@ window.CAS_FREE_VIDEOS = [
     "youtubeId": "FxMU1a_oU8A",
     "watch": "https://www.youtube.com/watch?v=FxMU1a_oU8A",
     "ratio": "16:9",
-    "poster": null,
+    "poster": "img/free/doggie-watercolor.jpg",
     "dur": null,
     "video": null,
-    "srcset": null,
-    "sizes": null,
-    "w": null,
-    "h": null
+    "srcset": "img/free/doggie-watercolor-320.jpg 320w, img/free/doggie-watercolor-480.jpg 480w, img/free/doggie-watercolor-896.jpg 896w, img/free/doggie-watercolor.jpg 1280w",
+    "sizes": "(max-width: 600px) 346px, (max-width: 1000px) 395px, 448px",
+    "w": 1280,
+    "h": 720
   },
   {
     "slug": "austria-watercolor",
@@ -114,13 +114,13 @@ window.CAS_FREE_VIDEOS = [
     "youtubeId": "obvS7jDWsB0",
     "watch": "https://www.youtube.com/watch?v=obvS7jDWsB0",
     "ratio": "16:9",
-    "poster": null,
+    "poster": "img/free/austria-watercolor.jpg",
     "dur": null,
     "video": null,
-    "srcset": null,
-    "sizes": null,
-    "w": null,
-    "h": null
+    "srcset": "img/free/austria-watercolor-320.jpg 320w, img/free/austria-watercolor-480.jpg 480w, img/free/austria-watercolor-896.jpg 896w, img/free/austria-watercolor.jpg 1280w",
+    "sizes": "(max-width: 600px) 346px, (max-width: 1000px) 395px, 448px",
+    "w": 1280,
+    "h": 720
   },
   {
     "slug": "tai-kok-tsui-cityscape",
@@ -131,13 +131,13 @@ window.CAS_FREE_VIDEOS = [
     "youtubeId": "fy-LtOTR9sY",
     "watch": "https://www.youtube.com/watch?v=fy-LtOTR9sY",
     "ratio": "16:9",
-    "poster": null,
+    "poster": "img/free/tai-kok-tsui-cityscape.jpg",
     "dur": null,
     "video": null,
-    "srcset": null,
-    "sizes": null,
-    "w": null,
-    "h": null
+    "srcset": "img/free/tai-kok-tsui-cityscape-320.jpg 320w, img/free/tai-kok-tsui-cityscape-480.jpg 480w, img/free/tai-kok-tsui-cityscape-896.jpg 896w, img/free/tai-kok-tsui-cityscape.jpg 1280w",
+    "sizes": "(max-width: 600px) 346px, (max-width: 1000px) 395px, 448px",
+    "w": 1280,
+    "h": 720
   },
   {
     "slug": "urban-sunset",
@@ -148,13 +148,13 @@ window.CAS_FREE_VIDEOS = [
     "youtubeId": "Qu_zdWEfr1o",
     "watch": "https://www.youtube.com/shorts/Qu_zdWEfr1o",
     "ratio": "9:16",
-    "poster": null,
+    "poster": "img/free/urban-sunset.jpg",
     "dur": null,
     "video": null,
-    "srcset": null,
-    "sizes": null,
-    "w": null,
-    "h": null
+    "srcset": "img/free/urban-sunset-320.jpg 320w, img/free/urban-sunset-640.jpg 640w, img/free/urban-sunset.jpg 900w",
+    "sizes": "(max-width: 600px) 290px, (max-width: 1000px) 225px, 260px",
+    "w": 900,
+    "h": 1600
   },
   {
     "slug": "floral-watercolor",
@@ -165,13 +165,13 @@ window.CAS_FREE_VIDEOS = [
     "youtubeId": "ehS3SkW6rU4",
     "watch": "https://www.youtube.com/shorts/ehS3SkW6rU4",
     "ratio": "9:16",
-    "poster": null,
+    "poster": "img/free/floral-watercolor.jpg",
     "dur": null,
     "video": null,
-    "srcset": null,
-    "sizes": null,
-    "w": null,
-    "h": null
+    "srcset": "img/free/floral-watercolor-320.jpg 320w, img/free/floral-watercolor.jpg 720w",
+    "sizes": "(max-width: 600px) 290px, (max-width: 1000px) 225px, 260px",
+    "w": 720,
+    "h": 1280
   },
   {
     "slug": "embroidery",
@@ -182,13 +182,13 @@ window.CAS_FREE_VIDEOS = [
     "youtubeId": "wSMeVq6AqIY",
     "watch": "https://www.youtube.com/shorts/wSMeVq6AqIY",
     "ratio": "9:16",
-    "poster": null,
+    "poster": "img/free/embroidery.jpg",
     "dur": null,
     "video": null,
-    "srcset": null,
-    "sizes": null,
-    "w": null,
-    "h": null
+    "srcset": "img/free/embroidery-320.jpg 320w, img/free/embroidery-640.jpg 640w, img/free/embroidery.jpg 1080w",
+    "sizes": "(max-width: 600px) 290px, (max-width: 1000px) 225px, 260px",
+    "w": 1080,
+    "h": 1080
   },
   {
     "slug": "sushi",
@@ -199,13 +199,13 @@ window.CAS_FREE_VIDEOS = [
     "youtubeId": "1rAVkluKC2U",
     "watch": "https://www.youtube.com/shorts/1rAVkluKC2U",
     "ratio": "9:16",
-    "poster": null,
+    "poster": "img/free/sushi.jpg",
     "dur": null,
     "video": null,
-    "srcset": null,
-    "sizes": null,
-    "w": null,
-    "h": null
+    "srcset": "img/free/sushi-320.jpg 320w, img/free/sushi.jpg 480w",
+    "sizes": "(max-width: 600px) 290px, (max-width: 1000px) 225px, 260px",
+    "w": 480,
+    "h": 360
   },
   {
     "slug": "sketching-hand",
@@ -216,13 +216,13 @@ window.CAS_FREE_VIDEOS = [
     "youtubeId": "5dsmaVylN2U",
     "watch": "https://www.youtube.com/shorts/5dsmaVylN2U",
     "ratio": "9:16",
-    "poster": null,
+    "poster": "img/free/sketching-hand.jpg",
     "dur": null,
     "video": null,
-    "srcset": null,
-    "sizes": null,
-    "w": null,
-    "h": null
+    "srcset": "img/free/sketching-hand-320.jpg 320w, img/free/sketching-hand-640.jpg 640w, img/free/sketching-hand.jpg 900w",
+    "sizes": "(max-width: 600px) 290px, (max-width: 1000px) 225px, 260px",
+    "w": 900,
+    "h": 1600
   },
   {
     "slug": "oil-painting-iron-man",
@@ -233,13 +233,13 @@ window.CAS_FREE_VIDEOS = [
     "youtubeId": "GJ3b9oK5j7o",
     "watch": "https://www.youtube.com/shorts/GJ3b9oK5j7o",
     "ratio": "9:16",
-    "poster": null,
+    "poster": "img/free/oil-painting-iron-man.jpg",
     "dur": null,
     "video": null,
-    "srcset": null,
-    "sizes": null,
-    "w": null,
-    "h": null
+    "srcset": "img/free/oil-painting-iron-man-320.jpg 320w, img/free/oil-painting-iron-man-640.jpg 640w, img/free/oil-painting-iron-man.jpg 900w",
+    "sizes": "(max-width: 600px) 290px, (max-width: 1000px) 225px, 260px",
+    "w": 900,
+    "h": 1600
   },
   {
     "slug": "coloured-pencil-eye",
@@ -250,12 +250,12 @@ window.CAS_FREE_VIDEOS = [
     "youtubeId": "R7bfwUY1iXo",
     "watch": "https://www.youtube.com/shorts/R7bfwUY1iXo",
     "ratio": "9:16",
-    "poster": null,
+    "poster": "img/free/coloured-pencil-eye.jpg",
     "dur": null,
     "video": null,
-    "srcset": null,
-    "sizes": null,
-    "w": null,
-    "h": null
+    "srcset": "img/free/coloured-pencil-eye.jpg 270w",
+    "sizes": "(max-width: 600px) 290px, (max-width: 1000px) 225px, 260px",
+    "w": 270,
+    "h": 480
   }
 ];

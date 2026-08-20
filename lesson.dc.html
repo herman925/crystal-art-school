@@ -154,8 +154,42 @@
    fill either side — rather than resizing the stage, so the page does not jump
    between a landscape and a portrait lesson. Full screen is the embedded
    player's own behaviour; this page only owns the container. */
-.stage.is-vertical .gdrive-frame,
-.stage.is-vertical > img { left: 50%; right: auto; width: auto; height: 100%; aspect-ratio: 9 / 16; transform: translateX(-50%); }
+.stage.is-vertical .gdrive-frame { left: 50%; right: auto; width: auto; height: 100%; aspect-ratio: 9 / 16; transform: translateX(-50%); }
+/* THE POSTER IS A SEPARATE QUESTION FROM THE FILM, and conflating them was a
+   bug. (client feedback 2026-08-21: "the course videos if a portrait video, has
+   a bleed out cover we inserted (landscape)".)
+
+   This rule used to read `.stage.is-vertical .gdrive-frame, .stage.is-vertical >
+   img`, pillarboxing the cover whenever the FILM was portrait. Two things went
+   wrong with that on lesson 1 of clouds-beginner, the only portrait film in the
+   course:
+
+     1. The cover there is a 1280x720 title card — a landscape picture, made for
+        a landscape stage. Squeezing it into a 9:16 box cropped it to a vertical
+        strip through the middle and sliced the words "Lesson 1" in half.
+     2. It did not even do that. `.stage img.poster` (industrial-2.css:1252) is
+        `position: static`, so `left: 50%` did nothing while `translateX(-50%)`
+        still fired — the cover was shifted a full half-width OFF the left edge
+        of the stage and bled out of it. The iframe centred correctly because it
+        is absolutely positioned; the img is not.
+
+   So the film's orientation drives the IFRAME, and the cover's own orientation
+   drives the COVER. A landscape cover fills a 16:9 stage as every other lesson's
+   does; a portrait cover is pillarboxed whole rather than cropped to its middle
+   band. `position: absolute` is stated here because the rule cannot work
+   without it.
+
+   How much of this a visitor sees: on a landscape lesson the Drive iframe covers
+   the stage outright, so the cover only shows while the embed loads and on a
+   lesson whose film is still missing. On lesson 1 the iframe is pillarboxed, so
+   the cover is visible either side of it the whole time — which is why the bleed
+   was obvious there and nowhere else. Lessons 8 and 9 are the two with portrait
+   covers; both have films, so the pillarboxing there matters mainly to the
+   loading state and to whichever lesson loses its film next. */
+.stage.is-poster-tall > img.poster {
+  position: absolute; top: 0; left: 50%; right: auto;
+  width: auto; height: 100%; aspect-ratio: 9 / 16; transform: translateX(-50%);
+}
 .stage.has-video .gdrive-frame { display: block; }
 .stage .unit-flag { pointer-events: none; z-index: 7; }
 .stage-missing { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); z-index: 6; display: none; font-family: var(--font-cond); font-size: 12.5px; font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; color: #f3ede1; background: rgba(20,17,13,.72); border-radius: 999px; padding: 7px 16px; backdrop-filter: blur(3px); white-space: nowrap; }
@@ -687,6 +721,11 @@ class Component extends DCLogic {
         poster.removeAttribute('srcset'); poster.removeAttribute('sizes');
         poster.removeAttribute('src'); poster.style.display = 'none';
       }
+      /* The cover's own shape, not the film's — see the .is-poster-tall note in
+         the stylesheet above. Read from the poster's intrinsic pixels, which the
+         asset pipeline measured, so a cover swapped for one of a different shape
+         is handled without touching this page. */
+      stage.classList.toggle('is-poster-tall', !!(u.img && u.w && u.h && u.h > u.w));
       poster.alt = 'Lesson ' + (state.unit + 1) + ' — ' + u.title;
       notes.forEach(a => a.classList.toggle('active', parseInt(a.dataset.unit, 10) === state.unit));
       setVideoMode(u);
