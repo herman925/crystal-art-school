@@ -632,6 +632,42 @@ Asked on 2026-08-16. Review thread: T457627.
 
 ---
 
+## Replies filed on the client review, 2026-08-21
+
+Ten of the twelve threads still open from the 2026-08-16 round now carry a reply:
+**3 resolved, 7 left open** because each of the seven ends in a question only the
+client can answer. Filed through `POST /admin/api/threads/{id}/comments` and
+`POST /admin/api/threads/{id}/resolve`.
+
+**Resolved — the work is live**
+
+| Ref | Answered with |
+|---|---|
+| I011 | The credentials section moved above the Demystifying line. Whole section, not the single pinned card — the card is the third of three and would have been orphaned. |
+| D005, D006 | The featured stage on Free Videos reads from Step-by-Step Demos. It had been wired to a section that was never filled, so the live page had been showing an empty grey box. The heading moved with it. |
+
+**Left open — each one asks her something**
+
+| Ref | Filed | Still needs |
+|---|---|---|
+| F006 | Thumbnails use her per-lesson cover photos; the importer now classifies a folder's images rather than taking the first | Whether the shared "Lesson 2" cover on the 2 & 3 row is acceptable; Intermediate covers |
+| G001 | Reference photographs shown in the lesson body with a download under each | Whether the pencil demo counts as a reference; whether she wants named captions |
+| I010 | One certificate shown as the highlight, driven by a single attribute | Which certificate; and whether "自定" meant she wants to change it herself |
+| D001, D002 | Cover photographs for all twelve YouTube films | The Tram link; whether Shorts stays its own row |
+| I001, I002 | Certificates section moved and a highlight added; masking confirmed done | Whether Certificate 4, which is a poster rather than an award, stays |
+
+Not replied to: the two `#598493` threads. The colour was changed on 2026-08-16
+and the contrast measurement was put to her then; nothing has moved since, and a
+second reply would be a ping rather than an answer.
+
+**A hazard worth recording.** A thread's short `ref` is **not unique across
+projects** — the box hosts more than one engagement, and four of these ten refs
+also existed on an unrelated client's project. Resolve a ref to a UUID only after
+filtering by `projectId`, and refuse to post when a ref matches anything other
+than exactly one thread.
+
+---
+
 ## Replies filed on the client review, 2026-08-16
 
 All 93 threads from the 2026-08-15 round now carry a reply: **63 resolved, 30 left
