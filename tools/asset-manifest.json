@@ -1163,37 +1163,37 @@
     },
     "img/about/livedrawing-1.jpg": {
       "srcset": "img/about/livedrawing-1-256.jpg 256w, img/about/livedrawing-1-384.jpg 384w, img/about/livedrawing-1.jpg 720w",
-      "sizes": "(max-width: 600px) 352px, (max-width: 1000px) 354px, 241px",
+      "sizes": "(max-width: 600px) 540px, (max-width: 900px) 840px, 484px",
       "w": 720,
       "h": 960
     },
     "img/about/livedrawing-2.jpg": {
       "srcset": "img/about/livedrawing-2-256.jpg 256w, img/about/livedrawing-2-384.jpg 384w, img/about/livedrawing-2-768.jpg 768w, img/about/livedrawing-2.jpg 1123w",
-      "sizes": "(max-width: 600px) 352px, (max-width: 1000px) 354px, 241px",
+      "sizes": "(max-width: 600px) 540px, (max-width: 900px) 840px, 484px",
       "w": 1123,
       "h": 1600
     },
     "img/about/livedrawing-3.jpg": {
       "srcset": "img/about/livedrawing-3-256.jpg 256w, img/about/livedrawing-3-384.jpg 384w, img/about/livedrawing-3-768.jpg 768w, img/about/livedrawing-3.jpg 1125w",
-      "sizes": "(max-width: 600px) 352px, (max-width: 1000px) 354px, 241px",
+      "sizes": "(max-width: 600px) 540px, (max-width: 900px) 840px, 484px",
       "w": 1125,
       "h": 1574
     },
     "img/about/livedrawing-4.jpg": {
       "srcset": "img/about/livedrawing-4-256.jpg 256w, img/about/livedrawing-4-384.jpg 384w, img/about/livedrawing-4.jpg 714w",
-      "sizes": "(max-width: 600px) 352px, (max-width: 1000px) 354px, 241px",
+      "sizes": "(max-width: 600px) 540px, (max-width: 900px) 840px, 484px",
       "w": 714,
       "h": 960
     },
     "img/about/livedrawing-5.jpg": {
       "srcset": "img/about/livedrawing-5-256.jpg 256w, img/about/livedrawing-5-384.jpg 384w, img/about/livedrawing-5-768.jpg 768w, img/about/livedrawing-5.jpg 1280w",
-      "sizes": "(max-width: 600px) 352px, (max-width: 1000px) 354px, 241px",
+      "sizes": "(max-width: 600px) 540px, (max-width: 900px) 840px, 484px",
       "w": 1280,
       "h": 1600
     },
     "img/about/livedrawing-6.jpg": {
       "srcset": "img/about/livedrawing-6-256.jpg 256w, img/about/livedrawing-6-384.jpg 384w, img/about/livedrawing-6-768.jpg 768w, img/about/livedrawing-6.jpg 1000w",
-      "sizes": "(max-width: 600px) 352px, (max-width: 1000px) 354px, 241px",
+      "sizes": "(max-width: 600px) 540px, (max-width: 900px) 840px, 484px",
       "w": 1000,
       "h": 1290
     },

@@ -870,16 +870,36 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
 .cas-root .bio-copy .eng-body em,
 .cas-root .bio-copy .eng-body strong,
 .cas-root .bio-copy .eng-title { color: var(--essay-ink); }
-/* Blind-tooled rather than pressed into paper: the frame and the two rules either
-   side of the heading keep the engraved device, restated in the hide's own ink.
-   Only border-COLOR is set, so the 3-sided geometry (border-top: 0) and the
-   narrow-width override that restores the top edge both still apply. */
-.cas-root .bio-copy .eng-body::before {
-  border-color: color-mix(in srgb, var(--essay-ink) 46%, transparent);
-}
-.cas-root .bio-copy .eng-rule {
-  background: color-mix(in srgb, var(--essay-ink) 46%, transparent);
-}
+/* THE LINES GO. (client feedback 2026-08-20: "those non-stitch lines don't exist
+   in the blog — should also not exist here too", and again on the second panel,
+   "the black line again".)
+
+   Two separate devices were drawing them, which is why the note reads as
+   repeated: the two `.eng-rule` segments either side of the heading, and the
+   3-sided frame `.eng-body::before` runs down the sides and under the copy.
+   Both were inherited from the ruled-notepaper sheet these panels used to be,
+   where a drawn frame belongs. On leather it is a second border inside the
+   saddle stitch, and `.blog-feature` — the same hide, the same stitch — carries
+   no such frame. Matching the blog means deleting them, not recolouring them.
+
+   WHAT STAYS: the dashed saddle stitch at `.bio-copy.engraved::before` above.
+   That is the stitch, it is the thing the client contrasted the other lines
+   against, and the blog has it too.
+
+   `content: none` rather than `border: 0`: the pseudo-element then generates no
+   box at all, so industrial-2.css's 620px override — which puts the top edge
+   back with `border-top: 1px` — has nothing left to paint. Killing only the
+   border-color would have left that phone-width line behind.
+
+   NOT TOUCHED: `.engraved.is-quote` at the top of About. Its rules are straddled
+   by the two quote marks and are the client's own 2026-08-08 device
+   ("用此符號設計"), not the panel frame she is objecting to here. Confirm
+   before removing those as well. */
+.cas-root .bio-copy .eng-body::before { content: none; }
+.cas-root .bio-copy .eng-rule { display: none; }
+/* The rules were the flex children that pushed the title to the middle of the
+   head; with them gone the title is the only child and would sit hard left. */
+.cas-root .bio-copy .eng-head { justify-content: center; }
 /* Leather takes an impression the other way up from paper: the lit edge sits
    ABOVE the glyphs on a stamped hide, not below. Written with .engraved in the
    chain to make this (0,4,0), because industrial-2.css sets this same property in
@@ -1389,3 +1409,54 @@ body .mc-btn.primary, body .ck-btn.primary {
   background: var(--coral-fill); color: var(--coral-fill-ink);
   -webkit-text-fill-color: var(--coral-fill-ink);
 }
+
+/* ---------- the stacked live-drawing pair ----------------------------------
+   (client feedback 2026-08-20: "because of the right hand side's text, it's best
+   to blow it up to 2 carousels on top of each other".)
+
+   #biography's left column used to hold ONE carousel showing two photographs
+   side by side, each painted about 241px wide against an essay that runs far
+   taller than the strip. It is now two one-up carousels stacked, so each
+   photograph gets the full column — roughly twice the width it had — and the
+   column fills the essay's height.
+
+   HEIGHT is fluid, and it is fluid for a reason worth reading before changing
+   it. The essay beside this column gets TALLER as the viewport narrows (it
+   wraps more), while the carousel cell gets NARROWER. A fixed height therefore
+   cannot match the essay at more than one width. The clamp below is fitted to
+   two measured points — essay 963px at 1440px and up, essay 1272px at 950px —
+   so the stacked pair plus its two 58px nav rows and 16px gap lands within
+   ~100px of the essay across the whole two-column range. Re-measure and refit
+   if the essay copy changes length.
+
+   CROPPING, and the compromise being made. Her photographs are portrait (3:4);
+   at 484px wide a cell would need to be 645px tall to show one whole, and two
+   of those plus nav rows come to 1422px against a 963px essay. They do not both
+   fit. So the cell crops, and `object-position` biases the crop DOWNWARD.
+
+   75% was picked by rendering all six and looking, not by taste. Five of the six
+   are the sketchbook or board held up at arm's length with the painting in the
+   lower two-thirds of the frame and open sky or street above it, so a centred
+   crop threw away the part that matters and kept the part that does not. At 50%
+   the beach study (livedrawing-3), the Tai O sheet (livedrawing-6) and the
+   temple study (livedrawing-2) all lost their lower edge, two of them including
+   the signature; at 62% two were still short; at 75% all five sit whole. The
+   sixth, livedrawing-4, is the open paintbox — study in the lid, palette below
+   — and fills the frame top to bottom, so it reads at any bias. Re-check the figure against the
+   second set when it arrives — it is fitted to these six.
+
+   (0,2,0) so it outranks the plain `.ph-carousel` rules in industrial-2.css's
+   own media queries, which media queries do not add specificity to.
+
+   The 900px break is the LAYOUT break (industrial-2.css:629), where .bio-layout
+   drops to one column and the cell jumps from 285px wide to 836px. The 1000px
+   and 620px breaks used elsewhere are wrong for this element and were tried
+   first: they left a 836px-wide cell 340px tall, a letterbox slot.
+
+   Each carousel keeps its OWN pause control and dots. They advance
+   independently — that is the point of the pair — so one control could not
+   honestly claim to stop both. */
+.phc-stack { display: grid; gap: 16px; }
+.phc-stack .ph-carousel { --phc-h: clamp(416px, calc(868px - 31.4vw), 520px); }
+.phc-stack .phc-cell img { object-position: 50% 75%; }
+@media (max-width: 900px) { .phc-stack .ph-carousel { --phc-h: min(62vw, 500px); } }

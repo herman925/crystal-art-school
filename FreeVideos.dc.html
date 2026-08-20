@@ -247,19 +247,40 @@
   <!-- 15: one featured block and three sections. Cards render from
        window.CAS_FREE_VIDEOS (js/free-videos-data.js), grouped by section. -->
 
-  <!-- Featured: the latest Studio Note, 16:9, with carousel dots. -->
+  <!-- Featured: a step-by-step demo, 16:9, with carousel dots.
+       (client feedback 2026-08-16, tickets D005 and D006: "only Step by Step
+       demos videos" / "Only for step-by-step demo section".)
+
+       This block was built for a "Studio Notes" section that was never filled,
+       so the stage stood empty on the live page. It now draws from Step-by-Step
+       Demos, which is what was asked for.
+
+       THIS OVERRIDES THE DIRECTION, deliberately.
+       docs/20260804_Design_Direction.md (Free Videos, the board table) specifies
+       the featured row as `Studio Notes from Crystal Lau`, "放最 latest",
+       16:9, with carousel dots. That is 2026-08-04; D005/D006 are 2026-08-16 and
+       are the client and the admin agreeing the stage should carry demos. The
+       later instruction wins. The row's other properties — latest first, 16:9,
+       dots, Crystal's portrait — are unchanged, so only the source moved.
+
+       CONSEQUENCE TO PUT TO THE CLIENT: the featured film is also the first card
+       in the Step-by-step demos rail below, so it appears twice on the page.
+       That is inherent to featuring a film from a row that also lists it. If she
+       would rather the rail skipped whatever is on the stage, that is a filter
+       on the rail, not a change here. -->
   <section class="fv-sec fv-featured" style="margin-top:26px;">
     <!-- Centred, with Crystal's portrait as a small disc to the left of the
          title. (client feedback 2026-08-08) -->
     <div class="fv-feat-head">
       <img class="fv-feat-avatar" src="img/ProfilePic.jpg" alt="Crystal Lau" loading="lazy" decoding="async">
-      <h2 class="font-a">Studio notes from Crystal Lau</h2>
+      <h2 class="font-a">Step-by-step demos from Crystal Lau</h2>
     </div>
     <div class="fv-feat-stage" id="fv-feat"></div>
     <div class="fv-feat-dots" id="fv-feat-dots"></div>
-    <!-- ASSET PENDING: Placeholder — the Studio Notes films are still to be supplied.
-            The portrait above is img/ProfilePic.jpg, the same photograph used on About,
-            the lesson page and the blog byline. -->
+    <!-- The heading was "Studio notes from Crystal Lau" and had to move with the
+         content: a stage showing demos under a Studio Notes title states
+         something untrue. The portrait is img/ProfilePic.jpg, the same
+         photograph used on About, the lesson page and the blog byline. -->
   </section>
 
   <section class="fv-sec" data-section="Step-by-Step Demos">
@@ -717,13 +738,16 @@ class Component extends DCLogic {
       });
     });
 
-    /* 15: the featured Studio Notes block — latest first, with dots. Nothing
-       has been supplied for it yet, so it renders its own placeholder rather
-       than borrowing a film from a section below. */
+    /* 15: the featured block — the step-by-step demos, first one first, with
+       dots. (client feedback 2026-08-16, D005/D006.) It reads the same section
+       string the rail below reads, so a film added to one appears in both and
+       the two cannot drift apart. If the section is ever emptied the stage falls
+       back to its own placeholder rather than borrowing from another row. */
+    const FEAT_SECTION = 'Step-by-Step Demos';
     const feat = document.getElementById('fv-feat');
     const featDots = document.getElementById('fv-feat-dots');
     if (feat) {
-      const notes = FV.filter((v) => v.section === 'Studio Notes');
+      const notes = FV.filter((v) => v.section === FEAT_SECTION);
       if (!notes.length) {
         feat.innerHTML = '<div class="fv-feat-empty">The latest free video will play here</div>';
         if (featDots) featDots.style.display = 'none';
@@ -732,14 +756,14 @@ class Component extends DCLogic {
         const draw = () => {
           feat.innerHTML = fvCard(notes[fi]);
           if (featDots) featDots.innerHTML = notes.map((_, i) =>
-            '<button type="button" class="' + (i === fi ? 'active' : '') + '" aria-label="Show note ' + (i + 1) + '"></button>').join('');
+            '<button type="button" class="' + (i === fi ? 'active' : '') + '" aria-label="Show demo ' + (i + 1) + '"></button>').join('');
           feat.querySelectorAll('.fv-card').forEach((c) => c.addEventListener('click', (e) => { e.preventDefault(); openV(c); }));
           if (featDots) featDots.querySelectorAll('button').forEach((btn, i) =>
             btn.addEventListener('click', () => {
               fi = i; draw();
               /* #22: the stage swapped silently — a class change announces
                  nothing, and the dots are the only visual cue. */
-              say('Studio note ' + (i + 1) + ' of ' + notes.length + ': ' + notes[fi].title + '.');
+              say('Featured demo ' + (i + 1) + ' of ' + notes.length + ': ' + notes[fi].title + '.');
             }));
         };
         draw();

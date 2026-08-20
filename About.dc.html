@@ -116,7 +116,8 @@
     </div>
   </header>
 
-  <!-- 13: three sections above the Demystifying the process line, each with its
+  <!-- 13: three sections above the credentials and the Demystifying the process
+       line below them, each with its
        own photo carousel, alternating left and right so they do not read as one
        template repeated three times. Two photographs per view, advancing two at
        a time, which is why every set has to hold an even number.
@@ -124,7 +125,28 @@
        outright — the board marks it "delete" and all four items with it. -->
   <section class="section" id="biography">
     <div class="bio-layout">
-      <div class="ph-carousel" id="car-livedrawing" role="group" aria-label="Live drawing"></div>
+      <!-- TWO carousels, stacked, not one two-up strip. (client feedback
+           2026-08-20: "because of the right hand side's text, it's best to blow
+           it up to 2 carousels on top of each other. 6 images each for now she
+           doesn't have that much image — duplicate it for now. make sure their
+           'transition' is not synced. try to vary a bit — randomised a little
+           everytime, even".)
+
+           The essay beside this column is tall and the single 500px strip left
+           the left column half empty. Stacking two one-up carousels fills it and
+           each photograph is painted about twice as wide as it was at two to a
+           page.
+
+           SCAFFOLDING, AND IT SAYS SO: there are still only SIX live-drawing
+           photographs. The lower carousel is the SAME six — shuffled, and the
+           deck rotated by half so the two never open on the same picture, with a
+           skip-ahead guard so they do not land on it later either. When Crystal
+           supplies a second set, give the lower carousel its own `files` and
+           delete `share`/`pair` from the config below. -->
+      <div class="phc-stack">
+        <div class="ph-carousel" id="car-livedrawing" role="group" aria-label="Live drawing, upper set"></div>
+        <div class="ph-carousel" id="car-livedrawing-b" role="group" aria-label="Live drawing, lower set"></div>
+      </div>
       <!-- The three biography blocks take the same engraved panel as the quote
            above, so the whole page reads as one device. The heading straddles
            the top rule exactly as About ref.jpg draws it; the paragraphs stay
@@ -196,32 +218,24 @@
     </div>
   </section>
 
-  <section class="section" id="philosophy">
-    <div class="section-head reveal-one" style="text-align:center;">
-      <div class="eyebrow" style="justify-content:center;"><span class="star">✦</span> My teaching philosophy</div>
-      <h2 class="section-title">Demystifying the process</h2>
-    </div>
-    <div style="max-width:760px;margin:0 auto 26px;">
-      <p style="color:var(--muted);font-size:15.5px;line-height:1.72;margin:0 0 14px;">Many people want to paint, but stop themselves before they even begin. They worry about "lacking natural talent," struggle with controlling unruly watercolours, or feel overwhelmed by the layers of oil painting.</p>
-      <p style="color:var(--muted);font-size:15.5px;line-height:1.72;margin:0 0 14px;">Here is the truth: <strong style="color:var(--ink);">painting is not an exclusive privilege for a gifted few — it is a learnable, structured skill.</strong></p>
-      <p style="color:var(--muted);font-size:15.5px;line-height:1.72;margin:0;">In my courses, you won't find overly academic jargon or intimidating rules. Instead, I focus on warm, practical, step-by-step guidance:</p>
-    </div>
-    <div class="about-tri">
-      <div class="card">
-        <h3 class="marker-title" style="font-size:19px;margin:0 0 8px;">Developing an artist's eye</h3>
-        <p style="margin:0;font-size:14.5px;color:var(--muted);line-height:1.7;">Learn to see the world differently by understanding light, proportion, structure, and atmospheric depth.</p>
-      </div>
-      <div class="card">
-        <h3 class="marker-title" style="font-size:19px;margin:0 0 8px;">Mastering your medium</h3>
-        <p style="margin:0;font-size:14.5px;color:var(--muted);line-height:1.7;">Gain full control over watercolour transparency and oil layering rules so your materials work <em>with</em> you, not against you.</p>
-      </div>
-      <div class="card">
-        <h3 class="marker-title" style="font-size:19px;margin:0 0 8px;">Finding your own visual voice</h3>
-        <p style="margin:0;font-size:14.5px;color:var(--muted);line-height:1.7;">My goal isn't to teach you how to copy my style, but to help you build the confidence to paint what speaks to <em>your</em> heart.</p>
-      </div>
-    </div>
-  </section>
+  <!-- ORDER (client feedback 2026-08-16, ticket I011: "放在Demystifying the process上面").
+       She pinned the International honours card and asked for it ABOVE the
+       Demystifying the process block, so the whole Highlights section moved
+       above Philosophy rather than the one card: the card is the third of three
+       in that section and lifting it alone would leave it with no heading and
+       split the honours away from the two cards that introduce them.
+       Reading order is now biography → community → instructor → credentials
+       → teaching philosophy → welcome. If she meant the single card only, this
+       is the one line to change back.
 
+       THIS OVERRIDES THE DIRECTION, deliberately. docs/20260804_Design_Direction.md
+       (About, the board's section order) draws a line at Demystifying the process
+       and marks everything below it "以下全部不修改", naming
+       `A glimpse into the journey` — this section — as "在界線以下，不動".
+       That freeze is from 2026-08-04; ticket I011 is from 2026-08-16 and is the
+       same client asking for this section to move. The later instruction wins.
+       Do NOT "restore" the board order on the strength of the direction document
+       without checking with her first. -->
   <section class="section" id="highlights">
     <div class="section-head reveal-one" style="text-align:center;">
       <div class="eyebrow" style="justify-content:center;"><span class="star">✦</span> Highlights &amp; professional background</div>
@@ -387,6 +401,32 @@
            dead-CSS problem #19 exists to clear up. -->
       <p style="margin:14px 0 0;font-size:13px;line-height:1.6;color:var(--muted);max-width:70ch;">Four of the dated rows are Crystal's honours. The <strong>2016 exhibition poster</strong> is the printed poster for the show listed above it — it is not an award. The rows marked <strong>Demo</strong> are layout scaffolding — they show the table scrolling past its five visible rows and how a landscape, portrait or square scan fits the same mount. They are not awards and will be removed before launch.</p>
     </div><!-- /.card -->
+  </section>
+
+  <section class="section" id="philosophy">
+    <div class="section-head reveal-one" style="text-align:center;">
+      <div class="eyebrow" style="justify-content:center;"><span class="star">✦</span> My teaching philosophy</div>
+      <h2 class="section-title">Demystifying the process</h2>
+    </div>
+    <div style="max-width:760px;margin:0 auto 26px;">
+      <p style="color:var(--muted);font-size:15.5px;line-height:1.72;margin:0 0 14px;">Many people want to paint, but stop themselves before they even begin. They worry about "lacking natural talent," struggle with controlling unruly watercolours, or feel overwhelmed by the layers of oil painting.</p>
+      <p style="color:var(--muted);font-size:15.5px;line-height:1.72;margin:0 0 14px;">Here is the truth: <strong style="color:var(--ink);">painting is not an exclusive privilege for a gifted few — it is a learnable, structured skill.</strong></p>
+      <p style="color:var(--muted);font-size:15.5px;line-height:1.72;margin:0;">In my courses, you won't find overly academic jargon or intimidating rules. Instead, I focus on warm, practical, step-by-step guidance:</p>
+    </div>
+    <div class="about-tri">
+      <div class="card">
+        <h3 class="marker-title" style="font-size:19px;margin:0 0 8px;">Developing an artist's eye</h3>
+        <p style="margin:0;font-size:14.5px;color:var(--muted);line-height:1.7;">Learn to see the world differently by understanding light, proportion, structure, and atmospheric depth.</p>
+      </div>
+      <div class="card">
+        <h3 class="marker-title" style="font-size:19px;margin:0 0 8px;">Mastering your medium</h3>
+        <p style="margin:0;font-size:14.5px;color:var(--muted);line-height:1.7;">Gain full control over watercolour transparency and oil layering rules so your materials work <em>with</em> you, not against you.</p>
+      </div>
+      <div class="card">
+        <h3 class="marker-title" style="font-size:19px;margin:0 0 8px;">Finding your own visual voice</h3>
+        <p style="margin:0;font-size:14.5px;color:var(--muted);line-height:1.7;">My goal isn't to teach you how to copy my style, but to help you build the confidence to paint what speaks to <em>your</em> heart.</p>
+      </div>
+    </div>
   </section>
 
   <section class="section" id="welcome">
@@ -599,29 +639,53 @@ class Component extends DCLogic {
 
        Autoplay pauses while the pointer is over a carousel, while its tab is in
        the background, and entirely under prefers-reduced-motion. */
+    /* The live-drawing deck, shuffled ONCE per page load and shared by the two
+       stacked carousels. (client feedback 2026-08-20.)
+
+       One shuffle, not two: two independent shuffles can agree, and the point of
+       the pair is that it does not look like the same strip printed twice. The
+       lower carousel takes the same deck rotated by half its length, so at rest
+       the two are three photographs apart, and `pair` below keeps them apart
+       once they start drifting.
+
+       livedrawing-6.jpg is copied into img/about/ by hand like the rest of
+       About's imagery, but it is NOT outside the pipeline: STATIC_SLOTS already
+       carries a glob for img/about/livedrawing-*.jpg, so the importer generates
+       its 256/384/768 ladder and CAS_IMG_ATTRS serves a srcset for it. Nothing
+       here needs a per-file entry.
+
+       The "keep this set EVEN" rule that used to live here is retired with the
+       two-up layout: at one photograph to a page any count fills its pages
+       exactly. */
+    const LIVE_DRAWING = ['livedrawing-1.jpg','livedrawing-2.jpg','livedrawing-3.jpg','livedrawing-4.jpg','livedrawing-5.jpg','livedrawing-6.jpg'];
+    const phcShuffle = (arr) => {
+      const a = arr.slice();
+      for (let i = a.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [a[i], a[j]] = [a[j], a[i]];
+      }
+      return a;
+    };
+    const LIVE_DECK = phcShuffle(LIVE_DRAWING);
+    const LIVE_HALF = Math.floor(LIVE_DECK.length / 2);
+    const LIVE_DECK_B = LIVE_DECK.slice(LIVE_HALF).concat(LIVE_DECK.slice(0, LIVE_HALF));
+
     const CAROUSELS = {
-      /* per = photographs to a page. Live drawing is the only two-up set:
-         6 photographs, 3 pages. The other two are one-up: 4 photographs,
-         4 pages each. (client feedback 2026-08-08)
+      /* per = photographs to a page. Everything is one-up now: Live drawing was
+         the only two-up set and it became the stacked pair. (client feedback
+         2026-08-08, revised 2026-08-20)
 
-         The sixth photograph arrived 2026-08-16 and closes the set: at two to a
-         page an odd count left the last page half empty while the dots still
-         claimed three full pages. Six is the first count above five that the
-         two-up layout can fill exactly, which is why the pending note asked for
-         six rather than "one or two more". Below 620px per drops to 1 and the
-         same six make six pages — still exact, because 6 divides by 1 and 2.
-         Keep this set EVEN. Adding a seventh reopens the half-empty last page.
-
-         livedrawing-6.jpg is copied into img/about/ by hand like the rest of
-         About's imagery, but it is NOT outside the pipeline: STATIC_SLOTS already
-         carries a glob for img/about/livedrawing-*.jpg, so the next importer run
-         generates its 256/384/768 ladder and registers it, and CAS_IMG_ATTRS
-         serves a srcset for it exactly as it does for the other five. Nothing
-         here needs a per-file entry. */
-      'car-livedrawing': { dir: 'img/about/', per: 2, files: ['livedrawing-1.jpg','livedrawing-2.jpg','livedrawing-3.jpg','livedrawing-4.jpg','livedrawing-5.jpg','livedrawing-6.jpg'], alt: 'Crystal drawing on location', dwell: 5300 },
+         dwell values are deliberately coprime-ish and each is jittered by up to
+         +/-700ms at build time, so the two live-drawing rails never settle into
+         step — "make sure their 'transition' is not synced". */
+      'car-livedrawing':   { dir: 'img/about/', per: 1, files: LIVE_DECK,   alt: 'Crystal drawing on location', dwell: 5300, jitter: 700, pair: 'car-livedrawing-b' },
+      'car-livedrawing-b': { dir: 'img/about/', per: 1, files: LIVE_DECK_B, alt: 'Crystal drawing on location', dwell: 6900, jitter: 700, pair: 'car-livedrawing' },
       'car-exhibition':  { dir: 'img/about/', per: 1, files: ['exhibition-1.jpg','exhibition-2.jpg','exhibition-3.jpg','exhibition-4.jpg'], alt: 'Exhibition', dwell: 6700 },
       'car-artful':      { dir: 'img/about/', per: 1, files: ['artful-living-1.jpg','artful-living-2.jpg','artful-living-3.jpg','artful-living-4.jpg'], alt: 'Artful Living', dwell: 8100 }
     };
+    /* What each carousel is showing right now, so a paired one can avoid it.
+       Keyed by host id; written in apply(), read in go(). */
+    const PHC_SHOWING = {};
     const stillPlease = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     Object.keys(CAROUSELS).forEach((id) => {
       const host = document.getElementById(id);
@@ -646,9 +710,16 @@ class Component extends DCLogic {
              a cell painted at 241-708px stops fetching a 1600px master. The
              lookup is keyed by the src this line already writes; a file the
              pipeline has not seen yet returns '' and the <img> is unchanged. */
-          cfg.files.map((f, i) => '<figure class="phc-cell"><img src="' + cfg.dir + f + '"' +
-            (window.CAS_IMG_ATTRS ? window.CAS_IMG_ATTRS(cfg.dir + f) : '') +
-            ' alt="' + cfg.alt + ' ' + (i + 1) + '" loading="lazy" decoding="async"></figure>').join('') +
+          /* The alt number comes from the FILENAME, not from the loop index.
+             The live-drawing deck is shuffled per load, so an index would give
+             the same photograph a different number on every visit and give two
+             different photographs the same number across the stacked pair. */
+          cfg.files.map((f, i) => {
+            const m = /-(\d+)\.[a-z0-9]+$/i.exec(f);
+            return '<figure class="phc-cell"><img src="' + cfg.dir + f + '"' +
+              (window.CAS_IMG_ATTRS ? window.CAS_IMG_ATTRS(cfg.dir + f) : '') +
+              ' alt="' + cfg.alt + ' ' + (m ? m[1] : (i + 1)) + '" loading="lazy" decoding="async"></figure>';
+          }).join('') +
         '</div></div>' +
         /* Dots only. No arrows — the set advances by itself and the dots are
            there to jump, not to step. (client feedback 2026-08-08) */
@@ -692,13 +763,14 @@ class Component extends DCLogic {
         dotBox.querySelectorAll('.phc-dot').forEach((d) =>
           d.addEventListener('click', () => {
             const n = Number(d.dataset.go);
-            go(n); start();
+            go(n, false); start();
             /* #22: the dots were the only thing that changed, and a class change
                announces nothing. */
             say(title + ', page ' + (n + 1) + ' of ' + pages + '.');
           }));
         navBox.style.display = pages > 1 ? '' : 'none';
       };
+      const shown = (n) => cfg.files.slice(n * per, n * per + per);
       const apply = () => {
         rail.style.transform = 'translateX(' + (-page * 100) + '%)';
         cells.forEach((c, i) => c.classList.toggle('is-current', Math.floor(i / per) === page));
@@ -706,9 +778,30 @@ class Component extends DCLogic {
           d.classList.toggle('active', i === page);
           d.setAttribute('aria-current', i === page ? 'true' : 'false');
         });
+        /* published for a paired carousel to read — see go() */
+        PHC_SHOWING[id] = shown(page);
       };
-      /* wraps, so the set can run unattended */
-      const go = (n) => { page = (n % pages + pages) % pages; apply(); };
+      /* wraps, so the set can run unattended.
+
+         `avoid` is on for the automatic advance and OFF for a dot press: the two
+         stacked live-drawing rails run the same six photographs, so left alone
+         they would eventually show the same picture twice on screen. On its own
+         clock a rail steps past a page its partner is already showing. A dot
+         press does not — pressing "page 4" and arriving at page 5 is a bug, not
+         a courtesy. The loop is bounded by `pages`, so a set whose every page
+         collides just stays where the caller asked. */
+      const go = (n, avoid) => {
+        let want = (n % pages + pages) % pages;
+        const other = (avoid !== false && cfg.pair) ? PHC_SHOWING[cfg.pair] : null;
+        if (other && other.length) {
+          let tries = 0;
+          while (tries < pages && shown(want).some((f) => other.indexOf(f) !== -1)) {
+            want = (want + 1) % pages;
+            tries++;
+          }
+        }
+        page = want; apply();
+      };
       const relayout = () => {
         const now = perFor();
         if (now === per) return;
@@ -723,11 +816,16 @@ class Component extends DCLogic {
       resizeJobs.push(relayout);
 
       let timer = null, held = false, paused = false;
+      /* Fixed at build time, not re-rolled per tick: a rail whose interval
+         changed every step would read as stuttering rather than as two rails
+         running at their own speeds. The two live-drawing dwells are 1600ms
+         apart before the jitter, so the offset survives it. */
+      const dwell = cfg.dwell + (cfg.jitter ? Math.round((Math.random() * 2 - 1) * cfg.jitter) : 0);
       const stop = () => { if (timer) { clearInterval(timer); timer = null; } };
       const start = () => {
         stop();
         if (stillPlease || paused || held || pages < 2 || document.hidden) return;
-        timer = setInterval(() => go(page + 1), cfg.dwell);
+        timer = setInterval(() => go(page + 1), dwell);
       };
       if (playBtn) playBtn.addEventListener('click', () => {
         paused = !paused;

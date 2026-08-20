@@ -154,10 +154,17 @@ STATIC_SLOTS = [
     {"glob": "img/about/artful-living-*.jpg",
      "widths": [384, 768, 1440],
      "sizes": "(max-width: 600px) 352px, (max-width: 1000px) 725px, 415px"},
-    # About `.phc-cell`, live-drawing strip: 352 / 354 / 211 / 241.
+    # About `.phc-cell`, live drawing. Re-measured 2026-08-20 when the strip
+    # became two stacked one-up carousels: the cell was 241px wide at two
+    # photographs to a page and is 484px at one. The bands follow the LAYOUT
+    # breakpoint (industrial-2.css:629, max-width 900px, where .bio-layout drops
+    # to a single column) rather than the 1000px used elsewhere, because that is
+    # where this cell's width actually jumps -- 285px at 901px, 836px at 900px.
+    # Painted widths measured in Chromium: 536 at 600, 836 at 900, 484 from
+    # 1440 (the --site-max cap) upwards.
     {"glob": "img/about/livedrawing-*.jpg",
      "widths": [256, 384, 768],
-     "sizes": "(max-width: 600px) 352px, (max-width: 1000px) 354px, 241px"},
+     "sizes": "(max-width: 600px) 540px, (max-width: 900px) 840px, 484px"},
     # About `.cert-mat` paints 100 at 1280 and 120 at 1600, and is not rendered
     # at all below 1000. cert-jiwi-2026.jpg was the worst oversample on the
     # site at 8.9x.
