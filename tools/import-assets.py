@@ -113,6 +113,17 @@ SLOTS = {
         "widths": [320, 480, 896],
         "sizes": "(max-width: 600px) 346px, (max-width: 1000px) 395px, 448px",
     },
+    # lesson.dc.html `.ref-grid img`. The grid is `auto-fit`, so the SAME
+    # viewport paints a very different width depending on how many photographs
+    # the lesson has: at 1000px a lesson with two gets 444 each and a lesson with
+    # one gets 904. Each band therefore takes the widest case inside it, measured
+    # in Chromium across twelve widths and both cases -- 504 at 600, 904 at 1000,
+    # 890 from 1440 up. Declaring the narrower case would leave every one-photo
+    # lesson soft, which is the failure that is actually visible.
+    "lesson-ref": {
+        "widths": [320, 640, 960],
+        "sizes": "(max-width: 600px) 510px, (max-width: 1000px) 910px, 890px",
+    },
     # The same tile in the 9:16 rail (`.fv-grid.is-vertical .fv-thumb`), which is
     # a different width entirely because more of them fit across. Measured in
     # Chromium: 186 at 390, 233 at 480, 287 at 600, 221 at 760, 171 at 1000,
@@ -393,6 +404,52 @@ def natural_key(s):
 PRIVATE_PATTERNS = ("頁面", "解說", "ref.", " ref", "ref.jpg")
 
 
+# --------------------------------------------------------------------------
+# what an image inside a lesson folder IS
+# --------------------------------------------------------------------------
+# A lesson folder holds up to four kinds of picture and they are not
+# interchangeable. Crystal names them consistently enough to tell apart, and
+# taking "the first image in the folder" -- which is what this file used to do --
+# picked whichever happened to sort first. That is how the course list ended up
+# showing the artwork close-ups instead of her title cards, which she asked about
+# on 2026-08-14 ("所有縮圖均為彩色，另這些照片均為Lesson Cover Photos" and then, an
+# hour later, "照片非Lesson Cover Photos").
+#
+#   COVER      BeginnerLesson1Cover.JPG, BeginnerLesson02.JPG, BeginnerLesson7.JPG
+#              A designed title card, 5712x3213, reading "Lesson 2" in her
+#              handwriting over a photograph of the work. One per lesson folder in
+#              the beginner course. The intermediate course has none.
+#   REFERENCE  Lesson03refphoto.JPG, CloudsLesson4refphoto.jpg,
+#              CloudsLesson05Arefphoto.jpg
+#              The photograph a student paints FROM. She asked for these to appear
+#              in the lesson (2026-08-12, "Reference Photos 在Courses裏Material").
+#   MATERIALS  CloudsLesson2tools.jpg, CloudsLesson07colorPalette.jpg
+#              What is on the desk, and the mixed palette for that lesson.
+#   ARTWORK    CloudsLesson7.jpg, CloudsLesson02&03.jpg
+#              The finished piece. Everything that is none of the above.
+#
+# Matching is on the FILENAME because that is the only signal there is, and it is
+# hers: if she renames a file the classification follows, which is the intended
+# behaviour. A folder whose names stop following the pattern falls back to
+# artwork, and the poster falls back to the first image -- the old behaviour --
+# rather than to nothing.
+COVER_PAT = re.compile(r"cover|^beginnerlesson", re.I)
+REF_PAT = re.compile(r"ref\s*photo|reference", re.I)
+MATERIAL_PAT = re.compile(r"tools?|palette|colou?r\s*chart", re.I)
+
+
+def classify_lesson_images(images):
+    """-> (poster, reference photos, material photos) from one lesson folder."""
+    covers = [f for f in images if COVER_PAT.search(f)]
+    refs = [f for f in images if REF_PAT.search(f) and f not in covers]
+    mats = [f for f in images if MATERIAL_PAT.search(f) and f not in covers and f not in refs]
+    rest = [f for f in images if f not in covers and f not in refs and f not in mats]
+    # Her title card first; her finished piece if there is no title card; and
+    # only then whatever is left, so a lesson never loses its poster entirely.
+    poster = (covers or rest or mats or refs)
+    return (poster[0] if poster else None), refs, mats
+
+
 def is_private(name):
     low = name.lower()
     return any(pat.lower() in low for pat in PRIVATE_PATTERNS)
@@ -494,8 +551,26 @@ def make_derivatives(master, widths, sizes, force=False):
 
 def encode_image(src, dst, max_edge, force=False, slot=None):
     """Resize + re-encode. Returns {w, h, ratio, bytes} of the OUTPUT, plus
-    {srcset, sizes, widths} when `slot` names a row in SLOTS."""
-    if os.path.exists(dst) and not force:
+    {srcset, sizes, widths} when `slot` names a row in SLOTS.
+
+    Skips when the output is already at least as new as the input. This used to
+    skip on EXISTENCE alone, which made the pipeline write-once rather than
+    incremental: a slot fed by a different source file, or a source the client
+    replaced, kept the old picture forever and nothing said so. That is how the
+    course list went on showing the artwork close-ups after Crystal supplied her
+    title cards -- the importer had already written l02.jpg, so it never looked
+    at the folder again. (found 2026-08-21)
+
+    A rewritten master forces its derivatives: leaving a 1280x1280 ladder beside
+    a 1280x720 master is worse than either.
+    """
+    fresh = force
+    if not fresh and os.path.exists(dst):
+        try:
+            fresh = os.path.getmtime(src) > os.path.getmtime(dst) + 1
+        except OSError:
+            fresh = True                      # cannot compare -> redo it
+    if os.path.exists(dst) and not fresh:
         with Image.open(dst) as im:
             w, h = im.size
         meta = {"w": w, "h": h, "ratio": round(h / w, 4), "bytes": os.path.getsize(dst)}
@@ -518,7 +593,9 @@ def encode_image(src, dst, max_edge, force=False, slot=None):
     if n > SIZE_WARN_BYTES:
         warn("%s is %d KB (over the 600 KB ceiling)" % (os.path.relpath(dst, SITE_DIR), n // 1024))
     meta = {"w": w, "h": h, "ratio": round(h / w, 4), "bytes": n}
-    return with_derivatives(dst, meta, slot, force)
+    # True, not `force`: this master was just rewritten, so its ladder is stale
+    # whatever the caller asked for.
+    return with_derivatives(dst, meta, slot, True)
 
 
 def img_meta(meta):
@@ -616,10 +693,13 @@ def import_courses(force):
                 continue
 
             seq += 1
+            # Which picture is the poster is a decision, not an accident of sort
+            # order -- see classify_lesson_images and the note above it.
+            cover, ref_names, _material_names = classify_lesson_images(images)
             rel, meta = None, None
-            if images:
+            if cover:
                 rel = "img/courses/%s/l%02d.jpg" % (course["slug"], seq)
-                meta = encode_image(os.path.join(folder, images[0]),
+                meta = encode_image(os.path.join(folder, cover),
                                     os.path.join(SITE_DIR, rel), MAX_EDGE_POSTER, force,
                                     slot="course-poster")
             else:
@@ -628,6 +708,20 @@ def import_courses(force):
                 # lesson — Lesson01 of the beginner course is video-only.
                 warn("%s/%s has a video but no cover photo — lesson kept, poster left empty"
                      % (course["slug"], sub or "."))
+
+            # The photographs a student paints FROM. Numbered by position in the
+            # folder so the files are stable, and the source filename is carried
+            # through: it is the only label these have, nothing describes them.
+            refs = []
+            for k, name in enumerate(ref_names, 1):
+                r_rel = "img/courses/%s/l%02d-ref%d.jpg" % (course["slug"], seq, k)
+                r_meta = encode_image(os.path.join(folder, name),
+                                      os.path.join(SITE_DIR, r_rel), MAX_EDGE_GALLERY,
+                                      force, slot="lesson-ref")
+                refs.append({"src": name, "path": r_rel, "w": r_meta["w"],
+                             "h": r_meta["h"], "meta": img_meta(r_meta)})
+            if refs:
+                print("      %d reference photo%s" % (len(refs), "" if len(refs) == 1 else "s"))
 
             # A lesson folder may hold several videos: they are PARTS of one
             # lesson, played in natural filename order (client confirmed the
@@ -660,6 +754,10 @@ def import_courses(force):
                 # that paints it reads srcset/sizes/w/h from here via
                 # build-data.py rather than re-deriving the widths.
                 "posterMeta": img_meta(meta),
+                # The photographs the lesson is painted FROM, shown in the lesson
+                # body. Empty for most lessons -- only six of the beginner course's
+                # folders carry one. (client feedback 2026-08-12)
+                "refPhotos": refs,
                 "dur": total,
                 "videos": parts,
                 "srcVideo": parts[0]["file"] if parts else None,

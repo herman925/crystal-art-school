@@ -114,6 +114,29 @@
    that did not exist, so on the three courses with no materials the card painted
    as a heading over 88px of nothing. The element exists now; it is empty until
    the script fills it, and an empty one takes no space. */
+/* Reference photographs — the pictures the lesson is painted FROM.
+   (client feedback 2026-08-12: "Reference Photos 在Courses裏Material", and
+   2026-08-21: shown in the lesson AND downloadable, rather than one or the
+   other.)
+
+   They are not put in the Course materials list above, for two reasons. That
+   list is COURSE-level and these belong to one lesson; and it is a list of
+   download rows, so a reference photograph in it would be a filename a student
+   has to fetch before they can see whether it is the one they want. Shown as
+   pictures, with the download under each, both readings of her note are
+   satisfied at once.
+
+   `auto-fit` rather than `auto-fill`: a lesson with one photograph should show
+   it at the full width of the card, not leave three empty columns beside it. */
+.ref-card .ref-grid { display: grid; gap: 16px; padding: 0 10px 16px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.ref-card figure { margin: 0; }
+.ref-card .ref-shot { display: block; width: 100%; height: auto; border-radius: var(--radius-card);
+  background: rgba(20,17,13,.35); }
+.ref-card figcaption { display: flex; align-items: baseline; justify-content: space-between;
+  gap: 10px; margin-top: 7px; font-family: var(--font-cond); font-size: 12.5px;
+  letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); }
+.ref-card figcaption a { color: var(--ink); text-decoration: underline; text-underline-offset: 2px; white-space: nowrap; }
 .materials-card .res-note { margin: 0; padding: 0 10px 14px; font-family: var(--font-cond); font-size: 13.5px; line-height: 1.5; color: var(--muted); }
 .materials-card .res-note:empty { display: none; }
 /* Course-level films — the tools / palette introductions that belong to the
@@ -298,6 +321,16 @@
       <!-- 8.1: Course Materials sits in the LEFT column, below the completion
            button. The known trade-off, recorded in 1.4.9, is that the completion
            button therefore comes before the downloads. -->
+      <!-- Per-LESSON, so it is rebuilt by loadUnit and hidden on the lessons
+           that have none — which is most of them. Six of the beginner course's
+           folders carry a reference photograph; the intermediate course carries
+           none at all. -->
+      <div class="curr-card materials-card ref-card" id="ref-card" hidden>
+        <div class="ch">Reference photos</div>
+        <p class="res-note">The photographs this lesson is painted from. Open one to see it full size, or download it to work from.</p>
+        <div class="ref-grid" id="ref-grid"></div>
+      </div>
+
       <div class="curr-card materials-card" id="materials-card">
         <div class="ch">Course materials</div>
         <!-- 8.1 item 4 + 1.4.9: materials[] is a per-course field. The list is
@@ -430,6 +463,8 @@ class Component extends DCLogic {
       srcset: l.srcset || '',
       w: l.w || 0,
       h: l.h || 0,
+      /* the photographs this lesson is painted FROM, each with its own ladder */
+      refPhotos: l.refPhotos || [],
       video: l.video || null,  // part 1's Drive preview URL, or null = missing
       portrait: !!l.portrait,  // 1.4.12: measured from the file at import
       parts: (l.videos && l.videos.length > 1) ? l.videos : null
@@ -703,6 +738,39 @@ class Component extends DCLogic {
       } catch (e) {}
     };
 
+    /* The reference photographs for the lesson being shown.
+
+       The visible label is positional — "Reference 1" — not a caption. Crystal
+       supplied no captions, so anything describing what is IN a photograph would
+       be invented; and her filenames, which is what was shown first, render as
+       LESSON03REFPHOTO2 and read like debug output on a student's page. The
+       filename is still what the file downloads AS, so the provenance is not
+       lost, it is just not shouted. */
+    const renderRefPhotos = (u) => {
+      const card = $('ref-card'), grid = $('ref-grid');
+      if (!card || !grid) return;
+      const shots = u.refPhotos || [];
+      card.hidden = !shots.length;
+      if (!shots.length) { grid.innerHTML = ''; return; }
+      grid.innerHTML = shots.map((r, k) => {
+        const label = 'Reference ' + (k + 1);
+        const alt = 'Reference photograph ' + (k + 1) + ' for lesson ' +
+                    (state.unit + 1) + ' — ' + u.title;
+        return '<figure>' +
+          '<a href="' + escl(r.path) + '" target="_blank" rel="noopener">' +
+            '<img class="ref-shot" src="' + escl(r.path) + '"' +
+              (r.srcset ? ' srcset="' + escl(r.srcset) + '"' : '') +
+              (r.sizes ? ' sizes="' + escl(r.sizes) + '"' : '') +
+              (r.w ? ' width="' + r.w + '" height="' + r.h + '"' : '') +
+              ' alt="' + escl(alt) + '" loading="lazy" decoding="async">' +
+          '</a>' +
+          '<figcaption><span>' + escl(label) + '</span>' +
+            '<a download="' + escl(r.src || '') + '" href="' + escl(r.path) + '">Download</a>' +
+          '</figcaption>' +
+        '</figure>';
+      }).join('');
+    };
+
     const loadUnit = (i) => {
       state.unit = Math.max(0, Math.min(N - 1, i));
       const u = UNITS[state.unit];
@@ -721,6 +789,7 @@ class Component extends DCLogic {
         poster.removeAttribute('srcset'); poster.removeAttribute('sizes');
         poster.removeAttribute('src'); poster.style.display = 'none';
       }
+      renderRefPhotos(u);
       /* The cover's own shape, not the film's — see the .is-poster-tall note in
          the stylesheet above. Read from the poster's intrinsic pixels, which the
          asset pipeline measured, so a cover swapped for one of a different shape

@@ -91,6 +91,7 @@
             "w": 1280,
             "h": 720
           },
+          "refPhotos": [],
           "dur": 500,
           "videos": [
             {
@@ -107,13 +108,39 @@
           "srcFolder": "Lesson02&03",
           "poster": "img/courses/clouds-beginner/l02.jpg",
           "posterW": 1280,
-          "posterH": 1280,
+          "posterH": 720,
           "posterMeta": {
             "srcset": "img/courses/clouds-beginner/l02-96.jpg 96w, img/courses/clouds-beginner/l02-160.jpg 160w, img/courses/clouds-beginner/l02-384.jpg 384w, img/courses/clouds-beginner/l02-768.jpg 768w, img/courses/clouds-beginner/l02.jpg 1280w",
             "sizes": "(max-width: 600px) 56px, 78px",
             "w": 1280,
-            "h": 1280
+            "h": 720
           },
+          "refPhotos": [
+            {
+              "src": "Lesson03refphoto2.jpg",
+              "path": "img/courses/clouds-beginner/l02-ref1.jpg",
+              "w": 1088,
+              "h": 1600,
+              "meta": {
+                "srcset": "img/courses/clouds-beginner/l02-ref1-320.jpg 320w, img/courses/clouds-beginner/l02-ref1-640.jpg 640w, img/courses/clouds-beginner/l02-ref1.jpg 1088w",
+                "sizes": "(max-width: 600px) 510px, (max-width: 1000px) 910px, 890px",
+                "w": 1088,
+                "h": 1600
+              }
+            },
+            {
+              "src": "Lesson03refphoto.JPG",
+              "path": "img/courses/clouds-beginner/l02-ref2.jpg",
+              "w": 736,
+              "h": 1101,
+              "meta": {
+                "srcset": "img/courses/clouds-beginner/l02-ref2-320.jpg 320w, img/courses/clouds-beginner/l02-ref2.jpg 736w",
+                "sizes": "(max-width: 600px) 510px, (max-width: 1000px) 910px, 890px",
+                "w": 736,
+                "h": 1101
+              }
+            }
+          ],
           "dur": 781,
           "videos": [
             {
@@ -130,13 +157,27 @@
           "srcFolder": "Lesson04",
           "poster": "img/courses/clouds-beginner/l03.jpg",
           "posterW": 1280,
-          "posterH": 1280,
+          "posterH": 720,
           "posterMeta": {
             "srcset": "img/courses/clouds-beginner/l03-96.jpg 96w, img/courses/clouds-beginner/l03-160.jpg 160w, img/courses/clouds-beginner/l03-384.jpg 384w, img/courses/clouds-beginner/l03-768.jpg 768w, img/courses/clouds-beginner/l03.jpg 1280w",
             "sizes": "(max-width: 600px) 56px, 78px",
             "w": 1280,
-            "h": 1280
+            "h": 720
           },
+          "refPhotos": [
+            {
+              "src": "CloudsLesson4refphoto.jpg",
+              "path": "img/courses/clouds-beginner/l03-ref1.jpg",
+              "w": 852,
+              "h": 867,
+              "meta": {
+                "srcset": "img/courses/clouds-beginner/l03-ref1-320.jpg 320w, img/courses/clouds-beginner/l03-ref1-640.jpg 640w, img/courses/clouds-beginner/l03-ref1.jpg 852w",
+                "sizes": "(max-width: 600px) 510px, (max-width: 1000px) 910px, 890px",
+                "w": 852,
+                "h": 867
+              }
+            }
+          ],
           "dur": 364,
           "videos": [
             {
@@ -153,13 +194,39 @@
           "srcFolder": "Lesson05",
           "poster": "img/courses/clouds-beginner/l04.jpg",
           "posterW": 1280,
-          "posterH": 1280,
+          "posterH": 720,
           "posterMeta": {
             "srcset": "img/courses/clouds-beginner/l04-96.jpg 96w, img/courses/clouds-beginner/l04-160.jpg 160w, img/courses/clouds-beginner/l04-384.jpg 384w, img/courses/clouds-beginner/l04-768.jpg 768w, img/courses/clouds-beginner/l04.jpg 1280w",
             "sizes": "(max-width: 600px) 56px, 78px",
             "w": 1280,
-            "h": 1280
+            "h": 720
           },
+          "refPhotos": [
+            {
+              "src": "CloudsLesson05Arefphoto.jpg",
+              "path": "img/courses/clouds-beginner/l04-ref1.jpg",
+              "w": 1600,
+              "h": 1600,
+              "meta": {
+                "srcset": "img/courses/clouds-beginner/l04-ref1-320.jpg 320w, img/courses/clouds-beginner/l04-ref1-640.jpg 640w, img/courses/clouds-beginner/l04-ref1-960.jpg 960w, img/courses/clouds-beginner/l04-ref1.jpg 1600w",
+                "sizes": "(max-width: 600px) 510px, (max-width: 1000px) 910px, 890px",
+                "w": 1600,
+                "h": 1600
+              }
+            },
+            {
+              "src": "CloudsLesson05refphoto.jpg",
+              "path": "img/courses/clouds-beginner/l04-ref2.jpg",
+              "w": 664,
+              "h": 569,
+              "meta": {
+                "srcset": "img/courses/clouds-beginner/l04-ref2-320.jpg 320w, img/courses/clouds-beginner/l04-ref2.jpg 664w",
+                "sizes": "(max-width: 600px) 510px, (max-width: 1000px) 910px, 890px",
+                "w": 664,
+                "h": 569
+              }
+            }
+          ],
           "dur": 2758,
           "videos": [
             {
@@ -181,13 +248,27 @@
           "srcFolder": "Lesson06",
           "poster": "img/courses/clouds-beginner/l05.jpg",
           "posterW": 1280,
-          "posterH": 1280,
+          "posterH": 720,
           "posterMeta": {
             "srcset": "img/courses/clouds-beginner/l05-96.jpg 96w, img/courses/clouds-beginner/l05-160.jpg 160w, img/courses/clouds-beginner/l05-384.jpg 384w, img/courses/clouds-beginner/l05-768.jpg 768w, img/courses/clouds-beginner/l05.jpg 1280w",
             "sizes": "(max-width: 600px) 56px, 78px",
             "w": 1280,
-            "h": 1280
+            "h": 720
           },
+          "refPhotos": [
+            {
+              "src": "CloudsLesson06refphoto.JPG",
+              "path": "img/courses/clouds-beginner/l05-ref1.jpg",
+              "w": 736,
+              "h": 1245,
+              "meta": {
+                "srcset": "img/courses/clouds-beginner/l05-ref1-320.jpg 320w, img/courses/clouds-beginner/l05-ref1.jpg 736w",
+                "sizes": "(max-width: 600px) 510px, (max-width: 1000px) 910px, 890px",
+                "w": 736,
+                "h": 1245
+              }
+            }
+          ],
           "dur": 874,
           "videos": [
             {
@@ -204,13 +285,14 @@
           "srcFolder": "Lesson07",
           "poster": "img/courses/clouds-beginner/l06.jpg",
           "posterW": 1280,
-          "posterH": 1280,
+          "posterH": 720,
           "posterMeta": {
             "srcset": "img/courses/clouds-beginner/l06-96.jpg 96w, img/courses/clouds-beginner/l06-160.jpg 160w, img/courses/clouds-beginner/l06-384.jpg 384w, img/courses/clouds-beginner/l06-768.jpg 768w, img/courses/clouds-beginner/l06.jpg 1280w",
             "sizes": "(max-width: 600px) 56px, 78px",
             "w": 1280,
-            "h": 1280
+            "h": 720
           },
+          "refPhotos": [],
           "dur": 183,
           "videos": [
             {
@@ -226,14 +308,15 @@
           "spans": 1,
           "srcFolder": "Lesson08",
           "poster": "img/courses/clouds-beginner/l07.jpg",
-          "posterW": 915,
-          "posterH": 1280,
+          "posterW": 1280,
+          "posterH": 720,
           "posterMeta": {
-            "srcset": "img/courses/clouds-beginner/l07-96.jpg 96w, img/courses/clouds-beginner/l07-160.jpg 160w, img/courses/clouds-beginner/l07-384.jpg 384w, img/courses/clouds-beginner/l07.jpg 915w",
+            "srcset": "img/courses/clouds-beginner/l07-96.jpg 96w, img/courses/clouds-beginner/l07-160.jpg 160w, img/courses/clouds-beginner/l07-384.jpg 384w, img/courses/clouds-beginner/l07-768.jpg 768w, img/courses/clouds-beginner/l07.jpg 1280w",
             "sizes": "(max-width: 600px) 56px, 78px",
-            "w": 915,
-            "h": 1280
+            "w": 1280,
+            "h": 720
           },
+          "refPhotos": [],
           "dur": 468,
           "videos": [
             {
@@ -249,14 +332,15 @@
           "spans": 1,
           "srcFolder": "Lesson09",
           "poster": "img/courses/clouds-beginner/l08.jpg",
-          "posterW": 945,
-          "posterH": 1280,
+          "posterW": 1280,
+          "posterH": 720,
           "posterMeta": {
-            "srcset": "img/courses/clouds-beginner/l08-96.jpg 96w, img/courses/clouds-beginner/l08-160.jpg 160w, img/courses/clouds-beginner/l08-384.jpg 384w, img/courses/clouds-beginner/l08.jpg 945w",
+            "srcset": "img/courses/clouds-beginner/l08-96.jpg 96w, img/courses/clouds-beginner/l08-160.jpg 160w, img/courses/clouds-beginner/l08-384.jpg 384w, img/courses/clouds-beginner/l08-768.jpg 768w, img/courses/clouds-beginner/l08.jpg 1280w",
             "sizes": "(max-width: 600px) 56px, 78px",
-            "w": 945,
-            "h": 1280
+            "w": 1280,
+            "h": 720
           },
+          "refPhotos": [],
           "dur": 484,
           "videos": [
             {
@@ -273,13 +357,14 @@
           "srcFolder": "Lesson10",
           "poster": "img/courses/clouds-beginner/l09.jpg",
           "posterW": 1280,
-          "posterH": 1280,
+          "posterH": 720,
           "posterMeta": {
             "srcset": "img/courses/clouds-beginner/l09-96.jpg 96w, img/courses/clouds-beginner/l09-160.jpg 160w, img/courses/clouds-beginner/l09-384.jpg 384w, img/courses/clouds-beginner/l09-768.jpg 768w, img/courses/clouds-beginner/l09.jpg 1280w",
             "sizes": "(max-width: 600px) 56px, 78px",
             "w": 1280,
-            "h": 1280
+            "h": 720
           },
+          "refPhotos": [],
           "dur": 885,
           "videos": [
             {
@@ -296,13 +381,14 @@
           "srcFolder": "Lesson11",
           "poster": "img/courses/clouds-beginner/l10.jpg",
           "posterW": 1280,
-          "posterH": 1280,
+          "posterH": 720,
           "posterMeta": {
             "srcset": "img/courses/clouds-beginner/l10-96.jpg 96w, img/courses/clouds-beginner/l10-160.jpg 160w, img/courses/clouds-beginner/l10-384.jpg 384w, img/courses/clouds-beginner/l10-768.jpg 768w, img/courses/clouds-beginner/l10.jpg 1280w",
             "sizes": "(max-width: 600px) 56px, 78px",
             "w": 1280,
-            "h": 1280
+            "h": 720
           },
+          "refPhotos": [],
           "dur": 558,
           "videos": [
             {
@@ -319,13 +405,14 @@
           "srcFolder": "Lesson12",
           "poster": "img/courses/clouds-beginner/l11.jpg",
           "posterW": 1280,
-          "posterH": 1280,
+          "posterH": 720,
           "posterMeta": {
             "srcset": "img/courses/clouds-beginner/l11-96.jpg 96w, img/courses/clouds-beginner/l11-160.jpg 160w, img/courses/clouds-beginner/l11-384.jpg 384w, img/courses/clouds-beginner/l11-768.jpg 768w, img/courses/clouds-beginner/l11.jpg 1280w",
             "sizes": "(max-width: 600px) 56px, 78px",
             "w": 1280,
-            "h": 1280
+            "h": 720
           },
+          "refPhotos": [],
           "dur": 400,
           "videos": [
             {
@@ -342,13 +429,14 @@
           "srcFolder": "Lesson13",
           "poster": "img/courses/clouds-beginner/l12.jpg",
           "posterW": 1280,
-          "posterH": 1280,
+          "posterH": 720,
           "posterMeta": {
             "srcset": "img/courses/clouds-beginner/l12-96.jpg 96w, img/courses/clouds-beginner/l12-160.jpg 160w, img/courses/clouds-beginner/l12-384.jpg 384w, img/courses/clouds-beginner/l12-768.jpg 768w, img/courses/clouds-beginner/l12.jpg 1280w",
             "sizes": "(max-width: 600px) 56px, 78px",
             "w": 1280,
-            "h": 1280
+            "h": 720
           },
+          "refPhotos": [],
           "dur": 619,
           "videos": [
             {
@@ -365,13 +453,14 @@
           "srcFolder": "Lesson14",
           "poster": "img/courses/clouds-beginner/l13.jpg",
           "posterW": 1280,
-          "posterH": 1280,
+          "posterH": 720,
           "posterMeta": {
             "srcset": "img/courses/clouds-beginner/l13-96.jpg 96w, img/courses/clouds-beginner/l13-160.jpg 160w, img/courses/clouds-beginner/l13-384.jpg 384w, img/courses/clouds-beginner/l13-768.jpg 768w, img/courses/clouds-beginner/l13.jpg 1280w",
             "sizes": "(max-width: 600px) 56px, 78px",
             "w": 1280,
-            "h": 1280
+            "h": 720
           },
+          "refPhotos": [],
           "dur": 461,
           "videos": [
             {
@@ -495,6 +584,7 @@
             "w": 1280,
             "h": 1280
           },
+          "refPhotos": [],
           "dur": 301,
           "videos": [
             {
@@ -518,6 +608,7 @@
             "w": 1280,
             "h": 1280
           },
+          "refPhotos": [],
           "dur": 721,
           "videos": [
             {
@@ -541,6 +632,7 @@
             "w": 1280,
             "h": 1280
           },
+          "refPhotos": [],
           "dur": 365,
           "videos": [
             {
@@ -564,6 +656,7 @@
             "w": 1280,
             "h": 1280
           },
+          "refPhotos": [],
           "dur": 646,
           "videos": [
             {
@@ -587,6 +680,7 @@
             "w": 1280,
             "h": 1280
           },
+          "refPhotos": [],
           "dur": 452,
           "videos": [
             {
@@ -610,6 +704,7 @@
             "w": 1280,
             "h": 1280
           },
+          "refPhotos": [],
           "dur": 752,
           "videos": [
             {
@@ -633,6 +728,7 @@
             "w": 1280,
             "h": 1280
           },
+          "refPhotos": [],
           "dur": 850,
           "videos": [
             {
@@ -692,6 +788,7 @@
             "w": 540,
             "h": 540
           },
+          "refPhotos": [],
           "dur": 483,
           "videos": [
             {
@@ -741,6 +838,7 @@
             "w": 1280,
             "h": 1280
           },
+          "refPhotos": [],
           "dur": 673,
           "videos": [
             {

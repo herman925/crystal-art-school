@@ -190,6 +190,16 @@ def build_courses(manifest, meta, links):
                 "free": i == 0 and len(a_lessons) > 1,
                 "src": al.get("srcVideo"),        # provenance only, never fetched
                 "srcFolder": al["srcFolder"],
+                # The photographs the lesson is painted FROM, shown in the lesson
+                # body with a download link under each. Only six of the beginner
+                # folders carry any; the block does not render when the list is
+                # empty. `src` is the client's own filename and is the only label
+                # these have -- she supplied no captions, and one written here
+                # would be invented. (client feedback 2026-08-12)
+                "refPhotos": [
+                    dict({"path": r["path"], "src": r["src"]}, **img_fields(r.get("meta")))
+                    for r in al.get("refPhotos", [])
+                ],
             }
             # srcset/sizes/w/h describe `poster`. `sizes` is written for the
             # 76-78px thumbnail the poster is painted in on course.dc.html and
