@@ -891,15 +891,38 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
    back with `border-top: 1px` — has nothing left to paint. Killing only the
    border-color would have left that phone-width line behind.
 
-   NOT TOUCHED: `.engraved.is-quote` at the top of About. Its rules are straddled
-   by the two quote marks and are the client's own 2026-08-08 device
-   ("用此符號設計"), not the panel frame she is objecting to here. Confirm
-   before removing those as well. */
+   SCOPE: About only. Both selectors below are hung on classes that appear in
+   About.dc.html and nowhere else in the repo, so nothing else can be reached
+   from here. */
 .cas-root .bio-copy .eng-body::before { content: none; }
 .cas-root .bio-copy .eng-rule { display: none; }
 /* The rules were the flex children that pushed the title to the middle of the
    head; with them gone the title is the only child and would sit hard left. */
 .cas-root .bio-copy .eng-head { justify-content: center; }
+
+/* The quote panel at the top of the page goes the same way, and this one needed
+   asking about first: its rules are the client's own 2026-08-08 device
+   ("用此符號設計"), where the opening and closing marks sit ON the top and
+   bottom rules at opposite corners. Confirmed 2026-08-20: the LINES go, the
+   MARKS stay. So the panel keeps its two serif quotation marks, opening at the
+   top left and closing at the bottom right exactly where they already sat, and
+   loses the two rule segments and the side frame between them.
+
+   The negative margins go with the rules. They existed to pull the head down
+   and the foot up by half their own height so the marks would straddle a frame
+   edge; with no edge to straddle they only push the marks into the quotation.
+   `--eng-f` is measured in About.dc.html purely to feed the foot margin and is
+   now unused — the measuring pass is left alone because `--eng-h` still drives
+   the essay panels' top padding. */
+.cas-root .engraved.is-quote .eng-rule { display: none; }
+.cas-root .engraved.is-quote .eng-body::before { content: none; }
+/* justify-content is restated, not inherited: industrial-2.css's 620px block
+   centres `.engraved .eng-head` because on the essay panels the rules were the
+   only thing centring the title. On the quote panel that put the opening mark
+   in the middle of the top edge while the closing one stayed at the far right.
+   Opening top LEFT, closing bottom right, at every width. */
+.cas-root .engraved.is-quote .eng-head { margin-bottom: 0; justify-content: flex-start; }
+.cas-root .engraved.is-quote .eng-foot { margin-top: 0; justify-content: flex-end; }
 /* Leather takes an impression the other way up from paper: the lit edge sits
    ABOVE the glyphs on a stamped hide, not below. Written with .engraved in the
    chain to make this (0,4,0), because industrial-2.css sets this same property in
