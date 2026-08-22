@@ -184,8 +184,52 @@
            This tween used to scrub its opacity down to .35 as the band left the
            viewport, so the title turned see-through after roughly two wheel
            notches — the band is only ~230px tall. The drift stays, the fade
-           does not: nothing in the wood band renders below full strength. */
-        if (phc) g.to(phc, { yPercent: 22, ease: 'none', scrollTrigger: { trigger: ph, start: 'top top', end: 'bottom top', scrub: 1 } });
+           does not: nothing in the wood band renders below full strength.
+
+           The signature (.logo2) is dragged along by that drift, and above
+           900px it clears the band's bottom edge by under 3px on the lesson
+           banner, so the shift pushed it through the edge and
+           .page-hero's `overflow: hidden` cut its lower half off. Scrubbing
+           back up eases the shift out over about a second, which is why the
+           mark looked chopped for a beat after scrolling down and back up
+           rather than all the time. It is held in place by an equal and
+           opposite tween on the mark itself, in the same timeline so the two
+           can never fall out of step.
+
+           Not by tweening the container's children instead and leaving the
+           mark out: .crumbs, .eyebrow and .lead are already mid-flight on
+           their own entrance tween (heroBits above), and a second tween on
+           their `y` captured its start value and stuck them 26px low.
+
+           The counter-tween is desktop-only. At 900 and below the mark is back
+           in normal flow BENEATH the text (see .page-hero .container > .logo2
+           in industrial-1.css), where holding it still while the text drifts
+           would run the two together. There the drift is capped at the band's
+           own bottom padding, which is the gap under the mark down there —
+           8.7px of it was being clipped at 800px wide before the cap. */
+        if (phc) {
+          var phLogo = phc.querySelector('.logo2');
+          var phDist = function () { return phc.offsetHeight * 0.22; };
+          var phCapped = function () {
+            var pad = parseFloat(getComputedStyle(ph).paddingBottom) || 0;
+            return Math.min(phDist(), pad);
+          };
+          var phBuild = function (dist, hold) {
+            var tl = g.timeline({ scrollTrigger: { trigger: ph, start: 'top top', end: 'bottom top', scrub: 1, invalidateOnRefresh: true } });
+            tl.to(phc, { y: dist, ease: 'none' }, 0);
+            /* -50% of its own height is the mark's resting CSS transform; GSAP
+               keeps that as yPercent and adds these pixels to it. */
+            if (hold && phLogo) tl.to(phLogo, { y: function () { return -dist(); }, ease: 'none' }, 0);
+            return tl;
+          };
+          if (g.matchMedia) {
+            var phMM = g.matchMedia();
+            phMM.add('(min-width: 901px)', function () { phBuild(phDist, true); });
+            phMM.add('(max-width: 900px)', function () { phBuild(phCapped, false); });
+          } else {
+            phBuild(phCapped, false);
+          }
+        }
       }
 
       /* ============================================================
