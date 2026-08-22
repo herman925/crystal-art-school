@@ -47,3 +47,12 @@ __pycache__/
 # before this line existed; see the commit that added it.)
 /docs/client-messages/
 /docs/asset-cutouts/
+
+# Credentials. The client's platform logins live OUTSIDE this repo, at
+# "Crystal Education Project/.secrets/.env" — this repo is public and serves
+# GitHub Pages. These patterns exist so that a stray .env created in here is
+# never committed by accident; they are a backstop, not the storage location.
+.env
+.env.*
+!.env.example
+/.secrets/
