@@ -117,6 +117,9 @@
     + '.tp-opt .nm{font-family:var(--font-marker,serif);font-weight:600;font-size:15px;color:var(--ink);line-height:1.1;}'
     + '.tp-opt .ds{font-family:var(--font-cond,sans-serif);font-size:12.5px;color:var(--muted);margin-top:3px;line-height:1.3;}'
     + '.tp-opt .pr{margin-left:auto;font-family:var(--font-display-serif,serif);font-weight:600;font-size:18px;color:var(--coral);white-space:nowrap;}'
+    /* The homepage owns the About column's transform choreography; keep the
+       shared fallback reveal from restarting its 16px rise. */
+    + '.cas-root .about-col.reveal-up.in-view{animation:none;}'
     + '.tp-arrow{position:absolute;top:-7px;left:var(--ax,40px);width:13px;height:13px;background:var(--surface);border-left:1px solid var(--line);border-top:1px solid var(--line);transform:rotate(45deg);}';
 
   function injectStyles() { var s = document.createElement('style'); s.id = 'mc-styles'; s.textContent = css; document.head.appendChild(s); }
