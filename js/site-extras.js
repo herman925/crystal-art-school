@@ -64,7 +64,7 @@
     /* chalk cursor and dust trail (theme D, fine pointers only) */
     + '@media (hover: hover) and (pointer: fine){'
     + '[data-theme="D"] .cas-root, [data-theme="D"].cas-root{cursor:url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'26\' height=\'26\'%3E%3Ccircle cx=\'13\' cy=\'13\' r=\'5\' fill=\'%23f3ede1\' fill-opacity=\'.92\'/%3E%3Ccircle cx=\'13\' cy=\'13\' r=\'9\' fill=\'none\' stroke=\'%23f3ede1\' stroke-opacity=\'.35\'/%3E%3C/svg%3E") 13 13, auto;}'
-    + '[data-theme="D"] .cas-root a,[data-theme="D"] .cas-root button,[data-theme="D"] .cas-root [role="button"],[data-theme="D"] .cas-root .cover-card,[data-theme="D"] .cas-root summary{cursor:url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'30\' height=\'30\'%3E%3Ccircle cx=\'15\' cy=\'15\' r=\'7\' fill=\'%23d98a5c\' fill-opacity=\'.95\'/%3E%3Ccircle cx=\'15\' cy=\'15\' r=\'12\' fill=\'none\' stroke=\'%23d98a5c\' stroke-opacity=\'.5\'/%3E%3C/svg%3E") 15 15, pointer;}'
+    + '[data-theme="D"].cas-root a,[data-theme="D"].cas-root button,[data-theme="D"].cas-root [role="button"],[data-theme="D"].cas-root .cover-card,[data-theme="D"].cas-root summary{cursor:url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'30\' height=\'30\'%3E%3Ccircle cx=\'15\' cy=\'15\' r=\'7\' fill=\'%23d98a5c\' fill-opacity=\'.95\'/%3E%3Ccircle cx=\'15\' cy=\'15\' r=\'12\' fill=\'none\' stroke=\'%23d98a5c\' stroke-opacity=\'.5\'/%3E%3C/svg%3E") 15 15, pointer;}'
     + '.mc-chalk-dust{position:fixed;width:7px;height:7px;border-radius:50%;background:#f3ede1;pointer-events:none;z-index:2000;opacity:.0;}'
     + '}'
     /* ---------- GDPR cookie consent ---------- */
@@ -317,7 +317,7 @@
     if (drawer.classList.contains('open')) close(); else open();
   }, true);
 
-  /* ---------- chalk dust trail (theme D only) ---------- */
+  /* ---------- chalk dust trail (theme D, fine pointers only) ---------- */
   function chalkTrail() {
     var finePointer = null;
     try { finePointer = window.matchMedia('(hover: hover) and (pointer: fine)'); } catch (e) {}
