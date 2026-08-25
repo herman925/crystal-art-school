@@ -12,10 +12,11 @@
  * cas_course_price() — rather than a second reading of the same meta, so a pricing or
  * category change lands on the catalogue card and this card together.
  *
- * WHILE EVERY COURSE IS A DRAFT THIS BLOCK RENDERS NOTHING AT ALL. Not a heading over an
- * empty rail, and not an empty state: the shortcode returns an empty string. The lede and
- * the section chrome exist only to introduce courses, so with no courses there is nothing
- * for them to introduce.
+ * WHILE EVERY COURSE IS A DRAFT THE RAIL RENDERS NOTHING. Not a heading over an empty rail,
+ * and not an empty state: the shortcode returns just the Course overview tail (3.5) instead.
+ * The lede and the section chrome exist only to introduce courses, so with no courses there
+ * is nothing for them to introduce — but the overview below them is her copy, not a rail,
+ * and renders alone until the first course is published.
  *
  * Deliberately not built here: the Art Gallery promotion card (3.6). It is the right-hand
  * column of `.shop-layout` and therefore has to sit INSIDE this markup, but it is another
@@ -229,11 +230,27 @@ function cas_home_courses_lede_default() {
 }
 
 function cas_render_home_courses() {
-	$ids = cas_home_course_ids();
+	$ids      = cas_home_course_ids();
+	$overview = function_exists( 'cas_render_home_course_overview' )
+		? cas_render_home_course_overview()
+		: '';
 
-	/* Nothing published — the whole block goes, heading and all. */
+	/* Nothing published — the rail and its heading go, but the Course overview tail (3.5)
+	   is her copy, not a rail, so it renders alone in the same width. */
 	if ( ! $ids ) {
-		return '';
+		if ( '' === $overview ) {
+			return '';
+		}
+
+		ob_start();
+		?>
+		<section class="pg-section">
+			<div class="pg-wrap">
+				<?php echo $overview; // phpcs:ignore WordPress.Security.EscapeOutput -- the module escapes its own output. ?>
+			</div>
+		</section>
+		<?php
+		return ob_get_clean();
 	}
 
 	/* This shortcode sits in a Page's post_content, so wp_filter_content_tags() runs over
@@ -280,10 +297,10 @@ function cas_render_home_courses() {
 			/* 3.5's Course overview — her two ledes, two numbered principles and the
 			   four self-answered questions — is the tail of this section, exactly as
 			   the prototype places it (index.html:279-319). Its module renders the
-			   markup against the shipped CSS; nothing here needs to know its fields. */
-			if ( function_exists( 'cas_render_home_course_overview' ) ) {
-				echo cas_render_home_course_overview(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- the module escapes its own output.
-			}
+			   markup against the shipped CSS; nothing here needs to know its fields.
+			   Computed once at the top of this function so the no-courses branch
+			   above can render it alone. */
+			echo $overview; // phpcs:ignore WordPress.Security.EscapeOutput -- the module escapes its own output.
 			?>
 		</div>
 	</section>
@@ -318,7 +335,7 @@ add_action(
 				'title'       => 'Home — Shop all courses',
 				'panel'       => 'cas_pages',
 				'priority'    => 13,
-				'description' => 'The introduction under the SHOP ALL COURSES heading. The cards themselves — course titles, covers, prices, levels, categories and the five photographs per course — are edited under Dashboard → Tutor LMS → Courses, and the order they appear in is the Page Attributes order on each course. This whole block is hidden while no course is published.',
+				'description' => 'The introduction under the SHOP ALL COURSES heading. The cards themselves — course titles, covers, prices, levels, categories and the five photographs per course — are edited under Dashboard → Tutor LMS → Courses, and the order they appear in is the Page Attributes order on each course. While no course is published the rail and this introduction stay hidden, but the Course overview block below them still shows.',
 			]
 		);
 

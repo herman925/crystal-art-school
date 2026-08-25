@@ -159,7 +159,9 @@ add_action(
 /**
  * The block. Called by cas-home-courses.php inside its own `.pg-wrap`, so it
  * renders as the tail of the Shop all courses section exactly as the prototype
- * places it — the course cards stay above, her overview below.
+ * places it — the course cards stay above, her overview below. While every course
+ * is still a draft the caller renders it alone (in the same width), because this
+ * copy is hers and must reach the page even before the first course is published.
  *
  * @return string
  */
