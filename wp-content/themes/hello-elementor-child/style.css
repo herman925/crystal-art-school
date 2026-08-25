@@ -1,0 +1,10 @@
+/*
+Theme Name: Crystal Art School
+Template: hello-elementor
+Description: Child theme of Hello Elementor. Carries the design system from the
+             approved static prototype. The tokens live in css/industrial-*.css
+             rather than in Elementor Site Settings because Site Settings cannot
+             express them: procedural SVG textures, gradient tokens, the A/D theme
+             pair, and the contrast-tuned ink values per surface.
+Version: 1.0.0
+*/
