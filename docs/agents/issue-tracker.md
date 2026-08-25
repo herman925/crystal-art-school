@@ -1,7 +1,8 @@
 # Issue tracker
 
-Tickets for this repo live **in this file**, not in GitHub Issues. GitHub Issues are
-closed and no longer used — see "History" at the bottom.
+Tickets for the **prototype** live **in this file**. The **WordPress build** work is
+tracked as **GitHub Issues** on this repo again since 2026-08-24 — the post-handoff fix
+list is issues #23-31 (see "History" at the bottom).
 
 Work the **frontier**: any ticket whose blockers are all done. Tick the acceptance
 criteria as they land; move the ticket to "Done" with its commit SHA when every box
@@ -1405,3 +1406,9 @@ Issues were tracked in **GitHub Issues** on `herman925/crystal-art-school` until
 2026-08-09. All issues were closed on that date and tracking moved into this file at the
 client's request; #17 and #22 were still open and are carried forward above as tickets 29
 and 30. The closed issues remain readable on GitHub for their history.
+
+**2026-08-24 — GitHub Issues reopened for the WordPress build.** The verified-but-unfixed
+fix list from the 2026-08-23 handoff, plus the still-not-built items it names, was filed
+as issues **#23-31**, each carrying the `ready-for-agent` label, in dependency order so
+blocking references point at real issue numbers. The split is now: prototype tickets
+live in this file, WordPress-build tickets live on GitHub.
