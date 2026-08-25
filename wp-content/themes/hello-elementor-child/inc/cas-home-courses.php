@@ -276,6 +276,15 @@ function cas_render_home_courses() {
 				</div>
 				<?php echo $aside; // phpcs:ignore WordPress.Security.EscapeOutput ?>
 			</div>
+			<?php
+			/* 3.5's Course overview — her two ledes, two numbered principles and the
+			   four self-answered questions — is the tail of this section, exactly as
+			   the prototype places it (index.html:279-319). Its module renders the
+			   markup against the shipped CSS; nothing here needs to know its fields. */
+			if ( function_exists( 'cas_render_home_course_overview' ) ) {
+				echo cas_render_home_course_overview(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- the module escapes its own output.
+			}
+			?>
 		</div>
 	</section>
 	<?php

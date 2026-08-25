@@ -262,6 +262,7 @@ require_once get_stylesheet_directory() . '/inc/cas-home-about.php';
 require_once get_stylesheet_directory() . '/inc/cas-home-release.php';
 require_once get_stylesheet_directory() . '/inc/cas-home-releases.php';
 require_once get_stylesheet_directory() . '/inc/cas-home-courses.php';
+require_once get_stylesheet_directory() . '/inc/cas-home-course-overview.php';
 require_once get_stylesheet_directory() . '/inc/cas-home-gallery.php';
 require_once get_stylesheet_directory() . '/inc/cas-home-blog.php';
 require_once get_stylesheet_directory() . '/inc/cas-account.php';
