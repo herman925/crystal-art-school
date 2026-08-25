@@ -138,7 +138,11 @@ function cas_archives_context() {
 	$count = $found . ( 1 === $found ? ' post' : ' posts' );
 
 	if ( is_search() ) {
-		$term = trim( (string) get_search_query() );
+		// get_search_query() escapes by default, and truncating an escaped string
+		// can cut inside &amp; — a phrase whose 60th character falls mid-entity
+		// renders a literal "&am" to the visitor. Truncate the raw query, and let
+		// the escaping happen downstream exactly once.
+		$term = trim( (string) get_search_query( false ) );
 
 		if ( '' === $term ) {
 			// Reachable: /?s= with nothing after it.
