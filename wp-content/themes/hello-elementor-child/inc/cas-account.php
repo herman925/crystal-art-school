@@ -672,6 +672,8 @@ function cas_account_dashboard_before() {
 		echo do_shortcode( '[cas_header]' ); // phpcs:ignore WordPress.Security.EscapeOutput
 	}
 
+	echo '<main id="main" class="site-main">'; // phpcs:ignore WordPress.Security.EscapeOutput
+
 	$hero = cas_account_dash_hero();
 
 	if ( $hero ) {
@@ -683,6 +685,8 @@ function cas_account_dashboard_before() {
  * @return void
  */
 function cas_account_dashboard_after() {
+	echo '</main>'; // phpcs:ignore WordPress.Security.EscapeOutput
+
 	if ( ! did_action( 'get_header' ) && shortcode_exists( 'cas_footer' ) ) {
 		echo do_shortcode( '[cas_footer]' ); // phpcs:ignore WordPress.Security.EscapeOutput
 	}
@@ -720,6 +724,38 @@ add_action(
 		wp_add_inline_style( 'cas-account', cas_account_css() );
 	},
 	27
+);
+
+/**
+ * The dashboard is Tutor's own document: Elementor's Theme Builder templates never
+ * render there, so Elementor's config never prints — but its frontend scripts are
+ * still enqueued, and the first one to run throws
+ * `ReferenceError: elementorFrontendConfig is not defined` on every dashboard visit.
+ * Nothing Elementor renders appears on that page, so the scripts are dead weight;
+ * drop them rather than feed them a config for templates that do not exist.
+ */
+add_action(
+	'wp_enqueue_scripts',
+	function () {
+		if ( 'dashboard' !== cas_account_current_key() ) {
+			return;
+		}
+
+		$handles = array(
+			'elementor-frontend',
+			'elementor-frontend-modules',
+			'elementor-common',
+			'elementor-common-modules',
+			'elementor-pro-frontend',
+			'elementor-pro-webpack-runtime',
+			'elementor-sticky',
+		);
+
+		foreach ( $handles as $handle ) {
+			wp_dequeue_script( $handle );
+		}
+	},
+	100
 );
 
 /**
@@ -776,6 +812,7 @@ body.tutor-screen-frontend-dashboard {
   --tutor-text-secondary: var(--muted);
   --tutor-text-subdued: var(--muted);
   --tutor-text-light: var(--muted);
+  --tutor-body-color: var(--ink);
   --tutor-text-primary-inverse: var(--coral-fill-ink);
   --tutor-text-brand: var(--coral-ink);
   --tutor-text-brand-hover: var(--coral-deep);

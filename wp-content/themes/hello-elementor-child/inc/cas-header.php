@@ -84,8 +84,12 @@ function cas_render_header() {
 						<?php echo cas_header_icon( 'cart' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 						<span class="cart-badge" aria-hidden="true">0</span>
 					</a>
-					<a class="btn ghost" href="<?php echo esc_url( function_exists( 'cas_account_login_url' ) ? cas_account_login_url() : wp_login_url() ); ?>">Log in</a>
-					<a class="btn primary" href="<?php echo esc_url( ( function_exists( 'cas_account_signup_url' ) ? cas_account_signup_url() : '' ) ?: wp_registration_url() ); ?>">Sign up</a>
+					<?php if ( ! is_user_logged_in() ) : ?>
+						<a class="btn ghost" href="<?php echo esc_url( function_exists( 'cas_account_login_url' ) ? cas_account_login_url() : wp_login_url() ); ?>">Log in</a>
+						<?php if ( get_option( 'users_can_register' ) ) : ?>
+							<a class="btn primary" href="<?php echo esc_url( ( function_exists( 'cas_account_signup_url' ) ? cas_account_signup_url() : '' ) ?: wp_registration_url() ); ?>">Sign up</a>
+						<?php endif; ?>
+					<?php endif; ?>
 					<button class="mode-toggle" type="button" aria-pressed="true" aria-label="Dark mode" title="Light / dark mode">
 						<?php
 						echo cas_header_icon( 'sun' ) . cas_header_icon( 'moon' ); // phpcs:ignore WordPress.Security.EscapeOutput
