@@ -61,10 +61,12 @@
     + '.mc-empty .ast{font-size:30px;color:var(--marine,#598493);display:block;margin-bottom:10px;}'
     + '.mc-empty p{color:var(--muted);margin:0 0 18px;font-size:15px;}'
     + '@media (max-width:640px){.mc-foot{flex-direction:column;align-items:stretch;}.mc-acts{justify-content:stretch;}.mc-btn{flex:1;justify-content:center;}}'
-    /* chalk cursor (theme D only) */
+    /* chalk cursor and dust trail (theme D, fine pointers only) */
+    + '@media (hover: hover) and (pointer: fine){'
     + '[data-theme="D"] .cas-root, [data-theme="D"].cas-root{cursor:url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'26\' height=\'26\'%3E%3Ccircle cx=\'13\' cy=\'13\' r=\'5\' fill=\'%23f3ede1\' fill-opacity=\'.92\'/%3E%3Ccircle cx=\'13\' cy=\'13\' r=\'9\' fill=\'none\' stroke=\'%23f3ede1\' stroke-opacity=\'.35\'/%3E%3C/svg%3E") 13 13, auto;}'
-    + '[data-theme="D"] .cas-root a,[data-theme="D"] .cas-root button,[data-theme="D"] .cas-root [role="button"],[data-theme="D"] .cas-root .cover-card,[data-theme="D"] .cas-root summary{cursor:url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'30\' height=\'30\'%3E%3Ccircle cx=\'15\' cy=\'15\' r=\'7\' fill=\'%23d98a5c\' fill-opacity=\'.95\'/%3E%3Ccircle cx=\'15\' cy=\'15\' r=\'12\' fill=\'none\' stroke=\'%23d98a5c\' stroke-opacity=\'.5\'/%3E%3C/svg%3E") 15 15, pointer;}'
+    + '[data-theme="D"].cas-root a,[data-theme="D"].cas-root button,[data-theme="D"].cas-root [role="button"],[data-theme="D"].cas-root .cover-card,[data-theme="D"].cas-root summary{cursor:url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'30\' height=\'30\'%3E%3Ccircle cx=\'15\' cy=\'15\' r=\'7\' fill=\'%23d98a5c\' fill-opacity=\'.95\'/%3E%3Ccircle cx=\'15\' cy=\'15\' r=\'12\' fill=\'none\' stroke=\'%23d98a5c\' stroke-opacity=\'.5\'/%3E%3C/svg%3E") 15 15, pointer;}'
     + '.mc-chalk-dust{position:fixed;width:7px;height:7px;border-radius:50%;background:#f3ede1;pointer-events:none;z-index:2000;opacity:.0;}'
+    + '}'
     /* ---------- GDPR cookie consent ---------- */
     + '.ck-bar{position:fixed;left:0;right:0;bottom:0;z-index:1500;transform:translateY(115%);visibility:hidden;transition:transform .5s cubic-bezier(.22,.61,.36,1),visibility 0s linear .5s;background-color:var(--surface);background-image:var(--concrete-grain);background-size:200px 200px;color:var(--ink);box-shadow:0 -14px 44px rgba(20,17,13,.34);border-top:2px solid color-mix(in srgb,var(--banner-bracket,#2b2823) 45%,transparent);}'
     + '.ck-bar.show{transform:translateY(0);visibility:visible;transition:transform .5s cubic-bezier(.22,.61,.36,1),visibility 0s;}'
@@ -315,13 +317,16 @@
     if (drawer.classList.contains('open')) close(); else open();
   }, true);
 
-  /* ---------- chalk dust trail (theme D only) ---------- */
+  /* ---------- chalk dust trail (theme D, fine pointers only) ---------- */
   function chalkTrail() {
+    var finePointer = null;
+    try { finePointer = window.matchMedia('(hover: hover) and (pointer: fine)'); } catch (e) {}
+    if (!finePointer || !finePointer.matches) return;
     var pool = [], N = 6, idx = 0;
     for (var k = 0; k < N; k++) { var d = document.createElement('div'); d.className = 'mc-chalk-dust'; document.body.appendChild(d); pool.push(d); }
     var last = 0;
     window.addEventListener('pointermove', function (e) {
-      if (curTheme() !== 'D') return;
+      if (!finePointer.matches || curTheme() !== 'D' || (e.pointerType && e.pointerType === 'touch')) return;
       var now = Date.now(); if (now - last < 38) return; last = now;
       var d = pool[idx % N]; idx++;
       var jx = (Math.random() - .5) * 8, jy = (Math.random() - .5) * 8;
