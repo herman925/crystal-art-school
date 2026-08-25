@@ -49,7 +49,25 @@
 		s.id = 'cas-extras-styles';
 		s.textContent = '.cas-sr-live{position:absolute!important;width:1px;height:1px;'
 			+ 'margin:-1px;padding:0;overflow:hidden;clip:rect(0 0 0 0);clip-path:inset(50%);'
-			+ 'white-space:nowrap;border:0;}';
+			+ 'white-space:nowrap;border:0;}'
+			/* The homepage owns the About column's transform choreography (its `--i:2`
+			   stagger is timed for the row it sits in); keep the shared fallback reveal
+			   from restarting the 16px rise on an element already in view, which is
+			   the visible reverse-jump this file introduced. The prototype's rule,
+			   verbatim, minus its .cas-root prefix — this theme puts that class on
+			   <body>, so the selectors here need no scope. */
+			+ '.about-col.reveal-up.in-view{animation:none;}'
+			/* Chalk cursor and dust trail (theme D, fine pointers only). The
+			   prototype's rules verbatim, adapted to this theme: .cas-root IS
+			   <body>, so `body[data-theme="D"]` is the whole scope and there is
+			   no wrapper to prefix. Ported on 2026-08-25 per issue #31 — the
+			   file header above records this being left out on purpose until
+			   Herman made the call. */
+			+ '@media (hover: hover) and (pointer: fine){'
+			+ 'body[data-theme="D"]{cursor:url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'26\' height=\'26\'%3E%3Ccircle cx=\'13\' cy=\'13\' r=\'5\' fill=\'%23f3ede1\' fill-opacity=\'.92\'/%3E%3Ccircle cx=\'13\' cy=\'13\' r=\'9\' fill=\'none\' stroke=\'%23f3ede1\' stroke-opacity=\'.35\'/%3E%3C/svg%3E") 13 13, auto;}'
+			+ 'body[data-theme="D"] a,body[data-theme="D"] button,body[data-theme="D"] [role="button"],body[data-theme="D"] .cover-card,body[data-theme="D"] summary{cursor:url("data:image/svg+xml,%3Csvg xmlns=\'http://www.w3.org/2000/svg\' width=\'30\' height=\'30\'%3E%3Ccircle cx=\'15\' cy=\'15\' r=\'7\' fill=\'%23d98a5c\' fill-opacity=\'.95\'/%3E%3Ccircle cx=\'15\' cy=\'15\' r=\'12\' fill=\'none\' stroke=\'%23d98a5c\' stroke-opacity=\'.5\'/%3E%3C/svg%3E") 15 15, pointer;}'
+			+ '.cas-chalk-dust{position:fixed;width:7px;height:7px;border-radius:50%;background:#f3ede1;pointer-events:none;z-index:2000;opacity:.0;}'
+			+ '}';
 
 		( document.head || document.documentElement ).appendChild( s );
 	} )();
@@ -335,6 +353,70 @@
 	}
 
 	/* ------------------------------------------------------------------
+	   Chalk dust trail (theme D, fine pointers only)
+
+	   The pointer-following motes that belong to the theme-D chalk cursor.
+	   Ported from the prototype's chalkTrail() on 2026-08-25 per issue #31;
+	   the CSS half lives in the injected style above. The prototype read the
+	   theme through its own curTheme(); here the theme is an attribute on
+	   <body> (set by functions.php on wp_body_open), so that is what is read.
+	   ------------------------------------------------------------------ */
+
+	function chalkTrail() {
+		var finePointer = null;
+
+		try {
+			finePointer = window.matchMedia( '(hover: hover) and (pointer: fine)' );
+		} catch ( e ) {}
+
+		if ( ! finePointer || ! finePointer.matches ) {
+			return;
+		}
+
+		var pool = [], N = 6, idx = 0, last = 0;
+
+		for ( var k = 0; k < N; k++ ) {
+			var d = document.createElement( 'div' );
+
+			d.className = 'cas-chalk-dust';
+			document.body.appendChild( d );
+			pool.push( d );
+		}
+
+		window.addEventListener( 'pointermove', function ( e ) {
+			if ( ! finePointer.matches || 'D' !== document.body.getAttribute( 'data-theme' ) || ( e.pointerType && 'touch' === e.pointerType ) ) {
+				return;
+			}
+
+			var now = Date.now();
+
+			if ( now - last < 38 ) {
+				return;
+			}
+
+			last = now;
+
+			var mote = pool[ idx % N ];
+			var jx = ( Math.random() - .5 ) * 8;
+			var jy = ( Math.random() - .5 ) * 8;
+
+			idx++;
+
+			mote.style.left = ( e.clientX + jx - 3 ) + 'px';
+			mote.style.top = ( e.clientY + jy - 3 ) + 'px';
+			mote.style.transition = 'none';
+			mote.style.opacity = ( 0.35 + Math.random() * 0.4 );
+			mote.style.transform = 'scale(' + ( 0.6 + Math.random() * 0.7 ) + ')';
+
+			requestAnimationFrame( function () {
+				mote.style.transition = 'opacity .6s ease, transform .6s ease';
+				mote.style.opacity = '0';
+				mote.style.transform = 'scale(.2) translateY(6px)';
+			} );
+		}, { passive: true } );
+	}
+
+	/* ------------------------------------------------------------------
 	   Public surface
 	   ------------------------------------------------------------------ */
 
@@ -355,6 +437,7 @@
 		ensureLive();
 		flushLive();
 		startReveal();
+		chalkTrail();
 	}
 
 	if ( 'loading' === document.readyState ) {
@@ -392,10 +475,12 @@
 
    chalkTrail() and the theme-D chalk cursor — a custom `cursor: url(…)` for the whole
    themed subtree plus six pointer-following dust motes. It is a real prototype design
-   feature and it is genuinely absent here (no `cursor: url` exists anywhere in the
+   feature and it was genuinely absent here (no `cursor: url` existed anywhere in the
    theme's CSS), but a site-wide custom cursor is a visible design decision, not an
    accessibility repair, and it would also apply under the admin bar and over Elementor
-   overlays. Left out on purpose; it is Herman's call, and it is a small file if wanted.
+   overlays. It was left out on purpose pending Herman's call — and the call was made
+   2026-08-25 (issue #31): both halves are now ported above, gated to theme D and fine
+   pointers exactly as the prototype gated them.
 
    watchTheme() / syncTheme() / stamp() — kept the cart drawer and cookie bar on the
    same [data-theme] as .cas-root, because the prototype appended them to <body>,
