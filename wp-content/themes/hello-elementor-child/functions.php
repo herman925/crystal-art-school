@@ -266,6 +266,7 @@ require_once get_stylesheet_directory() . '/inc/cas-home-gallery.php';
 require_once get_stylesheet_directory() . '/inc/cas-home-blog.php';
 require_once get_stylesheet_directory() . '/inc/cas-account.php';
 require_once get_stylesheet_directory() . '/inc/cas-archives.php';
+require_once get_stylesheet_directory() . '/inc/cas-404.php';
 
 /*
  * §3.6's Art Gallery card is the second column of §3.5's `.shop-layout` grid, not a
