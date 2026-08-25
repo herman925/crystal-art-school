@@ -1,0 +1,942 @@
+/* ============================================================
+   Crystal's Art School — Industrial Design System (v3.0)
+   工業風畫室 · "the atelier as workshop"
+   Reskins the pastel sketchbook system (site.css v2.1) into a
+   warm industrial interior: plaster, concrete, raw oak & walnut,
+   copper hardware, iron line-work. The ORIGINAL token names are
+   preserved and overridden per [data-theme] so every ported
+   component reskins automatically and responds to the A ⇄ D switch.
+   Full written spec: DESIGN.md
+   ============================================================ */
+
+/* ---------- fonts ----------
+   display/headlines : Bodoni Moda  (architectural serif)
+   labels/nav/marker : Oswald       (condensed grotesk)
+   body/UI           : Archivo      (technical grotesk)
+   brand stamp       : Saira Stencil One
+*/
+
+:root {
+  /* shape + corner language */
+  --radius-card: 16px;        /* grid cards / tiles — "all curved" */
+  --radius-pill: 999px;
+  --r-promo: 0 0 54px 0;      /* signature bottom-right scoop (hero / promos) */
+  --r-sharp: 2px;
+
+  /* grid + layout (from original) */
+  --site-max: 1440px;
+  --page-max: 1216px;
+  --gutter: 24px;
+
+  /* type tokens (names kept from original, faces swapped) */
+  --font-marker: 'Bodoni Moda', Georgia, serif;
+  --font-display: 'Bodoni Moda', Georgia, serif;
+  --font-display-serif: 'Bodoni Moda', Georgia, serif;
+  --font-body: 'Archivo', system-ui, sans-serif;
+  --font-hand: 'Oswald', sans-serif;
+  --font-cond: 'Oswald', sans-serif;
+  --font-stencil: 'Saira Stencil One', 'Oswald', sans-serif;
+  /* "Font A" — Arizonia (Google Fonts, SIL OFL). Regular 400 only, no bold, and
+     Latin-only: it carries no CJK glyphs, so any Chinese in a Font A heading
+     falls through to the serif behind it and the heading renders in two faces.
+     Only apply it to headings the client named in writing — see .font-a below. */
+  --font-a: 'Arizonia', 'Bodoni Moda', Georgia, cursive;
+
+  /* motion (from original) */
+  --ease-brush: cubic-bezier(.19, 1, .22, 1);
+  --ease-pop: cubic-bezier(.34, 1.56, .64, 1);
+  --ease-out: cubic-bezier(.2, .8, .2, 1);
+  --dur-entrance: 1.2s;
+  --dur-reveal: .9s;
+  --dur-fast: 140ms;
+  --dur-base: 240ms;
+  --stagger: 60ms;
+
+  /* Letter-spacing scale (issue #19). The client reported text reading too small
+     on a high-density laptop; raising the size floor to 12px was half the fix and
+     this is the other half. Heavy tracking on small caps drops ink coverage inside
+     the cap strip by up to 37% while cap height stays put, so it makes text read
+     smaller, not larger.
+
+     NOTE FOR A LATER READER: no recorded decision in either project document
+     mentions letter-spacing. These three values are a developer judgement call,
+     not a client instruction — the site previously carried sixteen ad-hoc values
+     with no system behind them.
+
+     --tracking-label   Oswald (--font-cond) uppercase micro-labels, 12-16px.
+                        Oswald's own cap-to-cap gap is .117em against a ~.30em
+                        counter, so its computable ceiling is .183em; both agreed
+                        reference sites (Proko, Will Kemp) normalise to .050-.066em
+                        at this size, and at .06em the letter gap stays at 47% of
+                        the word gap so words still group pre-attentively.
+     --tracking-display Bodoni Moda uppercase headings. A didone puts its serifs in
+                        the sidebearings, so its native gap is ~.034em — it needs a
+                        positive delta Oswald does not. Already the de facto value.
+     --tracking-stamp   Saira Stencil One wordmarks only. Bridge gaps are cut into
+                        those strokes; tightening to the label value makes the
+                        bridges read as damage rather than as the typeface. These
+                        are lockups the reader identifies, not labels they scan, so
+                        the word-segmentation ceiling above does not bind. */
+  --tracking-label: .06em;
+  --tracking-display: .04em;
+  --tracking-stamp: .10em;
+
+  --fs-h2: clamp(26px, 3.5vw, 38px);
+
+  /* ---------- focus (#08) ----------
+     One ring, two bands, so it can land on any surface in the system without a
+     per-component colour. Which band does the work depends on what is behind it:
+     the pale band clears 3:1 on everything below luminance .267 and the near-black
+     band on everything above .117, and no surface in either theme falls between
+     the two — so at least one band always passes. The tightest measured case is
+     the Discord card's blurple at 4.20:1; every other surface in the system is
+     above 4.5:1 on one band or the other.
+     Do NOT give a component its own :focus-visible colour. If a new surface
+     lands between those luminances, widen the ring here instead. */
+  --focus-ring: #f9f4ea;
+  --focus-ring-edge: #12100c;
+  --focus-ring-w: 3px;
+
+  /* ---------- copper in its three roles (#09) ----------
+     --coral       the MATERIAL: gradients, progress fills, tints, hairlines.
+                   Never small text, never a fill under a light label.
+     --coral-ink   copper as TEXT on --cream / --surface / --paper. Per theme,
+                   because a mid copper cannot read on both a cream page and a
+                   near-black one. Already existed; this is what the fifteen
+                   failing text instances now point at.
+     --coral-fill  copper as a small FILL carrying --coral-fill-ink. One value
+                   for both themes: --coral is #9a6436 in A and #a96b38 in D and
+                   NEITHER clears 4.5:1 under a cream label (measured 4.24:1 and
+                   3.36:1 off the painted pixels). This is the same hue two steps
+                   down, and it measures 5.73:1 under --coral-fill-ink.
+     The split exists because the two roles pull in opposite directions: text on
+     a dark page wants a LIGHTER copper, a fill under a light label wants a
+     DARKER one. One token cannot do both, which is why fifteen instances failed
+     at once rather than fifteen times for fifteen reasons. */
+  --coral-fill: #8a5528;
+  --coral-fill-ink: #fdf6ea;
+
+  /* shadows */
+  --shadow-soft: var(--shadow);
+  --shadow-sm: 0 1px 3px rgba(20,17,13,.10);
+  --shadow-md: 0 8px 24px rgba(20,17,13,.16);
+  --shadow-lift: 0 12px 30px rgba(20,17,13,.24);
+  --shadow-photo: var(--shadow);
+
+  /* ---------- raw materials (constant across themes) ---------- */
+  --oak-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='150'%3E%3Cfilter id='o'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.009 0.15' numOctaves='4' seed='11' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.42 0 0 0 0 0.31 0 0 0 0 0.19 0 0 0 0.5 0'/%3E%3C/filter%3E%3Crect width='400' height='150' filter='url(%23o)'/%3E%3C/svg%3E");
+  --walnut-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='150'%3E%3Cfilter id='w'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.008 0.14' numOctaves='4' seed='5' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.28 0 0 0 0 0.20 0 0 0 0 0.14 0 0 0 0.55 0'/%3E%3C/filter%3E%3Crect width='400' height='150' filter='url(%23w)'/%3E%3C/svg%3E");
+  --concrete-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='c'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.05' numOctaves='3' seed='7' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.30 0 0 0 0 0.28 0 0 0 0 0.24 0 0 0 0.07 0'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23c)'/%3E%3C/svg%3E");
+  /* Paper tooth for the About panels — the fibre you can see when a sheet
+     catches the light. Much finer and fainter than the wood grains: this is a
+     surface, not a material. */
+  --note-tooth: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='5' seed='19' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.34 0 0 0 0 0.28 0 0 0 0 0.20 0 0 0 0.19 0'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+  /* The longer fibres you see when a sheet is held to the light — coarser and
+     directional, layered under the tooth so the surface is not a uniform
+     speckle. The first pass read as a flat colour. (client feedback 2026-08-08) */
+  --note-fibre: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320'%3E%3Cfilter id='f'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.022 0.16' numOctaves='4' seed='31' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.30 0 0 0 0 0.25 0 0 0 0 0.17 0 0 0 0.14 0'/%3E%3C/filter%3E%3Crect width='320' height='320' filter='url(%23f)'/%3E%3C/svg%3E");
+  --iron-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='i'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.14 0.008' numOctaves='3' seed='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.14 0 0 0 0 0.12 0 0 0 0 0.10 0 0 0 0.45 0'/%3E%3C/filter%3E%3Crect width='200' height='200' filter='url(%23i)'/%3E%3C/svg%3E");
+
+  /* ---------- leather (client feedback 2026-08-08, blog feature card) ----------
+     Leather needs two frequencies to read as hide rather than as film grain: a
+     fine pebble for the pores and a slow, broad blotch for the way a hide takes
+     dye unevenly.
+
+     Both use type='fractalNoise', the same as the wood tokens above, and that
+     was not the obvious choice. type='turbulence' has the cellular output that
+     sounds like leather, and eight variants of it were rendered and compared
+     before being rejected: with several octaves it builds a regular crosshatch
+     and the card reads as woven bookcloth, and with one or two octaves it draws
+     a maze of connected worm shapes with the tile seams plainly visible.
+     fractalNoise at a high frequency and a single octave is the one that gives
+     an irregular fine pebble with no repeat a viewer can find, which is what
+     calfskin actually looks like.
+
+     Two numbers here are load-bearing. baseFrequency is the trap: the first
+     attempt used 0.62 with the tile drawn smaller than its natural size, which
+     put a pore every one and a half pixels, so the texture averaged out and the
+     card looked like flat card stock. And the pores ship as a matched dark/light
+     pair off the same seed, offset by a pixel against each other in the
+     component; that offset is what lights each pebble from one side, and it is
+     the whole reason the surface reads as raised rather than as speckle. */
+  --leather-pores: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Cfilter id='lp'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.5 0.55' numOctaves='1' seed='13' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.10 0 0 0 0 0.06 0 0 0 0 0.03 0 0 0 0.62 0'/%3E%3C/filter%3E%3Crect width='150' height='150' filter='url(%23lp)'/%3E%3C/svg%3E");
+  --leather-shine: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Cfilter id='ls'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.5 0.55' numOctaves='1' seed='13' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 0.91 0 0 0 0 0.74 0 0 0 0.52 0'/%3E%3C/filter%3E%3Crect width='150' height='150' filter='url(%23ls)'/%3E%3C/svg%3E");
+  --leather-hide: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='520' height='520'%3E%3Cfilter id='lh'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012 0.015' numOctaves='4' seed='41' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.21 0 0 0 0 0.13 0 0 0 0 0.06 0 0 0 0.34 0'/%3E%3C/filter%3E%3Crect width='520' height='520' filter='url(%23lh)'/%3E%3C/svg%3E");
+  /* The hide itself and the three inks that sit on it. Held here rather than in
+     the theme blocks because leather is a material, like the oak on .pull-quote
+     and .tip-card: it looks the same under both themes and its inks travel with
+     it.
+     The fill is a mid-tone, and a mid-tone has a low ceiling — the best any
+     colour can manage against it is a little over 5:1 — so every label on it has
+     to be near-black to clear 4.5:1. That is the same trade already recorded for
+     --marine-ink; the inks stay in the warm brown family so they still read as
+     coral and linen rather than as neutral black.
+     The ratios below were measured off the rendered pixels, not calculated from
+     this value, and the two are a long way apart. The first pass at these inks
+     was calculated from the token and every number was wrong. Sample the
+     screenshot.
+
+     #28 — WHAT THESE TWO TOKENS ARE. --leather and --leather-a are the BASE FILL
+     under five texture layers, not the colour of the cover. Measured off the
+     painted card, children hidden:
+
+       --leather   #d0a877  L .427  ->  paints #a98e6d  L .289   card-vs-page 5.36:1 (D)
+       --leather-a #d2cec7  L .620  ->  paints #a99d8d  L .345   card-vs-page 2.41:1 (A)
+
+     So neither token can be read as "the colour of the card", and no ratio may
+     be derived from them. The light cover's 2.41:1 against the cream page is
+     deliberate and is NOT a text or control contrast: it is one card against the
+     page, and the card is additionally bounded by --shadow, a 1px inner rim and
+     the stitched dashed border. Darkening --leather-a to force 3:1 there would
+     overturn "the cover turns to pale grey leather" (client feedback
+     2026-08-08). Every INK on the cover does have to pass, and does — see the
+     measured values on each token below. */
+  --leather: #d0a877;
+  --leather-ink: #33241a;      /* headline, 4.45:1 solid / 3.42:1 at the .92 it ships at */
+  --leather-label: #2b1d10;    /* kicker and links, 4.87:1 */
+  --leather-meta: #3a2716;     /* reading time, 4.23:1 */
+  /* The call to action carries its own colour so it does not read as one more
+     line of dark text. Rouge, the obvious choice, measures 1.73:1 on this tan
+     and is unusable; this is as red as the surface allows. 4.79:1 here. */
+  --leather-cta: #3d1410;
+  /* Light theme: the cover turns to pale grey leather (client feedback
+     2026-08-08). Same hide, different stock — the pores, shine and grain
+     images are shared, only the colour and the inks change. On this surface a
+     brighter madder is legible, so the CTA warms up: 7.26:1. */
+  --leather-a: #d2cec7;
+  --leather-a-ink: #2f2a24;
+  --leather-a-label: #241f19;
+  --leather-a-meta: #3a352e;
+  --leather-a-cta: #6b2018;
+
+  /* brushed metal & button materials (from design_base.html / DESIGN.md §6) */
+  --steel-grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='160'%3E%3Cfilter id='st'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012 0.92' numOctaves='2' seed='9' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.40 0 0 0 0 0.41 0 0 0 0 0.44 0 0 0 0.20 0'/%3E%3C/filter%3E%3Crect width='240' height='160' filter='url(%23st)'/%3E%3C/svg%3E");
+  --steel: linear-gradient(96deg,#bdb8b0,#e9e5de 17%,#aaa49b 41%,#dbd7d0 59%,#a09a91 82%,#c9c4bc);
+  --blacksteel: linear-gradient(180deg,#3c372f,#26231d 55%,#19160f);
+  /* #09: the copper was #b67c46 -> #9a6436 -> #7c4a26 with a 40% cream highlight
+     over the top of it, and under the label of a .btn.primary that painted as
+     light as #b28154 — 2.92:1 against the #f8ecd8 label, measured off the pixels.
+     (The audit's 4.23 was an average across the whole face; the top of the
+     gradient is where it actually fails.) Same hue, two steps down, and the
+     highlight cut from .40 to .22 in the two rules that lay it over this. */
+  --copper-metal: linear-gradient(180deg,#8d5f33 0%,#7a4a1c 46%,#5f3616 100%);
+  --olive-metal: linear-gradient(180deg,#5d7733 0%,#4d6625 50%,#3c511c 100%);
+  --iron: #2b2823;
+
+  /* ---------- the two colours from the client's written feedback ----------
+     --marine  #598493  things to notice or act on
+     --linen   #d3c2bb  supporting information
+     The rule is same-family substitution with a material exemption: flat brown
+     fills become marine and flat beige fills become linen, but anything carrying
+     a wood or metal texture keeps its finish. Almost every warm fill in this
+     system is textured, so the exemption covers most of them by design.
+     When the client names a textured element anyway, it changes — but as a
+     machined finish, not a flat fill, so it still belongs to the workshop. The
+     -metal gradients below are built exactly like --olive-metal for that. */
+  --marine: #598493;
+  --marine-metal: linear-gradient(180deg,#6b98a7 0%,#598493 50%,#456b78 100%);
+  /* A watercolour red for sale marks, asked for by the client on 2026-08-08 in
+     place of the marine §1.4.2 had assigned them. Mixed as a madder lake — the
+     red a watercolourist actually reaches for — so it reads as pigment rather
+     than as a signal colour, and built as a metal gradient like the others. */
+  --rouge: #a8463f;
+  --rouge-metal: linear-gradient(180deg,#c05a51 0%,#a8463f 50%,#84332e 100%);
+  --linen: #d3c2bb;
+  --linen-metal: linear-gradient(180deg,#e2d5cf 0%,#d3c2bb 50%,#b7a49c 100%);
+  /* --linen-ink is linen used as *text* rather than as a fill. On the dark theme
+     that is #d3c2bb itself (8.5:1). On the light theme #d3c2bb on paper is 1.5:1,
+     i.e. invisible, so A overrides this with the same hue taken down to a readable
+     value. The colour was specified as a fill, and this keeps it reading as the
+     same family without shipping text nobody can see. */
+  --linen-ink: var(--linen);
+  /* --marine-ink is the label colour that sits ON a marine fill. #598493 is a
+     mid-tone (relative luminance .207), so white reaches only 4.08:1 — fine for a
+     UI component or large text, short of the 4.5:1 that 12-15px labels need. No
+     light value clears it; only near-black does. So the ink moves and the client's
+     colour does not, the same trade already made for --linen-ink above. */
+  --marine-ink: #0b1418;   /* 4.56:1 on flat --marine */
+  /* The machined variants are NOT flat marine: --marine-metal ends at #456b78
+     and a repeating 10%-black rake sits over it, so the painted fill under a
+     label averages darker than the token. Measured with --marine-ink on it:
+     4.29:1, which reads as a pass if you only check the token and is not one.
+     This is the ink for those, and only those. */
+  --marine-ink-metal: #04080a;   /* 4.78:1 on the machined fill, measured */
+
+  /* twin-arch portrait mask — the "butterfly": two round-top columns (kept 1:1) */
+  --shape-arch-duo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 240'%3E%3Crect x='0' y='0' width='104' height='240' rx='52'/%3E%3Crect x='96' y='0' width='104' height='240' rx='52'/%3E%3C/svg%3E");
+}
+
+/* #08: the theme lives on .cas-root, but the DOCUMENT scrollbar is drawn by the
+   root element and takes its scheme from there — so declaring color-scheme in
+   the theme blocks below covers every control inside the page and leaves the
+   scrollbar light on a dark site. :has() reads the theme back up to :root, which
+   is the only way to reach it from CSS while the attribute stays where the
+   runtime puts it. */
+:root:has(.cas-root[data-theme="A"]) { color-scheme: light; }
+:root:has(.cas-root[data-theme="D"]) { color-scheme: dark; }
+
+/* ============================================================
+   THEMES — override the ORIGINAL token names per [data-theme].
+   Every ported component inherits these, so the A ⇄ D switch
+   reskins the whole site with zero markup changes.
+   Two themes only: A = Light, D = Dark. The earlier exploratory
+   themes B (Walnut Workshop) and C (Concrete & Iron) were dropped
+   on 2026-08-05 — the brief only ever asked for one light and one dark.
+   ============================================================ */
+
+/* A — Light Oak Atelier */
+[data-theme="A"] {
+  /* #08: without this both :root and body computed `normal`, so a dark page got
+     light-mode UA chrome — scrollbars, the default focus ring, select popups and
+     date pickers all drawn for a white page. It belongs with the palette, not on
+     :root, because the palette is what decides which one is right. */
+  color-scheme: light;
+  /* #28: the danger colour has to be legible on the theme's own surface. #9a3b2f
+     measures 6.24:1 on the light page and 2.40:1 on the dark one, so it moves. */
+  --danger: #9a3b2f;
+  --cream:#f8f3e9; --paper-2:#cdc7bd; --paper:#f3ede1; --surface:#f6f0e4; --warm-white:#e3dac9;
+  --blush:#d8c39c; --sand:#cab389;
+  --teal:#8a9a6b; --teal-ink:#4d6625; --mint:#cdd9b0;
+  --coral:#9a6436; --coral-deep:#7e4c27; --coral-ink:#7e4c27;
+  --ink:#474138; --muted:#6f6757; --forest:#5e4a3d;
+  --banner-bg:#e6d6b8; --banner-grain:url("../img/wood-creamy.jpg"); --banner-size:cover; --banner-ink:#474138; --banner-bracket:#2b2823;
+  --wall:#dfdedb; --wall-grain:url("../img/marble-wall.jpg"); --wall-size:cover;
+  --frame-base:#f3ede1; --frame-tl:#d8c39c; --frame-br:#a3895f;
+  --band-bg:#5e4a3d; --band-grain:var(--walnut-grain); --band-ink:#f4e7cf; --band-eyebrow:#cab389;
+  --nav-bg:rgba(248,243,233,.86); --line:rgba(71,65,56,.16);
+  --shadow:6px 11px 22px rgba(20,17,13,.16); --glow-op:0;
+  --linen-ink:#694f44;   /* same hue as --linen, dark enough to read on paper */
+}
+/* D — Moody Loft (dark, daylight glow) */
+[data-theme="D"] {
+  color-scheme: dark;
+  --danger: #e08a7c;   /* 5.66:1 on --surface, 6.60:1 on --cream */
+  --cream:#211e1a; --paper-2:#2b2823; --paper:#ede1d0; --surface:#2b2823; --warm-white:#33302a;
+  --blush:#876d5c; --sand:#9a7d54;
+  --teal:#8a9a6b; --teal-ink:#cab389; --mint:#cab389;
+  --coral:#a96b38; --coral-deep:#7e4c27; --coral-ink:#cab389;
+  --ink:#ede1d0; --muted:#b6ab97; --forest:#23201a;
+  --banner-bg:#5a4433; --banner-grain:linear-gradient(180deg, rgba(22,15,9,.40), rgba(22,15,9,.5)), url("../img/wood-rustic.jpg"); --banner-size:cover; --banner-ink:#f4e7cf; --banner-bracket:#2b2823;
+  --wall:#5a4433; --wall-grain:linear-gradient(180deg, rgba(28,18,10,.1), rgba(16,10,6,.42)), url("../img/wood-rustic.jpg"); --wall-size:cover;
+  --frame-base:#efe6d6; --frame-tl:#36322b; --frame-br:#0e0c08;
+  --band-bg:#23201a; --band-grain:var(--iron-grain); --band-ink:#ede1d0; --band-eyebrow:#cab389;
+  --nav-bg:rgba(33,30,26,.9); --line:rgba(231,221,203,.16);
+  --shadow:12px 20px 40px rgba(0,0,0,.6); --glow-op:1;
+}
+
+/* ============================================================
+   BASE
+   ============================================================ */
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; background: var(--cream); }
+html, body {
+  margin: 0; padding: 0;
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-weight: 500;
+  line-height: 1.6;
+  background: var(--cream);
+}
+img { display: block; max-width: 100%; }
+a { color: inherit; text-decoration: none; }
+a.btn { color: var(--ink) !important; -webkit-text-fill-color: var(--ink) !important; }
+.site-nav a.btn.ghost { color: #2b2823 !important; -webkit-text-fill-color: #2b2823 !important; }
+.tier-card.highlight a.btn { color: var(--coral-deep) !important; -webkit-text-fill-color: var(--coral-deep) !important; }
+.cc-btn.primary, .cover-btn.primary { -webkit-text-fill-color: #f4e7cf; }
+.cc-btn.secondary, .cover-btn.secondary { -webkit-text-fill-color: #2b2823; }
+
+.cas-root { position: relative; min-height: 100vh; background: var(--cream); color: var(--ink); }
+
+/* daylight glow (theme D only) */
+.glow-layer {
+  position: fixed; inset: 0; z-index: 0; pointer-events: none;
+  background: radial-gradient(120% 70% at 80% -5%, rgba(231,221,203,.18), transparent 52%);
+  opacity: var(--glow-op, 0);
+}
+
+.container { max-width: var(--site-max); margin: 0 auto; padding: 0 var(--gutter); }
+.pg-wrap { max-width: var(--page-max); margin-inline: auto; padding-inline: 24px; }
+.pg-section { padding: 64px 0 0; }
+.pg-section:first-child { padding-top: 40px; }
+.section { padding: 56px 0 8px; }
+.section-head { margin-bottom: 22px; }
+
+.grid-12 { display: grid; grid-template-columns: repeat(12, minmax(0,1fr)); gap: var(--gutter); }
+.span-3 { grid-column: span 3; } .span-4 { grid-column: span 4; }
+.span-6 { grid-column: span 6; } .span-9 { grid-column: span 9; }
+@media (max-width: 900px) { .span-3, .span-4 { grid-column: span 6; } .span-9, .span-6 { grid-column: span 12; } }
+@media (max-width: 540px) { .span-3, .span-4 { grid-column: span 12; } }
+
+/* ---------- typography helpers ---------- */
+.eyebrow {
+  font-family: var(--font-cond); font-weight: 600; font-size: 12px;
+  letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--coral-ink);
+  display: flex; align-items: center; gap: 8px;
+}
+.eyebrow .star { color: var(--coral-ink); font-size: 14px; display: inline-block; }
+.section-title {
+  font-family: var(--font-display-serif); font-weight: 600;
+  font-size: var(--fs-h2); letter-spacing: var(--tracking-display); text-transform: uppercase;
+  color: var(--banner-ink);
+  display: flex; align-items: center; justify-content: center; gap: .45em;
+  width: fit-content; max-width: 100%; margin: 0 auto;
+  padding: 12px 28px; border-radius: 14px;
+  background-color: var(--banner-bg); background-image: var(--banner-grain); background-size: var(--banner-size, 300px 120px);
+  box-shadow: var(--shadow); position: relative;
+}
+/* 3.7: the home Blog heading keeps the existing face but is noticeably larger
+   than the other section signs — the rename alone was done, the enlargement
+   was not. */
+.section-title.is-blog { font-size: clamp(34px, 3.9vw, 52px); padding: 14px 34px; }
+/* 39: the ornament was the only green on the site and the client named it on
+   the home page's New Release heading. It is one mark used in eight places,
+   so it changes everywhere rather than leaving one page's star odd. */
+.section-title::before { content: '✦'; font-size: .56em; color: var(--marine); display: inline-block; }
+.section-title.in-view::before { animation: ornament-in var(--dur-base) var(--ease-out) both; }
+.section-title.is-left { justify-content: flex-start; text-align: left; font-size: clamp(22px,2.6vw,30px); margin: 0; }
+/* 3.5.1: the lede sits directly under a centred section title and reads as part
+   of the same group, so it is centred too and capped at a comfortable measure —
+   full-width running text under a 1216px layout is unreadable. */
+.shop-lede { max-width: 60ch; margin: 16px auto 0; text-align: center; font-size: 17px; line-height: 1.65; color: var(--muted); }
+@keyframes ornament-in { from { transform: rotate(-90deg) scale(.4); opacity: 0; } to { transform: rotate(0); opacity: 1; } }
+.marker-title { font-family: var(--font-marker); font-weight: 600; line-height: 1.04; margin: 4px 0 12px; }
+/* Font A is defined at the foot of industrial-3.css — it has to outrank the
+   per-component heading rules that would otherwise set the face back. */
+.lead { font-size: 17px; color: var(--muted); max-width: 60ch; }
+.hand-note { font-family: var(--font-cond); font-weight: 500; font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); }
+
+/* squiggle → industrial: a quiet copper underline that wipes in on hover */
+.link-squiggle {
+  color: inherit; text-decoration: none; font-family: var(--font-cond);
+  font-weight: 600; font-size: 13px; letter-spacing: var(--tracking-label); text-transform: uppercase;
+  background: linear-gradient(var(--coral), var(--coral)) no-repeat left calc(100% - 1px) / 0% 2px;
+  padding-bottom: 5px; transition: background-size var(--dur-base) var(--ease-out);
+}
+.link-squiggle:hover { background-size: 100% 2px; }
+
+/* ---------- buttons ---------- */
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-cond); font-weight: 500; font-size: 13px;
+  letter-spacing: var(--tracking-label); text-transform: uppercase;
+  padding: 11px 22px; border-radius: var(--radius-pill); border: 0; cursor: pointer;
+  background: var(--surface); color: var(--ink); box-shadow: var(--shadow-sm);
+  transition: transform .18s var(--ease-pop), box-shadow .18s, background .18s, color .18s;
+}
+.btn:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+/* primary = brushed copper (design_base: "copper acts") — all themes */
+.btn.primary, a.btn.primary {
+  background-color: #8a5528;
+  background-image: linear-gradient(118deg, rgba(255,236,210,.14), transparent 42%), repeating-linear-gradient(95deg, rgba(0,0,0,.12) 0 1px, transparent 1px 3px), var(--copper-metal);
+  color: #f8ecd8 !important; -webkit-text-fill-color: #f8ecd8 !important;
+  box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(255,236,210,.45), inset 0 -1px 0 rgba(60,30,10,.4);
+}
+/* #09: was brightness(1.06), which took the label from 4.73:1 to 4.31:1 the
+   moment you pointed at it — a hover state is a real state and has to pass too.
+   Saturate enriches the copper without raising its luminance, and .btn:hover
+   already supplies the lift and the deeper shadow that read as feedback. */
+.btn.primary:hover { filter: saturate(1.18); }
+/* olive metal (design_base "BOOK" green machined finish) */
+.btn.teal { background-color: #4d6625; background-image: linear-gradient(118deg, rgba(240,245,220,.30), transparent 42%), repeating-linear-gradient(95deg, rgba(0,0,0,.10) 0 1px, transparent 1px 3px), var(--olive-metal); color: #f1f3e6; box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(240,245,220,.35), inset 0 -1px 0 rgba(20,30,8,.4); }
+.btn.teal:hover { filter: brightness(1.07); }
+/* marine metal — the finish a textured element takes when the client names it.
+   Same construction as .btn.teal above, so the two read as one hardware family. */
+.btn.marine { background-color: var(--marine); background-image: linear-gradient(118deg, rgba(226,242,247,.30), transparent 42%), repeating-linear-gradient(95deg, rgba(0,0,0,.10) 0 1px, transparent 1px 3px), var(--marine-metal); color: var(--marine-ink-metal) !important; -webkit-text-fill-color: var(--marine-ink-metal) !important; box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(226,242,247,.38), inset 0 -1px 0 rgba(10,35,45,.4); }
+.btn.marine:hover { filter: brightness(1.07); }
+/* linen metal — the supporting-information counterpart */
+.btn.linen { background-color: var(--linen); background-image: linear-gradient(118deg, rgba(255,252,248,.34), transparent 42%), repeating-linear-gradient(95deg, rgba(0,0,0,.07) 0 1px, transparent 1px 3px), var(--linen-metal); color: #2b2823 !important; -webkit-text-fill-color: #2b2823 !important; box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(255,252,248,.5), inset 0 -1px 0 rgba(90,70,60,.28); }
+.btn.linen:hover { filter: brightness(1.04); }
+/* ghost = iron outline (design_base supporting control) */
+.btn.ghost { background: transparent; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--ink) 45%, transparent); }
+.btn.ghost:hover { background: var(--ink); color: var(--paper); transform: none; box-shadow: none; }
+.btn.big { font-size: 14px; padding: 14px 28px; }
+.btn .arr { transition: transform .18s; }
+.btn:hover .arr { transform: translateX(4px); }
+.btn .ico { width: 17px; height: 17px; }
+.btn-big {
+  display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-cond);
+  font-weight: 500; font-size: 13px; letter-spacing: var(--tracking-label); text-transform: uppercase;
+  padding: 14px 28px; border-radius: var(--radius-pill);
+  background-color: #8a5528;
+  background-image: linear-gradient(118deg, rgba(255,236,210,.14), transparent 42%), repeating-linear-gradient(95deg, rgba(0,0,0,.12) 0 1px, transparent 1px 3px), var(--copper-metal);
+  color: #f8ecd8;
+  border: 0; box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(255,236,210,.45), inset 0 -1px 0 rgba(60,30,10,.4); cursor: pointer; transition: transform var(--dur-fast), box-shadow var(--dur-base);
+}
+.btn-big:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+/* 8.5: named in the client's written feedback, so it changes colour despite the
+   material exemption — and as a machined finish, not a flat fill (1.4.2). */
+.btn-big.btn-marine { background-color: var(--marine); background-image: linear-gradient(118deg, rgba(226,242,247,.30), transparent 42%), repeating-linear-gradient(95deg, rgba(0,0,0,.10) 0 1px, transparent 1px 3px), var(--marine-metal); color: var(--marine-ink-metal); box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(226,242,247,.38), inset 0 -1px 0 rgba(10,35,45,.4); }
+.btn-outline {
+  display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-cond);
+  font-weight: 500; font-size: 13px; letter-spacing: var(--tracking-label); text-transform: uppercase;
+  padding: 12px 24px; border-radius: var(--radius-pill); background: transparent; color: var(--ink);
+  border: 1px solid var(--line); cursor: pointer; transition: background var(--dur-base), color var(--dur-base);
+}
+.btn-outline:hover { background: var(--ink); color: var(--paper); }
+
+/* ---------- top nav ---------- */
+.site-nav { position: sticky; top: 0; z-index: 100; background-color: var(--banner-bg); background-image: var(--banner-grain); background-size: var(--banner-size, 380px 150px); background-attachment: fixed; background-position: center top; box-shadow: var(--shadow-sm); }
+.site-nav::before { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent 0 30px, color-mix(in srgb, var(--banner-bracket) 12%, transparent) 30px 31px); pointer-events: none; }
+.site-nav .inner { position: relative; z-index: 1; max-width: var(--site-max); margin: 0 auto; }
+/* rows 1 + 2 share the same 3-column grid, so their centred link groups sit on
+   the exact same axis; the brand is lifted out and spans both rows */
+/* 3.1 allows the header to grow, and it has to: .nav-brand is absolutely
+   positioned to the row's full height, so an 84px mark inside a 72px row
+   centres to y=-6 and the top of the L's ascender is cut off at the viewport
+   edge. The row is tall enough to hold the mark whole. */
+/* #20: the third track is minmax(max-content, 1fr), not minmax(200px, 1fr).
+   The auth cluster (Log in, Sign up, cart, theme) is 261px wide once both pills
+   show, and between 1081 and 1240 its 1fr share fell to 214-246px — so it
+   overflowed its own column to the LEFT, under the centred links. Measured
+   overlaps: FAQ x cart 5px at 1200, 25px at 1100, 28px at 1081.
+   A max-content floor means the column can never be smaller than what is in it;
+   the link group gives up the difference and sits a few pixels off centre
+   instead, which is the right trade.
+   Track one keeps a floor even though nothing is IN it: .nav-brand is
+   absolutely positioned over that column, so the track is what reserves room
+   for the mark. Dropping the floor to 0 let the links start at x=110 against a
+   brand whose right edge is 124 — measured at 900px. The floors are the mark's
+   measured width plus a little: 149px at full size, 100px below 1180 where
+   .nav-brand img drops to 56px tall.
+   2026-08-16: the client's final mark is a different shape. Cropped to its ink
+   it is aspect 2.115 against the old file's 1.778, so at 84px it measures 178px
+   wide and at 56px 118px. The floors move with it. */
+.nav-top .inner { position: static; display: grid; grid-template-columns: minmax(190px, 1fr) auto minmax(max-content, 1fr); align-items: center; gap: 18px; padding: 26px var(--gutter) 20px; }
+.nav-brand { position: absolute; z-index: 6; top: 0; bottom: 0; left: max(var(--gutter), calc((100% - var(--site-max)) / 2 + var(--gutter))); display: flex; align-items: center; gap: 12px; }
+/* 3.1: "現有 Logo 及導覽文字均明顯放大；允許頁首高度增加" — the nav text was raised
+   but the mark was left at its old 66px, so only half the clause was done. The
+   header is allowed to grow to take it. */
+.nav-brand img { height: 84px; width: auto; object-fit: contain; filter: drop-shadow(0 2px 6px rgba(0,0,0,.45)); }
+/* ============================================================
+   BRAND MARK TREATMENT (2026-08-16)
+   The transparent artwork the old note was waiting for has arrived, so the
+   filters are live again — but not in the form that was parked here.
+
+   The parked rule assumed ONE cream cut-out serving both themes: native on the
+   dark walnut, crushed to ink by brightness(0) on the pale wood. Her two files
+   break that assumption in opposite directions. Lau. is drawn in WHITE (unusable
+   on the light theme: 1.43:1 on #e6d6b8) and the Crystal Lau ART lockup is drawn
+   in BLACK (unusable on the dark theme: 2.31:1 on #5a4433 before the band's own
+   overlay). One rule cannot serve both if it depends on the ink colour.
+
+   So the treatment normalises instead of inverting: brightness(0) crushes ANY
+   ink to solid black while leaving alpha alone, and invert(1) after it yields
+   white. What colour she drew in stops mattering, and a future re-export cannot
+   silently break a theme. Measured: 14.7:1 in A, ~13:1 in D.
+
+   drop-shadow stays LAST in both. Before invert(1) it would have its own colour
+   inverted along with the mark.
+
+   The SIGNATURE is deliberately excluded. img/signature.png is still an opaque
+   JPEG export with a white ground, and brightness(0) on an opaque rectangle
+   makes a black box rather than a legible mark — worse than the white one. It
+   keeps its slab until transparent artwork for it arrives. See the note at
+   css/industrial-3.css:429.
+   ============================================================ */
+[data-theme="A"] .nav-brand img,
+[data-theme="A"] .logo2 img { filter: brightness(0) opacity(.88) drop-shadow(0 1px 2px rgba(255,255,255,.25)); }
+[data-theme="D"] .nav-brand img,
+[data-theme="D"] .logo2 img { filter: brightness(0) invert(1) drop-shadow(0 2px 6px rgba(0,0,0,.45)); }
+.nav-links { grid-column: 2; display: flex; gap: 4px; list-style: none; margin: 0; padding: 0; }
+.nav-links a { display: block; padding: 9px 14px; font-family: var(--font-cond); font-weight: 500; font-size: 15px; letter-spacing: var(--tracking-label); text-transform: uppercase; border-radius: var(--radius-pill); color: var(--banner-ink); transition: background .15s; }
+.nav-links a:hover { background: color-mix(in srgb, var(--banner-bracket) 16%, transparent); }
+.nav-links a.active { background: color-mix(in srgb, var(--banner-ink) 16%, transparent); }
+/* The two nav pills are the one place the client asked for a *solid* fill rather
+   than a finish (design direction §3.1 specifies a solid fill): Sign Up in marine, Log in in
+   linen. So they drop the copper and oak they used to carry, and they are scoped
+   to .site-nav — .btn.primary keeps its copper everywhere else on the site.
+   STALE COMMENT CORRECTED (#09). This used to read "white on #598493 is 4.08:1
+   … just under the 4.5:1 for body-size text", which described a rule that no
+   longer exists: the label here is --marine-ink (#0b1418), not white, and it
+   measures 4.56:1 off the painted pixels — it passes. The 4.08 figure belongs to
+   the note on --marine-ink in the token block above, which explains why the ink
+   moved off white in the first place. */
+.site-nav .btn.primary, .site-nav a.btn.primary {
+  background-color: var(--marine); background-image: none;
+  color: var(--marine-ink) !important; -webkit-text-fill-color: var(--marine-ink) !important;
+  box-shadow: var(--shadow-sm), inset 0 -1px 0 rgba(10,35,45,.28);
+}
+.site-nav .btn.primary:hover { filter: brightness(1.08); }
+.site-nav .btn.ghost {
+  background-color: var(--linen); background-image: none;
+  color: #2b2823; box-shadow: var(--shadow-sm), inset 0 -1px 0 rgba(90,70,60,.22);
+}
+.site-nav .btn.ghost:hover { background-color: var(--linen); filter: brightness(1.05); color: #2b2823; transform: translateY(-2px); box-shadow: var(--shadow-md), inset 0 -1px 0 rgba(90,70,60,.22); }
+.nav-auth { grid-column: 3; justify-self: end; display: flex; align-items: center; gap: 12px; flex: none; }
+/* §3.1 asks for the nav text to be enlarged as a set, and Log in / Sign up are
+   items 11 and 12 of that list. Left at the global .btn 13px they read a size
+   smaller than the links beside them, so they track .nav-links a instead. */
+.nav-auth .btn { white-space: nowrap; font-size: 15px; padding: 11px 24px; }
+.cart-btn { position: relative; width: 40px; height: 40px; border-radius: 50%; border: 0; background-color: #c9c4bc; background-image: linear-gradient(180deg, rgba(255,255,255,.30), transparent 55%), var(--steel); box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(255,255,255,.5), inset 0 -1px 0 rgba(0,0,0,.22); cursor: pointer; display: grid; place-items: center; transition: transform .18s var(--ease-pop); color: #2b2823; }
+.cart-btn:hover { transform: translateY(-2px) rotate(-4deg); }
+.cart-btn svg { width: 19px; height: 19px; }
+.cart-badge { position: absolute; top: -4px; right: -5px; min-width: 18px; height: 18px; border-radius: var(--radius-pill); background: var(--coral-fill); color: var(--coral-fill-ink); font-family: var(--font-cond); font-size: 12.5px; font-weight: 600; display: grid; place-items: center; padding: 0 4px; }
+.nav-burger { display: none; width: 42px; height: 42px; border: 0; border-radius: 50%; background: var(--surface); box-shadow: var(--shadow-sm); cursor: pointer; font-size: 20px; line-height: 1; color: var(--ink); }
+.nav-sheet { display: none; }
+
+/* ---------- Logo2 — the "Crystal Lau ART" signature lockup ----------
+   Where it goes is decided by the wood band, not by the page. A page that has a
+   .page-hero band already carries its own marker-title in the middle of that
+   band, so the signature sits to the right of it; centring it there would run
+   the two into each other. Pages with no band have nothing to collide with, so
+   it is centred above the content. The home page never gains a band — its hero
+   is pushed down to make the room instead.
+   Login / Signup / Dashboard / Checkout don't carry it at all: those are account
+   and payment flows, and the Lau. mark in the header is enough.
+   One transparent cream file serves both themes; the light theme flips it to ink
+   with the same filter the nav mark uses. */
+.logo2 { display: block; line-height: 0; }
+.logo2 img { display: block; width: auto; height: 92px; object-fit: contain; filter: drop-shadow(0 2px 6px rgba(0,0,0,.4)); }
+/* [data-theme="A"] .logo2 img { filter: brightness(0) opacity(.88) drop-shadow(0 1px 2px rgba(255,255,255,.25)); } */
+
+/* centred — pages with no wood band */
+.logo2.is-center { margin: 0 auto 26px; }
+.logo2.is-center img { height: 116px; margin: 0 auto; }
+
+/* right — inside the wood band. The band's container becomes a two-column grid
+   so the signature can never overlap the title, and the band grows to fit it. */
+/* The signature is taken out of the flow rather than placed in the grid. As a
+   row-spanning grid item its own height set the row heights, so a 160px mark
+   forced 73px of dead space between the eyebrow and the title — the band read
+   as two widely separated lines with a picture beside them. Absolutely
+   positioned it is centred against the whole text block and contributes nothing
+   to it, and the container reserves its width as padding so a long title still
+   cannot run underneath. (client feedback 2026-08-08) */
+/* Reserves widened 2026-08-16 for the client's final lockup: cropped to its
+   ink it is aspect 1.911 against the old file's 1.474, so at 160px it measures
+   306px wide and at 126px 241px, plus the 24px right offset below. Under the
+   old 296/246 the long titles on Gallery, Showcase and Free Videos ran beneath
+   the mark. */
+.page-hero .container { position: relative; padding-right: 336px; }
+.page-hero .container:not(:has(h1.font-a)) { padding-right: 272px; }
+.page-hero .container > .logo2 {
+  position: absolute; right: 24px; top: 50%; transform: translateY(-50%);
+  margin: 0; line-height: 0; }
+/* The signature stands as tall as the eyebrow-and-title beside it instead of a
+   fixed 92px. Two values rather than one, because the two title sizes in use
+   give two stack heights: 160px where the title is the large Font A one, 126px
+   on Blog and FAQ where it is not.
+   Not derived from the row height: `align-self: stretch` with a percentage
+   height is circular here — the picture's own 615px feeds back into the row it
+   is being measured against, and the band went from 207px to 1062px. Measured
+   values, no feedback loop. (client feedback 2026-08-08) */
+.page-hero .container > .logo2 img { height: clamp(104px, 11.1vw, 160px); }
+.page-hero .container:not(:has(h1.font-a)) > .logo2 img { height: clamp(88px, 8.8vw, 126px); }
+
+@media (max-width: 900px) {
+  /* the text column takes the full width and the signature drops beneath it,
+     rather than squeezing the title into a couple of words per line */
+  .page-hero .container { padding-right: 24px; }
+  .page-hero .container:not(:has(h1.font-a)) { padding-right: 24px; }
+  .page-hero .container > .logo2 { position: static; transform: none; margin: 18px auto 0; text-align: center; }
+  .page-hero .container > .logo2 img { height: 68px; }
+  .logo2.is-center img { height: 78px; }
+}
+
+/* ---------- responsive nav ---------- */
+@media (max-width: 1280px) { .nav-links a { padding: 9px 11px; } }
+/* #20: between roughly 1080 and 1240 the centred link group is wider than the
+   track it sits in and paints over the controls either side. Measured before
+   this rule: FAQ x cart 37px at 1200; Free videos x cart 24px, FAQ x cart 12px,
+   FAQ x Log in 17px at 1100.
+   The cause is not the link sizes — it is that .nav-links is a nowrap flex row,
+   so its min-content width equals its max-content width and the `auto` grid
+   track it sits in has no smaller size to fall back to. It overflows the track
+   rather than shrinking. Allowing the group to wrap gives the track a real
+   minimum, so the row takes a second line before it takes anyone else's space. */
+@media (max-width: 1240px) {
+  .nav-links { flex-wrap: wrap; justify-content: center; row-gap: 2px; }
+  .nav-top .inner { column-gap: 10px; }
+}
+@media (max-width: 1180px) { .nav-top .inner { grid-template-columns: minmax(128px, 1fr) auto minmax(max-content, 1fr); gap: 12px; } .nav-links { gap: 2px; } .nav-links a { padding: 8px 9px; font-size: 14px; } .nav-brand img { height: 56px; } }
+/* #14: the auth buttons are the first thing dropped when the bar runs out of
+   room, and Log out is one of them — so the burger sheet, which is the only
+   other place those actions live, has to appear at the SAME width they leave.
+   It used to wait for 860px, which left 861-1080 with no Log in and no Log out
+   anywhere on the page. */
+@media (max-width: 1080px) {
+  .nav-auth .btn { display: none; }
+  .nav-burger { display: block; }
+  .nav-sheet { position: absolute; top: 100%; left: 0; right: 0; background: var(--cream); box-shadow: var(--shadow-lift); padding: 10px var(--gutter) 22px; border-bottom: 1px solid var(--line); }
+  .nav-sheet.open { display: block; }
+  .nav-sheet a { display: block; padding: 13px 6px; font-family: var(--font-cond); font-weight: 500; font-size: 16px; text-transform: uppercase; color: var(--ink); border-bottom: 1px solid var(--line); }
+}
+@media (max-width: 860px) {
+  .nav-links { display: none; }
+}
+
+/* ---------- reveals ---------- */
+.reveal-up { opacity: 1; }
+.reveal-up.in-view { animation: rise-in var(--dur-reveal) var(--ease-out); animation-delay: calc(var(--i,0) * var(--stagger)); }
+.reveal-one { opacity: 1; }
+.reveal-one.in-view { animation: rise-in var(--dur-reveal) var(--ease-out); }
+@keyframes rise-in { from { transform: translateY(16px); } to { transform: none; } }
+.reveal-brush { opacity: 1; }
+.reveal-brush.in-view { animation: brush-rise var(--dur-reveal) var(--ease-brush); }
+@keyframes brush-rise { from { transform: translateY(14px); } to { transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; }
+  .reveal-up, .reveal-one { opacity: 1 !important; }
+  .arch-duo { opacity: 1 !important; }
+}
+
+/* ============================================================
+   HERO (Crafti left/right panel — geometry kept 1:1)
+   ============================================================ */
+.hero { position: relative; width: 100%; aspect-ratio: 1862/1009; max-height: calc(100vh - 66px); overflow: hidden; background: transparent; }
+.hero__panel {
+  position: absolute; top: 0; right: 0; bottom: 0; width: 52%; z-index: 1;
+  background-color: var(--banner-bg);
+  background-image: var(--banner-grain); background-size: var(--banner-size, 300px 120px);
+  border-left: 1px solid var(--line);
+}
+.hero__swirl { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 2; pointer-events: none; }
+.hero__swirl path { fill: none; stroke: var(--ink); stroke-opacity: .1; stroke-width: 1.6; }
+.hero__slide { position: absolute; inset: 0; z-index: 4; opacity: 0; pointer-events: none; transition: opacity .6s ease; }
+.hero__slide.is-active { opacity: 1; pointer-events: auto; }
+/* The hero is a fixed-ratio box that clips its overflow, and Font A runs much
+   taller than the face this block was measured against — at 1440 the title,
+   subtitle and CTA came to 427px inside 416px of room, so the bottom of the
+   CTA pill was cut off. Centring on the box instead of pinning to a percentage
+   from the top keeps the column inside the frame whatever the title height. */
+/* Top-anchored, not centred. Centred put the headline's second line straight
+   through the small photograph's vertical band: the title occupied 83..243 of a
+   489px hero while the photo starts at 166. The text was never covered — it is
+   z-index 5 against the photo's 2 — it was cream painted on a cream photograph,
+   1.20:1 at worst with 86% of the glyph pixels in the overlap under 3:1.
+
+   The cause is that the hero is a FIXED 1168x489 inside a 1216px wrapper, while
+   the title's clamp(39px, 5.1vw, 84px) keys off the VIEWPORT. Container still,
+   type growing: at 1280 the title is 65px and fits, at 1650+ it reaches the 84px
+   cap and runs into the photo.
+
+   Two more interesting fixes were measured and both lost. A dark halo moved the
+   median only 1.55 -> 1.72, because a halo works at the glyph edge and these
+   glyphs are cream right through. mix-blend-mode: difference — read the backdrop
+   and invert, which is the right instinct — changed NOTHING, byte for byte,
+   because this very rule's z-index isolates a stacking context and leaves no
+   backdrop to blend against. Third time that has bitten on this project.
+
+   Lifting the block clears the photo's band entirely: 0px vertical overlap, so
+   the 142px of horizontal overlap no longer matters — there is only dark wood
+   behind the text at that height. The photograph does not move.
+   (client feedback 2026-08-09) */
+.hero__text { position: absolute; left: 4.2%; top: 1%; width: 50%; z-index: 5; }
+.hero__title { font-family: var(--font-marker); font-weight: 600; font-size: clamp(30px,4.4vw,72px); line-height: 1.02; margin: 0 0 12px; color: var(--ink); }
+.hero__subtitle { font-family: var(--font-body); font-size: clamp(14px,1.15vw,18px); color: var(--muted); margin: 0 0 18px; max-width: 38ch; }
+.hero__img { position: absolute; margin: 0; overflow: hidden; background: var(--paper-2); }
+.hero__img img { width: 100%; height: 100%; object-fit: cover; }
+.hero__img--large { right: 0; top: 8.9%; width: 41.7%; height: 79%; z-index: 1; border-radius: var(--r-promo); box-shadow: var(--shadow); }
+.hero__img--small { right: 34%; bottom: 16%; width: 24%; height: 50%; z-index: 2; border-radius: 4px 4px 26px 4px; box-shadow: var(--shadow-lift); }
+@keyframes hero-wipe { from { clip-path: inset(0 100% 0 0); transform: skewX(3deg); } to { clip-path: inset(0 0% 0 0); transform: skewX(0); } }
+@keyframes hero-up { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+.hero__cta { display: inline-flex; align-items: center; gap: 10px; font-family: var(--font-cond); font-weight: 500; font-size: 13px; letter-spacing: var(--tracking-label); text-transform: uppercase; padding: 13px 26px; border-radius: var(--radius-pill); background: var(--marine); color: var(--marine-ink); box-shadow: var(--shadow-sm); transition: transform .18s var(--ease-pop), filter .18s; }
+.hero__cta:hover { transform: translateY(-2px); filter: brightness(1.08); }
+.hero__scroll { position: absolute; left: 4.2%; bottom: 7%; z-index: 6; display: flex; align-items: center; gap: 9px; background: none; border: 0; color: var(--ink); font-family: var(--font-cond); font-weight: 600; font-size: 12px; letter-spacing: var(--tracking-label); text-transform: uppercase; cursor: pointer; }
+.hero__scroll .ast { color: var(--coral-ink); font-size: 17px; display: inline-block; animation: ast-spin 9s linear infinite; }
+@keyframes ast-spin { to { transform: rotate(360deg); } }
+.hero__nav { position: absolute; right: 3.4%; bottom: 3.5%; z-index: 6; display: flex; align-items: center; gap: 16px; }
+.hero__arrow { position: relative; background: none; border: 0; color: var(--ink); cursor: pointer; padding: 6px 2px; transition: transform .18s; }
+/* #18: the drawn arrow is a 58x12 rule and stays that way — the direction asks
+   for the thin line. The HIT AREA is grown to 44px tall around it instead, so
+   the control is 62x44 while the paint is unchanged. */
+.hero__arrow::after { content: ""; position: absolute; left: 50%; top: 50%; width: 100%; min-width: 44px; height: 44px; transform: translate(-50%, -50%); }
+.hero__arrow:hover { transform: scale(1.12); }
+.hero__arrow svg { width: 58px; height: 12px; display: block; }
+.hero__counter { font-family: var(--font-cond); font-weight: 500; font-size: 16px; color: var(--ink); }
+.hero__counter-total { color: var(--muted); }
+.hero--compact { aspect-ratio: 1862 / 780; max-height: 560px; border-radius: var(--r-promo); }
+@media (max-width: 860px) {
+  .hero { aspect-ratio: auto; min-height: 540px; max-height: none; }
+  .hero__panel { width: 100%; opacity: .55; }
+  .hero__text { width: 86%; top: 12%; left: 7%; transform: none; }
+  .hero__img--large { width: 70%; height: 38%; top: auto; bottom: 4%; right: -6%; }
+  .hero__img--small { width: 38%; height: 30%; right: 56%; bottom: 9%; }
+  .hero__scroll { display: none; }
+  .hero__nav { bottom: auto; top: 6%; right: 6%; }
+}
+
+/* ---------- A1 photo banner (photo + ratio chip ONLY) ---------- */
+.pg-banner { position: relative; aspect-ratio: 32/9; border-radius: var(--r-promo); overflow: hidden; box-shadow: var(--shadow); background: var(--paper-2); }
+.pg-banner img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+/* ---------- New Release trio ---------- */
+.release-head { display: grid; grid-template-columns: repeat(12,1fr); gap: var(--gutter); margin-bottom: 14px; }
+.release-head .section-title { grid-column: 5 / span 4; margin: 0; }
+.release-trio { margin-top: 34px; align-items: start; }
+.release-trio .free-video, .release-trio .cover-card { aspect-ratio: 1/1; height: auto; min-height: 0; }
+/* The column used to be a fixed 1:1 box with the photo taking 80% of it and the
+   caption the remaining 20%. Adding the placeholder note to the caption
+   overflowed that 20% band: the centred flex content bled upwards over the
+   portrait and downwards past the column. The photo keeps its own ratio and the
+   column is sized by its content instead. */
+.release-trio .about-col { display: flex; flex-direction: column; }
+.release-trio .about-col .arch-link { flex: 0 0 auto; min-height: 0; display: block; }
+/* square, so the portrait's foot lines up with the free-video card and the New
+   Release card beside it; the caption then hangs below the row of three. */
+.release-trio .about-col .arch-duo { height: auto; width: 100%; aspect-ratio: 1 / 1; margin: 0 auto; }
+.release-trio .about-col .arch-cap { flex: 0 0 auto; margin-top: 12px; display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 6px; }
+.release-trio .about-col .arch-cap .eyebrow-lbl { font-size: 14px; }
+.release-trio .about-col .arch-cap .arch-visit { margin-top: 0; font-size: 12px; }
+.release-trio .about-col .social-row { margin-top: 3px; gap: 8px; }
+.release-trio .about-col .social-btn { width: 30px; height: 30px; }
+
+/* free-video tile (signature scoop) */
+.free-video { position: relative; display: block; height: 100%; min-height: 300px; border-radius: var(--r-promo); overflow: hidden; box-shadow: var(--shadow); text-decoration: none; background: var(--sand); }
+.free-video img { width: 100%; height: 100%; object-fit: cover; display: block; position: absolute; inset: 0; transition: transform .6s var(--ease-out); }
+.free-video:hover img { transform: scale(1.06); }
+.free-video .fv-veil { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; background: linear-gradient(to top, rgba(20,17,13,.66), rgba(20,17,13,.2) 55%, rgba(20,17,13,.32)); color: #f3ede1; text-align: center; padding: 28px; transition: background .45s var(--ease-out); }
+.free-video:hover .fv-veil { background: linear-gradient(to top, rgba(20,17,13,.8), rgba(20,17,13,.44) 60%, rgba(20,17,13,.32)); }
+.fv-play { width: 62px; height: 62px; border-radius: 50%; background: var(--coral-fill); color: var(--coral-fill-ink); display: grid; place-items: center; font-size: 20px; box-shadow: var(--shadow-md); transition: transform var(--dur-fast) var(--ease-out); }
+.free-video:hover .fv-play { transform: scale(1.09); }
+.fv-veil strong { font-family: var(--font-marker); font-weight: 600; font-size: clamp(34px,4.3vw,56px); line-height: 1.05; text-shadow: 0 2px 18px rgba(20,17,13,.55); }
+.fv-veil span { font-family: var(--font-body); font-weight: 500; font-size: clamp(13px,1.15vw,15px); line-height: 1.5; color: #efe3d4;
+  max-width: 34ch; text-align: center; text-shadow: 0 1px 10px rgba(20,17,13,.7);
+  /* 3.3: at rest the card shows only the title. Hidden with opacity and a small
+     rise rather than display:none so it stays in the accessibility tree. */
+  opacity: 0; transform: translateY(6px); transition: opacity .3s var(--ease-out), transform .3s var(--ease-out); }
+.free-video:hover .fv-veil span, .free-video:focus-visible .fv-veil span { opacity: 1; transform: none; }
+@media (hover: none) { .fv-veil span { opacity: 1; transform: none; } }
+
+/* cover-card (base) */
+.cover-card { position: relative; aspect-ratio: 1/1; border-radius: var(--radius-card); overflow: hidden; box-shadow: var(--shadow); display: block; background: var(--paper-2); }
+.cover-card > img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .55s var(--ease-out); }
+.cover-card:hover > img, .cover-card:focus-within > img { transform: scale(1.07); }
+/* Home variant: title + 2 buttons always on image */
+.cover-card:has(.cc-actions)::after { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(to top, rgba(20,17,13,.66) 0%, rgba(20,17,13,.18) 40%, transparent 64%); opacity: .9; transition: opacity .4s var(--ease-out); }
+.cover-card:has(.cc-actions):hover::after { opacity: 1; }
+.cc-title { position: absolute; left: 16px; right: 16px; bottom: 62px; z-index: 2; color: #f3ede1; font-family: var(--font-marker); font-weight: 600; font-size: 18px; line-height: 1.18; text-shadow: 0 2px 12px rgba(0,0,0,.55); }
+.cc-actions { position: absolute; left: 12px; right: 12px; bottom: 12px; z-index: 2; display: flex; gap: 8px; }
+/* Tracking held at .08em: direction §3.5.2 keeps the ADD button's text, colour
+   and style as they are. 0.24px/glyph looser than --tracking-label. (#20) */
+.cc-btn { flex: 1; display: inline-flex; align-items: center; justify-content: center; gap: 7px; font-family: var(--font-cond); font-weight: 500; font-size: 12px; letter-spacing: .08em; text-transform: uppercase; line-height: 1; padding: 11px 12px; border-radius: var(--radius-pill); cursor: pointer; border: 0; text-decoration: none; white-space: nowrap; transition: transform var(--dur-fast) var(--ease-out), background var(--dur-base), color var(--dur-base); }
+.cc-btn .arr { transition: transform var(--dur-fast); display: inline-block; }
+.cc-btn.primary { background-color: #5e4a3d; background-image: var(--walnut-grain); background-size: 200px 90px; color: #f4e7cf; box-shadow: var(--shadow-sm); }
+.cc-btn.primary:hover { transform: translateY(-1px); background-color: #4a3a2f; }
+/* 5.3: VIEW takes the client's supporting colour. Named in her feedback, so it
+   changes despite the oak texture it used to carry. */
+.cc-btn.secondary { background-color: var(--linen); background-image: none; color: #2b2823; }
+.cc-btn.secondary:hover { transform: translateY(-1px); filter: brightness(.96); }
+.cc-btn.secondary:hover .arr { transform: translateX(3px); }
+.cc-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
+/* Lessons variant: hover scrim + actions */
+.cover-card .scrim { position: absolute; inset: auto 0 0 0; z-index: 2; padding: 54px 16px 16px; background: linear-gradient(to top, rgba(20,17,13,.92) 0%, rgba(20,17,13,.74) 42%, transparent 100%); color: #f3ede1; }
+/* Bigger, and on a heavier scrim: the title sits over a client-editable
+   photograph, so the gradient has to carry it whatever gets swapped in.
+   (client feedback 2026-08-08) */
+.cover-card .scrim .t { font-family: var(--font-marker); font-weight: 600; font-size: 21px; line-height: 1.3; transition: transform .25s var(--ease-pop); }
+.cover-card:hover .scrim .t { transform: translateY(-46px); }
+.cover-card .actions { position: absolute; inset: auto 0 0 0; z-index: 3; display: flex; gap: 8px; justify-content: center; padding: 0 14px 16px; opacity: 0; transform: translateY(10px); transition: opacity .25s, transform .25s var(--ease-pop); pointer-events: none; }
+.cover-card:hover .actions, .cover-card:focus-within .actions { opacity: 1; transform: none; pointer-events: auto; }
+/* 06: with no hover there is no gesture that can reveal this row, and the only
+   link into a course lives inside it — a tap at the centre of either button
+   landed on the title scrim and Playwright's click timed out. Shown at rest
+   where there is no hover, with the title lifted by the same 46px the hover
+   state uses so the two do not sit on top of each other. Four other components
+   in these stylesheets already ship this exact unhide (.fv-veil span above,
+   .gallery-tile .gt-sub below, industrial-2.css:54 and :259). */
+@media (hover: none) {
+  .cover-card .actions { opacity: 1; transform: none; pointer-events: auto; }
+  .cover-card .scrim .t { transform: translateY(-46px); }
+}
+/* Tracking held at .1em, and font-size at 11.5px: named by the brief under
+   direction §3.5.2, and one of the sizes the 12px floor pass left alone. (#20) */
+.cover-btn { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-cond); font-weight: 500; font-size: 11.5px; letter-spacing: .1em; text-transform: uppercase; padding: 9px 14px; border-radius: var(--radius-pill); border: 0; cursor: pointer; transition: transform .15s var(--ease-pop), background .15s, color .15s; }
+.cover-btn.primary { background-color: #5e4a3d; background-image: var(--walnut-grain); background-size: 200px 90px; color: #f4e7cf; }
+.cover-btn.primary:hover { transform: translateY(-1px); background-color: #4a3a2f; }
+.cover-btn.secondary { background-color: #cab389; background-image: var(--oak-grain); background-size: 200px 90px; color: #474138; }
+.cover-btn.secondary:hover { transform: translateY(-1px); filter: brightness(.96); }
+.cover-btn .ico { width: 15px; height: 15px; }
+.cover-btn .arr { transition: transform .15s; }
+.cover-btn:hover .arr { transform: translateX(3px); }
+
+/* twin-arch portrait (the butterfly mask) */
+.arch-link { display: block; text-decoration: none; }
+.arch-duo { aspect-ratio: 5/6; width: 100%; -webkit-mask: var(--shape-arch-duo) center / contain no-repeat; mask: var(--shape-arch-duo) center / contain no-repeat; background: linear-gradient(160deg, var(--sand), var(--coral)); overflow: hidden; opacity: 1; }
+.arch-duo.in-view { opacity: 1; }
+.arch-duo { animation: none; }
+.arch-duo.reveal-armed { opacity: 0; }
+.arch-duo.reveal-armed.in-view { animation: arch-fade .9s var(--ease-out) forwards; }
+@keyframes arch-fade { from { opacity: .2; } to { opacity: 1; } }
+.arch-duo > img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s var(--ease-out); }
+.arch-link:hover .arch-duo > img, .arch-link:focus-visible .arch-duo > img { transform: scale(1.05); }
+.arch-cap { text-align: center; margin-top: 14px; }
+.arch-cap .eyebrow-lbl { font-family: var(--font-display-serif); font-size: 16px; font-weight: 600; letter-spacing: var(--tracking-display); text-transform: uppercase; color: var(--coral-ink); }
+.arch-visit { display: inline-block; margin-top: 6px; }
+@media (max-width: 860px) {
+  .release-trio > [class*="span-"] { grid-column: span 12; width: 100%; max-width: 420px; margin: 0 auto; }
+  .release-head .section-title { grid-column: 1 / -1; justify-content: center; }
+}
+
+/* ---------- Shop carousel (arrows only) ---------- */
+.carousel { position: relative; margin-top: 30px; }
+.carousel-track { display: flex; gap: var(--gutter); overflow-x: auto; scroll-behavior: smooth; scrollbar-width: none; -ms-overflow-style: none; scroll-snap-type: x mandatory; padding: 4px 50px 8px; }
+.carousel-track::-webkit-scrollbar { display: none; }
+.carousel-item { flex: 0 0 clamp(220px,25%,290px); scroll-snap-align: start; }
+@media (max-width: 768px) { .carousel-item { flex-basis: 60%; } }
+@media (max-width: 480px) { .carousel-item { flex-basis: 78%; } }
+.carousel-nav { display: contents; }
+.carousel .car-arrow { position: absolute; top: 50%; transform: translateY(-50%); z-index: 6; }
+.carousel [data-car="prev"] { left: 2px; }
+.carousel [data-car="next"] { right: 2px; }
+.car-arrow { width: 44px; height: 44px; border-radius: 50%; background: var(--surface); color: var(--ink); border: 0; box-shadow: var(--shadow-md); cursor: pointer; display: grid; place-items: center; transition: background var(--dur-base) var(--ease-out); }
+.carousel .car-arrow:hover { background: var(--ink); color: var(--paper); }
+.carousel .car-arrow:disabled { opacity: .28; cursor: default; background: var(--surface); color: var(--ink); }
+.car-arrow svg { width: 20px; height: 20px; }
+
+/* gallery promo tile */
+.gallery-tile { position: relative; aspect-ratio: 1/1; border-radius: var(--r-promo); overflow: hidden; box-shadow: var(--shadow); display: block; text-decoration: none; color: #f3ede1; }
+.gallery-tile img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .6s var(--ease-out); }
+.gallery-tile:hover img { transform: scale(1.07); }
+.gallery-tile .gt-veil { position: absolute; inset: 0; z-index: 2; background: linear-gradient(150deg, rgba(77,102,37,.42), rgba(20,17,13,.34)); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; text-align: center; padding: 24px; transition: background .35s var(--ease-out); }
+.gallery-tile:hover .gt-veil, .gallery-tile:focus-within .gt-veil { background: linear-gradient(150deg, rgba(77,102,37,.82), rgba(20,17,13,.74)); }
+.gallery-tile .gt-ast { font-size: 24px; color: var(--mint); display: inline-block; animation: ast-spin 9s linear infinite; }
+.gallery-tile .gt-title { font-family: var(--font-marker); font-weight: 600; font-size: clamp(28px,3.1vw,40px); line-height: 1.05; }
+.gallery-tile .gt-sub { font-family: var(--font-body); font-size: 14px; line-height: 1.5; max-width: 26ch;
+  /* 3.6: revealed on hover, over the darker gradient, with the title still visible. */
+  opacity: 0; transform: translateY(6px); transition: opacity .3s var(--ease-out), transform .3s var(--ease-out); }
+.gallery-tile:hover .gt-sub, .gallery-tile:focus-within .gt-sub { opacity: .96; transform: none; }
+@media (hover: none) { .gallery-tile .gt-sub { opacity: .96; transform: none; } }
+
+/* ---------- Share with you ---------- */
+.share-grid { display: grid; grid-template-columns: minmax(0,1fr) 196px; gap: var(--gutter); margin-top: 36px; align-items: center; }
+.share-stack { display: grid; gap: 16px; min-width: 0; }
+@media (max-width: 768px) { .share-grid { grid-template-columns: 1fr; } .share-card { grid-template-columns: 1fr !important; } .tools-btn { justify-self: center; } }
+/* 3.7: on desktop the blog card is horizontal — image left, text right. */
+.share-card { display: grid; grid-template-columns: 150px 1fr; align-items: stretch; border-radius: var(--radius-card); overflow: hidden; background: var(--surface); box-shadow: var(--shadow-sm); transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-base); text-decoration: none; color: var(--ink); display: grid; grid-template-columns: 1fr 1fr; align-items: stretch; }
+.share-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.share-card .sc-img { overflow: hidden; min-height: 0; }
+.share-card .sc-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .4s; }
+.share-card:hover .sc-img img { transform: scale(1.04); }
+.share-card .sc-body { padding: 16px 18px 20px; flex: 1; display: flex; flex-direction: column; gap: 6px; }
+.share-card .sc-kind { font-family: var(--font-cond); font-size: 14.5px; font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--teal-ink); }
+/* Both were too small to read at arm's length, and the kicker was competing
+   with the headline. The headline now leads it by a clear step.
+   (client feedback 2026-08-08) */
+.share-card h3 { font-family: var(--font-marker); font-weight: 600; font-size: 25px; margin: 0; line-height: 1.24; color: var(--ink); }
+
+.squiggle-links { display: flex; justify-content: center; flex-wrap: wrap; gap: 40px; margin-top: 36px; padding: 16px 0 8px; }
+
+/* ---------- wood / dark band (the "wooden banner" accent) ---------- */
+.band-forest { position: relative; overflow: hidden; background-color: var(--band-bg); background-image: var(--band-grain); background-size: var(--band-size, 380px 150px); color: var(--band-ink); border-radius: var(--radius-card); padding: 36px 40px; display: flex; align-items: center; gap: 32px; flex-wrap: wrap; box-shadow: var(--shadow); }
+.band-forest::before { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent 0 52px, rgba(0,0,0,.12) 52px 53px); pointer-events: none; }
+/* The copy column is an inline flex:1 child with no minimum on five of the pages
+   carrying this band, so flex-basis:0 makes the line-break decision fall through
+   to min-content: shave ~20px off the button and the two children stop wrapping
+   onto separate lines, collapsing the copy into a tall narrow ribbon. Measured on
+   Showcase at 390px, the column drops 306px -> 79px. Guard, not a tracking
+   exemption — the container is fragile independently of any type change. (#19) */
+.band-forest > * { position: relative; min-width: 200px; }
+.band-forest .eyebrow { color: var(--band-eyebrow); }
+.band-forest .star { color: var(--band-eyebrow); }
+.band-forest .marker-title, .band-forest h2 { font-family: var(--font-marker); font-weight: 600; font-size: clamp(22px,2.4vw,32px); margin: 0 0 8px; color: var(--band-ink); }
+
+/* The light theme's band wood is set in industrial-2.css, in the block that
+   already owns the real wood photographs. Do not add a second one here: this
+   file is imported first, so anything written here loses to it silently. */
+/* The scanline overlay is tuned for a dark ground; at .12 black it reads as
+   dirt on the pale wood the light theme now uses, so it is lightened rather
+   than removed — the ruled lines are what make the surface read as planks. */
+[data-theme="A"] .band-forest::before { background: repeating-linear-gradient(0deg, transparent 0 52px, rgba(94,74,61,.10) 52px 53px); }

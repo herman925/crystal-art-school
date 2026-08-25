@@ -1,0 +1,113 @@
+/* Nav rules the prototype injected from js/site-nav.js as <style id="cas-nav-style">.
+   Moved into a real stylesheet: injecting them from script cost a reflow on every
+   page and put them outside the cascade the rest of the design lives in.
+   The mega-drawer rules are omitted along with the drawer itself. */
+
+.mode-toggle {
+  display: inline-grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 999px;
+  border: 1.5px solid color-mix(in srgb, var(--banner-ink, #ede1d0) 42%, transparent);
+  background: transparent;
+  color: var(--banner-ink, #ede1d0);
+  cursor: pointer;
+  flex: none;
+  transition: background .16s ease;
+}
+
+.mode-toggle:hover { background: color-mix(in srgb, var(--banner-ink, #ede1d0) 12%, transparent); }
+.mode-toggle svg { width: 18px; height: 18px; }
+
+/* One button, two glyphs: show the state you would move TO, not the one you are in. */
+.mode-toggle .ico-sun { display: none; }
+.mode-toggle .ico-moon { display: block; }
+[data-theme="D"] .mode-toggle .ico-sun { display: block; }
+[data-theme="D"] .mode-toggle .ico-moon { display: none; }
+
+.site-nav .nav-links a { white-space: nowrap; }
+
+
+/* The button carries `padding: 8px 16px` from a generic button rule elsewhere in the
+   cascade. With width:38px and box-sizing:border-box that padding plus the 1.5px
+   border left a 3.33px content box, and the icon's max-width:100% clamped it to that
+   — the glyph was rendering, 3px wide. Height survived because vertical padding is
+   only 8px, which is what made it look like a missing icon rather than a squashed one. */
+.mode-toggle { padding: 0; }
+
+/* The header and footer are placed through Elementor sections, which cap their
+   contents at the kit's content width. Both are full-bleed designs — the wood banner
+   and the plank footer run to the viewport edges — so the cap is removed here.
+   Measured in the browser: without this the footer renders 1140px wide inside a
+   2286px viewport, centred, with the plank texture stopping short on both sides. */
+.site-footer,
+.site-nav {
+  max-width: none;
+  width: 100%;
+}
+
+.elementor-location-header .elementor-container,
+.elementor-location-footer .elementor-container {
+  max-width: none;
+}
+
+/* A rule elsewhere caps .site-footer at the kit's content width with a selector more
+   specific than a bare class, so the plain `.site-footer` rule above loses. It is not
+   !important — an inline non-important value beats it — so raising specificity is
+   enough and no !important is warranted. Selector verified in the browser before
+   being written here. */
+body.cas-root .elementor-shortcode > footer.site-footer,
+body.cas-root .elementor-shortcode > nav.site-nav {
+  max-width: none;
+  width: 100%;
+}
+
+/* Carousel pause control.
+   These rules lived in an inline <style> block in the prototype's index.html rather
+   than in css/, so they were missed when the stylesheets were ported. Without them the
+   button falls back to an unstyled control and both glyphs render at 3px, squeezed by
+   the same inherited `padding: 8px 16px` that shrank the theme toggle. */
+
+.cas-pause {
+  display: inline-grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  flex: none;
+  padding: 0;
+  border: 1.5px solid color-mix(in srgb, var(--ink) 45%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--surface) 86%, transparent);
+  color: var(--ink);
+  cursor: pointer;
+  transition: background .16s ease;
+}
+
+.cas-pause:hover { background: color-mix(in srgb, var(--ink) 14%, transparent); }
+.cas-pause svg { width: 16px; height: 16px; display: block; }
+
+/* Show the state pressing it would move to, not the state it is in. */
+.cas-pause .ico-play { display: none; }
+.cas-pause[aria-pressed="true"] .ico-play { display: block; }
+.cas-pause[aria-pressed="true"] .ico-pause { display: none; }
+
+/* Restore normal document scrolling.
+   The prototype scoped `overflow-x: hidden` to `body, .cas-root`, where .cas-root was
+   a wrapper div. Here .cas-root is ON the body, so that rule now matches the body at
+   class specificity — and setting overflow-x forces overflow-y to compute as `auto`,
+   which turns the body into its own scroll container. The visible symptom is subtle:
+   the page still scrolls, but window.scrollY stays pinned at 0, so every scroll-driven
+   effect on the site silently does nothing.
+   `clip` gives the same horizontal clipping without creating a scroll container. */
+
+html {
+  height: auto;
+  overflow-x: clip;
+}
+
+body.cas-root {
+  height: auto;
+  overflow-x: clip;
+  overflow-y: visible;
+}

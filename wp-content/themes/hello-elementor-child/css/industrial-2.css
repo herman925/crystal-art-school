@@ -1,0 +1,1281 @@
+/* 1.4.8: the board marks this band as too small — enlarged with the heading. */
+.band-forest p { margin: 0; font-size: 17px; line-height: 1.6; max-width: 54ch; }
+/* 3.8: every piece of text in the community block scales up together —
+   eyebrow, title, description and the button label — without touching the
+   copy or the layout, which the section rules out. */
+.band-forest .eyebrow { font-size: 14px; }
+/* §1.4.8 singles out the FREE TRIAL band on the catalogue page as "字太細",
+   and the client asked for that eyebrow specifically to go much larger. Scoped
+   to that one band: the same selector unscoped also feeds Free Videos, FAQ,
+   Showcase and the course page, where it added 45px to the band on phone
+   widths for no reason. (2026-08-08) */
+.band-forest.is-trial .eyebrow { font-size: 21px; }
+/* 1.4.8: the board marks the FREE TRIAL band as too small, and the button label
+   is part of that band — it was still on the global .btn-big 13px. */
+.band-forest .btn-big { font-size: 15px; padding: 16px 32px; }
+.band-community .eyebrow { font-size: 15px; }
+.band-community .eyebrow .star { font-size: 15px; }
+.band-community h2 { font-size: clamp(33px, 3.6vw, 48px) !important; }
+.band-community p { font-size: 18.5px; }
+.band-community .btn-big { font-size: 15px; padding: 16px 32px; }
+
+/* ---------- testimonials ---------- */
+.testi-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 20px; margin-top: 32px; }
+@media (max-width: 700px) { .testi-grid { grid-template-columns: 1fr; } }
+.testi-card { background: var(--surface); border-radius: var(--radius-card); padding: 22px; box-shadow: var(--shadow-sm); }
+.testi-card .who { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
+.testi-card .who img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; }
+/* §3.9 says this slot holds the member's own uploaded profile picture. Until
+   there are members it holds nothing — an empty disc, not a photograph of a
+   paintbrush. A stand-in that looks like a real answer is worse than a blank
+   one here, because a reader cannot tell an avatar apart from a decision. */
+.testi-card .who-avatar { flex: none; width: 42px; height: 42px; border-radius: 50%;
+  background: color-mix(in srgb, var(--ink) 10%, transparent);
+  border: 1px dashed color-mix(in srgb, var(--muted) 55%, transparent); }
+/* Tracking held at .04em: direction §3.9 retains the Real Hands heading, the
+   three-card layout AND its text styles. This rule renders nowhere else. (#20) */
+.testi-card .who strong { font-family: var(--font-cond); font-weight: 600; letter-spacing: .04em; }
+.testi-card .q { font-style: italic; font-size: 14.5px; color: var(--muted); line-height: 1.6; }
+
+/* ---------- footer (walnut planks) ---------- */
+.site-footer { position: relative; overflow: hidden; margin-top: 70px; background-color: #4a3a2f; background-image: linear-gradient(180deg, rgba(30,20,12,.48), rgba(24,16,10,.58)), url("../img/wood-rustic.jpg"); background-size: cover; color: var(--band-ink); }
+/* 31-37: the light footer takes the banner's pale grain, matching the band —
+   it used to be wood-natural under a brown wash, which read a step darker than
+   the header on the same page. The wash is gone rather than lightened: it was
+   there to pull wood-natural down toward the band, and the band is now pale. */
+[data-theme="A"] .site-footer { --band-ink:#474138; --band-eyebrow:#7e4c27; background-color: #e6d6b8; background-image: url("../img/wood-creamy.jpg"); background-size: cover; background-position: center; color: #474138; }
+[data-theme="A"] .site-footer .footer-meta { border-top-color: rgba(71,65,56,.28); }
+/* Same overlay problem as the band: .17 black is soot on pale wood. */
+[data-theme="A"] .site-footer::before { background: repeating-linear-gradient(0deg, transparent 0 62px, rgba(94,74,61,.12) 62px 63px); }
+[data-theme="D"] .site-footer { background-color: #17130e; background-image: url("../img/wood-black.jpg"); background-size: cover; }
+.site-footer::before { content: ""; position: absolute; inset: 0; z-index: 0; background: repeating-linear-gradient(0deg, transparent 0 62px, rgba(0,0,0,.17) 62px 63px), linear-gradient(180deg, rgba(231,221,203,.05), transparent 18%); pointer-events: none; }
+.site-footer .inner { position: relative; z-index: 1; max-width: var(--site-max); margin: 0 auto; padding: 46px var(--gutter) 26px; }
+
+/* ---------- carousel arrows: fade unless the carousel is hovered/focused ---------- */
+.carousel .car-arrow, .shop-carousel .shop-arrow, .share-carousel .share-arrow { opacity: 0; transition: opacity .3s var(--ease-out), background var(--dur-base), color var(--dur-base); }
+.carousel:hover .car-arrow, .carousel:focus-within .car-arrow,
+.shop-carousel:hover .shop-arrow, .shop-carousel:focus-within .shop-arrow,
+.share-carousel:hover .share-arrow, .share-carousel:focus-within .share-arrow { opacity: 1; }
+.carousel:hover .car-arrow:disabled, .shop-carousel:hover .shop-arrow:disabled, .share-carousel:hover .share-arrow:disabled { opacity: .28; }
+@media (hover: none) { .carousel .car-arrow, .shop-carousel .shop-arrow, .share-carousel .share-arrow { opacity: 1; } }
+
+/* ---------- hero panel ---------- */
+.hero__panel { overflow: hidden; }
+.footer-grid { display: grid; grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 26px; }
+.site-footer h4 { font-family: var(--font-cond); font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; font-size: 12px; margin: 0 0 10px; color: var(--band-eyebrow); }
+/* Full strength, like every other text in the wood. */
+.site-footer a { display: block; padding: 3px 0; font-size: 14px; }
+.site-footer a:hover { color: var(--band-eyebrow); }
+.site-footer .social-btn { display: grid; place-items: center; padding: 0; }
+.footer-brand { font-family: var(--font-stencil); font-size: 20px; letter-spacing: var(--tracking-stamp); margin-bottom: 8px; }
+/* The signature replaces the stencilled wordmark. (client feedback 2026-08-08)
+   The supplied file is dark ink on an opaque light ground, so on the dark
+   footer it is knocked out to the footer's own ink rather than left as a white
+   slab — the same treatment .sig-script uses on the light theme, in reverse.
+   Drop both filters once transparent artwork arrives (#17). */
+/* Her signature ships exactly as she uploaded it — opaque white ground and all.
+   See the note on .sig-script in industrial-3.css: the cut-out is her side of
+   the work, and faking it with a blend mode hides the ask. Removed on the
+   client's instruction (2026-08-09). */
+.footer-sig { line-height: 0; margin-bottom: 12px; display: inline-block; }
+.footer-sig img { display: block; width: clamp(150px, 15vw, 200px); height: auto; }
+.footer-meta { margin-top: 30px; padding-top: 16px; border-top: 1px solid rgba(244,231,207,.22); display: flex; justify-content: space-between; font-family: var(--font-cond); font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; flex-wrap: wrap; gap: 8px; }
+@media (max-width: 900px) { .footer-grid { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 540px) { .footer-grid { grid-template-columns: 1fr; } }
+
+/* ============================================================
+   LESSONS PAGE
+   ============================================================ */
+/* wooden header banner (oak) — the wood accent specified for page headers */
+.page-hero { position: relative; overflow: hidden; padding: 28px 0 26px; margin-top: 0; background-color: var(--banner-bg); background-image: var(--banner-grain); background-size: var(--banner-size, 400px 150px); background-attachment: fixed; background-position: center top; box-shadow: var(--shadow); }
+.page-hero::before { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent 0 56px, rgba(43,40,35,.1) 56px 57px); pointer-events: none; }
+.page-hero .container { position: relative; }
+/* The wood band carries the page title and its eyebrow, nothing else — with a
+   paragraph in it too the band grew tall enough to push the content below the
+   fold. The introduction now reads under the band, in body colour.
+   (client feedback 2026-08-08) */
+/* Text in the wood band is painted at full strength; where it sits back from
+   the title it does so through size and colour, never through opacity. */
+.page-hero .eyebrow { color: var(--banner-ink); font-size: 14px; }
+.page-lead-wrap { padding-top: 28px; padding-bottom: 2px; }
+.page-lead { margin: 0; max-width: 74ch; font-size: 17px; line-height: 1.62; color: var(--muted); }
+.page-hero .eyebrow .star { color: var(--banner-ink); }
+.page-hero .marker-title { color: var(--banner-ink); }
+.page-hero .lead { color: var(--banner-ink); }
+.page-hero .wash { display: none; }
+
+.filter-row { display: flex; flex-wrap: wrap; gap: 10px; margin: 26px 0 8px; }
+.chip { font-family: var(--font-cond); font-weight: 500; font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; padding: 9px 18px; border-radius: var(--radius-pill); border: 1px solid var(--line); background: var(--surface); color: var(--ink); box-shadow: var(--shadow-sm); cursor: pointer; transition: background .15s, color .15s, transform .15s var(--ease-pop); }
+.chip:hover { background: var(--warm-white); }
+.chip.active { background-color: #c9c4bc; background-image: linear-gradient(180deg, rgba(255,255,255,.28), transparent 55%), var(--steel); color: #2b2823; border-color: transparent; box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(255,255,255,.5), inset 0 -1px 0 rgba(0,0,0,.18); }
+.lesson-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 20px; margin-top: 22px; }
+.lesson-cell .meta { display: flex; justify-content: space-between; align-items: baseline; padding: 10px 6px 0; }
+.lesson-cell .level { font-family: var(--font-cond); font-size: 14px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); }
+.lesson-cell .price { font-family: var(--font-cond); font-weight: 600; font-size: 18px; }
+.lesson-cell .price.free { color: var(--teal-ink); }
+/* 6 / 1.4.3: the reduced price is the only part that changes colour. */
+.lesson-cell .price .now { color: var(--marine); font-weight: 600; }
+.lesson-cell .price s { opacity: .72; }
+.lesson-cell.hidden { display: none; }
+/* 4.3: media tag, top-left on the cover, in the client's marine. */
+.cover-card .media-tag { position: absolute; top: 12px; left: 12px; z-index: 3; font-family: var(--font-cond); font-weight: 600; font-size: 13px; letter-spacing: var(--tracking-label); text-transform: uppercase; background: var(--marine); color: var(--marine-ink); border-radius: var(--r-sharp); padding: 5px 12px; box-shadow: var(--shadow-sm); }
+
+/* 4.3: the sale marker is a diagonal ribbon across the top-right corner, not a
+   chip. The card already clips its overflow, so the band's ends are cut by the
+   corner and it reads as a real ribbon rather than a rotated rectangle. */
+.cover-card .sale-ribbon { position: absolute; top: 0; right: 0; z-index: 4; width: 132px; height: 132px; overflow: hidden; pointer-events: none; }
+/* The client asked for a watercolour red here rather than the marine §1.4.2
+   assigned it (2026-08-08). --rouge is a madder-lake red, mixed to sit in the
+   same family as the paintings rather than a signal red. */
+.cover-card .sale-ribbon span { position: absolute; top: 24px; right: -34px; width: 160px; transform: rotate(45deg); text-align: center;
+  background-color: var(--rouge); background-image: var(--rouge-metal); color: #fdf3ef;
+  font-family: var(--font-cond); font-weight: 600; font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase;
+  padding: 6px 0; box-shadow: 0 2px 10px rgba(20,17,13,.4); }
+
+.free-flag { position: absolute; top: 12px; left: 12px; z-index: 3; font-family: var(--font-cond); font-size: 12.5px; font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; background: var(--coral-fill); color: var(--coral-fill-ink); border-radius: var(--r-sharp); padding: 5px 13px; box-shadow: var(--shadow-sm); }
+@media (max-width: 1024px) { .lesson-grid { grid-template-columns: repeat(3,1fr); } }
+@media (max-width: 860px) { .lesson-grid { grid-template-columns: repeat(2,1fr); } }
+@media (max-width: 480px) { .lesson-grid { grid-template-columns: 1fr; } }
+
+/* lesson cover-card: home-style hover darken */
+.cover-card:has(.actions)::after { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(to top, rgba(20,17,13,.84) 0%, rgba(20,17,13,.42) 46%, rgba(20,17,13,.08) 72%, transparent 100%); opacity: 0; transition: opacity .32s var(--ease-out); pointer-events: none; }
+.cover-card:has(.actions):hover::after, .cover-card:has(.actions):focus-within::after { opacity: 1; }
+
+/* catalog: vertical filter panel + grid */
+.catalog-layout { display: grid; grid-template-columns: 250px minmax(0,1fr); gap: 30px; align-items: start; margin-top: 24px; }
+.filter-panel { position: sticky; top: 88px; align-self: start; background-color: var(--surface); background-image: var(--concrete-grain); background-size: 200px 200px; border-radius: var(--radius-card); box-shadow: var(--shadow-sm); padding: 18px 20px 12px; }
+.filter-panel .fp-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.filter-panel .fp-title { font-family: var(--font-display-serif); font-weight: 600; font-size: 18px; letter-spacing: var(--tracking-display); text-transform: uppercase; color: var(--ink); }
+.filter-panel .fp-clear { border: 0; background: none; cursor: pointer; font-family: var(--font-cond); font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--coral-ink); -webkit-text-fill-color: var(--coral-ink); }
+.filter-panel .fp-clear:hover { text-decoration: underline; }
+.fgroup { padding: 13px 0; border-top: 1px solid var(--line); }
+.fgroup .fg-title { font-family: var(--font-cond); font-weight: 600; font-size: 14px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); margin-bottom: 10px; }
+.fg-opts { display: flex; flex-wrap: wrap; gap: 7px; }
+.fopt { font-family: var(--font-cond); font-weight: 500; font-size: 14px; padding: 8px 15px; border-radius: var(--radius-pill); border: 1px solid var(--line); background: transparent; color: var(--ink); -webkit-text-fill-color: var(--ink); cursor: pointer; transition: background .15s, color .15s, border-color .15s; }
+.fopt:hover { background: var(--warm-white); }
+/* A band with nothing in it still shows, so the row reads as a full scale, but
+   it is plainly not clickable. (client feedback 2026-08-08) */
+.fopt.is-empty { opacity: .38; cursor: default; }
+.fopt.is-empty:hover { background: transparent; }
+.fopt.active { background-color: #c9c4bc; background-image: linear-gradient(180deg, rgba(255,255,255,.28), transparent 55%), var(--steel); color: #2b2823; -webkit-text-fill-color: #2b2823; border-color: transparent; box-shadow: inset 0 1px 0 rgba(255,255,255,.5), inset 0 -1px 0 rgba(0,0,0,.18); }
+.catalog-layout .lesson-grid { grid-template-columns: repeat(3,1fr); margin-top: 0; }
+.lesson-meta-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; min-height: 18px; }
+.lesson-count { font-family: var(--font-cond); font-size: 13px; color: var(--muted); }
+.no-results { display: none; padding: 44px 0; text-align: center; color: var(--muted); font-size: 15px; }
+/* 51: a red square, not a marine pill, and not --danger either — that token is
+   a salmon in the dark theme and would read as two different flags on the same
+   product between themes. The red was a one-off #b3382c, which made two reds on
+   one site; it now takes --rouge with --rouge-metal and #fdf3ef ink, the same
+   treatment `.cover-card .sale-ribbon span` and `.art-frame-wrap .sale-ribbon
+   span` already carry, so there is one red. Shape is untouched: square corners,
+   6px 10px.
+
+   The FILL is flat --rouge and deliberately not --rouge-metal, which is what the
+   two ribbons use. Measured, not assumed: #fdf3ef is 5.33:1 on flat #a8463f, but
+   --rouge-metal runs #c05a51 -> #a8463f -> #84332e, and against that lightest
+   stop the same ink is 3.99:1. No light ink clears 4.5 there — pure white is
+   4.41:1 — so on an element this small, where a 27px gradient reads as a flat
+   colour anyway, the gradient buys nothing and costs the threshold. The ribbons
+   keep theirs: they are several times taller, so their label never sits in the
+   top stop. */
+.sale-flag { position: absolute; top: 12px; right: 12px; z-index: 3; font-family: var(--font-cond); font-size: 12.5px; font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; background-color: var(--rouge); background-image: none; color: #fdf3ef; padding: 6px 10px; border-radius: 0; }
+@media (max-width: 1100px) { .catalog-layout .lesson-grid { grid-template-columns: repeat(2,1fr); } }
+@media (max-width: 880px) { .catalog-layout { grid-template-columns: 1fr; } .filter-panel { position: static; } }
+@media (max-width: 480px) { .catalog-layout .lesson-grid { grid-template-columns: 1fr; } }
+
+/* tiers */
+/* 18.1: anything shipped before its real asset arrives says so on the page. */
+.asset-pending { font-family: var(--font-cond); font-size: 13px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); border: 1px dashed color-mix(in srgb, var(--muted) 55%, transparent); border-radius: var(--r-sharp); padding: 8px 14px; margin: 0 0 16px; display: inline-block; }
+/* the lede sits centred under a centred section title, so its note follows it */
+.shop-lede-note { display: block; width: fit-content; max-width: 60ch; text-align: center; margin: 12px auto 0; }
+/* 4.1: the most-popular row. Five square covers with the title over a scrim —
+   the same treatment the catalogue cards use, at a smaller size, so the row
+   reads as a shortcut into the grid below rather than a second catalogue. */
+
+
+.tier-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
+@media (max-width: 860px) { .tier-grid { grid-template-columns: 1fr; } }
+/* 1.4.8: every card carries a photograph behind it. The scrim has to hold up for
+   a bright photo as well as a dark one, because the image is editable from the CMS
+   and nobody will re-tune the overlay after swapping it — hence a near-opaque base
+   rather than a light wash, plus a bottom-weighted gradient for the body copy. */
+/* The photograph is set inline ON the card, not through a custom property. A url()
+   inside a custom property resolves against the stylesheet that USES the var, not
+   the one that declares it — so a path written in the HTML as img/x.jpg resolved to
+   css/img/x.jpg here and 404'd. Setting background-image on the element keeps the
+   path relative to the document, where it was written. */
+.tier-card { position: relative; padding: 30px 28px; border-radius: var(--radius-card); box-shadow: var(--shadow-sm); background-color: #241f1a; background-size: cover; background-position: center; color: #f4efe6; }
+/* 1.4.8 requires this to hold up whatever photograph is behind it, because the
+   image is client-editable and nobody re-tunes an overlay after swapping one in.
+   Worked from the worst case: a near-white photo. White text needs the backdrop
+   below luminance .183 for 4.5:1, which over a .90 photo means .80 opacity. So
+   .80 is the floor at the top of the card, not a taste decision — anything
+   lighter fails against a bright image. The CMS field should still advise a
+   darker or lower-contrast photo, per the same section. */
+.tier-card::after { content: ""; position: absolute; inset: 0; z-index: 0; border-radius: inherit; background: linear-gradient(180deg, rgba(20,17,13,.80) 0%, rgba(20,17,13,.84) 55%, rgba(20,17,13,.88) 100%); }
+.tier-card > * { position: relative; z-index: 1; }
+.tier-card p { color: rgba(246,240,230,.95) !important; font-size: 16px !important; line-height: 1.6; }
+.tier-card .tname, .tier-card .tprice, .tier-card p { text-shadow: 0 1px 10px rgba(20,17,13,.85); }
+
+/* the middle card is the one the client marked to change colour; marine sits over
+   the photo as a tint so the change still reads once an image is behind it */
+.tier-card.highlight::after { background: linear-gradient(180deg, rgba(52,84,96,.86) 0%, rgba(30,52,60,.90) 100%); }
+.tier-card.highlight { color: #f4fbfd; }
+.tier-card.highlight p { color: rgba(244,251,253,.94) !important; }
+/* The Fellow card is a PHOTOGRAPH under the .tier-card::after scrim, not a wood
+   band. It used to take var(--band-ink), which is cream in theme D and #474138 in
+   theme A — so on the light theme its title and price painted dark ink on a dark
+   scrim and measured 1.08:1, i.e. invisible, while its paragraph (forced cream
+   below) stayed readable. It now simply inherits the base card's light ink, the
+   way .highlight already does. */
+.tier-card.fellow { position: relative; overflow: hidden; }
+.tier-card.fellow p { color: rgba(231,221,203,.9) !important; }
+/* 1.4.8: all three cards enlarged together */
+.tier-card .tname { font-family: var(--font-stencil); font-size: 31px; letter-spacing: var(--tracking-stamp); }
+.tier-card .tprice { font-family: var(--font-cond); font-weight: 600; font-size: 17px; color: inherit; opacity: .92; margin: 8px 0 12px; }
+.tier-card.highlight .tprice, .tier-card.fellow .tprice { color: inherit; opacity: .92; }
+.tier-pick { position: absolute; top: -12px; right: 18px; background: var(--iron); color: #f3ede1; font-family: var(--font-cond); font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; padding: 5px 14px; border-radius: var(--radius-pill); }
+.tier-card .btn, .tier-card .btn.ghost { font-size: 14px; }
+.tier-card .btn.ghost { background: rgba(246,240,230,.94); color: #2b2823 !important; -webkit-text-fill-color: #2b2823 !important; box-shadow: none; text-shadow: none; }
+.tier-card.highlight .btn { background: var(--paper); color: #2b2823; }
+.tier-card.fellow .btn { background: var(--coral-fill); color: var(--coral-fill-ink); }
+
+/* ---------- auth: social + divider ---------- */
+.btn.social-google { background: #f3ede1 !important; color: #2b2823 !important; -webkit-text-fill-color: #2b2823 !important; box-shadow: inset 0 0 0 1px rgba(43,40,35,.22); justify-content: center; gap: 10px; }
+.btn.social-google:hover { background: #fff !important; transform: translateY(-1px); }
+.auth-or { display: flex; align-items: center; gap: 12px; margin: 16px 0; color: var(--muted); font-size: 12px; font-family: var(--font-cond); letter-spacing: var(--tracking-label); text-transform: uppercase; }
+
+/* ---------- Share section: horizontal blog cards + TOOLS filter button ---------- */
+.share-card .sc-body { padding: 16px 18px; justify-content: center; }
+/* 3.7: near-square, not a circle, and with no text beyond the wrench and TOOLS. */
+.tools-btn { position: relative; justify-self: end; width: 184px; height: 184px; border-radius: var(--radius-card); overflow: hidden; box-shadow: var(--shadow); display: grid; place-items: center; text-align: center; background: #1f1c18; color: #f3ede1; transition: transform var(--dur-fast) var(--ease-out); }
+.tools-btn .tb-photo { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+.tools-btn:hover { transform: translateY(-3px); }
+.tools-btn::after { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(165deg, rgba(20,17,13,.18), rgba(20,17,13,.42)); pointer-events: none; transition: background .35s var(--ease-out); }
+.tools-btn:hover::after, .tools-btn:focus-visible::after { background: linear-gradient(165deg, rgba(20,17,13,.28), rgba(20,17,13,.55)); }
+.tools-btn .tb-in { position: relative; z-index: 2; }
+.tools-btn .tb-title { font-family: var(--font-stencil); font-size: 20px; letter-spacing: var(--tracking-stamp); }
+.tools-btn .tb-in svg { width: 46px; height: 46px; stroke: #f3ede1; }
+
+/* ---------- New Release: 3-most-recent mini carousel (signature scoop) ---------- */
+.rel-carousel { position: relative; aspect-ratio: 1/1; border-radius: var(--r-promo); overflow: hidden; box-shadow: var(--shadow); background: var(--paper-2); }
+.rel-slide { position: absolute; inset: 0; opacity: 0; transition: opacity 1.4s var(--ease-out); pointer-events: none; }
+.rel-slide.is-active { opacity: 1; pointer-events: auto; }
+.rel-slide > img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.rel-carousel::after { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(to top, rgba(20,17,13,.7) 0%, rgba(20,17,13,.2) 42%, transparent 66%); }
+/* 5.2: marine and enlarged, but deliberately still the ordinary condensed face —
+   the direction rules Font A out for this label. */
+/* Tracking held at .14em pending issue #22 — the client has not yet been asked.
+   §5.2 asks for this chip to be enlarged, so any cut needs ~+1px of size. (#20) */
+/* Held row 2 of 2, decided 2026-08-09 without the client. The direction §5.2
+   asks for this chip to be ENLARGED, and it already is — 14px against the 12px
+   of every sibling chip. That was the objection to tightening it: on an
+   eleven-character string, tighter tracking and smaller type read alike, so
+   tightening alone risked looking like the opposite of what was asked. The
+   enlargement is already visible, so the objection no longer stands, and the
+   chip joins the token scale. Size deliberately unchanged. */
+.rel-chip { position: absolute; top: 12px; left: 12px; z-index: 3; font-family: var(--font-cond); font-size: 14px; font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; background: var(--marine); color: var(--marine-ink); border-radius: var(--r-sharp); padding: 6px 13px; box-shadow: var(--shadow-sm); }
+/* 5.1: the short topic, at the course-title face rather than Font A. It steps
+   down a size as the topic gets longer so a long one still reads on one line. */
+.rel-title { position: absolute; left: 16px; right: 16px; bottom: 58px; z-index: 3; color: #f3ede1; font-family: var(--font-marker); font-weight: 600; font-size: 38px; line-height: 1.14; text-shadow: 0 2px 12px rgba(0,0,0,.55); }
+.rel-title.is-mid { font-size: 30px; }
+.rel-title.is-long { font-size: 24px; }
+.rel-note { margin-top: 12px; font-size: 12px; text-transform: none; }
+.rel-note em { font-size: inherit; }
+.rel-actions { position: absolute; left: 14px; right: auto; bottom: 14px; z-index: 3; display: flex; gap: 8px; }
+/* 5.2: the three facts sit under the short topic and appear only on hover, with
+   the gradient deepening behind them. The two buttons are always present — the
+   direction is explicit that they do not wait for hover. */
+.rel-facts { position: absolute; left: 16px; right: 16px; bottom: 58px; z-index: 3; display: flex; gap: 20px; color: #f3ede1;
+  opacity: 0; transform: translateY(6px); transition: opacity .3s var(--ease-out), transform .3s var(--ease-out); pointer-events: none; }
+.rel-facts span { display: flex; flex-direction: column; gap: 1px; font-family: var(--font-cond); font-weight: 600; font-size: 14px; line-height: 1.15; }
+.rel-facts i { font-style: normal; font-size: 12px; font-weight: 500; letter-spacing: var(--tracking-label); text-transform: uppercase; opacity: .78; }
+.rel-carousel:hover .rel-facts, .rel-carousel:focus-within .rel-facts { opacity: 1; transform: none; }
+.rel-carousel:hover::after, .rel-carousel:focus-within::after { background: linear-gradient(to top, rgba(20,17,13,.86) 0%, rgba(20,17,13,.5) 52%, rgba(20,17,13,.18) 100%); }
+@media (hover: none) { .rel-facts { opacity: 1; transform: none; } }
+/* the title lifts to make room for the facts once they are showing */
+.rel-carousel:hover .rel-title, .rel-carousel:focus-within .rel-title { bottom: 104px; }
+.rel-title { transition: bottom .3s var(--ease-out); }
+.rel-actions .cc-btn { flex: 0 0 auto; }
+.rel-dots { position: absolute; top: 14px; right: 14px; z-index: 4; display: flex; gap: 6px; }
+/* #18: 8px of dot, but the control grows to 44x44 under a coarse pointer —
+   padding added in the coarse-pointer block at the foot of industrial-3.css,
+   plus background-clip:content-box here so the hit area grows and the dot does
+   not.
+   These dots sit ON THE PHOTOGRAPH, and the photograph is client-editable, so no
+   fill can be guaranteed 3:1 against it — measured 1.15:1 where the image runs
+   to white. The group gets its own scrim instead, which is a surface we control:
+   at .72 the darkest thing the scrim can become over a white photograph is
+   #565452, and a .72 cream dot on that measures 4.4:1; over a black photograph
+   it is 9.2:1. */
+.rel-dots { background: rgba(20,17,13,.72); border-radius: var(--radius-pill); padding: 6px 8px; }
+.rel-dots button { width: 8px; height: 8px; border-radius: 50%; border: 0; padding: 0; cursor: pointer;
+  background: rgba(244,231,207,.72); background-clip: content-box;
+  transition: background .2s; }
+.rel-dots button.active { background: #f3ede1; background-clip: content-box; }
+
+/* ---------- social buttons ---------- */
+.social-row { display: flex; gap: 10px; margin-top: 12px; }
+.social-btn { width: 36px; height: 36px; border-radius: 50%; display: grid; place-items: center; background: color-mix(in srgb, var(--band-eyebrow) 22%, transparent); color: var(--band-ink); transition: background .18s, transform .18s; }
+.social-btn:hover { background: var(--band-eyebrow); color: var(--band-bg); transform: translateY(-2px); }
+/* 2.4 / 18.1: the YouTube slot is present everywhere but plainly inert until
+   the channel URL arrives — a dashed outline, no hover, no cursor. */
+.social-btn.is-pending, .ss-btn.is-pending {
+  /* Matches its siblings exactly. The dashed, half-opacity treatment made one
+     icon in a row of four look like a rendering fault rather than a pending
+     link; the accessible name and tooltip still say the URL is to come.
+     (client feedback 2026-08-08) */
+  cursor: default;
+}
+.social-btn.is-pending:hover, .ss-btn.is-pending:hover { background: transparent; transform: none; }
+.social-btn svg { width: 18px; height: 18px; display: block; }
+
+/* ============================================================
+   SHOP ALL COURSES — sketch layout (3 courses + 3 photos + tall gallery)
+   ============================================================ */
+.shop-layout { display: grid; grid-template-columns: minmax(0,1fr) 300px; gap: 24px; margin-top: 24px; align-items: start; }
+.shop-left { display: flex; flex-direction: column; gap: 18px; min-width: 0; }
+.shop-carousel { position: relative; }
+.shop-viewport { overflow: hidden; }
+.shop-rail { display: flex; gap: 18px; transition: transform .45s var(--ease-brush); }
+.shop-rail .course-card { flex: 0 0 calc((100% - 36px) / 3); }
+.course-card { position: relative; border-radius: var(--radius-card); overflow: hidden; box-shadow: var(--shadow-sm); background: var(--surface); display: flex; flex-direction: column; transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-base); }
+.course-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+/* 3.5.2 makes the cover a link to the course page, so it has to be a block —
+   an anchor left inline collapses the aspect-ratio box. */
+.course-card .cc-cover { display: block; position: relative; aspect-ratio: 4/3; overflow: hidden; }
+.course-card .cc-cover img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s var(--ease-out); }
+.course-card:hover .cc-cover img { transform: scale(1.05); }
+.course-card .cc-pad { padding: 14px 15px 15px; display: flex; flex-direction: column; gap: 9px; flex: 1; }
+/* 3.5.2: the media tag is named in the client's feedback, so it changes colour
+   despite carrying an oak texture — and it is enlarged, as asked. */
+.course-card .cc-meta { align-self: flex-start; font-family: var(--font-cond); font-size: 14px; font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--marine-ink); background-color: var(--marine); background-image: none; padding: 5px 12px; border-radius: var(--r-sharp); }
+/* The Media Tag is uppercase Oswald 600, so at anything near the title's size it
+   reads as the louder of the two. The title leads; the label stays where §3.5.2
+   put it. (client feedback 2026-08-08) */
+.course-card h3 { font-family: var(--font-marker); font-weight: 600; font-size: 23px; margin: 0; line-height: 1.18; color: var(--ink); }
+.course-card .cc-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; margin-top: auto; }
+.course-card .cc-price { font-family: var(--font-cond); font-weight: 600; font-size: 15px; color: var(--coral-ink); }
+.course-card .cc-btn { flex: 0 0 auto; }
+.course-card .cc-photo { aspect-ratio: 16/9; overflow: hidden; border-top: 2px solid color-mix(in srgb, var(--ink) 12%, transparent); }
+.course-card .cc-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s var(--ease-out); }
+.course-card:hover .cc-photo img { transform: scale(1.05); }
+.shop-arrow { position: absolute; top: 50%; transform: translateY(-50%); z-index: 6; width: 42px; height: 42px; border-radius: 50%; background: var(--surface); color: var(--ink); border: 0; box-shadow: var(--shadow-md); cursor: pointer; display: grid; place-items: center; transition: background var(--dur-base); }
+.shop-arrow svg { width: 20px; height: 20px; }
+.shop-arrow[data-shop="prev"] { left: -10px; }
+.shop-arrow[data-shop="next"] { right: -10px; }
+.shop-arrow:hover { background: var(--ink); color: var(--paper); }
+.shop-arrow:disabled { opacity: .28; cursor: default; background: var(--surface); color: var(--ink); }
+.shop-photos { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; }
+.shop-photo { position: relative; aspect-ratio: 4/3; border-radius: var(--radius-card); overflow: hidden; box-shadow: var(--shadow-sm); display: block; }
+.shop-photo img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s var(--ease-out); }
+.shop-photo:hover img { transform: scale(1.06); }
+.shop-gallery { aspect-ratio: auto; }
+@media (max-width: 860px) { .shop-layout { grid-template-columns: 1fr; } .shop-rail .course-card { flex-basis: calc((100% - 18px) / 2); } }
+@media (max-width: 560px) { .shop-rail .course-card { flex-basis: 100%; } .shop-photos { grid-template-columns: repeat(3,1fr); } }
+
+/* ============================================================
+   SHARE WITH YOU — 2 horizontal blog cards (carousel) + TOOLS
+   ============================================================ */
+.share-layout { display: grid; grid-template-columns: minmax(0,1fr) 196px; gap: 24px; margin-top: 36px; align-items: center; }
+.share-carousel { position: relative; min-width: 0; }
+.share-viewport { overflow: hidden; }
+.share-rail { display: flex; gap: 20px; transition: transform .45s var(--ease-brush); }
+.share-rail .share-card { flex: 0 0 calc((100% - 20px) / 2); }
+/* 3.7: horizontal card — image left, title right. Scoped to the rail so it
+   outranks whatever else is setting the tracks on this element. */
+.share-rail .share-card { grid-template-columns: 150px minmax(0, 1fr); }
+.share-arrow { position: absolute; top: 50%; transform: translateY(-50%); z-index: 6; width: 40px; height: 40px; border-radius: 50%; background: var(--surface); color: var(--ink); border: 0; box-shadow: var(--shadow-md); cursor: pointer; display: grid; place-items: center; transition: background var(--dur-base); }
+.share-arrow svg { width: 18px; height: 18px; }
+.share-arrow[data-share="prev"] { left: -10px; }
+.share-arrow[data-share="next"] { right: -10px; }
+.share-arrow:hover { background: var(--ink); color: var(--paper); }
+.share-arrow:disabled { opacity: .28; cursor: default; background: var(--surface); color: var(--ink); }
+@media (max-width: 768px) { .share-layout { grid-template-columns: 1fr; } .share-rail .share-card { flex-basis: 100%; } .tools-btn { justify-self: center; } }
+
+/* New Release — single featured lesson card (image + details unified) */
+.feature-lesson { display: grid; grid-template-columns: 1.05fr .95fr; border-radius: var(--r-promo); overflow: hidden; box-shadow: var(--shadow); background: var(--surface); min-height: 340px; }
+.feature-lesson .fl-media { position: relative; overflow: hidden; min-height: 220px; }
+.feature-lesson .fl-media img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s var(--ease-out); }
+.feature-lesson:hover .fl-media img { transform: scale(1.04); }
+.feature-lesson .fl-body { padding: 28px 30px; display: flex; flex-direction: column; gap: 12px; justify-content: center; }
+.feature-lesson .fl-chip { align-self: flex-start; font-family: var(--font-cond); font-size: 12px; font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; background: var(--coral-fill); color: var(--coral-fill-ink); border-radius: var(--r-sharp); padding: 5px 12px; }
+.feature-lesson .fl-title { font-family: var(--font-marker); font-weight: 600; font-size: clamp(22px,2.4vw,30px); line-height: 1.1; margin: 0; color: var(--ink); }
+.feature-lesson .fl-text { font-size: 13.5px; line-height: 1.6; color: var(--muted); margin: 0; }
+.feature-lesson .fl-actions { display: flex; gap: 10px; margin-top: 6px; flex-wrap: wrap; }
+.feature-lesson .fl-actions .cc-btn { flex: 0 0 auto; padding: 12px 18px; }
+@media (max-width: 860px) { .feature-lesson { grid-template-columns: 1fr; } .feature-lesson .fl-media { aspect-ratio: 16/9; } }
+
+/* About column — Instagram + Facebook */
+.about-col .social-row { justify-content: center; margin-top: 14px; }
+.about-col .social-btn { background: color-mix(in srgb, var(--ink) 12%, transparent); color: var(--ink); }
+.about-col .social-btn:hover { background: var(--coral-fill); color: var(--coral-fill-ink); transform: translateY(-2px); }
+
+/* ---------- About page: biography / story / certificates / signup ---------- */
+/* 13: the copy columns run long now that each section carries its full text, so
+   the carousel aligns to the top of its section rather than floating in the
+   middle of a much taller neighbour. */
+.bio-layout { display: grid; grid-template-columns: 0.95fr 1.05fr; gap: 40px; align-items: start; }
+.bio-photos { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: start; }
+.bio-frame { margin: 0; background: var(--surface); border-radius: var(--radius-card); overflow: hidden; box-shadow: var(--shadow); }
+.bio-frame img { width: 100%; display: block; aspect-ratio: 4/5; object-fit: cover; }
+.bio-frame figcaption { font-family: var(--font-cond); font-size: 13px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); padding: 10px 12px; }
+.bio-copy p { color: var(--muted); font-size: 15.5px; line-height: 1.72; margin: 0 0 14px; }
+/* 13: the second of the three About blocks reverses the columns so the set does
+   not read as one template stamped three times. */
+.bio-layout--flip { grid-template-columns: 1.05fr 0.95fr; }
+
+/* One photograph per view, advancing on its own with a dot for each frame.
+   This reverses §3.5.2's "nothing moves by itself" rule for these three
+   carousels only, on the client's explicit instruction (2026-08-08); the rule
+   still stands everywhere else. Each carousel runs on its own interval so the
+   three never fall into step — see the DWELL values in About.dc.html.
+   (client feedback 2026-08-08) */
+.ph-carousel { --phc-per: 2; position: relative; }
+.ph-carousel .phc-viewport { overflow: hidden; border-radius: var(--radius-card); }
+.ph-carousel .phc-rail { display: flex; transition: transform .62s var(--ease-brush); }
+/* Two photographs to a page, as before. The count is a variable rather than a
+   media query because the rail advances a whole page at a time — if CSS dropped
+   the cells to full width on a phone without the script knowing, half the
+   photographs would become unreachable. The script sets it and recomputes the
+   page count with it. (client feedback 2026-08-08) */
+/* overflow: hidden matters. The settling animation scales the incoming frame
+   slightly, and without clipping the scaled image spilled ~2.3px past its own
+   cell — which is why slivers of the neighbouring photographs showed at both
+   edges of the viewport. (client feedback 2026-08-08) */
+.ph-carousel .phc-cell { flex: 0 0 calc(100% / var(--phc-per)); margin: 0; padding: 0 8px;
+  box-sizing: border-box; overflow: hidden; }
+/* Fixed height, and the photograph fills the frame rather than being fitted
+   inside it. (client feedback 2026-08-08 — "fill instead of fit") */
+/* #20: the height is a custom property rather than a value here, because the
+   portrait variant used to set it on `.ph-carousel.is-portrait .phc-cell img`
+   (0,3,2) and the small-screen override sat on `.ph-carousel .phc-cell img`
+   inside a media query (0,2,2). Specificity does not care which query you are
+   in, so the portrait set stayed 560px tall in a 358px-wide cell at 390px.
+   A variable moves the decision to the CAROUSEL, where both the variant and the
+   breakpoint can set it and the last one wins on cascade order, not weight. */
+.ph-carousel { --phc-h: 400px; }
+.ph-carousel .phc-cell img { width: 100%; height: var(--phc-h); display: block;
+  object-fit: cover; background: var(--surface);
+  border-radius: var(--radius-card); box-shadow: var(--shadow);
+  transition: transform .9s var(--ease-out), opacity .5s linear; }
+/* .is-portrait — every photograph in that set is portrait, so the frame is
+   portrait and narrower. */
+.ph-carousel.is-portrait { --phc-h: 560px; }
+/* The page coming into view drifts and fades a little as it lands, so the
+   change reads as a movement rather than a jump. */
+.ph-carousel .phc-cell:not(.is-current) img { opacity: .55; transform: scale(1.03); }
+@media (max-width: 900px) {
+  .ph-carousel { --phc-h: 320px; }
+  /* still taller than it is wide at these widths, so the set still reads as
+     portrait, but 560px in a 358px cell was a letterbox on its side */
+  .ph-carousel.is-portrait { --phc-h: 420px; }
+}
+@media (max-width: 560px) {
+  .ph-carousel { --phc-h: 240px; }
+  .ph-carousel.is-portrait { --phc-h: 380px; }
+}
+.ph-carousel .phc-nav { display: flex; align-items: center; justify-content: center; gap: 16px; margin-top: 14px; }
+/* One dot per photograph, replacing the "1 / 2" counter. (client feedback
+   2026-08-08) */
+.ph-carousel .phc-dots { display: flex; align-items: center; gap: 9px; }
+/* #18: the dot stays 9px — it is a position indicator, not a button face — but
+   the CONTROL grows to 44x44 under a coarse pointer. background-clip:content-box
+   is what makes that possible: the padding added in the coarse-pointer block at
+   the foot of industrial-3.css enlarges the hit area while the painted disc
+   stays the size of the content box. It is a no-op at zero padding, so desktop
+   is unchanged.
+   #18 also: at 26% ink the inactive dot measured 1.56:1 (A) / 2.08:1 (D) against
+   the page. A pagination dot is a non-text control, so it needs 3:1. 55% ink was
+   still only 2.80:1 on the LIGHT theme — a mix towards transparent is not
+   symmetrical between a dark page and a pale one — so 65%, which measures
+   3.36:1 (A) and 5.68:1 (D). It still reads as "not the current one" because the
+   active dot is marine and 25% larger. */
+.ph-carousel .phc-dot { width: 9px; height: 9px; padding: 0; border: 0; border-radius: 50%; cursor: pointer;
+  background: color-mix(in srgb, var(--ink) 65%, transparent);
+  background-clip: content-box;
+  transition: background var(--dur-base), transform var(--dur-base); }
+.ph-carousel .phc-dot.active { background: var(--marine); background-clip: content-box; transform: scale(1.25); }
+.ph-carousel .phc-dot:hover { background: color-mix(in srgb, var(--ink) 78%, transparent); background-clip: content-box; }
+@media (prefers-reduced-motion: reduce) {
+  .ph-carousel .phc-rail { transition: none; }
+  .ph-carousel .phc-cell img { transition: none; }
+  .ph-carousel .phc-cell:not(.is-current) img { opacity: 1; transform: none; }
+}
+
+/* ---- engraved wooden frame ------------------------------------------------
+   Reference: the client's About ref.jpg — a thin rule frame whose top edge is
+   interrupted by the heading, the body sitting inside it. The reference is the
+   FRAME, not its colour (his words), so the panel takes the same oak as the
+   page banner and therefore flips with the theme without a second palette:
+   creamy oak on the light theme, rustic on the dark one.
+
+   The heading sits ON the rule rather than above it. Rather than knock a hole
+   in a border — which needs the heading's wood to line up with the panel's, and
+   background-attachment: fixed is unreliable on iOS — the top edge IS two rule
+   segments either side of the heading, exactly as the reference draws it. The
+   remaining three sides are one border on .eng-body, pulled up by half the
+   heading's height so the four meet. That half is --eng-h, measured in script,
+   with a fallback here for the no-JS case. */
+/* Notebook paper, not wood. The reference is a printed page — a texture, not a
+   material — and an oak panel read as furniture. (client feedback 2026-08-08)
+   The sheet is ruled, with a margin line down the left, and --note-line is the
+   ruling pitch: the body copy is set to exactly that line-height and its
+   margins to whole multiples, so the text actually sits on the rules instead of
+   drifting across them. Change --note-line and the whole panel re-registers. */
+.engraved {
+  --note-line: 27px;
+  /* Two real sheets, not one sheet and its negative: white notepaper on the
+     light theme, manila on the dark one. The dark theme had been given a
+     near-black panel, which is not a colour paper comes in. (client feedback
+     2026-08-08) Both keep dark ink, because that is what paper does. */
+  --note-paper: #f6f1e2; --note-rule: rgba(90,120,150,.34);
+  --note-margin: rgba(176,90,80,.38); --note-ink: #3d372e;
+  position: relative; padding: 18px; border-radius: var(--radius-card);
+  background-color: var(--note-paper);
+  /* mottling, tooth, fibre — three passes, because one faint speckle read as a
+     flat colour (client feedback 2026-08-08) */
+  background-image:
+    radial-gradient(120% 90% at 18% 8%, rgba(255,255,255,.5), transparent 55%),
+    radial-gradient(90% 70% at 86% 92%, rgba(96,74,46,.09), transparent 60%),
+    var(--note-tooth), var(--note-fibre);
+  background-size: auto, auto, 180px 180px, 320px 320px;
+  color: var(--note-ink);
+  box-shadow: var(--shadow-md), inset 0 0 0 1px rgba(90,70,55,.14),
+              inset 0 1px 0 rgba(255,255,255,.6); }
+[data-theme="D"] .engraved {
+  --note-paper: #cdbb98; --note-rule: rgba(72,96,124,.34);
+  --note-margin: rgba(150,66,54,.40); --note-ink: #33291d;
+  box-shadow: var(--shadow-md), inset 0 0 0 1px rgba(60,44,26,.28),
+              inset 0 1px 0 rgba(255,255,255,.34); }
+.engraved .eng-head { display: flex; align-items: center; gap: 18px;
+  margin-bottom: calc(var(--eng-h, 40px) / -2); }
+.engraved .eng-rule { flex: 1 1 auto; height: 1px;
+  background: color-mix(in srgb, var(--note-ink) 46%, transparent); }
+/* Pressed into the sheet rather than printed on it: a lit edge below the
+   glyphs, a dark one above. Kept subtle — on paper this is an impression, not
+   the deep cut a wooden panel could carry. */
+.engraved .eng-title { flex: 0 1 auto; margin: 0; text-align: center; text-wrap: balance;
+  color: var(--note-ink);
+  text-shadow: 0 1px 0 rgba(255,255,255,.5), 0 -1px 0 rgba(60,45,35,.22); }
+[data-theme="D"] .engraved .eng-title { text-shadow: 0 1px 0 rgba(255,255,255,.10), 0 -1px 1px rgba(0,0,0,.5); }
+/* The ruling lives on the body, not on the panel, and is measured from the body's
+   CONTENT box — background-origin: content-box. That is what makes the text sit
+   on the lines instead of near them: the first rule falls on the bottom edge of
+   the first line box, exactly where a rule sits under handwriting, and every
+   line after it follows because the copy is set to --note-line and its margins
+   are whole multiples of it. Painting still clips to the padding box so the
+   rules run the full width of the frame. Anchoring it to the panel instead put
+   the first rule an arbitrary distance above the first line. (client feedback
+   2026-08-08) */
+/* Two things are being lined up here and they need different origins, which is
+   why background-origin takes a list.
+
+   The RULING is measured from the content box, so the first rule falls on the
+   bottom edge of the first line of text and every line after it follows.
+
+   The MARGIN RULE is measured from the padding box, so it sits at a fixed 44px
+   from the sheet's edge whatever the text inset is — and the text inset is then
+   set past it. Both were on the content box before, which put the red line 43px
+   INTO the text and every line was written straight across it. (client feedback
+   2026-08-08)
+
+   The top padding reserves the title's overhang plus one clear line, so the gap
+   under the heading is the same whether the title runs to one line or two. It
+   was a flat 30px, which a two-line title ate into — the reason the first
+   paragraph sat hard against the heading on two of the three sheets. */
+.engraved .eng-body { position: relative;
+  padding: calc(var(--eng-h, 40px) / 2 + var(--note-line)) 26px 8px 62px;
+  background-image:
+    linear-gradient(90deg, transparent 0 43px, var(--note-margin) 43px 44px, transparent 44px),
+    repeating-linear-gradient(180deg, transparent 0 calc(var(--note-line) - 1px),
+                              var(--note-rule) calc(var(--note-line) - 1px) var(--note-line));
+  background-origin: padding-box, content-box;
+  background-clip: padding-box, padding-box; }
+.engraved .eng-body::before { content: ""; position: absolute; inset: 0; pointer-events: none;
+  border: 1px solid color-mix(in srgb, var(--note-ink) 46%, transparent);
+  border-top: 0; border-radius: 0 0 3px 3px; }
+/* Copy inside the panel sits on the sheet, not on the page, so it takes the
+   sheet's own ink; and it is set to the ruling so the lines mean something. */
+.engraved .eng-body p { color: color-mix(in srgb, var(--note-ink) 88%, transparent);
+  font-size: 15.5px; line-height: var(--note-line); margin: 0 0 var(--note-line); }
+.engraved .eng-body .bio-sub { color: var(--note-ink); line-height: var(--note-line);
+  margin: var(--note-line) 0 0; }
+.engraved .eng-body .bio-sub:first-of-type { margin-top: 0; }
+.engraved .eng-body em, .engraved .eng-body strong { color: var(--note-ink); }
+@media (max-width: 620px) {
+  .engraved { padding: 14px; }
+  .engraved .eng-body { padding: 24px 16px 6px; }
+  .engraved .eng-rule { display: none; }
+  /* with the rules gone the title is the only flex child, so it needs centring
+     of its own or it sits against the left edge */
+  .engraved .eng-head { margin-bottom: 10px; justify-content: center; }
+  .engraved .eng-body::before { border-top: 1px solid color-mix(in srgb, var(--banner-ink) 46%, transparent); border-radius: 3px; }
+}
+
+/* The pull-quote is the same panel, centred, with the blog feature card's
+   quote marks straddling the top and bottom rules instead of a heading.
+   (client feedback 2026-08-08) */
+/* ---- per-section proportions ---------------------------------------------
+   Each of the three blocks is tuned on its own; the shared .bio-layout only
+   sets the gap and the alignment now. (client feedback 2026-08-08) */
+/* the journey copy is much the longest, so it takes about a fifth more width */
+#biography .bio-layout { grid-template-columns: 0.74fr 1.26fr; }
+/* short copy beside a single photograph: sheet and picture near enough equal */
+#community .bio-layout--flip { grid-template-columns: 0.96fr 1.04fr; }
+/* every Artful Living photograph is portrait, so the frame is portrait too and
+   narrower, which hands the width back to the sheet */
+#instructor .bio-layout { grid-template-columns: 0.62fr 1.38fr; }
+@media (max-width: 900px) {
+  #biography .bio-layout, #community .bio-layout--flip, #instructor .bio-layout {
+    grid-template-columns: 1fr; }
+}
+
+/* The quote is a plain panel — flat colour, no ruling, no tooth. Only the
+   biography sheets below it are notebook paper; the reference is a printed
+   chapter opener, not a page torn out of a pad. (client feedback 2026-08-08) */
+.engraved.is-quote { background-color: var(--surface); background-image: none;
+  color: var(--ink); box-shadow: var(--shadow-md); }
+[data-theme="D"] .engraved.is-quote { box-shadow: var(--shadow-md); }
+.engraved.is-quote .eng-rule { background: color-mix(in srgb, var(--ink) 42%, transparent); }
+.engraved.is-quote .eng-body { text-align: center; background-image: none;
+  padding: 26px 34px 26px; }
+.engraved.is-quote .eng-body::before { border-color: color-mix(in srgb, var(--ink) 42%, transparent); }
+/* both horizontal edges are rule segments here, so the body draws only its sides */
+.engraved.is-quote .eng-body::before { border-bottom: 0; border-radius: 0; }
+.engraved.is-quote blockquote { margin: 0; font-family: var(--font-marker); font-weight: 600;
+  font-size: clamp(20px, 2.2vw, 28px); line-height: 1.42; color: var(--ink); }
+.engraved.is-quote .eng-title { font-family: var(--font-display-serif); font-weight: 700;
+  font-size: 54px; line-height: .6; padding-bottom: .18em; text-shadow: none;
+  color: color-mix(in srgb, var(--ink) 52%, transparent); }
+/* The marks sit at the outer corners rather than centred on the rules — opening
+   at the top left, closing at the bottom right, the way a quotation is actually
+   punctuated. (client feedback 2026-08-08) The single rule in each row takes up
+   the remaining width, so the frame edge still runs unbroken to the far corner. */
+.engraved.is-quote .eng-foot { display: flex; align-items: center; gap: 18px;
+  margin-top: calc(var(--eng-f, 34px) / -2); }
+.engraved.is-quote .eng-foot .eng-title { line-height: .9; padding-bottom: 0; }
+@media (max-width: 620px) {
+  .engraved.is-quote .eng-foot .eng-rule { display: none; }
+  .engraved.is-quote .eng-foot { margin-top: 8px; justify-content: flex-end; }
+}
+/* the one-per-page drop on small screens is driven by --phc-per from the
+   script, so the page count moves with it — see the note on .phc-cell */
+
+/* 13: her own sub-headings inside the journey copy. --band-eyebrow is #cab389,
+   which sits at 1.84:1 on the light theme's paper — these are heading text, not
+   decoration, so they take the body ink. */
+.bio-sub { font-family: var(--font-cond); font-weight: 600; font-size: 15px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--ink); margin: 22px 0 8px; }
+.bio-sub:first-of-type { margin-top: 6px; }
+
+/* #19: .story-layout / .story-media / .story-copy and .cert-grid / .cert-card
+   are gone. About renders neither block; the certificates are the .cert-split
+   table plus the .bc-card--cert mounts in industrial-3.css. */
+
+.signup-band { position: relative; overflow: hidden; background-color: var(--band-bg); background-image: var(--band-grain); background-size: var(--band-size, 380px 150px); color: var(--band-ink); border-radius: var(--radius-card); padding: 40px 44px; display: grid; grid-template-columns: auto 1fr; gap: 40px; align-items: center; box-shadow: var(--shadow); }
+.signup-band::before { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent 0 52px, rgba(0,0,0,.12) 52px 53px); pointer-events: none; }
+.signup-band > * { position: relative; }
+.signup-logo { display: flex; align-items: center; gap: 14px; padding-right: 40px; border-right: 1px solid rgba(244,231,207,.2); }
+.signup-logo img { width: 66px; height: 66px; border-radius: 50%; object-fit: cover; box-shadow: 0 3px 10px rgba(0,0,0,.45); border: 2px solid var(--band-eyebrow); }
+.signup-copy h2 { font-family: var(--font-marker); font-weight: 600; font-size: clamp(24px,2.6vw,34px); margin: 4px 0 6px; color: var(--band-ink); }
+.signup-copy p { margin: 0 0 16px; font-size: 15px; opacity: .9; max-width: 52ch; }
+.signup-form { display: flex; gap: 10px; flex-wrap: wrap; }
+.signup-form input { flex: 1; min-width: 220px; padding: 13px 18px; border-radius: var(--radius-pill); border: 1px solid rgba(244,231,207,.3); background: rgba(0,0,0,.28); color: var(--band-ink); font-family: var(--font-body); font-size: 15px; }
+.signup-form input::placeholder { color: rgba(244,231,207,.55); }
+.signup-form input:focus { outline: none; border-color: var(--band-eyebrow); }
+@media (max-width: 820px) {
+  .bio-layout { grid-template-columns: 1fr; gap: 26px; }
+  .signup-band { grid-template-columns: 1fr; gap: 22px; padding: 30px; }
+  .signup-logo { padding-right: 0; border-right: 0; border-bottom: 1px solid rgba(244,231,207,.2); padding-bottom: 18px; }
+}
+
+/* #19: the .nav-cats second nav row and its five rules are gone. buildNav()
+   emits no such block, so they matched nothing on any page at any width. */
+
+/* A visible, deliberately plain marker for content that is invented and must
+   not ship. It is not styled to be pretty — it is styled to be noticed, and to
+   look wrong enough that nobody forgets to remove it. */
+.ph-banner { margin: 0 auto 18px; max-width: 74ch; padding: 10px 14px;
+  border: 1px dashed color-mix(in srgb, var(--coral) 60%, transparent);
+  border-radius: var(--r-sharp);
+  background: color-mix(in srgb, var(--coral) 8%, transparent);
+  font-family: var(--font-cond); font-size: 13.5px; line-height: 1.5;
+  letter-spacing: var(--tracking-label); color: var(--ink); text-align: center; }
+
+/* ---------- social strip (Follow along) ---------- */
+.social-strip { display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 6px 0 10px; }
+/* Tracking held at .3em pending issue #22. It is the furthest value from the
+   measured ceiling, but §3 holds home-page elements her board never named. (#20) */
+/* Held row 1 of 2, decided 2026-08-09 without the client. .3em on a 12px
+   two-word label is 5x the token scale and 64% above the measured legibility
+   ceiling of .183em; past about .10em the letters stop grouping into words at a
+   glance, which is the whole job of a two-word label. The design direction §3
+   holds home-page elements the client's board did not name, and this one was
+   never named — so this IS a departure from that rule. It is recorded here
+   rather than buried: the judgement is that .3em is a legibility fault on a
+   supporting label, not a design statement worth protecting. One value; revert
+   to .3em if she disagrees. */
+.social-strip .ss-label { font-family: var(--font-cond); font-weight: 600; font-size: 12px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); }
+.ss-icons { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+.ss-btn { width: 54px; height: 54px; border-radius: 50%; display: grid; place-items: center; background-color: #876d5c; background-image: linear-gradient(118deg, rgba(231,221,203,.16), transparent 46%), var(--walnut-grain); background-size: 100% 100%, 200px 90px; color: #f4e7cf; box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(231,221,203,.2); transition: transform .2s var(--ease-pop), filter .2s; }
+.ss-btn:hover { transform: translateY(-4px); filter: brightness(1.08); }
+.ss-btn svg { width: 24px; height: 24px; }
+
+/* ============================================================
+   GALLERY STORE (Etsy-style: filter rail + framed products)
+   ============================================================ */
+.store-head { padding: 26px 0 6px; }
+.store-layout { display: grid; grid-template-columns: 248px minmax(0,1fr); gap: 30px; align-items: start; padding-bottom: 70px; }
+@media (max-width: 820px) { .store-layout { grid-template-columns: 1fr; } }
+
+/* stacked sort + filter cards in the left column */
+/* Both panels are children of this column, so they share its width. The sort
+   panel was 8px narrower than the filter panel below it. (2026-08-08) */
+.filter-col { display: flex; flex-direction: column; gap: 16px; position: sticky; top: 88px; align-self: start; }
+.filter-col > .filter-panel { width: 100%; box-sizing: border-box; }
+.filter-col .filter-panel { position: static; top: auto; }
+.sort-panel .fp-head { margin-bottom: 12px; }
+@media (max-width: 880px) { .filter-col { position: static; } }
+
+/* filter rail */
+.filter-rail { position: sticky; top: 88px; align-self: start; background: var(--surface); border-radius: var(--radius-card); padding: 22px 20px; box-shadow: var(--shadow-sm); }
+@media (max-width: 820px) { .filter-rail { position: static; } }
+.filter-rail h3 { font-family: var(--font-cond); font-weight: 600; font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--coral-ink); margin: 0 0 12px; }
+.filter-group { padding-bottom: 18px; margin-bottom: 18px; border-bottom: 1px solid var(--line); }
+.filter-group:last-child { border-bottom: 0; margin-bottom: 0; padding-bottom: 0; }
+.tag-list { display: flex; flex-direction: column; gap: 2px; }
+.tag-row { display: flex; align-items: center; gap: 9px; padding: 7px 8px; border-radius: var(--r-sharp); cursor: pointer; font-family: var(--font-body); font-size: 13.5px; color: var(--ink); transition: background .15s; }
+.tag-row:hover { background: var(--line); }
+.tag-row input { appearance: none; -webkit-appearance: none; width: 16px; height: 16px; border: 1.6px solid var(--muted); border-radius: 3px; display: grid; place-items: center; cursor: pointer; flex: none; transition: background .15s, border-color .15s; }
+.tag-row input:checked { background: var(--coral-fill); border-color: var(--coral-fill); }
+.tag-row input:checked::after { content: "✓"; color: var(--coral-fill-ink); font-size: 12.5px; font-weight: 700; line-height: 1; }
+.tag-row .count { margin-left: auto; font-family: var(--font-cond); font-size: 12.5px; color: var(--muted); }
+.price-val { font-family: var(--font-cond); font-weight: 600; font-size: 16px; color: var(--ink); margin-bottom: 10px; }
+.slider-wrap { padding: 8px 0 4px; }
+.slider-ui { position: relative; height: 20px; margin: 0 10px; }
+.slider-track { position: absolute; top: 7px; left: 0; right: 0; height: 6px; border-radius: 6px; background: color-mix(in srgb, var(--ink) 18%, transparent); pointer-events: none; }
+/* 40: the filled part of the track and its knob take the client's marine. The
+   unfilled track is left as it was, so the two halves still read apart. */
+.slider-fill { position: absolute; top: 7px; left: 0; height: 6px; border-radius: 6px; background: var(--marine); width: var(--pct, 100%); pointer-events: none; }
+.slider-knob { position: absolute; top: 0; left: var(--pct, 100%); width: 20px; height: 20px; border-radius: 50%; background: var(--marine); border: 3px solid var(--surface); box-shadow: 0 1px 5px rgba(0,0,0,.32); transform: translateX(-50%); transition: transform .12s; pointer-events: none; }
+.price-slider { position: absolute; top: 0; left: 0; right: 0; width: auto; height: 20px; margin: 0; padding: 0; -webkit-appearance: none; appearance: none; background: transparent; cursor: pointer; z-index: 2; }
+.price-slider:active + .slider-knob, .slider-ui:hover .slider-knob { transform: translateX(-50%) scale(1.14); }
+.price-slider::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 24px; height: 24px; background: transparent; border: 0; cursor: pointer; }
+.price-slider::-moz-range-thumb { width: 24px; height: 24px; background: transparent; border: 0; cursor: pointer; }
+.price-slider::-moz-range-track { background: transparent; }
+.price-scale { display: flex; justify-content: space-between; margin-top: 9px; font-family: var(--font-cond); font-size: 14px; color: var(--muted); }
+.sort-select { width: 100%; font-family: var(--font-body); font-size: 13.5px; color: var(--ink); background: var(--cream); border: 1px solid var(--line); border-radius: var(--r-sharp); padding: 9px 11px; cursor: pointer; }
+.filter-clear { width: 100%; margin-top: 4px; font-family: var(--font-cond); font-weight: 500; font-size: 13px; letter-spacing: var(--tracking-label); text-transform: uppercase; padding: 10px; border: 1px solid var(--line); border-radius: var(--radius-pill); background: transparent; color: var(--ink); cursor: pointer; transition: background .15s, color .15s; }
+.filter-clear:hover { background: var(--ink); color: var(--paper); }
+
+/* results */
+.store-main { min-width: 0; }
+.store-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
+.store-count { font-family: var(--font-cond); font-size: 12px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); }
+.active-tags { display: flex; flex-wrap: wrap; gap: 8px; }
+.active-tag { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-cond); font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; background: var(--coral-fill); color: var(--coral-fill-ink); border-radius: var(--radius-pill); padding: 5px 12px; cursor: pointer; }
+.active-tag::after { content: "✕"; font-size: 12px; }
+/* 9.2: the artwork cards and their frames grow with the type, and the spacing
+   between cards is re-opened so the bigger cards still read as a tidy grid.
+   Three across at 1440 gives a wider card; the frame takes more of it. */
+/* 9.2: the artwork cards and their frames grow with the type, and the spacing
+   between cards is re-adjusted. The column gap stays tight so the card itself
+   gets wider; the row gap opens up so the taller cards do not crowd vertically. */
+.store-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px 20px; }
+@media (max-width: 1100px) { .store-grid { grid-template-columns: repeat(2, 1fr); gap: 32px 20px; } }
+@media (max-width: 480px) { .store-grid { grid-template-columns: 1fr; } }
+.store-empty { padding: 60px 20px; text-align: center; font-family: var(--font-body); color: var(--muted); }
+
+/* framed product card — uniform sizing so the whole grid aligns */
+.art-card { display: flex; flex-direction: column; }
+.art-card.hidden { display: none; }
+/* 9.2 「作品卡／圖框一併放大」: the wall panel is taller than square now, which is
+   what actually enlarges the framed artwork — the frame is portrait, so a square
+   panel was capping it on height while the column width went unused. The panel
+   keeps a visible margin of wall on every side, so the framed-on-a-wall reading
+   survives and the hover lift has somewhere to go. */
+.art-frame-wrap { background: var(--wall); background-image: var(--wall-grain); background-size: var(--wall-size); border-radius: var(--radius-card); aspect-ratio: 4 / 5; display: grid; place-items: center; box-shadow: inset 0 0 0 1px rgba(0,0,0,.14); container-type: size; overflow: hidden; }
+.art-frame { background: var(--frame-base); border-style: solid; border-width: 14px; border-top-color: var(--frame-tl); border-left-color: var(--frame-tl); border-right-color: var(--frame-br); border-bottom-color: var(--frame-br); box-shadow: var(--shadow); width: auto; max-width: 92%; max-height: 92%; transition: transform .35s var(--ease-out); }
+.art-card:hover .art-frame { transform: translateY(-4px) scale(1.02); }
+.art-frame .art-img { overflow: hidden; box-shadow: inset 0 0 0 1px rgba(0,0,0,.3); height: min(72cqh, calc(72cqw / var(--r, 0.8))); aspect-ratio: var(--r, 0.8); }
+.art-frame .art-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* Style D — ornate carved frame overlay (replaces the bevel frame) */
+.art-ornate { display: none; }
+/* #19: the theme-D carved-frame block that used to sit here is gone. Gallery
+   promoted the carved frame to every theme in its own page CSS ("carved-frame
+   layout, all themes (was theme-D only)"), which restates every declaration of
+   it — and the page even carries a `[data-theme="D"] .art-frame` rule of its own
+   whose only purpose was to out-specify this one. Nothing here was reaching the
+   screen. */
+/* Style D — real walnut wood photo (matches design_base): banners + framed wall */
+[data-theme="D"] .site-nav,
+[data-theme="D"] .hero__panel,
+[data-theme="D"] .banner,
+[data-theme="D"] .page-hero,
+[data-theme="D"] .post-banner .chip-inner {
+  background-color: #1c130b;
+  background-image: linear-gradient(180deg, rgba(22,15,9,.40), rgba(22,15,9,.5)), url("../img/wood-rustic.jpg");
+  background-size: cover;
+  background-position: center 38%;
+}
+[data-theme="D"] .art-frame-wrap,
+[data-theme="D"] .art-modal .am-frame-wrap {
+  background-color: #1c130b;
+  background-image: radial-gradient(130% 95% at 70% 0%, rgba(231,221,203,.14), transparent 55%), linear-gradient(180deg, rgba(28,18,10,.1), rgba(16,10,6,.42)), url("../img/wood-rustic.jpg");
+  background-size: cover;
+  background-position: center;
+}
+.art-meta { padding: 14px 4px 0; display: flex; flex-direction: column; flex: 1; }
+/* 9.2: artwork titles, prices and tag chips all enlarged together, and the
+   spacing between cards opened up. */
+.art-title { font-family: var(--font-marker); font-weight: 600; font-size: 20px; line-height: 1.22; color: var(--ink); margin: 0 0 4px; min-height: 2.4em; }
+.art-sub { font-family: var(--font-cond); font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); margin-bottom: 3px; }
+.art-size { font-family: var(--font-cond); font-size: 12.5px; color: var(--ink); opacity: .82; margin-bottom: 8px; }
+.art-tagrow { display: flex; flex-wrap: wrap; gap: 5px; margin-bottom: 12px; }
+/* 9.2 asks for the chip BOX and its text to grow together. The enlarged padding
+   was written here but a second padding declaration further along the same rule
+   silently won, so only the type ever grew. */
+.art-tagchip { font-family: var(--font-cond); font-size: 13.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: #474138; background-color: #cab389; background-image: var(--oak-grain); background-size: 120px 50px; padding: 5px 12px; border-radius: var(--r-sharp); }
+.art-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: auto; padding-top: 4px; }
+/* Was a marine pill with dark ink on it, reading §9.2's "圈起" as a literal
+   ring. The client confirmed the catalogue treatment is the right one, so the
+   price is marine type like `.lesson-cell .price .now`. (2026-08-08) */
+.art-price { font-family: var(--font-cond); font-weight: 600; font-size: 24px; color: var(--marine); }
+/* A reduced piece shows its original struck through beside the new price, the
+   same pairing the course cards use. §1.4.3 keeps the artwork price marine
+   unconditionally, so the sale is carried by the struck original and the
+   ribbon rather than by a colour change. (client feedback 2026-08-08) */
+.art-was { font-family: var(--font-cond); font-weight: 500; font-size: 16px; color: var(--muted); margin-right: 10px; }
+.art-frame-wrap { position: relative; }
+.art-frame-wrap .sale-ribbon { position: absolute; top: 0; right: 0; z-index: 4; width: 118px; height: 118px; overflow: hidden; pointer-events: none; border-radius: 0 var(--radius-card) 0 0; }
+.art-frame-wrap .sale-ribbon span { position: absolute; top: 20px; right: -32px; width: 150px; transform: rotate(45deg); text-align: center;
+  background-color: var(--rouge); background-image: var(--rouge-metal); color: #fdf3ef;
+  font-family: var(--font-cond); font-weight: 600; font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase;
+  padding: 5px 0; box-shadow: 0 2px 10px rgba(20,17,13,.4); }
+.art-actions { display: flex; gap: 8px; }
+.art-btn { display: inline-flex; align-items: center; gap: 6px; font-family: var(--font-cond); font-weight: 500; font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; padding: 9px 13px; border-radius: var(--radius-pill); border: 0; cursor: pointer; text-decoration: none; transition: transform .15s var(--ease-pop), background .18s, filter .18s; }
+.art-btn.etsy { background-color: #5e4a3d; background-image: var(--walnut-grain); background-size: 160px 70px; color: #f4e7cf; }
+.art-btn.etsy:hover { transform: translateY(-1px); filter: brightness(1.08); }
+.art-btn.detail { background-color: #cab389; background-image: var(--oak-grain); background-size: 160px 70px; color: #474138; }
+.art-btn.detail:hover { transform: translateY(-1px); filter: brightness(.96); }
+
+/* gallery quick-view modal */
+.art-modal { position: fixed; inset: 0; z-index: 200; display: none; align-items: center; justify-content: center; padding: 24px; }
+.art-modal.open { display: flex; }
+.art-modal .am-backdrop { position: absolute; inset: 0; background: rgba(20,17,13,.62); backdrop-filter: blur(3px); }
+.art-modal .am-panel { position: relative; z-index: 1; width: min(880px, 100%); max-height: 90vh; overflow: auto; background: var(--surface); border-radius: var(--radius-card); box-shadow: var(--shadow); display: grid; grid-template-columns: 1fr 1fr; }
+@media (max-width: 680px) { .art-modal .am-panel { grid-template-columns: 1fr; } }
+.art-modal .am-frame-wrap { background: var(--wall); background-image: var(--wall-grain); background-size: var(--wall-size); display: grid; place-items: center; padding: 34px; }
+.art-modal .am-frame { background: var(--frame-base); border-style: solid; border-width: 14px; border-top-color: var(--frame-tl); border-left-color: var(--frame-tl); border-right-color: var(--frame-br); border-bottom-color: var(--frame-br); box-shadow: var(--shadow); width: 78%; }
+.art-modal .am-frame .am-img { aspect-ratio: 4/5; overflow: hidden; box-shadow: inset 0 0 0 1px rgba(0,0,0,.3); }
+.art-modal .am-frame .am-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+/* Style D — ornate carved frame overlay for the detail modal */
+.am-ornate { display: none; }
+[data-theme="D"] .art-modal .am-frame { background: transparent; border: 0; box-shadow: none; position: relative; aspect-ratio: 18426 / 21301; width: 78%; }
+[data-theme="D"] .art-modal .am-frame .am-img { position: absolute; top: 7.4%; bottom: 7.4%; left: 9.1%; right: 9.1%; aspect-ratio: auto !important; box-shadow: inset 0 0 0 1px rgba(0,0,0,.45); }
+[data-theme="D"] .art-modal .am-ornate { display: block; position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; filter: drop-shadow(0 16px 26px rgba(0,0,0,.55)); }
+.art-modal .am-body { padding: 30px 30px 28px; display: flex; flex-direction: column; gap: 12px; }
+.art-modal .am-sub { font-family: var(--font-cond); font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--coral-ink); }
+.art-modal .am-title { font-family: var(--font-marker); font-weight: 600; font-size: 28px; line-height: 1.05; color: var(--ink); margin: 0; }
+.art-modal .am-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.art-modal .am-desc { font-size: 14px; line-height: 1.6; color: var(--muted); margin: 0; }
+.art-modal .am-spec { display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; font-size: 13px; color: var(--ink); margin: 4px 0 2px; }
+.art-modal .am-spec dt { font-family: var(--font-cond); letter-spacing: var(--tracking-label); text-transform: uppercase; font-size: 12.5px; color: var(--muted); }
+/* 1.4.3: artwork prices are marine unconditionally — a different rule from
+   course prices, where only a reduced price changes colour. The card already
+   did this; the quick-view modal was still on copper. */
+.art-modal .am-price { font-family: var(--font-cond); font-weight: 600; font-size: 26px; color: var(--marine-ink); background: var(--marine); border-radius: var(--radius-pill); padding: 4px 16px; align-self: flex-start; }
+.art-modal .am-actions { display: flex; gap: 10px; margin-top: 6px; flex-wrap: wrap; }
+.art-modal .am-close { position: absolute; top: 12px; right: 12px; z-index: 2; width: 38px; height: 38px; border-radius: 50%; border: 0; cursor: pointer; background: var(--cream); color: var(--ink); font-size: 18px; display: grid; place-items: center; box-shadow: var(--shadow-sm); }
+.art-modal .am-close:hover { background: var(--ink); color: var(--paper); }
+
+/* ============================================================
+   BLOG (listing + tag filter)
+   ============================================================ */
+/* The whole feature card is the leather notebook cover (client feedback
+   2026-08-08). §12.1 asked only for the title box to be pressed leather and said
+   not to add a background colour; the client has since asked for the material to
+   carry the card instead, so the fill here is a deliberate override of that
+   sentence rather than an oversight. Four layers, topmost first: a light fall
+   from the upper left, a diagonal that darkens the lower right the way a curved
+   cover loses the light, the pores, and the hide blotch under everything. The
+   inset shadows are the cover's edge — a lit top lip, a dark bottom one, and a
+   wide inner vignette that rounds the board over. */
+.blog-feature {
+  display: grid; grid-template-columns: 1.1fr .9fr; gap: 20px;
+  border-radius: var(--radius-card); padding: 18px; margin-bottom: 30px; align-items: stretch;
+  background-color: var(--leather);
+  background-image:
+    radial-gradient(115% 78% at 18% -4%, rgba(255,238,206,.30), rgba(255,238,206,0) 56%),
+    linear-gradient(163deg, rgba(255,241,214,.10) 0%, rgba(48,29,15,0) 38%, rgba(44,26,13,.17) 100%),
+    var(--leather-pores),
+    var(--leather-shine),
+    var(--leather-hide);
+  /* The pore layer sits a pixel down and right of the identical highlight layer
+     beneath it, so every pebble gets a lit edge on one side and a shadowed one
+     on the other. Without the offset the two cancel and the grain disappears. */
+  background-position: 0 0, 0 0, 1px 1px, 0 0, 0 0;
+  background-size: 100% 100%, 100% 100%, 150px 150px, 150px 150px, 520px 520px;
+  box-shadow:
+    var(--shadow),
+    inset 0 1px 0 rgba(255,242,216,.34),
+    inset 0 -2px 0 rgba(38,21,10,.42),
+    inset 0 0 0 1px rgba(44,26,13,.38),
+    inset 0 0 44px rgba(44,26,13,.20);
+}
+/* The saddle stitch that runs round a bound cover. A dashed border is the only
+   way to draw it without an image; the drop-shadow underneath is what stops it
+   reading as a dotted CSS border — it puts each stitch in its own groove. It
+   sits inside the card's padding so it never crosses the photograph. */
+.blog-feature::before {
+  content: ""; position: absolute; inset: 8px; border-radius: 11px; z-index: 2;
+  border: 2px dashed rgba(255,240,212,.52);
+  filter: drop-shadow(0 1.5px 0 rgba(40,22,10,.62));
+  pointer-events: none;
+}
+@media (max-width: 760px) { .blog-feature { grid-template-columns: 1fr; } }
+/* The photograph is mounted on the cover rather than set into it, so it takes an
+   outer shadow. An inset ring would be hidden by the photograph that fills it. */
+.blog-feature .bf-img { position: relative; overflow: hidden; min-height: 260px; border-radius: var(--radius-card); box-shadow: 0 3px 14px rgba(30,16,7,.42); }
+.blog-feature .bf-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s var(--ease-out); }
+.blog-feature:hover .bf-img img { transform: scale(1.04); }
+.blog-feature .bf-body { padding: 20px 26px; display: flex; flex-direction: column; gap: 12px; justify-content: center; }
+/* 2026-07-26: the dark-theme wood-rustic texture that used to sit here was
+   removed. It was the only card-level wood background on the site (bands and
+   the footer are a different thing), and the clay/coral kicker + meta text
+   were unreadable against the grain in theme D. The feature card now uses
+   var(--surface) in every theme, matching .blog-card below it. */
+
+/* ---------- real wood photos on the dark/wood bands (2026-07) ----------
+   Light (A): the page banner's pale wood — band text flips DARK so it stays readable.
+   Dark (D): near-black wood — keeps the cream band ink.
+   Scoped to the band components so the footer (fixed dark) keeps cream text.
+
+   31-37: the light band was wood-natural under a brown wash, which sat a step
+   darker than the banner at the top of the same page and read as a second,
+   unrelated timber. It now carries the banner's own photograph, and the wash
+   is gone rather than lightened — the wash existed to pull wood-natural down,
+   and there is nothing left to pull down.
+
+   The three surfaces beside .band-forest were not named in the client's round.
+   They move with it deliberately: leaving them on wood-natural would put two
+   near-identical pale woods on one page, which is a worse outcome than
+   changing a surface nobody asked about. */
+/* .tier-card.fellow is deliberately NOT in these two groups. It carries its own
+   photograph inline, so the wood never paints; all membership did was hand it a
+   --band-ink and a color meant for wood, which is what made its heading
+   unreadable on the light theme. */
+[data-theme="A"] .band-forest,
+[data-theme="A"] .signup-band,
+[data-theme="A"] .dash-hero {
+  --band-ink:#474138; --band-eyebrow:#7e4c27; --band-bg:#e6d6b8;
+  background-color: #e6d6b8;
+  background-image: url("../img/wood-creamy.jpg");
+  background-size: cover;
+  background-position: center;
+  color: #474138;
+}
+[data-theme="D"] .band-forest,
+[data-theme="D"] .signup-band,
+[data-theme="D"] .dash-hero {
+  --band-bg:#17130e;
+  background-color: #17130e;
+  background-image: url("../img/wood-black.jpg");
+  background-size: cover;
+  background-position: center;
+}
+/* 12.2: the board marks the whole feature card as too small.
+   Every ink in the body is now a leather ink rather than a theme token: the card
+   is the same tan under both themes, so --ink and --coral would be readable in
+   one theme and not the other. See the --leather-* block for why they are all
+   near-black. */
+.blog-feature .bf-body { color: var(--leather-label); }
+/* Light theme swaps the hide for pale grey stock. Only the colour and the inks
+   change; the pore, shine and grain images are the same generated textures, so
+   it is recognisably the same object in a different light. (2026-08-08) */
+[data-theme="A"] .blog-feature { background-color: var(--leather-a); }
+[data-theme="A"] .blog-feature .bf-body { color: var(--leather-a-label); }
+[data-theme="A"] .blog-feature .bf-frame h2 { color: var(--leather-a-ink); }
+[data-theme="A"] .blog-feature .bf-reads { color: var(--leather-a-meta); }
+[data-theme="A"] .blog-feature .bf-quote { color: rgba(47,42,36,.5); -webkit-text-stroke-color: rgba(47,42,36,.5); }
+.blog-feature .bf-kicker { font-family: var(--font-cond); font-size: 14px; font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--leather-label); }
+.blog-feature h2 { font-family: var(--font-marker); font-weight: 600; font-size: clamp(28px,3.3vw,41px); line-height: 1.08; margin: 0; color: var(--leather-ink); }
+.blog-feature p { font-size: 16.5px; line-height: 1.62; color: var(--leather-meta); margin: 0; }
+.blog-feature .bf-reads { font-size: 14px; color: var(--leather-meta); }
+
+/* 12.1: the title is pressed into the cover. The frame is no longer a box — the
+   leather moved up to the card, so all this element does now is hold the
+   headline and give the quote marks something to hang off. */
+.blog-feature .bf-frame {
+  position: relative; align-self: flex-start; max-width: 100%;
+  padding: 6px 0 10px;
+  display: grid; justify-items: start; gap: 10px;
+}
+/* Blind deboss: light comes from the top left, so the wall above each letter is
+   in shadow and the lip below it catches the light. That pairing — dark offset
+   up, light offset down — is what the eye reads as a groove rather than as a
+   drop shadow. The letters are 90% opaque so the pores show faintly through the
+   recess, which is the part that sells it; a solid fill reads as printed ink. */
+/* Everything printed on the cover is pressed into it rather than laid on top:
+   the kicker, the reading time and the call to action take the same groove as
+   the headline (client feedback 2026-08-08). The offsets stay at 1px with no
+   blur, because the shadow that reads as a groove on 41px type reads as a smear
+   on 14px — only the headline carries the extra ambient layer, in its own rule
+   below. */
+.blog-feature .bf-kicker,
+.blog-feature .bf-reads {
+  text-shadow: 0 -1px 0 rgba(40,22,10,.55), 0 1px 0 rgba(255,240,212,.42);
+}
+.blog-feature .bf-frame h2 {
+  color: rgba(51,36,26,.92);
+  text-shadow:
+    0 -1px 1px rgba(40,22,10,.70),
+    0 1px 0 rgba(255,240,212,.50),
+    0 2px 4px rgba(40,22,10,.28);
+}
+/* §12.1: the headline sits inside quote marks, each in its own box.
+   They were pseudo-elements on the <h2>, which meant all three shared one line
+   box: the closing mark had to hang off whatever word the title happened to end
+   on, and it collided with the last line. As grid rows the engine places them
+   with no overlap and no hand-tuned offsets.
+   The spans are empty in the markup — the glyph is CSS content — so there is no
+   field here for the CMS to expose. Only the <h2> is editable content. */
+.blog-feature .bf-quote { display: block; line-height: .78; pointer-events: none;
+  font-family: Georgia, "Times New Roman", serif; font-weight: 700;
+  font-size: clamp(62px, 6.1vw, 96px); color: rgba(52,36,23,.5);
+  /* Georgia's comma tapers to a thin tail and no weight it ships fixes that. A
+     centred stroke fattens the glyph without changing its shape, which is what a
+     mark pressed into hide looks like — the tool had a width. Archivo and Oswald
+     were tried first: both draw straight wedges with no tail at all. */
+  -webkit-text-stroke: 3px rgba(52,36,23,.5);
+  text-shadow: 0 -1px 1px rgba(40,22,10,.45), 0 1px 0 rgba(255,240,212,.42); }
+.blog-feature .bf-quote.is-open::before  { content: "“"; }
+.blog-feature .bf-quote.is-close::before { content: "”"; }
+/* Each mark is confined to its own box: at line-height .52 the glyph spilled
+   well past its band and could sit on the headline's last line. .78 keeps the
+   ink inside, and the row gap separates the four bands — kicker, open mark,
+   headline, close mark — so a long title lengthens its own box and can never
+   reach a mark. (client feedback 2026-08-08) */
+.blog-feature .bf-quote.is-close { justify-self: end; }
+.blog-feature .bf-frame h2 { position: relative; z-index: 1; text-wrap: pretty; }
+
+/* 12.1: a bookmark ribbon down the right-hand edge carrying the category,
+   hanging over the top edge of the card the way a page marker would. Bigger and
+   in leather as well (client feedback 2026-08-08), so it reads as a strap
+   stitched to the cover rather than as a flat tab.
+   The category colour is fixed at --marine by §1.4.2, and --marine-ink only just
+   clears 4.56:1 on it, so the pores could not simply be laid over --marine — the
+   grain is dark and would have eaten the margin. The fill starts instead at the
+   light end of --marine-metal and the pores bring it back down to roughly
+   --marine, which keeps the client's colour and the contrast both intact.
+   The ribbon takes the dark pore layer on its own and skips the cream highlight
+   the card uses. The highlight is a warm cream, and over a blue-grey it washed
+   the ribbon out to a flat grey-green that was visibly no longer the client's
+   colour — measured at #7d8a87 against a specified #598493. */
+.blog-feature { position: relative; }
+/* The call to action is a button, not a coloured line of text. At 13px on a
+   patterned hide a colour change alone was invisible next to the reading time.
+
+   The fill is the deep red rather than the marine §1.4.2 assigns to actions:
+   marine measures 1.22:1 against this tan and copper 1.47:1, so a pill in
+   either would be a shape nobody can see. The red is 4.79:1 on the tan and
+   10.26:1 on the light cover, with cream type at 13.77:1 on the fill.
+   (client feedback 2026-08-08) */
+.blog-feature .bf-cta {
+  align-self: flex-start; display: inline-flex; align-items: center; gap: 9px;
+  margin-top: 4px; padding: 13px 26px; border-radius: var(--radius-pill);
+  background-color: #3d1410;
+  background-image: linear-gradient(180deg, rgba(255,236,222,.16), transparent 46%),
+    var(--leather-pores);
+  background-size: 100% 100%, 110px 110px;
+  color: #fdf3ef; text-decoration: none;
+  font-family: var(--font-cond); font-weight: 500; font-size: 14px;
+  letter-spacing: var(--tracking-label); text-transform: uppercase;
+  box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(255,236,222,.22),
+    inset 0 -2px 5px rgba(0,0,0,.34);
+  transition: transform var(--dur-fast) var(--ease-pop), filter var(--dur-base);
+}
+.blog-feature .bf-cta:hover { transform: translateY(-2px); filter: brightness(1.12); }
+.blog-feature .bf-cta .arr { transition: transform var(--dur-fast) var(--ease-out); }
+.blog-feature .bf-cta:hover .arr { transform: translateX(3px); }
+/* The light cover is paler, so the same fill can afford to lift a little. */
+[data-theme="A"] .blog-feature .bf-cta { background-color: #6b2018; }
+
+.blog-feature .bf-ribbon {
+  position: absolute; top: -18px; right: 34px; z-index: 3; width: 58px; min-height: 195px;
+  background-color: #6f9dad;
+  background-image:
+    linear-gradient(101deg, rgba(255,255,255,.16), rgba(255,255,255,0) 46%, rgba(0,0,0,.18)),
+    var(--leather-pores);
+  background-size: 100% 100%, 110px 110px;
+  /* Same machined-fill problem as the marine buttons: a sheen and a leather
+     pore layer sit over the colour, so --marine-ink measured 4.49:1 here. The
+     ribbon's tag can be long enough to shrink the type back to 14px, where
+     that is a fail rather than a large-text pass, so it takes the darker ink. */
+  color: var(--marine-ink-metal);
+  box-shadow: var(--shadow-md), inset 0 0 0 1px rgba(255,255,255,.18), inset 0 -2px 6px rgba(0,0,0,.22);
+  clip-path: polygon(0 0, 100% 0, 100% 100%, 50% calc(100% - 20px), 0 100%);
+  display: flex; justify-content: center; padding: 20px 0 44px;
+}
+.blog-feature .bf-ribbon span {
+  writing-mode: vertical-rl; text-orientation: mixed;
+  /* The tag is whatever the post carries, so the type sizes itself to the length
+     instead of assuming a short word. --rib-len is the character count, set on
+     the element by the template. (client feedback 2026-08-08) */
+  font-family: var(--font-cond); font-weight: 600;
+  /* 54: the whole ramp moves up a step. It still scales itself to the tag's
+     length, because the tag is whatever the post carries — a fixed size would
+     overflow the ribbon on a long one. */
+  font-size: clamp(14px, calc(190px / max(var(--rib-len, 5), 5)), 24px);
+  letter-spacing: var(--tracking-label); text-transform: uppercase;
+}
+@media (max-width: 760px) { .blog-feature .bf-ribbon { right: 16px; } }
+
+/* 12.2: Load More sits under the grid and disappears on the last page. */
+.blog-more { display: flex; justify-content: center; margin-top: 30px; }
+
+/* 13: the About quote takes the same debossed device as the blog feature card's
+   title frame — "用此符號設計" — so the two read as one idea rather than two.
+   The pull-quote already carries an oak fill, so only the pressed edge and the
+   quote mark are added here. */
+.pull-quote.is-deboss {
+  box-shadow: var(--shadow-sm), inset 2px 2px 5px rgba(90,70,55,.42),
+              inset -1px -1px 3px rgba(255,255,255,.55), inset 0 0 0 1px rgba(90,70,55,.20);
+  padding-top: 40px;
+}
+.pull-quote.is-deboss::before {
+  content: "\201C"; position: absolute; top: 8px; left: 26px;
+  font-family: var(--font-display-serif); font-size: 62px; line-height: 1;
+  color: rgba(71,65,56,.34);
+  text-shadow: 0 1px 0 rgba(255,255,255,.5), 0 -1px 1px rgba(90,70,55,.4);
+}
+
+.blog-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
+@media (max-width: 980px) { .blog-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .blog-grid { grid-template-columns: 1fr; } }
+.blog-card { display: flex; flex-direction: column; border-radius: var(--radius-card); overflow: hidden; background: var(--surface); box-shadow: var(--shadow-sm); text-decoration: none; color: var(--ink); transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-base); }
+.blog-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.blog-card .bc-img { aspect-ratio: 3/2; overflow: hidden; }
+.blog-card .bc-img img { width: 100%; height: 100%; object-fit: cover; transition: transform .4s; }
+.blog-card:hover .bc-img img { transform: scale(1.05); }
+.blog-card .bc-body { padding: 16px 18px 20px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
+/* The post's category chip is a classification marker, same job as the course
+   media tag, so it takes marine too. */
+.blog-card .bc-tag { align-self: flex-start; font-family: var(--font-cond); font-size: 12px; font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--marine-ink); background: var(--marine); border-radius: var(--r-sharp); padding: 4px 10px; }
+/* The listing cards were called too small alongside the feature card (client
+   feedback 2026-08-08), the same complaint §12.2 already recorded against the
+   feature card itself. Title 17 → 19px, excerpt 13 → 14.5px, date 12.5 → 13.5px.
+   The title climbs least in proportion because Bodoni Moda already sets larger
+   on the body than Archivo does at the same nominal size. */
+.blog-card h3 { font-family: var(--font-marker); font-weight: 600; font-size: 19px; line-height: 1.24; margin: 0; }
+.blog-card p { font-size: 14.5px; line-height: 1.55; color: var(--muted); margin: 0; flex: 1; }
+.blog-card .bc-date { font-family: var(--font-cond); font-size: 13.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); }
+/* Reading time is purely supporting information, so it takes linen.
+   Blog.dc.html styles .bc-reads / .bf-reads itself; both point at the token. */
+.bc-reads, .bf-reads { color: var(--linen-ink); }
+
+/* ============================================================
+   ABOUT
+   ============================================================ */
+.card { background: var(--surface); border-radius: var(--radius-card); padding: 22px 24px; box-shadow: var(--shadow-sm); }
+.card.paper { background: var(--cream); }
+.card.blush { background-color: #cab389; background-image: var(--oak-grain); background-size: 200px 90px; color: #474138; }
+.card.mint { background: #4d6625; color: #f1f3e6; }
+.card.mint a { color: inherit; }
+.card h3 { color: var(--ink); }
+.card.blush h3, .card.mint h3 { color: inherit; }
+.about-hero { display: grid; grid-template-columns: 1fr 1.3fr; gap: 48px; align-items: center; padding: 56px 0 30px; }
+/* Two lines split at the exclamation mark, the greeting set larger than the
+   invitation under it. The second line is 0.72 of the first — enough to read as
+   deliberate hierarchy rather than a rendering accident, without the second line
+   dropping to caption size. (client feedback 2026-08-08) */
+.about-greet { margin: 4px 0 12px; }
+.about-greet .ag-line { display: block; line-height: 1.14; }
+.about-greet .ag-1 { font-size: clamp(40px, 5.2vw, 70px); }
+.about-greet .ag-2 { font-size: clamp(29px, 3.75vw, 50px); }
+.about-hero .portrait-wrap { position: relative; }
+.about-hero .arch-duo { box-shadow: var(--shadow-lift); }
+/* 13 names this element and rules the conversion to #d3c2bb automatic. It calls
+   the fill flat, which it is not — the chip carries an oak grain — but 1.4.2's
+   override says a NAMED element converts even when it is material-class, and
+   that a material element takes the metal version of the new colour rather than
+   a flat fill. So: linen, with the linen-metal finish. */
+.portrait-note { position: absolute; bottom: -14px; right: -8px; transform: rotate(-3deg); background-color: var(--linen); background-image: linear-gradient(118deg, rgba(255,252,248,.34), transparent 42%), repeating-linear-gradient(95deg, rgba(0,0,0,.07) 0 1px, transparent 1px 3px), var(--linen-metal); background-size: auto; color: #2b2823; border-radius: var(--radius-pill); padding: 7px 18px; font-family: var(--font-cond); font-weight: 600; font-size: 14px; letter-spacing: var(--tracking-label); text-transform: uppercase; box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(255,252,248,.5), inset 0 -1px 0 rgba(90,70,60,.28); }
+.approach-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.approach-grid .marker-title { color: var(--ink); }
+.contact-grid { display: grid; grid-template-columns: 1.3fr 1fr; gap: 26px; align-items: start; }
+.field { margin-bottom: 16px; }
+/* Tracking held at .08em: `.field` renders only in About's contact form, which
+   is below the §13/§14 freeze line. Holding it costs nothing elsewhere. (#20) */
+.field label { font-family: var(--font-cond); font-weight: 600; letter-spacing: .08em; text-transform: uppercase; font-size: 12px; display: block; margin-bottom: 6px; color: var(--ink); }
+/* #02: this rule declared color:#2b2823, then declared color:var(--ink) again
+   further along the SAME rule, so the first was dead and only the
+   -webkit-text-fill-color was doing any work. On theme D that painted #2b2823
+   over --cream #211e1a: measured 1.13:1 off the pixels, i.e. what you type is
+   invisible. Both inks now follow --ink, and the fill colour is stated rather
+   than left to WebKit's default so the two cannot drift apart again. */
+.field input, .field textarea { width: 100%; border: 1px solid var(--line); border-radius: var(--r-sharp); background: var(--cream); padding: 13px 15px; font-family: var(--font-body); font-size: 14.5px; color: var(--ink); -webkit-text-fill-color: var(--ink); }
+.field input::placeholder, .field textarea::placeholder { color: var(--muted); opacity: 1; -webkit-text-fill-color: var(--muted); }
+.field input:focus, .field textarea:focus { outline: 2px solid var(--coral); border-color: transparent; }
+.tc-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.about-tri { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.approach-num { font-family: var(--font-stencil); font-size: 22px; color: var(--coral-ink); margin-bottom: 6px; }
+@media (max-width: 900px) {
+  .about-hero { grid-template-columns: 1fr; gap: 30px; }
+  .about-hero .portrait-wrap { max-width: 380px; }
+  .approach-grid, .contact-grid, .tc-grid, .about-tri { grid-template-columns: 1fr; }
+}
+
+/* ============================================================
+   LESSON PLAYER (simulated student journey)
+   ============================================================ */
+/* No opacity here either — see the note on .page-hero .eyebrow. */
+.crumbs { font-family: var(--font-cond); font-size: 14px; font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--banner-ink); margin-bottom: 10px; }
+.crumbs a:hover { color: var(--banner-ink); text-decoration: underline; }
+.free-pill { display: inline-block; font-family: var(--font-cond); font-size: 12.5px; font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; background: var(--coral-fill); color: var(--coral-fill-ink); border-radius: var(--r-sharp); padding: 5px 14px; box-shadow: var(--shadow-sm); }
+/* The banner is 1440px wide and was carrying four facts as one 13px
+   dot-separated string. Same facts, each under its own label, in the strip
+   pattern the course cards use — readable at a glance and it fills the width.
+   (client feedback 2026-08-08) */
+.lesson-meta-row { display: flex; flex-wrap: wrap; gap: 14px 46px; align-items: flex-start; margin-top: 18px; color: var(--banner-ink); }
+.lesson-meta-row .lf { display: flex; flex-direction: column; gap: 3px;
+  font-family: var(--font-cond); font-weight: 600; font-size: 18px; line-height: 1.2; }
+.lesson-meta-row .lf i { font-style: normal; font-weight: 500; font-size: 12px;
+  letter-spacing: var(--tracking-label); text-transform: uppercase; }
+.lesson-meta-row .dot { color: var(--coral-deep); }
+.lesson-cols { display: grid; grid-template-columns: 2.2fr 1fr; gap: 28px; align-items: start; margin-top: 28px; }
+@media (max-width: 1024px) { .lesson-cols { grid-template-columns: 1fr; } }
+
+/* player */
+.player { border-radius: var(--radius-card); overflow: hidden; background: #1b1814; box-shadow: var(--shadow); }
+.stage { position: relative; aspect-ratio: 16/9; overflow: hidden; background: #1b1814; }
+.stage img.poster { width: 100%; height: 100%; object-fit: cover; display: block; transform-origin: 60% 40%; }
+.stage.is-playing img.poster { animation: ken-burns 36s ease-in-out infinite alternate; }
+@keyframes ken-burns { from { transform: scale(1.02) translate(0,0); } to { transform: scale(1.16) translate(-2.5%, 2%); } }
+.stage .sheen { position: absolute; inset: 0; pointer-events: none; opacity: 0; background: linear-gradient(115deg, transparent 30%, rgba(252,250,237,.10) 46%, rgba(202,179,137,.10) 52%, transparent 68%); background-size: 300% 100%; transition: opacity .6s; }
+.stage.is-playing .sheen { opacity: 1; animation: sheen-drift 7s linear infinite; }
+@keyframes sheen-drift { from { background-position: 120% 0; } to { background-position: -60% 0; } }
+.stage .veil { position: absolute; inset: 0; display: grid; place-items: center; background: rgba(20,17,13,.42); cursor: pointer; transition: opacity .4s, visibility .4s; }
+.stage.is-playing .veil { opacity: 0; visibility: hidden; }
+.big-play { width: 76px; height: 76px; border-radius: 50%; border: 0; cursor: pointer; background: rgba(243,237,225,.95); color: var(--coral-deep); display: grid; place-items: center; font-size: 26px; padding-left: 6px; box-shadow: var(--shadow); transition: transform .18s var(--ease-pop); }
+.stage .veil:hover .big-play { transform: scale(1.08); }
+.unit-flag { position: absolute; top: 14px; left: 14px; font-family: var(--font-cond); font-weight: 500; font-size: 13px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: #ede1d0; background: rgba(20,17,13,.62); border-radius: var(--r-sharp); padding: 5px 14px; backdrop-filter: blur(3px); }
+.stage .done-toast { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%) scale(.8); background: #4d6625; color: #f1f3e6; font-family: var(--font-cond); font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; font-size: 14px; border-radius: var(--radius-pill); padding: 12px 26px; box-shadow: var(--shadow); opacity: 0; pointer-events: none; transition: opacity .3s, transform .3s var(--ease-pop); }
+.stage .done-toast.show { opacity: 1; transform: translate(-50%,-50%) scale(1); }
+.controls { display: flex; align-items: center; gap: 12px; padding: 11px 16px 13px; background: #1b1814; color: #ede1d0; }
+.ctl-btn { width: 38px; height: 38px; border-radius: 50%; border: 0; cursor: pointer; background: rgba(243,237,225,.12); color: #ede1d0; display: grid; place-items: center; font-size: 14px; transition: background .15s, transform .15s var(--ease-pop); }
+.ctl-btn:hover { background: var(--coral-fill); color: var(--coral-fill-ink); transform: translateY(-1px); }
+.timecode { font-family: var(--font-cond); font-size: 12.5px; font-weight: 500; opacity: .9; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.seek { position: relative; flex: 1; height: 22px; cursor: pointer; display: flex; align-items: center; }
+.seek .track { width: 100%; height: 5px; border-radius: 99px; background: rgba(243,237,225,.22); overflow: hidden; }
+.seek .fill { height: 100%; width: 0%; border-radius: 99px; background: linear-gradient(90deg, var(--teal-ink), var(--coral)); }
+.seek .knob { position: absolute; top: 50%; left: 0%; width: 13px; height: 13px; border-radius: 50%; background: #f3ede1; transform: translate(-50%,-50%); box-shadow: 0 1px 5px rgba(0,0,0,.5); pointer-events: none; }
+.spd { font-family: var(--font-cond); font-size: 12.5px; font-weight: 600; opacity: .6; white-space: nowrap; }
+.demo-note { margin: 10px 2px 0; font-family: var(--font-cond); font-size: 12px; color: var(--muted); }
+
+.unit-panel { margin-top: 26px; }
+.unit-notes { display: none; }
+.unit-notes.active { display: block; }
+.unit-notes h2 { font-family: var(--font-marker); font-weight: 600; font-size: clamp(22px,2.4vw,30px); margin: 0 0 10px; color: var(--ink); }
+.unit-notes p { font-size: 15px; color: var(--muted); max-width: 68ch; margin: 0 0 12px; }
+.tip-card { background-color: #cab389; background-image: var(--oak-grain); background-size: 220px 90px; color: #474138; border-radius: var(--radius-card); padding: 16px 20px; margin: 16px 0; max-width: 60ch; font-size: 14.5px; box-shadow: var(--shadow-sm); }

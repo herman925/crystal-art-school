@@ -1,0 +1,170 @@
+/* Free videos page rules.
+   These lived in an inline <style> block in the prototype's FreeVideos.dc.html
+   rather than in css/, which is why .fv-grid, .fv-thumb, .fv-feat-stage and every
+   .fvm-* selector return no hits in industrial-1/2/3.css. Ported here for the same
+   reason css/cas-home.css exists.
+
+   Two rules from that block are deliberately NOT here. The section band's
+   `background-image` stays in css/industrial-3.css:1235: a url() inside a custom
+   property resolves against the DOCUMENT when it is substituted into a page-level
+   style, so `../img/` escapes the site. And the sample-tile rules (.fv-card.is-ph,
+   .fv-ph-*) are dropped with the sample tiles themselves — this page renders
+   nothing rather than invented cards.
+
+   Covers: the section bands, the featured stage, the rails and their arrows, the
+   cards, and the lightbox player. */
+
+.fv-sec { margin-top: 54px; }
+
+/* 15: the page title and all four block titles are Font A. The .font-a rule in
+   industrial-3.css sets the family; the size is set here because this page's
+   headings run larger than the site default. */
+/* Each section title sits on the same wood as the page banner — left-aligned, and
+   with no eyebrow above it. The band bleeds to the viewport edges the way
+   .page-hero does, so it reads as the same device rather than as a wide card. */
+.fv-sec h2 { font-family: var(--font-marker); font-weight: 600; font-size: clamp(24px, 2.6vw, 32px); color: var(--ink); margin: 0 0 10px; }
+/* The band was `background-attachment: fixed`, so the pixels behind every glyph
+   changed as the page scrolled and the hairline Arizonia script fell to 2.46:1 at
+   some scroll positions. Two changes, both needed: the texture is anchored to the
+   band, so the backdrop is the same at every scroll position; and a flat scrim of
+   the band's own colour is laid over the grain as the first background layer, so
+   the ink meets a near-uniform field rather than the wood's dark figure. The scrim
+   is built from --banner-bg, which is per-theme, so one declaration covers A and D.
+   A ::after overlay could not do this job — a positioned pseudo-element paints
+   ABOVE the h2's own inline text, so it would wash the letters out with the wood. */
+.cas-root .fv-sec > h2 {
+  --fv-band-scrim: color-mix(in srgb, var(--banner-bg) 80%, transparent);
+  position: relative; margin: 0 calc(50% - 50vw) 16px; padding: 16px calc(50vw - 50% + 0px);
+  background-color: var(--banner-bg);
+  background-size: cover; background-position: center top;
+  background-repeat: no-repeat; background-attachment: scroll;
+  color: var(--banner-ink); box-shadow: var(--shadow); text-align: left; }
+.cas-root .fv-sec > h2::before { content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: repeating-linear-gradient(0deg, transparent 0 56px, rgba(43,40,35,.1) 56px 57px); }
+.cas-root .fv-sec h2.font-a { font-size: clamp(31px, 3.4vw, 46px); line-height: 1.16; }
+
+/* 15: the featured block, 16:9, with its own dots. The whole block is centred on
+   the page — heading, portrait, stage and dots. */
+.fv-featured .fv-feat-head { display: flex; align-items: center; justify-content: center; gap: 16px; }
+/* The disc is sized off the heading's own line box, so it stays level with the
+   title at every clamp step instead of needing a matching clamp of its own. */
+.fv-featured .fv-feat-avatar { flex: none; width: 1.15em; height: 1.15em;
+  font-size: clamp(31px, 3.4vw, 46px); border-radius: 50%; object-fit: cover;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--ink) 16%, transparent); }
+.cas-root .fv-featured .fv-feat-head h2.font-a { margin-bottom: 0; text-align: center; }
+.fv-featured .fv-feat-stage { margin: 20px auto 0; max-width: 760px; }
+.fv-featured .fv-feat-stage .fv-thumb { aspect-ratio: 16 / 9; }
+/* Every demo is rendered into the stage and the script swaps which one shows, so
+   the hidden ones need a rule that beats `.fv-card { display: flex }` — the UA rule
+   for [hidden] loses to it, which is the same trap the gallery's Buy button hit. */
+.fv-featured .fv-feat-stage .fv-card[hidden] { display: none; }
+.fv-feat-dots { display: flex; justify-content: center; gap: 8px; margin: 14px 0 6px; }
+.fv-feat-dots button { width: 9px; height: 9px; padding: 0; border: 0; border-radius: 50%; cursor: pointer; background: color-mix(in srgb, var(--ink) 26%, transparent); }
+.fv-feat-dots button.active { background: var(--marine); }
+
+/* 1.4.12: section three is vertical. Same card, 9:16 container — one player, two
+   ratios, rather than a second component. 15 says the section reuses section two's
+   layout and changes only the content and the ratio. */
+/* A 9:16 thumbnail in a third-of-the-row column is ~800px tall, which made the
+   Shorts section tower over the rest of the page. Shorts are shown five across
+   instead of three, so the same ratio lands near 380px. */
+.fv-grid.is-vertical { grid-auto-columns: calc((100% - 4 * 24px) / 5); }
+.fv-grid.is-vertical .fv-thumb { aspect-ratio: 9 / 16; }
+@media (max-width: 900px) { .fv-grid.is-vertical { grid-auto-columns: calc((100% - 2 * 24px) / 3); } }
+@media (max-width: 620px) { .fv-grid.is-vertical { grid-auto-columns: 52%; } }
+/* The intro runs the full content width rather than stopping at a 72ch measure — it
+   was ending less than half way across a 1392px container. */
+.fv-sec .fv-sec-intro { max-width: none; margin: 0; color: var(--muted); }
+/* The one link inside an introduction is the catalogue. It carried an inline style
+   in the prototype; the paragraph is a Customizer field now, so the rule has to
+   live here or an edited paragraph loses it. */
+.fv-sec .fv-sec-intro a { color: var(--ink); text-decoration: underline; text-underline-offset: 2px; }
+
+/* Each section is a rail: three cards visible, the rest reached with the arrows or
+   by dragging. Still a grid, so the card itself is unchanged — the columns are
+   auto-flowed along x with a snap point on each. */
+.fv-rail { position: relative; }
+.fv-grid { display: grid; grid-auto-flow: column; grid-auto-columns: calc((100% - 48px) / 3);
+  gap: 30px 24px; margin-top: 26px; align-items: stretch;
+  overflow-x: auto; scroll-snap-type: x mandatory; scroll-behavior: smooth;
+  scrollbar-width: none; padding-bottom: 4px; }
+/* The rail kept animating its scroll under prefers-reduced-motion. The declaration
+   is dropped here and the arrows ask for 'auto' explicitly. */
+@media (prefers-reduced-motion: reduce) { .fv-grid { scroll-behavior: auto; } }
+.fv-grid::-webkit-scrollbar { display: none; }
+.fv-card { display: flex; flex-direction: column; scroll-snap-align: start; }
+/* The arrows only exist when there is something off-screen to reach; the script
+   adds .has-more, so a section holding three or fewer films looks as before. */
+/* --fv-arrow-top is the vertical centre of the thumbnail, measured in script. It
+   was calc(26px + 28%) — a guess against the whole card, so the arrows sat below
+   the middle of the picture and moved further off as the card grew. */
+.fv-rail .fv-arrow { position: absolute; top: var(--fv-arrow-top, 50%); transform: translateY(-50%);
+  z-index: 3; display: none;
+  width: 42px; height: 42px; border-radius: 50%; cursor: pointer;
+  border: 1px solid color-mix(in srgb, var(--ink) 22%, transparent);
+  background: color-mix(in srgb, var(--surface) 88%, transparent);
+  color: var(--ink); font-size: 15px; line-height: 1; backdrop-filter: blur(3px);
+  box-shadow: var(--shadow-sm); transition: background .2s ease, transform .2s ease; }
+.fv-rail.has-more .fv-arrow { display: grid; place-items: center; }
+/* the translate is part of the positioning, so hover and disabled have to carry it
+   too or the arrow jumps to sit 21px low the moment you touch it */
+.fv-rail .fv-arrow:hover { background: var(--surface); transform: translateY(-50%) scale(1.06); }
+.fv-rail .fv-arrow[disabled] { opacity: .3; cursor: default; transform: translateY(-50%); }
+.fv-rail .fv-arrow.prev { left: -14px; }
+.fv-rail .fv-arrow.next { right: -14px; }
+
+/* 15: the section table assigns 16:9 to the thumbnail videos of Sections 1 and 2;
+   9:16 is reserved for Section 3. The ratio plus object-fit is also what makes a
+   swapped cover photograph safe: any upload crops to the slot. */
+.fv-thumb { display: block; position: relative; aspect-ratio: 16 / 9; border-radius: var(--radius-card); overflow: hidden; background: #2b2823; }
+.fv-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .35s ease; }
+.fv-card:hover .fv-thumb img { transform: scale(1.05); }
+.fv-thumb::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(20,16,12,0) 42%, rgba(20,16,12,.62)); opacity: 0; transition: opacity .25s ease; z-index: 1; }
+.fv-card:hover .fv-thumb::after { opacity: 1; }
+.fv-playbtn { position: absolute; inset: 0; display: grid; place-items: center; z-index: 2; }
+.fv-playbtn span { width: 52px; height: 52px; border-radius: 50%; background: rgba(43,40,35,.7); border: 1.5px solid rgba(243,237,225,.65); color: #f3ede1; display: grid; place-items: center; font-size: 15px; padding-left: 3px; transition: background .2s ease, transform .2s ease; }
+.fv-card:hover .fv-playbtn span { background: var(--coral); transform: scale(1.08); }
+.fv-dur { position: absolute; right: 10px; bottom: 10px; font-family: var(--font-cond); font-size: 12.5px; font-weight: 600; color: #f3ede1; background: rgba(43,40,35,.75); padding: 4px 9px; border-radius: 2px; z-index: 2; }
+.fv-card h3 { font-family: var(--font-marker); font-weight: 600; font-size: 20px; line-height: 1.2; color: var(--ink); margin: 13px 0 6px; min-height: 2.4em; }
+.fv-card p { margin: 0; font-size: 14px; line-height: 1.55; color: var(--muted); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+/* Narrower viewports show fewer cards at a time; the rail itself is unchanged, so a
+   phone swipes through the same films the arrows step through on desktop. */
+@media (max-width: 900px) { .fv-grid { grid-auto-columns: calc((100% - 24px) / 2); } }
+@media (max-width: 620px) { .fv-grid { grid-auto-columns: 84%; }
+  .fv-rail .fv-arrow { display: none !important; } }
+
+/* ---- lightbox video player ----
+   One stage, two hosts: a Bunny Stream embed for the films hosted on this site and
+   a youtube-nocookie.com embed for the ones Crystal supplied as links. Both load
+   into the same #fvm-frame and share every rule below, including the 9:16
+   pillarbox. */
+.fv-modal { position: fixed; inset: 0; z-index: 400; display: none; align-items: center; justify-content: center; padding: 22px; }
+.fvm-stage .gdrive-frame { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: none; z-index: 5; background: #000; }
+.fvm-stage.has-video .gdrive-frame { display: block; }
+.fv-modal.open { display: flex; }
+.fvm-backdrop { position: absolute; inset: 0; background: rgba(15,12,9,.78); backdrop-filter: blur(4px); }
+.fvm-panel { position: relative; z-index: 1; width: min(880px, 100%); background: #181410; border-radius: 16px; overflow: hidden; box-shadow: 0 40px 90px rgba(0,0,0,.6); }
+.fvm-close { position: absolute; top: 10px; right: 10px; z-index: 3; width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(243,237,225,.3); background: rgba(24,20,16,.6); color: #f3ede1; cursor: pointer; font-size: 14px; }
+.fvm-stage { position: relative; aspect-ratio: 16 / 9; background: #000; }
+/* 1.4.12: a 9:16 film keeps the same stage height and is pillarboxed — flat dark
+   fill either side — so the modal does not change size between a landscape and a
+   portrait video. Full screen is the embedded player's job. */
+/* The player stays absolutely positioned over the poster. Making both of them flow
+   children of a grid (which is what this rule used to do) stacked the poster ABOVE
+   the player and took the stage from 495px to 3128px tall, with no side fill at
+   all — the opposite of pillarboxing. */
+.fvm-stage.is-vertical .gdrive-frame { left: 50%; right: auto; width: auto; height: 100%; aspect-ratio: 9 / 16; transform: translateX(-50%); }
+.fvm-stage.is-vertical img { width: auto; height: 100%; aspect-ratio: 9 / 16; margin: 0 auto; }
+.fvm-stage img { width: 100%; height: 100%; object-fit: cover; display: block; opacity: .92; }
+/* .fvm-note carries the "open in a new tab" recovery link. It used to live INSIDE
+   the transport row, which the script set to display:none on every open — measured
+   height 0 — so the only affordance a reader had when the embed was blocked never
+   painted. It is its own row now, and it is NOT hidden below 560px: a phone is
+   exactly where a blocked embed needs the escape hatch. */
+.fvm-note { display: block; margin: 0; padding: 12px 16px; background: #181410;
+  font-family: var(--font-cond); font-size: 12px; letter-spacing: var(--tracking-label);
+  text-transform: uppercase; color: #cfc4b2; }
+.fvm-note a { color: #f3ede1; text-decoration: underline; text-underline-offset: 2px; }
+.fvm-body { padding: 14px 18px 18px; background: #181410; border-top: 1px solid rgba(243,237,225,.08); }
+.fvm-body h3 { margin: 0 0 4px; font-family: var(--font-marker); font-weight: 600; font-size: 19px; color: #f3ede1; }
+.fvm-body p { margin: 0; font-size: 13.5px; color: rgba(243,237,225,.65); }

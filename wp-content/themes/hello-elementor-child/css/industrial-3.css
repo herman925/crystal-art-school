@@ -1,0 +1,1526 @@
+.tip-card .hand-note { font-family: var(--font-cond); font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; font-size: 12px; display: block; margin-bottom: 4px; color: var(--coral-deep); }
+.res-title { font-family: var(--font-cond); font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; font-size: 13px; color: var(--coral-ink); margin: 24px 0 10px; display: flex; align-items: center; gap: 8px; }
+.res-title::before { content: '✦'; color: var(--coral-ink); font-size: 12.5px; }
+.res-list { display: grid; gap: 10px; max-width: 560px; }
+.res-item { display: flex; align-items: center; gap: 14px; background: var(--surface); border-radius: var(--radius-card); padding: 12px 16px; box-shadow: var(--shadow-sm); transition: transform .15s var(--ease-pop), box-shadow .15s; text-decoration: none; color: var(--ink); }
+.res-item:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+.res-ico { flex: none; width: 40px; height: 40px; border-radius: 10px; display: grid; place-items: center; font-size: 17px; background: var(--cream); }
+.res-body { flex: 1; min-width: 0; }
+.res-body .nm { font-family: var(--font-cond); font-weight: 600; font-size: 14px; }
+.res-body .sz { font-family: var(--font-cond); font-size: 12px; color: var(--muted); }
+.res-get { flex: none; font-family: var(--font-cond); font-weight: 600; font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--teal-ink); display: inline-flex; align-items: center; gap: 5px; }
+.res-item:hover .res-get { color: var(--coral-ink); }
+.complete-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; margin-top: 26px; margin-bottom: 26px; }
+/* 8.1: the completion button takes the client's marine. Scoped here so the
+   copper .btn.primary elsewhere on the site is untouched. */
+/* 1.4.9 turns this button marine, and 1.4.2 says a material-class element that
+   changes colour takes the METAL version of the new colour, not a flat fill —
+   the same treatment Visit the showcase already has. It was flat. */
+.complete-row #complete-btn { background-color: var(--marine); background-image: linear-gradient(118deg, rgba(226,242,247,.30), transparent 42%), repeating-linear-gradient(95deg, rgba(0,0,0,.10) 0 1px, transparent 1px 3px), var(--marine-metal); color: var(--marine-ink) !important; -webkit-text-fill-color: var(--marine-ink) !important; box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(226,242,247,.38), inset 0 -1px 0 rgba(10,35,45,.4); }
+.complete-row #complete-btn:hover { filter: brightness(1.08); }
+.complete-row .done-tag { font-family: var(--font-cond); font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; font-size: 13px; color: var(--teal-ink); }
+
+.side-stick { position: sticky; top: 80px; display: grid; gap: 16px; }
+@media (max-width: 1024px) { .side-stick { position: static; } }
+.progress-card { background: var(--surface); border-radius: var(--radius-card); padding: 20px 22px; box-shadow: var(--shadow-sm); }
+.progress-card .pc-top { display: flex; justify-content: space-between; align-items: baseline; }
+.progress-card .pc-label { font-family: var(--font-cond); font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; font-size: 13px; color: var(--ink); }
+.progress-card .pc-count { font-family: var(--font-stencil); font-size: 18px; color: var(--teal-ink); }
+/* --paper-2 equals --surface in the dark theme, so the track was invisible
+   against the card and an empty bar looked like a missing bar. Derived from
+   the ink instead, so it reads in both themes. Also thicker, per §8.2's
+   "只將進度條加粗加大". (client feedback 2026-08-08) */
+.pbar { margin-top: 12px; height: 14px; border-radius: 99px; overflow: hidden;
+  background: color-mix(in srgb, var(--ink) 18%, transparent);
+  box-shadow: inset 0 1px 2px rgba(0,0,0,.18); }
+.pbar .pfill { height: 100%; width: 0%; border-radius: 99px; background: linear-gradient(90deg, var(--teal-ink), var(--coral)); transition: width .6s var(--ease-brush); }
+.pc-reset { margin-top: 12px; font-family: var(--font-cond); font-size: 12px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); background: none; border: 0; cursor: pointer; padding: 0; }
+.pc-reset:hover { color: var(--coral-ink); }
+.curr-card { background: var(--surface); border-radius: var(--radius-card); padding: 14px; box-shadow: var(--shadow-sm); }
+.curr-card .ch { font-family: var(--font-cond); font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; font-size: 13px; color: var(--coral-ink); padding: 6px 10px 12px; }
+.unit-row { display: flex; align-items: center; gap: 12px; width: 100%; text-align: left; border: 0; background: none; cursor: pointer; padding: 11px 10px; border-radius: 10px; font-family: var(--font-body); color: var(--ink); transition: background .15s; }
+.unit-row:hover { background: var(--cream); }
+.unit-row.current { background-color: #cab389; background-image: var(--oak-grain); background-size: 180px 70px; }
+.unit-row .st { flex: none; width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-family: var(--font-cond); font-size: 12px; font-weight: 600; background: var(--paper-2); color: var(--muted); transition: background .25s, color .25s; }
+.unit-row.done .st { background: #4d6625; color: #f1f3e6; }
+.unit-row.current .st { background: var(--coral-fill); color: var(--coral-fill-ink); }
+.unit-row .ut { flex: 1; min-width: 0; font-family: var(--font-cond); font-weight: 500; font-size: 13.5px; line-height: 1.3; color: var(--ink); }
+.unit-row.current .ut { color: #3f3930; }
+.unit-row .ud { flex: none; font-family: var(--font-cond); font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+.unit-row.current .ud { color: #5e4a3d; }
+.unit-row .now { display: inline-block; font-family: var(--font-cond); font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--coral-deep); }
+/* 56: the client's mauve replaces the olive. It is a light mid-tone, so the
+   ink flips dark — the cream that read on olive measures 2.1:1 on this. */
+.teach-card { background-color: #a498a6; color: #191419; border-radius: var(--radius-card); padding: 18px 20px; box-shadow: var(--shadow-sm); display: flex; gap: 14px; align-items: center; }
+.teach-card img { width: 54px; height: 54px; border-radius: 50%; object-fit: cover; flex: none; }
+.teach-card .tq { font-family: var(--font-body); font-style: italic; font-size: 16.5px; line-height: 1.5; }
+
+.finish-card { display: none; position: relative; overflow: hidden; text-align: center; background: var(--surface); border-radius: var(--radius-card); box-shadow: var(--shadow); padding: 54px 30px 46px; margin-top: 26px; }
+.finish-card.show { display: block; }
+.finish-card .fc-star { font-size: 34px; color: var(--coral-ink); display: inline-block; }
+.finish-card h2 { font-family: var(--font-marker); font-weight: 600; font-size: clamp(28px,3.4vw,44px); margin: 10px 0 8px; color: var(--ink); }
+.finish-card p { color: var(--muted); max-width: 52ch; margin: 0 auto 8px; }
+.finish-card .cert { display: inline-block; margin: 18px auto 22px; background-color: #cab389; background-image: var(--oak-grain); background-size: 240px 100px; color: #474138; border-radius: var(--radius-card); padding: 18px 34px; box-shadow: var(--shadow-sm); transform: rotate(-1deg); }
+.finish-card .cert .c1 { font-family: var(--font-cond); letter-spacing: var(--tracking-label); text-transform: uppercase; font-size: 12px; color: #5e4a3d; }
+.finish-card .cert .c2 { font-family: var(--font-marker); font-weight: 600; font-size: 24px; margin: 4px 0; }
+.finish-card .cert .c3 { font-family: var(--font-cond); font-size: 13px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--coral-deep); }
+.finish-card .fc-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.next-band { margin-top: 40px; }
+.next-band .thumb { flex: 0 0 150px; border-radius: var(--radius-card); overflow: hidden; aspect-ratio: 1/1; }
+.next-band .thumb img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ============================================================
+   BLOG POST (article)
+   ============================================================ */
+.post-banner { position: relative; aspect-ratio: 48/9; min-height: 220px; overflow: hidden; border-radius: var(--r-promo); box-shadow: var(--shadow); }
+.post-banner img { width: 100%; height: 100%; object-fit: cover; }
+.post-banner .chip-h1 { position: absolute; left: 5%; bottom: 14%; overflow: hidden; border-radius: 4px; box-shadow: 0 8px 26px rgba(0,0,0,.4); max-width: 64%; }
+.post-banner .chip-inner { position: relative; background-color: var(--banner-bg); background-image: var(--banner-grain); background-size: 380px 150px; padding: 16px 26px; }
+.post-banner h1 { position: relative; font-family: var(--font-marker); font-weight: 600; font-size: clamp(20px,2.6vw,40px); line-height: 1.12; margin: 0; color: var(--banner-ink); }
+.byline { display: inline-flex; align-items: center; gap: 10px; margin-top: 18px; background: var(--surface); border-radius: var(--radius-pill); padding: 8px 18px 8px 8px; box-shadow: var(--shadow-sm); }
+.byline img { width: 36px; height: 36px; border-radius: 50%; object-fit: cover; }
+.byline strong { font-family: var(--font-cond); font-weight: 600; color: var(--ink); font-size: 14px; }
+.byline .hand-note { font-family: var(--font-cond); font-size: 12px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); }
+/* #27: 760px at 16.5px is about 46em, and it measured 104 characters a line at
+   1692px — counted with Range.getClientRects(), not estimated — against the
+   65-75 a sustained read wants. The cap is now in ch so it tracks the type
+   rather than a pixel count someone has to remember to update, and 760px stays
+   as the ceiling so nothing gets WIDER than it used to be. .page-lead on FAQ
+   was already capped this way at 74ch; this is the same device.
+   58ch resolves to 550px here, and the corpus then measures min 57 / median 67 /
+   max 80 characters a line — counted with Range.getClientRects() over every
+   character INCLUDING SPACES, because a space takes measure like any other
+   glyph and leaving them out under-reports a line by about a sixth. The median
+   is the statistic that matters: a fixed column always has a spread, and the
+   80 is one space-light paragraph, not the typical line. */
+/* #27: 65-75 characters per line, counted per LINE BOX with Range rects (not
+   paragraph length / line count, which averages the short last line in and
+   reads ~20 low). `ch` is the width of "0", which in this face is 0.57em
+   against a 0.44em average glyph, so a ch value reads about 1.6x the real
+   character count: 68ch measured 89. 55ch measures 70-73. */
+.article { max-width: min(760px, 55ch); margin: 0 auto; font-size: 16.5px; }
+/* #27 heading inversion. Every CONTENT section heading on a post carries
+   .bp-sec and is set to 26px by the page; this rule matches only the headings
+   the page appends AFTER the content — Comments — and it was painting them at
+   34px. So the least important heading on the page outranked all twenty-one of
+   the real ones. Sized below the content step rather than above it: the trailing
+   blocks are apparatus, not chapters. */
+.article h2 { font-family: var(--font-display); font-weight: 600; font-size: clamp(21px,1.6vw,24px); letter-spacing: var(--tracking-display); text-transform: uppercase; margin: 44px 0 14px; color: var(--ink); }
+.article h3 { font-family: var(--font-cond); font-weight: 600; font-size: 19px; margin: 30px 0 10px; color: var(--ink); }
+.article p { font-size: 16.5px; line-height: 1.75; margin: 0 0 18px; color: var(--ink); }
+.article figure { margin: 30px 0; }
+.article figure img { border-radius: var(--radius-card); width: 100%; box-shadow: var(--shadow-sm); }
+.pull-quote { font-family: var(--font-marker); font-weight: 600; font-size: clamp(20px,2.2vw,28px); line-height: 1.4; padding: 26px 30px; margin: 34px 0; background-color: #cab389; background-image: var(--oak-grain); background-size: 300px 120px; color: #474138; border-radius: var(--radius-card); position: relative; box-shadow: var(--shadow-sm); }
+.pull-quote::before { content: "✦"; position: absolute; top: -14px; left: 24px; color: var(--coral-deep); font-size: 24px; }
+.toc { background: var(--surface); border-radius: var(--radius-card); padding: 24px 28px; margin: 30px 0 8px; box-shadow: var(--shadow-sm); }
+.toc .toc-title { font-family: var(--font-cond); font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; font-size: 14px; color: var(--coral-ink); margin: 0 0 12px; }
+.toc ol { margin: 0; padding-left: 22px; font-size: 15px; color: var(--ink); }
+.toc > ol > li { font-family: var(--font-cond); font-weight: 600; padding: 4px 0; }
+.toc a:hover { color: var(--coral-ink); }
+.comment { display: flex; gap: 14px; margin-bottom: 20px; }
+.comment img { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; flex: none; }
+.comment .bubble { background: var(--surface); border-radius: var(--radius-card); box-shadow: var(--shadow-sm); padding: 14px 18px; font-size: 14.5px; color: var(--ink); }
+.comment .bubble strong { font-family: var(--font-cond); }
+.related-rail { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+.prevnext { display: flex; justify-content: space-between; gap: 14px; margin: 44px 0 0; flex-wrap: wrap; }
+.post-field { width: 100%; border: 1px solid var(--line); border-radius: var(--r-sharp); background: var(--cream); padding: 12px 14px; font-family: var(--font-body); font-size: 14.5px; color: var(--ink); resize: vertical; }
+.post-field:focus { outline: 2px solid var(--coral); border-color: transparent; }
+@media (max-width: 700px) { .post-banner { aspect-ratio: auto; height: 240px; } .post-banner .chip-h1 { max-width: 88%; left: 6%; } .related-rail { grid-template-columns: 1fr; } }
+
+/* ============================================================
+   CART / CHECKOUT + AUTH
+   ============================================================ */
+.checkout-grid { display: grid; grid-template-columns: 1.6fr 1fr; gap: 28px; align-items: start; padding-bottom: 70px; }
+@media (max-width: 880px) { .checkout-grid { grid-template-columns: 1fr; } }
+.steps { display: flex; gap: 8px; align-items: center; margin: 22px 0 26px; flex-wrap: wrap; }
+.step { display: flex; align-items: center; gap: 9px; font-family: var(--font-cond); font-size: 12px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); }
+.step .sn { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; background: var(--surface); color: var(--muted); font-weight: 600; box-shadow: var(--shadow-sm); }
+.step.active { color: var(--ink); }
+/* 41: the live step's disc is the client's marine, with the ink the token
+   block already pairs with it. */
+.step.active .sn { background: var(--marine); color: var(--marine-ink); }
+.step.done .sn { background: #4d6625; color: #f1f3e6; }
+.step-arrow { color: var(--muted); opacity: .5; }
+.line-item { display: grid; grid-template-columns: 78px 1fr auto; gap: 16px; align-items: center; background: var(--surface); border-radius: var(--radius-card); padding: 14px; box-shadow: var(--shadow-sm); margin-bottom: 14px; }
+.line-item .li-thumb { width: 78px; height: 78px; border-radius: var(--r-sharp); overflow: hidden; background: var(--wall); }
+.line-item .li-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.line-item .li-title { font-family: var(--font-marker); font-weight: 600; font-size: 16px; color: var(--ink); margin: 0 0 3px; }
+.line-item .li-sub { font-family: var(--font-cond); font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); }
+.line-item .li-right { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+.line-item .li-price { font-family: var(--font-cond); font-weight: 600; font-size: 16px; color: var(--coral-ink); }
+.qty { display: inline-flex; align-items: center; border: 1px solid var(--line); border-radius: var(--radius-pill); overflow: hidden; }
+.qty button { width: 28px; height: 28px; border: 0; background: var(--cream); color: var(--ink); cursor: pointer; font-size: 15px; line-height: 1; }
+.qty button:hover { background: var(--coral-fill); color: var(--coral-fill-ink); }
+.qty .qv { min-width: 30px; text-align: center; font-family: var(--font-cond); font-weight: 600; font-size: 14px; color: var(--ink); }
+.li-remove { font-family: var(--font-cond); font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); background: none; border: 0; cursor: pointer; }
+.li-remove:hover { color: var(--coral-ink); }
+.summary { position: sticky; top: 88px; background: var(--surface); border-radius: var(--radius-card); padding: 24px 26px; box-shadow: var(--shadow-sm); }
+@media (max-width: 880px) { .summary { position: static; } }
+.summary h3 { font-family: var(--font-cond); font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; font-size: 13px; color: var(--coral-ink); margin: 0 0 16px; }
+.sum-row { display: flex; justify-content: space-between; font-size: 14px; color: var(--ink); padding: 7px 0; }
+.sum-row.muted { color: var(--muted); }
+.sum-total { display: flex; justify-content: space-between; align-items: baseline; margin-top: 12px; padding-top: 14px; border-top: 1px solid var(--line); }
+.sum-total .l { font-family: var(--font-cond); font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; font-size: 13px; color: var(--ink); }
+.sum-total .v { font-family: var(--font-marker); font-weight: 600; font-size: 26px; color: var(--marine); }
+.cart-empty { text-align: center; padding: 60px 20px; color: var(--muted); }
+.co-field { margin-bottom: 14px; }
+.co-field label { font-family: var(--font-cond); font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; font-size: 12.5px; display: block; margin-bottom: 6px; color: var(--ink); }
+/* #02: the same construct as .field in industrial-2.css, and the same fault.
+   `color:#2b2823` was declared and then declared again as `color:var(--ink)`
+   in the same rule, so only the -webkit-text-fill-color survived — which on
+   theme D painted the card number, address and password at #2b2823 over
+   --cream #211e1a. Measured 1.13:1 from the pixels: no pixel in a filled
+   field was darker than its own background. */
+.co-field input, .co-field select { width: 100%; border: 1px solid var(--line); border-radius: var(--r-sharp); background: var(--cream); padding: 12px 14px; font-family: var(--font-body); font-size: 14.5px; color: var(--ink); -webkit-text-fill-color: var(--ink); }
+.co-field input::placeholder { color: var(--muted); opacity: 1; -webkit-text-fill-color: var(--muted); }
+.co-field select option { color: var(--ink); background: var(--cream); }
+.co-field input:focus, .co-field select:focus { outline: 2px solid var(--coral); border-color: transparent; }
+.co-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.co-panel { background: var(--surface); border-radius: var(--radius-card); padding: 26px 28px; box-shadow: var(--shadow-sm); }
+.co-panel h3 { font-family: var(--font-marker); font-weight: 600; font-size: 20px; color: var(--ink); margin: 0 0 16px; }
+
+/* auth */
+.auth-wrap { max-width: 460px; margin: 0 auto; padding: 40px 0 80px; }
+.auth-card { background: var(--surface); border-radius: var(--radius-card); padding: 34px 34px 30px; box-shadow: var(--shadow); }
+.auth-head { text-align: center; margin-bottom: 24px; }
+.auth-head .eyebrow { justify-content: center; }
+.auth-head h1 { font-family: var(--font-marker); font-weight: 600; font-size: clamp(26px,3vw,36px); color: var(--ink); margin: 8px 0 6px; }
+.auth-head p { font-size: 14px; color: var(--muted); margin: 0; }
+.auth-steps { display: flex; gap: 6px; margin-bottom: 22px; }
+.auth-steps .as { flex: 1; height: 5px; border-radius: 99px; background: var(--paper-2); }
+.auth-steps .as.on { background: var(--coral); }
+/* 3.9: the username/avatar clause at the point of joining. It sits on the 14px
+   step the stage prompts already use rather than introducing another size into
+   an already-tight band — and larger is the right direction for consent copy. */
+.su-terms { font-size: 14px; line-height: 1.6; color: var(--muted); margin: 16px 0 4px; }
+.su-terms strong { color: var(--ink); font-weight: 600; }
+
+.auth-stage { display: none; }
+.auth-stage.active { display: block; }
+.auth-foot { text-align: center; margin-top: 18px; font-size: 13.5px; color: var(--muted); }
+.auth-foot a { color: var(--coral-ink); font-weight: 600; }
+.plan-opt { display: flex; gap: 12px; align-items: flex-start; border: 1.5px solid var(--line); border-radius: var(--radius-card); padding: 14px 16px; margin-bottom: 12px; cursor: pointer; transition: border-color .15s, background .15s; }
+.plan-opt:hover { border-color: var(--coral); }
+.plan-opt.sel { border-color: var(--coral); background: color-mix(in srgb, var(--coral) 8%, transparent); }
+.plan-opt .po-radio { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--muted); flex: none; margin-top: 2px; display: grid; place-items: center; }
+.plan-opt.sel .po-radio { border-color: var(--coral); }
+.plan-opt.sel .po-radio::after { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--coral); }
+.plan-opt .po-name { font-family: var(--font-cond); font-weight: 600; color: var(--ink); }
+.plan-opt .po-desc { font-size: 12.5px; color: var(--muted); }
+.plan-opt .po-price { margin-left: auto; font-family: var(--font-cond); font-weight: 600; color: var(--coral-ink); }
+.btn.full { width: 100%; justify-content: center; }
+.auth-success { text-align: center; padding: 16px 0; }
+.auth-success .as-check { width: 64px; height: 64px; border-radius: 50%; background: #4d6625; color: #f1f3e6; display: grid; place-items: center; margin: 0 auto 16px; font-size: 30px; }
+
+/* ============ student dashboard ============ */
+.dash-hero { position: relative; overflow: hidden; border-radius: var(--radius-card); background-color: var(--band-bg); background-image: var(--band-grain); background-size: var(--band-size, 380px 150px); color: var(--band-ink); box-shadow: var(--shadow); padding: 30px 34px; display: flex; align-items: center; gap: 26px; flex-wrap: wrap; }
+.dash-hero::before { content: ""; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent 0 52px, rgba(0,0,0,.12) 52px 53px); pointer-events: none; }
+.dash-hero > * { position: relative; z-index: 1; }
+.dash-avatar { width: 84px; height: 84px; border-radius: 50%; overflow: hidden; flex: none; border: 3px solid color-mix(in srgb, var(--band-ink) 30%, transparent); box-shadow: 0 6px 18px rgba(0,0,0,.3); }
+.dash-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.dash-hi { flex: 1; min-width: 240px; }
+.dash-hi .eyebrow { color: var(--band-eyebrow); margin-bottom: 6px; }
+.dash-hi h1 { font-family: var(--font-marker); font-weight: 600; font-size: clamp(26px,3vw,40px); margin: 0 0 6px; color: var(--band-ink); }
+.dash-hi p { margin: 0; font-size: 14.5px; opacity: .85; }
+.dash-plan-chip { display: inline-flex; align-items: center; gap: 7px; font-family: var(--font-cond); font-weight: 600; font-size: 13px; letter-spacing: var(--tracking-label); text-transform: uppercase; background: var(--coral-fill); color: var(--coral-fill-ink); padding: 5px 12px; border-radius: 999px; margin-top: 10px; }
+.dash-stats { display: flex; gap: 14px; flex-wrap: wrap; }
+.dash-stat { background: color-mix(in srgb, var(--band-ink) 12%, transparent); border: 1px solid color-mix(in srgb, var(--band-ink) 22%, transparent); border-radius: 12px; padding: 14px 18px; min-width: 96px; }
+.dash-stat .v { font-family: var(--font-display-serif); font-weight: 600; font-size: 30px; line-height: 1; color: var(--band-ink); }
+.dash-stat .k { font-family: var(--font-cond); font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; opacity: .8; margin-top: 5px; }
+
+.dash-layout { display: grid; grid-template-columns: 230px minmax(0,1fr); gap: 30px; align-items: start; margin-top: 26px; }
+@media (max-width: 880px) { .dash-layout { grid-template-columns: 1fr; } }
+.dash-rail { position: sticky; top: 88px; display: flex; flex-direction: column; gap: 4px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 12px; box-shadow: var(--shadow-sm); }
+@media (max-width: 880px) { .dash-rail { position: static; flex-direction: row; overflow-x: auto; } }
+.dash-tab { display: flex; align-items: center; gap: 11px; width: 100%; text-align: left; border: 0; background: transparent; color: var(--ink); font-family: var(--font-cond); font-weight: 500; font-size: 14px; padding: 11px 13px; border-radius: 9px; cursor: pointer; white-space: nowrap; transition: background .15s, color .15s; }
+.dash-tab .ti { width: 18px; height: 18px; flex: none; opacity: .8; }
+.dash-tab:hover { background: color-mix(in srgb, var(--ink) 7%, transparent); }
+.dash-tab.active { background: var(--coral-fill); color: var(--coral-fill-ink); }
+.dash-tab.active .ti { opacity: 1; }
+.dash-tab .badge { margin-left: auto; font-size: 12.5px; background: color-mix(in srgb, var(--ink) 12%, transparent); padding: 1px 8px; border-radius: 999px; }
+.dash-tab.active .badge { background: rgba(244,231,207,.25); }
+
+.dash-panel { display: none; }
+.dash-panel.active { display: block; }
+.dash-panel-head { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; margin-bottom: 16px; flex-wrap: wrap; }
+.dash-panel-head h2 { font-family: var(--font-display-serif); font-weight: 600; font-size: 22px; letter-spacing: var(--tracking-display); text-transform: uppercase; color: var(--ink); margin: 0; display: flex; align-items: center; gap: .5em; }
+.dash-panel-head h2 .ast { color: var(--marine); font-size: .7em; }
+.dash-panel-head p { margin: 0; font-size: 13.5px; color: var(--muted); }
+
+.dash-card { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 20px 22px; box-shadow: var(--shadow-sm); }
+.dash-card + .dash-card { margin-top: 16px; }
+.resume-card { display: flex; gap: 20px; align-items: center; flex-wrap: wrap; }
+.resume-thumb { width: 150px; aspect-ratio: 4/3; border-radius: 10px; overflow: hidden; flex: none; box-shadow: var(--shadow-sm); }
+.resume-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.resume-body { flex: 1; min-width: 220px; }
+.resume-body .rk { font-family: var(--font-cond); font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--coral-ink); }
+.resume-body h3 { font-family: var(--font-marker); font-weight: 600; font-size: 20px; margin: 4px 0 12px; color: var(--ink); }
+
+.prog { height: 9px; border-radius: 999px; background: color-mix(in srgb, var(--ink) 13%, transparent); overflow: hidden; }
+.prog > i { display: block; height: 100%; border-radius: 999px; background: var(--coral); }
+.prog-row { display: flex; align-items: center; justify-content: space-between; font-family: var(--font-cond); font-size: 12px; color: var(--muted); margin-bottom: 7px; }
+.prog-row b { color: var(--ink); }
+
+.mycourse-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px,1fr)); gap: 18px; }
+.mc-course { background: var(--surface); border: 1px solid var(--line); border-radius: 14px; overflow: hidden; box-shadow: var(--shadow-sm); display: flex; flex-direction: column; transition: transform .18s, box-shadow .18s; }
+.mc-course:hover { transform: translateY(-3px); box-shadow: var(--shadow-md); }
+.mc-course .cov { aspect-ratio: 16/10; overflow: hidden; position: relative; }
+.mc-course .cov img { width: 100%; height: 100%; object-fit: cover; }
+.mc-tier { position: absolute; top: 10px; left: 10px; font-family: var(--font-cond); font-size: 12px; font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; padding: 3px 9px; border-radius: 999px; background: rgba(20,17,13,.62); color: #f3ede1; }
+.mc-tier.fellow { background: var(--coral-fill); color: var(--coral-fill-ink); }
+.mc-course .body { padding: 14px 15px 16px; display: flex; flex-direction: column; gap: 10px; flex: 1; }
+.mc-course .body h3 { font-family: var(--font-marker); font-weight: 600; font-size: 15.5px; line-height: 1.2; margin: 0; color: var(--ink); }
+.mc-course .body .meta { font-family: var(--font-cond); font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); }
+.mc-course .body .btn { margin-top: auto; }
+
+.dash-table { width: 100%; border-collapse: collapse; font-family: var(--font-cond); font-size: 14px; }
+.dash-table th { text-align: left; font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); font-weight: 600; padding: 0 14px 11px; border-bottom: 1px solid var(--line); }
+.dash-table td { padding: 14px; border-bottom: 1px solid var(--line); color: var(--ink); vertical-align: middle; }
+.dash-table tr:last-child td { border-bottom: 0; }
+.dash-table .ord-item { display: flex; align-items: center; gap: 12px; }
+.dash-table .ord-item img { width: 46px; height: 46px; border-radius: 7px; object-fit: cover; flex: none; }
+.dash-table .ord-item .t { font-family: var(--font-marker); font-weight: 600; font-size: 14.5px; color: var(--ink); }
+.ord-tier { font-size: 12px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); }
+.dash-table .amt { font-family: var(--font-display-serif); font-weight: 600; font-size: 17px; color: var(--ink); }
+.inv-link { color: var(--coral-ink); cursor: pointer; font-size: 12.5px; }
+.inv-link:hover { text-decoration: underline; }
+
+.discord-card { display: flex; gap: 22px; align-items: center; flex-wrap: wrap; background-color: #4d5a8a; background-image: linear-gradient(135deg, #5865F2 0%, #404a9e 100%); color: #fff; border: 0; }
+.discord-card .dc-ico { width: 64px; height: 64px; flex: none; display: grid; place-items: center; background: rgba(255,255,255,.14); border-radius: 16px; }
+.discord-card .dc-ico svg { width: 38px; height: 38px; }
+.discord-card .dc-body { flex: 1; min-width: 220px; }
+.discord-card h3 { font-family: var(--font-marker); font-weight: 600; font-size: 21px; margin: 0 0 6px; color: #fff; }
+.discord-card p { margin: 0; font-size: 13.5px; opacity: .92; max-width: 52ch; }
+.discord-card .btn { background: #fff !important; color: #404a9e !important; -webkit-text-fill-color: #404a9e !important; flex: none; }
+.dc-locked { background: var(--surface); background-image: none; color: var(--ink); border: 1px dashed var(--line); }
+.dc-locked .dc-ico { background: color-mix(in srgb, var(--ink) 8%, transparent); color: var(--muted); }
+.dc-locked h3 { color: var(--ink); }
+.dc-locked p { color: var(--muted); }
+.dc-locked .btn { background: var(--coral-fill) !important; color: var(--coral-fill-ink) !important; -webkit-text-fill-color: var(--coral-fill-ink) !important; }
+
+.set-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+@media (max-width: 620px) { .set-grid { grid-template-columns: 1fr; } }
+.set-field { display: flex; flex-direction: column; gap: 6px; }
+.set-field.full { grid-column: 1 / -1; }
+.set-field label { font-family: var(--font-cond); font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); }
+/* #28: these were #2b2823 on #f3ede1 in BOTH themes — a cream field with dark
+   type sitting in a near-black panel on theme D, with a --line border that
+   measured about 1.03:1 against its own fill, i.e. no visible edge at all.
+   Tokened, and the border derived from --ink so the field has a boundary you
+   can see. A text input is a control, so its edge needs 3:1 against BOTH what it
+   encloses and what it sits in — and here the fill and the panel are within
+   1.3:1 of each other, so the border is the only boundary there is. --line at
+   16% alpha reached 1.54:1 (D) / 1.30:1 (A); 42% reached 3.39/2.13, still short
+   on the light theme, because --ink is much closer to the cream page than it is
+   to the dark one. 65% is the first value that clears it in both:
+   3.59:1 / 3.49:1 (A) and 6.20:1 / 5.49:1 (D), fill and panel respectively. */
+.set-field input, .set-field select { font-family: var(--font-cond); font-size: 14.5px;
+  color: var(--ink); -webkit-text-fill-color: var(--ink);
+  background: var(--cream); border: 1px solid color-mix(in srgb, var(--ink) 65%, transparent);
+  border-radius: 9px; padding: 12px 13px; }
+.set-field input::placeholder { color: var(--muted); opacity: 1; -webkit-text-fill-color: var(--muted); }
+.set-field select option { color: var(--ink); background: var(--cream); }
+.set-field input:focus, .set-field select:focus { outline: none; border-color: var(--coral); }
+.set-row-tog { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 14px 0; border-bottom: 1px solid var(--line); }
+.set-row-tog:last-of-type { border-bottom: 0; }
+.set-row-tog .l { font-family: var(--font-marker); font-weight: 600; font-size: 15px; color: var(--ink); }
+.set-row-tog .d { font-family: var(--font-cond); font-size: 12.5px; color: var(--muted); margin-top: 3px; }
+.set-tog { flex: none; width: 46px; height: 26px; border-radius: 999px; border: 0; background: color-mix(in srgb, var(--ink) 20%, transparent); position: relative; cursor: pointer; transition: background .2s; margin-top: 3px; }
+.set-tog::after { content: ""; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: var(--paper); transition: transform .2s; }
+.set-tog.on { background: var(--coral); }
+.set-tog.on::after { transform: translateX(20px); }
+/* #28: #9a3b2f is a light-theme red. On the dark page it measured 2.40:1 —
+   the heading and the button label of the one destructive control on the
+   site were the least legible text on it. --danger moves with the theme. */
+.danger-zone { border: 1px solid color-mix(in srgb, var(--danger) 50%, var(--line)); border-radius: 14px; padding: 20px 22px; margin-top: 16px; }
+.danger-zone h3 { font-family: var(--font-marker); font-weight: 600; font-size: 16px; color: var(--danger); margin: 0 0 6px; }
+.danger-zone p { font-family: var(--font-cond); font-size: 13px; color: var(--muted); margin: 0 0 14px; }
+.btn.danger { background: transparent; color: var(--danger); -webkit-text-fill-color: var(--danger); box-shadow: inset 0 0 0 1px var(--danger); }
+.btn.danger:hover { background: var(--danger); color: #211e1a; -webkit-text-fill-color: #211e1a; }
+.dash-toast { position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%) translateY(20px); background: var(--ink); color: var(--paper); font-family: var(--font-cond); font-size: 13.5px; padding: 13px 22px; border-radius: 999px; box-shadow: 0 12px 30px rgba(20,17,13,.4); opacity: 0; pointer-events: none; transition: opacity .3s, transform .3s; z-index: 1700; }
+.dash-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+.nav-user { display: inline-flex; align-items: center; gap: 9px; padding: 5px 8px 5px 5px; border-radius: 999px; background: color-mix(in srgb, var(--banner-ink) 12%, transparent); }
+.nav-user img { width: 30px; height: 30px; border-radius: 50%; object-fit: cover; }
+.nav-user .nm { font-family: var(--font-cond); font-weight: 600; font-size: 13px; color: var(--banner-ink); }
+
+/* ============================================================
+   MOBILE & TABLET POLISH (phones + iPad portrait/landscape)
+   Appended last so it wins the cascade. The grids already
+   collapse via per-component queries above; this layer fixes
+   the nav overflow, spacing rhythm, touch targets and the
+   pages that still felt desktop-only on small screens.
+   ============================================================ */
+
+/* never allow a stray wide element to cause a horizontal scrollbar */
+html { -webkit-text-size-adjust: 100%; }
+body, .cas-root { overflow-x: hidden; }
+img, svg, video { max-width: 100%; }
+
+/* iPad-ish: a touch more breathing room than desktop padding */
+@media (max-width: 1024px) {
+  .pg-section { padding-top: 52px; }
+}
+
+/* The sheet's presentation follows the sheet: it is shown from 1080px down
+   (industrial-1.css), so these cannot sit in the 860px block. (#14) */
+@media (max-width: 1080px) {
+  .nav-sheet.open { display: flex; flex-direction: column; gap: 2px; padding: 10px var(--gutter) 16px; }
+  .nav-sheet a { padding: 13px 10px; font-family: var(--font-cond); font-weight: 500; font-size: 15px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--banner-ink); border-radius: 8px; min-height: 44px; display: flex; align-items: center; }
+  .nav-sheet a:hover { background: color-mix(in srgb, var(--banner-ink) 12%, transparent); }
+}
+
+/* ---- tablet / large-phone (≪860, the link row is gone) ---- */
+@media (max-width: 860px) {
+  /* theme switch + cart stay in the top bar; keep them compact */
+  .nav-auth { gap: 10px; }
+  /* page-hero & bands: tighten vertical rhythm */
+  .page-hero { padding: 38px 0 32px; }
+  .band-forest, .band-oak { padding: 30px 26px; }
+}
+
+/* ---- phones (≪560) ---- */
+@media (max-width: 560px) {
+  :root { --gutter: 16px; }
+  .nav-top .inner { gap: 12px; padding: 10px var(--gutter); }
+  .nav-brand img { height: 42px; }
+  .cart-btn { width: 38px; height: 38px; }
+  .nav-burger { width: 40px; height: 40px; }
+  /* the logged-in chip: keep avatar, hide the name to save width */
+  .nav-user { padding: 3px; gap: 0; }
+  .nav-user .nm { display: none; }
+
+  .pg-section { padding-top: 40px; }
+  .pg-wrap { padding-inline: 16px; }
+  .lead { font-size: 15.5px; }
+
+  /* dashboard hero stacks and centres on phones */
+  .dash-hero { flex-direction: column; align-items: flex-start; padding: 24px 20px; gap: 18px; }
+  .dash-stats { width: 100%; gap: 10px; }
+  .dash-stat { flex: 1; min-width: 0; padding: 12px 10px; text-align: center; }
+  .dash-stat .v { font-size: 24px; }
+
+  /* purchase-history table: let it scroll instead of crushing columns */
+  .dash-card > .dash-table { min-width: 520px; }
+  .dash-panel[data-panel="purchases"] .dash-card { overflow-x: auto; }
+
+  /* sticky rails would eat the short viewport — let them flow */
+  .summary, .side-stick, .filter-rail, .filter-col, .dash-rail { position: static !important; top: auto !important; }
+
+  /* checkout step row: shrink so it wraps tidily instead of overflowing */
+  .steps { gap: 6px; }
+  .step { font-size: 12.5px; }
+}
+
+/* ---- very small phones (≪380) ---- */
+@media (max-width: 380px) {
+  .dash-stat .v { font-size: 21px; }
+}
+
+
+/* ============================================================
+   2026-07 additions — About rework, accordions, showcase, course page
+   ============================================================ */
+
+/* ---------- handwritten signature (About) ----------
+   Crystal's real signature, not a script webfont pretending to be one. The tilt
+   is already in her hand, so no rotate here. Same one transparent cream file and
+   the same light-theme filter flip as the other two brand marks. */
+.sig-script { display: inline-block; width: clamp(210px, 24vw, 320px); margin: -6px 0 10px 2px; line-height: 0; user-select: none; }
+/* signature.png is 100% OPAQUE — a white rectangle with black ink, 0.0% of its
+   pixels transparent — so it draws a white box wherever it is placed.
+
+   IT SHIPS THAT WAY ON PURPOSE. Cutting her artwork out, or faking the cut-out
+   with a blend mode, is her side of the work (§2.3) and doing it for her hides
+   the ask and sets the expectation that we will keep doing it. The white box is
+   the ask, made self-evident. A blend-mode workaround was written here and
+   REMOVED on the client's instruction (2026-08-09); the method is recorded in
+   docs/20260807_About_Copy_Provenance.md so nobody has to work it out
+   again, and it stays out of the site until she supplies transparent artwork
+   (#17). Do not re-add it.
+
+   No light-theme filter either: brightness(0) on an opaque white rectangle
+   makes a BLACK box rather than a white one, which is worse, not better. */
+.sig-script img { display: block; width: 100%; height: auto; }
+
+/* ---------- accordion (FAQ + terms) ---------- */
+.acc-list { display: grid; gap: 12px; max-width: 860px; margin: 28px auto 0; }
+/* #08: was `overflow: hidden`, which clipped the focus ring off the summary
+   inside it — A/B pixel diff: 44 pixels changed on focus with hidden, 4752
+   with the clip margin, and none of them above the summary's top edge.
+   `overflow: clip` still clips to the rounded padding box, which is the only
+   reason the hidden was there; overflow-clip-margin then lets ink — and only
+   ink, not scrollable content — spill by the width of the ring. */
+details.acc-item { background-color: var(--surface); background-image: var(--concrete-grain); background-size: 220px 220px; border-radius: var(--radius-card); box-shadow: var(--shadow-sm); overflow: clip; overflow-clip-margin: 8px; }
+details.acc-item summary { cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 17px 22px; font-family: var(--font-marker); font-weight: 600; font-size: 17.5px; color: var(--ink); transition: background .15s; }
+details.acc-item summary::-webkit-details-marker { display: none; }
+details.acc-item summary:hover { background: color-mix(in srgb, var(--ink) 6%, transparent); }
+.acc-ico { flex: none; width: 30px; height: 30px; display: grid; place-items: center; border-radius: 50%; background: color-mix(in srgb, var(--coral) 18%, transparent); color: var(--coral-ink); font-family: var(--font-cond); font-size: 19px; font-weight: 500; line-height: 1; transition: transform .25s var(--ease-pop), background .2s; }
+details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--coral-fill); color: var(--coral-fill-ink); }
+/* #27: measured 118 characters a line at 1692px. The panel keeps its full
+   width — the answer is inside a card and the card is the component — but the
+   copy inside it is capped to a readable measure. */
+.acc-body { padding: 0 22px 20px; font-size: 14.5px; line-height: 1.65; color: var(--muted); }
+/* #27: see the note on .article — 68ch measured 88 characters per line. */
+.acc-body p, .acc-body li { max-width: 55ch; }
+.acc-body p { margin: 0 0 10px; }
+.acc-body p:last-child { margin-bottom: 0; }
+
+/* ---------- About contact rework ---------- */
+.contact-wrap { display: grid; grid-template-columns: 1fr 1.05fr; gap: 48px; align-items: start; max-width: 1080px; margin: 0 auto; }
+.contact-channels { list-style: none; margin: 22px 0 0; padding: 0; display: grid; gap: 14px; }
+.contact-channels li { display: flex; align-items: center; gap: 14px; }
+.contact-channels .ch-ico { flex: none; width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; background: color-mix(in srgb, var(--teal) 22%, transparent); color: var(--teal-ink); }
+.contact-channels .ch-ico svg { width: 20px; height: 20px; }
+.contact-channels li > span:last-child { display: grid; }
+/* Tracking held at .16em: renders only below About's §13/§14 freeze line. (#20) */
+.contact-channels strong { font-family: var(--font-cond); font-weight: 600; font-size: 12px; letter-spacing: .16em; text-transform: uppercase; color: var(--ink); }
+.contact-channels em { font-style: normal; font-size: 14.5px; color: var(--muted); }
+.contact-note { font-family: var(--font-marker); font-style: italic; font-weight: 600; font-size: 18px; color: var(--teal-ink); margin: 24px 0 0; transform: rotate(-2deg); }
+.contact-card { background-color: var(--surface); background-image: var(--concrete-grain); background-size: 220px 220px; border-radius: var(--radius-card); box-shadow: var(--shadow-md); padding: 26px 26px 24px; }
+@media (max-width: 900px) { .contact-wrap { grid-template-columns: 1fr; gap: 30px; } }
+
+/* ---------- Student Showcase ----------
+   #19: the justified-collage rules (.sw-grid, .sw-tile and its hover overlay,
+   .sw-owner, .sw-name, .sw-medium, the 760px breakpoint and the .sw-grid::after
+   last-row guard) are gone. Showcase renders .pol-tile squares from its own page
+   CSS and has never rendered a .sw-tile; the collage was measured matching zero
+   elements on the page at every width.
+   .sw-ava stays: the Showcase LIGHTBOX below still uses it for the avatar disc. */
+.sw-ava { width: 26px; height: 26px; border-radius: 50%; display: grid; place-items: center; font-family: var(--font-cond); font-weight: 600; font-size: 12px; color: #f3ede1; box-shadow: 0 1px 4px rgba(0,0,0,.4); }
+
+/* showcase lightbox */
+.sw-modal { position: fixed; inset: 0; z-index: 1500; display: none; place-items: center; background: rgba(15,12,9,.86); backdrop-filter: blur(3px); padding: 30px; }
+.sw-modal.show { display: grid; }
+.sw-modal figure { margin: 0; max-width: min(1080px, 94vw); max-height: 88vh; display: grid; gap: 12px; justify-items: center; }
+.sw-modal img { max-width: 100%; max-height: 76vh; border-radius: 10px; box-shadow: 0 24px 70px rgba(0,0,0,.55); }
+.sw-modal figcaption { display: flex; align-items: center; gap: 10px; color: #ede1d0; font-family: var(--font-cond); font-size: 14px; }
+.sw-close { position: absolute; top: 18px; right: 22px; width: 44px; height: 44px; border-radius: 50%; border: 0; background: rgba(237,225,208,.14); color: #ede1d0; font-size: 20px; cursor: pointer; transition: background .15s, transform .15s; }
+.sw-close:hover { background: rgba(237,225,208,.3); transform: rotate(90deg); }
+
+/* ---------- course overview page ---------- */
+/* 7.4: the left column is 14px narrower than it was so the right column lands
+   on --prose-max exactly — the introduction then measures the same as every
+   other long-form field on the page rather than 14px short of them. */
+/* #20: the left column was pinned at 446px until the 900px breakpoint, so at
+   laptop widths it kept taking a fixed slice out of a shrinking container and
+   the right column — and with it every long-form field on the page, which is
+   sized to match it — collapsed: 660px of content at 1200, 560 at 1100, 460 at
+   1000, against 270px of empty gutter each side. It is a proportion now,
+   floored at 300px and capped at the 446px it already used at 1440+, so the
+   desktop measure is unchanged and the laptop one stops collapsing.
+   Held in a variable because the long-form measure below subtracts it; the two
+   used to be a 446 here and a hard-coded 492 there, which is exactly the kind
+   of pair that drifts. */
+:root { --course-left: clamp(300px, 31%, 446px); --course-gap: 46px; }
+.course-hero { display: grid; grid-template-columns: var(--course-left) 1fr; gap: var(--course-gap); align-items: start; padding: 46px 0 10px; }
+/* 7.1: the image block is height-capped so the price and CTA below it stay on the
+   first screen on a laptop rather than being pushed under the fold. */
+.course-left { display: flex; flex-direction: column; }
+.co-thumbs { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-top: 12px; }
+.co-thumb { padding: 0; border: 0; background: none; cursor: pointer; border-radius: 10px; overflow: hidden; aspect-ratio: 4/3; box-shadow: var(--shadow-sm); outline-offset: 2px; }
+.co-thumb img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform .35s var(--ease-out), opacity .2s; opacity: .78; }
+.co-thumb:hover img, .co-thumb:focus-visible img { opacity: 1; transform: scale(1.05); }
+.co-thumb.is-active { box-shadow: 0 0 0 2px var(--marine), var(--shadow-sm); }
+.co-thumb.is-active img { opacity: 1; }
+/* 7.1 right column: the title shares the video frame's left edge, and the video
+   sits directly beneath it with the introduction below that. */
+/* #28: #1b1814 in both themes put a 900x506 black rectangle above the fold on
+   the cream page. Black is right for a frame that is HOLDING a film — that is
+   the letterbox, a material — and wrong for one that is only announcing that
+   a film is coming. So the empty frame is a themed surface and .has-video,
+   which is the branch the iframe renders into, keeps the black. */
+.co-highlight { position: relative; aspect-ratio: 16/9; border-radius: var(--radius-card); overflow: hidden; background: var(--surface); box-shadow: var(--shadow); margin: 4px 0 18px; display: grid; place-items: center; }
+.co-highlight.has-video { background: #1b1814; }
+.co-highlight-empty { font-family: var(--font-cond); font-size: 13px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); text-align: center; padding: 0 20px; }
+/* 7.1: the preview reel, once the client has supplied one. */
+.co-highlight.has-video { display: block; }
+.co-highlight .gdrive-frame { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #000; }
+/* The poster the client named for this reel, under the lazy iframe. Same
+   arrangement the lesson stage uses: the frame is on top and opaque once Drive
+   answers, so this is what the visitor looks at until then, instead of the black
+   rectangle Drive shows while it decides. z-index rather than DOM order because
+   the iframe is written after it and would otherwise win on stacking alone. */
+.co-highlight .co-hl-poster { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; z-index: 0; }
+.co-highlight .gdrive-frame { z-index: 1; }
+.co-hl-dur { position: absolute; right: 10px; bottom: 10px; z-index: 2; pointer-events: none;
+  font-family: var(--font-cond); font-size: 12.5px; font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase;
+  color: #f3ede1; background: rgba(20,17,13,.72); padding: 4px 10px; border-radius: var(--r-sharp); }
+.course-left .course-buy { margin-top: 22px; }
+/* 7.1: the image block is kept short on purpose so the price and CTA below it
+   stay on the first screen without scrolling. */
+/* 7.1 requires the picture area to be height-controlled so the buy button is on
+   the first screen without scrolling. The aspect ratio alone does not do that:
+   on a short laptop screen a 3:2 cover plus the thumbnail strip plus the
+   pending-photographs note pushed ADD TO CART about 30px below the fold. The
+   cap is viewport-relative so it only bites on short screens and leaves the
+   ratio alone on tall ones. */
+.course-cover { position: relative; border-radius: var(--r-promo); overflow: hidden; box-shadow: var(--shadow-lift); aspect-ratio: 3/2; max-height: min(272px, 31vh); }
+.course-cover img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.course-cover .free-flag, .course-cover .sale-flag { position: absolute; top: 14px; left: 14px; right: auto; }
+.course-meta-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0 4px; }
+.cmc { font-family: var(--font-cond); font-weight: 500; font-size: 13px; letter-spacing: var(--tracking-label); text-transform: uppercase; padding: 6px 14px; border-radius: var(--radius-pill); background: color-mix(in srgb, var(--ink) 8%, transparent); color: var(--ink); }
+/* Two kinds of chip, and they were indistinguishable. .is-filter marks the ones
+   that correspond to a filter on the courses page — medium, length and level —
+   and takes marine, the colour that classification already uses site-wide. A
+   plain chip is a fact about this course that you cannot filter by, such as the
+   lesson count, and takes linen. (client feedback 2026-08-08) */
+.cmc.is-filter { background: var(--marine); color: var(--marine-ink); }
+/* NOT --linen-ink: that token is linen used AS text on a dark ground, so on the
+   dark theme it resolves to linen itself and the chip was linen on linen —
+   invisible. A linen FILL takes the same dark ink .btn.linen uses, 8.5:1.
+   (client feedback 2026-08-09) */
+.cmc.is-fact { background: var(--linen); color: #2b2823; }
+.course-buy { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 20px; }
+.course-price { font-family: var(--font-display); font-weight: 700; font-size: 34px; color: var(--coral-ink); }
+/* 6 / 1.4.3: the old price keeps the colour it already had and carries the
+   reduction through the strike alone. It used to be recoloured to --muted,
+   which is not 維持現有顏色. */
+.course-price .was { font-size: 19px; opacity: .72; text-decoration: line-through; margin-right: 10px; font-weight: 500; }
+/* 6 / 1.4.3: only the reduced price changes colour. */
+.course-price .now { color: var(--marine); }
+.course-tier-note { font-size: 13px; color: var(--muted); max-width: 34ch; }
+/* Her own line under the course title. */
+/* 51: 13.5px was too small to read as the course's subtitle. */
+.co-subline { font-family: var(--font-cond); font-weight: 600; font-size: 18px;
+  letter-spacing: var(--tracking-label); text-transform: uppercase;
+  color: var(--teal-ink); margin: 0 0 12px; }
+/* #09: --muted is already the quiet step; the extra .85 took it to 3.75:1 on
+   the light page. Dimming a token that was chosen for its contrast just
+   spends the margin it was chosen for. */
+.course-terms-note { font-size: 13px; color: var(--muted); max-width: 46ch; margin-top: 12px; }
+/* The client-testing switch, moved under the Add to cart button because that is
+   what it changes. (client feedback 2026-08-08) */
+.own-test { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+.own-test-label { font-family: var(--font-cond); font-size: 12.5px; font-weight: 600;
+  letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); }
+.own-test .fg-opts { display: inline-flex; gap: 6px; }
+/* 7.4 「所有課程詳情長文欄位統一加闊至相同寬度」: every long-form field on the page at
+   one measure. The introduction was on the 60ch .lead default while the title and
+   preview above it ran the full column — the "呢個好短咧⋯⋯我想佢闊翻，好似上邊咁樣"
+   complaint exactly.
+   The introduction sits in the hero's right column, so the shared measure is
+   whatever that column can hold: the container less the left column and the gap,
+   capped at 900px. The stacked blocks track the same expression, so the two stay
+   equal as the viewport moves rather than only matching at one width. Below the
+   width where the hero collapses to one column the cap is simply 900px again,
+   because both are then bounded by the container. */
+:root { --prose-max: 900px; }
+/* The section signs travel with the content they head. Pinning the blocks to
+   the right column without them left each plaque centred on the full container
+   while its own list sat to the right of it, which reads as a mistake. */
+.learn-list, .syllabus, #co-who, .course-teacher,
+#learn .section-head, #syllabus .section-head, #who .section-head { max-width: var(--prose-max); margin-left: auto; margin-right: auto; }
+.course-right #co-blurb { max-width: var(--prose-max); }
+@media (min-width: 901px) {
+  /* 50: these already borrowed the hero right column's WIDTH, but they were
+     centred in the container while the introduction and the title above them
+     start at the column's left edge, so the two blocks were offset by half the
+     leftover space. Pinning the right edge puts them under that column exactly.
+     All four move together: aligning only the learn list would leave it out of
+     step with the syllabus directly beneath it. */
+  .learn-list, .syllabus, #co-who, .course-teacher,
+  #learn .section-head, #syllabus .section-head, #who .section-head { max-width: min(var(--prose-max), calc(100% - var(--course-left) - var(--course-gap))); margin-left: auto; margin-right: 0; }
+}
+/* 7.5 / 1.4.10: the SYLLABUS heading is enlarged; the other section headings on
+   this page keep the shared size. */
+#syllabus h2.section-title { font-size: clamp(32px, 3.7vw, 50px); padding: 14px 34px; }
+/* 50: each outcome sits on its own rounded plate in the client's marine, the
+   type is a step larger, and the gutter between the columns is close to double
+   what it was — at 22px the two columns read as one wrapped paragraph. */
+.learn-list { list-style: none; margin: 26px 0 0 auto; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 14px 40px; }
+.learn-list li { display: flex; gap: 10px; align-items: baseline; font-size: 16.5px; line-height: 1.45;
+  background: var(--marine); color: var(--marine-ink); border-radius: 14px; padding: 14px 18px; }
+.learn-list li::before { content: "✦"; color: var(--marine-ink); font-size: 12px; flex: none; }
+.syllabus { margin: 26px 0 0 auto; display: grid; gap: 10px; }
+/* 7.5: odd and even rows are distinguished for readability. The box colour
+   itself is deliberately unchanged — the direction says so explicitly — so this
+   is a light tint over it rather than a different fill. */
+/* The alternation was 5% and effectively invisible. (client feedback
+   2026-08-08) */
+.syl-item[data-odd="1"] { background-color: color-mix(in srgb, var(--ink) 13%, var(--surface)) !important; }
+/* #08: same change as details.acc-item above, and the same reason — as shipped
+   0 of 103,008 pixels changed when a .syl-row took focus. */
+.syl-item { background-color: var(--surface); background-image: var(--concrete-grain); background-size: 220px 220px; border-radius: var(--radius-card); box-shadow: var(--shadow-sm); overflow: clip; overflow-clip-margin: 8px; }
+/* The fourth column is the lesson thumbnail, on the right as the syllabus asks.
+   auto rather than a fixed width so a lesson with no cover — Lesson 1, which
+   Crystal supplied as film only — closes the column up instead of leaving a
+   hole. (client feedback 2026-08-08) */
+.syl-row { display: grid; grid-template-columns: 44px 1fr auto auto; align-items: center; gap: 16px; padding: 14px 20px; }
+.syl-thumb { width: 76px; height: 76px; border-radius: 14px; object-fit: cover; display: block;
+  background: color-mix(in srgb, var(--ink) 8%, transparent); box-shadow: var(--shadow-sm); }
+@media (max-width: 600px) { .syl-thumb { width: 56px; height: 56px; border-radius: 11px; } }
+
+/* ---- collapsible phases ----
+   Collapsed by default: fourteen rows open at once was the complaint.
+   (client feedback 2026-08-08) */
+.syl-phase { margin: 30px 0 10px; }
+.syl-phase:first-of-type { margin-top: 4px; }
+/* 49: rounded on all four corners rather than the near-square --r-sharp, so
+   the phase reads as a card rather than a slab. */
+.syl-phase-btn { display: flex; align-items: center; gap: 14px; width: 100%; cursor: pointer;
+  border: 0; text-align: left; padding: 16px 20px; border-radius: 16px;
+  background: rgba(20,17,13,.5); color: #f4e7cf; }
+/* 38 + 49: the light theme's bar used to be an 82%-ink slab, near-black on a
+   pale page. Two of the three things the client asked for on this bar are
+   marine — the phase number and the open/close marker — and marine measures
+   1.53:1 against that slab, which is not a contrast problem so much as an
+   invisible one. The bar therefore goes light in the light theme, which is also
+   what makes it read as the soft card 49 asks for. The dark theme keeps its
+   dark bar: marine reads there already. */
+[data-theme="A"] .syl-phase-btn { background: color-mix(in srgb, var(--ink) 7%, var(--surface)); color: var(--ink); box-shadow: inset 0 0 0 1px var(--line); }
+.syl-phase-btn .sp-n { font-family: var(--font-cond); font-weight: 600;
+  font-size: clamp(19px, 2.1vw, 26px); letter-spacing: var(--tracking-label);
+  text-transform: uppercase; flex: none; color: var(--marine); }
+.syl-phase-btn .sp-name { font-family: var(--font-marker); font-weight: 600;
+  font-size: clamp(16px, 1.6vw, 21px); flex: 1; opacity: .92; }
+/* #09: at opacity .7 over the phase bar this measured 3.49:1 on theme A, and
+   fading it to 82% of the bar's own ink only reached 4.15:1 — the bar is a
+   mid-tone in that theme, so there is very little room above it. The count is
+   the only thing on the row that says how many lessons are inside, so it is
+   content, not chrome: it takes the bar's ink at full strength (5.26:1 in A,
+   14.50:1 in D) and stays subordinate by being 13px against the name's 16-21. */
+.syl-phase-btn .sp-count { font-family: var(--font-cond); font-size: 13px;
+  letter-spacing: var(--tracking-label); text-transform: uppercase; flex: none; }
+/* 49: a filled triangle in the client's marine, not the outline chevron. The
+   rotation still carries the state visually and aria-expanded carries it to
+   assistive technology, so the shape is not the only signal. */
+.syl-phase-btn svg { transition: transform .2s ease; flex: none; color: var(--marine); fill: var(--marine); }
+.syl-phase-btn[aria-expanded="true"] svg { transform: rotate(180deg); }
+.syl-phase-body { display: grid; gap: 10px; margin-top: 10px; }
+.syl-phase-body[hidden] { display: none; }
+.syl-more { display: flex; align-items: center; gap: 7px; width: 100%; background: none; border: 0; border-top: 1px solid color-mix(in srgb, var(--ink) 9%, transparent); padding: 9px 20px 9px 64px; cursor: pointer; font-family: var(--font-cond); font-size: 13px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); }
+.syl-more:hover { color: var(--coral-ink); }
+.syl-more svg { transition: transform .18s ease; }
+.syl-more[aria-expanded="true"] svg { transform: rotate(180deg); }
+.syl-detail { margin: 0; padding: 2px 20px 18px 64px; display: grid; gap: 4px; }
+/* An author `display` beats the UA sheet's [hidden] rule, so restate it. */
+.syl-detail[hidden] { display: none; }
+.syl-detail dt { font-family: var(--font-cond); font-weight: 600; font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--teal-ink); margin-top: 10px; }
+.syl-detail dt:first-child { margin-top: 0; }
+.syl-detail dd { margin: 0; font-size: 13.5px; line-height: 1.55; color: var(--muted); }
+@media (max-width: 600px) { .syl-more, .syl-detail { padding-left: 20px; } }
+.syl-num { width: 34px; height: 34px; border-radius: 50%; display: grid; place-items: center; font-family: var(--font-cond); font-weight: 600; font-size: 13px; background: color-mix(in srgb, var(--coral) 16%, transparent); color: var(--coral-ink); }
+.syl-title { font-family: var(--font-marker); font-weight: 600; font-size: 18.5px; color: var(--ink); }
+.syl-sub { font-size: 14.5px; color: var(--muted); margin-top: 3px; }
+.syl-len { font-family: var(--font-cond); font-size: 12.5px; color: var(--marine); }
+/* ---- #16: locked rows ----
+   course.dc.html used to emit style="opacity:.72" inline on twelve of thirteen
+   rows, which painted 2.55:1 (A) / 3.00:1 (D) and, being inline, could not be
+   overridden from here at all. The dimming is a real requirement — a locked row
+   has to read as locked — but opacity is the wrong instrument: it fades the row
+   AND its contrast at the same rate, so the more locked it looks the less
+   readable it is.
+   Locked is carried by three things that cost no contrast instead: the number
+   disc drops its copper for a neutral, the thumbnail loses its colour, and the
+   text steps back one stop towards --muted.
+   NOT all the way to --muted: half these rows sit on the .syl-item[data-odd]
+   tint rather than on --surface, and --muted measured 4.47:1 (D) / 3.94:1 (A)
+   against THAT. --muted is chosen for --surface, and a tinted row is not
+   --surface. Two stops, because the numeral sits on its own lighter disc and
+   needs more than the title does: measured 5.70/4.96 for the text and 5.29/5.33
+   for the numeral. */
+.syl-row.is-locked { --locked-ink: color-mix(in srgb, var(--ink) 40%, var(--muted)); }
+.syl-row.is-locked .syl-title,
+.syl-row.is-locked .syl-sub,
+.syl-row.is-locked .syl-len { color: var(--locked-ink); }
+.syl-row.is-locked .syl-num { background: color-mix(in srgb, var(--ink) 13%, transparent);
+  color: color-mix(in srgb, var(--ink) 70%, var(--muted)); }
+/* 57: the thumbnail keeps its colour whether or not the lesson is bought. The
+   desaturation was one of three cues that a row is locked; the other two stay —
+   the padlock, which carries role="img" aria-label="Locked" and so is announced,
+   and the row's stepped-back ink. Client instruction, and she has been told the
+   cue is weaker for it. */
+.syl-row.is-locked svg { color: var(--locked-ink); }
+.course-teacher { display: flex; gap: 20px; align-items: center; margin: 30px 0 0 auto; background-color: var(--surface); background-image: var(--concrete-grain); background-size: 220px 220px; border-radius: var(--radius-card); box-shadow: var(--shadow-sm); padding: 20px 24px; }
+.course-teacher img { width: 74px; height: 74px; border-radius: 50%; object-fit: cover; flex: none; box-shadow: var(--shadow-sm); }
+@media (max-width: 900px) { .course-hero { grid-template-columns: 1fr; gap: 26px; } .learn-list { grid-template-columns: 1fr; } }
+
+/* ---------- dashboard onboarding empty-state ---------- */
+.dash-onboard { display: grid; gap: 14px; }
+.dash-onboard .ob-hero { display: flex; gap: 22px; align-items: center; }
+.dash-onboard .ob-hero img { width: 120px; height: 120px; border-radius: var(--radius-card); object-fit: cover; flex: none; box-shadow: var(--shadow-sm); }
+.ob-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 6px; }
+.ob-step { background: color-mix(in srgb, var(--ink) 5%, transparent); border-radius: var(--radius-card); padding: 16px; }
+.ob-step .n { font-family: var(--font-display); font-weight: 700; font-size: 22px; color: var(--coral-ink); }
+.ob-step h4 { font-family: var(--font-marker); font-weight: 600; font-size: 15.5px; margin: 6px 0 4px; color: var(--ink); }
+.ob-step p { margin: 0; font-size: 13px; color: var(--muted); }
+@media (max-width: 760px) { .ob-steps { grid-template-columns: 1fr; } .dash-onboard .ob-hero { flex-direction: column; align-items: flex-start; } }
+
+/* ---------- the essay sheets: leather, not ruled notepaper ------------------
+   (client feedback 2026-08-16, reference asset "About Article background.jpg")
+
+   WHAT WAS THERE BEFORE, precisely, because the client called it "the draughting
+   paper" and that is not what the code calls it:
+     - the SHEET is `.engraved` in css/industrial-2.css (~line 509). It paints
+       background-color: var(--note-paper) — #f6f1e2 light / #cdbb98 under
+       [data-theme="D"] — under two radial gradients plus var(--note-tooth) and
+       var(--note-fibre) (both defined in css/industrial-1.css ~line 133).
+     - the RULING is a separate rule, `.engraved .eng-body` (~line 570): a
+       repeating-linear-gradient of var(--note-rule) blue lines at --note-line
+       pitch, plus the single var(--note-margin) red margin line at 43-44px.
+   Those two rules together are the ground being replaced. Both stay untouched —
+   see the scoping note below.
+
+   WHAT REPLACES IT: the same hide the blog feature card is bound in — the
+   --leather* tokens in css/industrial-1.css (~line 140). "Dotted" in the client's
+   note is the PORE layer (--leather-pores), the fine pebble that makes it read as
+   calfskin; it is not a stitched border, and none is added here. The five layers
+   and the 1px pore/shine offset are copied from `.blog-feature` deliberately: that
+   offset is what lights each pebble from one side, and without it the grain
+   averages out to flat card (the token comment records this being got wrong once).
+
+   SCOPING — the important part. This is hung on `.bio-copy`, NOT on `.engraved`:
+     - `.engraved` is also the QUOTE panel at the top of About (`.engraved.is-quote`),
+       which the client did not ask to change and which deliberately has no ground
+       at all (`background-image: none`).
+     - `.bio-copy` and `.engraved` were both grepped across every .html and .js in
+       the repo: both appear in About.dc.html and nowhere else. index.html's only
+       match for "engraved" is a CSS comment in its <style> saying it deliberately
+       does NOT use this block, and index.html has no --leather consumer either.
+       So the home page cannot be reached from here — not because the selector is
+       careful, but because the class is not on it.
+   Everything below therefore carries a .cas-root prefix purely to outrank
+   `[data-theme="D"] .engraved …` (0,2,0 / 0,3,0), not to add reach.
+
+   CONTRAST — measured, not calculated, and the distinction matters here. The
+   --leather token comment states the rule for this material: the base token is the
+   fill UNDER five texture layers, so no ratio may be derived from it. The painted
+   values it records are #a98e6d (tan, L .289) and #a99d8d (pale grey, L .345).
+   Recomputing that comment's own four measured ink ratios against those painted
+   values came out a consistent +0.34..+0.40 HIGH — the gap between sampling a flat
+   average and glyph-masked sampling of real antialiased type on a mottled ground.
+   So the figures below are computed against the painted value and then discounted
+   by 0.40 before being called a pass:
+
+     theme D, tan cover #a98e6d
+       body/sub/heading  --leather-label   #2b1d10   5.27 computed -> 4.87 expected
+     theme A, pale cover #a99d8d
+       body/sub/heading  --leather-a-label #241f19   6.14 computed -> 5.74 expected
+
+   Both clear 4.5:1 with the discount applied. Two consequences worth recording:
+     - the client's reference image sets this copy in WHITE. White measures 3.10:1
+       on the tan and 2.66:1 on the pale grey — it fails 4.5:1 by a wide margin in
+       BOTH themes and is not used. The ground is hers; the ink is not.
+     - the previous --note-ink values (#3d372e / #33291d) also fail on leather
+       (3.80:1 and 4.59:1 computed, i.e. 3.40 / 4.19 expected), so re-inking was not
+       optional cosmetics — carrying the paper inks over would have shipped a fail.
+   These are the site's own already-measured tokens for text on this exact
+   material, not new colours invented for this panel. Re-measure with the Playwright
+   harness's glyph-masked sampling before trusting the discount. */
+.cas-root .bio-copy.engraved {
+  --essay-ink: var(--leather-label);
+  color: var(--essay-ink);
+  background-color: var(--leather);
+  background-image:
+    radial-gradient(115% 78% at 18% -4%, rgba(255,238,206,.30), rgba(255,238,206,0) 56%),
+    linear-gradient(163deg, rgba(255,241,214,.10) 0%, rgba(48,29,15,0) 38%, rgba(44,26,13,.17) 100%),
+    var(--leather-pores),
+    var(--leather-shine),
+    var(--leather-hide);
+  background-position: 0 0, 0 0, 1px 1px, 0 0, 0 0;
+  background-size: 100% 100%, 100% 100%, 150px 150px, 150px 150px, 520px 520px;
+  box-shadow:
+    var(--shadow),
+    inset 0 1px 0 rgba(255,242,216,.34),
+    inset 0 -2px 0 rgba(38,21,10,.42),
+    inset 0 0 0 1px rgba(44,26,13,.38),
+    inset 0 0 44px rgba(44,26,13,.20);
+}
+/* The saddle stitch, lifted from .blog-feature::before unchanged — same 8px
+   inset, same 2px dashed rule at the same alpha, same drop-shadow underneath.
+   The shadow is the part that matters: without it a dashed border reads as a
+   dotted CSS border rather than as thread, because each stitch needs its own
+   groove. Copied rather than shared: .blog-feature's rule is one selector on
+   one component, and pulling both onto a common class would mean touching the
+   Blog listing to restyle About.
+   `position: relative` is already on .engraved (industrial-2.css:509 block), so
+   the inset resolves against the panel and not the page. */
+.cas-root .bio-copy.engraved::before {
+  content: ""; position: absolute; inset: 8px; border-radius: 11px; z-index: 2;
+  border: 2px dashed rgba(255,240,212,.52);
+  filter: drop-shadow(0 1.5px 0 rgba(40,22,10,.62));
+  pointer-events: none;
+}
+/* The pale grey hide, exactly as .blog-feature swaps it: same pores, shine and
+   grain images, only the fill and the ink change. */
+/* .cas-root is the element that CARRIES data-theme, so the attribute goes on it,
+   not on an ancestor. (0,4,0) — outranks the base rule above outright rather than
+   relying on source order to break a tie. */
+.cas-root[data-theme="A"] .bio-copy.engraved {
+  --essay-ink: var(--leather-a-label);
+  background-color: var(--leather-a);
+}
+/* The ruling goes. Blue feint and a red margin line drawn on a leather cover is
+   two materials at once — and the 62px left padding existed ONLY to set the text
+   past that red line at 43-44px, so it goes with it and the sheet becomes
+   symmetrical. The top padding is untouched: it still reserves the heading's
+   overhang (--eng-h is measured in About.dc.html's componentDidMount) plus one
+   clear line, which is what keeps the gap under a one-line and a two-line heading
+   equal. --note-line survives as the body's line-height; it no longer registers
+   against anything, it is just a 27px rhythm now. */
+.cas-root .bio-copy .eng-body {
+  background-image: none;
+  padding: calc(var(--eng-h, 40px) / 2 + var(--note-line)) 26px 8px;
+}
+/* Ink. Body copy also drops the 88% alpha the paper sheets carry: on paper that
+   softened the ink, on a mid-tone hide it composites the text back TOWARDS the
+   ground, which is exactly the wrong direction on a surface this dark. */
+.cas-root .bio-copy .eng-body p,
+.cas-root .bio-copy .eng-body .bio-sub,
+.cas-root .bio-copy .eng-body em,
+.cas-root .bio-copy .eng-body strong,
+.cas-root .bio-copy .eng-title { color: var(--essay-ink); }
+/* THE LINES GO. (client feedback 2026-08-20: "those non-stitch lines don't exist
+   in the blog — should also not exist here too", and again on the second panel,
+   "the black line again".)
+
+   Two separate devices were drawing them, which is why the note reads as
+   repeated: the two `.eng-rule` segments either side of the heading, and the
+   3-sided frame `.eng-body::before` runs down the sides and under the copy.
+   Both were inherited from the ruled-notepaper sheet these panels used to be,
+   where a drawn frame belongs. On leather it is a second border inside the
+   saddle stitch, and `.blog-feature` — the same hide, the same stitch — carries
+   no such frame. Matching the blog means deleting them, not recolouring them.
+
+   WHAT STAYS: the dashed saddle stitch at `.bio-copy.engraved::before` above.
+   That is the stitch, it is the thing the client contrasted the other lines
+   against, and the blog has it too.
+
+   `content: none` rather than `border: 0`: the pseudo-element then generates no
+   box at all, so industrial-2.css's 620px override — which puts the top edge
+   back with `border-top: 1px` — has nothing left to paint. Killing only the
+   border-color would have left that phone-width line behind.
+
+   SCOPE: About only. Both selectors below are hung on classes that appear in
+   About.dc.html and nowhere else in the repo, so nothing else can be reached
+   from here. */
+.cas-root .bio-copy .eng-body::before { content: none; }
+.cas-root .bio-copy .eng-rule { display: none; }
+/* The rules were the flex children that pushed the title to the middle of the
+   head; with them gone the title is the only child and would sit hard left. */
+.cas-root .bio-copy .eng-head { justify-content: center; }
+
+/* The quote panel at the top of the page goes the same way, and this one needed
+   asking about first: its rules are the client's own 2026-08-08 device
+   ("用此符號設計"), where the opening and closing marks sit ON the top and
+   bottom rules at opposite corners. Confirmed 2026-08-20: the LINES go, the
+   MARKS stay. So the panel keeps its two serif quotation marks, opening at the
+   top left and closing at the bottom right exactly where they already sat, and
+   loses the two rule segments and the side frame between them.
+
+   The negative margins go with the rules. They existed to pull the head down
+   and the foot up by half their own height so the marks would straddle a frame
+   edge; with no edge to straddle they only push the marks into the quotation.
+   `--eng-f` is measured in About.dc.html purely to feed the foot margin and is
+   now unused — the measuring pass is left alone because `--eng-h` still drives
+   the essay panels' top padding. */
+.cas-root .engraved.is-quote .eng-rule { display: none; }
+.cas-root .engraved.is-quote .eng-body::before { content: none; }
+/* justify-content is restated, not inherited: industrial-2.css's 620px block
+   centres `.engraved .eng-head` because on the essay panels the rules were the
+   only thing centring the title. On the quote panel that put the opening mark
+   in the middle of the top edge while the closing one stayed at the far right.
+   Opening top LEFT, closing bottom right, at every width. */
+.cas-root .engraved.is-quote .eng-head { margin-bottom: 0; justify-content: flex-start; }
+.cas-root .engraved.is-quote .eng-foot { margin-top: 0; justify-content: flex-end; }
+/* Leather takes an impression the other way up from paper: the lit edge sits
+   ABOVE the glyphs on a stamped hide, not below. Written with .engraved in the
+   chain to make this (0,4,0), because industrial-2.css sets this same property in
+   BOTH `.engraved .eng-title` (0,2,0) and `[data-theme="D"] .engraved .eng-title`
+   (0,3,0) — the second of which a plain (0,3,0) rule would only beat on source
+   order. One selector covers both themes: the hide looks the same under each. */
+.cas-root .bio-copy.engraved .eng-title {
+  text-shadow: 0 1px 0 rgba(255,240,212,.22), 0 -1px 0 rgba(38,21,10,.34);
+}
+/* The 620px block in industrial-2.css re-pads .eng-body at (0,2,0); the base rule
+   above is (0,3,0) and would outrank it at every width, so the phone padding is
+   restated here. Media queries add no specificity — this trap is why. */
+@media (max-width: 620px) {
+  .cas-root .bio-copy .eng-body { padding: 24px 16px 6px; }
+}
+
+/* ---------- bio credentials (polaroids inside Artist biography) ---------- */
+/* Tracking held at .2em: below About's §13/§14 freeze line. It will read looser
+   than its retuned siblings; cheaper than breaching the freeze. (#20) */
+.bc-row { display: flex; gap: 18px; flex-wrap: wrap; }
+.bc-card { margin: 0; background: var(--paper); padding: 10px 10px 12px; border-radius: 6px; box-shadow: var(--shadow-md); transform: rotate(-2deg); transition: transform .3s var(--ease-pop), box-shadow .3s; max-width: 200px; }
+.bc-card + .bc-card { transform: rotate(1.6deg); }
+.bc-card:hover { transform: rotate(0) translateY(-4px) scale(1.03); box-shadow: var(--shadow-lift); z-index: 2; position: relative; }
+.bc-card img { width: 100%; aspect-ratio: 4/3; object-fit: cover; border-radius: 3px; display: block; }
+/* Award certificates hang in a matched set of portrait mounts. Every mount is
+   the same 3/4 whatever shape the scan is: the certificate is fitted inside it
+   with object-fit: contain and centred on the mat, so an A4 portrait fills the
+   opening and a landscape one letterboxes with mat above and below instead of
+   forcing a second frame size. That is what keeps a mixed set looking like a
+   wall of certificates rather than an assortment. (client feedback 2026-08-08)
+
+   2026-08-16 — THE MIXED SET IS NOW REAL, and no rule below needed changing to
+   take it. Two landscape scans landed (cert-iws-hk-2016 2003x1409 and
+   poster-iws-hk-2016 1932x1330) beside the two portrait ones already here
+   (cert-accademia-2026 707x1000, cert-jiwi-2026 1076x1522 — both ~1:1.414, A-series
+   portrait; the new pair are ~1.42:1, the same ratio on its side).
+
+   WHY THE ROW HEIGHT CANNOT JUMP, stated once so nobody re-solves it: the mount's
+   height is set by `.cert-frame { aspect-ratio: 3 / 4 }` and its width by the fixed
+   flex basis on `.bc-card--cert` — both independent of the scan. `.cert-mat img` is
+   then width:100% height:100% object-fit:contain with `aspect-ratio: auto` (which is
+   what overrides the 4/3 that `.bc-card img` imposes on the polaroids). So the IMG
+   BOX is always the full opening and only the picture inside it letterboxes: a
+   portrait scan fills the opening, a landscape one sits centred with mat above and
+   below. Nothing in the row is content-sized, so no scan can resize a neighbour.
+   Do not "fix" the letterbox by giving landscape scans their own aspect-ratio —
+   that reintroduces the second frame size this mount exists to avoid.
+
+   The empty landscape mount is now redundant as a demonstration (two real scans do
+   the job) but is left in place: it is one of the three `is-demo` mounts that also
+   push the table past its five visible rows, and those go as a set before launch.
+
+   FREEZE: About's §13/§14 freeze covers this block. Lifted by the client on
+   2026-08-16 for the two scans above ONLY; it otherwise still stands, which is why
+   the tracking and 11px caption size below are still held at their frozen values. */
+/* A fixed basis, not a max-width: .bc-row is a flex row, so max-width alone let
+   each mount size to its own content and the set came out 236 / 245 / 179px
+   wide — the one thing a matched set of frames must not do.
+   Five across, worked out from the same division the timeline uses so the two
+   rails cannot disagree. It was showing a little over five. */
+.bc-card--cert { flex: 0 0 calc((100% - (var(--cert-show) - 1) * var(--cert-gap)) / var(--cert-show));
+  width: auto; max-width: none; padding: 0; background: none; box-shadow: none; }
+/* `.bc-card + .bc-card` tilts the polaroids and outranks a bare `.bc-card--cert`,
+   so the second and third mounts kept a 1.6° rotation. Hanging straight is the
+   point of a mount, and the tilt also inflated their bounding boxes to 245px
+   against the first one's 236 — the set only looked matched in the CSS. */
+.bc-card--cert, .bc-card + .bc-card--cert { transform: none; }
+.bc-card--cert:hover, .bc-card + .bc-card--cert:hover { transform: translateY(-4px); box-shadow: none; }
+/* The border is one SVG, applied with border-image so the corner ornaments keep
+   their proportions at any frame size and only the straight runs between them
+   stretch — the reason four masked corner motifs were the wrong tool. It is the
+   engraved rule-and-flourish border a certificate is actually printed with:
+   a heavy outer rule, a hairline inner one, a lozenge and a leaf at each corner.
+   Gold on cream in both themes, because a certificate is a physical object and
+   does not repaint itself when the site does. (client feedback 2026-08-08 — the
+   wooden mount read as a picture frame, which is not how certificates are
+   presented.) */
+/* Frame 22px + mat 13px was 35px of chrome a side on a 254px mount, leaving the
+   scan barely half the width. The certificate is the content; the frame is the
+   frame. (client feedback 2026-08-09) */
+.cert-frame { position: relative; aspect-ratio: 3 / 4; box-sizing: border-box;
+  padding: 5px;
+  background-color: #f7f2e5;
+  background-image:
+    radial-gradient(120% 80% at 50% 0%, rgba(255,255,255,.85), transparent 60%),
+    repeating-linear-gradient(45deg, rgba(138,111,61,.045) 0 6px, transparent 6px 12px),
+    repeating-linear-gradient(-45deg, rgba(138,111,61,.045) 0 6px, transparent 6px 12px);
+  border: 12px solid transparent;
+  border-image-source: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120' viewBox='0 0 120 120'%3E%3Cg fill='none' stroke='%238a6f3d' stroke-linecap='round'%3E%3Crect x='3.5' y='3.5' width='113' height='113' stroke-width='3'/%3E%3Crect x='11.5' y='11.5' width='97' height='97' stroke-width='1'/%3E%3Cpath d='M17 30V17h13M103 30V17H90M17 90v13h13M103 90v13H90' stroke-width='2.2'/%3E%3C/g%3E%3Cg fill='%238a6f3d'%3E%3Cpath d='M23.5 19.6l4 3.9-4 3.9-4-3.9z'/%3E%3Cpath d='M96.5 19.6l4 3.9-4 3.9-4-3.9z'/%3E%3Cpath d='M23.5 92.6l4 3.9-4 3.9-4-3.9z'/%3E%3Cpath d='M96.5 92.6l4 3.9-4 3.9-4-3.9z'/%3E%3C/g%3E%3Cg stroke='%238a6f3d' stroke-width='1.1' fill='none'%3E%3Cpath d='M30 23.5c6 0 9-3 9-6.5M90 23.5c-6 0-9-3-9-6.5M30 96.5c6 0 9 3 9 6.5M90 96.5c-6 0-9 3-9 6.5'/%3E%3C/g%3E%3C/svg%3E");
+  border-image-slice: 44; border-image-width: 12px; border-image-repeat: stretch;
+  box-shadow: var(--shadow-md); transition: box-shadow .3s; }
+.bc-card--cert:hover .cert-frame { box-shadow: var(--shadow-lift); }
+/* the mat the certificate is mounted on */
+.cert-frame .cert-mat { position: relative; width: 100%; height: 100%;
+  display: grid; place-items: center; overflow: hidden;
+  background: #fffdf7;
+  box-shadow: inset 0 0 0 1px rgba(138,111,61,.42), inset 0 2px 7px rgba(90,70,40,.13); }
+.cert-frame .cert-mat img { width: 100%; height: 100%; object-fit: contain; display: block;
+  aspect-ratio: auto; border-radius: 0; }
+/* The empty mount that shows a landscape scan fitting the same frame. Marked
+   as a placeholder in the same language the free-videos rails use. */
+.bc-card--cert.is-ph .cert-slot { width: 100%; display: grid; place-items: center;
+  background: repeating-linear-gradient(135deg, transparent 0 10px,
+    rgba(138,111,61,.13) 10px 20px);
+  font-family: var(--font-cond); font-size: 11px; font-weight: 600;
+  letter-spacing: var(--tracking-label); text-transform: uppercase;
+  color: rgba(90,72,42,.72); text-align: center; padding: 0 10px; }
+/* the three shapes an author might upload, all sitting in the one mount */
+.bc-card--cert.is-ph .cert-slot.is-landscape { aspect-ratio: 4 / 3; }
+.bc-card--cert.is-ph .cert-slot.is-portrait { aspect-ratio: 3 / 4; height: 100%; width: auto; }
+.bc-card--cert.is-ph .cert-slot.is-square { aspect-ratio: 1 / 1; }
+
+/* ---- the certificate strip: a table that drives a rail of pictures --------
+   Desktop is two things and only two: a vertical table of certificates, and the
+   pictures beside it. The table is the CONTROL — scroll it and the pictures
+   move with it. There is no second horizontal strip of text; that existed only
+   to force the two into step and was never wanted. (client feedback 2026-08-09)
+
+   --cert-rows is how many rows are visible before the table scrolls, and the
+   rail is sized so the same number of pictures is visible, which is what makes
+   one scrollbar position mean the same thing in both. */
+/* These live on .cert-split, not on a wrapper. They were on .bio-certs, and
+   when that wrapper was removed every calc() using them became invalid — the
+   five-row cap and the five-across mount width both silently stopped applying
+   and the table rendered all ten rows. A custom property on an element that may
+   be refactored away is a trap; keep them on the element that uses them. */
+.cert-split { --cert-gap: 18px; --cert-show: 5; --cert-row: 62px;
+  display: grid; grid-template-columns: minmax(280px, 0.9fr) 1.6fr; gap: 26px; align-items: start; }
+@media (max-width: 1100px) { .cert-split { grid-template-columns: 1fr; } }
+
+.cert-list { max-height: calc(var(--cert-show) * var(--cert-row)); overflow-y: auto;
+  overscroll-behavior-y: contain; scrollbar-width: thin;
+  border-radius: var(--radius-card); background: var(--surface); box-shadow: var(--shadow-sm); }
+.cert-list::-webkit-scrollbar { width: 8px; }
+.cert-list::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--ink) 22%, transparent); border-radius: 4px; }
+.cert-row { display: grid; grid-template-columns: 34px 58px 1fr; align-items: center; gap: 12px;
+  height: var(--cert-row); box-sizing: border-box; padding: 0 14px; cursor: pointer;
+  border-bottom: 1px solid color-mix(in srgb, var(--ink) 10%, transparent);
+  background: none; border-left: 0; border-right: 0; border-top: 0; width: 100%;
+  text-align: left; color: inherit; font: inherit;
+  transition: background var(--dur-base); }
+.cert-row:last-child { border-bottom: 0; }
+.cert-row:hover, .cert-row.is-active { background: color-mix(in srgb, var(--ink) 7%, transparent); }
+.cert-row.is-active { box-shadow: inset 3px 0 0 var(--marine); }
+/* The info button is a column of its own at the left edge, so every icon lines
+   up down the table instead of floating after text of differing lengths.
+   (client feedback 2026-08-09) Desktop does not need it — the picture is right
+   there — so it only appears on the narrow layout. */
+/* #23: this is a decorative glyph INSIDE the real control — the row itself is
+   the <button>, and the disc is an aria-hidden span, which is why it cannot be
+   a nested button. It is only emitted on rows that have a scan to open, so it
+   never appears on a disabled row. Its pointer cursor now matches the row's
+   (the `.cert-row { cursor: default }` that used to sit in the 1100px block
+   below is gone), so the pointer no longer appears on the one element in the
+   widget that is not a control while the control showed an arrow. */
+.cert-info { display: none; grid-column: 1; width: 30px; height: 30px; place-items: center;
+  border-radius: 50%; border: 1px solid color-mix(in srgb, var(--ink) 22%, transparent);
+  background: var(--surface); color: var(--ink); cursor: pointer; padding: 0;
+  font-family: var(--font-cond); font-weight: 700; font-size: 14px; line-height: 1;
+  transition: background var(--dur-base), transform var(--dur-base); }
+.cert-info:hover { background: var(--marine); color: var(--marine-ink); transform: scale(1.06); }
+.cert-year { grid-column: 2; font-family: var(--font-cond); font-weight: 600; font-size: 14px;
+  letter-spacing: var(--tracking-label); color: var(--ink); }
+.cert-name { grid-column: 3; font-size: 13.5px; line-height: 1.4; color: var(--muted);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+/* #09: --muted at .8 measured 3.36:1 on the light theme. A pending row still
+   has to be readable; it is marked as pending by the italic demo caption and
+   the disabled cursor, not by being faded out. */
+.cert-row.is-pending .cert-year, .cert-row.is-pending .cert-name { color: var(--muted); }
+.cert-row[disabled] { cursor: default; }
+/* rows that exist only to demonstrate the scroll, so they cannot be mistaken
+   for honours she has actually been given */
+.cert-row.is-demo .cert-name { font-style: italic; opacity: .55; }
+
+/* The row is one continuous strip that can be dragged, not a set of pages: the
+   mounts are identical in size, so there is no natural page boundary between
+   them. Order is authored by hand in the CMS — see the note in the markup. */
+/* No scroll-behavior: smooth. Every programmatic write to a smooth scroller
+   starts an ANIMATION that emits scroll events for many frames afterwards, and
+   those echoed back into the table while the reader was still scrolling it —
+   the row-by-row stutter. The follower has to track 1:1. Jumps that genuinely
+   want easing ask for it per call with scrollTo({behavior:'smooth'}). */
+.bc-row.is-rail { flex-wrap: nowrap; gap: var(--cert-gap); overflow-x: auto; scrollbar-width: thin;
+  cursor: grab; padding-bottom: 8px;
+  overscroll-behavior-x: contain; }
+.bc-row.is-rail.is-dragging { cursor: grabbing; user-select: none; }
+.bc-row.is-rail.is-dragging img { pointer-events: none; }
+.bc-row.is-rail::-webkit-scrollbar { height: 8px; }
+.bc-row.is-rail::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--ink) 22%, transparent); border-radius: 4px; }
+/* the tilt returns on hover only, so a dragged strip stays flat */
+.bc-row.is-rail .bc-card--cert:hover { transform: translateY(-4px); }
+
+/* Below 1100px the pictures are dropped and the table is the whole thing: five
+   3:4 mounts in a narrow column would be thumbnails. That is when the info
+   button appears, because the table becomes the only route to a scan.
+   (client feedback 2026-08-09) */
+@media (max-width: 1100px) {
+  /* .cert-split, not .bio-certs: that wrapper no longer exists, and scoping to
+     it left the rail rendering at every width. Same fault as the custom
+     properties above — check for orphaned ancestors after removing a wrapper. */
+  .cert-split .bc-row.is-rail { display: none; }
+  .cert-list { max-height: none; }
+  .cert-info { display: grid; }
+}
+
+/* ---- the certificate lightbox ---- */
+.cert-lb { position: fixed; inset: 0; z-index: 420; display: none; align-items: center;
+  justify-content: center; padding: 24px; }
+.cert-lb.open { display: flex; }
+.cert-lb .clb-backdrop { position: absolute; inset: 0; background: rgba(15,12,9,.8); backdrop-filter: blur(4px); }
+.cert-lb .clb-panel { position: relative; z-index: 1; max-width: min(560px, 100%); max-height: 100%;
+  display: flex; flex-direction: column; gap: 12px; }
+.cert-lb .clb-panel img { max-width: 100%; max-height: 74vh; object-fit: contain;
+  background: #fffdf7; border-radius: 3px; box-shadow: 0 30px 70px rgba(0,0,0,.55); }
+.cert-lb .clb-cap { font-family: var(--font-cond); font-size: 12.5px;
+  letter-spacing: var(--tracking-label); text-transform: uppercase;
+  color: rgba(243,237,225,.82); text-align: center; }
+.cert-lb .clb-close { position: absolute; top: -6px; right: -6px; z-index: 3; width: 36px; height: 36px;
+  border-radius: 50%; border: 1px solid rgba(243,237,225,.3); background: rgba(24,20,16,.7);
+  color: #f3ede1; cursor: pointer; font-size: 14px; }
+/* Tracking and 11px size both held: below About's §13/§14 freeze line. (#20) */
+.bc-card figcaption { font-family: var(--font-cond); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: #474138; margin-top: 8px; text-align: center; }
+/* Captions under a wooden mount sit on the page, not on the wood, so they take
+   the page's own muted ink rather than the fixed #474138 the polaroids use. */
+.bc-card--cert figcaption { color: var(--muted); margin-top: 10px; }
+/* ============================================================
+   FONT A — Arizonia
+   Applied only to the headings the client named in writing (see the design
+   direction, §2.2). It lives here, last, and carries the .cas-root prefix
+   because several component rules (.hero__title, .band-forest .marker-title)
+   set font-family on the very elements it has to override.
+   Arizonia ships one weight, so hierarchy inside a Font A heading has to come
+   from size and spacing — never from bold. Its x-height is small, so each
+   heading also carries a font-size roughly 1.3x the serif it replaces; those
+   sit on the element, because most already set an inline clamp() that would
+   win over anything declared here. Ascenders and descenders interlock, hence
+   the looser leading.
+   Latin only: no CJK glyphs. Chinese in a Font A heading falls through to the
+   serif behind it and the heading renders in two faces.
+   ============================================================ */
+/* 42-48 extend the face to the section and card headings the client named in
+   the 2026-08-15 round. They are listed as selectors rather than by adding a
+   class in seven files: three of them (the band headings on course, Showcase
+   and Free Videos) are the same component, and several are built by script, so
+   a class would have to be threaded through the builder as well as the markup.
+
+   THE SIZE RAMP, settled here once (ticket 42) and reused by 43-48:
+     * roughly 1.3x whatever face it replaces, because Arizonia's x-height is
+       small inside a tall em and a same-size swap reads a step smaller;
+     * weight 400 always — the face has one weight, so a 600 declaration is
+       synthesised bold and thickens the joins;
+     * text-transform none — a connected script in capitals stops joining;
+     * line-height 1.24, or 1.15 on anything that was already display-sized.
+   Nothing here is applied to an element that can carry Chinese: Arizonia has no
+   CJK glyphs, so such a heading would render in two faces. */
+.cas-root .font-a,
+.cas-root .overview-h,
+.cas-root .ov-q h4,
+.cas-root .ov-point strong,
+.cas-root .band-forest h2,
+.cas-root .band-forest .marker-title,
+.cas-root .course-teacher h3,
+.cas-root #co-who h3,
+.cas-root h2.eng-title,
+.cas-root .blog-card h3 {
+  font-family: var(--font-a);
+  font-weight: 400;
+  font-style: normal;
+  line-height: 1.24;
+  /* Tracking held at .01em and deliberately off the token scale: direction §2.2
+     records that Arizonia ships one weight, so hierarchy can only come from size
+     and spacing. Tracking a connected script also breaks the join. (#20) */
+  letter-spacing: .01em;
+  text-transform: none;
+}
+/* Arizonia sets a small x-height inside a tall em, so 1.1 leaves a gap between
+   lines that reads as a mistake rather than as leading. The text column also
+   widens, because at 38% the second line wrapped and the heading rendered as
+   three lines instead of two. (client feedback 2026-08-08) */
+.cas-root .hero__title.font-a { font-size: clamp(39px, 5.1vw, 84px); line-height: .95; }
+
+/* ============================================================
+   WOOD ON RULES THAT ARE WRITTEN IN A PAGE'S OWN <style>
+   --banner-grain and --wall-grain are the only two grain tokens holding a FILE
+   url(); the other five are inline data URIs and are immune to this.
+
+   A relative url() inside a custom property is resolved when the variable is
+   SUBSTITUTED, against the document — not against the stylesheet that declared
+   it. So `url("../img/wood-creamy.jpg")` is correct for every rule inside
+   css/*.css (css/../img/ = img/) and WRONG for a rule in a page's own <style>,
+   where it becomes ../img/ relative to the page.
+
+   That is invisible in local development, because the dev server serves the
+   site from the domain root and `../` clamps harmlessly to /img/. It only
+   appears once the site is served from a subdirectory — on GitHub Pages the
+   home page's plaque was requesting
+   herman925.github.io/img/wood-creamy.jpg (404) instead of
+   herman925.github.io/crystal-art-school/img/wood-creamy.jpg (200), so it
+   rendered as flat --banner-bg with no grain at all. Reported from the live
+   site 2026-08-16; every local check had passed.
+
+   Both offenders are therefore served from here. Geometry may stay in the page;
+   the grain may not.
+   ============================================================ */
+.cas-root .overview-h {
+  background-color: var(--banner-bg);
+  background-image: var(--banner-grain);
+  background-size: var(--banner-size, 300px 120px);
+}
+.cas-root .fv-sec > h2 {
+  background-image: linear-gradient(var(--fv-band-scrim), var(--fv-band-scrim)), var(--banner-grain);
+}
+
+/* 42-48, the sizes. Each of these replaces a face at roughly 1.3x, per the
+   ramp described above. The ones that already carry an inline clamp() are
+   resized in their own markup instead — an inline size wins over anything
+   declared here, and a value in two places drifts. */
+.cas-root .overview-h { font-size: clamp(31px, 3.2vw, 44px); }
+.cas-root .ov-q h4 { font-size: 28px; }
+.cas-root .ov-point strong { font-size: 23px; margin-bottom: 2px; }
+.cas-root .band-forest h2, .cas-root .band-forest .marker-title { font-size: clamp(29px, 3vw, 42px); }
+.cas-root .course-teacher h3 { font-size: 27px; }
+.cas-root .blog-card h3 { font-size: 25px; }
+/* The essay titles keep the engraved treatment; only the face and size move.
+   Their inline clamp is in About.dc.html. */
+
+/* ============================================================
+   ACCESSIBILITY LAYER — touch targets, focus, skip link (#08, #18)
+   This block is LAST on purpose. Both halves of it are corrections that
+   have to outrank the component rules they correct, and several of those
+   components set the same properties at the same specificity: .cert-info
+   declares 30x30 and .social-btn 30x30 several hundred lines below where
+   this used to sit, so the coarse-pointer minimums simply lost the
+   cascade and measured 30x30 at 390px after the rule was written.
+   Keep it after every component. Font A follows it and only sets
+   font-family, so the two cannot collide.
+   ============================================================ */
+
+/* ============================================================
+   TOUCH TARGETS (#18)
+   Every interactive control reaches 44x44 under a coarse pointer, or is given a
+   44x44 hit area without changing what it looks like.
+   The two minimums here used to be 40px and 42px — deliberately below 44, and
+   they were the only rule in the file, so most controls never met either: the
+   New Release dots measured 8x8, the About carousel dots 9x9, Remove 21px tall,
+   the quantity steppers 28x28, the social discs 30-36, the cart and theme
+   buttons 38x38, the burger 40x40, a filter option 39px and a cover button 36px.
+
+   Three techniques, chosen per control:
+     min-height           where the control is a text button and can simply grow
+     width/height         where it is an icon disc and growing it is harmless
+     padding + background-clip: content-box + box-sizing: content-box
+                          where the control is a DOT and growing it would change
+                          what the design says. The padding enlarges the box, the
+                          clip keeps the paint at the old size, and border-radius
+                          is resolved against each box separately so the dot
+                          stays a circle.
+   ============================================================ */
+@media (pointer: coarse) {
+  /* text-shaped controls: grow the box, keep the type */
+  .nav-links a, .nav-sheet a, .filter-rail .tag-row, .tag-row, .dash-tab,
+  .fopt, .chip, .li-remove, .syl-more, .pc-reset, .inv-link, .auth-foot a,
+  .filter-clear, .active-tag, .price-scale, .cert-row, .plan-opt,
+  .btn, .cc-btn, .cover-btn, .btn-big, .btn-outline, .art-btn, .hero__cta {
+    min-height: 44px;
+  }
+  .li-remove, .pc-reset, .inv-link, .fopt, .chip, .art-btn, .cc-btn, .cover-btn {
+    display: inline-flex; align-items: center;
+  }
+  /* icon discs: 44x44 outright. flex:none matters as much as the size — the
+     cart button and the burger are flex items in .nav-auth, and at 390px they
+     were being shrunk to 32 and 36 wide by the row, not by their own rule. */
+  .cart-btn, .nav-burger, .site-nav .mode-toggle, .social-btn, .ss-btn,
+  .car-arrow, .shop-arrow, .share-arrow, .art-modal .am-close, .cert-info,
+  .cert-lb .clb-close, .sw-close, .ctl-btn,
+  /* the home column narrows its social discs to 30px at (0,3,0), so match it */
+  .release-trio .about-col .social-btn,
+  /* FreeVideos sets its own 42px on `.fv-rail .fv-arrow`, in a <style> that
+     loads after this file, so the extra step is what reaches it */
+  .cas-root .fv-rail .fv-arrow {
+    width: 44px; height: 44px; flex: none;
+  }
+  .qty button { width: 44px; height: 44px; }
+  /* the label is the control here — clicking it toggles the 15px box —
+     so the label is what has to clear 44 (#18) */
+  .li-remember-lbl { min-height: 44px; }
+  /* the toggle keeps its 46x26 switch shape; the hit area grows around it */
+  .set-tog { position: relative; }
+  .set-tog::before { content: ""; position: absolute; left: 0; right: 0; top: -9px; bottom: -9px; }
+  /* dots: 44x44 of control, unchanged paint. No negative margin to claw the
+     layout back — three 44px targets 6px apart would overlap by 38px each, and
+     an overlapping target is not a target. The group grows instead, and loses
+     its own padding and its inset from the corner to pay for it. */
+  .rel-dots { gap: 0; padding: 0; top: 4px; right: 4px; }
+  .rel-dots button {
+    box-sizing: content-box; padding: 18px; margin: 0;
+  }
+  .ph-carousel .phc-dot {
+    box-sizing: content-box; padding: 18px; margin: -13px -6px;
+  }
+  /* eleven dots at 45px each cannot sit on one 358px line, so the row wraps
+     rather than overflowing its carousel */
+  .ph-carousel .phc-dots { flex-wrap: wrap; justify-content: center; row-gap: 0; }
+}
+@media (max-width: 560px) {
+  /* these two are set to 38/40 in the phone block above; 44 is the floor */
+  .cart-btn { width: 44px; height: 44px; }
+  .nav-burger { width: 44px; height: 44px; }
+}
+
+/* ============================================================
+   FOCUS (#08)
+   There was no :focus-visible rule anywhere in css/ except on form fields, so
+   every link, button and summary fell through to Chromium's default ring — and
+   on a dark page, with color-scheme computing to `normal`, that ring was drawn
+   for a white page.
+
+   The ring is three bands: dark, pale, dark. The pale band is the outline; the
+   dark bands are the box-shadow it is drawn on top of, because outlines paint
+   above outer box-shadows. See the note on --focus-ring for why one colour
+   cannot do this job on both themes.
+
+   The box-shadow replaces whatever resting shadow the control had, so
+   --shadow-sm is restated at the end of the stack: a focused button keeps a
+   drop shadow, and loses only the 1px inset bevel lines, for as long as it has
+   focus.
+   ============================================================ */
+.cas-root a:focus-visible,
+.cas-root button:focus-visible,
+.cas-root summary:focus-visible,
+.cas-root input:focus-visible,
+.cas-root select:focus-visible,
+.cas-root textarea:focus-visible,
+.cas-root [tabindex]:focus-visible,
+.cas-root .syl-row:focus-visible,
+.cas-root .fopt:focus-visible,
+.cas-root .chip:focus-visible,
+.cas-root .phc-dot:focus-visible,
+.cas-root .fv-card:focus-visible,
+.cas-root .fv-arrow:focus-visible,
+.cas-root .pol-tile:focus-visible,
+.cas-root .art-btn:focus-visible,
+.cas-root .co-thumb:focus-visible,
+.cas-root .dash-tab:focus-visible,
+.cas-root .li-remove:focus-visible,
+.cas-root .skip-link:focus-visible {
+  outline: var(--focus-ring-w) solid var(--focus-ring);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 calc(var(--focus-ring-w) + 4px) var(--focus-ring-edge), var(--shadow-sm);
+}
+/* Controls whose container must keep clipping hard get the same ring turned
+   inward. .cover-card clips its own overflow so the sale ribbon's ends are cut
+   by the corner, and .qty and .cert-list clip for their pill and their scroll —
+   none of those can take an overflow-clip-margin without giving something up. */
+.cas-root .cover-card a:focus-visible,
+.cas-root .cover-card button:focus-visible,
+.cas-root .course-card .cc-cover:focus-visible,
+.cas-root .qty button:focus-visible,
+.cas-root .cert-row:focus-visible {
+  outline-offset: calc(-2px - var(--focus-ring-w));
+  box-shadow: inset 0 0 0 calc(var(--focus-ring-w) + 4px) var(--focus-ring-edge);
+}
+/* the form fields already had a :focus outline in --coral; it was 2px, it was
+   the accent colour on a surface built from the accent colour, and it did not
+   distinguish pointer focus from keyboard focus. One ring for everything. */
+.co-field input:focus, .co-field select:focus,
+.field input:focus, .field textarea:focus,
+.post-field:focus, .set-field input:focus, .set-field select:focus,
+.signup-form input:focus {
+  outline: none; border-color: var(--coral-ink);
+}
+.co-field input:focus-visible, .co-field select:focus-visible,
+.field input:focus-visible, .field textarea:focus-visible,
+.post-field:focus-visible, .set-field input:focus-visible, .set-field select:focus-visible,
+.signup-form input:focus-visible {
+  outline: var(--focus-ring-w) solid var(--focus-ring);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 calc(var(--focus-ring-w) + 4px) var(--focus-ring-edge);
+}
+
+/* ---- skip link (#08 styling for the #10 markup) ----
+   The page agents add `<a class="skip-link" href="#content">` as the first child
+   of .cas-root; this is its only styling. It is off-screen rather than
+   display:none so it stays in the tab order, and it comes back on :focus as well
+   as :focus-visible because a scripted focus() should reveal it too. */
+.cas-root .skip-link {
+  position: absolute; z-index: 2000; left: 16px; top: 12px;
+  display: inline-flex; align-items: center; min-height: 44px;
+  padding: 10px 20px; border-radius: var(--radius-pill);
+  font-family: var(--font-cond); font-weight: 600; font-size: 14px;
+  letter-spacing: var(--tracking-label); text-transform: uppercase;
+  background: var(--linen); color: #2b2823; box-shadow: var(--shadow-md);
+  transform: translateY(-200%);
+  transition: transform var(--dur-base) var(--ease-out);
+}
+.cas-root .skip-link:focus, .cas-root .skip-link:focus-visible { transform: none; }
+
+/* ---- runtime-injected chrome (#09) ----
+   .mc-price / .mc-btn.primary / .ck-btn.primary are declared in a <style> that
+   js/site-extras.js appends to <head>, so they land after this file and win any
+   tie. The extra .cas-root/body step is what makes these reach them. Both the
+   drawer and the cookie bar are appended to <body>, outside .cas-root, hence
+   `body`. Delete these three rules once site-extras.js reads the role tokens
+   itself. Measured before: .mc-price 2.98:1 (D), .mc-btn.primary 3.36:1 (D). */
+body .mc-price { color: var(--coral-ink); }
+body .mc-btn.primary, body .ck-btn.primary {
+  background: var(--coral-fill); color: var(--coral-fill-ink);
+  -webkit-text-fill-color: var(--coral-fill-ink);
+}
+
+/* ---------- the stacked live-drawing pair ----------------------------------
+   (client feedback 2026-08-20: "because of the right hand side's text, it's best
+   to blow it up to 2 carousels on top of each other".)
+
+   #biography's left column used to hold ONE carousel showing two photographs
+   side by side, each painted about 241px wide against an essay that runs far
+   taller than the strip. It is now two one-up carousels stacked, so each
+   photograph gets the full column — roughly twice the width it had — and the
+   column fills the essay's height.
+
+   HEIGHT is fluid, and it is fluid for a reason worth reading before changing
+   it. The essay beside this column gets TALLER as the viewport narrows (it
+   wraps more), while the carousel cell gets NARROWER. A fixed height therefore
+   cannot match the essay at more than one width. The clamp below is fitted to
+   two measured points — essay 963px at 1440px and up, essay 1272px at 950px —
+   so the stacked pair plus its two 58px nav rows and 16px gap lands within
+   ~100px of the essay across the whole two-column range. Re-measure and refit
+   if the essay copy changes length.
+
+   CROPPING, and the compromise being made. Her photographs are portrait (3:4);
+   at 484px wide a cell would need to be 645px tall to show one whole, and two
+   of those plus nav rows come to 1422px against a 963px essay. They do not both
+   fit. So the cell crops, and `object-position` biases the crop DOWNWARD.
+
+   75% was picked by rendering all six and looking, not by taste. Five of the six
+   are the sketchbook or board held up at arm's length with the painting in the
+   lower two-thirds of the frame and open sky or street above it, so a centred
+   crop threw away the part that matters and kept the part that does not. At 50%
+   the beach study (livedrawing-3), the Tai O sheet (livedrawing-6) and the
+   temple study (livedrawing-2) all lost their lower edge, two of them including
+   the signature; at 62% two were still short; at 75% all five sit whole. The
+   sixth, livedrawing-4, is the open paintbox — study in the lid, palette below
+   — and fills the frame top to bottom, so it reads at any bias. Re-check the figure against the
+   second set when it arrives — it is fitted to these six.
+
+   (0,2,0) so it outranks the plain `.ph-carousel` rules in industrial-2.css's
+   own media queries, which media queries do not add specificity to.
+
+   The 900px break is the LAYOUT break (industrial-2.css:629), where .bio-layout
+   drops to one column and the cell jumps from 285px wide to 836px. The 1000px
+   and 620px breaks used elsewhere are wrong for this element and were tried
+   first: they left a 836px-wide cell 340px tall, a letterbox slot.
+
+   Each carousel keeps its OWN pause control and dots. They advance
+   independently — that is the point of the pair — so one control could not
+   honestly claim to stop both. */
+.phc-stack { display: grid; gap: 16px; }
+.phc-stack .ph-carousel { --phc-h: clamp(416px, calc(868px - 31.4vw), 520px); }
+.phc-stack .phc-cell img { object-position: 50% 75%; }
+@media (max-width: 900px) { .phc-stack .ph-carousel { --phc-h: min(62vw, 500px); } }
+
+/* ---------- the highlighted certificate ------------------------------------
+   (client feedback 2026-08-16, ticket I010.)
+
+   One certificate, shown on its own above the table-and-rail, larger than a rail
+   mount and beside its own caption rather than under it — at this size a caption
+   set under a 340px frame leaves a long empty column to its right.
+
+   The mount keeps every rule `.bc-card--cert` already gives it: the engraved
+   gold border, the mat, `object-fit: contain` so a landscape scan letterboxes
+   inside the same opening rather than being cropped. Only the WIDTH is
+   overridden, because the rail sizes its mounts by a flex basis computed from
+   how many show at once, and that basis means nothing outside the rail.
+
+   `.cert-highlight[hidden]` is stated: `display: flex` on a `[hidden]` element
+   beats the UA's `display: none`, and without this the block would still take
+   its margin when there is no highlight to show. */
+/* The FIGURE becomes the flex row, not this wrapper: `figcaption` has to stay
+   inside its `figure` to mean anything, so laying the frame and the caption side
+   by side is a job for the figure itself. Sizing the frame here rather than the
+   figure matters too — `.cert-frame`'s 3/4 aspect-ratio is what gives the mount
+   its height, so a basis on the figure would leave the frame sized by content. */
+.cert-highlight { display: block; margin: 0 0 26px; }
+.cert-highlight[hidden] { display: none; }
+.cert-highlight .bc-card--cert { display: flex; align-items: center; gap: 30px; max-width: 900px; }
+.cert-highlight .cert-frame { flex: 0 0 340px; }
+.cert-highlight figcaption { flex: 1 1 auto; text-align: left; display: grid; gap: 10px; }
+.cert-highlight .cert-hi-eyebrow { display: flex; align-items: center; gap: 8px;
+  font-family: var(--font-cond); font-size: 13px; font-weight: 600;
+  letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--marine); }
+.cert-highlight .cert-hi-year { color: var(--muted); }
+.cert-highlight .cert-hi-honour { font-family: var(--font-marker); font-weight: 600;
+  font-size: clamp(19px, 2vw, 25px); line-height: 1.3; color: var(--ink); text-transform: none;
+  letter-spacing: normal; }
+.cert-highlight .cert-hi-cap { font-size: 13px; line-height: 1.6; color: var(--muted);
+  text-transform: none; letter-spacing: normal; }
+@media (max-width: 700px) {
+  .cert-highlight .bc-card--cert { flex-direction: column; align-items: stretch; gap: 14px; }
+  .cert-highlight .cert-frame { flex: 0 0 auto; max-width: 300px; margin-inline: auto; width: 100%; }
+  .cert-highlight figcaption { text-align: center; max-width: none; }
+}
