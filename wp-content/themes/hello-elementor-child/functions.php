@@ -186,22 +186,26 @@ add_action(
 /**
  * GSAP is vendored rather than pulled from a CDN: one fewer third party in the
  * critical path of a site that takes payments, and no external request to explain to
- * a UK visitor. ScrollTrigger is registered here because the non-homepage templates
- * use it for scroll reveals; the homepage's own parallax does not need it.
+ * a UK visitor. The shared motion pass is the prototype's existing GSAP choreography;
+ * it is loaded site-wide so the same reveals and pointer-only tilt apply to every
+ * card-bearing page. The homepage's hero still has its own dedicated pass, while the
+ * shared file detects that hero and leaves its remaining choreography alone.
  */
 
 add_action(
 	'wp_enqueue_scripts',
 	function () {
-		if ( ! is_front_page() ) {
-			return;
-		}
-
 		$dir = get_stylesheet_directory();
 		$uri = get_stylesheet_directory_uri();
 
 		wp_enqueue_script( 'gsap', $uri . '/js/vendor/gsap.min.js', [], '3.12.5', true );
-		wp_enqueue_script( 'cas-hero-motion', $uri . '/js/cas-hero-motion.js', [ 'gsap', 'cas-hero' ], filemtime( $dir . '/js/cas-hero-motion.js' ), true );
+		wp_enqueue_script( 'cas-scrolltrigger', $uri . '/js/vendor/ScrollTrigger.min.js', [ 'gsap' ], '3.12.5', true );
+
+		if ( is_front_page() ) {
+			wp_enqueue_script( 'cas-hero-motion', $uri . '/js/cas-hero-motion.js', [ 'gsap', 'cas-hero' ], filemtime( $dir . '/js/cas-hero-motion.js' ), true );
+		}
+
+		wp_enqueue_script( 'cas-motion', $uri . '/js/cas-motion.js', [ 'gsap', 'cas-scrolltrigger', 'cas-site-extras' ], filemtime( $dir . '/js/cas-motion.js' ), true );
 	},
 	23
 );
