@@ -72,6 +72,7 @@ function cas_render_header() {
 
 	ob_start();
 	?>
+	<div class="glow-layer" aria-hidden="true"></div>
 	<nav class="site-nav" aria-label="Main">
 		<div class="nav-top">
 			<div class="inner">
