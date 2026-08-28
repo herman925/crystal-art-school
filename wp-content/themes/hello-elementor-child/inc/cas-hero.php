@@ -20,8 +20,8 @@ const CAS_HERO_SLIDES = 3;
 
 /**
  * Slot ratios are measured from the prototype: the large image occupies 41.7% x 79% of
- * a 1862:780 stage and the small one 24% x 50%, which at the shipped page width of
- * 1168px comes to 487x387 and 280x245. The recommendations below are those doubled, so
+ * a 1862:780 stage and the small one 24% x 50%, which at the shared 1440px wrapper's
+ * 1392px content width comes to about 580x442 and 334x280. The recommendations below are those doubled, so
  * they stay sharp on high-density displays without asking for needlessly large files.
  */
 function cas_hero_fields() {
@@ -95,6 +95,103 @@ function cas_hero_value( $slide, $field ) {
 	return get_theme_mod( "cas_hero_{$slide}_{$field}", cas_hero_default( $slide, $field ) );
 }
 
+/**
+ * Render one hero image with the responsive ladder shipped beside static theme assets.
+ *
+ * Customizer image controls normally return a WordPress attachment URL, so those use
+ * WordPress's own generated srcset. The shipped defaults live in the child theme and
+ * use the checked-in derivatives; only files that exist are offered, so a changed
+ * default cannot create a row of 404s. Width and height reserve the crop box before
+ * either image paints.
+ */
+function cas_hero_img( $url, $sizes, $attrs = [] ) {
+	if ( ! $url ) {
+		return '';
+	}
+
+	$theme_dir = trailingslashit( get_stylesheet_directory() ) . 'img/';
+	$theme_uri = trailingslashit( get_stylesheet_directory_uri() ) . 'img/';
+	$path      = preg_replace( '/[?#].*$/', '', $url );
+	$rel       = '';
+
+	if ( 0 === strpos( $path, $theme_uri ) ) {
+		$rel = ltrim( substr( $path, strlen( $theme_uri ) ), '/' );
+	}
+
+	if ( $rel && false === strpos( $rel, '..' ) && is_readable( $theme_dir . $rel ) ) {
+		$size = getimagesize( $theme_dir . $rel );
+
+		if ( ! $size ) {
+			return '';
+		}
+
+		$ext         = pathinfo( $rel, PATHINFO_EXTENSION );
+		$stem        = substr( $rel, 0, - ( strlen( $ext ) + 1 ) );
+		$derivatives = [];
+
+		foreach ( glob( $theme_dir . $stem . '-*.' . $ext ) ?: [] as $candidate ) {
+			$name = basename( $candidate );
+
+			if ( ! preg_match( '/-(\d+)\.' . preg_quote( $ext, '/' ) . '$/i', $name ) ) {
+				continue;
+			}
+
+			$candidate_size = getimagesize( $candidate );
+
+			if ( ! $candidate_size || $candidate_size[0] >= $size[0] ) {
+				continue;
+			}
+
+			$candidate_rel = substr( $candidate, strlen( $theme_dir ) );
+			$derivatives[ (int) $candidate_size[0] ] = esc_url( $theme_uri . $candidate_rel ) . ' ' . (int) $candidate_size[0] . 'w';
+		}
+
+		$render_attrs = [
+			'alt'    => '',
+			'width'  => (int) $size[0],
+			'height' => (int) $size[1],
+		];
+
+		if ( $derivatives ) {
+			ksort( $derivatives, SORT_NUMERIC );
+			$derivatives[]       = esc_url( $theme_uri . $rel ) . ' ' . (int) $size[0] . 'w';
+			$render_attrs['srcset'] = implode( ', ', $derivatives );
+			$render_attrs['sizes']  = $sizes;
+		}
+
+		foreach ( $attrs as $name => $value ) {
+			if ( 'alt' !== $name ) {
+				$render_attrs[ $name ] = $value;
+			}
+		}
+
+		$out = '<img src="' . esc_url( $theme_uri . $rel ) . '"';
+
+		foreach ( $render_attrs as $name => $value ) {
+			$out .= ' ' . sanitize_key( $name ) . '="' . esc_attr( $value ) . '"';
+		}
+
+		return $out . '>';
+	}
+
+	$attachment = attachment_url_to_postid( $url );
+
+	if ( $attachment ) {
+		$attrs['alt']   = '';
+		$attrs['sizes'] = $sizes;
+
+		return wp_get_attachment_image( $attachment, 'full', false, $attrs );
+	}
+
+	$out = '<img src="' . esc_url( $url ) . '" alt=""';
+
+	foreach ( $attrs as $name => $value ) {
+		$out .= ' ' . sanitize_key( $name ) . '="' . esc_attr( $value ) . '"';
+	}
+
+	return $out . '>';
+}
+
 add_action(
 	'customize_register',
 	function ( $wp_customize ) {
@@ -139,8 +236,7 @@ add_action(
 );
 
 function cas_render_hero() {
-	$courses = get_page_by_path( 'courses' );
-	$cta     = $courses ? get_permalink( $courses ) : home_url( '/' );
+	$cta = cas_page_url( 'courses' );
 
 	ob_start();
 	?>
@@ -177,12 +273,25 @@ function cas_render_hero() {
 						<?php
 						/*
 						 * Slide 1's large image is the one actually seen on load, so it takes
-						 * priority and the rest are demoted rather than racing it. None may be
-						 * lazy-loaded: every one is above the fold at all tested widths.
+						 * priority and the inactive slides are lazy-loaded rather than racing it.
+						 * They should not compete with the first image for the page's initial
+						 * request budget.
 						 */
 						?>
-						<figure class="hero__img hero__img--large"><img src="<?php echo esc_url( cas_hero_value( $i, 'large' ) ); ?>" alt="" fetchpriority="<?php echo $first ? 'high' : 'low'; ?>" decoding="async"></figure>
-						<figure class="hero__img hero__img--small"><img src="<?php echo esc_url( cas_hero_value( $i, 'small' ) ); ?>" alt="" fetchpriority="low" decoding="async"></figure>
+						<?php
+						$large_attrs = [
+							'fetchpriority' => $first ? 'high' : 'low',
+							'loading'      => $first ? 'eager' : 'lazy',
+							'decoding'     => 'async',
+						];
+						$small_attrs = [
+							'fetchpriority' => 'low',
+							'loading'      => $first ? 'eager' : 'lazy',
+							'decoding'     => 'async',
+						];
+						?>
+						<figure class="hero__img hero__img--large"><?php echo cas_hero_img( cas_hero_value( $i, 'large' ), '(max-width: 860px) calc(70vw - 22px), (max-width: 1440px) calc(41.7vw - 20px), 580px', $large_attrs ); // phpcs:ignore WordPress.Security.EscapeOutput ?></figure>
+						<figure class="hero__img hero__img--small"><?php echo cas_hero_img( cas_hero_value( $i, 'small' ), '(max-width: 860px) calc(38vw - 12px), (max-width: 1440px) calc(24vw - 12px), 334px', $small_attrs ); // phpcs:ignore WordPress.Security.EscapeOutput ?></figure>
 					</div>
 				</article>
 			<?php endforeach; ?>

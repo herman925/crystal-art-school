@@ -60,16 +60,13 @@ add_shortcode(
 );
 
 function cas_page_url( $slug ) {
-	// Tutor LMS registers its course post type on the `courses` slug, so no WordPress
-	// page can ever hold it: get_page_by_path() returns null and the fallback below
-	// sends every catalogue link to the homepage. The archive is the address that
-	// resolves; the page lookup stays as the fallback for the case where Tutor is off.
+	// Tutor LMS registers its course post type on the `courses` slug, so the archive is
+	// the only valid catalogue destination. Never pass this slug through the page lookup;
+	// if Tutor is unavailable, the home URL is safer than a misleading page match.
 	if ( 'courses' === $slug ) {
 		$archive = get_post_type_archive_link( 'courses' );
 
-		if ( $archive ) {
-			return $archive;
-		}
+		return $archive ? $archive : home_url( '/' );
 	}
 
 	$page = get_page_by_path( $slug );
