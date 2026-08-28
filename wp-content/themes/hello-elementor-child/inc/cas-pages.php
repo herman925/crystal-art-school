@@ -50,7 +50,7 @@ function cas_render_faq() {
 	ob_start();
 	echo cas_page_hero( 'Questions, answered', 'Ask me anything.' ); // phpcs:ignore WordPress.Security.EscapeOutput
 	?>
-	<div class="pg-wrap">
+	<main class="container" id="content" tabindex="-1">
 		<section id="faq" class="section">
 			<div class="section-head">
 				<h2 class="section-title" id="faq-h">Frequently asked questions</h2>
@@ -79,7 +79,7 @@ function cas_render_faq() {
 			</p>
 			<div class="social-row"><?php echo cas_social_links( 'social-btn' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></div>
 		</section>
-	</div>
+	</main>
 	<?php
 
 	return ob_get_clean();
