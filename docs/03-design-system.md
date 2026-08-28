@@ -24,7 +24,8 @@ in a component — read a token.
 
 - **Shape:** `--radius-card: 16px`, `--radius-pill: 999px`, `--r-promo: 0 0 54px 0`
   (the signature bottom-right scoop), `--r-sharp: 2px` (chips/flags).
-- **Layout:** `--site-max: 1440px`, `--page-max: 1216px`, `--gutter: 24px`.
+- **Layout:** `--site-max: 1440px`, `--gutter: 24px`. Both `.container` and `.pg-wrap`
+  use the shared `--site-max` cap; there is no separate page-width token.
 - **Type:** `--font-marker`/`--font-display*` (Bodoni Moda), `--font-body` (Archivo),
   `--font-cond`/`--font-hand` (Oswald), `--font-stencil` (Saira Stencil One).
 - **Motion:** `--ease-brush`, `--ease-pop`, `--ease-out`, `--dur-*`, `--stagger`.
