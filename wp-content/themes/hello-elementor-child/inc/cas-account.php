@@ -996,7 +996,7 @@ body.tutor-screen-frontend-dashboard .tutor-login-wrap {
 
 /* Tutor's retrieve-password template supplies a card of its own. The auth card is
    now the surface, so flatten only that inner shell and keep Tutor's form intact. */
-.cas-retrieve-password-form > .tutor-card {
+body.cas-account-page .cas-retrieve-password-form .tutor-card {
   background: transparent;
   border: 0;
   border-radius: 0;
@@ -1004,7 +1004,7 @@ body.tutor-screen-frontend-dashboard .tutor-login-wrap {
   margin: 0 !important;
   max-width: none !important;
 }
-.cas-retrieve-password-form > .tutor-card > form { padding: 0 !important; }
+body.cas-account-page .cas-retrieve-password-form .tutor-card > form { padding: 0 !important; }
 .cas-account-back-link { margin-top: 12px; }
 CSS;
 }
