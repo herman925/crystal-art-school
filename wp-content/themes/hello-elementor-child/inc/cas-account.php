@@ -83,11 +83,38 @@ function cas_account_page_ids() {
 }
 
 /**
- * Which of Tutor's pages the request is on, or '' for anything else.
+ * Whether Tutor has redirected to its order-placement success screen.
+ *
+ * Tutor's native payment handler renders the success template from a URL on the
+ * site's home route, so it is not one of the configured Tutor pages. Detect the
+ * read-only success request here so the account CSS and checkout footer variant
+ * are still available to the template override below.
+ *
+ * @return bool
+ */
+function cas_account_is_checkout_success() {
+	if ( is_admin() || ! isset( $_GET['tutor_order_placement'], $_GET['order_id'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		return false;
+	}
+
+	if ( ! is_scalar( $_GET['tutor_order_placement'] ) || ! is_scalar( $_GET['order_id'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		return false;
+	}
+
+	return 'success' === (string) wp_unslash( $_GET['tutor_order_placement'] ) // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		&& absint( wp_unslash( $_GET['order_id'] ) ) > 0; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+}
+
+/**
+ * Whether this request is one of Tutor's pages, or '' for anything else.
  *
  * @return string
  */
 function cas_account_current_key() {
+	if ( cas_account_is_checkout_success() ) {
+		return 'checkout-success';
+	}
+
 	if ( is_admin() || ! is_page() ) {
 		return '';
 	}
@@ -196,6 +223,39 @@ function cas_account_dashboard_url() {
  */
 function cas_account_courses_url() {
 	return (string) cas_page_url( 'courses' );
+}
+
+/**
+ * Tutor's basket page, or '' when it is not configured.
+ *
+ * @return string
+ */
+function cas_account_cart_url() {
+	if ( class_exists( '\\Tutor\\Ecommerce\\CartController' ) && method_exists( '\\Tutor\\Ecommerce\\CartController', 'get_page_url' ) ) {
+		return (string) \Tutor\Ecommerce\CartController::get_page_url();
+	}
+
+	$id = cas_account_page_ids()['cart'];
+
+	return $id ? (string) get_permalink( $id ) : '';
+}
+
+/**
+ * Whether the request is part of the checkout journey.
+ *
+ * The cart and checkout pages are normal WordPress pages, while Tutor renders
+ * the success screen from a home URL with query arguments. Keeping this test in
+ * one place lets the PHP footer mirror the prototype's checkout variant without
+ * changing the footer used by unrelated pages.
+ *
+ * @return bool
+ */
+function cas_account_is_checkout_surface() {
+	return in_array(
+		cas_account_current_key(),
+		array( 'cart', 'checkout', 'checkout-success' ),
+		true
+	);
 }
 
 /* -------------------------------------------------------------------------
@@ -729,8 +789,332 @@ function cas_render_dashboard() {
 add_shortcode( 'cas_dashboard', 'cas_render_dashboard' );
 
 /* -------------------------------------------------------------------------
+ * Checkout consent
+ * ---------------------------------------------------------------------- */
+
+/**
+ * Whether the current request is Tutor's native pay-now submission.
+ *
+ * Tutor verifies the checkout nonce before its order handler runs. This flag is
+ * used only to gate the custom consent control and to attach consent metadata after
+ * Tutor has placed the order; it never replaces Tutor's nonce, validation or payment
+ * handling.
+ *
+ * @return bool
+ */
+function cas_account_checkout_submission() {
+	if ( ! isset( $_POST['tutor_action'] ) || ! is_scalar( $_POST['tutor_action'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		return false;
+	}
+
+	return 'tutor_pay_now' === (string) wp_unslash( $_POST['tutor_action'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+}
+
+/**
+ * Whether the checkout consent checkbox was submitted as checked.
+ *
+ * @return bool
+ */
+function cas_account_checkout_terms_checked() {
+	if ( ! isset( $_POST['agree_to_terms'] ) || ! is_scalar( $_POST['agree_to_terms'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		return false;
+	}
+
+	return '1' === (string) wp_unslash( $_POST['agree_to_terms'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+}
+
+/**
+ * Require the custom consent before Tutor creates a single-course order.
+ *
+ * Tutor's native GDPR validator only checks configured consent records. The current
+ * install has none, so this supported purchase filter closes that server-side gap for
+ * the native single-course checkout path before order creation. Tutor still owns the
+ * nonce, cart, billing, payment and order handlers.
+ *
+ * @param bool|WP_Error $can_buy Existing Tutor purchase result.
+ *
+ * @return bool|WP_Error
+ */
+function cas_account_require_checkout_terms( $can_buy ) {
+	if ( ! cas_account_checkout_submission() || cas_account_checkout_terms_checked() || is_wp_error( $can_buy ) ) {
+		return $can_buy;
+	}
+
+	return new WP_Error(
+		'cas_checkout_terms_required',
+		__( 'Please accept the checkout terms to continue.', 'hello-elementor-child' )
+	);
+}
+
+add_filter( 'tutor_can_purchase_course', 'cas_account_require_checkout_terms' );
+
+/**
+ * Whether Tutor already owns a checkout consent control.
+ *
+ * Do not print a second checkbox when an administrator later configures Tutor's
+ * native Terms page or GDPR checkout consent. Tutor remains the source of truth in
+ * that case; the empty-copy mechanism below is only the safe current-install path.
+ *
+ * @return bool
+ */
+function cas_account_checkout_has_native_consent() {
+	if ( function_exists( 'tutor_utils' ) && tutor_utils()->get_toc_page_link() ) {
+		return true;
+	}
+
+	if ( class_exists( '\\Tutor\\GDPR\\Controllers\\LegalConsent' ) ) {
+		$consents = \Tutor\GDPR\Controllers\LegalConsent::get_consent_by_display_key(
+			\Tutor\GDPR\Controllers\LegalConsent::DISPLAY_ON_CHECKOUT
+		);
+
+		if ( is_array( $consents ) ) {
+			foreach ( $consents as $consent ) {
+				if ( is_object( $consent ) && ! empty( $consent->is_active ) ) {
+					return true;
+				}
+			}
+		}
+	}
+
+	return false;
+}
+
+/**
+ * The checkout consent control mounted inside Tutor's checkout form.
+ *
+ * The copy span is intentionally empty until the client supplies the final legal
+ * wording. The link destination is the existing About page's `#terms` section.
+ *
+ * @return string
+ */
+function cas_account_checkout_terms_markup() {
+	$terms_url = esc_url( cas_page_url( 'about' ) . '#terms' );
+	$checked   = checked( cas_account_checkout_terms_checked(), true, false );
+
+	ob_start();
+	?>
+	<div class="tutor-form-row tutor-mt-20 cas-member-terms cas-checkout-terms">
+		<div class="tutor-input-field">
+			<div class="tutor-input-wrapper">
+				<input
+					id="cas-checkout-terms"
+					type="checkbox"
+					class="tutor-checkbox tutor-checkbox-md tutor-form-check-input"
+					name="agree_to_terms"
+					value="1"
+					required
+					aria-label="<?php esc_attr_e( 'Checkout terms consent', 'hello-elementor-child' ); ?>"
+					aria-describedby="cas-checkout-terms-link"
+					<?php echo $checked; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+				>
+				<label for="cas-checkout-terms">
+					<span class="cas-checkout-terms-copy"></span>
+					<a id="cas-checkout-terms-link" href="<?php echo $terms_url; ?>">Terms &amp; privacy</a>
+				</label>
+			</div>
+		</div>
+	</div>
+	<?php
+
+	return ob_get_clean();
+}
+
+/**
+ * Print the checkout consent control in Tutor's own checkout form.
+ *
+ * Tutor's checkout-details template exposes this hook before its order details
+ * markup. The form, nonce and payment controls remain entirely Tutor-owned.
+ *
+ * @return void
+ */
+function cas_account_render_checkout_terms() {
+	if ( cas_account_checkout_has_native_consent() ) {
+		return;
+	}
+
+	echo cas_account_checkout_terms_markup(); // phpcs:ignore WordPress.Security.EscapeOutput
+}
+
+add_action( 'tutor_before_checkout_order_details', 'cas_account_render_checkout_terms', 999 );
+
+/**
+ * Store the accepted checkout consent after Tutor has created the order.
+ *
+ * Only the acceptance flag and UTC timestamp are stored. No legal wording or
+ * fabricated receipt data is persisted. The action fires from Tutor's order
+ * creation path, so this function never creates an order itself.
+ *
+ * @param int|string|array|object $order Newly placed Tutor order id/data.
+ *
+ * @return void
+ */
+function cas_account_store_checkout_terms_consent( $order ) {
+	if ( ! cas_account_checkout_submission() || ! cas_account_checkout_terms_checked() ) {
+		return;
+	}
+
+	$order_id = is_scalar( $order )
+		? absint( $order )
+		: ( is_array( $order ) && isset( $order['id'] )
+			? absint( $order['id'] )
+			: ( is_object( $order ) && isset( $order->id ) ? absint( $order->id ) : 0 ) );
+
+	if ( ! $order_id || ! class_exists( '\\Tutor\\Models\\OrderMetaModel' ) ) {
+		return;
+	}
+
+	try {
+		\Tutor\Models\OrderMetaModel::update_meta( $order_id, '_cas_checkout_terms_consent', '1' );
+		\Tutor\Models\OrderMetaModel::update_meta( $order_id, '_cas_checkout_terms_consent_at', current_time( 'mysql', true ) );
+	} catch ( \Throwable $exception ) {
+		// Consent storage must not interrupt Tutor's already-created order.
+		return;
+	}
+}
+
+add_action( 'tutor_order_placement_success', 'cas_account_store_checkout_terms_consent' );
+
+/* -------------------------------------------------------------------------
  * [cas_checkout]
  * ---------------------------------------------------------------------- */
+
+/**
+ * The purchase-history route used by Tutor's native order confirmation.
+ *
+ * @return string
+ */
+function cas_account_checkout_purchase_history_url() {
+	if ( class_exists( '\\TUTOR\\Dashboard' ) && method_exists( '\\TUTOR\\Dashboard', 'get_account_page_url' ) ) {
+		return (string) \TUTOR\Dashboard::get_account_page_url( 'billing' );
+	}
+
+	$dashboard_url = cas_account_dashboard_url();
+
+	return $dashboard_url ? $dashboard_url . '#purchases' : '';
+}
+
+/**
+ * Whether an order belongs to the currently authenticated student.
+ *
+ * The order id is supplied in the success URL, so never expose its total or item
+ * count from an arbitrary guessed id. Guest/unauthenticated visitors still receive
+ * the generic success card, but private order details are omitted until Tutor has
+ * an authenticated owner context.
+ *
+ * @param mixed $order Tutor order data.
+ *
+ * @return bool
+ */
+function cas_account_checkout_order_belongs_to_current_user( $order ) {
+	if ( ! is_object( $order ) || ! function_exists( 'get_current_user_id' ) ) {
+		return false;
+	}
+
+	$current_user_id = absint( get_current_user_id() );
+	$order_user_id   = isset( $order->user_id ) ? absint( $order->user_id ) : 0;
+
+	if ( ! $order_user_id && isset( $order->student ) ) {
+		if ( is_object( $order->student ) && isset( $order->student->id ) ) {
+			$order_user_id = absint( $order->student->id );
+		} elseif ( is_array( $order->student ) && isset( $order->student['id'] ) ) {
+			$order_user_id = absint( $order->student['id'] );
+		}
+	}
+
+	return $current_user_id > 0 && $order_user_id > 0 && $current_user_id === $order_user_id;
+}
+
+/**
+ * Render Tutor's native order-placement success state inside the account shell.
+ *
+ * Tutor has already completed its native nonce, validation, cart and payment flow
+ * before loading this template. The order summary is read from OrderModel only;
+ * missing data is omitted rather than replaced with invented receipt values.
+ *
+ * @param int|string $order_id Order id supplied by Tutor.
+ * @param string     $order_status Placement status supplied by Tutor.
+ *
+ * @return string
+ */
+function cas_account_render_checkout_success( $order_id, $order_status = 'success' ) {
+	if ( 'success' !== (string) $order_status || ! absint( $order_id ) ) {
+		return '';
+	}
+
+	$order = false;
+
+	if ( class_exists( '\\Tutor\\Models\\OrderModel' ) ) {
+		try {
+			$order = ( new \Tutor\Models\OrderModel() )->get_order_by_id( absint( $order_id ) );
+		} catch ( \Throwable $exception ) {
+			$order = false;
+		}
+	}
+
+	$has_receipt = $order
+		&& is_object( $order )
+		&& isset( $order->id, $order->items, $order->total_price )
+		&& absint( $order->id ) === absint( $order_id )
+		&& cas_account_checkout_order_belongs_to_current_user( $order )
+		&& is_countable( $order->items )
+		&& is_numeric( $order->total_price );
+
+	$purchase_history_url = cas_account_checkout_purchase_history_url();
+	$dashboard_url        = cas_account_dashboard_url();
+	$courses_url          = cas_account_courses_url();
+	$terms_url            = esc_url( cas_page_url( 'about' ) . '#terms' );
+
+	ob_start();
+	?>
+	<section class="cas-checkout-confirmation" data-stage="3" tabindex="-1">
+		<div class="finish-card show" tabindex="-1" aria-labelledby="cas-checkout-success-title" style="max-width:620px;margin:10px auto 80px;">
+			<div class="fc-star" aria-hidden="true">&#10022;</div>
+			<h2 id="cas-checkout-success-title">Order placed</h2>
+			<?php if ( $has_receipt ) : ?>
+				<p id="fc-line">
+					Your receipt is saved to
+					<?php if ( $purchase_history_url ) : ?>
+						<a href="<?php echo esc_url( $purchase_history_url ); ?>">Purchase history</a>
+					<?php else : ?>
+						Purchase history
+					<?php endif; ?>
+					in your dashboard.
+				</p>
+			<?php endif; ?>
+			<?php if ( $has_receipt ) : ?>
+				<div class="cert" aria-label="Order summary">
+					<div class="c1">Crystal's Art School</div>
+					<div class="c2">Order <span id="order-no"><?php echo esc_html( (string) $order->id ); ?></span></div>
+					<div class="c3">
+						<span id="order-count"><?php echo esc_html( (string) count( $order->items ) ); ?></span>
+						<span id="order-noun"><?php echo 1 === count( $order->items ) ? 'item' : 'items'; ?></span>
+						&middot;
+						<span id="order-total">
+							<?php
+							if ( function_exists( 'tutor_get_formatted_price' ) ) {
+								echo wp_kses_post( tutor_get_formatted_price( (float) $order->total_price ) );
+							}
+							?>
+						</span>
+					</div>
+				</div>
+			<?php endif; ?>
+			<div class="fc-btns">
+				<?php if ( $dashboard_url ) : ?>
+					<a class="btn primary big" href="<?php echo esc_url( $dashboard_url ); ?>">Go to my courses</a>
+				<?php endif; ?>
+				<?php if ( $courses_url ) : ?>
+					<a class="btn teal" href="<?php echo esc_url( $courses_url ); ?>">Keep browsing</a>
+				<?php endif; ?>
+			</div>
+			<p class="cas-checkout-terms-footer"><a href="<?php echo $terms_url; ?>">Terms &amp; privacy</a></p>
+		</div>
+	</section>
+	<?php
+	$success_markup = ob_get_clean();
+
+	return cas_account_checkout_shell( $success_markup, 'success' );
+}
 
 /**
  * The basket and checkout shell.
@@ -742,12 +1126,20 @@ add_shortcode( 'cas_dashboard', 'cas_render_dashboard' );
  * three of its stages, which is why Tutor's separate cart page gets the same one.
  *
  * @param string $inner Already-rendered markup for the stage (Tutor's).
- * @param string $stage 'cart' or 'checkout'.
+ * @param string $stage 'cart', 'checkout' or 'success'.
  *
  * @return string
  */
 function cas_account_checkout_shell( $inner, $stage ) {
-	$is_cart = ( 'cart' === $stage );
+	$is_cart    = ( 'cart' === $stage );
+	$is_success = ( 'success' === $stage );
+	$back_url   = ( 'checkout' === $stage ) ? cas_account_cart_url() : '';
+
+	// Each step renders aria-current="step" for the live stage and
+	// aria-current="false" for the remaining stages.
+	$step_one_state   = $is_cart ? 'active' : 'done';
+	$step_two_state   = $is_cart ? '' : ( $is_success ? 'done' : 'active' );
+	$step_three_state = $is_success ? 'active' : '';
 
 	ob_start();
 	?>
@@ -760,18 +1152,22 @@ function cas_account_checkout_shell( $inner, $stage ) {
 	<div class="container page-lead-wrap"><p class="page-lead">Review what&rsquo;s in your basket, then we&rsquo;ll take it from here.</p></div>
 	<div class="container cas-account-body">
 		<div class="steps">
-			<div class="step <?php echo $is_cart ? 'active' : 'done'; ?>"><span class="sn">1</span> Basket</div>
+			<div class="step <?php echo esc_attr( $step_one_state ); ?>" aria-current="<?php echo $is_cart ? 'step' : 'false'; ?>"><span class="sn">1</span> Basket</div>
 			<span class="step-arrow" aria-hidden="true">&#8594;</span>
-			<div class="step <?php echo $is_cart ? '' : 'active'; ?>"><span class="sn">2</span> Details &amp; payment</div>
+			<div class="step <?php echo esc_attr( $step_two_state ); ?>" aria-current="<?php echo ( ! $is_cart && ! $is_success ) ? 'step' : 'false'; ?>"><span class="sn">2</span> Details &amp; payment</div>
 			<span class="step-arrow" aria-hidden="true">&#8594;</span>
-			<div class="step"><span class="sn">3</span> Confirmation</div>
+			<div class="step <?php echo esc_attr( $step_three_state ); ?>" aria-current="<?php echo $is_success ? 'step' : 'false'; ?>"><span class="sn">3</span> Confirmation</div>
 		</div>
 		<?php echo $inner; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+		<?php if ( $back_url ) : ?>
+			<a class="btn ghost full cas-account-back-link" href="<?php echo esc_url( $back_url ); ?>">&#8592; Back to basket</a>
+		<?php endif; ?>
 	</div>
 	<?php
 
 	return ob_get_clean();
 }
+
 
 /**
  * Basket / checkout as a shortcode.
@@ -905,6 +1301,12 @@ add_filter(
 		if ( $key ) {
 			$classes[] = 'cas-account-page';
 			$classes[] = 'cas-account-' . $key;
+
+			if ( 'checkout-success' === $key ) {
+				// The success route is a home URL, but it still needs the checkout
+				// full-bleed rules and the checkout footer variant.
+				$classes[] = 'cas-account-checkout';
+			}
 
 			if ( cas_account_is_retrieve_password() ) {
 				$classes[] = 'cas-account-retrieve-password';
