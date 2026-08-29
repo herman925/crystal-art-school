@@ -707,6 +707,396 @@ add_shortcode(
  * ---------------------------------------------------------------------- */
 
 /**
+ * Whether Tutor is rendering the dashboard landing route rather than a native
+ * dashboard sub-route. Query vars are used instead of a hard-coded page slug because
+ * Tutor lets the integrator move or rename the dashboard page.
+ *
+ * @return bool
+ */
+function cas_account_dashboard_home_request() {
+	$page = function_exists( 'get_query_var' ) ? (string) get_query_var( 'tutor_dashboard_page' ) : '';
+	$sub  = function_exists( 'get_query_var' ) ? (string) get_query_var( 'tutor_dashboard_sub_page' ) : '';
+
+	return '' === $page && '' === $sub;
+}
+
+/**
+ * The studio panels are the student surface. Instructor/admin dashboard internals stay
+ * on Tutor's native landing template, just like every other dashboard sub-route.
+ *
+ * @return bool
+ */
+function cas_account_dashboard_should_render_studio() {
+	if ( ! cas_account_dashboard_home_request() || ! is_user_logged_in() ) {
+		return false;
+	}
+
+	if ( class_exists( 'TUTOR\\User' ) && method_exists( 'TUTOR\\User', 'is_student_view' ) ) {
+		return \TUTOR\User::is_student_view();
+	}
+
+	return true;
+}
+
+/**
+ * Return the enrolled courses that Tutor says belong to the current student.
+ * No browser demo records are consulted; unpublished catalogue posts are
+ * deliberately omitted from the display.
+ *
+ * @param int $user_id WordPress user id.
+ * @return array<int,array<string,mixed>>
+ */
+function cas_account_dashboard_courses( $user_id ) {
+	if ( ! $user_id || ! function_exists( 'tutor_utils' ) ) {
+		return array();
+	}
+
+	$utils = tutor_utils();
+	if ( ! is_object( $utils ) || ! method_exists( $utils, 'get_enrolled_courses_ids_by_user' ) ) {
+		return array();
+	}
+
+	$ids = $utils->get_enrolled_courses_ids_by_user( $user_id );
+	$ids = is_array( $ids ) ? array_unique( array_map( 'absint', $ids ) ) : array();
+	$rows = array();
+
+	foreach ( $ids as $course_id ) {
+		if ( ! $course_id ) {
+			continue;
+		}
+
+		$post = get_post( $course_id );
+		if ( ! $post instanceof WP_Post || 'courses' !== $post->post_type || ! in_array( $post->post_status, array( 'publish', 'private' ), true ) ) {
+			continue;
+		}
+
+		$stats = method_exists( $utils, 'get_course_completed_percent' )
+			? $utils->get_course_completed_percent( $course_id, $user_id, true )
+			: array();
+		$stats = is_array( $stats ) ? $stats : array();
+		$total = max( 0, (int) ( $stats['total_count'] ?? 0 ) );
+		$done  = max( 0, (int) ( $stats['completed_count'] ?? 0 ) );
+		$done  = $total ? min( $done, $total ) : $done;
+		$percent = $total ? (int) round( ( $done / $total ) * 100 ) : 0;
+		$percent = max( 0, min( 100, $percent ) );
+		$first_lesson = method_exists( $utils, 'get_course_first_lesson' )
+			? $utils->get_course_first_lesson( $course_id )
+			: false;
+		$course_url = get_permalink( $course_id );
+		$next_url   = $first_lesson ? $first_lesson : $course_url;
+
+		if ( ! $course_url || ! $next_url ) {
+			continue;
+		}
+
+		$rows[] = array(
+			'id'        => $course_id,
+			'title'     => get_the_title( $course_id ),
+			'url'       => $course_url,
+			'next_url'  => $next_url,
+			'image'     => get_the_post_thumbnail_url( $course_id, 'medium' ),
+			'done'      => $done,
+			'total'     => $total,
+			'percent'   => $percent,
+		);
+	}
+
+	return $rows;
+}
+
+/**
+ * Aggregate real Tutor progress for the student's enrolled courses.
+ *
+ * @param array<int,array<string,mixed>> $courses Enrolled course rows.
+ * @return array{done:int,total:int,percent:int}
+ */
+function cas_account_dashboard_progress( $courses ) {
+	$done  = 0;
+	$total = 0;
+
+	foreach ( $courses as $course ) {
+		$done  += max( 0, (int) ( $course['done'] ?? 0 ) );
+		$total += max( 0, (int) ( $course['total'] ?? 0 ) );
+	}
+
+	$percent = $total ? (int) round( ( $done / $total ) * 100 ) : 0;
+
+	return array(
+		'done'    => $done,
+		'total'   => $total,
+		'percent' => max( 0, min( 100, $percent ) ),
+	);
+}
+
+/**
+ * Get catalogue recommendations without inventing course titles, prices or tiers.
+ * The brief permits newest-first fallback because no approved focus field exists in
+ * Tutor's account data.
+ *
+ * @param array<int,int> $enrolled_ids Enrolled course ids.
+ * @return array<int,array<string,mixed>>
+ */
+function cas_account_dashboard_recommendations( $enrolled_ids ) {
+	$query = new WP_Query(
+		array(
+			'post_type'      => 'courses',
+			'post_status'    => 'publish',
+			'posts_per_page' => 3,
+			'post__not_in'   => array_map( 'absint', (array) $enrolled_ids ),
+			'orderby'        => 'date',
+			'order'          => 'DESC',
+			'no_found_rows'  => true,
+		)
+	);
+	$rows = array();
+
+	foreach ( $query->posts as $post ) {
+		$url = get_permalink( $post->ID );
+		if ( ! $url ) {
+			continue;
+		}
+
+		$rows[] = array(
+			'id'    => (int) $post->ID,
+			'title' => get_the_title( $post->ID ),
+			'url'   => $url,
+			'image' => get_the_post_thumbnail_url( $post->ID, 'medium' ),
+		);
+	}
+
+	return $rows;
+}
+
+/**
+ * Use Tutor's own template loader for account internals. This keeps billing, profile
+ * forms, settings, nonce handling and future Tutor updates in Tutor's ownership.
+ *
+ * @param string               $template  Tutor template key.
+ * @param array<string,mixed>  $variables Variables inherited by the template.
+ * @return string
+ */
+function cas_account_dashboard_native_template( $template, $variables = array() ) {
+	if ( ! function_exists( 'tutor_load_template' ) ) {
+		return '';
+	}
+
+	ob_start();
+	tutor_load_template( $template, $variables );
+	return (string) ob_get_clean();
+}
+
+/**
+ * @return string
+ */
+function cas_account_dashboard_courses_url() {
+	if ( function_exists( 'tutor_utils' ) && method_exists( tutor_utils(), 'course_archive_page_url' ) ) {
+		$url = tutor_utils()->course_archive_page_url();
+		if ( $url ) {
+			return $url;
+		}
+	}
+
+	$url = get_post_type_archive_link( 'courses' );
+	return $url ? $url : home_url( '/' );
+}
+
+/**
+ * Render one empty state with a real catalogue destination.
+ *
+ * @return string
+ */
+function cas_account_dashboard_empty_state() {
+	return '<div class="dash-card dash-empty">'
+		. '<div class="eyebrow">Your studio</div>'
+		. '<h3>Your bench is ready.</h3>'
+		. '<p>Explore the course catalogue when you are ready to begin.</p>'
+		. '<a class="btn primary" href="' . esc_url( cas_account_dashboard_courses_url() ) . '">Explore courses <span class="arr" aria-hidden="true">&#8594;</span></a>'
+		. '</div>';
+}
+
+/**
+ * Build the approved dashboard body. The sixth tab is Profile, which uses Tutor's
+ * native account form; the obsolete community card is intentionally not represented.
+ *
+ * @return string
+ */
+function cas_account_dashboard_body() {
+	$user_id       = get_current_user_id();
+	$courses       = cas_account_dashboard_courses( $user_id );
+	$progress      = cas_account_dashboard_progress( $courses );
+	$enrolled_ids  = array_map(
+		function ( $course ) {
+			return (int) $course['id'];
+		},
+		$courses
+	);
+	$recommendations = cas_account_dashboard_recommendations( $enrolled_ids );
+	$dashboard_url   = function_exists( 'tutor_utils' ) ? tutor_utils()->tutor_dashboard_url() : home_url( '/' );
+	$logout_url      = wp_logout_url( $dashboard_url );
+	$profile_html    = cas_account_dashboard_native_template(
+		'dashboard.account.settings.account',
+		array( 'form_id' => 'cas-dashboard-profile-form' )
+	);
+	$settings_html   = cas_account_dashboard_native_template(
+		'dashboard.account.settings',
+		array( 'back_url' => $dashboard_url )
+	);
+	$billing_html    = cas_account_dashboard_native_template( 'dashboard.account.billing' );
+	$tabs            = array(
+		'overview'  => 'Overview',
+		'courses'   => 'My courses',
+		'progress'  => 'Progress',
+		'purchases' => 'Purchases',
+		'account'   => 'Profile',
+		'settings'  => 'Settings',
+	);
+
+	ob_start();
+	?>
+	<div class="dash-layout cas-studio-dashboard" data-cas-dashboard>
+		<nav class="dash-rail" role="tablist" aria-label="Studio sections" aria-orientation="vertical">
+			<div class="dash-rail-head">
+				<span class="eyebrow">Your studio</span>
+				<span class="hand-note">Make a little, often.</span>
+			</div>
+			<?php $first = true; ?>
+			<?php foreach ( $tabs as $key => $label ) : ?>
+				<button
+					class="dash-tab<?php echo $first ? ' active' : ''; ?>"
+					type="button"
+					role="tab"
+					id="tab-<?php echo esc_attr( $key ); ?>"
+					data-panel="<?php echo esc_attr( $key ); ?>"
+					aria-controls="panel-<?php echo esc_attr( $key ); ?>"
+					aria-selected="<?php echo $first ? 'true' : 'false'; ?>"
+					tabindex="<?php echo $first ? '0' : '-1'; ?>"
+				>
+					<span><?php echo esc_html( $label ); ?></span><span class="arr" aria-hidden="true">&#8594;</span>
+				</button>
+				<?php $first = false; ?>
+			<?php endforeach; ?>
+			<div class="dash-rail-foot">
+				<a class="dash-logout" href="<?php echo esc_url( $logout_url ); ?>">Log out <span class="arr" aria-hidden="true">&#8594;</span></a>
+			</div>
+		</nav>
+		<div class="dash-main" id="dash-main">
+			<section class="dash-panel active" id="panel-overview" data-panel="overview" role="tabpanel" aria-labelledby="tab-overview" tabindex="0">
+				<div class="dash-panel-head"><div><span class="eyebrow">Overview</span><h2>Continue learning</h2></div></div>
+				<?php if ( ! empty( $courses ) ) : ?>
+					<?php $resume = $courses[0]; ?>
+					<article class="resume-card dash-card">
+						<?php if ( $resume['image'] ) : ?><img src="<?php echo esc_url( $resume['image'] ); ?>" alt="" loading="lazy" decoding="async" width="480" height="270"><?php endif; ?>
+						<div class="resume-body"><span class="eyebrow">Pick up where you left off</span><h3><?php echo esc_html( $resume['title'] ); ?></h3><div class="prog-row"><span><?php echo esc_html( (string) $resume['done'] ); ?> / <?php echo esc_html( (string) $resume['total'] ); ?> lessons</span><strong><?php echo esc_html( (string) $resume['percent'] ); ?>%</strong></div><div class="pbar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="<?php echo esc_attr( (string) $resume['percent'] ); ?>"><span style="width:<?php echo esc_attr( (string) $resume['percent'] ); ?>%"></span></div><a class="btn primary" href="<?php echo esc_url( $resume['next_url'] ); ?>">Continue <span class="arr" aria-hidden="true">&#8594;</span></a></div>
+					</article>
+				<?php else : ?>
+					<?php echo cas_account_dashboard_empty_state(); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+				<?php endif; ?>
+				<?php if ( ! empty( $recommendations ) ) : ?>
+					<div class="dash-subhead"><span class="eyebrow">From the catalogue</span><h3>Recommended next</h3></div>
+					<div class="mycourse-grid dash-recommendations">
+						<?php foreach ( $recommendations as $recommendation ) : ?>
+							<a class="mc-course dash-recommendation" href="<?php echo esc_url( $recommendation['url'] ); ?>">
+								<?php if ( $recommendation['image'] ) : ?><img src="<?php echo esc_url( $recommendation['image'] ); ?>" alt="" loading="lazy" decoding="async" width="480" height="270"><?php endif; ?>
+								<span class="mc-body"><span class="eyebrow">Course</span><strong><?php echo esc_html( $recommendation['title'] ); ?></strong><span class="arr" aria-hidden="true">&#8594;</span></span>
+							</a>
+						<?php endforeach; ?>
+					</div>
+				<?php endif; ?>
+			</section>
+
+			<section class="dash-panel" id="panel-courses" data-panel="courses" role="tabpanel" aria-labelledby="tab-courses" tabindex="0" hidden>
+				<div class="dash-panel-head"><div><span class="eyebrow">Studio shelf</span><h2>My courses</h2></div><span class="badge"><?php echo esc_html( (string) count( $courses ) ); ?></span></div>
+				<?php if ( empty( $courses ) ) : ?>
+					<?php echo cas_account_dashboard_empty_state(); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+				<?php else : ?>
+					<div class="mycourse-grid">
+						<?php foreach ( $courses as $course ) : ?>
+							<article class="mc-course dash-card">
+								<?php if ( $course['image'] ) : ?><a href="<?php echo esc_url( $course['url'] ); ?>"><img src="<?php echo esc_url( $course['image'] ); ?>" alt="" loading="lazy" decoding="async" width="480" height="270"></a><?php endif; ?>
+								<div class="mc-body"><span class="eyebrow">Course</span><h3><?php echo esc_html( $course['title'] ); ?></h3><div class="prog-row"><span><?php echo esc_html( (string) $course['done'] ); ?> / <?php echo esc_html( (string) $course['total'] ); ?> lessons</span><strong><?php echo esc_html( (string) $course['percent'] ); ?>%</strong></div><div class="pbar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="<?php echo esc_attr( (string) $course['percent'] ); ?>"><span style="width:<?php echo esc_attr( (string) $course['percent'] ); ?>%"></span></div><a class="btn small" href="<?php echo esc_url( $course['percent'] >= 100 ? $course['url'] : $course['next_url'] ); ?>"><?php echo $course['percent'] >= 100 ? 'Review' : 'Continue'; ?> <span class="arr" aria-hidden="true">&#8594;</span></a></div>
+							</article>
+						<?php endforeach; ?>
+					</div>
+				<?php endif; ?>
+			</section>
+
+			<section class="dash-panel" id="panel-progress" data-panel="progress" role="tabpanel" aria-labelledby="tab-progress" tabindex="0" hidden>
+				<div class="dash-panel-head"><div><span class="eyebrow">The long view</span><h2>Progress</h2></div></div>
+				<div class="dash-card progress-summary"><div class="prog-row"><strong>Overall progress</strong><strong><?php echo esc_html( (string) $progress['percent'] ); ?>%</strong></div><div class="pbar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="<?php echo esc_attr( (string) $progress['percent'] ); ?>"><span style="width:<?php echo esc_attr( (string) $progress['percent'] ); ?>%"></span></div><p><?php echo esc_html( (string) $progress['done'] ); ?> of <?php echo esc_html( (string) $progress['total'] ); ?> lessons completed.</p></div>
+				<?php if ( ! empty( $courses ) ) : ?>
+					<div class="dash-card prog-list">
+						<?php foreach ( $courses as $course ) : ?><div class="prog-course"><div class="prog-row"><a href="<?php echo esc_url( $course['url'] ); ?>"><?php echo esc_html( $course['title'] ); ?></a><strong><?php echo esc_html( (string) $course['percent'] ); ?>%</strong></div><div class="pbar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="<?php echo esc_attr( (string) $course['percent'] ); ?>"><span style="width:<?php echo esc_attr( (string) $course['percent'] ); ?>%"></span></div></div><?php endforeach; ?>
+					</div>
+				<?php else : ?><p class="hand-note">Progress appears here as you finish lessons.</p><?php endif; ?>
+			</section>
+
+			<section class="dash-panel" id="panel-purchases" data-panel="purchases" role="tabpanel" aria-labelledby="tab-purchases" tabindex="0" hidden>
+				<div class="dash-panel-head"><div><span class="eyebrow">Your records</span><h2>Purchases</h2></div></div>
+				<div class="dash-card tutor-panel-host"><?php echo $billing_html; // phpcs:ignore WordPress.Security.EscapeOutput ?></div>
+			</section>
+
+			<section class="dash-panel" id="panel-account" data-panel="account" role="tabpanel" aria-labelledby="tab-account" tabindex="0" hidden>
+				<div class="dash-panel-head"><div><span class="eyebrow">Your details</span><h2>Profile</h2></div></div>
+				<div class="dash-card tutor-panel-host"><?php echo $profile_html; // phpcs:ignore WordPress.Security.EscapeOutput ?></div>
+			</section>
+
+			<section class="dash-panel" id="panel-settings" data-panel="settings" role="tabpanel" aria-labelledby="tab-settings" tabindex="0" hidden>
+				<div class="dash-panel-head"><div><span class="eyebrow">Studio preferences</span><h2>Settings</h2></div></div>
+				<div class="dash-card tutor-panel-host"><?php echo $settings_html; // phpcs:ignore WordPress.Security.EscapeOutput ?></div>
+			</section>
+		</div>
+	</div>
+	<?php
+
+	return (string) ob_get_clean();
+}
+
+/**
+ * Render the shared shell around Tutor's standalone dashboard documents.
+ *
+ * @param bool $include_hero Whether the dashboard welcome band should be printed.
+ * @return void
+ */
+function cas_account_render_dashboard_shell_before( $include_hero = true ) {
+	if ( cas_account_rendered( 'dashboard-shell' ) ) {
+		return;
+	}
+
+	cas_account_rendered( 'dashboard-shell', true );
+
+	if ( ! did_action( 'get_header' ) ) {
+		echo '<a class="skip-link" href="#content">Skip to content</a>'; // phpcs:ignore WordPress.Security.EscapeOutput
+		if ( shortcode_exists( 'cas_header' ) ) {
+			echo do_shortcode( '[cas_header]' ); // phpcs:ignore WordPress.Security.EscapeOutput
+		}
+	}
+
+	echo '<main id="content" class="site-main" tabindex="-1">'; // phpcs:ignore WordPress.Security.EscapeOutput
+
+	if ( $include_hero ) {
+		$hero = cas_account_dash_hero();
+		if ( $hero ) {
+			echo '<div class="container cas-account-dash">' . $hero . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput
+		}
+	}
+}
+
+/**
+ * @return void
+ */
+function cas_account_render_dashboard_shell_after() {
+	if ( ! cas_account_rendered( 'dashboard-shell' ) ) {
+		return;
+	}
+
+	echo '</main>'; // phpcs:ignore WordPress.Security.EscapeOutput
+
+	if ( ! did_action( 'get_header' ) && shortcode_exists( 'cas_footer' ) ) {
+		echo do_shortcode( '[cas_footer]' ); // phpcs:ignore WordPress.Security.EscapeOutput
+	}
+}
+
+/**
  * The welcome band above Tutor's dashboard: `.dash-hero` from the prototype.
  *
  * Every number in it is read, not invented. The prototype also carries a plan chip
@@ -781,9 +1171,7 @@ function cas_render_dashboard() {
 		return cas_account_card( 'Your studio', 'Dashboard', '', $body );
 	}
 
-	$inner = shortcode_exists( 'tutor_dashboard' ) ? do_shortcode( '[tutor_dashboard]' ) : '';
-
-	return '<div class="container cas-account-dash">' . cas_account_dash_hero() . $inner . '</div>';
+	return '<div class="container cas-account-dash">' . cas_account_dash_hero() . cas_account_dashboard_body() . '</div>';
 }
 
 add_shortcode( 'cas_dashboard', 'cas_render_dashboard' );
@@ -1247,10 +1635,9 @@ function cas_account_adopt_content( $content ) {
 
 /*
  * The logged-in dashboard is not a page render at all — Tutor prints its own document
- * — so the site header and footer have to be put back by hand. `did_action('get_header')`
- * distinguishes that case from every other: Tutor's logged-out login template calls
- * get_header() (hello-elementor is not a block theme), and the shortcode path is inside
- * a normal template, so in both of those the header is already on the page.
+ * — so the site header and footer have to be put back by hand. The native landing markup
+ * is buffered between Tutor's hooks and replaced only on the logged-in home route; every
+ * dashboard sub-route keeps Tutor's original markup and behavior.
  */
 add_action( 'tutor_dashboard/before/wrap', 'cas_account_dashboard_before' );
 add_action( 'tutor_dashboard/after/wrap', 'cas_account_dashboard_after' );
@@ -1264,17 +1651,12 @@ function cas_account_dashboard_before() {
 	}
 
 	cas_account_rendered( 'dashboard', true );
+	cas_account_render_dashboard_shell_before( true );
 
-	if ( ! did_action( 'get_header' ) && shortcode_exists( 'cas_header' ) ) {
-		echo do_shortcode( '[cas_header]' ); // phpcs:ignore WordPress.Security.EscapeOutput
-	}
-
-	echo '<main id="main" class="site-main">'; // phpcs:ignore WordPress.Security.EscapeOutput
-
-	$hero = cas_account_dash_hero();
-
-	if ( $hero ) {
-		echo '<div class="container cas-account-dash">' . $hero . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput
+	if ( cas_account_dashboard_should_render_studio() ) {
+		echo '<div class="container cas-account-dash">'; // phpcs:ignore WordPress.Security.EscapeOutput
+		ob_start();
+		cas_account_rendered( 'dashboard-native-body', true );
 	}
 }
 
@@ -1282,11 +1664,19 @@ function cas_account_dashboard_before() {
  * @return void
  */
 function cas_account_dashboard_after() {
-	echo '</main>'; // phpcs:ignore WordPress.Security.EscapeOutput
-
-	if ( ! did_action( 'get_header' ) && shortcode_exists( 'cas_footer' ) ) {
-		echo do_shortcode( '[cas_footer]' ); // phpcs:ignore WordPress.Security.EscapeOutput
+	$native = '';
+	if ( cas_account_rendered( 'dashboard-native-body' ) && ob_get_level() > 0 ) {
+		$native = (string) ob_get_clean();
 	}
+
+	if ( cas_account_dashboard_should_render_studio() && cas_account_rendered( 'dashboard-native-body' ) ) {
+		echo cas_account_dashboard_body(); // phpcs:ignore WordPress.Security.EscapeOutput
+		echo '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput
+	} else {
+		echo $native; // phpcs:ignore WordPress.Security.EscapeOutput
+	}
+
+	cas_account_render_dashboard_shell_after();
 }
 
 /* -------------------------------------------------------------------------
@@ -1331,6 +1721,29 @@ add_action(
 		wp_add_inline_style( 'cas-account', cas_account_css() );
 	},
 	27
+);
+
+add_action(
+	'wp_enqueue_scripts',
+	function () {
+		if ( 'dashboard' !== cas_account_current_key() && ! cas_account_has_shortcode() ) {
+			return;
+		}
+
+		$script = get_stylesheet_directory() . '/js/cas-dashboard.js';
+		if ( ! is_readable( $script ) ) {
+			return;
+		}
+
+		wp_enqueue_script(
+			'cas-dashboard',
+			get_stylesheet_directory_uri() . '/js/cas-dashboard.js',
+			array(),
+			(string) filemtime( $script ),
+			true
+		);
+	},
+	28
 );
 
 /**
@@ -1545,5 +1958,112 @@ body.cas-account-page .cas-account-form #tutor-registration-form > div > .tutor-
 .cas-member-terms .tutor-input-wrapper { align-items: flex-start; }
 .cas-member-terms .tutor-input-wrapper label { line-height: 1.5; }
 .cas-member-terms a { color: var(--coral-ink); text-decoration: underline; }
+
+/* Keep the site's studio layout and the native Tutor routes in the same material language. */
+body.cas-account-page .tutor-dashboard-layout,
+body.tutor-screen-frontend-dashboard .tutor-dashboard-layout {
+  max-width: 1440px;
+  margin: 0 auto;
+  background: var(--cream);
+  color: var(--ink);
+}
+body.cas-account-page .tutor-dashboard-sidebar,
+body.tutor-screen-frontend-dashboard .tutor-dashboard-sidebar {
+  background: var(--surface);
+  border-right: 1px solid var(--line);
+}
+body.cas-account-page .tutor-dashboard-main,
+body.tutor-screen-frontend-dashboard .tutor-dashboard-main {
+  background: var(--cream);
+}
+body.cas-account-page .tutor-dashboard-header,
+body.tutor-screen-frontend-dashboard .tutor-dashboard-header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--line);
+}
+body.cas-account-page .tutor-dashboard-body,
+body.tutor-screen-frontend-dashboard .tutor-dashboard-body {
+  background: transparent;
+  color: var(--ink);
+}
+body.cas-account-page .tutor-dashboard-page,
+body.tutor-screen-frontend-dashboard .tutor-dashboard-page {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 30px clamp(18px, 4vw, 52px) 72px;
+}
+body.cas-account-page .tutor-dashboard-nav-mobile,
+body.tutor-screen-frontend-dashboard .tutor-dashboard-nav-mobile {
+  background: var(--surface);
+  border-top-color: var(--line);
+  border-bottom-color: var(--line);
+}
+body.cas-account-page .tutor-account-page-wrapper,
+body.cas-account-page .tutor-dashboard-isolated-page-wrapper {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 30px clamp(18px, 4vw, 52px) 72px;
+}
+body.cas-account-page .tutor-account-page-wrapper .tutor-card,
+body.cas-account-page .tutor-dashboard-isolated-page-wrapper .tutor-card {
+  box-shadow: var(--shadow-sm);
+}
+.cas-studio-dashboard { padding-bottom: 72px; }
+.cas-studio-dashboard .dash-panel[hidden] { display: none; }
+.cas-studio-dashboard .tutor-panel-host { overflow: hidden; }
+.cas-studio-dashboard .tutor-panel-host > .tutor-card {
+  margin: 0;
+  border: 0;
+  box-shadow: none;
+}
+.cas-studio-dashboard .dash-panel-head {
+  align-items: flex-end;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 22px;
+}
+.cas-studio-dashboard .dash-panel-head h2,
+.cas-studio-dashboard .dash-subhead h3 { margin-bottom: 0; }
+.cas-studio-dashboard .dash-subhead { margin: 34px 0 16px; }
+.cas-studio-dashboard .dash-rail-foot { margin-top: auto; padding-top: 24px; }
+.cas-studio-dashboard .dash-logout {
+  color: var(--muted);
+  display: inline-flex;
+  font-family: var(--font-cond);
+  gap: 8px;
+  letter-spacing: var(--tracking-label);
+  text-transform: uppercase;
+}
+.cas-studio-dashboard .dash-logout:hover { color: var(--coral-ink); }
+.cas-studio-dashboard .dash-recommendation {
+  color: inherit;
+  text-decoration: none;
+}
+.cas-studio-dashboard .dash-recommendation .mc-body {
+  align-items: center;
+  display: grid;
+  gap: 5px;
+  grid-template-columns: 1fr auto;
+}
+.cas-studio-dashboard .dash-recommendation .mc-body .eyebrow { grid-column: 1 / -1; }
+.cas-studio-dashboard .progress-summary p { color: var(--muted); margin: 14px 0 0; }
+.cas-studio-dashboard .prog-list { display: grid; gap: 22px; margin-top: 18px; }
+.cas-studio-dashboard .prog-course a { color: var(--ink); font-weight: 600; }
+
+@media (max-width: 880px) {
+  body.cas-account-page .tutor-dashboard-layout,
+  body.tutor-screen-frontend-dashboard .tutor-dashboard-layout { display: block; }
+  body.cas-account-page .tutor-dashboard-sidebar,
+  body.tutor-screen-frontend-dashboard .tutor-dashboard-sidebar {
+    border-bottom: 1px solid var(--line);
+    border-right: 0;
+  }
+  body.cas-account-page .tutor-dashboard-page,
+  body.tutor-screen-frontend-dashboard .tutor-dashboard-page,
+  body.cas-account-page .tutor-account-page-wrapper,
+  body.cas-account-page .tutor-dashboard-isolated-page-wrapper {
+    padding-inline: 18px;
+  }
+}
 CSS;
 }
