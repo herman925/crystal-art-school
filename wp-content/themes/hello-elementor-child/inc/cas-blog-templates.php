@@ -202,6 +202,25 @@ add_action(
 				'description' => 'The line under the banner. Leave it empty to show no introduction.',
 			)
 		);
+
+		$wp_customize->add_setting(
+			'cas_blog_bio',
+			array(
+				'default'           => cas_blog_bio_default(),
+				'sanitize_callback' => 'sanitize_textarea_field',
+				'transport'         => 'refresh',
+			)
+		);
+
+		$wp_customize->add_control(
+			'cas_blog_bio',
+			array(
+				'label'       => 'Author bio',
+				'section'     => 'cas_page_blog',
+				'type'        => 'textarea',
+				'description' => 'The one-line bio in the article author card. Use Crystal&rsquo;s own wording; leave it empty to show only her name and link.',
+			)
+		);
 	}
 );
 
@@ -217,6 +236,47 @@ add_action(
 function cas_blog_intro_default() {
 	return 'Notes on materials, technique and the slow practice of drawing &mdash; filterable by topic.';
 }
+
+/**
+ * The bio starts with the sentence already supplied for About. Removing the name
+ * keeps the author card from saying "Crystal Lau" twice; the words remain Crystal's
+ * own rather than a second invented description of her work.
+ */
+function cas_blog_bio_default() {
+	$fields  = function_exists( 'cas_about_fields' ) ? cas_about_fields() : array();
+	$default = isset( $fields['cas_about_intro']['default'] ) ? (string) $fields['cas_about_intro']['default'] : '';
+	$intro   = (string) get_theme_mod( 'cas_about_intro', $default );
+	$intro   = wp_strip_all_tags( $intro );
+	$intro   = html_entity_decode( $intro, ENT_QUOTES, 'UTF-8' );
+
+	foreach ( array( 'I’m Crystal Lau, ', "I'm Crystal Lau, " ) as $prefix ) {
+		if ( 0 === strpos( $intro, $prefix ) ) {
+			return trim( substr( $intro, strlen( $prefix ) ) );
+		}
+	}
+
+	return trim( $intro );
+}
+
+/**
+ * The same featured image is cropped into several article/list slots. Tell the
+ * editor the two fixed ratios that matter on the single-post page rather than
+ * making her infer them from the front end.
+ */
+function cas_blog_admin_thumbnail_hint( $content, $post_id ) {
+	$post_type = $post_id ? get_post_type( $post_id ) : '';
+	if ( ! $post_type && function_exists( 'get_current_screen' ) ) {
+		$screen     = get_current_screen();
+		$post_type = $screen ? $screen->post_type : '';
+	}
+
+	if ( 'post' !== $post_type ) {
+		return $content;
+	}
+
+	return $content . '<p class="description cas-blog-image-hint">Recommended image size: 1600 &times; 300px for the article banner (48:9) or 904 &times; 678px for Keep reading cards (4:3); the same image is cropped to fit the other blog cards.</p>';
+}
+add_filter( 'admin_post_thumbnail_html', 'cas_blog_admin_thumbnail_hint', 10, 2 );
 
 
 /* ------------------------------------------------------------------
@@ -559,6 +619,11 @@ function cas_render_blog_post() {
 		return '';
 	}
 
+	// wp_filter_content_tags() prepends sizes="auto," to lazy images. The related
+	// cards use height:100% inside a fixed-ratio box, so keep the explicit slot
+	// sizes that were measured for this template.
+	add_filter( 'wp_img_tag_add_auto_sizes', '__return_false' );
+
 	$banner_sizes = '(max-width: 700px) calc(100vw - 32px), (max-width: 1488px) calc(100vw - 48px), 1392px';
 	$rel_sizes    = '(max-width: 700px) calc(100vw - 32px), 452px';
 
@@ -622,6 +687,10 @@ function cas_render_blog_post() {
 
 			<?php echo $article; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- the_content, re-serialised by cas_blog_sectionise(). ?>
 
+			<?php cas_blog_author_card(); ?>
+
+			<?php cas_blog_comments( $post ); ?>
+
 			<?php cas_blog_prevnext(); ?>
 		</div>
 
@@ -630,6 +699,61 @@ function cas_render_blog_post() {
 	<?php
 
 	return ob_get_clean();
+}
+
+/**
+ * The article's author panel. The portrait and name are fixed chrome; the one-line
+ * bio is a Pages > Blog Customizer field so Crystal can correct or replace her copy.
+ */
+function cas_blog_author_card() {
+	$bio       = trim( (string) get_theme_mod( 'cas_blog_bio', cas_blog_bio_default() ) );
+	$about_url = function_exists( 'cas_page_url' ) ? cas_page_url( 'about' ) : home_url( '/' );
+	?>
+	<aside class="card blush blog-author-card" aria-labelledby="cas-blog-author-name">
+		<?php echo cas_blog_portrait( 72 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built below. ?>
+		<div>
+			<strong id="cas-blog-author-name">Crystal Lau</strong>
+			<p>
+				<?php if ( '' !== $bio ) : ?>
+					<?php echo esc_html( $bio ); ?>
+					<span aria-hidden="true"> </span>
+				<?php endif; ?>
+				<a class="link-squiggle" href="<?php echo esc_url( $about_url ); ?>">More about me <span aria-hidden="true">&rarr;</span></a>
+			</p>
+		</div>
+	</aside>
+	<?php
+}
+
+/**
+ * Native WordPress comments, with the prototype's field labels but without its
+ * obsolete membership-tier line. Core owns moderation, nonce fields and the
+ * comment_registration login gate; the site's configured honeypot plugin remains
+ * in that native submission path.
+ */
+function cas_blog_comment_form_defaults( $defaults ) {
+	$defaults['id_form']       = 'comment-form';
+	$defaults['class_form']    = 'comment-form card';
+	$defaults['class_submit']  = 'btn primary';
+	$defaults['label_submit']  = 'Post comment';
+	$defaults['comment_field'] = '<p class="comment-form-comment"><label for="comment-box">Join the conversation <span class="required">*</span></label><textarea id="comment-box" name="comment" class="post-field" rows="3" placeholder="Be kind, be curious&hellip;" required="required"></textarea></p>';
+
+	return $defaults;
+}
+
+function cas_blog_comments( $post ) {
+	if ( post_password_required( $post ) || ( ! comments_open( $post->ID ) && ! have_comments() ) ) {
+		return;
+	}
+
+	add_filter( 'comment_form_defaults', 'cas_blog_comment_form_defaults' );
+	?>
+	<section class="blog-comments" aria-labelledby="cas-blog-comments-title">
+		<h2 id="cas-blog-comments-title">Comments</h2>
+		<?php comments_template(); ?>
+	</section>
+	<?php
+	remove_filter( 'comment_form_defaults', 'cas_blog_comment_form_defaults' );
 }
 
 /**
@@ -960,6 +1084,30 @@ function cas_blog_styles() {
 .article blockquote { font-family: var(--font-marker); font-weight: 600; font-size: clamp(20px,2.2vw,28px); line-height: 1.4; padding: 26px 30px; margin: 34px 0; background-color: #cab389; background-image: var(--oak-grain); background-size: 300px 120px; color: #474138; border-radius: var(--radius-card); position: relative; box-shadow: var(--shadow-sm); }
 .article blockquote::before { content: "\2726"; position: absolute; top: -14px; left: 24px; color: var(--coral-deep); font-size: 24px; }
 .article blockquote p:last-child { margin-bottom: 0; }
+
+/* Single-post apparatus ported from the prototype. The blush card reuses the
+   existing material surface; only its layout belongs to the article template. */
+.article .blog-author-card { display: flex; align-items: center; gap: 16px; margin: 40px 0; }
+.article .blog-author-card > img { width: 72px; height: 72px; border-radius: 50%; object-fit: cover; flex: none; }
+.article .blog-author-card > div { min-width: 0; }
+.article .blog-author-card strong { font-family: var(--font-cond); font-weight: 600; }
+.article .blog-author-card p { margin: 4px 0 0; font-size: 14px; line-height: 1.5; color: #5e4a3d; }
+.article .blog-author-card .link-squiggle { font-weight: 700; color: inherit; }
+.article .blog-comments { margin-top: 8px; }
+.article .blog-comments > h2 { margin-top: 8px; }
+.article .blog-comments .comments-area { margin-top: 8px; }
+.article .blog-comments .comment-list { margin: 0; padding: 0; list-style: none; }
+.article .blog-comments .comment-list .comment { display: block; margin-bottom: 20px; }
+.article .blog-comments .comment-body { background: var(--surface); border-radius: var(--radius-card); box-shadow: var(--shadow-sm); padding: 14px 18px; color: var(--ink); }
+.article .blog-comments .comment-meta { font-family: var(--font-cond); font-size: 13px; line-height: 1.4; }
+.article .blog-comments .comment-content { font-size: 14.5px; line-height: 1.6; }
+.article .blog-comments .comment-content p:last-child { margin-bottom: 0; }
+.article .blog-comments .comment-form { margin-top: 8px; }
+.article .blog-comments .comment-form label { display: block; margin-bottom: 8px; font-family: var(--font-cond); font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; font-size: 13px; color: var(--ink); }
+.article .blog-comments .comment-form input[type="text"], .article .blog-comments .comment-form input[type="email"], .article .blog-comments .comment-form input[type="url"] { width: 100%; border: 1px solid var(--line); border-radius: var(--r-sharp); background: var(--cream); padding: 12px 14px; font-family: var(--font-body); font-size: 14.5px; color: var(--ink); }
+.article .blog-comments .comment-form .form-submit { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.article .blog-comments .comment-form .required { color: var(--coral); }
+@media (max-width: 560px) { .article .blog-author-card { align-items: flex-start; } }
 CSS;
 }
 
