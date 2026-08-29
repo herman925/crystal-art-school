@@ -1,0 +1,52 @@
+{
+  "source": "wp-content/themes/hello-elementor-child/inc/cas-account.php",
+  "script": "wp-content/themes/hello-elementor-child/js/cas-dashboard.js",
+  "templates": [
+    "wp-content/themes/hello-elementor-child/tutor/account.php",
+    "wp-content/themes/hello-elementor-child/tutor/dashboard-isolated.php"
+  ],
+  "panels": [
+    {"key": "overview", "label": "Overview"},
+    {"key": "courses", "label": "My courses"},
+    {"key": "progress", "label": "Progress"},
+    {"key": "purchases", "label": "Purchases"},
+    {"key": "account", "label": "Profile"},
+    {"key": "settings", "label": "Settings"}
+  ],
+  "source_tokens": [
+    "function cas_account_dashboard_body",
+    "function cas_account_dashboard_should_render_studio",
+    "function cas_account_dashboard_courses",
+    "function cas_account_dashboard_progress",
+    "function cas_account_render_dashboard_shell_before",
+    "tutor_utils()->get_enrolled_courses_ids_by_user",
+    "$utils->get_course_completed_percent",
+    "cas_account_dashboard_native_template(",
+    "wp_logout_url("
+  ],
+  "native_templates": [
+    "dashboard.account.billing",
+    "dashboard.account.settings",
+    "dashboard.account.settings.account"
+  ],
+  "preserved_tokens": [
+    "cas_account_require_checkout_terms",
+    "tutor_student_registration_required_fields",
+    "tutor_after_login_redirect_url",
+    "tutor_action"
+  ],
+  "script_tokens": [
+    "role=\"tab\"",
+    "aria-selected",
+    "aria-controls",
+    "ArrowRight",
+    "ArrowLeft",
+    "history.replaceState"
+  ],
+  "forbidden_tokens": [
+    "discord-card",
+    "panel-discord",
+    "cas-orders",
+    "cas-enrolled"
+  ]
+}
