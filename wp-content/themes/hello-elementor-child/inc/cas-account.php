@@ -941,7 +941,13 @@ function cas_account_dashboard_body() {
 		'dashboard.account.settings',
 		array( 'back_url' => $dashboard_url )
 	);
-	$billing_html    = cas_account_dashboard_native_template( 'dashboard.account.billing' );
+	$billing_html    = cas_account_dashboard_native_template(
+		'dashboard.account.billing',
+		array(
+			'back_url'  => $dashboard_url,
+			'close_url' => $dashboard_url,
+		)
+	);
 	$tabs            = array(
 		'overview'  => 'Overview',
 		'courses'   => 'My courses',
