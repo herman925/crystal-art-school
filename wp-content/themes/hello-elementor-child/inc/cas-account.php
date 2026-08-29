@@ -470,6 +470,120 @@ add_action( 'tutor_after_reset_password_form', 'cas_account_retrieve_password_af
  * ---------------------------------------------------------------------- */
 
 /**
+ * Whether the member-terms checkbox was submitted as checked.
+ *
+ * Tutor verifies its registration nonce before running the registration validation
+ * filters and before firing `tutor_new_user_registered`. This helper only reads the
+ * scalar checkbox value; it never trusts it as a substitute for Tutor's nonce check.
+ *
+ * @return bool
+ */
+function cas_account_member_terms_checked() {
+	if ( ! isset( $_POST['cas_member_terms'] ) || ! is_scalar( $_POST['cas_member_terms'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		return false;
+	}
+
+	return '1' === (string) wp_unslash( $_POST['cas_member_terms'] ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+}
+
+/**
+ * The member-terms consent control appended by Tutor's registration-form hook.
+ *
+ * The copy mount is intentionally empty until the client supplies the final wording.
+ * The existing About page's Terms & privacy heading is the only visible destination
+ * here; no legal or member-terms text is invented in the account flow.
+ *
+ * @return string
+ */
+function cas_account_member_terms_markup() {
+	$terms_url = esc_url( cas_page_url( 'about' ) . '#terms' );
+	$checked   = checked( cas_account_member_terms_checked(), true, false );
+
+	ob_start();
+	?>
+	<div class="tutor-form-row tutor-mb-8 cas-member-terms">
+		<div class="tutor-input-field">
+			<div class="tutor-input-wrapper">
+				<input
+					id="cas-member-terms"
+					type="checkbox"
+					class="tutor-checkbox tutor-checkbox-md"
+					name="cas_member_terms"
+					value="1"
+					required
+					aria-label="<?php esc_attr_e( 'Member terms consent', 'hello-elementor-child' ); ?>"
+					aria-describedby="cas-member-terms-link"
+					<?php echo $checked; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+				>
+				<label for="cas-member-terms">
+					<span class="cas-member-terms-copy"></span>
+					<a id="cas-member-terms-link" href="<?php echo $terms_url; ?>">Terms &amp; privacy</a>
+				</label>
+			</div>
+		</div>
+	</div>
+	<?php
+
+	return ob_get_clean();
+}
+
+/**
+ * Print the consent control inside Tutor's own registration form.
+ *
+ * @return void
+ */
+function cas_account_render_member_terms() {
+	echo cas_account_member_terms_markup(); // phpcs:ignore WordPress.Security.EscapeOutput
+}
+
+add_action( 'tutor_student_reg_form_end', 'cas_account_render_member_terms' );
+
+/**
+ * Make the consent control required in Tutor's server-side registration validation.
+ *
+ * The message describes the missing control, not the pending legal wording. Tutor
+ * remains responsible for collecting the rest of the form and creating the user.
+ *
+ * @param array<string,string> $fields Required registration fields.
+ *
+ * @return array<string,string>
+ */
+function cas_account_member_terms_required_field( $fields ) {
+	$fields['cas_member_terms'] = __( 'Member terms consent is required to create an account.', 'hello-elementor-child' );
+
+	return $fields;
+}
+
+add_filter( 'tutor_student_registration_required_fields', 'cas_account_member_terms_required_field' );
+
+/**
+ * Store the accepted consent only after Tutor has successfully created the user.
+ *
+ * A value and UTC timestamp are kept as user meta. The pending wording has no version
+ * or legal text to store yet; adding that copy is a separate client decision.
+ *
+ * @param WP_User|int $user Newly registered Tutor user.
+ *
+ * @return void
+ */
+function cas_account_store_member_terms_consent( $user ) {
+	if ( ! cas_account_member_terms_checked() ) {
+		return;
+	}
+
+	$user_id = $user instanceof WP_User ? (int) $user->ID : absint( $user );
+
+	if ( ! $user_id ) {
+		return;
+	}
+
+	update_user_meta( $user_id, '_cas_member_terms_consent', '1' );
+	update_user_meta( $user_id, '_cas_member_terms_consent_at', current_time( 'mysql', true ) );
+}
+
+add_action( 'tutor_new_user_registered', 'cas_account_store_member_terms_consent' );
+
+/**
  * Sign up. Tutor's own registration form, in the site's card.
  *
  * `users_can_register` is 0 on this install and turning it on is Herman's decision, not
@@ -1006,5 +1120,28 @@ body.cas-account-page .cas-retrieve-password-form .tutor-card {
 }
 body.cas-account-page .cas-retrieve-password-form .tutor-card > form { padding: 0 !important; }
 .cas-account-back-link { margin-top: 12px; }
+
+/* Tutor's registration template supplies a second card around its form. The account
+   card is the only surface here, so flatten the plugin wrapper without changing its
+   fields, handlers or nonce. */
+body.cas-account-page .cas-account-form #tutor-registration-wrap.tutor-card {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  margin: 0 !important;
+  max-width: none !important;
+  padding: 0 !important;
+}
+body.cas-account-page .cas-account-form #tutor-registration-wrap.tutor-card > form { padding: 0 !important; }
+
+/* Keep the site's single, /login/ registration link. Tutor's form repeats its own
+   dashboard link immediately below the submit button. */
+body.cas-account-page .cas-account-form #tutor-registration-form > div > .tutor-flex.tutor-items-center.tutor-justify-center { display: none; }
+
+.cas-member-terms { margin-top: 4px; }
+.cas-member-terms .tutor-input-wrapper { align-items: flex-start; }
+.cas-member-terms .tutor-input-wrapper label { line-height: 1.5; }
+.cas-member-terms a { color: var(--coral-ink); text-decoration: underline; }
 CSS;
 }
