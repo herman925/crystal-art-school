@@ -379,6 +379,93 @@ function cas_render_login() {
 add_shortcode( 'cas_login', 'cas_render_login' );
 
 /* -------------------------------------------------------------------------
+ * Tutor's retrieve-password endpoint
+ *
+ * This is a sub-route of Tutor's dashboard page, not the dedicated Log in page.
+ * Tutor renders it through `template-part.retrieve-password`, so there is no
+ * shortcode content to adopt and the dashboard wrap actions do not run. Its form
+ * hooks are the stable extension point: capture Tutor's own form, put it in the
+ * prototype card, and restore the missing main landmark around that card.
+ * ---------------------------------------------------------------------- */
+
+/**
+ * Is this Tutor's public retrieve-password dashboard endpoint?
+ *
+ * @return bool
+ */
+function cas_account_is_retrieve_password() {
+	return 'dashboard' === cas_account_current_key()
+		&& 'retrieve-password' === (string) get_query_var( 'tutor_dashboard_page' );
+}
+
+/**
+ * Track whether one of Tutor's retrieve/reset form hooks started our buffer.
+ *
+ * @param bool|null $on Pass true/false to set, null to read.
+ *
+ * @return bool
+ */
+function cas_account_retrieve_password_capture_active( $on = null ) {
+	static $active = false;
+
+	if ( null !== $on ) {
+		$active = (bool) $on;
+	}
+
+	return $active;
+}
+
+/**
+ * Start capturing Tutor's form after its custom header has rendered.
+ *
+ * @return void
+ */
+function cas_account_retrieve_password_before() {
+	if ( ! cas_account_is_retrieve_password() || cas_account_retrieve_password_capture_active() ) {
+		return;
+	}
+
+	echo '<main id="main" class="site-main">'; // phpcs:ignore WordPress.Security.EscapeOutput
+	cas_account_retrieve_password_capture_active( true );
+	ob_start();
+}
+
+/**
+ * Finish Tutor's form capture and render the prototype's password-reset card.
+ *
+ * @return void
+ */
+function cas_account_retrieve_password_after() {
+	if ( ! cas_account_retrieve_password_capture_active() ) {
+		return;
+	}
+
+	$form = ob_get_clean();
+	cas_account_retrieve_password_capture_active( false );
+
+	$back = '<a class="btn ghost full cas-account-back-link" href="'
+		. esc_url( cas_account_login_url() )
+		. '">&#8592; Back to log in</a>';
+	$body = '<div class="auth-stage active cas-account-form cas-retrieve-password-form">'
+		. $form
+		. $back
+		. '</div>';
+
+	echo cas_account_card( // phpcs:ignore WordPress.Security.EscapeOutput
+		'Reset access',
+		'Forgot password?',
+		'Tell us the address on the account.',
+		$body
+	);
+	echo '</main>'; // phpcs:ignore WordPress.Security.EscapeOutput
+}
+
+add_action( 'tutor_before_retrieve_password_form', 'cas_account_retrieve_password_before', 0 );
+add_action( 'tutor_after_retrieve_password_form', 'cas_account_retrieve_password_after', 999 );
+add_action( 'tutor_before_reset_password_form', 'cas_account_retrieve_password_before', 0 );
+add_action( 'tutor_after_reset_password_form', 'cas_account_retrieve_password_after', 999 );
+
+/* -------------------------------------------------------------------------
  * [cas_signup]
  * ---------------------------------------------------------------------- */
 
@@ -704,6 +791,10 @@ add_filter(
 		if ( $key ) {
 			$classes[] = 'cas-account-page';
 			$classes[] = 'cas-account-' . $key;
+
+			if ( cas_account_is_retrieve_password() ) {
+				$classes[] = 'cas-account-retrieve-password';
+			}
 		} elseif ( cas_account_has_shortcode() ) {
 			$classes[] = 'cas-account-page';
 		}
@@ -902,5 +993,18 @@ body.tutor-screen-frontend-dashboard .tutor-login-wrap {
 .cas-account-form .tutor-form-control,
 .cas-account-form .tutor-input { width: 100%; }
 .cas-account-form .tutor-btn-block { width: 100%; }
+
+/* Tutor's retrieve-password template supplies a card of its own. The auth card is
+   now the surface, so flatten only that inner shell and keep Tutor's form intact. */
+body.cas-account-page .cas-retrieve-password-form .tutor-card {
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  margin: 0 !important;
+  max-width: none !important;
+}
+body.cas-account-page .cas-retrieve-password-form .tutor-card > form { padding: 0 !important; }
+.cas-account-back-link { margin-top: 12px; }
 CSS;
 }
