@@ -74,12 +74,52 @@ function cas_page_url( $slug ) {
 	return $page ? get_permalink( $page ) : home_url( '/' );
 }
 
-function cas_render_footer() {
-	$s = cas_social();
+/**
+ * Render the account links used by the checkout footer variant.
+ *
+ * @return string
+ */
+function cas_render_footer_account_column() {
+	$login_url  = function_exists( 'cas_account_login_url' ) ? cas_account_login_url() : wp_login_url();
+	$signup_url = function_exists( 'cas_account_signup_url' ) ? cas_account_signup_url() : '';
+	$cart_url   = function_exists( 'cas_account_cart_url' ) ? cas_account_cart_url() : '';
 
 	ob_start();
 	?>
-	<footer class="site-footer">
+	<div>
+		<h4>Account</h4>
+		<?php if ( $login_url ) : ?>
+			<a href="<?php echo esc_url( $login_url ); ?>">Log in</a>
+		<?php endif; ?>
+		<?php if ( $signup_url ) : ?>
+			<a href="<?php echo esc_url( $signup_url ); ?>">Sign up</a>
+		<?php endif; ?>
+		<?php if ( $cart_url ) : ?>
+			<a href="<?php echo esc_url( $cart_url ); ?>">Basket</a>
+		<?php endif; ?>
+	</div>
+	<?php
+
+	return ob_get_clean();
+}
+
+/**
+ * The site footer.
+ *
+ * @param array $atts Optional `variant="checkout"` account-column variant.
+ *
+ * @return string
+ */
+function cas_render_footer( $atts = array() ) {
+	$atts        = shortcode_atts( array( 'variant' => 'default' ), $atts, 'cas_footer' );
+	$variant     = is_scalar( $atts['variant'] ) ? sanitize_key( $atts['variant'] ) : 'default';
+	$is_checkout = ( 'checkout' === $variant );
+	$is_checkout = $is_checkout || ( function_exists( 'cas_account_is_checkout_surface' ) && cas_account_is_checkout_surface() );
+	$s           = cas_social();
+
+	ob_start();
+	?>
+	<footer class="site-footer"<?php echo $is_checkout ? ' data-footer-variant="checkout"' : ''; ?>>
 		<div class="inner">
 			<div class="footer-grid">
 				<div>
@@ -101,14 +141,18 @@ function cas_render_footer() {
 					<a href="<?php echo esc_url( cas_page_url( 'blog' ) ); ?>">Blog</a>
 					<a href="<?php echo esc_url( cas_page_url( 'about' ) ); ?>">About</a>
 				</div>
-				<div>
-					<h4>Contact</h4>
-					<a href="mailto:<?php echo esc_attr( $s['email'] ); ?>"><?php echo esc_html( $s['email'] ); ?></a>
-					<a href="<?php echo esc_url( $s['instagram'] ); ?>" target="_blank" rel="noopener">Instagram</a>
-					<a href="<?php echo esc_url( $s['facebook'] ); ?>" target="_blank" rel="noopener">Facebook</a>
-					<a href="<?php echo esc_url( $s['youtube'] ); ?>" target="_blank" rel="noopener">YouTube</a>
-					<a href="<?php echo esc_url( cas_page_url( 'about' ) ); ?>#terms">Terms &amp; privacy</a>
-				</div>
+				<?php if ( $is_checkout ) : ?>
+					<?php echo cas_render_footer_account_column(); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+				<?php else : ?>
+					<div>
+						<h4>Contact</h4>
+						<a href="mailto:<?php echo esc_attr( $s['email'] ); ?>"><?php echo esc_html( $s['email'] ); ?></a>
+						<a href="<?php echo esc_url( $s['instagram'] ); ?>" target="_blank" rel="noopener">Instagram</a>
+						<a href="<?php echo esc_url( $s['facebook'] ); ?>" target="_blank" rel="noopener">Facebook</a>
+						<a href="<?php echo esc_url( $s['youtube'] ); ?>" target="_blank" rel="noopener">YouTube</a>
+						<a href="<?php echo esc_url( cas_page_url( 'about' ) ); ?>#terms">Terms &amp; privacy</a>
+					</div>
+				<?php endif; ?>
 			</div>
 			<div class="footer-meta"><span>&copy; <?php echo esc_html( gmdate( 'Y' ) ); ?> Crystal&#39;s Art School</span></div>
 		</div>
