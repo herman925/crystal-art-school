@@ -122,6 +122,36 @@ function cas_course_photos( $course_id ) {
 	return array_values( $ids );
 }
 
+/**
+ * Render Tutor's course attachment shelf without creating course content.
+ *
+ * The official template resolves attachments from the current course post. This helper
+ * is called while that post is current, after the course ID has been validated above.
+ * Tutor owns the attachment markup, escaping, open-mode behavior and empty state.
+ */
+function cas_render_course_attachments( $course_id ) {
+	if ( ! $course_id || ! function_exists( 'tutor_utils' ) || ! function_exists( 'tutor_load_template' ) ) {
+		return '';
+	}
+
+	$utils = tutor_utils();
+
+	if ( ! is_object( $utils ) || ! method_exists( $utils, 'get_attachments' ) ) {
+		return '';
+	}
+
+	$attachments = $utils->get_attachments( $course_id );
+
+	if ( ! is_array( $attachments ) ) {
+		return '';
+	}
+
+	ob_start();
+	tutor_load_template( 'global.attachments' );
+
+	return (string) ob_get_clean();
+}
+
 function cas_render_course_single() {
 	$id = get_the_ID();
 
@@ -141,6 +171,7 @@ function cas_render_course_single() {
 	$benefits  = cas_course_lines( $id, '_tutor_course_benefits' );
 	$audience  = cas_course_lines( $id, '_tutor_course_target_audience' );
 	$materials = cas_course_lines( $id, '_tutor_course_material_includes' );
+	$attachments_markup = cas_render_course_attachments( $id );
 
 	$topics = get_posts(
 		[
@@ -346,7 +377,7 @@ function cas_render_course_single() {
 			</section>
 		<?php endif; ?>
 
-		<?php if ( $materials ) : ?>
+		<?php if ( $materials || $attachments_markup ) : ?>
 			<section id="materials" class="section">
 				<div class="section-head">
 					<div class="eyebrow">Included</div>
@@ -357,6 +388,9 @@ function cas_render_course_single() {
 						<li><?php echo esc_html( $m ); ?></li>
 					<?php endforeach; ?>
 				</ul>
+				<div class="cas-course-attachments">
+					<?php echo $attachments_markup; // phpcs:ignore WordPress.Security.EscapeOutput -- Tutor's official template escapes attachment values. ?>
+				</div>
 			</section>
 		<?php endif; ?>
 	</div>
