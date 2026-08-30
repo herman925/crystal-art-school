@@ -131,7 +131,6 @@ function cas_render_footer( $atts = array() ) {
 				<div>
 					<h4>Learn</h4>
 					<a href="<?php echo esc_url( cas_page_url( 'courses' ) ); ?>">All courses</a>
-					<a href="<?php echo esc_url( cas_page_url( 'courses' ) ); ?>#membership">Membership</a>
 					<a href="<?php echo esc_url( cas_page_url( 'free-videos' ) ); ?>">Free videos</a>
 				</div>
 				<div>

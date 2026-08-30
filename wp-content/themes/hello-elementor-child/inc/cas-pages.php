@@ -47,7 +47,7 @@ add_shortcode(
 
 
 function cas_faq_intro_default() {
-	return 'The things people usually want to know before picking up a brush &mdash; courses, materials, refunds and the Discord. Anything missing, just write to me.';
+	return '';
 }
 
 function cas_faq_intro() {

@@ -12,43 +12,6 @@
 
 defined( 'ABSPATH' ) || exit;
 
-function cas_render_community_band() {
-	$courses = get_post_type_archive_link( 'courses' );
-	$img_uri = get_stylesheet_directory_uri() . '/img/';
-	$img     = $img_uri . 'Rubber.jpg';
-	$srcset  = implode(
-		', ',
-		[
-			esc_url( $img_uri . 'Rubber-224.jpg' ) . ' 224w',
-			esc_url( $img_uri . 'Rubber-448.jpg' ) . ' 448w',
-			esc_url( $img ) . ' 1438w',
-		]
-	);
-
-	ob_start();
-	?>
-	<section class="pg-section">
-		<div class="pg-wrap">
-			<div class="band-forest band-community reveal-up">
-				<div style="flex:0 0 160px;border-radius:var(--radius-card);overflow:hidden;aspect-ratio:1/1;">
-					<img src="<?php echo esc_url( $img ); ?>" srcset="<?php echo esc_attr( $srcset ); ?>" sizes="200px" width="1438" height="890" alt="Students sharing work in the studio community" style="width:100%;height:100%;object-fit:cover;" loading="lazy" decoding="async">
-				</div>
-				<div style="flex:1;min-width:200px;">
-					<div class="eyebrow"><span class="star">&#10022;</span> Fellow tier</div>
-					<h2 class="font-a" style="font-size:clamp(29px,3.1vw,42px);">Paint alongside others.</h2>
-					<p>Every course can be bought at the Fellow tier, which adds Crystal&rsquo;s private Discord channel to the course videos &mdash; somewhere to post work in progress and ask questions as you paint.</p>
-				</div>
-				<a class="btn-big btn-marine" href="<?php echo esc_url( $courses . '#membership' ); ?>" style="flex:none;">See the tiers &rarr;</a>
-			</div>
-		</div>
-	</section>
-	<?php
-
-	return ob_get_clean();
-}
-
-add_shortcode( 'cas_community_band', 'cas_render_community_band' );
-
 /**
  * Testimonials.
  *
