@@ -2,9 +2,9 @@
 /**
  * Crystal Art School login form override.
  *
- * Tutor still owns authentication, validation, redirects, errors and the password
- * visibility control. This override adds persistent accessible labels and applies
- * the locked prototype copy. Registration remains in cas_account_card()'s foot so
+ * Tutor still owns authentication, validation, redirects and error handling. This
+ * override keeps the password field native and adds a dependency-free progressive
+ * enhancement for visibility. Registration remains in cas_account_card()'s foot so
  * the P6 registration gate has one source of truth and the link is not duplicated.
  *
  * @package Crystal_Art_School
@@ -22,14 +22,22 @@ $login_errors = get_transient( Ajax::LOGIN_ERRORS_TRANSIENT_KEY )
 	? get_transient( Ajax::LOGIN_ERRORS_TRANSIENT_KEY )
 	: array();
 
-foreach ( $login_errors as $login_error ) {
-	Alert::make()
-		->text( $login_error )
-		->variant( Alert::ERROR )
-		->icon( Icon::WARNING )
-		->attr( 'class', 'tutor-mb-8' )
-		->render();
-}
+if ( ! empty( $login_errors ) ) :
+	?>
+	<div class="cas-login-errors" role="alert" aria-live="assertive" aria-atomic="true">
+		<?php foreach ( $login_errors as $login_error ) : ?>
+			<?php
+			Alert::make()
+				->text( $login_error )
+				->variant( Alert::ERROR )
+				->icon( Icon::WARNING )
+				->attr( 'class', 'cas-login-error' )
+				->render();
+			?>
+		<?php endforeach; ?>
+	</div>
+	<?php
+endif;
 
 do_action( 'tutor_before_login_form' );
 ?>
@@ -46,22 +54,27 @@ do_action( 'tutor_before_login_form' );
 		<input id="cas-login-email" type="text" class="tutor-form-control tutor-input" placeholder="<?php esc_attr_e( 'you@example.com', 'hello-elementor-child' ); ?>" name="log" value="" size="20" autocomplete="username" required />
 	</div>
 
-	<div class="tutor-input-field tutor-mb-8 co-field" x-data="{ show: false, value: '' }" style="position: relative;">
+	<div class="tutor-input-field tutor-mb-8 co-field cas-password-field">
 		<label for="cas-login-password"><?php esc_html_e( 'Password', 'hello-elementor-child' ); ?></label>
-		<span
-			class="tutor-flex tutor-items-center tutor-justify-center"
-			style="position: absolute; right: 15px; bottom: 13px; cursor: pointer; z-index: 1;"
-			x-show="value.length > 0"
-			@click="show = !show"
+		<button
+			type="button"
+			class="cas-password-toggle"
+			data-cas-password-toggle
+			aria-controls="cas-login-password"
+			aria-pressed="false"
+			aria-label="<?php esc_attr_e( 'Show password', 'hello-elementor-child' ); ?>"
+			data-show-label="<?php esc_attr_e( 'Show password', 'hello-elementor-child' ); ?>"
+			data-hide-label="<?php esc_attr_e( 'Hide password', 'hello-elementor-child' ); ?>"
+			hidden
 		>
-			<template x-if="!show">
+			<span class="cas-password-icon" data-cas-password-icon="show" aria-hidden="true">
 				<?php SvgIcon::make()->name( Icon::EYE )->size( 20 )->render(); ?>
-			</template>
-			<template x-if="show">
+			</span>
+			<span class="cas-password-icon" data-cas-password-icon="hide" aria-hidden="true" hidden>
 				<?php SvgIcon::make()->name( Icon::EYE_OFF )->size( 20 )->render(); ?>
-			</template>
-		</span>
-		<input id="cas-login-password" :type="show ? 'text' : 'password'" class="tutor-form-control tutor-input" placeholder="<?php esc_attr_e( 'Your password', 'hello-elementor-child' ); ?>" name="pwd" x-model="value" size="20" required style="padding-right: 45px;" autocomplete="current-password" />
+			</span>
+		</button>
+		<input id="cas-login-password" type="password" class="tutor-form-control tutor-input" placeholder="<?php esc_attr_e( 'Your password', 'hello-elementor-child' ); ?>" name="pwd" size="20" required style="padding-right: 45px;" autocomplete="current-password" />
 	</div>
 
 	<div class="tutor-login-error" role="alert" aria-live="polite"></div>
@@ -91,6 +104,45 @@ do_action( 'tutor_before_login_form' );
 
 	<?php do_action( 'tutor_after_sign_in_button' ); ?>
 </form>
+<script>
+( function () {
+	var field  = document.getElementById( 'cas-login-password' );
+	var toggle = document.querySelector( '[data-cas-password-toggle]' );
+
+	if ( ! field || ! toggle ) {
+		return;
+	}
+
+	var show_icon = toggle.querySelector( '[data-cas-password-icon="show"]' );
+	var hide_icon = toggle.querySelector( '[data-cas-password-icon="hide"]' );
+
+	if ( ! show_icon || ! hide_icon ) {
+		return;
+	}
+
+	function sync() {
+		var visible = 'text' === field.type;
+
+		toggle.hidden = 0 === field.value.length;
+		toggle.setAttribute( 'aria-pressed', visible ? 'true' : 'false' );
+		toggle.setAttribute(
+			'aria-label',
+			visible ? toggle.getAttribute( 'data-hide-label' ) : toggle.getAttribute( 'data-show-label' )
+		);
+		show_icon.hidden = visible;
+		hide_icon.hidden = ! visible;
+	}
+
+	field.addEventListener( 'input', sync );
+	field.addEventListener( 'change', sync );
+	toggle.addEventListener( 'click', function () {
+		field.type = 'text' === field.type ? 'password' : 'text';
+		sync();
+		field.focus();
+	} );
+	sync();
+}() );
+</script>
 <?php
 do_action( 'tutor_after_login_form' );
 if ( ! tutor_utils()->is_tutor_frontend_dashboard() ) :

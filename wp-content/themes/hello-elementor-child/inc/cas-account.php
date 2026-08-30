@@ -1929,6 +1929,69 @@ body.tutor-screen-frontend-dashboard .tutor-login-wrap {
 .cas-account-form .tutor-input { width: 100%; }
 .cas-account-form .tutor-btn-block { width: 100%; }
 
+/* The /login/ override cannot assume Tutor's Alpine runtime is present. Keep the
+   fallback password native, then let its small vanilla enhancement use this control. */
+body.cas-account-page .cas-password-field { position: relative; }
+body.cas-account-page .cas-password-toggle {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  color: var(--muted);
+  cursor: pointer;
+  display: inline-flex;
+  height: 36px;
+  justify-content: center;
+  padding: 0;
+  position: absolute;
+  right: 9px;
+  bottom: 8px;
+  width: 36px;
+}
+body.cas-account-page .cas-password-toggle:hover { color: var(--ink); }
+body.cas-account-page .cas-password-toggle:focus-visible {
+  border-radius: var(--r-sharp);
+  outline: var(--focus-ring-w) solid var(--focus-ring);
+  outline-offset: 2px;
+}
+body.cas-account-page .cas-password-toggle[hidden] { display: none; }
+body.cas-account-page .cas-password-toggle svg { display: block; }
+
+/* Tutor's Alert component has no guaranteed theme stylesheet on the shortcode
+   login page. Give its server-rendered errors one full-width, wrapping surface so
+   long messages stay above the remember/forgot row. */
+body.cas-account-page .cas-login-errors {
+  display: grid;
+  gap: 10px;
+  margin: 0 0 18px;
+  width: 100%;
+}
+body.cas-account-page .cas-login-errors .cas-login-error {
+  background: var(--surface);
+  border: 1px solid var(--danger);
+  border-left: 4px solid var(--danger);
+  border-radius: var(--r-sharp);
+  box-sizing: border-box;
+  color: var(--ink);
+  margin: 0 !important;
+  padding: 12px 14px;
+  width: 100%;
+}
+body.cas-account-page .cas-login-errors .cas-login-error .tutor-alert-content {
+  align-items: flex-start;
+  display: flex;
+  gap: 10px;
+  min-width: 0;
+}
+body.cas-account-page .cas-login-errors .cas-login-error .tutor-alert-icon {
+  color: var(--danger);
+  flex: 0 0 auto;
+}
+body.cas-account-page .cas-login-errors .cas-login-error .tutor-alert-text {
+  color: var(--ink);
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
 /* Tutor's retrieve-password template supplies a card of its own. The auth card is
    now the surface, so flatten only that inner shell and keep Tutor's form intact. */
 body.cas-account-page .cas-retrieve-password-form .tutor-card {
