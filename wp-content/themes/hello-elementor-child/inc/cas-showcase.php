@@ -13,8 +13,8 @@ defined( 'ABSPATH' ) || exit;
  *
  * Open to Crystal: the photograph, the artwork title, the student's name, the
  * medium — which is also what the filter pills are built from — and the wall order.
- * Locked here: the page title and eyebrow, both section headings, the Fellow button
- * and its destination, and the pinned-to-cork layout itself.
+ * Locked here: the page title and eyebrow, both section headings, and the
+ * pinned-to-cork layout itself.
  *
  * The prototype's ten sample rows carried invented student names, titles and media,
  * and its own comment says so ("Replace all ten rows together; do not ship these
@@ -379,16 +379,6 @@ function cas_render_showcase() {
 			<?php endif; ?>
 		</section>
 
-		<section class="section">
-			<div class="band-forest reveal-one">
-				<div style="flex:1;">
-					<div class="eyebrow"><span class="star">&#10022;</span> Painted along with a course?</div>
-					<h2 class="marker-title" style="font-size:clamp(31px,3.1vw,44px);">Get your work on this wall.</h2>
-					<p style="margin:0;max-width:60ch;">Fellows share their block-ins and finished pieces in the private Discord &mdash; the best of each month&rsquo;s critique lands here, with full credit.</p>
-				</div>
-				<a class="btn-big" href="<?php echo esc_url( cas_showcase_membership_url() ); ?>" style="flex:none;">Join as a Fellow &rarr;</a>
-			</div>
-		</section>
 	</main>
 
 	<?php
@@ -397,22 +387,6 @@ function cas_render_showcase() {
 	}
 
 	return ob_get_clean();
-}
-
-/**
- * Tutor owns the /courses/ slug, so no WordPress page carries it and cas_page_url()
- * falls back to the home page for that one word — which is why the footer's own
- * "Membership" link currently lands on the front page. The archive link is the
- * address that actually resolves. The helper stays as the fallback so this reads the
- * same as the rest of the theme if Tutor is ever off.
- */
-function cas_showcase_membership_url() {
-	$url = get_post_type_archive_link( 'courses' );
-	if ( ! $url && function_exists( 'cas_page_url' ) ) {
-		$url = cas_page_url( 'courses' );
-	}
-
-	return ( $url ? $url : home_url( '/' ) ) . '#membership';
 }
 
 /**

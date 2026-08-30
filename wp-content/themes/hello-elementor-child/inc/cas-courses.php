@@ -474,82 +474,8 @@ function cas_course_sort_panel() {
 		. '</div></aside>';
 }
 
-/* ---------------------------------------------------------------------------
- * Three ways to study — direction document 1.4.8
- * ------------------------------------------------------------------------ */
-
 /**
- * The three membership cards.
- *
- * 1.4.8 opens exactly two fields per card, the description and the background
- * photograph, and locks the rest by name: the tier names are quoted again in 7.2 and in
- * the checkout copy, so a rename would leave the checkout talking about a tier that no
- * longer exists, and the price line, the "most picked" marker and the button are locked
- * in the same paragraph. Everything locked is therefore in this array and not in the
- * Customizer.
- *
- * The photographs are Crystal's own, uploaded to the media library rather than shipped
- * inside the theme: the field is hers to change, and her replacement will land in the
- * library too. They are resolved by attachment ID at render, so deleting one degrades to
- * the card's base colour instead of a broken URL.
- */
-function cas_tiers() {
-	return [
-		'wanderer'   => [
-			'name'     => 'Wanderer',
-			'price'    => 'Free',
-			'class'    => '',
-			'btn'      => 'ghost',
-			'text'     => 'Browse the blog and watch the free preview lessons.',
-			'photo_id' => 125,
-		],
-		'apprentice' => [
-			'name'     => 'Apprentice',
-			'price'    => 'Per-course purchase',
-			'class'    => ' highlight',
-			'btn'      => '',
-			'text'     => 'Full video access, downloadable materials, resume from anywhere.',
-			'photo_id' => 126,
-		],
-		'fellow'     => [
-			'name'     => 'Fellow',
-			'price'    => 'Per-course + Discord',
-			'class'    => ' fellow',
-			'btn'      => '',
-			'text'     => 'Everything in Apprentice, plus teacher Q&amp;A in a private Discord channel.',
-			'photo_id' => 127,
-		],
-	];
-}
-
-function cas_tier_default( $slug, $field ) {
-	$tiers = cas_tiers();
-
-	if ( 'photo' === $field ) {
-		$id = $tiers[ $slug ]['photo_id'] ?? 0;
-
-		return $id ? (string) wp_get_attachment_image_url( $id, 'full' ) : '';
-	}
-
-	return $tiers[ $slug ]['text'] ?? '';
-}
-
-/**
- * Falls back to the shipped value when the stored one is empty, which is what a
- * Customizer "Remove image" leaves behind — `get_theme_mod` returns that empty string in
- * preference to the registered default, and the card would then paint no photograph at
- * all. Same guard as `cas_brand_image()`, deliberately, because the hero's missing one
- * is the trap this pattern exists to avoid.
- */
-function cas_tier_value( $slug, $field ) {
-	$default = cas_tier_default( $slug, $field );
-	$set     = get_theme_mod( "cas_tier_{$slug}_{$field}", $default );
-
-	return $set ? $set : $default;
-}
-
-/**
- * The Wanderer button needs a lesson that is genuinely free to reach. Tutor marks one
+ * The free-trial button needs a lesson that is genuinely free to reach. Tutor marks one
  * with `_is_preview`, so the destination is the first preview lesson whose course is
  * published — a preview lesson under a draft course 404s for a visitor. When none
  * qualifies the button is not rendered, the same posture as the Gallery's Buy button,
@@ -587,112 +513,6 @@ function cas_first_preview_lesson_url() {
 
 	return $url;
 }
-
-function cas_render_membership_tiers() {
-	/* 1.4.8 locks the button destinations as well as their labels. The prototype sent
-	   "Browse courses" to its sign-up page, which carried a tier picker; this build has
-	   no such picker, so a button reading "Browse courses" goes to the catalogue. */
-	$browse = get_post_type_archive_link( tutor()->course_post_type );
-	$free   = cas_first_preview_lesson_url();
-
-	ob_start();
-	?>
-	<section class="section" id="membership">
-		<div class="section-head reveal-one">
-			<div class="eyebrow"><span class="star">&#10038;</span> Membership</div>
-			<h2 class="section-title">Three Ways to Study</h2>
-		</div>
-		<div class="tier-grid reveal">
-			<?php foreach ( cas_tiers() as $slug => $tier ) : ?>
-				<?php $photo = cas_tier_value( $slug, 'photo' ); ?>
-				<div class="tier-card<?php echo esc_attr( $tier['class'] ); ?>"
-					<?php echo $photo ? 'style="background-image:url(\'' . esc_url( $photo ) . '\');"' : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>>
-					<?php if ( 'apprentice' === $slug ) : ?>
-						<div class="tier-pick">most picked &#10038;</div>
-					<?php endif; ?>
-					<div class="tname"><?php echo esc_html( $tier['name'] ); ?></div>
-					<div class="tprice"><?php echo esc_html( $tier['price'] ); ?></div>
-					<p style="margin:0;"><?php echo wp_kses_post( cas_tier_value( $slug, 'text' ) ); ?></p>
-					<?php if ( 'wanderer' === $slug ) : ?>
-						<?php if ( $free ) : ?>
-							<a class="btn ghost" href="<?php echo esc_url( $free ); ?>" style="margin-top:16px;">Start the free lesson <span class="arr" aria-hidden="true">&rarr;</span></a>
-						<?php endif; ?>
-					<?php else : ?>
-						<a class="btn" href="<?php echo esc_url( $browse ); ?>" style="margin-top:16px;">Browse courses</a>
-					<?php endif; ?>
-				</div>
-			<?php endforeach; ?>
-		</div>
-	</section>
-	<?php
-
-	return ob_get_clean();
-}
-
-/**
- * Registered after inc/cas-customizer-map.php, which creates the "Pages" panel at
- * priority 100. Registering into a panel that does not exist yet works, but only by
- * accident of when the Customizer resolves the two, and this section is the one place in
- * the theme that would depend on it.
- */
-add_action(
-	'customize_register',
-	function ( $wp_customize ) {
-		$wp_customize->add_section(
-			'cas_page_courses_tiers',
-			[
-				'title'       => 'Courses &mdash; Three ways to study',
-				'panel'       => 'cas_pages',
-				'priority'    => 55,
-				'description' => 'The three membership cards below the catalogue. The tier names, prices, the "most picked" marker and the buttons are fixed &mdash; the checkout and the course pages quote them, so they cannot be renamed here.',
-			]
-		);
-
-		foreach ( cas_tiers() as $slug => $tier ) {
-			$fields = [
-				'text'  => [
-					'label' => sprintf( '%s &mdash; description', $tier['name'] ),
-					'desc'  => 'One or two short sentences. The card is a fixed height beside the other two, so keep it to about the length of the current text.',
-				],
-				'photo' => [
-					'label' => sprintf( '%s &mdash; background photograph', $tier['name'] ),
-					/* 1.4.8 requires this warning to sit beside the field: the overlay is
-					   built to hold up against a bright photograph, but a darker one
-					   leaves far more room and the text reads better on it. */
-					'desc'  => 'Please choose a darker or lower-contrast photograph &mdash; the tier name, price and description are printed on top of it. Recommended about 760 x 600px. Any size works, because the photograph is cropped to fill the card.',
-				],
-			];
-
-			foreach ( $fields as $field => $spec ) {
-				$key = "cas_tier_{$slug}_{$field}";
-
-				$wp_customize->add_setting(
-					$key,
-					[
-						'default'           => cas_tier_default( $slug, $field ),
-						'sanitize_callback' => 'photo' === $field ? 'esc_url_raw' : 'wp_kses_post',
-						'transport'         => 'refresh',
-					]
-				);
-
-				$args = [
-					'label'       => $spec['label'],
-					'description' => $spec['desc'],
-					'section'     => 'cas_page_courses_tiers',
-					'settings'    => $key,
-				];
-
-				if ( 'photo' === $field ) {
-					$wp_customize->add_control( new WP_Customize_Image_Control( $wp_customize, $key, $args ) );
-				} else {
-					$args['type'] = 'textarea';
-					$wp_customize->add_control( $key, $args );
-				}
-			}
-		}
-	},
-	110
-);
 
 /* ---------------------------------------------------------------------------
  * Page introduction and the FREE TRIAL band - direction document 1.4.8, 4.2
@@ -952,7 +772,6 @@ function cas_render_courses( $atts ) {
 				<?php echo $catalogue; // phpcs:ignore WordPress.Security.EscapeOutput ?>
 			</section>
 		<?php endif; ?>
-		<?php echo cas_render_membership_tiers(); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 		<?php echo cas_render_free_trial(); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 	</div>
 	<?php

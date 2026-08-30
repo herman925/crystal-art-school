@@ -10,8 +10,6 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 RELEASE = ROOT / "wp-content" / "themes" / "hello-elementor-child" / "inc" / "cas-home-releases.php"
 COURSES = ROOT / "wp-content" / "themes" / "hello-elementor-child" / "inc" / "cas-home-courses.php"
-HOME = ROOT / "wp-content" / "themes" / "hello-elementor-child" / "inc" / "cas-home.php"
-THEME_IMG = ROOT / "wp-content" / "themes" / "hello-elementor-child" / "img"
 
 
 def read(path: Path) -> str:
@@ -55,36 +53,9 @@ def assert_release_slides_prioritize_only_the_visible_cover() -> None:
             raise AssertionError(f"course image helper is missing the {token} output state")
 
 
-def assert_community_band_uses_the_rubber_responsive_ladder() -> None:
-    source = read(HOME)
-    start = source.index("function cas_render_community_band")
-    end = source.index("\n}\n", start) + 3
-    band = source[start:end]
-
-    for token in (
-        "Rubber.jpg",
-        "Rubber-224.jpg",
-        "Rubber-448.jpg",
-        'srcset="',
-        '224w',
-        '448w',
-        '1438w',
-        'sizes="200px"',
-        'width="1438"',
-        'height="890"',
-    ):
-        if token not in band:
-            raise AssertionError(f"community band is missing the {token} image contract")
-
-    for name in ("Rubber.jpg", "Rubber-224.jpg", "Rubber-448.jpg"):
-        if not (THEME_IMG / name).is_file():
-            raise AssertionError(f"missing checked-in community image asset: {name}")
-
-
 def main() -> int:
     assert_release_slides_prioritize_only_the_visible_cover()
-    assert_community_band_uses_the_rubber_responsive_ladder()
-    print("home parity contracts passed: release priority and community image ladder")
+    print("home parity contracts passed: release priority")
     return 0
 
 

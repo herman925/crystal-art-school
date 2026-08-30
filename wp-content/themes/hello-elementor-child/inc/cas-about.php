@@ -1094,15 +1094,10 @@ function cas_render_about() {
 				<div class="eyebrow"><span class="star">&#10022;</span> Say hello</div>
 				<h2 class="marker-title" style="font-size:clamp(26px,3vw,40px);margin:6px 0 12px;">Write to the studio.</h2>
 				<p class="lead" style="font-size:16px;">A question about a course, a commission, or just to show me what you&rsquo;re painting this week &mdash; write to the studio and it comes straight to me.</p>
-				<?php /* The five channel icons are the footer's, from cas_social_icon(), so the two cannot drift apart. Discord and Originals have no equivalent there and keep their own. */ ?>
 				<ul class="contact-channels">
 					<li>
 						<span class="ch-ico"><?php echo cas_social_icon( 'email' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></span>
 						<span><strong>Email</strong><em><a href="mailto:<?php echo esc_attr( $social['email'] ); ?>"><?php echo esc_html( $social['email'] ); ?></a></em></span>
-					</li>
-					<li>
-						<span class="ch-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="12" r="1"></circle><circle cx="15" cy="12" r="1"></circle><path d="M7.5 7.2A16 16 0 0 1 12 6.5a16 16 0 0 1 4.5.7c2 3 2.6 6 2.5 9a13 13 0 0 1-4 2l-1-1.6"></path><path d="M9.5 16.6 8.5 18a13 13 0 0 1-4-2c-.1-3 .5-6 2.5-9"></path></svg></span>
-						<span><strong>Discord</strong><em>Fellows channel &mdash; invite arrives after enrolment</em></span>
 					</li>
 					<li>
 						<span class="ch-ico"><?php echo cas_social_icon( 'instagram' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></span>
