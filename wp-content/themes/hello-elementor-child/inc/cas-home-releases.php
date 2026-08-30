@@ -93,7 +93,7 @@ function cas_home_release_slide( $course_id, $index ) {
 
 	$cover_id = (int) get_post_thumbnail_id( $course_id );
 	$cover    = ( $cover_id && wp_attachment_is_image( $cover_id ) )
-		? cas_home_course_img( $cover_id, $sizes, false )
+		? cas_home_course_img( $cover_id, $sizes, 0 === $index ? 'high' : 'low' )
 		: '';
 
 	$cart_svg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1.6"></circle><circle cx="19" cy="21" r="1.6"></circle><path d="M2 3h3l2.6 12.6a1.8 1.8 0 0 0 1.8 1.4h8.9a1.8 1.8 0 0 0 1.8-1.4L22 7H6"></path></svg>';
