@@ -107,9 +107,10 @@ function cas_home_course_photo_pool( $course_id ) {
  *
  * `alt` is empty on purpose: the anchor wrapping each picture already carries the course
  * title as its accessible name, so an alt naming the course reads the title twice, and
- * nothing stored about the picture describes what is in it.
+ * nothing stored about the picture describes what is in it. `$priority` accepts `lazy`,
+ * `high`, or `low`; the last two states use fetchpriority rather than loading.
  */
-function cas_home_course_img( $att_id, $sizes, $lazy = true ) {
+function cas_home_course_img( $att_id, $sizes, $priority = 'lazy' ) {
 	$src = wp_get_attachment_image_src( $att_id, 'large' );
 
 	if ( ! $src ) {
@@ -125,7 +126,15 @@ function cas_home_course_img( $att_id, $sizes, $lazy = true ) {
 	}
 
 	$out .= ' width="' . (int) $src[1] . '" height="' . (int) $src[2] . '" alt=""';
-	$out .= $lazy ? ' loading="lazy"' : ' fetchpriority="high"';
+
+	if ( 'low' === $priority ) {
+		$out .= ' fetchpriority="low"';
+	} elseif ( 'high' === $priority ) {
+		$out .= ' fetchpriority="high"';
+	} else {
+		$out .= ' loading="lazy"';
+	}
+
 	$out .= ' decoding="async">';
 
 	return $out;
@@ -160,12 +169,12 @@ function cas_home_course_card( $course_id, $index ) {
 
 	$cover_id = (int) get_post_thumbnail_id( $course_id );
 	$cover    = ( $cover_id && wp_attachment_is_image( $cover_id ) )
-		? cas_home_course_img( $cover_id, $card_sizes, $index > 0 )
+		? cas_home_course_img( $cover_id, $card_sizes, $index > 0 ? 'lazy' : 'high' )
 		: '';
 
 	/* 3.5.2: drawn once per page load, then left alone. No rotation this round. */
 	$pool = cas_home_course_photo_pool( $course_id );
-	$shot = $pool ? cas_home_course_img( $pool[ wp_rand( 0, count( $pool ) - 1 ) ], $card_sizes ) : '';
+	$shot = $pool ? cas_home_course_img( $pool[ wp_rand( 0, count( $pool ) - 1 ) ], $card_sizes, 'lazy' ) : '';
 
 	$cart_svg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1.6"></circle><circle cx="19" cy="21" r="1.6"></circle><path d="M2 3h3l2.6 12.6a1.8 1.8 0 0 0 1.8 1.4h8.9a1.8 1.8 0 0 0 1.8-1.4L22 7H6"></path></svg>';
 

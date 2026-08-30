@@ -14,7 +14,16 @@ defined( 'ABSPATH' ) || exit;
 
 function cas_render_community_band() {
 	$courses = get_post_type_archive_link( 'courses' );
-	$img     = get_stylesheet_directory_uri() . '/img/Rubber.jpg';
+	$img_uri = get_stylesheet_directory_uri() . '/img/';
+	$img     = $img_uri . 'Rubber.jpg';
+	$srcset  = implode(
+		', ',
+		[
+			esc_url( $img_uri . 'Rubber-224.jpg' ) . ' 224w',
+			esc_url( $img_uri . 'Rubber-448.jpg' ) . ' 448w',
+			esc_url( $img ) . ' 1438w',
+		]
+	);
 
 	ob_start();
 	?>
@@ -22,7 +31,7 @@ function cas_render_community_band() {
 		<div class="pg-wrap">
 			<div class="band-forest band-community reveal-up">
 				<div style="flex:0 0 160px;border-radius:var(--radius-card);overflow:hidden;aspect-ratio:1/1;">
-					<img src="<?php echo esc_url( $img ); ?>" sizes="200px" alt="Students sharing work in the studio community" style="width:100%;height:100%;object-fit:cover;" loading="lazy" decoding="async">
+					<img src="<?php echo esc_url( $img ); ?>" srcset="<?php echo esc_attr( $srcset ); ?>" sizes="200px" width="1438" height="890" alt="Students sharing work in the studio community" style="width:100%;height:100%;object-fit:cover;" loading="lazy" decoding="async">
 				</div>
 				<div style="flex:1;min-width:200px;">
 					<div class="eyebrow"><span class="star">&#10022;</span> Fellow tier</div>
