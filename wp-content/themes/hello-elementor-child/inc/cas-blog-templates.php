@@ -1151,6 +1151,86 @@ function cas_blog_list_script() {
 
   var counted = function (n) { return n + (n === 1 ? ' post' : ' posts'); };
 
+  /* Blog-specific roll-in controller. The shared motion pass covers the site's
+     other choreography; this controller owns Blog feature/card entry and every
+     state change that replaces or reveals list items. */
+  var reduce = false;
+  try {
+    reduce = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+  } catch (e) {}
+  var g = window.gsap;
+  var watch = [];
+  var bound = false;
+
+  var drive = function () {
+    if (!watch.length || !g) return;
+    var vh = window.innerHeight || document.documentElement.clientHeight;
+    for (var i = 0; i < watch.length; i++) {
+      var w = watch[i];
+      if (w.done || !w.el.isConnected || w.el.hidden) continue;
+      var r = w.el.getBoundingClientRect();
+      if (r.top < vh * 0.9 && r.bottom > 20) {
+        w.done = true;
+        g.fromTo(w.el,
+          { opacity: 0, x: w.left ? -60 : 60, y: 28, rotateZ: w.left ? -3 : 3, transformOrigin: 'center top' },
+          { opacity: 1, x: 0, y: 0, rotateZ: 0, duration: .7, ease: 'power3.out' });
+      }
+    }
+  };
+
+  var visibleCards = function () {
+    return cards.filter(function (card) { return !card.hidden; });
+  };
+  var allTargets = function () {
+    return features.filter(function (feature) { return !feature.hidden; }).concat(visibleCards());
+  };
+
+  var arm = function (items) {
+    /* The server keeps filtered cards in the document, so replace any pending
+       entry for a target before re-arming it rather than growing duplicates. */
+    watch = watch.filter(function (w) {
+      return items.indexOf(w.el) < 0 && !w.done && w.el.isConnected;
+    });
+    if (!items.length) return;
+    if (!g || reduce) {
+      items.forEach(function (el) {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+      });
+      return;
+    }
+    g.set(items, { opacity: 0 });
+    items.forEach(function (el, i) {
+      el.__casM = 1;
+      watch.push({ el: el, done: false, left: i % 2 === 0 });
+    });
+    drive();
+    if (!bound) {
+      bound = true;
+      window.addEventListener('scroll', drive, { passive: true });
+      window.addEventListener('resize', drive, { passive: true });
+    }
+    setTimeout(drive, 180);
+  };
+
+  var revealNow = function (node) {
+    for (var i = 0; i < watch.length; i++) {
+      var w = watch[i];
+      if (w.done || !(w.el === node || w.el.contains(node))) continue;
+      w.done = true;
+      if (g) g.set(w.el, { opacity: 1, x: 0, y: 0, rotateZ: 0 });
+      else {
+        w.el.style.opacity = '1';
+        w.el.style.transform = 'none';
+      }
+    }
+  };
+
+  grid.addEventListener('focusin', function (e) { revealNow(e.target); });
+  features.forEach(function (feature) {
+    feature.addEventListener('focusin', function (e) { revealNow(e.target); });
+  });
+
   var apply = function () {
     var featured = null;
     features.forEach(function (f) {
@@ -1189,6 +1269,7 @@ function cas_blog_list_script() {
       active = chip.getAttribute('data-tag');
       shown = PER_PAGE;   /* a new filter starts from the first page again */
       var n = apply();
+      arm(allTargets());
       say(n ? active + ': ' + counted(n) + '.' : 'No posts under ' + active + '.');
     });
   });
@@ -1197,7 +1278,8 @@ function cas_blog_list_script() {
     var had = grid.querySelectorAll('.blog-card:not([hidden])').length;
     shown += PER_PAGE;
     apply();
-    var now = [].slice.call(grid.querySelectorAll('.blog-card:not([hidden])'));
+    var now = visibleCards();
+    arm(now.slice(had));
     /* On the last press the button hides itself out from under the user's focus,
        which drops focus to <body> with nothing announced. */
     if (moreWrap.style.display === 'none' && now[had]) now[had].focus();
@@ -1205,6 +1287,7 @@ function cas_blog_list_script() {
   });
 
   apply();
+  arm(allTargets());
 }());
 JS;
 }
