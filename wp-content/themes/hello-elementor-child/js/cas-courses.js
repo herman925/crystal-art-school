@@ -240,6 +240,11 @@
 	   kept as a snapshot so returning to it does not need a reload. */
 	var sortRail = document.getElementById( 'lesson-sort' );
 	var featured = cells.slice();
+	var SORT_SAID = {
+		'featured': 'Sorted by featured order.',
+		'price-asc': 'Sorted by price, lowest first.',
+		'price-desc': 'Sorted by price, highest first.'
+	};
 
 	if ( sortRail ) {
 		sortRail.querySelectorAll( '.fopt' ).forEach( function ( opt ) {
@@ -260,9 +265,39 @@
 				order.forEach( function ( cell ) {
 					grid.appendChild( cell );
 				} );
+
+				if ( typeof window.CasAnnounce === 'function' && SORT_SAID[ val ] ) {
+					window.CasAnnounce( SORT_SAID[ val ] );
+				}
 			} );
 		} );
 	}
 
 	apply();
+} )();
+
+/* Expand only the continuation Crystal marks in the editable introduction. */
+( function () {
+	'use strict';
+
+	var toggle = document.querySelector( '[data-cas-courses-intro-toggle]' );
+
+	if ( ! toggle ) {
+		return;
+	}
+
+	var target_id = toggle.getAttribute( 'aria-controls' );
+	var more      = target_id ? document.getElementById( target_id ) : null;
+
+	if ( ! more ) {
+		return;
+	}
+
+	toggle.addEventListener( 'click', function () {
+		var expanded = 'true' === toggle.getAttribute( 'aria-expanded' );
+
+		more.hidden = expanded;
+		toggle.setAttribute( 'aria-expanded', expanded ? 'false' : 'true' );
+		toggle.textContent = expanded ? 'Read More' : 'Read Less';
+	} );
 } )();

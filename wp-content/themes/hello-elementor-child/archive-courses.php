@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
 
 get_header();
 ?>
-<main id="content" class="site-main cas-archive">
+<main id="content" class="site-main cas-archive" tabindex="-1">
 	<?php echo do_shortcode( '[cas_courses]' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 </main>
 <?php
