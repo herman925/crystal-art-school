@@ -383,11 +383,13 @@ function cas_render_course_single() {
 					<div class="eyebrow">Included</div>
 					<h2 class="section-title">What comes with it</h2>
 				</div>
-				<ul class="learn-list">
-					<?php foreach ( $materials as $m ) : ?>
-						<li><?php echo esc_html( $m ); ?></li>
-					<?php endforeach; ?>
-				</ul>
+				<?php if ( $materials ) : ?>
+					<ul class="learn-list">
+						<?php foreach ( $materials as $m ) : ?>
+							<li><?php echo esc_html( $m ); ?></li>
+						<?php endforeach; ?>
+					</ul>
+				<?php endif; ?>
 				<div class="cas-course-attachments">
 					<?php echo $attachments_markup; // phpcs:ignore WordPress.Security.EscapeOutput -- Tutor's official template escapes attachment values. ?>
 				</div>

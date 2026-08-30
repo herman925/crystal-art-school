@@ -48,6 +48,16 @@ def main() -> None:
         "echo $attachments_markup;",
         "course output must include the attachment shelf markup",
     )
+    require(
+        source,
+        "<?php if ( $materials ) : ?>\n\t\t\t\t\t<ul class=\"learn-list\">\n\t\t\t\t\t\t<?php foreach ( $materials as $m ) : ?>",
+        "text-material list must stay empty when only attachments exist",
+    )
+    require(
+        source,
+        "\t\t\t\t\t\t<?php endforeach; ?>\n\t\t\t\t\t</ul>\n\t\t\t\t<?php endif; ?>\n\t\t\t\t<div class=\"cas-course-attachments\">",
+        "text-material list must close before attachment markup",
+    )
 
     # This slice must render existing Tutor records only; it must not seed content.
     forbidden = (
