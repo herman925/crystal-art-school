@@ -160,6 +160,18 @@ function cas_course_facets( $course_id ) {
 }
 
 /**
+ * The catalogue card width at each CSS breakpoint.
+ *
+ * `.pg-wrap` is capped at 1440px including its 24px gutters. The catalogue rail is
+ * 250px wide with a 30px gap, and the card grid uses 20px gaps. Keeping those values
+ * here in the same order as industrial-2.css lets the browser choose the smallest
+ * attachment that fills the actual cover slot.
+ */
+function cas_course_cover_sizes() {
+	return '(max-width: 480px) calc(100vw - 48px), (max-width: 880px) calc((100vw - 68px) / 2), (max-width: 1100px) calc((100vw - 348px) / 2), calc((min(100vw, 1440px) - 368px) / 3)';
+}
+
+/**
  * One catalogue card. Markup mirrors the prototype's courseCard() exactly, including
  * the data-* attributes the filter rail matches on.
  */
@@ -181,9 +193,28 @@ function cas_course_card( $course_id, $index ) {
 	);
 
 	/* The first row is above the fold at every width, so the first card is eager and
-	   high priority and the rest stay lazy. */
-	$img_attr = 0 === $index ? 'fetchpriority="high" decoding="async"' : 'loading="lazy" decoding="async"';
-	$cover    = get_the_post_thumbnail_url( $course_id, 'large' );
+	   high priority and the rest stay lazy. WordPress supplies srcset, sizes,
+	   width, and height from the attachment metadata. */
+	$cover_id = (int) get_post_thumbnail_id( $course_id );
+	$cover    = '';
+
+	if ( $cover_id && wp_attachment_is_image( $cover_id ) ) {
+		$sizes      = cas_course_cover_sizes();
+		$cover_attrs = [
+			'alt'      => get_the_title( $course_id ) . ( $tag ? ' — ' . $tag . ' course' : '' ),
+			'sizes'    => $sizes,
+			'decoding' => 'async',
+		];
+
+		if ( 0 === $index ) {
+			$cover_attrs['fetchpriority'] = 'high';
+			$cover_attrs['loading']       = false;
+		} else {
+			$cover_attrs['loading'] = 'lazy';
+		}
+
+		$cover = wp_get_attachment_image( $cover_id, 'large', false, $cover_attrs );
+	}
 
 	ob_start();
 	?>
@@ -198,7 +229,7 @@ function cas_course_card( $course_id, $index ) {
 		<?php echo $f['is_sale'] ? 'data-sale="1"' : ''; ?>>
 		<div class="cover-card">
 			<?php if ( $cover ) : ?>
-				<img src="<?php echo esc_url( $cover ); ?>" <?php echo $img_attr; // phpcs:ignore WordPress.Security.EscapeOutput ?> alt="<?php echo esc_attr( get_the_title( $course_id ) . ( $tag ? ' — ' . $tag . ' course' : '' ) ); ?>">
+				<?php echo $cover; // phpcs:ignore WordPress.Security.EscapeOutput -- wp_get_attachment_image escapes its own attributes. ?>
 			<?php endif; ?>
 			<?php if ( $tag ) : ?>
 				<div class="media-tag"><?php echo esc_html( $tag ); ?></div>
@@ -680,6 +711,42 @@ function cas_courses_intro_default() {
 }
 
 /**
+ * Render Crystal's introduction with the WordPress-style `<!--more-->` marker.
+ *
+ * The textarea remains the source of truth: no length, word, or paragraph heuristic
+ * decides where the fold sits. A marker with no continuation is treated as plain copy,
+ * so an accidental trailing marker cannot leave a useless control on the page.
+ */
+function cas_render_courses_intro( $intro ) {
+	$intro = trim( (string) $intro );
+
+	if ( '' === $intro ) {
+		return '';
+	}
+
+	$parts = explode( '<!--more-->', $intro, 2 );
+	$lead  = trim( $parts[0] );
+	$more  = isset( $parts[1] ) ? trim( $parts[1] ) : '';
+
+	ob_start();
+	?>
+	<div class="page-lead-wrap">
+		<?php if ( $lead ) : ?>
+			<p class="page-lead"><?php echo wp_kses_post( $lead ); ?></p>
+		<?php endif; ?>
+		<?php if ( $more ) : ?>
+			<div id="cas-courses-intro-more" hidden>
+				<p class="page-lead"><?php echo wp_kses_post( $more ); ?></p>
+			</div>
+			<button class="btn ghost" type="button" data-cas-courses-intro-toggle aria-expanded="false" aria-controls="cas-courses-intro-more" style="margin-top:14px;">Read More</button>
+		<?php endif; ?>
+	</div>
+	<?php
+
+	return ob_get_clean();
+}
+
+/**
  * Her Free Trial photograph, uploaded to the media library rather than shipped inside
  * the theme so the field is hers to change and her replacement lands beside it.
  */
@@ -868,7 +935,7 @@ function cas_render_courses( $atts ) {
 		$catalogue = '<div class="catalog-layout"><div class="filter-col reveal-one">' . $rail . '</div><div>' . $catalogue . '</div></div>';
 	}
 
-	$intro = trim( (string) get_theme_mod( 'cas_courses_intro', cas_courses_intro_default() ) );
+	$intro = (string) get_theme_mod( 'cas_courses_intro', cas_courses_intro_default() );
 
 	ob_start();
 	/* The wood-grain banner every other content page carries. 4.3 sets the title in
@@ -877,9 +944,7 @@ function cas_render_courses( $atts ) {
 	echo cas_page_hero( 'Course catalog', 'Pick up a brush.' ); // phpcs:ignore WordPress.Security.EscapeOutput
 	?>
 	<div class="pg-wrap">
-		<?php if ( $intro ) : ?>
-			<div class="page-lead-wrap"><p class="page-lead"><?php echo wp_kses_post( $intro ); ?></p></div>
-		<?php endif; ?>
+		<?php echo cas_render_courses_intro( $intro ); // phpcs:ignore WordPress.Security.EscapeOutput -- helper escapes the editable copy. ?>
 		<?php if ( ! $ids ) : ?>
 			<p class="shop-lede">No courses are published yet.</p>
 		<?php else : ?>
