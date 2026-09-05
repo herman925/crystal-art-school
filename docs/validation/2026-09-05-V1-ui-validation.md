@@ -195,3 +195,65 @@ The seventeen photographs are real and are hers. Everything written about them i
 The page's own introduction promises a visitor can filter by medium and price and then buy on
 Etsy. Publishing these seventeen would put invented prices on a real artist's work under a
 promise the page cannot keep. Held, and raised as its own ticket.
+
+---
+
+## Dashboard — `/dashboard/`
+
+**FIXED — a logged-out visitor was shown a second, stock sign-in form.** The dashboard address
+printed the course plugin's own sign-in panel — *Hi, Welcome back!* / *Keep me signed in* / *SIGN
+IN* / *Don't have an account? Register Now* — in a voice that is not this site's, inside this
+site's header and footer, while the designed Log in page sat at its own address doing the same job
+properly.
+
+The theme already states the rule for this: building a second login is not its job, and a
+logged-out visitor is sent to the one that exists. That rule was applied only to the page
+shortcode, and the dashboard address does not use the shortcode — the plugin renders its own
+template there, so the rule never ran.
+
+A logged-out request to the dashboard is now sent to the Log in page. Signing in still lands on
+the dashboard, because that is already this site's default destination after login.
+
+Verified in both directions on the live site:
+
+| Request | Before | After |
+|---|---|---|
+| Logged out, dashboard | 200, stock sign-in form | 302 to the Log in page |
+| Logged out, Log in page | 200 | 200 |
+| Signed in, dashboard | 200 | 200, with the account's own name on the page |
+| Every other page | 200 | 200 |
+
+The signed-in check used a temporary subscriber account created for the test and deleted
+immediately afterwards. The site has no subscriber accounts.
+
+## Log in — `/login/`
+
+Correct. Title, lede, both fields, remember-me, forgotten-password link, and a link through to
+registration.
+
+## Sign up — `/student-registration/`
+
+Correct, and the consent control links to terms and privacy. What those terms say is still
+outstanding with her adviser.
+
+## Basket — `/cart/`
+
+Correct, including the three-step progress line and the empty state. Checkout redirects to the
+basket while the basket is empty, which is right.
+
+## Not found
+
+Correct.
+
+## FAQ — `/faq/`
+
+Nine entries, all published. Two of them describe a product that no longer exists:
+
+- *What's the difference between Apprentice and Fellow?* names both membership tiers in its own
+  title, and its answer promises the community server and lifetime access.
+- *Can I send you my personal work for critique?* promises the community server.
+
+Both are Crystal's own words and both are already tracked. They are deliberately **not** rewritten
+here: replacement wording has to be hers, and inventing it is the exact failure this project has
+had to undo before. Left published rather than withdrawn, consistent with the earlier decision to
+publish her FAQ verbatim.

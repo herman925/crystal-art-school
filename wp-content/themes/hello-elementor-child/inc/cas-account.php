@@ -1645,6 +1645,44 @@ function cas_account_adopt_content( $content ) {
  * is buffered between Tutor's hooks and replaced only on the logged-in home route; every
  * dashboard sub-route keeps Tutor's original markup and behavior.
  */
+/**
+ * A logged-out visitor who reaches the dashboard is sent to the site's own Log in page.
+ *
+ * Without this, Tutor prints its own stock sign-in form on that route - a second login,
+ * in a different voice, inside this site's header and footer, while the designed one
+ * sits at its own address. cas_render_dashboard() already states the rule for the
+ * shortcode path: building a second login is not this theme's job. This applies the
+ * same rule to Tutor's own template, which is what the dashboard page actually uses.
+ *
+ * Signing in lands on the dashboard, because that is already this site's default
+ * destination after login.
+ *
+ * @return void
+ */
+add_action(
+	'template_redirect',
+	function () {
+		if ( is_user_logged_in() || ! function_exists( 'tutor_utils' ) ) {
+			return;
+		}
+
+		$dashboard = (int) tutor_utils()->get_option( 'tutor_dashboard_page_id' );
+
+		if ( ! $dashboard || ! is_page( $dashboard ) ) {
+			return;
+		}
+
+		$login = cas_account_login_url();
+
+		if ( ! $login ) {
+			return;
+		}
+
+		wp_safe_redirect( $login );
+		exit;
+	}
+);
+
 add_action( 'tutor_dashboard/before/wrap', 'cas_account_dashboard_before' );
 add_action( 'tutor_dashboard/after/wrap', 'cas_account_dashboard_after' );
 
