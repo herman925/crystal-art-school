@@ -395,10 +395,73 @@ function cas_render_course_single() {
 				</div>
 			</section>
 		<?php endif; ?>
+
+		<?php
+		/* The prototype's closing band, `.band-forest` in course.dc.html: a picture, an
+		   eyebrow, a Font A heading and a button through to the Free videos page. It was
+		   never ported.
+
+		   Built the way the Courses page's FREE TRIAL band is built, and conditional for
+		   the same reason: the button must lead somewhere with something on it, so the
+		   whole band stays away until a free video is published. The picture is the newest
+		   free film's own cover rather than a fixed file, so it cannot go stale, and no
+		   paragraph is shipped - the prototype's sentence names lessons on skies, colour
+		   mixing and materials, and nothing on this site promises those. */
+		$fv_page  = cas_page_url( 'free-videos' );
+		$fv_cover = cas_course_free_video_cover();
+		?>
+		<?php if ( $fv_page && $fv_cover ) : ?>
+			<section class="section">
+				<div class="band-forest reveal-one">
+					<div style="flex:0 0 180px;border-radius:var(--radius-card);overflow:hidden;aspect-ratio:1/1;position:relative;z-index:1;">
+						<img src="<?php echo esc_url( $fv_cover ); ?>" alt="Free videos preview" style="width:100%;height:100%;object-fit:cover;" loading="lazy" decoding="async">
+					</div>
+					<div style="flex:1;">
+						<div class="eyebrow"><span class="star">&#10038;</span> Not ready to buy?</div>
+						<h2 class="marker-title font-a" style="font-size:clamp(31px,3.1vw,44px);">Try the free videos first.</h2>
+					</div>
+					<a class="btn-big btn-marine" href="<?php echo esc_url( $fv_page ); ?>" style="flex:none;">Watch free videos &rarr;</a>
+				</div>
+			</section>
+		<?php endif; ?>
 	</div>
 	<?php
 
 	return ob_get_clean();
+}
+
+/**
+ * The cover picture for the Free videos band.
+ *
+ * The newest published free film that carries a Featured image. Returns an empty
+ * string when there is none, which is what keeps the band off the page.
+ *
+ * @return string
+ */
+function cas_course_free_video_cover() {
+	if ( ! defined( 'CAS_FV_POST_TYPE' ) ) {
+		return '';
+	}
+
+	$films = get_posts(
+		array(
+			'post_type'   => CAS_FV_POST_TYPE,
+			'post_status' => 'publish',
+			'numberposts' => 10,
+			'orderby'     => 'date',
+			'order'       => 'DESC',
+		)
+	);
+
+	foreach ( $films as $film ) {
+		$url = get_the_post_thumbnail_url( $film, 'large' );
+
+		if ( $url ) {
+			return (string) $url;
+		}
+	}
+
+	return '';
 }
 
 add_shortcode( 'cas_course', 'cas_render_course_single' );

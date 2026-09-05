@@ -1,0 +1,144 @@
+# V1 — UI validation pass, page by page (#86)
+
+Started 2026-09-05. Live site `https://crystalau.com` compared against the prototype in this
+repository, served locally and rendered in a real browser at 1440px wide.
+
+Method: each page is opened in two browser tabs, live beside prototype. Section geometry
+(position, height, heading) is measured in the rendered page, and any block that differs is
+then looked at as a picture. This is not a class-name diff — that method has produced false
+findings on this project before and cannot tell an unbuilt block from a content-gated one.
+
+Every finding is classified:
+
+| Class | Meaning |
+|---|---|
+| FIXED | Unambiguous defect, corrected in this pass |
+| TICKET | Needs a judgement call or client input; raised separately |
+| DELIBERATE | Differs from the prototype on purpose; the reason is recorded |
+| GATED | Renders nothing because the content does not exist yet; the code is correct |
+
+---
+
+## Home — `/`
+
+| Prototype section | Height | Live | Verdict |
+|---|---|---|---|
+| Hero | 663 | present | OK |
+| New release | 617 | 679 | OK |
+| Shop all courses | 1828 | 1937 | OK |
+| Blog | 395 | absent | GATED |
+| Community band | 336 | absent | DELIBERATE |
+| Real hands, real progress | 494 | absent | GATED |
+| Social strip | 249 | 249 | OK |
+
+**FIXED — the homepage printed a raw shortcode to visitors.** The page content still called
+`[cas_community_band]` after the membership cleanup removed that shortcode from the theme, so
+WordPress printed the literal text `[cas_community_band]` inside a paragraph on the live home
+page. Removed from the page content; the previous content is backed up on the server at
+`~/cas-backups/home-12.content.bak`. Verified by re-fetching the live page: 0 occurrences.
+
+**GATED — Blog rail.** Renders nothing because the only published post is WordPress's own
+`Hello world!` sample, which has no featured image, and a card in that rail is a picture beside
+a title. The code documents this case explicitly and is correct.
+
+**GATED — Testimonials.** Renders nothing because no testimonial is published. Correct: the
+alternative is a heading over an empty grid.
+
+**DELIBERATE — Community band.** Removed with the membership tiers on the client's instruction.
+
+**TICKET — `Hello world!` is published on a live site.** It is WordPress's sample post and it is
+the only thing the Blog page lists. It is placeholder content on a public page.
+
+## Courses — `/courses/`
+
+| Prototype section | Height | Live | Verdict |
+|---|---|---|---|
+| Catalogue with sort and filter rail | 1149 | 887 | OK |
+| Three ways to study | 462 | absent | DELIBERATE |
+| Not sure where to start? | 336 | 336 | OK |
+
+Catalogue verified by eye: four courses, real cover photographs, real prices, the sale ribbon on
+the discounted course, sort controls and the full filter rail all present and correctly
+positioned. The height difference is the number of courses, not a missing block.
+
+**DELIBERATE — Three ways to study.** The tier block, removed with the membership model.
+
+**Known, not re-raised here:** the four course titles and all four prices are unapproved
+placeholders. That is already tracked with the client.
+
+## About — `/about/`
+
+Eight sections, matched one for one against the prototype, every one within 16 pixels of the
+prototype's position. Reading order, headings and heights all agree.
+
+| Section | Prototype | Live |
+|---|---|---|
+| Biography | 1071 / 1028 | 1071 / 1028 |
+| Community | 2099 / 522 | 2099 / 522 |
+| Instructor | 2621 / 682 | 2621 / 682 |
+| Highlights | 3303 / 1371 | 3303 / 1355 |
+| Philosophy | 4673 / 502 | 4658 / 486 |
+| Welcome | 5175 / 386 | 5144 / 371 |
+| Contact | 5561 / 517 | 5515 / 522 |
+| Terms and privacy | 6077 / 563 | 6037 / 320 |
+
+**DELIBERATE — the terms panel is shorter.** Three of the four panels were withheld because the
+prototype's wording invented UK data-protection rights for a Hong Kong business. Real wording is
+tracked separately and comes from the client's adviser.
+
+## Course detail — `/courses/clouds-beginner/`
+
+| Prototype | Live | Verdict |
+|---|---|---|
+| What you'll learn | By the end of this course | DELIBERATE — reworded |
+| Syllabus | What is inside | DELIBERATE — reworded |
+| Who this course is for | This course suits | DELIBERATE — reworded |
+| — | What comes with it | Added — the attachments shelf |
+| Try the free videos first. | absent | **FIXED** |
+
+**FIXED — the closing Free videos band was never ported.** The prototype closes every course page
+with a picture, an eyebrow, a heading and a button through to the Free videos page. Nothing in the
+theme rendered it and no note recorded a decision to drop it, so it was unbuilt rather than
+deliberate. Built to match the Courses page's own trial band, which is the established pattern for
+this component on the live site.
+
+Two things about it are conditional on purpose, both following that precedent. The band stays off
+the page until a free video is published, because the button must lead somewhere with something on
+it. And it ships no paragraph — the prototype's sentence promises tutorials on skies, colour
+mixing and materials, and nothing on this site promises those. The picture is the newest free
+film's own cover rather than a fixed file, so it cannot go stale.
+
+Consequence today: the band does not appear, because no free video is published. See below.
+
+---
+
+# The headline finding: five public pages have no content in them
+
+Measured on the live database, not inferred.
+
+| Content type | Published on the live site | Exists in the prototype |
+|---|---|---|
+| Artworks (Gallery) | 0 | yes — Crystal's paintings |
+| Student work (Showcase) | 0 | yes |
+| Free videos | 0 | yes — twelve films with covers |
+| About photographs | 0 | yes |
+| Testimonials | 0 | invented in the prototype, correctly not carried over |
+| FAQ entries | 9 | yes |
+| Course overview questions | 4 | yes |
+
+What a visitor sees today:
+
+- **Gallery** — the introduction, then `0 PIECES` and *No artwork is published yet.*
+- **Showcase** — the heading, then *No student work is published yet.*
+- **Free videos** — three section signs, each followed by *Nothing published in this section yet.*
+- **Home** — no blog rail and no testimonials, both for the same reason.
+- **Course detail** — no Free videos band, for the same reason.
+
+Every one of those pages renders its empty state correctly. The code is right. **The content was
+never imported.** This is not the same as waiting on the client: the pictures and the film links
+are in this repository already, in `assets/` and in the prototype's own data files, and they are
+Crystal's real material rather than placeholders.
+
+**FIXED — `Hello world!` was published on the live Blog page.** WordPress's own sample post was
+the only thing the Blog page listed. Set to draft, which is reversible. The Blog page now shows
+its empty state instead of sample content.
