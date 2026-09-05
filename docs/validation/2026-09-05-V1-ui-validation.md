@@ -257,3 +257,73 @@ Both are Crystal's own words and both are already tracked. They are deliberately
 here: replacement wording has to be hers, and inventing it is the exact failure this project has
 had to undo before. Left published rather than withdrawn, consistent with the earlier decision to
 publish her FAQ verbatim.
+
+## Lesson — `/courses/urban-sketch/lessons/...`
+
+Renders. Checked for the thing that matters most on this page: a signed-out visitor is served no
+video frame and no video identifier at all on a paid lesson. The enrolment gate holds.
+
+## Blog post
+
+**CARRIED FORWARD.** There is no published post to look at. Her three real posts are still drafts,
+each carrying a visible developer's note about corrections made without her sign-off, and the
+sample post that stood in their place has been withdrawn. This page can only be judged with real
+content in it.
+
+## Archive surfaces
+
+Search, category, tag filter and author all return a page with the site's own title and chrome.
+
+---
+
+# Verdict
+
+| Page | Verdict |
+|---|---|
+| Home | Fixed — raw shortcode removed. Two sections wait on content |
+| Courses | Pass |
+| Course detail | Fixed — the Free videos band was never ported; built |
+| Lesson | Pass; enrolment gate holds for a signed-out visitor |
+| About | Pass. Legal panels deliberately short |
+| FAQ | Two answers describe a product that no longer exists; already tracked |
+| Gallery | Empty. Held on her titles, prices and shop links — raised as its own ticket |
+| Showcase | Empty. Nothing exists to publish, and member terms must come first |
+| Blog list | Fixed — the sample post was withdrawn |
+| Blog post | Carried forward; no published post to judge |
+| Free videos | Fixed — her twelve films imported |
+| Log in | Pass |
+| Sign up | Pass |
+| Dashboard | Fixed — a second, stock login was showing to logged-out visitors |
+| Basket | Pass |
+| Checkout | Redirects to the basket while empty, which is right |
+| Not found | Pass |
+| Archives | Pass |
+
+## Fixed in this pass
+
+1. The home page printed a raw shortcode to visitors.
+2. The course pages were missing the prototype's closing Free videos band entirely.
+3. The Free videos page was empty; her twelve films are now published.
+4. WordPress's `Hello world!` sample post was the only thing on the live Blog page.
+5. The dashboard showed a second, stock sign-in form to anyone not signed in.
+
+## Needs her, and cannot be closed here
+
+1. Gallery titles, prices, medium and shop links.
+2. The two FAQ answers that still describe membership tiers, the community server and lifetime
+   access.
+3. The three legal panels on About.
+4. Approval of the corrections in her three blog posts, so they can be published.
+5. Content for the middle section of the Free videos page.
+6. Student work, which also waits on the member terms.
+7. Course titles and prices, which are still placeholders.
+
+## Deliberately not judged here
+
+Member-only states — the dashboard with a real enrolment, a course page after purchase, a lesson
+playing, order history — need a real purchase, which needs a payment gateway. That is the second
+validation pass, by design.
+
+Motion, hover and scroll effects are not judged here either. An automated browser reports the page
+as hidden and the animation frames never run, so every reading would be "no motion observed"
+whether the motion works or not. That needs a person at a real screen.
