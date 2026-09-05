@@ -142,3 +142,56 @@ Crystal's real material rather than placeholders.
 **FIXED — `Hello world!` was published on the live Blog page.** WordPress's own sample post was
 the only thing the Blog page listed. Set to draft, which is reversible. The Blog page now shows
 its empty state instead of sample content.
+
+---
+
+## The content port, item by item
+
+Each of the four empty content types was checked for provenance before anything was published.
+The rule applied throughout: publish only what Crystal supplied herself, and publish nothing whose
+wording was written by a developer. `tools/content-meta.json` states in its own header that its
+copy is placeholder and not client-approved, so it cannot be the source of anything that goes live.
+
+### Free videos — IMPORTED, 12 films
+
+Her provenance note is explicit: for a film she supplied as a link, the title and the address were
+transcribed character for character from her own document, and the description is deliberately
+empty because she supplied none and a blurb written here would be invented.
+
+Imported exactly that: twelve titles, twelve links, twelve cover pictures taken from her own
+channel, in the order her document lists them. No description was written. Five films sit in
+step-by-step demos and seven in shorts.
+
+Three further films were **not** imported. They are the ones she supplied as video files rather
+than links. Their titles and descriptions are developer-written placeholders, and the address on
+each is a file-sharing preview link that this site's player cannot open at all. Publishing them
+would put invented copy on a public page behind a button that does nothing.
+
+**Consequence:** the Free videos page is now populated, and the Free videos band added to every
+course page above now appears. The middle section, *Quick inspiration and bite-sized tips*, is
+still empty — she has supplied nothing for it.
+
+### About photographs — NO IMPORT NEEDED
+
+Not a gap. Each of the three photograph sets ships with its own pictures in the theme and switches
+over entirely to hers on the first one she publishes. The About page renders correctly today.
+
+### Student showcase — NOTHING TO IMPORT
+
+There is no student work anywhere in this project to import. The page is also the one surface that
+publishes a student's name and picture, which cannot happen before the member terms exist.
+
+### Gallery — HELD, and it needs her
+
+The seventeen photographs are real and are hers. Everything written about them is not:
+
+- The titles run `Original painting No.1` through `No.6`, `Art print No.1` through `No.6` and
+  `Pet drawing No.1` through `No.5`. They were generated, not named.
+- All seventeen prices, and the six struck-through "was" prices, were invented.
+- The medium and type tags cycle Original / Print / Pet over photographs that are mostly of pets,
+  because she asked for them to be filled in freely.
+- Not one artwork has a shop link, so not one would show a Buy button.
+
+The page's own introduction promises a visitor can filter by medium and price and then buy on
+Etsy. Publishing these seventeen would put invented prices on a real artist's work under a
+promise the page cannot keep. Held, and raised as its own ticket.
