@@ -48,6 +48,12 @@ function cas_dashboard_route_target() {
 		return 'blocked';
 	}
 
+	// Tutor's own address for the order history (the checkout and the pay-an-order guard send students
+	// here), so it opens the studio's Purchases tab instead of Tutor's native page.
+	if ( 'purchase_history' === $page ) {
+		return 'panel-purchases';
+	}
+
 	if ( 'courses' === $page ) {
 		if ( 'wishlist' === $sub ) {
 			return 'panel-wishlist';

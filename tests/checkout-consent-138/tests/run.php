@@ -150,5 +150,38 @@ t( '6a an unpaid order with no consent on it is refused at the pay-incomplete en
 t( '6b an order that carries the consent may go on', 'allowed' === $run_incomplete( $oid ) );
 t( '6c no order id is refused', 'allowed' !== $run_incomplete( 0 ) );
 
+// 7. The site terms consent is now stored on paid and on free orders too (it never was on paid ones).
+$meta_rows = function ( $order_id, $key ) {
+	return $GLOBALS['wpdb']->get_col( $GLOBALS['wpdb']->prepare( "SELECT meta_value FROM {$GLOBALS['wpdb']->prefix}tutor_ordermeta WHERE order_id = %d AND meta_key = %s", $order_id, $key ) );
+};
+$is_utc_now = fn( $v ) => 1 === preg_match( '/^\d{4}-\d\d-\d\d \d\d:\d\d:\d\d$/', (string) $v ) && abs( strtotime( $v . ' UTC' ) - time() ) < 300;
+t( '7a paid order: terms consent stored once (flag 1)', array( '1' ) === array_map( 'maybe_unserialize', $meta_rows( $oid, '_cas_checkout_terms_consent' ) ) );
+$terms_at = array_map( 'maybe_unserialize', $meta_rows( $oid, '_cas_checkout_terms_consent_at' ) );
+t( '7b paid order: terms consent time stored once, UTC', 1 === count( $terms_at ) && $is_utc_now( $terms_at[0] ), json_encode( $terms_at ) );
+$free_course = wp_insert_post( array( 'post_type' => 'courses', 'post_title' => 'Free one', 'post_status' => 'publish' ) );
+update_post_meta( $free_course, '_tutor_course_price_type', 'free' );
+$before = order_count();
+list( $redirect, $errors ) = $checkout( array_merge( $post_base(), array( 'object_ids' => (string) $free_course, 'payment_method' => 'free', 'cas_no_refund_consent' => '1' ) ) );
+$fid = (int) $GLOBALS['wpdb']->get_var( "SELECT MAX(id) FROM {$GLOBALS['wpdb']->prefix}tutor_orders" );
+t( '7c free order: created through the same checkout', order_count() === $before + 1 && $fid > $oid, (string) $redirect . json_encode( $errors ) );
+t( '7d free order: terms consent stored once', 1 === count( $meta_rows( $fid, '_cas_checkout_terms_consent' ) ) && 1 === count( $meta_rows( $fid, '_cas_checkout_terms_consent_at' ) ) );
+t( '7e free order: no-refund consent stored once, exact wording', array( WORDING ) === array_map( 'maybe_unserialize', $meta_rows( $fid, '_cas_refund_consent_text' ) ) && 1 === count( $meta_rows( $fid, '_cas_refund_consent_at' ) ) );
+$before = order_count();
+list( $redirect, $errors ) = $checkout( array_merge( $post_base(), array( 'object_ids' => (string) $free_course, 'payment_method' => 'free' ) ) );
+t( '7f free order without the box is refused too', order_count() === $before && null === $redirect );
+// Firing the old hook must not add a second record.
+do_action( 'tutor_order_placement_success', $fid );
+t( '7g the old placement-success hook writes nothing more', 1 === count( $meta_rows( $fid, '_cas_checkout_terms_consent' ) ) );
+
+// 8. Order history address: Tutor's own purchase_history page opens the studio Purchases tab.
+set_query_var( 'tutor_dashboard_page', 'purchase_history' );
+set_query_var( 'tutor_dashboard_sub_page', '' );
+t( '8a purchase_history maps to panel-purchases', 'panel-purchases' === cas_dashboard_route_target() );
+set_query_var( 'tutor_dashboard_page', 'account' );
+set_query_var( 'tutor_dashboard_sub_page', 'billing' );
+t( '8b account/billing still maps to panel-purchases', 'panel-purchases' === cas_dashboard_route_target() );
+set_query_var( 'tutor_dashboard_page', 'reviews' );
+t( '8c reviews is still blocked', 'blocked' === cas_dashboard_route_target() );
+
 echo "\npass=" . $GLOBALS['pass'] . ' fail=' . $GLOBALS['fail'] . "\n";
 echo "audit log:\n" . ( file_exists( '/tmp/audit.log' ) ? file_get_contents( '/tmp/audit.log' ) : '(none)' );

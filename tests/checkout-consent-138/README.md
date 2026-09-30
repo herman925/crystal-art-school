@@ -15,5 +15,5 @@ Covered: the box (a required checkbox with the approved wording, never pre-ticke
 place-order button); no box or a wrong value = no order, no billing record, a clear error; the site terms box is
 still required; box ticked = order created with `_cas_refund_consent_at` (UTC) and `_cas_refund_consent_text`
 (exact wording); an unpaid order paid again; other requests untouched; the second payment entry point
-(`tutor_pay_incomplete_order`). Mutation check: with the server filter removed, 11 checks fail.
+(`tutor_pay_incomplete_order`); the site terms consent stored on paid and free orders (once); the `purchase_history` route. Mutation checks: with the server filter removed 11 checks fail; with the old terms hook restored 2 fail.
 Not covered: the served page in a browser and Stripe test mode (needs a deploy).

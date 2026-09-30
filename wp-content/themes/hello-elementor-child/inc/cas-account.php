@@ -1368,6 +1368,13 @@ function cas_account_render_checkout_terms() {
  * fabricated receipt data is persisted. The action fires from Tutor's order
  * creation path, so this function never creates an order itself.
  *
+ * It hangs on `tutor_order_placed` (a new order, free or paid) and `tutor_order_updated` (an unpaid
+ * order paid again). Both fire inside the pay-now request, where the ticked box is still in $_POST.
+ * It used to hang on `tutor_order_placement_success`, which Tutor fires inside that request only
+ * for a single free item; for a paid order it fires when the success page is viewed, a GET with no
+ * box, so the consent was never stored (live orders 1 and 2 have none). update_meta() writes one
+ * row per key, so the two hooks cannot leave a second record.
+ *
  * @param int|string|array|object $order Newly placed Tutor order id/data.
  *
  * @return void
@@ -1396,7 +1403,8 @@ function cas_account_store_checkout_terms_consent( $order ) {
 	}
 }
 
-add_action( 'tutor_order_placement_success', 'cas_account_store_checkout_terms_consent' );
+add_action( 'tutor_order_placed', 'cas_account_store_checkout_terms_consent' );
+add_action( 'tutor_order_updated', 'cas_account_store_checkout_terms_consent' );
 
 /* -------------------------------------------------------------------------
  * [cas_checkout]
