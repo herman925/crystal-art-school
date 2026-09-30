@@ -115,7 +115,7 @@ $is_checkout_page = true;
 						</h3>
 
 						<div class="tutor-billing-fields">
-							<?php require tutor()->path . 'templates/ecommerce/checkout-billing-form-fields.php'; ?>
+							<?php require __DIR__ . '/cas-checkout-billing-fields.php'; // Tutor's fields without State and Phone, see that file. ?>
 						</div>
 					</section>
 
