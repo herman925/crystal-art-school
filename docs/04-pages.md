@@ -225,6 +225,39 @@ users get seeded `cas-enrolled` + `cas-orders` so the design shows populated. Fr
 progress is read from `cas-free-lesson-progress`. A toast confirms actions. Active tab
 persists in `cas-dash-tab`.
 
+### WordPress port (theme `hello-elementor-child`)
+
+The prototype's demo storage does not exist on the site; the studio page is
+`cas_account_dashboard_body()` in `inc/cas-account.php`, and the subpage work is in
+`inc/cas-dashboard-pages.php` (#125).
+
+- **One shell.** A student's GET request for one of Tutor's own subpages redirects to the
+  studio page with that tab open (`template_redirect`, student view only; instructors and
+  admins keep Tutor's pages):
+
+  | Tutor address | Studio tab |
+  |---|---|
+  | `/dashboard/courses/` (also `active-courses`, `completed-courses`, `my-courses`) | My courses |
+  | `/dashboard/courses/wishlist/` | Wishlist (not in the prototype) |
+  | `/dashboard/account/billing/` | Purchases |
+  | `/dashboard/account/profile/`, `/dashboard/account/` | Profile |
+  | `/dashboard/account/settings/` | Settings |
+  | quiz attempts (`quiz-attempts`, `my-quiz-attempts`), reviews | studio home; not reachable (no quizzes at launch, #124) |
+
+- **Purchases** is the `dash-table` built from Tutor's orders. The Receipt cell holds Tutor's
+  own pay button and, with Tutor Pro's invoice add-on, its invoice button
+  (`tutor_dashboard_invoice_button`). Newest 50 orders, no paging.
+- **Settings** is Main focus (usermeta `cas_main_focus`) and Country (Tutor's billing row),
+  plus Tutor's own Login Info / Reset Password card. Notification switches, Full name, Email,
+  Privacy and Delete account are not built (owner decisions 2026-09-30; the site sends
+  transactional mail only).
+- **Profile and Settings need Tutor's settings component.** Tutor's dashboard script registers
+  a page's Alpine components from the address, and `/dashboard/` only registers the home
+  ones. The studio page therefore carries `?dashboard-page=settings` until the page has
+  loaded, then restores the address (inline scripts added in `inc/cas-dashboard-pages.php`).
+  Without this the profile save, photo upload and password reset do nothing.
+- Toolbar: nobody without `manage_options` gets the WordPress admin toolbar (#140).
+
 ---
 
 ## `Checkout.dc.html` — Checkout
@@ -238,6 +271,28 @@ A 3-step flow driven by the shared cart:
    cart** (`cas-cart`) on completion.
 
 Reads/writes the same `cas-cart` array as the drawer. Money is shown in GBP.
+
+### WordPress port (theme `hello-elementor-child`)
+
+The checkout step is Tutor's native eCommerce page, not the prototype's demo flow (#123).
+
+- `tutor/ecommerce/checkout.php` is a **fork of Tutor 4.1.0's own `checkout.php`**. All Tutor
+  ids, field names, nonce and hooks are kept; the wrapping is the prototype's `.checkout-grid`
+  (billing and payment panels on the left, the order summary card on the right). The consent,
+  the "Place order" button and "Back to basket" sit outside `[tutor-checkout-details]`, the
+  element Tutor refreshes over AJAX when a coupon or country changes, so they survive it.
+- `tutor/ecommerce/cas-checkout-billing-fields.php` is a copy of Tutor's billing fields
+  **without State and Phone**. Tutor does not check them on the server, but its customers
+  table has no default for them, so they are posted as empty hidden inputs.
+- `inc/cas-checkout.php` adds the stylesheet (`css/cas-checkout.css`), the prototype's words
+  ("Order summary", "Total", "Place order") and the AJAX-refresh coverage.
+- **When Tutor is updated, diff both template files against the plugin's** and carry the
+  changes across. `tests/test_checkout_parity_contract.py` names the pieces that must stay.
+- There are no card fields on the site: Stripe hosts the card form, and its page branding is a
+  Stripe setting.
+- The footer on the checkout pages shows the Account column (Log in, Basket; Sign up only while
+  registration is open) to a signed-out visitor and the normal Contact column to a signed-in
+  one (#141).
 
 ---
 
