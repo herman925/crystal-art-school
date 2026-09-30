@@ -644,6 +644,29 @@ function cas_account_store_member_terms_consent( $user ) {
 add_action( 'tutor_new_user_registered', 'cas_account_store_member_terms_consent' );
 
 /**
+ * Mark a new student as having finished Tutor's onboarding tour.
+ *
+ * The tour is switched off by the empty tutor/shared/tour.php override. This is the second
+ * line: Tutor records completion in `_tutor_tour_completed`, so a student who is created with
+ * it set never sees the tour even if the override is later removed.
+ *
+ * @param WP_User|int $user Newly registered Tutor user.
+ *
+ * @return void
+ */
+function cas_account_skip_tutor_tour( $user ) {
+	$user_id = $user instanceof WP_User ? (int) $user->ID : absint( $user );
+
+	if ( ! $user_id ) {
+		return;
+	}
+
+	update_user_meta( $user_id, '_tutor_tour_completed', true );
+}
+
+add_action( 'tutor_new_user_registered', 'cas_account_skip_tutor_tour' );
+
+/**
  * Sign up. Tutor's own registration form, in the site's card.
  *
  * `users_can_register` is 0 on this install and turning it on is Herman's decision, not

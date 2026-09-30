@@ -1,0 +1,110 @@
+/*
+ * Lesson page — the rules lesson.dc.html keeps in its own <style> block. The shared lesson
+ * layout (.lesson-cols, .stage, .unit-row, .progress-card, .finish-card and the rest) is
+ * already in industrial-2.css and industrial-3.css; only what the page adds on top is here.
+ *
+ * Left out on purpose, because the data behind them does not exist in Tutor: .part-row
+ * (multi-part lessons), .films-card / .film-row (course films) and .stage.is-vertical
+ * (portrait films). See inc/cas-lesson.php.
+ */
+
+/* "Now playing" must only show on the active lesson. The design css sets
+   .curr-card .unit-row .now, which outranks a plain [hidden] rule. */
+.curr-card .unit-row .now[hidden], .unit-row .now[hidden] { display: none; }
+
+/* The course description with its cover wrapped into it. The cover floats left, per the
+   client's Word mock-up and the COURSES 3rd Layer board. With no cover the text runs full
+   width; nothing stands in for it. */
+.course-desc { margin-bottom: 22px; }
+.course-desc h1 { font-family: var(--font-marker); font-weight: 700; font-size: clamp(26px, 2.8vw, 38px); line-height: 1.14; color: var(--ink); margin: 0 0 16px; }
+.course-desc .cd-body::after { content: ""; display: block; clear: both; }
+/* height:auto is load-bearing: real width/height attributes are presentational hints, and
+   without it the cover keeps its intrinsic height at 320px wide. */
+.course-desc .cd-cover { float: left; width: min(42%, 320px); height: auto; margin: 4px 24px 14px 0; border-radius: var(--radius-card); box-shadow: var(--shadow-sm); }
+.course-desc p { font-size: 16px; line-height: 1.72; color: var(--muted); margin: 0; }
+@media (max-width: 620px) { .course-desc .cd-cover { float: none; width: 100%; margin: 0 0 14px; } }
+
+/* The progress bar stays alongside the "n of N" count, thickened rather than replaced. */
+.progress-card .pbar { height: 16px; }
+
+/* Even rows take a slightly lighter tone of the same colour, never a flat fill, and the
+   list's text and spacing are opened up. */
+.curr-card .unit-row[data-odd="1"] { background: color-mix(in srgb, var(--ink) 5%, transparent); }
+/* The odd-row stripe above resets `background`, which also wipes the oak grain that
+   .unit-row.current draws in industrial-3.css, while leaving that rule's dark title colour
+   in place. On the prototype this makes the current lesson unreadable whenever its number
+   is even (its title is dark on the dark card). The current row keeps its oak ground. */
+.curr-card .unit-row.current { background-color: #cab389; background-image: var(--oak-grain); background-size: 180px 70px; }
+.curr-card .unit-row { padding: 15px 13px; gap: 13px; }
+.curr-card .unit-row .ut { font-size: 16px; }
+.curr-card .unit-row .ud { font-size: 14px; }
+/* At most one thumbnail per lesson. Nothing is substituted when a lesson has no image. */
+.curr-card .unit-row .uthumb-wrap { position: relative; flex: none; width: 78px; height: 48px; border-radius: 8px; overflow: hidden; }
+.curr-card .unit-row .uthumb { display: block; width: 100%; height: 100%; object-fit: cover; box-shadow: var(--shadow-sm); }
+/* A lesson with no cover still reserves the slot, so the rows stay aligned. */
+.curr-card .unit-row .uthumb-wrap.is-empty { background: color-mix(in srgb, var(--ink) 10%, transparent); }
+/* "Now playing" reads on the thumbnail rather than beside the title, on one line, on a
+   solid bar. 10px is below the site's 12px floor, deliberately and only here: it is a
+   state marker on an image, not reading matter. */
+.curr-card .unit-row .now { position: absolute; inset: auto 0 0 0; display: flex; align-items: center; justify-content: center; gap: 4px;
+  padding: 3px 0; background: rgba(20,17,13,.78); backdrop-filter: blur(2px);
+  font-family: var(--font-cond); font-weight: 600; font-size: 10px; line-height: 1.1;
+  letter-spacing: var(--tracking-label); text-transform: uppercase; white-space: nowrap; color: #f3ede1; }
+.curr-card .unit-row .now-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--coral);
+  animation: nowPulse 1.6s var(--ease-out) infinite; }
+@keyframes nowPulse { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
+@media (prefers-reduced-motion: reduce) { .curr-card .unit-row .now-dot { animation: none; } }
+
+/* The prototype's rows are buttons; here they are links, or plain text for a lesson the
+   student cannot open yet. */
+a.unit-row { text-decoration: none; color: inherit; }
+.unit-row.is-locked { opacity: .55; cursor: default; }
+.unit-row.is-locked:hover { background: none; }
+
+/* The bundled download sits above the per-item list. */
+.materials-card .res-all { display: flex; align-items: center; gap: 12px; padding: 2px 10px 12px; }
+/* The list packs the card's width in as many columns as fit. */
+.materials-card .res-list { max-width: none; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); }
+.materials-card .ch { font-size: 21px; font-family: var(--font-marker); font-weight: 600;
+  letter-spacing: normal; text-transform: none; color: var(--ink); padding: 4px 10px 14px; }
+.materials-card .res-all-note { font-family: var(--font-cond); font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); }
+
+/* Reference photographs — the pictures the lesson is painted FROM, shown as pictures with
+   the download under each. `auto-fit`, so a lesson with one photograph shows it at the
+   full width of the card. */
+.ref-card .ref-grid { display: grid; gap: 16px; padding: 0 10px 16px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+.ref-card figure { margin: 0; }
+.ref-card .ref-shot { display: block; width: 100%; height: auto; border-radius: var(--radius-card);
+  background: rgba(20,17,13,.35); }
+.ref-card figcaption { display: flex; align-items: baseline; justify-content: space-between;
+  gap: 10px; margin-top: 7px; font-family: var(--font-cond); font-size: 12.5px;
+  letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); }
+.ref-card figcaption a { color: var(--ink); text-decoration: underline; text-underline-offset: 2px; white-space: nowrap; }
+.materials-card .res-note { margin: 0; padding: 0 10px 14px; font-family: var(--font-cond); font-size: 13.5px; line-height: 1.5; color: var(--muted); }
+.materials-card .res-note:empty { display: none; }
+
+/* The film is the video host's own player, laid over the poster. The unit flag stays
+   visible but must not steal clicks from the player. */
+.stage .gdrive-frame { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; display: none; z-index: 6; background: #000; }
+.stage.has-video .gdrive-frame { display: block; }
+/* A film that is not an embed (YouTube, Vimeo, an uploaded file) keeps Tutor's own player,
+   filling the stage. */
+.stage .cas-lesson-native { position: absolute; inset: 0; z-index: 6; background: #000; }
+.stage .cas-lesson-native iframe, .stage .cas-lesson-native video { width: 100%; height: 100%; border: 0; }
+.stage .unit-flag { pointer-events: none; z-index: 7; }
+/* The cover's own shape drives the COVER: a portrait cover is pillarboxed whole rather
+   than cropped to its middle band. `position: absolute` is stated because the rule cannot
+   work without it. */
+.stage.is-poster-tall > img.poster {
+  position: absolute; top: 0; left: 50%; right: auto;
+  width: auto; height: 100%; aspect-ratio: 9 / 16; transform: translateX(-50%);
+}
+.stage-missing { position: absolute; left: 50%; bottom: 14px; transform: translateX(-50%); z-index: 6; display: none; font-family: var(--font-cond); font-size: 12.5px; font-weight: 600; letter-spacing: var(--tracking-label); text-transform: uppercase; color: #f3ede1; background: rgba(20,17,13,.72); border-radius: 999px; padding: 7px 16px; backdrop-filter: blur(3px); white-space: nowrap; }
+.stage.is-missing .stage-missing { display: block; }
+
+/* small screens */
+@media (max-width: 640px) {
+  .lesson-meta-row { font-size: 12.5px; gap: 6px 12px; }
+  .page-hero .crumbs { font-size: 12.5px; }
+}

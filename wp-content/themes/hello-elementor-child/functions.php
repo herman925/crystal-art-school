@@ -214,6 +214,8 @@ require_once get_stylesheet_directory() . '/inc/cas-courses.php';
 
 require_once get_stylesheet_directory() . '/inc/cas-course-single.php';
 
+require_once get_stylesheet_directory() . '/inc/cas-lesson.php';
+
 add_action(
 	'wp_enqueue_scripts',
 	function () {
