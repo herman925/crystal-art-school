@@ -1,44 +1,24 @@
 <?php
 /**
- * The site's own emails: receipt, enrolment, refund, and the opt-in new-course and promotion mails.
+ * The site's own transactional emails: receipt, enrolment confirmation and refund notice.
  *
  * WHY THEME CODE. Tutor Pro's Email and Notifications addons stay off (issue #119): the Email addon
  * emails every administrator by default, adds a public `?tutor_cron=1` queue trigger and replaces
  * the password-reset mail. Everything here goes through wp_mail(), so it uses the existing SMTP
  * hook in mu-plugins/cas-audit-log.php (the hello@ mailbox, 100 sends a day).
  *
- * WHO GETS WHAT.
- *   - Receipt, enrolment and refund notices go to the buyer or student only, never to an
- *     administrator, and they are sent at once. They are never held back by the daily cap.
- *   - New-course and promotion mails go only to users whose usermeta flag is '1'
- *     (cas_notify_new_course, cas_notify_promos). The flags are written by the dashboard
- *     switches (issue #125); a missing flag means off. This file only reads them.
- *   - No mail is sent to a user who can manage options.
- *
- * THE DAILY CAP. Bulk mails go into a queue and a WP-cron job sends a few every 15 minutes. They may
- * use only what is left of the cap after CAS_MAIL_BULK_RESERVE sends are held back for receipts and
- * refunds, so bulk mail cannot starve a receipt. WP-cron runs on page visits, so a quiet site sends
- * bulk mail later, never earlier.
+ * WHO GETS WHAT. Each mail goes to the buyer or student only, at once, and never to a user who can
+ * manage options. There is no bulk, marketing or opt-in mail: the site sends transactional mail only
+ * (owner decision 2026-09-30).
  *
  * WHAT IS NOT HERE. No wording that is not data from the order or the course: no refund policy, no
  * delivery times, no promises. The words are in cas_mail_copy() so the owner can approve or change
- * them in one place. There is no one-click unsubscribe link; every bulk mail points to the
- * dashboard settings instead.
+ * them in one place.
  *
  * Each mail is sent once: cas_mail_once() takes a lock in wp_options before sending.
  */
 
 defined( 'ABSPATH' ) || exit;
-
-if ( ! defined( 'CAS_MAIL_DAILY_CAP' ) ) {
-	define( 'CAS_MAIL_DAILY_CAP', 100 ); // The mailbox limit on the trial plan.
-}
-if ( ! defined( 'CAS_MAIL_BULK_RESERVE' ) ) {
-	define( 'CAS_MAIL_BULK_RESERVE', 40 ); // Sends held back each day for receipts, enrolments and refunds.
-}
-if ( ! defined( 'CAS_MAIL_BULK_BATCH' ) ) {
-	define( 'CAS_MAIL_BULK_BATCH', 10 ); // Most bulk mails one cron run sends.
-}
 
 /* -------------------------------------------------------------------------
  * The words
@@ -70,35 +50,12 @@ function cas_mail_copy() {
 		'refund_cancelled'     => 'The enrolment for this order has been cancelled.',
 		'refund_cta'           => 'Go to your dashboard',
 		'refund_reason'        => 'You are receiving this email because a refund was made on your order at %s.',
-
-		'new_course_subject'   => 'New course: %s',
-		'new_course_heading'   => 'A new course has been published',
-		'new_course_intro'     => '%s is now on the site.',
-		'new_course_cta'       => 'View the course',
-
-		'optin_reason'         => 'You are receiving this email because you chose to get %2$s from %1$s.',
-		'optin_kind_new_course' => 'new-course emails',
-		'optin_kind_promos'    => 'promotion emails',
-		'settings_link'        => 'Turn it off in your dashboard settings',
 	);
 }
 
 /* -------------------------------------------------------------------------
- * Flags, guards, counters
+ * Guards and the audit log
  * ---------------------------------------------------------------------- */
-
-/**
- * Whether a user switched a notification on. Off unless the flag is exactly '1'.
- *
- * @param int    $user_id User id.
- * @param string $flag    One of cas_notify_new_course, cas_notify_reminders, cas_notify_promos.
- * @return bool
- */
-function cas_notify_enabled( $user_id, $flag ) {
-	$flags = array( 'cas_notify_new_course', 'cas_notify_reminders', 'cas_notify_promos' );
-
-	return in_array( $flag, $flags, true ) && '1' === (string) get_user_meta( (int) $user_id, $flag, true );
-}
 
 /**
  * The address to write to, or '' when this user must not be emailed at all.
@@ -127,31 +84,6 @@ function cas_mail_once( $key ) {
 }
 
 /**
- * Sends made today (UTC). The counter resets when the date changes.
- *
- * @return int
- */
-function cas_mail_sent_today() {
-	$day = get_option( 'cas_mail_day' );
-
-	return ( is_array( $day ) && gmdate( 'Y-m-d' ) === $day['date'] ) ? (int) $day['count'] : 0;
-}
-
-/**
- * Count one send. Receipts count too, so bulk mail sees what is really left.
- */
-function cas_mail_count_send() {
-	update_option(
-		'cas_mail_day',
-		array(
-			'date'  => gmdate( 'Y-m-d' ),
-			'count' => cas_mail_sent_today() + 1,
-		),
-		false
-	);
-}
-
-/**
  * Write to the audit log when it exists. Event names and ids only, never an address.
  *
  * @param string $event  Event name.
@@ -168,24 +100,10 @@ function cas_mail_log( $event, $detail = '' ) {
  * ---------------------------------------------------------------------- */
 
 /**
- * The dashboard settings address, where the three switches live.
- *
- * @return string
- */
-function cas_mail_settings_url() {
-	if ( function_exists( 'tutor_utils' ) ) {
-		return tutor_utils()->tutor_dashboard_url( 'account/settings' );
-	}
-
-	return home_url( '/dashboard/' );
-}
-
-/**
  * Build the HTML and plain-text bodies from one description.
  *
  * $mail keys: heading (string), lines (string[] paragraphs), rows (array of [label, value]),
- * cta_label and cta_url (optional), reason (string, the footer sentence), settings (bool, add the
- * dashboard settings link to the footer).
+ * cta_label and cta_url (optional), reason (string, the footer sentence).
  *
  * Colours are the palette in DESIGN.md §3. Email clients ignore stylesheets and web fonts, so the
  * styles are inline and the type is a safe serif and sans stack.
@@ -200,7 +118,6 @@ function cas_mail_render( array $mail ) {
 	$rows     = isset( $mail['rows'] ) ? (array) $mail['rows'] : array();
 	$cta_url  = isset( $mail['cta_url'] ) ? (string) $mail['cta_url'] : '';
 	$cta_text = isset( $mail['cta_label'] ) ? (string) $mail['cta_label'] : '';
-	$settings = ! empty( $mail['settings'] );
 
 	$serif = "Georgia,'Times New Roman',serif";
 	$sans  = "Arial,Helvetica,sans-serif";
@@ -233,9 +150,6 @@ function cas_mail_render( array $mail ) {
 	$html .= '</td></tr>';
 	$html .= '<tr><td style="padding:16px 28px 26px;border-top:1px solid #cdc7bd;color:#474138;font:400 13px/1.5 ' . $sans . ';">';
 	$html .= esc_html( $mail['reason'] );
-	if ( $settings ) {
-		$html .= ' <a href="' . esc_url( cas_mail_settings_url() ) . '" style="color:#4d6625;">' . esc_html( cas_mail_copy()['settings_link'] ) . '</a>';
-	}
 	$html .= '<br><a href="' . esc_url( $home ) . '" style="color:#4d6625;">' . esc_html( preg_replace( '#^https?://#', '', untrailingslashit( $home ) ) ) . '</a>';
 	$html .= '</td></tr></table></td></tr></table></body></html>';
 
@@ -253,9 +167,6 @@ function cas_mail_render( array $mail ) {
 		$text .= $cta_text . ': ' . $cta_url . "\n\n";
 	}
 	$text .= "--\n" . $mail['reason'];
-	if ( $settings ) {
-		$text .= ' ' . cas_mail_copy()['settings_link'] . ': ' . cas_mail_settings_url();
-	}
 	$text .= "\n" . $home . "\n";
 
 	return array( $html, $text );
@@ -303,7 +214,6 @@ function cas_mail_send( $user_id, $subject, array $mail, $tag ) {
 	remove_action( 'wp_mail_failed', $catch );
 
 	if ( $sent ) {
-		cas_mail_count_send();
 		cas_mail_log( 'mail_sent', $tag );
 	} else {
 		cas_mail_log( 'mail_failed', $tag . ' ' . substr( $fail_reason, 0, 120 ) );
@@ -513,179 +423,3 @@ function cas_mail_refund( $order_id, $amount, $reason = '' ) {
 	);
 }
 add_action( 'tutor_after_order_refund', 'cas_mail_refund', 20, 3 );
-
-/* -------------------------------------------------------------------------
- * Opt-in bulk mail: queued, capped, checked again at send time
- * ---------------------------------------------------------------------- */
-
-/**
- * Queue a mail for every user whose flag is '1'.
- *
- * $campaign keys: type (new_course or promos), subject, heading, lines, cta_label, cta_url.
- * The flag is read again when each mail goes out, so someone who opts out while the queue is
- * waiting gets nothing more.
- *
- * @param string $flag     cas_notify_new_course or cas_notify_promos.
- * @param array  $campaign Campaign description.
- * @return int Number of recipients queued.
- */
-function cas_mail_queue_campaign( $flag, array $campaign ) {
-	if ( ! in_array( $flag, array( 'cas_notify_new_course', 'cas_notify_promos' ), true ) ) {
-		return 0;
-	}
-
-	$ids = get_users(
-		array(
-			'meta_key'   => $flag, // phpcs:ignore WordPress.DB.SlowDBQuery -- one small query per campaign.
-			'meta_value' => '1', // phpcs:ignore WordPress.DB.SlowDBQuery
-			'fields'     => 'ID',
-		)
-	);
-	$ids = array_values( array_filter( array_map( 'intval', $ids ), static function ( $id ) {
-		return '' !== cas_mail_address( $id );
-	} ) );
-	if ( ! $ids ) {
-		return 0;
-	}
-
-	$queue   = get_option( 'cas_mail_queue', array() );
-	$queue   = is_array( $queue ) ? $queue : array();
-	$queue[] = array_merge( $campaign, array( 'flag' => $flag, 'users' => $ids, 'pos' => 0 ) );
-	update_option( 'cas_mail_queue', $queue, false );
-	cas_mail_log( 'mail_queued', $flag . ' recipients=' . count( $ids ) );
-
-	return count( $ids );
-}
-
-/**
- * Promotion mail. Nothing calls this on its own: it is the entry point for a promotion the owner
- * decides to send, and it reaches only users who switched promotions on.
- *
- * @param string $subject   Subject line.
- * @param string $heading   Heading.
- * @param string $body      Paragraphs, one per array item.
- * @param string $cta_label Button label, or ''.
- * @param string $cta_url   Button address, or ''.
- * @return int Number of recipients queued.
- */
-function cas_mail_queue_promo( $subject, $heading, array $body, $cta_label = '', $cta_url = '' ) {
-	return cas_mail_queue_campaign(
-		'cas_notify_promos',
-		array(
-			'subject'   => $subject,
-			'heading'   => $heading,
-			'lines'     => $body,
-			'cta_label' => $cta_label,
-			'cta_url'   => $cta_url,
-		)
-	);
-}
-
-/**
- * New-course mail, queued the first time a course becomes public. Private and draft courses send
- * nothing, and a course that is unpublished and published again is not announced twice.
- *
- * @param string  $new_status New post status.
- * @param string  $old_status Old post status.
- * @param WP_Post $post       The post.
- */
-function cas_mail_new_course( $new_status, $old_status, $post ) {
-	if ( 'publish' !== $new_status || 'publish' === $old_status || 'courses' !== $post->post_type || wp_installing() ) {
-		return;
-	}
-	if ( get_post_meta( $post->ID, '_cas_new_course_mailed', true ) ) {
-		return;
-	}
-	update_post_meta( $post->ID, '_cas_new_course_mailed', gmdate( 'Y-m-d H:i:s' ) );
-
-	$copy  = cas_mail_copy();
-	$title = html_entity_decode( get_the_title( $post ), ENT_QUOTES, 'UTF-8' );
-
-	cas_mail_queue_campaign(
-		'cas_notify_new_course',
-		array(
-			'subject'   => sprintf( $copy['new_course_subject'], $title ),
-			'heading'   => $copy['new_course_heading'],
-			'lines'     => array( sprintf( $copy['new_course_intro'], $title ) ),
-			'cta_label' => $copy['new_course_cta'],
-			'cta_url'   => get_permalink( $post ),
-		)
-	);
-}
-add_action( 'transition_post_status', 'cas_mail_new_course', 10, 3 );
-
-/**
- * How many bulk mails may go out right now: what is left of the cap after the reserve.
- *
- * @return int
- */
-function cas_mail_bulk_room() {
-	return max( 0, min( CAS_MAIL_BULK_BATCH, CAS_MAIL_DAILY_CAP - CAS_MAIL_BULK_RESERVE - cas_mail_sent_today() ) );
-}
-
-/**
- * The cron job: send the next few queued mails.
- */
-function cas_mail_bulk_tick() {
-	$queue = get_option( 'cas_mail_queue', array() );
-	if ( ! is_array( $queue ) || ! $queue ) {
-		return;
-	}
-	$room = cas_mail_bulk_room();
-
-	foreach ( $queue as $i => &$job ) {
-		while ( $room > 0 && $job['pos'] < count( $job['users'] ) ) {
-			$user_id = (int) $job['users'][ $job['pos'] ];
-			++$job['pos'];
-
-			if ( ! cas_notify_enabled( $user_id, $job['flag'] ) ) {
-				continue; // Opted out while waiting: not sent and not counted.
-			}
-			$kind = 'cas_notify_promos' === $job['flag'] ? 'optin_kind_promos' : 'optin_kind_new_course';
-			$copy = cas_mail_copy();
-			$site = wp_specialchars_decode( get_bloginfo( 'name' ), ENT_QUOTES );
-
-			cas_mail_send(
-				$user_id,
-				$job['subject'],
-				array(
-					'heading'   => $job['heading'],
-					'lines'     => $job['lines'],
-					'cta_label' => $job['cta_label'],
-					'cta_url'   => $job['cta_url'],
-					'reason'    => sprintf( $copy['optin_reason'], $site, $copy[ $kind ] ),
-					'settings'  => true,
-				),
-				'bulk ' . $job['flag'] . ' user=' . $user_id
-			);
-			--$room;
-		}
-		if ( $job['pos'] >= count( $job['users'] ) ) {
-			unset( $queue[ $i ] );
-		}
-	}
-	unset( $job );
-
-	update_option( 'cas_mail_queue', array_values( $queue ), false );
-}
-add_action( 'cas_mail_bulk_tick', 'cas_mail_bulk_tick' );
-
-add_filter(
-	'cron_schedules',
-	function ( $schedules ) {
-		$schedules['cas_fifteen_minutes'] = array(
-			'interval' => 900,
-			'display'  => 'Every 15 minutes',
-		);
-		return $schedules;
-	}
-);
-
-add_action(
-	'init',
-	function () {
-		if ( ! wp_next_scheduled( 'cas_mail_bulk_tick' ) ) {
-			wp_schedule_event( time() + 300, 'cas_fifteen_minutes', 'cas_mail_bulk_tick' );
-		}
-	}
-);

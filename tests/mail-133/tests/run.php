@@ -1,5 +1,5 @@
 <?php
-// Local test of inc/cas-mail.php against Tutor 4.1.0 (free) with the manual gateway. Mail goes to Mailpit.
+// Local test of inc/cas-mail.php (transactional mail only) against Tutor 4.1.0 (free) with the manual gateway. Mail goes to Mailpit.
 use Tutor\Models\OrderModel;
 
 $GLOBALS['pass'] = 0;
@@ -28,23 +28,14 @@ function subjects() {
 }
 
 update_option( 'tutor_option', array_merge( (array) get_option( 'tutor_option' ), array( 'monetize_by' => 'tutor', 'currency_code' => 'GBP', 'currency_position' => 'left' ) ) );
-delete_option( 'cas_mail_day' );
-delete_option( 'cas_mail_queue' );
 clear_inbox();
 
 $mk = function ( $login, $role = 'subscriber' ) {
 	return wp_insert_user( array( 'user_login' => $login, 'user_pass' => 'pw', 'user_email' => $login . '@example.test', 'role' => $role, 'display_name' => $login ) );
 };
 $buyer = $mk( 'buyer' );
-$on    = $mk( 'optin' );
-$off   = $mk( 'optout' );
-$none  = $mk( 'noflag' );
+$free  = $mk( 'freebuyer' );
 $adm   = $mk( 'adminfan', 'administrator' );
-update_user_meta( $on, 'cas_notify_new_course', '1' );
-update_user_meta( $on, 'cas_notify_promos', '1' );
-update_user_meta( $off, 'cas_notify_new_course', '0' );
-update_user_meta( $adm, 'cas_notify_new_course', '1' );
-update_user_meta( $adm, 'cas_notify_promos', '1' );
 
 $course = wp_insert_post( array( 'post_type' => 'courses', 'post_title' => 'Clouds & Skies', 'post_status' => 'draft' ) );
 update_post_meta( $course, '_tutor_course_price_type', 'paid' );
@@ -73,7 +64,6 @@ $new_order = function ( $uid, $total = 25.00 ) use ( $model, $course ) {
 
 // 1. Paid order: receipt and enrolment, buyer only.
 wp_update_post( array( 'ID' => $course, 'post_status' => 'publish' ) );
-delete_option( 'cas_mail_queue' );
 clear_inbox();
 $oid = $new_order( $buyer );
 $model->mark_as_paid( $oid );
@@ -179,61 +169,17 @@ t( '4 no mail to an administrator buyer', 0 === count( inbox() ), implode( '|', 
 
 // 5. Free order: no receipt.
 clear_inbox();
-$o3 = $new_order( $on, 0.00 );
+$o3 = $new_order( $free, 0.00 );
 $model->mark_as_paid( $o3 );
 t( '5 free order has no receipt', ! array_filter( subjects(), fn( $s ) => str_starts_with( $s, 'Your receipt' ) ), implode( '|', subjects() ) );
 
-// 6. New course: queue reaches only opted-in non-admins; private sends nothing; no repeat.
+// 6. Transactional only: no bulk or opt-in machinery is left behind.
 clear_inbox();
-delete_option( 'cas_mail_queue' );
-delete_option( 'cas_mail_day' );
-$c2 = wp_insert_post( array( 'post_type' => 'courses', 'post_title' => 'Private test', 'post_status' => 'private' ) );
-t( '6a private course queues nothing', ! get_option( 'cas_mail_queue' ) );
-$c3 = wp_insert_post( array( 'post_type' => 'courses', 'post_title' => 'Urban Sketching', 'post_status' => 'publish' ) );
-$q  = get_option( 'cas_mail_queue' );
-t( '6b publish queues one job with exactly the opted-in user', is_array( $q ) && 1 === count( $q ) && array( $on ) === $q[0]['users'], json_encode( $q ? $q[0]['users'] : null ) );
-cas_mail_bulk_tick();
-$m = inbox();
-t( '6c one new-course mail to the opted-in student', 1 === count( $m ) && array( 'optin@example.test' ) === to_of( $m[0] ) && 'New course: Urban Sketching' === $m[0]['Subject'], implode( '|', subjects() ) );
-if ( $m ) {
-	$n = msg( $m[0]['ID'] );
-	t( '6d footer explains why and links settings', str_contains( $n['Text'], 'you chose to get new-course emails' ) && str_contains( $n['Text'], 'Turn it off in your dashboard settings:' ), $n['Text'] );
-}
-t( '6e queue emptied', ! get_option( 'cas_mail_queue' ) );
-wp_update_post( array( 'ID' => $c3, 'post_status' => 'draft' ) );
-wp_update_post( array( 'ID' => $c3, 'post_status' => 'publish' ) );
-t( '6f republish does not announce twice', ! get_option( 'cas_mail_queue' ) );
+$c_new = wp_insert_post( array( 'post_type' => 'courses', 'post_title' => 'Brand new course', 'post_status' => 'publish' ) );
+t( '6a publishing a course sends no mail', 0 === count( inbox() ), implode( '|', subjects() ) );
+t( '6b no bulk, promo, flag or counter functions', ! function_exists( 'cas_mail_bulk_tick' ) && ! function_exists( 'cas_mail_queue_promo' ) && ! function_exists( 'cas_notify_enabled' ) && ! function_exists( 'cas_mail_sent_today' ) );
+t( '6c no cron event and no queue or counter option', ! wp_next_scheduled( 'cas_mail_bulk_tick' ) && false === get_option( 'cas_mail_queue' ) && false === get_option( 'cas_mail_day' ) && ! isset( wp_get_schedules()['cas_fifteen_minutes'] ) );
+t( '6d no hook left on transition_post_status from cas-mail', ! has_action( 'transition_post_status', 'cas_mail_new_course' ) );
 
-// 7. Opt out while queued: nothing sent.
-clear_inbox();
-$c4 = wp_insert_post( array( 'post_type' => 'courses', 'post_title' => 'Oils', 'post_status' => 'publish' ) );
-update_user_meta( $on, 'cas_notify_new_course', '0' );
-cas_mail_bulk_tick();
-t( '7 opt-out while queued sends nothing', 0 === count( inbox() ), implode( '|', subjects() ) );
-update_user_meta( $on, 'cas_notify_new_course', '1' );
-
-// 8. Promo reaches promo opt-ins only.
-clear_inbox();
-delete_option( 'cas_mail_queue' );
-$n = cas_mail_queue_promo( 'Studio news', 'Studio news', array( 'A short note.' ), 'Read more', home_url( '/' ) );
-t( '8a promo queued for exactly 1 user', 1 === $n, (string) $n );
-cas_mail_bulk_tick();
-$m = inbox();
-t( '8b promo mail to the promo opt-in', 1 === count( $m ) && array( 'optin@example.test' ) === to_of( $m[0] ), implode( '|', subjects() ) );
-
-// 9. Daily cap: bulk waits when only the reserve is left, receipts still go out.
-clear_inbox();
-delete_option( 'cas_mail_queue' );
-update_option( 'cas_mail_day', array( 'date' => gmdate( 'Y-m-d' ), 'count' => CAS_MAIL_DAILY_CAP - CAS_MAIL_BULK_RESERVE ) );
-cas_mail_queue_promo( 'Held', 'Held', array( 'x' ), '', '' );
-cas_mail_bulk_tick();
-t( '9a bulk sends nothing when only the reserve is left', 0 === count( inbox() ) && 1 === count( get_option( 'cas_mail_queue' ) ) );
-$o4 = $new_order( $buyer, 10 );
-$model->mark_as_paid( $o4 );
-t( '9b receipt still goes out', (bool) array_filter( subjects(), fn( $s ) => str_starts_with( $s, 'Your receipt' ) ), implode( '|', subjects() ) );
-update_option( 'cas_mail_day', array( 'date' => gmdate( 'Y-m-d', time() - 86400 ), 'count' => 99 ) );
-t( '9c counter resets on a new day', 0 === cas_mail_sent_today() );
-t( '9d flag helper: only the three names, only "1"', cas_notify_enabled( $on, 'cas_notify_promos' ) && ! cas_notify_enabled( $off, 'cas_notify_new_course' ) && ! cas_notify_enabled( $none, 'cas_notify_new_course' ) && ! cas_notify_enabled( $on, 'other_flag' ) );
-
-echo "\npass=" . $GLOBALS['pass'] . ' fail=' . $GLOBALS['fail'] . "\n";
+echo "\npass=" .$GLOBALS['pass'] . ' fail=' . $GLOBALS['fail'] . "\n";
 echo "audit log:\n" . ( file_exists( '/tmp/audit.log' ) ? file_get_contents( '/tmp/audit.log' ) : '(none)' );
