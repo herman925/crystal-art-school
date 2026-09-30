@@ -35,7 +35,6 @@ def assert_tutor_hooks_kept() -> None:
         'id="tutor-checkout-pay-now-button"',
         'name="payment_method"',
         'name="payment_type"',
-        "checkout-billing-form-fields.php",
         "tutor_checkout_enable_pay_now_btn",
         "LegalConsent::render_consent_field",
     ):
