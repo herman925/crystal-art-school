@@ -16,7 +16,7 @@ Thumbs.db
 .gstack/
 __pycache__/
 
-# Client working material — this repo is PUBLIC (serves GitHub Pages).
+# Client working material — this repo is PRIVATE now (it was public and served GitHub Pages; keep this material out of it anyway).
 # Meeting recordings, the client's handwritten feedback boards, and the internal
 # design/spec documents must not be published. Keep them local.
 /docs/*Design Discussion Minutes*
