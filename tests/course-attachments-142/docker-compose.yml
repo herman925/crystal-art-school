@@ -1,0 +1,27 @@
+services:
+  db:
+    image: mariadb:11
+    environment: { MARIADB_ROOT_PASSWORD: root, MARIADB_DATABASE: wp, MARIADB_USER: wp, MARIADB_PASSWORD: wp }
+  mailpit:
+    image: axllent/mailpit
+    ports: ["8026:8025"]
+  wp:
+    image: wordpress:php8.3-apache
+    depends_on: [db, mailpit]
+    ports: ["8089:80"]
+    environment: { WORDPRESS_DB_HOST: db, WORDPRESS_DB_USER: wp, WORDPRESS_DB_PASSWORD: wp, WORDPRESS_DB_NAME: wp }
+    volumes:
+      - wpdata:/var/www/html
+      - ./mu:/var/www/html/wp-content/mu-plugins
+      - ../../wp-content/themes/hello-elementor-child:/theme-src:ro
+  cli:
+    image: wordpress:cli-php8.3
+    depends_on: [wp]
+    user: "33:33"
+    volumes:
+      - wpdata:/var/www/html
+      - ./mu:/var/www/html/wp-content/mu-plugins
+      - ./tests:/tests
+      - ../../wp-content/themes/hello-elementor-child:/theme-src:ro
+    environment: { WORDPRESS_DB_HOST: db, WORDPRESS_DB_USER: wp, WORDPRESS_DB_PASSWORD: wp, WORDPRESS_DB_NAME: wp }
+volumes: { wpdata: {} }

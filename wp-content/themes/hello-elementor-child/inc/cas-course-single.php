@@ -127,7 +127,8 @@ function cas_course_photos( $course_id ) {
  *
  * The official template resolves attachments from the current course post. This helper
  * is called while that post is current, after the course ID has been validated above.
- * Tutor owns the attachment markup, escaping, open-mode behavior and empty state.
+ * Tutor owns the attachment markup, escaping and open-mode behavior. A course with no
+ * attachments returns an empty string: Tutor's empty state is never printed on a public page.
  */
 function cas_render_course_attachments( $course_id ) {
 	if ( ! $course_id || ! function_exists( 'tutor_utils' ) || ! function_exists( 'tutor_load_template' ) ) {
@@ -142,7 +143,10 @@ function cas_render_course_attachments( $course_id ) {
 
 	$attachments = $utils->get_attachments( $course_id );
 
-	if ( ! is_array( $attachments ) ) {
+	// get_attachments() returns an empty array for a course with none, and Tutor's template then
+	// prints its own empty state ("No Attachment Found" and a stock picture). Nothing to show means
+	// no markup at all, so the caller can leave the whole shelf out.
+	if ( ! is_array( $attachments ) || ! $attachments ) {
 		return '';
 	}
 
@@ -390,9 +394,11 @@ function cas_render_course_single() {
 						<?php endforeach; ?>
 					</ul>
 				<?php endif; ?>
-				<div class="cas-course-attachments">
-					<?php echo $attachments_markup; // phpcs:ignore WordPress.Security.EscapeOutput -- Tutor's official template escapes attachment values. ?>
-				</div>
+				<?php if ( $attachments_markup ) : ?>
+					<div class="cas-course-attachments">
+						<?php echo $attachments_markup; // phpcs:ignore WordPress.Security.EscapeOutput -- Tutor's official template escapes attachment values. ?>
+					</div>
+				<?php endif; ?>
 			</section>
 		<?php endif; ?>
 
