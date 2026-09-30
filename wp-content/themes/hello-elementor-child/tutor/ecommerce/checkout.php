@@ -209,6 +209,8 @@ $is_checkout_page = true;
 						<?php cas_account_render_checkout_terms(); // Neither Tutor consent is configured: the site's own single consent control. ?>
 					<?php endif; ?>
 
+					<?php cas_checkout_render_refund_consent(); // The no-refund consent: required, not ticked, enforced on the server (inc/cas-checkout.php). ?>
+
 					<!-- handle errors -->
 					<?php
 					$pay_now_errors    = get_transient( CheckoutController::PAY_NOW_ERROR_TRANSIENT_KEY . $user_id );
