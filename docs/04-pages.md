@@ -293,6 +293,11 @@ The checkout step is Tutor's native eCommerce page, not the prototype's demo flo
 - The footer on the checkout pages shows the Account column (Log in, Basket; Sign up only while
   registration is open) to a signed-out visitor and the normal Contact column to a signed-in
   one (#141).
+- **Consent:** a required no-refund checkbox (owner-approved wording, #138) and the site-terms
+  box. The server refuses pay-now without the no-refund box (filter `tutor_can_purchase_course`,
+  `inc/cas-checkout.php`), and it also guards the pay button for an unpaid order. Both consents
+  are stored as order meta on `tutor_order_placed` and `tutor_order_updated`:
+  `_cas_refund_consent_at`, `_cas_refund_consent_text` and `_cas_checkout_terms_consent`.
 
 ---
 
