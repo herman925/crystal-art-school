@@ -55,8 +55,13 @@ def main() -> None:
     )
     require(
         source,
-        "\t\t\t\t\t\t<?php endforeach; ?>\n\t\t\t\t\t</ul>\n\t\t\t\t<?php endif; ?>\n\t\t\t\t<div class=\"cas-course-attachments\">",
-        "text-material list must close before attachment markup",
+        "\t\t\t\t\t\t<?php endforeach; ?>\n\t\t\t\t\t</ul>\n\t\t\t\t<?php endif; ?>\n\t\t\t\t<?php if ( $attachments_markup ) : ?>\n\t\t\t\t\t<div class=\"cas-course-attachments\">",
+        "text-material list must close before the attachment shelf, which prints only when it has markup",
+    )
+    require(
+        source,
+        "if ( ! is_array( $attachments ) || ! $attachments ) {\n\t\treturn '';\n\t}\n\n\tob_start();\n\ttutor_load_template( 'global.attachments' );",
+        "a course with no attachments must return no markup before Tutor's template (and its empty state) can run (#142)",
     )
 
     # This slice must render existing Tutor records only; it must not seed content.
