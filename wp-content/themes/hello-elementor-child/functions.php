@@ -248,6 +248,12 @@ require_once get_stylesheet_directory() . '/inc/cas-blog.php';
 
 require_once get_stylesheet_directory() . '/inc/cas-blog-templates.php';
 require_once get_stylesheet_directory() . '/inc/cas-showcase.php';
+/*
+ * Signed video addresses. Loaded before anything that prints a player, so the filter is
+ * in place by the time a lesson or a film is rendered.
+ */
+require_once get_stylesheet_directory() . '/inc/cas-video-token.php';
+
 require_once get_stylesheet_directory() . '/inc/cas-free-videos.php';
 
 /*

@@ -245,13 +245,15 @@ function cas_fv_video( $post_id ) {
 		return null;
 	}
 
+	// Signed, so a copied address stops working. cas_video_sign_url() returns the
+	// address unchanged when no signing key is configured.
 	return array(
 		'host'  => 'bunny',
-		'embed' => 'https://iframe.mediadelivery.net/embed/' . $library . '/' . $guid . '?autoplay=true',
+		'embed' => cas_video_sign_url( 'https://iframe.mediadelivery.net/embed/' . $library . '/' . $guid . '?autoplay=true' ),
 		// The pull zone allows this site as a referer, so the escape-hatch link
 		// works from here and stops working the moment the URL is pasted
 		// anywhere else. That is the intended behaviour, not a limitation.
-		'watch' => 'https://iframe.mediadelivery.net/play/' . $library . '/' . $guid,
+		'watch' => cas_video_sign_url( 'https://iframe.mediadelivery.net/play/' . $library . '/' . $guid ),
 	);
 }
 
