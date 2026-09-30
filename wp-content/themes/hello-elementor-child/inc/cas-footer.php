@@ -75,13 +75,14 @@ function cas_page_url( $slug ) {
 }
 
 /**
- * Render the account links used by the checkout footer variant.
+ * Render the account links used by the checkout footer variant. Only a signed-out visitor sees
+ * them; "Sign up" is left out while registration is closed.
  *
  * @return string
  */
 function cas_render_footer_account_column() {
 	$login_url  = function_exists( 'cas_account_login_url' ) ? cas_account_login_url() : wp_login_url();
-	$signup_url = function_exists( 'cas_account_signup_url' ) ? cas_account_signup_url() : '';
+	$signup_url = function_exists( 'cas_account_signup_url' ) && get_option( 'users_can_register' ) ? cas_account_signup_url() : '';
 	$cart_url   = function_exists( 'cas_account_cart_url' ) ? cas_account_cart_url() : '';
 
 	ob_start();
@@ -140,7 +141,7 @@ function cas_render_footer( $atts = array() ) {
 					<a href="<?php echo esc_url( cas_page_url( 'blog' ) ); ?>">Blog</a>
 					<a href="<?php echo esc_url( cas_page_url( 'about' ) ); ?>">About</a>
 				</div>
-				<?php if ( $is_checkout ) : ?>
+				<?php if ( $is_checkout && ! is_user_logged_in() ) : ?>
 					<?php echo cas_render_footer_account_column(); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 				<?php else : ?>
 					<div>
