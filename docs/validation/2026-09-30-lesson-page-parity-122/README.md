@@ -23,6 +23,8 @@ the route `inc/cas-course-single.php` already takes for the single course. It do
 and a forked copy would go stale with every Tutor release. A visitor Tutor would refuse, a
 `?subpage=` request, or any other post type falls through to Tutor untouched.
 
+Tutor's core and learning-area stylesheets and scripts are dequeued on this route only. Tutor's core sheet sets `body { background-color: var(--tutor-surface-base) }`, a navy ground in dark mode that painted over the site's warm charcoal; it is not a local-only effect. A quiz or any other learning-area screen still gets Tutor's assets.
+
 Access is Tutor's own `CourseModel::has_course_content_access()`. Completion is Tutor's own form
 post (`tutor_action=tutor_complete_lesson`, with its nonce); a following hook moves on to the next
 lesson, only after Tutor's handler has finished.
@@ -32,7 +34,7 @@ lesson, only after Tutor's handler has finished.
 | Prototype | Bound to |
 |---|---|
 | Crumbs, course link | course archive, course permalink, course title |
-| Meta row: Media, Level, Lessons, Running time | first course category, `_tutor_course_level`, lesson count, `cas_course_runtime()` |
+| Meta row: Media, Level, Lessons, Running time | first course category, `_tutor_course_level`, lesson count, the sum of the lesson runtimes the phase list shows (written like the prototype's `runtimeStr()`, for example `~1h 8m`; left out when no lesson has a runtime) |
 | Stage poster | the lesson's featured image |
 | Stage player | the film's address from the lesson's `_video` embed, passed through `cas_video_sign_url()`; other sources keep Tutor's player |
 | Lesson flag | "Lesson N — title" from the lesson order and title |
@@ -40,7 +42,7 @@ lesson, only after Tutor's handler has finished.
 | Phase eyebrow, lesson title, sub-line | topic title (only when the course has more than one topic), lesson title, lesson post content |
 | Mark complete & continue | Tutor's completion form |
 | Reference photos | the lesson's image attachments |
-| Course materials | the course's attachments plus the lesson's non-image attachments |
+| Course materials | the course's attachments plus the lesson's non-image attachments; the whole card is hidden when there are none |
 | Your progress, n of N, bar | `get_course_completed_percent()` counts |
 | Phase list rows | topics and lessons, with featured image, runtime, done and current state |
 
@@ -55,6 +57,7 @@ lesson, only after Tutor's handler has finished.
 | Course films card, multi-part lessons | Tutor holds no data for them |
 | Portrait pillarboxing of the film | Tutor stores no orientation |
 | Source notes about Google Drive | not applicable to the video host |
+| "Course materials ... still to be supplied" sentence | owner-facing placeholder; the card is hidden instead |
 
 ## One deviation from the prototype
 
@@ -83,6 +86,8 @@ The tour is not new in 4.1.0; it is present in 4.0.7.
 | `?subpage=course-info` | Tutor's own page |
 | Lesson with a YouTube source | Tutor's player fills the stage |
 | Tour override | child template path, 0 bytes of output |
+| Page ground | `body` is `rgb(33, 30, 26)` (warm charcoal); no Tutor stylesheet is loaded on the route |
+| Running time | 6:11 + 3:00 + 7:12 + 8:13 + 9:14 shows `~34m` |
 | `tests/test_lesson_page_contract.py` | passes; fails when the signed-address call is removed |
 | Existing contract tests | all pass |
 

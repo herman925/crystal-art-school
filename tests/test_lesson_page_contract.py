@@ -49,6 +49,12 @@ def main() -> None:
     require(lesson, "cas_video_sign_url( $src )", "embed address must pass through cas_video_sign_url")
     require(lesson, "tutor_lesson_video( false )", "non-embed sources must keep Tutor's own player")
 
+    # Tutor's dark learning-area shell must not paint over the page, only on this route.
+    require(lesson, "foreach ( array( 'tutor-core', 'tutor-learning', 'tutor-google-fonts', 'tutor-kids' ) as $handle )", "Tutor's core and learning-area styles must be dropped on the lesson route")
+    require(lesson, "cas_lesson_total_runtime( array_sum( array_column( $items, 'seconds' ) ) )", "running time must be the sum of the lesson runtimes")
+    require(lesson, "<?php if ( $files ) : ?>\n\t\t\t\t<div class=\"curr-card materials-card\" id=\"materials-card\">", "the materials card must be hidden when there are no files")
+    forbid(lesson, "still to be supplied", "owner-facing placeholder copy must not reach a student")
+
     # Nothing from the prototype's demo copy is invented.
     code = re.sub(r"/\*.*?\*/", "", lesson, flags=re.S)  # the docblocks explain what was left out
     for demo in ("Taught by", "Take it slowly", "Share your skies", "You painted the whole sky"):

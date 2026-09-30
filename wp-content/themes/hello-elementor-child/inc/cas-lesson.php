@@ -120,6 +120,33 @@ add_filter(
 );
 
 /**
+ * A running time the way the prototype's runtimeStr() writes it: "1h 8m", "1h", "45m".
+ *
+ * The total is the sum of the lesson runtimes the phase list already shows, so the two
+ * cannot disagree. A course whose lessons carry no runtime has no running time to show.
+ *
+ * @param int $seconds Total in seconds.
+ *
+ * @return string
+ */
+function cas_lesson_total_runtime( $seconds ) {
+	$seconds = (int) $seconds;
+
+	if ( $seconds <= 0 ) {
+		return '';
+	}
+
+	$h = (int) floor( $seconds / 3600 );
+	$m = (int) round( ( $seconds % 3600 ) / 60 );
+
+	if ( $h ) {
+		return $m ? $h . 'h ' . $m . 'm' : $h . 'h';
+	}
+
+	return $m . 'm';
+}
+
+/**
  * Print one lesson row's length as m:ss, the way the prototype's fmt0() does.
  *
  * @param int $seconds Length in seconds.
@@ -368,7 +395,7 @@ function cas_render_lesson() {
 	$tag     = ( ! is_wp_error( $cats ) && $cats ) ? $cats[0] : '';
 	$level   = (string) get_post_meta( $course_id, '_tutor_course_level', true );
 	$level   = $level ? ucfirst( str_replace( '-', ' ', $level ) ) : '';
-	$runtime = cas_course_runtime( $course_id );
+	$runtime = cas_lesson_total_runtime( array_sum( array_column( $items, 'seconds' ) ) );
 	$blurb   = trim( (string) get_post_field( 'post_content', $course_id ) );
 	$photos  = cas_course_photos( $course_id );
 	$thumb   = $current ? $current['thumb'] : 0;
@@ -426,7 +453,7 @@ function cas_render_lesson() {
 						}
 						?>
 						<?php if ( $film['src'] ) : ?>
-							<iframe class="gdrive-frame" id="gdrive-frame" title="Lesson video player" src="<?php echo esc_url( $film['src'] ); ?>" allow="autoplay; fullscreen" allowfullscreen loading="lazy"></iframe>
+							<iframe class="gdrive-frame" id="gdrive-frame" title="Lesson video player" src="<?php echo esc_url( $film['src'] ); ?>" allow="autoplay; fullscreen" loading="lazy"></iframe>
 						<?php elseif ( $film['native'] ) : ?>
 							<div class="cas-lesson-native"><?php echo $film['native']; // phpcs:ignore WordPress.Security.EscapeOutput -- Tutor's own player markup. ?></div>
 						<?php endif; ?>
@@ -531,27 +558,25 @@ function cas_render_lesson() {
 					</div>
 				<?php endif; ?>
 
+				<?php if ( $files ) : ?>
 				<div class="curr-card materials-card" id="materials-card">
 					<div class="ch">Course materials</div>
-					<?php if ( $files ) : ?>
-						<div class="res-all" id="res-all">
-							<button class="btn primary" type="button" id="res-all-btn">Download all <span class="arr" aria-hidden="true">&darr;</span></button>
-							<span class="res-all-note"><?php echo esc_html( count( $files ) . ( 1 === count( $files ) ? ' file' : ' files' ) ); ?></span>
-						</div>
-						<div class="res-list" id="res-list" style="padding:0 4px 8px;">
-							<?php foreach ( $files as $file ) : ?>
-								<a class="res-item" download="<?php echo esc_attr( $file->name ); ?>" href="<?php echo esc_url( $file->url ); ?>">
-									<span class="res-ico" aria-hidden="true"><?php echo cas_lesson_file_icon( $file ); // phpcs:ignore WordPress.Security.EscapeOutput -- static markup. ?></span>
-									<span class="res-body"><span class="nm"><?php echo esc_html( $file->title ); ?></span><br>
-										<span class="sz"><?php echo esc_html( strtoupper( (string) $file->ext ) . ' · ' . $file->size ); ?></span></span>
-									<span class="res-get">Download &darr;</span>
-								</a>
-							<?php endforeach; ?>
-						</div>
-					<?php else : ?>
-						<p class="res-note" id="res-note">Course materials for this course are still to be supplied.</p>
-					<?php endif; ?>
+					<div class="res-all" id="res-all">
+						<button class="btn primary" type="button" id="res-all-btn">Download all <span class="arr" aria-hidden="true">&darr;</span></button>
+						<span class="res-all-note"><?php echo esc_html( count( $files ) . ( 1 === count( $files ) ? ' file' : ' files' ) ); ?></span>
+					</div>
+					<div class="res-list" id="res-list" style="padding:0 4px 8px;">
+						<?php foreach ( $files as $file ) : ?>
+							<a class="res-item" download="<?php echo esc_attr( $file->name ); ?>" href="<?php echo esc_url( $file->url ); ?>">
+								<span class="res-ico" aria-hidden="true"><?php echo cas_lesson_file_icon( $file ); // phpcs:ignore WordPress.Security.EscapeOutput -- static markup. ?></span>
+								<span class="res-body"><span class="nm"><?php echo esc_html( $file->title ); ?></span><br>
+									<span class="sz"><?php echo esc_html( strtoupper( (string) $file->ext ) . ' · ' . $file->size ); ?></span></span>
+								<span class="res-get">Download &darr;</span>
+							</a>
+						<?php endforeach; ?>
+					</div>
 				</div>
+				<?php endif; ?>
 			</div>
 
 			<aside class="side-stick">
@@ -665,4 +690,32 @@ add_action(
 		wp_enqueue_script( 'cas-lesson', $uri . '/js/cas-lesson.js', array( 'cas-site-extras' ), filemtime( $dir . '/js/cas-lesson.js' ), true );
 	},
 	27
+);
+
+/**
+ * Tutor's learning-area stylesheet and script are not wanted on a lesson this file renders.
+ *
+ * Tutor enqueues its core and learning-area CSS for every learning-area request, and the
+ * core sheet sets `body { background-color: var(--tutor-surface-base) }` — in dark mode a
+ * navy ground that paints over the site's warm charcoal. The page is built from the site's
+ * own classes, so none of Tutor's learning-area styling or script has anything to act on.
+ * Dropped late (after Tutor's own enqueue) and only on this route: a quiz or any other
+ * learning-area screen still gets Tutor's assets.
+ */
+add_action(
+	'wp_enqueue_scripts',
+	function () {
+		if ( ! cas_lesson_is_ours() ) {
+			return;
+		}
+
+		foreach ( array( 'tutor-core', 'tutor-learning', 'tutor-google-fonts', 'tutor-kids' ) as $handle ) {
+			wp_dequeue_style( $handle );
+		}
+
+		foreach ( array( 'tutor-core', 'tutor-learning' ) as $handle ) {
+			wp_dequeue_script( $handle );
+		}
+	},
+	100
 );
