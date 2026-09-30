@@ -279,6 +279,7 @@ require_once get_stylesheet_directory() . '/inc/cas-home-gallery.php';
 require_once get_stylesheet_directory() . '/inc/cas-home-blog.php';
 require_once get_stylesheet_directory() . '/inc/cas-account.php';
 require_once get_stylesheet_directory() . '/inc/cas-checkout.php';
+require_once get_stylesheet_directory() . '/inc/cas-dashboard-pages.php';
 require_once get_stylesheet_directory() . '/inc/cas-archives.php';
 require_once get_stylesheet_directory() . '/inc/cas-404.php';
 
