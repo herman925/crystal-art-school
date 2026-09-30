@@ -108,8 +108,9 @@ t( '2 repeat events send nothing', 0 === count( inbox() ), (string) count( inbox
 
 // 3. Refund through Tutor's own handler, partial then full.
 wp_set_current_user( 1 );
-$call_refund = function ( $amount ) use ( $oid ) {
-	$_POST    = array( '_tutor_nonce' => wp_create_nonce( tutor()->nonce_action ), 'order_id' => $oid, 'amount' => $amount, 'reason' => 'internal note do not send', 'is_remove_enrolment' => '' );
+$call_refund = function ( $amount, $order_id = null ) use ( $oid ) {
+	$order_id = $order_id ? $order_id : $oid;
+	$_POST    = array( '_tutor_nonce' => wp_create_nonce( tutor()->nonce_action ), 'order_id' => $order_id, 'amount' => $amount, 'reason' => 'internal note do not send', 'is_remove_enrolment' => '' );
 	$_REQUEST = $_POST;
 	add_filter( 'wp_die_ajax_handler', fn() => function () { throw new Exception( 'die' ); } );
 	add_filter( 'wp_doing_ajax', '__return_true' );
@@ -137,6 +138,37 @@ if ( $m ) {
 	$r = msg( $m[0]['ID'] );
 	t( '3e shows refunded so far', str_contains( $r['Text'], 'Refunded so far on this order: £25.00' ), $r['Text'] );
 }
+t( '3f no "cancelled" line while the enrolment is completed', ! str_contains( $r['Text'] ?? '', 'has been cancelled' ) );
+
+// 3g. The order is cancelled but the enrolment is still completed (seen on the live site): no cancelled line.
+$o5 = $new_order( $buyer, 30 );
+$model->mark_as_paid( $o5 );
+$model->update_order( $o5, array( 'order_status' => 'cancelled' ) );
+$enrol5 = (int) $GLOBALS['wpdb']->get_var( $GLOBALS['wpdb']->prepare( "SELECT post_id FROM {$GLOBALS['wpdb']->postmeta} WHERE meta_key = %s AND meta_value = %d LIMIT 1", Tutor\Models\EnrollmentModel::ENROLLMENT_ORDER_ID_META, $o5 ) );
+t( '3g setup: the enrolment for order 5 exists and is completed', $enrol5 && 'completed' === get_post_status( $enrol5 ), (string) get_post_status( $enrol5 ) );
+t( '3g setup: the order itself reads cancelled (the old check would have printed the line)', 'cancelled' === $model->get_order_by_id( $o5 )->order_status );
+clear_inbox();
+$call_refund( 10, $o5 );
+$m = inbox();
+$r = $m ? msg( $m[0]['ID'] ) : array( 'Text' => '' );
+t( '3h order cancelled + enrolment completed: refund mail has no cancelled line', 1 === count( $m ) && str_contains( $r['Text'], 'refunded £10.00' ) && ! str_contains( $r['Text'], 'has been cancelled' ), $r['Text'] );
+
+// 3i. The enrolment of this order really is cancelled: the line is there.
+Tutor\Models\EnrollmentModel::update_enrollments( 'cancel', array( $enrol5 ), false );
+clear_inbox();
+$call_refund( 5, $o5 );
+$m = inbox();
+$r = $m ? msg( $m[0]['ID'] ) : array( 'Text' => '' );
+t( '3i enrolment cancelled: refund mail says so', 1 === count( $m ) && str_contains( $r['Text'], 'The enrolment for this order has been cancelled.' ), $r['Text'] );
+
+// 3j. Another order's cancelled enrolment does not leak into this order's mail.
+$o6 = $new_order( $buyer, 12 );
+$model->mark_as_paid( $o6 );
+clear_inbox();
+$call_refund( 2, $o6 );
+$m = inbox();
+$r = $m ? msg( $m[0]['ID'] ) : array( 'Text' => '' );
+t( '3j refund on an order whose enrolment is completed: no cancelled line even though another order was cancelled', 1 === count( $m ) && ! str_contains( $r['Text'], 'has been cancelled' ), $r['Text'] );
 wp_set_current_user( 0 );
 
 // 4. Admin buyer gets nothing.

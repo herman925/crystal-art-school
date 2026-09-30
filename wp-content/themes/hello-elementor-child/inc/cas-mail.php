@@ -437,6 +437,40 @@ function cas_mail_enrolled( $course_id, $user_id, $enrol_id ) {
 add_action( 'tutor_after_enrolled', 'cas_mail_enrolled', 20, 3 );
 
 /**
+ * Whether the enrolment linked to this order is cancelled. The order's own status is no proof: an
+ * order can be refunded and cancelled while its enrolment stays completed. So this reads the
+ * enrolment records that point at this order (post meta ENROLLMENT_ORDER_ID_META) for the courses
+ * in the order, and answers yes only when one of them has the status `cancel`.
+ *
+ * @param object $order Order from OrderModel::get_order_by_id().
+ * @return bool
+ */
+function cas_mail_order_enrolment_cancelled( $order ) {
+	global $wpdb;
+
+	$courses = array_filter( array_map( static function ( $item ) {
+		return (int) $item->id;
+	}, (array) $order->items ) );
+	if ( ! $courses ) {
+		return false;
+	}
+
+	$in = implode( ',', $courses ); // Integers only.
+
+	return (bool) $wpdb->get_var(
+		$wpdb->prepare(
+			"SELECT p.ID FROM {$wpdb->posts} p
+			JOIN {$wpdb->postmeta} m ON m.post_id = p.ID AND m.meta_key = %s AND m.meta_value = %d
+			WHERE p.post_type = %s AND p.post_status = %s AND p.post_parent IN ( {$in} ) LIMIT 1", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $in is a list of integers.
+			\Tutor\Models\EnrollmentModel::ENROLLMENT_ORDER_ID_META,
+			(int) $order->id,
+			\Tutor\Models\EnrollmentModel::POST_TYPE,
+			\Tutor\Models\EnrollmentModel::STATUS_CANCEL
+		)
+	);
+}
+
+/**
  * Refund notice, after an administrator refunds an order in full or in part. Tutor has already
  * saved the new refund total when this fires. The lock key holds that total, so a second refund
  * on the same order is a new notice and a repeat of the same event is not.
@@ -461,7 +495,7 @@ function cas_mail_refund( $order_id, $amount, $reason = '' ) {
 	if ( (float) $order->refund_amount > (float) $amount ) {
 		$lines[] = sprintf( $copy['refund_total'], cas_mail_price( $order->refund_amount ) );
 	}
-	if ( \Tutor\Models\OrderModel::ORDER_CANCELLED === $order->order_status ) {
+	if ( cas_mail_order_enrolment_cancelled( $order ) ) {
 		$lines[] = $copy['refund_cancelled'];
 	}
 

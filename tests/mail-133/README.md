@@ -10,8 +10,8 @@ MSYS_NO_PATHCONV=1 docker compose run --rm cli sh /tests/run.sh   # resets the s
 docker compose down -v
 ```
 
-Covered: receipt and enrolment on a paid order (buyer only, HTML and plain part, escaping), no repeat
-on a repeated event, refund through Tutor's own handler (partial, then full; staff reason not sent),
+Covered (36 checks): receipt and enrolment on a paid order (buyer only, HTML and plain part, escaping), no repeat
+on a repeated event, refund through Tutor's own handler (partial, then full; staff reason not sent; "enrolment cancelled" line only when the enrolment of that order is cancelled, not when the order is),
 no mail to an administrator, no receipt for a free order, new-course queue (opted-in only, private
 course sends nothing, no second announcement), opt-out while queued, promo opt-ins, the daily cap
 reserve (bulk waits, receipt still goes out).
