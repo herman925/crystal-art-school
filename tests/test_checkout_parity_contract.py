@@ -13,6 +13,7 @@ MODULE = (THEME / "inc" / "cas-checkout.php").read_text(encoding="utf-8")
 ACCOUNT = (THEME / "inc" / "cas-account.php").read_text(encoding="utf-8")
 FUNCTIONS = (THEME / "functions.php").read_text(encoding="utf-8")
 CSS = (THEME / "css" / "cas-checkout.css").read_text(encoding="utf-8")
+FIELDS = (THEME / "tutor" / "ecommerce" / "cas-checkout-billing-fields.php").read_text(encoding="utf-8")
 
 
 def require(haystack: str, needle: str, context: str) -> None:
@@ -83,6 +84,18 @@ def assert_css_scoped() -> None:
     require(CSS, ".cas-co-summary", "cas-checkout.css summary")
 
 
+def assert_billing_trimmed() -> None:
+    """State and Phone are not asked, but Tutor's customers table has no default for them."""
+    require(FORK, "cas-checkout-billing-fields.php", "checkout fork (trimmed billing fields)")
+    forbid(FORK, "templates/ecommerce/checkout-billing-form-fields.php", "checkout fork")
+    for name in ("billing_first_name", "billing_last_name", "billing_email", "billing_country", "billing_city", "billing_zip_code", "billing_address"):
+        require(FIELDS, f'name="{name}"', "trimmed billing fields (asked)")
+    for name in ("billing_state", "billing_phone"):
+        require(FIELDS, f'<input type="hidden" name="{name}" value="">', "trimmed billing fields (empty hidden)")
+        forbid(FIELDS, f'<select name="{name}"', "trimmed billing fields (visible)")
+        forbid(FIELDS, f'type="text" name="{name}"', "trimmed billing fields (visible)")
+
+
 def main() -> None:
     assert_tutor_hooks_kept()
     assert_layout_matches_prototype()
@@ -90,6 +103,7 @@ def main() -> None:
     assert_one_consent()
     assert_words_and_button()
     assert_css_scoped()
+    assert_billing_trimmed()
     print("checkout parity contract: OK")
 
 
