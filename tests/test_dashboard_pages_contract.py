@@ -68,10 +68,6 @@ def assert_tutor_components_started() -> None:
 
 def assert_settings_storage() -> None:
     for token in (
-        "'cas_notify_new_course'",
-        "'cas_notify_reminders'",
-        "'cas_notify_promos'",
-        "cas_notify_updated_at",
         "cas_main_focus",
         "wp_verify_nonce",
         "get_current_user_id()",
@@ -80,7 +76,9 @@ def assert_settings_storage() -> None:
     ):
         require(PAGES, token, "settings storage")
     forbid(PAGES, "$_POST['user_id']", "settings storage (never a user id from the request)")
-    require(SCRIPT, "data-cas-switch", "switch script")
+    # Transactional mail only (owner decision 2026-09-30): no notification switches or flags.
+    for token in ("cas_notify", "data-cas-switch", "set-tog"):
+        forbid(PAGES + ACCOUNT + SCRIPT, token, "dashboard (no notification switches)")
 
 
 def main() -> None:

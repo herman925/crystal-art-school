@@ -205,22 +205,8 @@ function cas_dashboard_focus_options() {
 }
 
 /**
- * The three email preferences: usermeta key => label and description (Dashboard.dc.html).
- * A missing key means off, so nobody is mailed without choosing it.
- *
- * @return array<string,array{0:string,1:string}>
- */
-function cas_dashboard_notify_flags() {
-	return array(
-		'cas_notify_new_course' => array( 'New course alerts', 'Email me when Crystal publishes a new course.' ),
-		'cas_notify_reminders'  => array( 'Lesson reminders', 'A gentle nudge to keep your streak going.' ),
-		'cas_notify_promos'     => array( 'Promotions', 'Occasional offers and studio news.' ),
-	);
-}
-
-/**
- * Settings: Main focus (a small user field), Country (Tutor's billing country) and the three
- * email switches. One form, one Save button.
+ * Settings: Main focus (a small user field) and Country (Tutor's billing country). One form,
+ * one Save button.
  *
  * @param int $user_id User id.
  * @return string
@@ -257,17 +243,6 @@ function cas_dashboard_settings_html( $user_id ) {
 				</div>
 			</div>
 		</div>
-		<div class="dash-card" style="margin-top:16px;">
-			<div class="dash-panel-head" style="margin-bottom:4px;"><h2 style="font-size:16px;" id="set-notify-h">Notifications</h2></div>
-			<?php foreach ( cas_dashboard_notify_flags() as $key => $copy ) : ?>
-				<?php $on = '1' === get_user_meta( $user_id, $key, true ); ?>
-				<div class="set-row-tog">
-					<div><div class="l" id="lbl-<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $copy[0] ); ?></div><div class="d"><?php echo esc_html( $copy[1] ); ?></div></div>
-					<button class="set-tog<?php echo $on ? ' on' : ''; ?>" type="button" role="switch" aria-checked="<?php echo $on ? 'true' : 'false'; ?>" aria-labelledby="lbl-<?php echo esc_attr( $key ); ?>" data-cas-switch="<?php echo esc_attr( $key ); ?>"></button>
-					<input type="hidden" name="<?php echo esc_attr( $key ); ?>" value="<?php echo $on ? '1' : '0'; ?>">
-				</div>
-			<?php endforeach; ?>
-		</div>
 		<div style="margin-top:16px;display:flex;align-items:center;gap:12px;"><button class="btn primary" type="submit">Save changes</button><?php if ( $saved ) : ?> <span class="hand-note" role="status">Saved.</span><?php endif; ?></div>
 	</form>
 	<?php
@@ -295,23 +270,6 @@ add_action(
 
 		if ( '' !== $country && in_array( $country, $names, true ) ) {
 			cas_dashboard_save_billing_country( $user_id, $country );
-		}
-
-		/* The three email preferences: only the current user, only the three known keys, only
-		   '1' or '0'. The time of the last change is kept as the record of consent. */
-		$changed = false;
-
-		foreach ( array_keys( cas_dashboard_notify_flags() ) as $key ) {
-			$value = isset( $_POST[ $key ] ) && '1' === sanitize_text_field( wp_unslash( $_POST[ $key ] ) ) ? '1' : '0';
-
-			if ( get_user_meta( $user_id, $key, true ) !== $value ) {
-				update_user_meta( $user_id, $key, $value );
-				$changed = true;
-			}
-		}
-
-		if ( $changed ) {
-			update_user_meta( $user_id, 'cas_notify_updated_at', gmdate( 'Y-m-d H:i:s' ) );
 		}
 
 		wp_safe_redirect( add_query_arg( 'cas_saved', '1', tutor_utils()->tutor_dashboard_url() ) . '#panel-settings' );

@@ -82,25 +82,6 @@
     activate(tabFromHash() || tabs[0], false, false);
   }
 
-  /* The email switches: the button shows the state, the hidden input next to it carries it. */
-  document.addEventListener('click', function (event) {
-    var toggle = event.target.closest('[data-cas-switch]');
-
-    if (!toggle) {
-      return;
-    }
-
-    var on = toggle.getAttribute('aria-checked') !== 'true';
-    var field = toggle.parentNode.querySelector('input[type="hidden"]');
-
-    toggle.setAttribute('aria-checked', on ? 'true' : 'false');
-    toggle.classList.toggle('on', on);
-
-    if (field) {
-      field.value = on ? '1' : '0';
-    }
-  });
-
   function init() {
     document.querySelectorAll('[data-cas-dashboard]').forEach(initDashboard);
   }
