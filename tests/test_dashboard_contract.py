@@ -13,22 +13,6 @@ ROOT = Path(__file__).resolve().parents[1]
 FIXTURE = ROOT / "tests" / "fixtures" / "dashboard_contract.json"
 
 
-def assert_billing_template_inherits_dashboard_context(source: str) -> None:
-    expected = re.compile(
-        r"\$billing_html\s*=\s*cas_account_dashboard_native_template\(\s*"
-        r"'dashboard\.account\.billing'\s*,\s*"
-        r"array\(\s*"
-        r"'back_url'\s*=>\s*\$dashboard_url\s*,\s*"
-        r"'close_url'\s*=>\s*\$dashboard_url\s*,\s*"
-        r"\)\s*\);",
-        re.DOTALL,
-    )
-    if len(expected.findall(source)) != 1:
-        raise AssertionError(
-            "native billing template must receive the dashboard URL as back_url and close_url"
-        )
-
-
 def read(relative: str) -> str:
     path = ROOT / relative
     if not path.is_file():
@@ -44,13 +28,12 @@ def require(haystack: str, needle: str, context: str) -> None:
 def main() -> int:
     contract = json.loads(FIXTURE.read_text(encoding="utf-8"))
     source = read(contract["source"])
-    assert_billing_template_inherits_dashboard_context(source)
     script = read(contract["script"])
     templates = {relative: read(relative) for relative in contract["templates"]}
 
     panel_keys = [panel["key"] for panel in contract["panels"]]
-    if len(panel_keys) != 6 or len(set(panel_keys)) != 6:
-        raise AssertionError("the studio contract must define six distinct panels")
+    if len(set(panel_keys)) != len(panel_keys):
+        raise AssertionError("the studio contract must define distinct panels")
     for panel in contract["panels"]:
         require(source, f'data-panel="{panel["key"]}"', "dashboard panel")
         require(source, panel["label"], "dashboard tab label")

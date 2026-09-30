@@ -8,6 +8,7 @@
   "panels": [
     {"key": "overview", "label": "Overview"},
     {"key": "courses", "label": "My courses"},
+    {"key": "wishlist", "label": "Wishlist"},
     {"key": "progress", "label": "Progress"},
     {"key": "purchases", "label": "Purchases"},
     {"key": "account", "label": "Profile"},
@@ -25,9 +26,8 @@
     "wp_logout_url("
   ],
   "native_templates": [
-    "dashboard.account.billing",
-    "dashboard.account.settings",
-    "dashboard.account.settings.account"
+    "dashboard.account.settings.account",
+    "dashboard.account.settings.security"
   ],
   "preserved_tokens": [
     "cas_account_require_checkout_terms",
