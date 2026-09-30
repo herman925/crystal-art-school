@@ -1,0 +1,119 @@
+/*
+ * Checkout step (Checkout.dc.html, stage 2).
+ *
+ * The markup is tutor/ecommerce/checkout.php: the prototype's own classes for the layout
+ * (.checkout-grid, .co-panel, .summary, the .btn family) wrapped round Tutor's form, whose
+ * fields, ids and script hooks are unchanged. The prototype classes already carry their own
+ * rules in industrial-3.css. What is here styles what stays Tutor's — its labels, inputs,
+ * gateway list, order lines and coupon box — so they read as the prototype's .co-field,
+ * .sum-row and .sum-total do, and it undoes the hard-coded light ground and the 1032px box
+ * that Tutor's own stylesheet gives them.
+ */
+
+/* Tutor boxes its checkout at 1032px inside a 1320px container; the prototype's grid uses
+   the page's own container. */
+.cas-account-body .tutor-checkout-page .tutor-container,
+.cas-account-body .tutor-checkout-page .tutor-checkout-container { max-width: none; width: auto; margin: 0; padding: 0; }
+
+/* ---- billing address: the prototype's .co-field -------------------------------------
+   Tutor draws this form as one bordered table: labels hidden (the placeholders stand in),
+   margins zeroed with !important, squared corners and the shared borders between cells
+   removed with !important. Each of those is undone here, at higher specificity and with the
+   same !important where Tutor used it, so the fields read as the prototype's .co-field. */
+.tutor-checkout-page .tutor-checkout-billing.cas-co-main .tutor-billing-fields .tutor-form-label { display: block; }
+.tutor-checkout-page .tutor-checkout-billing.cas-co-main .tutor-billing-fields .tutor-mb-16 { margin: 0 0 14px !important; }
+.tutor-checkout-page .tutor-checkout-billing.cas-co-main .tutor-billing-fields [class*="tutor-col-"] .tutor-form-control {
+  border: 1px solid var(--line) !important; border-radius: var(--r-sharp); height: auto; line-height: normal; padding: 12px 14px; }
+.tutor-checkout-page .cas-co-main .tutor-billing-fields .tutor-row { display: grid; grid-template-columns: 1fr 1fr; column-gap: 14px; margin: 0; }
+.tutor-checkout-page .cas-co-main .tutor-billing-fields [class*="tutor-col-"] { grid-column: 1 / -1; width: auto; max-width: none; padding: 0; flex: none; }
+.tutor-checkout-page .cas-co-main .tutor-billing-fields .tutor-col-lg-6 { grid-column: auto; }
+@media (max-width: 560px) { .tutor-checkout-page .cas-co-main .tutor-billing-fields .tutor-col-lg-6 { grid-column: 1 / -1; } }
+.tutor-checkout-page .cas-co-main .tutor-billing-fields .tutor-mb-16 { margin-bottom: 14px; }
+.tutor-checkout-page .cas-co-main .tutor-form-label { display: block; margin-bottom: 6px; font-family: var(--font-cond); font-weight: 600; font-size: 12.5px;
+  letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--ink); }
+.tutor-checkout-page .cas-co-main .tutor-form-control { width: 100%; height: auto; border: 1px solid var(--line); border-radius: var(--r-sharp); background: var(--cream);
+  padding: 12px 14px; font-family: var(--font-body); font-size: 14.5px; color: var(--ink); -webkit-text-fill-color: var(--ink); box-shadow: none; }
+.tutor-checkout-page .cas-co-main .tutor-form-control::placeholder { color: var(--muted); opacity: 1; -webkit-text-fill-color: var(--muted); }
+.tutor-checkout-page .cas-co-main select.tutor-form-control option { color: var(--ink); background: var(--cream); }
+.tutor-checkout-page .cas-co-main .tutor-form-control:focus { outline: 2px solid var(--coral); border-color: transparent; }
+
+/* ---- payment: the gateway list as the panel's own rows ------------------------------ */
+.tutor-checkout-page .cas-co-main .tutor-checkout-payment-item { display: flex; align-items: center; gap: 12px; margin: 0 0 10px; padding: 14px 16px; cursor: pointer;
+  border: 1px solid var(--line); border-radius: var(--r-sharp); background: var(--cream); color: var(--ink); }
+.tutor-checkout-page .cas-co-main .tutor-checkout-payment-item:hover { border-color: var(--coral); }
+.tutor-checkout-page .cas-co-main .tutor-payment-item-content { display: flex; align-items: center; gap: 10px; font-family: var(--font-cond); font-weight: 600; font-size: 14px;
+  letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--ink); }
+.tutor-checkout-page .cas-co-main .tutor-payment-item-content img { height: 24px; width: auto; }
+.tutor-checkout-page .cas-co-main .tutor-payment-instructions { margin-top: 6px; font-size: 14px; line-height: 1.6; color: var(--muted); }
+.tutor-checkout-page .cas-co-main .tutor-alert, .tutor-checkout-page .cas-co-summary .tutor-alert { border: 1px solid var(--line); border-radius: var(--r-sharp); background: var(--cream); color: var(--ink); padding: 14px 16px; }
+.tutor-checkout-page .cas-co-summary .tutor-alert ul { margin: 0; padding-left: 18px; }
+
+/* ---- order summary: .summary h3, .sum-row, .sum-total ------------------------------- */
+.tutor-checkout-page .cas-co-summary .tutor-checkout-details-inner { padding: 0; background: none; border-radius: 0; }
+.tutor-checkout-page .cas-co-summary .tutor-checkout-details-inner > h5 { margin: 0 0 16px; padding: 0; border: 0; font-family: var(--font-cond); font-weight: 600;
+  font-size: 13px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--coral-ink); }
+.tutor-checkout-page .cas-co-summary .tutor-checkout-course-item { padding: 7px 0; }
+.tutor-checkout-page .cas-co-summary .tutor-checkout-course-content { display: flex; justify-content: space-between; align-items: flex-start; gap: 14px; }
+.tutor-checkout-page .cas-co-summary .tutor-checkout-course-thumb-title { display: flex; align-items: center; gap: 12px; }
+.tutor-checkout-page .cas-co-summary .tutor-checkout-course-thumb-title img { width: 48px; height: 48px; flex: none; object-fit: cover; border-radius: var(--r-sharp); }
+.tutor-checkout-page .cas-co-summary .tutor-checkout-course-title { margin: 0; font-family: var(--font-body); font-weight: 400; font-size: 14px; color: var(--ink); }
+.tutor-checkout-page .cas-co-summary .tutor-checkout-course-title a { color: var(--ink); text-decoration: none; }
+.tutor-checkout-page .cas-co-summary .tutor-checkout-course-content .tutor-fw-bold { font-weight: 400; font-size: 14px; color: var(--ink); }
+.tutor-checkout-page .cas-co-summary .tutor-checkout-discount-price { font-size: 13px; color: var(--muted); text-decoration: line-through; }
+.tutor-checkout-page .cas-co-summary .tutor-checkout-summary { margin-top: 6px; }
+.tutor-checkout-page .cas-co-summary .tutor-checkout-summary-item { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; padding: 7px 0; font-size: 14px; color: var(--ink); }
+.tutor-checkout-page .cas-co-summary .tutor-checkout-summary-item .tutor-fw-medium,
+.tutor-checkout-page .cas-co-summary .tutor-checkout-summary-item .tutor-fw-bold { font-weight: 400; }
+.tutor-checkout-page .cas-co-summary .tutor-checkout-summary-item.tutor-have-a-coupon,
+.tutor-checkout-page .cas-co-summary .tutor-checkout-incl-tax-label { color: var(--muted); }
+.tutor-checkout-page .cas-co-summary .tutor-checkout-incl-tax-label:empty, .tutor-checkout-page .cas-co-summary .tutor-checkout-incl-tax-label > div:empty { display: none; }
+/* the grand total: .sum-total */
+.tutor-checkout-page .cas-co-summary .tutor-checkout-details-inner > .tutor-pt-12 { margin-top: 12px; padding: 14px 0 0; border-top: 1px solid var(--line); }
+.tutor-checkout-page .cas-co-summary .tutor-checkout-details-inner > .tutor-pt-12 .tutor-checkout-summary-item:first-child { padding: 0; align-items: baseline; }
+.tutor-checkout-page .cas-co-summary .tutor-checkout-details-inner > .tutor-pt-12 .tutor-checkout-summary-item:first-child > div:first-child { font-family: var(--font-cond); font-weight: 600;
+  font-size: 13px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--ink); }
+.tutor-checkout-page .cas-co-summary .tutor-checkout-grand-total { font-family: var(--font-marker); font-weight: 600; font-size: 26px; color: var(--marine); }
+
+/* the coupon box: a plain link to open it, the same inputs as the address form */
+.tutor-checkout-page .cas-co-summary .tutor-toggle-coupon-button,
+.tutor-checkout-page .cas-co-summary #tutor-toggle-coupon-button { padding: 0; border: 0; border-radius: 0; background: none; font-family: var(--font-body); font-size: 14px;
+  font-weight: 400; text-transform: none; letter-spacing: 0; color: var(--coral-ink); text-decoration: underline; text-underline-offset: 2px; cursor: pointer; }
+.tutor-checkout-page .cas-co-summary .tutor-apply-coupon-form { display: flex; gap: 10px; padding: 6px 0 10px; }
+.tutor-checkout-page .cas-co-summary .tutor-apply-coupon-form.tutor-d-none { display: none; }
+.tutor-checkout-page .cas-co-summary .tutor-apply-coupon-form input { flex: 1; min-width: 0; border: 1px solid var(--line); border-radius: var(--r-sharp); background: var(--cream);
+  padding: 10px 12px; font-family: var(--font-body); font-size: 14px; color: var(--ink); -webkit-text-fill-color: var(--ink); }
+.tutor-checkout-page .cas-co-summary .tutor-apply-coupon-form input::placeholder { color: var(--muted); opacity: 1; -webkit-text-fill-color: var(--muted); }
+.tutor-checkout-page .cas-co-summary #tutor-apply-coupon-button { flex: none; border: 1px solid var(--line); border-radius: var(--radius-pill); background: none; padding: 0 18px;
+  font-family: var(--font-cond); font-weight: 600; font-size: 13px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--ink); cursor: pointer; }
+.tutor-checkout-page .cas-co-summary #tutor-apply-coupon-button:hover { border-color: var(--coral); color: var(--coral-ink); }
+.tutor-checkout-page .cas-co-summary .tutor-checkout-coupon-badge { color: var(--ink); }
+.tutor-checkout-page .cas-co-summary .tutor-checkout-coupon-wrapper.tutor-d-none, .tutor-checkout-page .cas-co-summary .tutor-checkout-coupon-badge.tutor-d-none { display: none; }
+
+/* ---- inside the summary card: consent, errors, place order, back -------------------- */
+.tutor-checkout-page .cas-co-actions { display: grid; gap: 12px; margin-top: 18px; }
+.tutor-checkout-page .cas-co-actions > .tutor-mt-20, .tutor-checkout-page .cas-co-actions .cas-checkout-terms { margin: 0; }
+.tutor-checkout-page .cas-co-actions .tutor-form-check label, .tutor-checkout-page .cas-co-actions .cas-checkout-terms label { font-size: 14px; line-height: 1.5; color: var(--muted); }
+.tutor-checkout-page .cas-co-actions .tutor-form-check a, .tutor-checkout-page .cas-co-actions .cas-checkout-terms a { color: var(--coral-ink); text-decoration: underline; text-underline-offset: 2px; }
+.tutor-checkout-page .cas-co-actions .tutor-mt-16 { margin: 0; }
+.tutor-checkout-page .cas-co-actions .btn { width: 100%; }
+.tutor-checkout-page .cas-co-actions .cas-account-back-link { margin-top: 0; }
+.tutor-checkout-page .cas-co-actions #tutor-checkout-pay-now-button[disabled] { opacity: .5; cursor: not-allowed; }
+
+/* the prototype's .summary is sticky only beside the form; the grid stacks below 880px */
+@media (max-width: 880px) { .tutor-checkout-page .cas-co-summary { position: static; } }
+
+/* ---- Tutor rules that need a second, more specific answer ---------------------------- */
+/* the list is not a bordered white box with hairlines between its rows */
+.tutor-checkout-page .cas-co-main .tutor-checkout-payment-options { border: 0; background: none; border-radius: 0; gap: 0; }
+.tutor-checkout-page .cas-co-main .tutor-checkout-payment-options .tutor-checkout-payment-item:not(:last-child) { border-bottom: 1px solid var(--line); }
+.tutor-checkout-page .cas-co-main .tutor-checkout-payment-options .tutor-checkout-payment-item .tutor-payment-item-content { color: var(--ink); font-size: 14px; width: auto; }
+.tutor-checkout-page .cas-co-main .tutor-checkout-payment-options .tutor-checkout-payment-item.active { background: var(--surface); border-color: var(--coral);
+  box-shadow: none; border-radius: var(--r-sharp); }
+.tutor-checkout-page .cas-co-main .tutor-checkout-payment-options .tutor-alert { margin: 0; }
+.tutor-checkout-page .cas-co-main .tutor-payment-instructions { background: var(--cream); border: 1px solid var(--line); border-radius: var(--r-sharp); color: var(--ink); }
+/* the order lines and the summary rows sit close, like .sum-row, not in airy 24px bands */
+.tutor-checkout-page .cas-co-summary .tutor-checkout-detail-item { padding: 6px 0; }
+.tutor-checkout-page .cas-co-summary .tutor-checkout-detail-item:not(:last-child) { border-bottom: 1px solid var(--line); }
+.tutor-checkout-page .cas-co-summary .tutor-checkout-courses { gap: 10px; }
+.tutor-checkout-page .cas-co-summary .tutor-checkout-course-thumb-title { display: flex; align-items: center; }
+.tutor-checkout-page .cas-co-summary .tutor-apply-coupon-form { border: 0; background: none; padding: 6px 0 10px; }
