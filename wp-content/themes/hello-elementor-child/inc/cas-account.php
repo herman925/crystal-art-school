@@ -1257,6 +1257,12 @@ function cas_account_require_checkout_terms( $can_buy ) {
 		return $can_buy;
 	}
 
+	// Tutor's own Terms / consent checkbox, when configured, posts `on`, not `1`, and Tutor
+	// validates it itself; this control is not printed then, so it must not be demanded.
+	if ( cas_account_checkout_has_native_consent() ) {
+		return $can_buy;
+	}
+
 	return new WP_Error(
 		'cas_checkout_terms_required',
 		__( 'Please accept the checkout terms to continue.', 'hello-elementor-child' )
@@ -1339,8 +1345,10 @@ function cas_account_checkout_terms_markup() {
 /**
  * Print the checkout consent control in Tutor's own checkout form.
  *
- * Tutor's checkout-details template exposes this hook before its order details
- * markup. The form, nonce and payment controls remain entirely Tutor-owned.
+ * Called from tutor/ecommerce/checkout.php, inside the order-summary card and outside the
+ * element Tutor refreshes when a coupon or country changes, so the tick survives that
+ * refresh. It used to hang on `tutor_before_checkout_order_details`, which sits inside the
+ * refreshed element. The form, nonce and payment controls remain entirely Tutor-owned.
  *
  * @return void
  */
@@ -1351,8 +1359,6 @@ function cas_account_render_checkout_terms() {
 
 	echo cas_account_checkout_terms_markup(); // phpcs:ignore WordPress.Security.EscapeOutput
 }
-
-add_action( 'tutor_before_checkout_order_details', 'cas_account_render_checkout_terms', 999 );
 
 /**
  * Store the accepted checkout consent after Tutor has created the order.
@@ -1550,7 +1556,6 @@ function cas_account_render_checkout_success( $order_id, $order_status = 'succes
 function cas_account_checkout_shell( $inner, $stage ) {
 	$is_cart    = ( 'cart' === $stage );
 	$is_success = ( 'success' === $stage );
-	$back_url   = ( 'checkout' === $stage ) ? cas_account_cart_url() : '';
 
 	// Each step renders aria-current="step" for the live stage and
 	// aria-current="false" for the remaining stages.
@@ -1576,9 +1581,6 @@ function cas_account_checkout_shell( $inner, $stage ) {
 			<div class="step <?php echo esc_attr( $step_three_state ); ?>" aria-current="<?php echo $is_success ? 'step' : 'false'; ?>"><span class="sn">3</span> Confirmation</div>
 		</div>
 		<?php echo $inner; // phpcs:ignore WordPress.Security.EscapeOutput ?>
-		<?php if ( $back_url ) : ?>
-			<a class="btn ghost full cas-account-back-link" href="<?php echo esc_url( $back_url ); ?>">&#8592; Back to basket</a>
-		<?php endif; ?>
 	</div>
 	<?php
 
