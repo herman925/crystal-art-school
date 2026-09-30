@@ -50,7 +50,9 @@ function cas_video_token_key() {
  *
  * The signature is a SHA-256 of the key, the video identifier and the expiry, in that
  * order, written as hexadecimal - the form the video host specifies. An address that
- * already carries a signature is returned untouched, so signing twice is harmless.
+ * already carries a signature has it replaced, not kept: a signature made with an older
+ * key, or one that is about to expire, must not survive, and signing twice just gives the
+ * address a fresh expiry.
  *
  * @param string $url A player address on the video host.
  * @return string The same address with a signature, or unchanged when it cannot be signed.
@@ -62,13 +64,13 @@ function cas_video_sign_url( $url ) {
 		return $url;
 	}
 
-	if ( false !== strpos( $url, 'token=' ) ) {
-		return $url;
-	}
-
 	if ( ! preg_match( '~^https://(?:iframe|video)\.mediadelivery\.net/(?:embed|play)/([0-9]+)/([0-9a-f-]{36})~i', $url, $m ) ) {
 		return $url;
 	}
+
+	/* Whatever signature the address arrived with is dropped first; the other parameters
+	   (autoplay, preload) are kept exactly as they were. */
+	$url = remove_query_arg( array( 'token', 'expires' ), $url );
 
 	$guid    = strtolower( $m[2] );
 	$expires = time() + CAS_VIDEO_TOKEN_TTL;
