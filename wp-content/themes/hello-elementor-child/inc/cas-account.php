@@ -2219,3 +2219,20 @@ body.cas-account-page .tutor-dashboard-isolated-page-wrapper .tutor-card {
 }
 CSS;
 }
+
+/**
+ * No admin toolbar for anyone who cannot manage options (#140).
+ *
+ * WordPress gives every account `show_admin_bar_front = true` when it is created, and nothing
+ * on this site filtered it, so a student saw "About WordPress", "Howdy, ..." and the search
+ * box above the studio header. The user setting is per account; this rule is for everyone, so
+ * a student never has to be edited. Administrators keep the toolbar, including their own
+ * "show toolbar" preference.
+ */
+add_filter(
+	'show_admin_bar',
+	function ( $show ) {
+		return current_user_can( 'manage_options' ) ? $show : false;
+	},
+	20
+);
