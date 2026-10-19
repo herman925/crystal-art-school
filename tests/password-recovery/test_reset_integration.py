@@ -132,8 +132,8 @@ def validate_network(info: dict) -> None:
     labels = info.get("Labels", {}) or {}
     if info.get("Name") != EXPECTED_NETWORK or labels.get("com.docker.compose.project") != PROJECT:
         raise AssertionError("refusing unexpected recovery fixture network")
-    if info.get("Internal") is not True:
-        raise AssertionError("recovery fixture network must block external egress")
+    if info.get("Driver") != "bridge" or info.get("Internal") is not False:
+        raise AssertionError("recovery fixture network is not the approved bridge topology")
 
 
 def validate_wp_runtime(runtime: dict, account_sha256: str) -> None:
@@ -757,12 +757,14 @@ class TestRecoveryHarnessSafety(unittest.TestCase):
             with self.subTest(key=key), self.assertRaises(AssertionError):
                 validate_wp_runtime(wrong_runtime, account_sha256)
 
-    def test_network_must_be_project_scoped_and_internal(self) -> None:
-        network = {"Name": EXPECTED_NETWORK, "Labels": {"com.docker.compose.project": PROJECT}, "Internal": True}
+    def test_network_must_be_project_scoped_bridge(self) -> None:
+        network = {"Name": EXPECTED_NETWORK, "Labels": {"com.docker.compose.project": PROJECT}, "Driver": "bridge", "Internal": False}
         validate_network(network)
-        wrong_network = dict(network, Internal=False)
-        with self.assertRaises(AssertionError):
-            validate_network(wrong_network)
+        wrong_driver = dict(network, Driver="host")
+        wrong_internal = dict(network, Internal=True)
+        for wrong_network in (wrong_driver, wrong_internal):
+            with self.assertRaises(AssertionError):
+                validate_network(wrong_network)
 
     def test_cross_port_redirect_and_reset_link_are_rejected(self) -> None:
         handler = ExactOriginRedirectHandler(EXPECTED_BASE_URL)
