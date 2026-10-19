@@ -6,6 +6,7 @@ import sys
 import tempfile
 import unittest
 from pathlib import Path
+from unittest.mock import patch
 
 RUNNER_PATH = Path(__file__).parent / "paid-materials-security" / "run.py"
 SPEC = importlib.util.spec_from_file_location("paid_materials_runner", RUNNER_PATH)
@@ -116,6 +117,114 @@ class PaidMaterialsSafetyTests(unittest.TestCase):
         first = runner.LoopbackClient(origin)
         second = runner.LoopbackClient(origin)
         self.assertIsNot(first.cookie_jar, second.cookie_jar)
+
+    def test_denied_page_rejects_unrelated_success_and_server_errors(self) -> None:
+        client = runner.LoopbackClient(runner.validate_loopback_base("http://127.0.0.1:18089"))
+        url = "http://127.0.0.1:18089/lessons/synthetic-paid/"
+        for status in (200, 204, 302, 429, 500, 503):
+            for body in (b"Unrelated page", b'<nav><a href="/login/">Log in</a></nav>'):
+                with self.subTest(status=status, body=body), patch.object(client, "request", return_value=(status, url, body)):
+                    self.assertFalse(runner.check_page(client, url, "PROTECTED", False)[0])
+
+    def test_explicit_denial_requires_absent_marker(self) -> None:
+        client = runner.LoopbackClient(runner.validate_loopback_base("http://127.0.0.1:18089"))
+        url = "http://127.0.0.1:18089/lessons/synthetic-paid/"
+        for status in (401, 403, 404):
+            for body, expected in ((b"Access denied", True), (b"PROTECTED", False)):
+                with self.subTest(status=status, body=body), patch.object(client, "request", return_value=(status, url, body)):
+                    self.assertEqual(runner.check_page(client, url, "PROTECTED", False)[0], expected)
+
+    def test_allowed_page_requires_success_and_protected_marker(self) -> None:
+        client = runner.LoopbackClient(runner.validate_loopback_base("http://127.0.0.1:18089"))
+        url = "http://127.0.0.1:18089/lessons/synthetic-paid/"
+        for status, body, expected in ((200, b"PROTECTED", True), (200, b"Unrelated", False), (403, b"PROTECTED", False), (500, b"PROTECTED", False)):
+            with self.subTest(status=status, body=body), patch.object(client, "request", return_value=(status, url, body)):
+                self.assertEqual(runner.check_page(client, url, "PROTECTED", True)[0], expected)
+
+    def test_login_denial_requires_observed_redirect_to_exact_login_route(self) -> None:
+        client = runner.LoopbackClient(runner.validate_loopback_base("http://127.0.0.1:18089"))
+        url = "http://127.0.0.1:18089/lessons/synthetic-paid/"
+        for path in ("/login/", "/wp-login.php", "/wp-login.php?action=login"):
+            target = "http://127.0.0.1:18089" + path
+            for code in (301, 302, 303, 307, 308):
+                client.redirect_handler.redirects[:] = [(code, url, target)]
+                with self.subTest(path=path, code=code), patch.object(client, "request", return_value=(200, target, b"Login form")):
+                    self.assertTrue(runner.check_page(client, url, "PROTECTED", False)[0])
+                with patch.object(client, "request", return_value=(200, target, b"PROTECTED")):
+                    self.assertFalse(runner.check_page(client, url, "PROTECTED", False)[0])
+        target = "http://127.0.0.1:18089/login/"
+        for status, trace in ((200, []), (200, [(200, url, target)]), (200, [(302, url, url)]), (302, [(302, url, target)]), (500, [(302, url, target)])):
+            client.redirect_handler.redirects[:] = trace
+            with self.subTest(status=status, trace=trace), patch.object(client, "request", return_value=(status, target, b"Login form")):
+                self.assertFalse(runner.check_page(client, url, "PROTECTED", False)[0])
+
+    def test_unverified_login_targets_never_prove_denial(self) -> None:
+        client = runner.LoopbackClient(runner.validate_loopback_base("http://127.0.0.1:18089"))
+        url = "http://127.0.0.1:18089/lessons/synthetic-paid/"
+        for target in (
+            "http://127.0.0.1:18089/unrelated/login/",
+            "http://127.0.0.1:18089/log-in/",
+            "http://127.0.0.1:18089/assets/wp-login.php",
+            "http://127.0.0.1:18089/wp-login.php?action=lostpassword",
+            "http://127.0.0.1:18089/wp-login.php?action=resetpass",
+            "http://127.0.0.1:18090/login/",
+            "http://localhost:18089/login/",
+            "https://crystalau.com/login/",
+        ):
+            client.redirect_handler.redirects[:] = [(302, url, target)]
+            with self.subTest(target=target), patch.object(client, "request", return_value=(200, target, b"Login form")):
+                self.assertFalse(runner.check_page(client, url, "PROTECTED", False)[0])
+
+    def test_file_denial_uses_same_strict_response_and_body_checks(self) -> None:
+        client = runner.LoopbackClient(runner.validate_loopback_base("http://127.0.0.1:18089"))
+        url = "http://127.0.0.1:18089/wp-content/uploads/synthetic.pdf"
+        fixture = b"SYNTHETIC FILE"
+        item = {"url": url, "sha256": hashlib.sha256(fixture).hexdigest()}
+        for allowed, status, final, body, trace, expected in (
+            (True, 200, url, fixture, [], True),
+            (True, 200, url, b"Unrelated", [], False),
+            (False, 200, url, b"Unrelated", [], False),
+            (False, 403, url, b"Denied", [], True),
+            (False, 403, url, fixture, [], False),
+            (False, 200, "http://127.0.0.1:18089/login/", b"Login", [], False),
+            (False, 500, "http://127.0.0.1:18089/login/", b"Error", [(302, url, "http://127.0.0.1:18089/login/")], False),
+            (False, 200, "http://127.0.0.1:18089/login/", b"Login", [(302, url, "http://127.0.0.1:18089/login/")], True),
+        ):
+            client.redirect_handler.redirects[:] = trace
+            with self.subTest(allowed=allowed, status=status, final=final), patch.object(client, "request", return_value=(status, final, body)):
+                self.assertEqual(runner.check_file(client, item, allowed)[0], expected)
+
+    def test_redirect_evidence_is_recorded_and_reset_for_each_request(self) -> None:
+        origin = runner.validate_loopback_base("http://127.0.0.1:18089")
+        client = runner.LoopbackClient(origin)
+        url = "http://127.0.0.1:18089/lessons/synthetic-paid/"
+        target = "http://127.0.0.1:18089/login/"
+        handler = client.redirect_handler
+        redirected = handler.redirect_request(runner.Request(url), None, 302, "Found", {}, target)
+        self.assertEqual(redirected.full_url, target)
+        self.assertEqual(handler.redirects, [(302, url, target)])
+        with self.assertRaises(runner.SafetyError):
+            handler.redirect_request(runner.Request(url), None, 302, "Found", {}, "http://127.0.0.1:18090/login/")
+        self.assertEqual(handler.redirects, [(302, url, target)])
+
+        class Response:
+            status = 200
+
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return None
+
+            def read(self, limit):
+                return b"Unrelated page"
+
+            def geturl(self):
+                return url
+
+        with patch.object(client.opener, "open", return_value=Response()):
+            client.request(url)
+        self.assertEqual(handler.redirects, [])
 
     @staticmethod
     def synthetic_manifest() -> dict:

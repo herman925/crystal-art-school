@@ -14,7 +14,7 @@ from dataclasses import dataclass
 from http.cookiejar import CookieJar
 from pathlib import Path, PurePosixPath, PureWindowsPath
 from urllib.error import HTTPError, URLError
-from urllib.parse import urlencode, urljoin, urlsplit
+from urllib.parse import parse_qs, urlencode, urljoin, urlsplit
 from urllib.request import (HTTPRedirectHandler, HTTPCookieProcessor, ProxyHandler,
                             Request, build_opener)
 
@@ -269,32 +269,41 @@ def body_matches_fixture(body: bytes, expected_sha256: str) -> bool:
 
 
 def is_login_redirect(url: str) -> bool:
-    path = urlsplit(url).path.casefold().rstrip("/")
-    return path.endswith("/wp-login.php") or path.endswith("/login") or path.endswith("/log-in")
+    parsed = urlsplit(url)
+    # Only the root login routes verified in the local runtime count as login gates.
+    if parsed.path not in {"/wp-login.php", "/login", "/login/"}:
+        return False
+    return parse_qs(parsed.query).get("action", ["login"]) == ["login"]
 
 
 class SameOriginRedirectHandler(HTTPRedirectHandler):
     def __init__(self, expected_origin: Origin):
         super().__init__()
         self.expected_origin = expected_origin
+        self.redirects: list[tuple[int, str, str]] = []
 
     def redirect_request(self, request, response, code, message, headers, new_url):
         validate_same_origin(new_url, self.expected_origin)
-        return super().redirect_request(request, response, code, message, headers, new_url)
+        redirected = super().redirect_request(request, response, code, message, headers, new_url)
+        if redirected is not None:
+            self.redirects.append((code, request.full_url, new_url))
+        return redirected
 
 
 class LoopbackClient:
     def __init__(self, origin: Origin):
         self.cookie_jar = CookieJar()
+        self.redirect_handler = SameOriginRedirectHandler(origin)
         self.opener = build_opener(
             ProxyHandler({}),
             HTTPCookieProcessor(self.cookie_jar),
-            SameOriginRedirectHandler(origin),
+            self.redirect_handler,
         )
         self.origin = origin
 
     def request(self, url: str, data: bytes | None = None):
         validate_same_origin(url, self.origin)
+        self.redirect_handler.redirects.clear()
         request = Request(
             url,
             data=data,
@@ -338,13 +347,28 @@ def add_result(results: list[tuple[bool | None, str]], outcome: bool | None, lab
     print(f"{state} {label}")
 
 
+def is_explicit_denial(client: LoopbackClient, status: int, final_url: str) -> bool:
+    try:
+        validate_same_origin(final_url, client.origin)
+    except SafetyError:
+        return False
+    if status in {401, 403, 404}:
+        return True
+    if not 200 <= status < 300 or not is_login_redirect(final_url):
+        return False
+    redirects = client.redirect_handler.redirects
+    return bool(redirects) and (
+        redirects[-1][0] in {301, 302, 303, 307, 308} and redirects[-1][2] == final_url
+    )
+
+
 def check_page(client: LoopbackClient, url: str, marker: str, allowed: bool) -> tuple[bool, int, str, bytes]:
     status, final_url, body = client.request(url)
     contains = marker.encode("utf-8") in body
     if allowed:
         passed = 200 <= status < 300 and contains
     else:
-        passed = not contains and status < 500
+        passed = not contains and is_explicit_denial(client, status, final_url)
     return passed, status, final_url, body
 
 
@@ -354,7 +378,7 @@ def check_file(client: LoopbackClient, item: dict, allowed: bool) -> tuple[bool,
     if allowed:
         passed = 200 <= status < 300 and matches
     else:
-        passed = not matches and (status in {401, 403, 404} or is_login_redirect(final_url))
+        passed = not matches and is_explicit_denial(client, status, final_url)
     return passed, status, matches
 
 
