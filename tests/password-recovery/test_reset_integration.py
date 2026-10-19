@@ -508,7 +508,15 @@ class TestIsolatedPasswordRecoveryFlow(unittest.TestCase):
 
     @classmethod
     def mailpit_messages(cls) -> list[dict]:
-        return json.loads(cls.mailpit_get("/api/v1/messages").decode("utf-8")).get("messages", [])
+        messages = []
+        while True:
+            page = json.loads(cls.mailpit_get(f"/api/v1/messages?start={len(messages)}&limit=50").decode("utf-8"))
+            batch = page.get("messages", [])
+            messages.extend(batch)
+            if len(messages) >= page["total"]:
+                return messages
+            if not batch:
+                raise AssertionError("Mailpit returned an empty page before its reported total")
 
     @classmethod
     def message_detail(cls, message_id: str) -> dict:
@@ -972,6 +980,18 @@ class TestRecoveryHarnessSafety(unittest.TestCase):
             flow.assert_reset_failure_response(200, url, form, 'none', 'invalid-or-expired-key')
         with self.assertRaises(AssertionError):
             flow.assert_reset_failure_response(200, url, alert + form.replace('tutor_retrieve_password', 'other_action'), 'none', 'invalid-or-expired-key')
+
+    def test_mailpit_message_snapshot_paginates_past_fifty(self) -> None:
+        flow = TestIsolatedPasswordRecoveryFlow
+        first = {"messages": [{"ID": str(n)} for n in range(50)], "total": 51}
+        second = {"messages": [{"ID": "50"}], "total": 51}
+        with patch.object(flow, 'mailpit_get', side_effect=[json.dumps(first).encode(), json.dumps(second).encode()]) as get:
+            messages = flow.mailpit_messages()
+        self.assertEqual(len(messages), 51)
+        self.assertEqual(get.call_args_list[0].args[0], '/api/v1/messages?start=0&limit=50')
+        self.assertEqual(get.call_args_list[1].args[0], '/api/v1/messages?start=50&limit=50')
+        with patch.object(flow, 'mailpit_get', return_value=b'{"messages":[],"total":1}'), self.assertRaises(AssertionError):
+            flow.mailpit_messages()
 
     def test_mailpit_uses_get_at_its_fixed_origin(self) -> None:
         class Harness:
