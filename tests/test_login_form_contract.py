@@ -60,13 +60,51 @@ def assert_login_error_contract(login: str, account: str) -> None:
     require(account, "overflow-wrap: anywhere", "login error wrapping")
 
 
+def assert_public_recovery_route(account: str) -> None:
+    helper = re.search(
+        r"function cas_account_is_retrieve_password\(\)\s*\{(.*?)\n\}",
+        account,
+        re.DOTALL,
+    )
+    if not helper:
+        raise AssertionError("public recovery route helper is missing")
+    require(helper.group(1), "'dashboard' === cas_account_current_key()", "recovery route scope")
+    require(
+        helper.group(1),
+        "'retrieve-password' === (string) get_query_var( 'tutor_dashboard_page' )",
+        "recovery route scope",
+    )
+
+    start = account.find("add_action(\n\t'template_redirect',")
+    end = account.find("\n);", start)
+    if start < 0 or end < 0:
+        raise AssertionError("guest dashboard redirect is missing")
+
+    body = account[start:end]
+    guard = re.search(r"if\s*\((.*?)\)\s*\{\s*return;\s*\}", body, re.DOTALL)
+    if not guard:
+        raise AssertionError("guest dashboard early-return guard is missing")
+    require(guard.group(1), "cas_account_is_retrieve_password()", "guest dashboard guard")
+    if body.index("cas_account_is_retrieve_password()") > body.index("$dashboard ="):
+        raise AssertionError("recovery route exemption must run before the dashboard redirect")
+    require(body, "is_page( $dashboard )", "ordinary guest dashboard protection")
+    require(body, "wp_safe_redirect( $login )", "ordinary guest dashboard protection")
+    require(account, "tutor_before_retrieve_password_form", "Tutor recovery form hooks")
+    require(account, "tutor_before_reset_password_form", "Tutor reset form hooks")
+
+
+def test_public_recovery_route_exempts_only_tutor_retrieve_password_endpoint() -> None:
+    assert_public_recovery_route(ACCOUNT.read_text(encoding="utf-8"))
+
+
 def main() -> int:
     login = LOGIN.read_text(encoding="utf-8")
     account = ACCOUNT.read_text(encoding="utf-8")
     assert_plain_password_fallback(login)
     assert_vanilla_password_toggle(login)
     assert_login_error_contract(login, account)
-    print("login form contract passed: native password fallback, vanilla toggle, styled errors")
+    assert_public_recovery_route(account)
+    print("login form contract passed: native password fallback, vanilla toggle, styled errors, public recovery route")
     return 0
 
 

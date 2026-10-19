@@ -1696,7 +1696,8 @@ function cas_account_adopt_content( $content ) {
 add_action(
 	'template_redirect',
 	function () {
-		if ( is_user_logged_in() || ! function_exists( 'tutor_utils' ) ) {
+		// Tutor marks retrieve-password public for request and reset-token forms.
+		if ( is_user_logged_in() || ! function_exists( 'tutor_utils' ) || cas_account_is_retrieve_password() ) {
 			return;
 		}
 
