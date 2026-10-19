@@ -235,6 +235,8 @@ def visible_messages(source: str, redact: tuple[str, ...] = ()) -> list[str]:
 def visible_marker(source: str) -> str:
     text = html.unescape(re.sub(r"<[^>]*>", " ", source))
     text = " ".join(text.split()).lower()
+    if "if an account matches those details, a reset email will be sent" in text:
+        return "generic-reset-outcome"
     if "invalid username or email" in text:
         return "invalid-account"
     if "sent an email to this account" in text:
@@ -484,13 +486,9 @@ class TestIsolatedPasswordRecoveryFlow(unittest.TestCase):
         self.assertEqual(path, "/dashboard/retrieve-password/")
         self.assertEqual(kind, "tutor")
         self.assert_tutor_reset_form(find_form(body, {"password", "confirm_password"}))
-        if marker == expected_marker:
-            return "visible-feedback"
-
-        self.assertEqual(marker, "other-visible-response")
-        self.assertEqual(visible_summary(body), "<no alert text>")
-
-        return "no-visible-feedback"
+        self.assertEqual(marker, expected_marker)
+        self.assertTrue(visible_messages(body), "Tutor reset errors must include a rendered alert")
+        return "visible-feedback"
 
     @classmethod
     def mailpit_get(cls, path: str) -> bytes:
@@ -611,6 +609,7 @@ class TestIsolatedPasswordRecoveryFlow(unittest.TestCase):
         bad_nonce_status, bad_nonce_final, bad_nonce_body = self.client.request(urljoin(bad_nonce_url, bad_nonce_form["action"] or bad_nonce_url), bad_nonce_fields)
         print(f"bad nonce request: status={bad_nonce_status}, path={urlsplit(bad_nonce_final).path}, visible={visible_marker(bad_nonce_body)}, message={visible_summary(bad_nonce_body, (self.email, self.login))}")
         self.assertLess(bad_nonce_status, 500)
+        self.assertNotEqual(visible_marker(bad_nonce_body), "generic-reset-outcome", "bad nonce must not reach the generic success outcome")
         empty_status, empty_final, empty_body = self.request_reset("")
         print(f"empty username request: status={empty_status}, path={urlsplit(empty_final).path}, visible={visible_marker(empty_body)}, message={visible_summary(empty_body)}")
         self.assertEqual(visible_marker(empty_body), "username-required")
@@ -619,14 +618,18 @@ class TestIsolatedPasswordRecoveryFlow(unittest.TestCase):
         known_status, known_final, known_body = self.request_reset(self.email)
         known_marker = self.visible_outcome(known_status, known_final, known_body, "known-account reset request", (self.email, self.login, self.old_password, self.new_password))
         self.assertLess(known_status, 500)
+        self.assertEqual(known_marker, "generic-reset-outcome")
         reset_url, _ = self.email_link_for_request(initial_ids)
 
         unknown = "unknown-" + secrets.token_hex(6) + "@example.test"
         unknown_status, unknown_final, unknown_body = self.request_reset(unknown)
         unknown_marker = self.visible_outcome(unknown_status, unknown_final, unknown_body, "unknown-account reset request", (unknown, self.email, self.login, self.old_password, self.new_password))
         self.assertLess(unknown_status, 500)
+        self.assertEqual(unknown_marker, "generic-reset-outcome")
+        self.assertEqual(known_marker, unknown_marker, "known and unknown requests must share their visible outcome")
+        self.assertEqual(visible_messages(known_body), visible_messages(unknown_body), "known and unknown requests must show the same complete alert")
         self.assertNotIn(unknown.lower(), json.dumps(self.mailpit_messages()).lower(), "unknown account must not receive mail")
-        print(f"known/unknown visible-outcome difference: {known_marker != unknown_marker} (recorded for hardening follow-up)")
+        print("known/unknown visible outcome is generic and identical; mail is delivered only for known user")
 
         # Confirm a bad key and expired key cannot change the synthetic user's password.
         parts = urlsplit(reset_url)
@@ -641,7 +644,7 @@ class TestIsolatedPasswordRecoveryFlow(unittest.TestCase):
         if invalid_kind != "none":
             invalid_status, invalid_final, invalid_body = self.submit_reset(invalid_final, invalid_form, invalid_kind, self.new_password, self.new_password)
         self.visible_outcome(invalid_status, invalid_final, invalid_body, "invalid reset token", (self.email, self.login, self.old_password, self.new_password))
-        invalid_feedback = self.assert_reset_failure_response(invalid_status, invalid_final, invalid_body, invalid_kind, "invalid-or-expired-key")
+        self.assert_reset_failure_response(invalid_status, invalid_final, invalid_body, invalid_kind, "invalid-or-expired-key")
         self.assertEqual(self.password_hash(), invalid_hash_before, "invalid token must not change the password hash")
         self.assertTrue(self.auth_ok(self.old_password), "invalid token must not change credentials")
         self.assertFalse(self.auth_ok(self.new_password), "invalid token must not set the new password")
@@ -650,8 +653,6 @@ class TestIsolatedPasswordRecoveryFlow(unittest.TestCase):
             dashboard_status, dashboard_final, _ = self.client.get("/dashboard/")
             self.assertLess(dashboard_status, 500)
             self.assertEqual(urlsplit(dashboard_final).path, "/login/", "invalid token must not grant dashboard access")
-            if invalid_feedback == "no-visible-feedback":
-                print("TUTOR_RESET_SERVER_ALERT_ABSENT: invalid-key danger flash is not rendered by the native reset template")
 
         # Password mismatch must leave the valid email token usable and original password unchanged.
         status, page_url, body, form, kind = self.reset_form(reset_url)
@@ -660,12 +661,10 @@ class TestIsolatedPasswordRecoveryFlow(unittest.TestCase):
         mismatch_hash_before = self.password_hash()
         mismatch_status, mismatch_final, mismatch_body = self.submit_reset(page_url, form, kind, self.new_password, self.new_password + "-mismatch")
         self.visible_outcome(mismatch_status, mismatch_final, mismatch_body, "mismatched passwords", (self.email, self.login, self.old_password, self.new_password))
-        mismatch_feedback = self.assert_reset_failure_response(mismatch_status, mismatch_final, mismatch_body, kind, "password-mismatch")
+        self.assert_reset_failure_response(mismatch_status, mismatch_final, mismatch_body, kind, "password-mismatch")
         self.assertEqual(self.password_hash(), mismatch_hash_before, "mismatched passwords must not change the password hash")
         self.assertTrue(self.auth_ok(self.old_password), "mismatched passwords must not change credentials")
         self.assertFalse(self.auth_ok(self.new_password), "mismatched passwords must not set the new password")
-        if kind == "tutor" and mismatch_feedback == "no-visible-feedback":
-            print("TUTOR_RESET_SERVER_ALERT_ABSENT: password-mismatch danger flash is not rendered by the native reset template")
 
         # A correct confirmation resets the synthetic user's password.
         status, page_url, body, form, kind = self.reset_form(reset_url)
@@ -691,12 +690,10 @@ class TestIsolatedPasswordRecoveryFlow(unittest.TestCase):
         if reused_kind != "none":
             reused_status, reused_final, reused_body = self.submit_reset(reused_final, reused_form, reused_kind, self.old_password, self.old_password)
         self.visible_outcome(reused_status, reused_final, reused_body, "reused reset token", (self.email, self.login, self.old_password, self.new_password))
-        reused_feedback = self.assert_reset_failure_response(reused_status, reused_final, reused_body, reused_kind, "invalid-or-expired-key")
+        self.assert_reset_failure_response(reused_status, reused_final, reused_body, reused_kind, "invalid-or-expired-key")
         self.assertEqual(self.password_hash(), reused_password_hash, "reused token must not change the password hash")
         self.assertTrue(self.auth_ok(self.new_password), "reused token must not replace the new password")
         self.assertFalse(self.auth_ok(self.old_password), "reused token must not restore the old password")
-        if reused_kind == "tutor" and reused_feedback == "no-visible-feedback":
-            print("TUTOR_RESET_SERVER_ALERT_ABSENT: reused-key danger flash is not rendered by the native reset template")
 
         # Mint a second token, age only this synthetic user's key in the local disposable DB, then verify expiry.
         before_second = {str(m.get("ID") or m.get("id") or "") for m in self.mailpit_messages()}
@@ -716,13 +713,36 @@ class TestIsolatedPasswordRecoveryFlow(unittest.TestCase):
         if expired_kind != "none":
             expired_status, expired_final, expired_body = self.submit_reset(expired_final, expired_form, expired_kind, self.old_password, self.old_password)
         self.visible_outcome(expired_status, expired_final, expired_body, "expired reset token", (self.email, self.login, self.old_password, self.new_password))
-        expired_feedback = self.assert_reset_failure_response(expired_status, expired_final, expired_body, expired_kind, "invalid-or-expired-key")
+        self.assert_reset_failure_response(expired_status, expired_final, expired_body, expired_kind, "invalid-or-expired-key")
         self.assertEqual(self.password_hash(), expired_password_hash, "expired token must not change the password hash")
         self.assertTrue(self.auth_ok(self.new_password), "expired token must not change credentials")
         self.assertFalse(self.auth_ok(self.old_password), "expired token must not restore the old password")
-        if expired_kind == "tutor" and expired_feedback == "no-visible-feedback":
-            print("TUTOR_RESET_SERVER_ALERT_ABSENT: expired-key danger flash is not rendered by the native reset template")
 
+        # Force one in-process local SMTP failure; no option or transport setting persists.
+        messages_before_failure = len(self.mailpit_messages())
+        failure = self.wp_json(
+            "$_POST['user_login']=" + php_string(self.email) + ";"
+            + "$error=new WP_Error('synthetic_preflight');"
+            + "$preserved=cas_account_password_recovery_start($error)===$error&&!cas_account_password_recovery_request_active();"
+            + "cas_account_password_recovery_start(true);"
+            + "$preserved=$preserved&&cas_account_password_recovery_preflight($error)===$error&&!cas_account_password_recovery_request_active();"
+            + "$_POST['user_login']=array('invalid');$scalar_rejected=!cas_account_password_recovery_input_valid();"
+            + "$_POST['user_login']=" + php_string(self.email) + ";cas_account_password_recovery_start(true);"
+            + "$before=is_file('/tmp/audit.log')?filesize('/tmp/audit.log'):0;"
+            + "add_action('phpmailer_init',function($m){$m->isSMTP();$m->Host='mailpit';$m->Port=1;$m->SMTPAuth=false;$m->SMTPAutoTLS=false;$m->Timeout=1;},PHP_INT_MAX);"
+            + "$sent=wp_mail(" + php_string(self.email) + ",'Local recovery failure test','Synthetic local failure');"
+            + "cas_account_password_recovery_finish();$flash=tutor_flash_get('success');"
+            + "$log=is_file('/tmp/audit.log')?substr(file_get_contents('/tmp/audit.log'),$before):'';"
+            + "return array('sent'=>$sent,'logged'=>strpos($log,'password_reset_mail_failed')!==false,"
+            + "'private'=>strpos($log," + php_string(self.email) + ")===false&&strpos($log," + php_string(self.login) + ")===false,"
+            + "'generic'=>strpos(wp_json_encode($flash),'If an account matches those details, a reset email will be sent.')!==false,"
+            + "'preflight_preserved'=>$preserved,'scalar_rejected'=>$scalar_rejected);"
+        )
+        self.assertFalse(failure.get("sent"), "local SMTP failure probe must fail delivery")
+        for key in ("logged", "private", "generic", "preflight_preserved", "scalar_rejected"):
+            self.assertTrue(failure.get(key), "local recovery failure check failed: " + key)
+        self.assertEqual(len(self.mailpit_messages()), messages_before_failure, "failed SMTP probe must not deliver mail")
+        print("LOCAL_MAIL_FAILURE_PASS: private audit event, generic response, preserved preflight errors and scalar rejection")
         print("LOCAL_MATRIX_PASS: bad nonce, empty input, known/unknown request, captured reset link, invalid token, mismatch, valid reset, reused token, expired token, old/new credential checks")
 
 
@@ -863,7 +883,7 @@ class TestRecoveryHarnessSafety(unittest.TestCase):
         with self.assertRaises(AssertionError):
             require_same_origin("http://127.0.0.1:18027/api/v1/messages", EXPECTED_MAILPIT_URL, "Mailpit request")
 
-    def test_tutor_native_no_alert_requires_exact_form_route(self) -> None:
+    def test_tutor_native_requires_visible_error_and_exact_form_route(self) -> None:
         flow = TestIsolatedPasswordRecoveryFlow("test_password_recovery_email_token_and_credential_matrix")
         final_url = EXPECTED_BASE_URL + "/dashboard/retrieve-password/"
         form = (
@@ -871,10 +891,13 @@ class TestRecoveryHarnessSafety(unittest.TestCase):
             '<input name="reset_key" value="invalid-local-reset-key"><input name="user_id" value="9">'
             '<input name="password"><input name="confirm_password"></form>'
         )
+        alert = '<div class="tutor-alert" role="alert">This key is invalid or has already been used. Please reset your password again if needed.</div>'
         self.assertEqual(
-            flow.assert_reset_failure_response(200, final_url, form, "tutor", "invalid-or-expired-key"),
-            "no-visible-feedback",
+            flow.assert_reset_failure_response(200, final_url, alert + form, "tutor", "invalid-or-expired-key"),
+            "visible-feedback",
         )
+        with self.assertRaises(AssertionError):
+            flow.assert_reset_failure_response(200, final_url, form, "tutor", "invalid-or-expired-key")
         with self.assertRaises(AssertionError):
             flow.assert_reset_failure_response(200, EXPECTED_BASE_URL + "/login/", form, "tutor", "invalid-or-expired-key")
         with self.assertRaises(AssertionError):

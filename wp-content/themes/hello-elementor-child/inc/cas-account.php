@@ -525,6 +525,85 @@ add_action( 'tutor_after_retrieve_password_form', 'cas_account_retrieve_password
 add_action( 'tutor_before_reset_password_form', 'cas_account_retrieve_password_before', 0 );
 add_action( 'tutor_after_reset_password_form', 'cas_account_retrieve_password_after', 999 );
 
+/* Tutor's native reset template sets error flashes but does not display them. */
+function cas_account_reset_password_feedback() {
+	if ( cas_account_is_retrieve_password() ) {
+		tutor_alert( null, 'any', true, true );
+	}
+}
+add_action( 'tutor_before_reset_password_form', 'cas_account_reset_password_feedback', 1 );
+
+/* Preserve Tutor's nonce/input checks; mask only its account-existence response for valid identifiers. */
+function cas_account_password_recovery_request_active( $on = null ) {
+	static $active = false;
+
+	if ( null !== $on ) {
+		$active = (bool) $on;
+	}
+
+	return $active;
+}
+
+function cas_account_password_recovery_input_valid() {
+	if ( ! isset( $_POST['user_login'] ) || ! is_scalar( $_POST['user_login'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		return false;
+	}
+
+	$login = trim( (string) wp_unslash( $_POST['user_login'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+
+	return '' !== sanitize_user( $login ) && ( false === strpos( $login, '@' ) || is_email( $login ) );
+}
+
+function cas_account_password_recovery_start( $result ) {
+	if ( ! is_wp_error( $result ) && cas_account_password_recovery_input_valid() ) {
+		cas_account_password_recovery_request_active( true );
+	}
+
+	return $result;
+}
+
+function cas_account_password_recovery_preflight( $result ) {
+	if ( is_wp_error( $result ) ) {
+		cas_account_password_recovery_request_active( false );
+	}
+
+	return $result;
+}
+
+function cas_account_password_recovery_log_mail_failure( $error ) {
+	if ( ! cas_account_password_recovery_request_active() ) {
+		return;
+	}
+
+	$code = is_wp_error( $error ) ? sanitize_key( (string) $error->get_error_code() ) : '';
+	$code = '' !== $code ? $code : 'unknown';
+
+	if ( function_exists( 'cas_audit_log' ) ) {
+		cas_audit_log( 'password_reset_mail_failed', 'code=' . $code );
+	} else {
+		error_log( 'CAS password reset mail failed [' . $code . ']' );
+	}
+}
+
+function cas_account_password_recovery_finish() {
+	if ( ! cas_account_password_recovery_request_active() ) {
+		return;
+	}
+
+	cas_account_password_recovery_request_active( false );
+	tutor_flash_get( 'danger' );
+	tutor_flash_get( 'success' );
+	tutor_flash_set(
+		'success',
+		'<p>' . esc_html__( 'If an account matches those details, a reset email will be sent.', 'hello-elementor-child' ) . '</p>'
+	);
+}
+
+add_filter( 'tutor_before_retrieve_password_form_process', 'cas_account_password_recovery_start', 1 );
+add_filter( 'tutor_before_retrieve_password_form_process', 'cas_account_password_recovery_preflight', PHP_INT_MAX );
+add_action( 'wp_mail_failed', 'cas_account_password_recovery_log_mail_failure', 10, 1 );
+add_action( 'tutor_action_tutor_retrieve_password', 'cas_account_password_recovery_finish', 20 );
+
 /* -------------------------------------------------------------------------
  * [cas_signup]
  * ---------------------------------------------------------------------- */
