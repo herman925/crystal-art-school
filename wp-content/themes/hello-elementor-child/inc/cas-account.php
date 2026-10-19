@@ -533,7 +533,9 @@ function cas_account_retrieve_password_before() {
 
 	if ( isset( $_GET['cas_reset_notice'] ) && is_string( $_GET['cas_reset_notice'] ) // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		&& 'invalid' === wp_unslash( $_GET['cas_reset_notice'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		ob_start();
 		tutor_alert( '<p>' . esc_html__( 'This password reset link is invalid or has expired. Please request a new link.', 'hello-elementor-child' ) . '</p>', 'danger', true, true );
+		cas_account_recovery_alert( ob_get_clean() );
 	}
 }
 
@@ -547,7 +549,7 @@ function cas_account_retrieve_password_after() {
 		return;
 	}
 
-	$form = ob_get_clean();
+	$form = cas_account_recovery_accessible( ob_get_clean() );
 	cas_account_retrieve_password_capture_active( false );
 
 	$back = '<a class="btn ghost full cas-account-back-link" href="'
@@ -564,6 +566,7 @@ function cas_account_retrieve_password_after() {
 		'Tell us the address on the account.',
 		$body
 	);
+	echo '<script>( function () { var error = document.getElementById( "cas-recovery-errors" ); if ( error && "alert" === error.getAttribute( "role" ) ) { error.focus(); } }() );</script>'; // phpcs:ignore WordPress.Security.EscapeOutput
 	echo '</main>'; // phpcs:ignore WordPress.Security.EscapeOutput
 }
 
@@ -575,10 +578,106 @@ add_action( 'tutor_after_reset_password_form', 'cas_account_retrieve_password_af
 /* Tutor's native reset template sets error flashes but does not display them. */
 function cas_account_reset_password_feedback() {
 	if ( cas_account_is_retrieve_password() ) {
+		ob_start();
 		tutor_alert( null, 'any', true, true );
+		cas_account_recovery_alert( ob_get_clean() );
 	}
 }
 add_action( 'tutor_before_reset_password_form', 'cas_account_reset_password_feedback', 1 );
+
+/**
+ * Track whether this request ended with the generic success message.
+ *
+ * @param bool|null $on Pass true/false to set, null to read.
+ *
+ * @return bool
+ */
+function cas_account_recovery_status_active( $on = null ) {
+	static $active = false;
+
+	if ( null !== $on ) {
+		$active = (bool) $on;
+	}
+
+	return $active;
+}
+
+/**
+ * Print a recovery alert in the named error container, or nothing when empty.
+ *
+ * Success is a status, not an alert, so it is announced politely and never focused.
+ *
+ * @param string $alert Rendered alert markup.
+ *
+ * @return void
+ */
+function cas_account_recovery_alert( $alert ) {
+	if ( '' === trim( $alert ) ) {
+		return;
+	}
+
+	$role = cas_account_recovery_status_active() ? 'status' : 'alert';
+	echo '<div id="cas-recovery-errors" class="cas-recovery-errors" role="' . esc_attr( $role ) . '" tabindex="-1">' . $alert . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput
+}
+
+/**
+ * Associate Tutor's recovery labels with their fields and describe fields by the error container.
+ *
+ * Parses Tutor's own markup, so no field or message is matched by its translated text.
+ *
+ * @param string $html Captured Tutor form markup.
+ *
+ * @return string
+ */
+function cas_account_recovery_accessible( $html ) {
+	if ( ! class_exists( 'DOMDocument' ) || '' === trim( $html ) ) {
+		return $html;
+	}
+
+	$dom      = new DOMDocument( '1.0', 'UTF-8' );
+	$previous = libxml_use_internal_errors( true );
+	$dom->loadHTML( '<?xml encoding="UTF-8"><div id="cas-recovery-root">' . $html . '</div>', LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD );
+	libxml_clear_errors();
+	libxml_use_internal_errors( $previous );
+
+	$xpath = new DOMXPath( $dom );
+
+	foreach ( $xpath->query( '//label[not(@for)]' ) as $label ) {
+		$input = $xpath->query( '(ancestor::*[contains(concat( " ", normalize-space(@class), " " ), " tutor-form-group ")][1]//input[@id and not(@type="hidden")])[1]', $label )->item( 0 );
+
+		if ( $input ) {
+			$label->setAttribute( 'for', $input->getAttribute( 'id' ) );
+		}
+	}
+
+	$has_error = $xpath->query( '//*[@id="cas-recovery-errors"]' )->length > 0;
+
+	if ( ! $has_error ) {
+		$tutor_alert = $xpath->query( '//form[contains(@class, "tutor-forgot-password-form")]/div[contains(concat( " ", normalize-space(@class), " " ), " tutor-mb-8 ")]' )->item( 0 );
+
+		if ( $tutor_alert && '' !== trim( $tutor_alert->textContent ) ) {
+			$tutor_alert->setAttribute( 'id', 'cas-recovery-errors' );
+			$tutor_alert->setAttribute( 'role', cas_account_recovery_status_active() ? 'status' : 'alert' );
+			$tutor_alert->setAttribute( 'tabindex', '-1' );
+			$has_error = true;
+		}
+	}
+
+	if ( $has_error ) {
+		foreach ( $xpath->query( '//input[not(@type="hidden")]' ) as $input ) {
+			$input->setAttribute( 'aria-describedby', 'cas-recovery-errors' );
+		}
+	}
+
+	$out  = '';
+	$root = $xpath->query( '//*[@id="cas-recovery-root"]' )->item( 0 );
+
+	foreach ( $root->childNodes as $node ) {
+		$out .= $dom->saveHTML( $node );
+	}
+
+	return $out;
+}
 
 /* Preserve Tutor's nonce/input checks; mask only its account-existence response for valid identifiers. */
 function cas_account_password_recovery_request_active( $on = null ) {
@@ -650,6 +749,7 @@ function cas_account_password_recovery_finish() {
 		'success',
 		'<p>' . esc_html__( 'If an account matches those details, a reset email will be sent.', 'hello-elementor-child' ) . '</p>'
 	);
+	cas_account_recovery_status_active( true );
 }
 
 add_filter( 'tutor_before_retrieve_password_form_process', 'cas_account_password_recovery_start', 1 );

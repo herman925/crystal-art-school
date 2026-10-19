@@ -176,20 +176,27 @@ echo json_encode($out);
         match = re.search(r'function cas_account_retrieve_password_before\(\)\s*\{.*?^\}', self.source, re.MULTILINE | re.DOTALL)
         self.assertIsNotNone(match)
         self.assertNotIn('session_start', match.group(0))
+        helpers = '\n'.join(
+            re.search(r'function ' + name + r'\(.*?\n\}', self.source, re.DOTALL).group(0)
+            for name in ('cas_account_recovery_status_active', 'cas_account_recovery_alert')
+        )
         result = run_php(r'''
+function esc_attr($text){return htmlspecialchars($text,ENT_QUOTES);}
 function cas_account_is_retrieve_password(){return true;}
 function cas_account_retrieve_password_capture_active($value=null){static $active=false;if($value!==null){$active=$value;}return $active;}
 function wp_unslash($value){return stripslashes($value);}
 function esc_html__($message,$domain){return htmlspecialchars($message,ENT_QUOTES);}
 function tutor_alert($message,$type,$echo,$component){if($echo){echo $message;}}
-''' + match.group(0) + r'''
+''' + helpers + '\n' + match.group(0) + r'''
 $out=array();foreach(array('invalid','expired','unknown',array('invalid'),'<script>invalid</script>') as $notice){
 $_GET=array('cas_reset_notice'=>$notice);cas_account_retrieve_password_capture_active(false);
 ob_start();cas_account_retrieve_password_before();$inner=ob_get_clean();ob_end_clean();$out[]=$inner;
 }
 echo json_encode($out);
 ''')
-        self.assertEqual(result, ['<p>This password reset link is invalid or has expired. Please request a new link.</p>', '', '', '', ''])
+        notice = '<div id="cas-recovery-errors" class="cas-recovery-errors" role="alert" tabindex="-1">'
+        notice += '<p>This password reset link is invalid or has expired. Please request a new link.</p></div>'
+        self.assertEqual(result, [notice, '', '', '', ''])
 
     def test_callback_never_reads_or_forwards_identity_or_redirect_input(self) -> None:
         callback, _ = callback_source(self.source)
