@@ -34,8 +34,11 @@ def assert_routes() -> None:
         "'reviews'  => 'blocked'",
         "'quiz-attempts' === $page",
         "'my-quiz-attempts' === $sub",
-        "return 'panel-wishlist'",
+        "'wishlist' === $sub",
+        "return 'blocked'",
         "return 'panel-courses'",
+        "unset( $tabs['courses/my-quiz-attempts'] );",
+        "unset( $tabs['courses/wishlist'] );",
         "is_student_view()",
         "'template_redirect'",
         "tutor_enrolled_courses_page_tabs",
@@ -47,15 +50,30 @@ def assert_routes() -> None:
 def assert_panels() -> None:
     for token in (
         "cas_dashboard_purchases_html( $user_id )",
-        "cas_dashboard_wishlist_html( $user_id )",
         "cas_dashboard_settings_html( $user_id )",
-        'id="panel-wishlist"',
         "tutor_dashboard_invoice_button",
         "OrderModel::render_pay_button",
     ):
         require(ACCOUNT + PAGES, token, "panels")
+    forbid(ACCOUNT, 'id="panel-wishlist"', "dashboard panels")
+    forbid(ACCOUNT, "'wishlist'  => 'Wishlist'", "dashboard navigation")
+    forbid(ACCOUNT, "cas_dashboard_wishlist_html", "dashboard wishlist renderer")
+    forbid(PAGES, "cas_dashboard_wishlist_html", "wishlist route (no renderer)")
+    forbid(PAGES, "get_wishlist(", "wishlist route (saved wishlist is not queried)")
+    forbid(PAGES, "delete_user_meta", "wishlist data preservation")
+    forbid(PAGES, "panel-wishlist", "wishlist route (no dead panel target)")
     forbid(ACCOUNT, "dashboard.account.billing", "studio (Tutor billing card replaced by the table)")
     require(PAGES, '<table class="dash-table">', "purchases table")
+
+
+def assert_wishlist_legacy_route() -> None:
+    route = PAGES.split("if ( 'wishlist' === $sub ) {", 1)[1].split("\n\t\t\t}", 1)[0]
+    require(route, "return 'blocked';", "legacy wishlist address")
+    require(
+        PAGES,
+        "wp_safe_redirect( 'blocked' === $target ? $dashboard",
+        "blocked legacy route redirect",
+    )
 
 
 def assert_tutor_components_started() -> None:
@@ -84,6 +102,7 @@ def assert_settings_storage() -> None:
 def main() -> None:
     assert_routes()
     assert_panels()
+    assert_wishlist_legacy_route()
     assert_tutor_components_started()
     assert_settings_storage()
     print("dashboard pages contract: OK")

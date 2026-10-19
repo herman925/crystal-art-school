@@ -962,12 +962,10 @@ function cas_account_dashboard_body() {
 	);
 	$security_html   = cas_account_dashboard_native_template( 'dashboard.account.settings.security' );
 	$purchases_html  = cas_dashboard_purchases_html( $user_id );
-	$wishlist_html   = cas_dashboard_wishlist_html( $user_id );
 	$settings_html   = cas_dashboard_settings_html( $user_id );
 	$tabs            = array(
 		'overview'  => 'Overview',
 		'courses'   => 'My courses',
-		'wishlist'  => 'Wishlist',
 		'progress'  => 'Progress',
 		'purchases' => 'Purchases',
 		'account'   => 'Profile',
@@ -1041,11 +1039,6 @@ function cas_account_dashboard_body() {
 						<?php endforeach; ?>
 					</div>
 				<?php endif; ?>
-			</section>
-
-			<section class="dash-panel" id="panel-wishlist" data-panel="wishlist" role="tabpanel" aria-labelledby="tab-wishlist" tabindex="0" hidden>
-				<div class="dash-panel-head"><div><span class="eyebrow">Saved for later</span><h2>Wishlist</h2></div></div>
-				<?php echo $wishlist_html; // phpcs:ignore WordPress.Security.EscapeOutput ?>
 			</section>
 
 			<section class="dash-panel" id="panel-progress" data-panel="progress" role="tabpanel" aria-labelledby="tab-progress" tabindex="0" hidden>

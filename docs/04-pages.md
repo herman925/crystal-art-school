@@ -231,14 +231,14 @@ The prototype's demo storage does not exist on the site; the studio page is
 `cas_account_dashboard_body()` in `inc/cas-account.php`, and the subpage work is in
 `inc/cas-dashboard-pages.php` (#125).
 
-- **One shell.** A student's GET request for one of Tutor's own subpages redirects to the
-  studio page with that tab open (`template_redirect`, student view only; instructors and
-  admins keep Tutor's pages):
+- **One shell.** A student's GET request for Tutor subpages redirects to the studio page; mapped
+  pages open the matching tab, while the removed Wishlist route goes to studio home. Instructors
+  and admins keep Tutor's pages:
 
   | Tutor address | Studio tab |
   |---|---|
   | `/dashboard/courses/` (also `active-courses`, `completed-courses`, `my-courses`) | My courses |
-  | `/dashboard/courses/wishlist/` | Wishlist (not in the prototype) |
+  | `/dashboard/courses/wishlist/` | studio home; legacy route, saved Tutor data retained, no Wishlist panel |
   | `/dashboard/account/billing/` | Purchases |
   | `/dashboard/account/profile/`, `/dashboard/account/` | Profile |
   | `/dashboard/account/settings/` | Settings |

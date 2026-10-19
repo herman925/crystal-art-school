@@ -32,8 +32,8 @@ def main() -> int:
     templates = {relative: read(relative) for relative in contract["templates"]}
 
     panel_keys = [panel["key"] for panel in contract["panels"]]
-    if len(set(panel_keys)) != len(panel_keys):
-        raise AssertionError("the studio contract must define distinct panels")
+    if len(panel_keys) != 6 or len(set(panel_keys)) != 6:
+        raise AssertionError("the studio contract must define six distinct panels")
     for panel in contract["panels"]:
         require(source, f'data-panel="{panel["key"]}"', "dashboard panel")
         require(source, panel["label"], "dashboard tab label")
