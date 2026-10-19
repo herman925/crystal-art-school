@@ -195,6 +195,48 @@ function cas_account_login_url() {
 }
 
 /**
+ * Send only core password requests to Tutor; keep core reset-token routes intact.
+ */
+function cas_account_redirect_password_request() {
+	$method = $_SERVER['REQUEST_METHOD'] ?? 'GET'; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+	if ( ! in_array( $method, array( 'GET', 'POST' ), true ) || ! function_exists( 'tutor_utils' ) ) {
+		return;
+	}
+
+	$id   = cas_account_page_ids()['dashboard'];
+	$page = $id ? get_post( $id ) : null;
+	if ( ! $page || 'page' !== $page->post_type || 'publish' !== $page->post_status ) {
+		return;
+	}
+
+	$target = tutor_utils()->tutor_dashboard_url( 'retrieve-password' );
+	$site   = wp_parse_url( home_url( '/' ) );
+	$url    = wp_parse_url( $target );
+	if ( ! is_array( $url ) || ! is_array( $site )
+		|| ! in_array( $url['scheme'] ?? '', array( 'http', 'https' ), true )
+		|| ( $url['scheme'] ?? '' ) !== ( $site['scheme'] ?? '' )
+		|| strtolower( $url['host'] ?? '' ) !== strtolower( $site['host'] ?? '' )
+		|| ( $url['port'] ?? ( 'https' === $url['scheme'] ? 443 : 80 ) ) !== ( $site['port'] ?? ( 'https' === $site['scheme'] ? 443 : 80 ) )
+		|| isset( $url['user'] ) || isset( $url['pass'] )
+		|| rtrim( $url['path'] ?? '', '/' ) === rtrim( (string) wp_parse_url( wp_login_url(), PHP_URL_PATH ), '/' ) ) {
+		return;
+	}
+
+	// Preserve core reset-link failures without forwarding their query parameters.
+	if ( 'GET' === $method && isset( $_GET['error'] ) && is_scalar( $_GET['error'] ) // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		&& in_array( wp_unslash( $_GET['error'] ), array( 'invalidkey', 'expiredkey' ), true ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$target = add_query_arg( 'cas_reset_notice', 'invalid', $target );
+	}
+
+	// Do not forward posted identifiers or untrusted redirect_to parameters.
+	if ( wp_safe_redirect( $target, 'POST' === $method ? 303 : 302 ) ) {
+		exit;
+	}
+}
+add_action( 'login_form_lostpassword', 'cas_account_redirect_password_request' );
+add_action( 'login_form_retrievepassword', 'cas_account_redirect_password_request' );
+
+/**
  * Tutor's student registration page, or '' when it is not configured.
  *
  * @return string
@@ -488,6 +530,11 @@ function cas_account_retrieve_password_before() {
 	echo '<main id="main" class="site-main">'; // phpcs:ignore WordPress.Security.EscapeOutput
 	cas_account_retrieve_password_capture_active( true );
 	ob_start();
+
+	if ( isset( $_GET['cas_reset_notice'] ) && is_string( $_GET['cas_reset_notice'] ) // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		&& 'invalid' === wp_unslash( $_GET['cas_reset_notice'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		tutor_alert( '<p>' . esc_html__( 'This password reset link is invalid or has expired. Please request a new link.', 'hello-elementor-child' ) . '</p>', 'danger', true, true );
+	}
 }
 
 /**

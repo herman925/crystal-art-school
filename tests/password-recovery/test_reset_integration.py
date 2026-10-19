@@ -485,8 +485,13 @@ class TestIsolatedPasswordRecoveryFlow(unittest.TestCase):
             return "visible-feedback"
 
         self.assertEqual(path, "/dashboard/retrieve-password/")
-        self.assertEqual(kind, "tutor")
-        self.assert_tutor_reset_form(find_form(body, {"password", "confirm_password"}))
+        if kind == "none":
+            request_form = find_form(body, {"user_login", "tutor_action"})
+            fields = {item["name"]: item["value"] for item in request_form["fields"]}
+            self.assertEqual(fields["tutor_action"], "tutor_retrieve_password")
+        else:
+            self.assertEqual(kind, "tutor")
+            self.assert_tutor_reset_form(find_form(body, {"password", "confirm_password"}))
         self.assertEqual(marker, expected_marker)
         self.assertTrue(visible_messages(body), "Tutor reset errors must include a rendered alert")
         return "visible-feedback"
@@ -503,7 +508,15 @@ class TestIsolatedPasswordRecoveryFlow(unittest.TestCase):
 
     @classmethod
     def mailpit_messages(cls) -> list[dict]:
-        return json.loads(cls.mailpit_get("/api/v1/messages").decode("utf-8")).get("messages", [])
+        messages = []
+        while True:
+            page = json.loads(cls.mailpit_get(f"/api/v1/messages?start={len(messages)}&limit=50").decode("utf-8"))
+            batch = page.get("messages", [])
+            messages.extend(batch)
+            if len(messages) >= page["total"]:
+                return messages
+            if not batch:
+                raise AssertionError("Mailpit returned an empty page before its reported total")
 
     @classmethod
     def message_detail(cls, message_id: str) -> dict:
@@ -956,6 +969,29 @@ class TestRecoveryHarnessSafety(unittest.TestCase):
             visible_marker("This key is invalid or has already been used. Please reset your password again if needed."),
             "invalid-or-expired-key",
         )
+
+    def test_core_token_error_requires_visible_error_on_exact_tutor_request_form(self) -> None:
+        flow = TestIsolatedPasswordRecoveryFlow("test_password_recovery_email_token_and_credential_matrix")
+        form = '<form><input name="user_login"><input name="tutor_action" value="tutor_retrieve_password"></form>'
+        alert = '<div class="tutor-alert">This password reset link is invalid or has expired. Please request a new link.</div>'
+        url = EXPECTED_BASE_URL + '/dashboard/retrieve-password/'
+        self.assertEqual(flow.assert_reset_failure_response(200, url, alert + form, 'none', 'invalid-or-expired-key'), 'visible-feedback')
+        with self.assertRaises(AssertionError):
+            flow.assert_reset_failure_response(200, url, form, 'none', 'invalid-or-expired-key')
+        with self.assertRaises(AssertionError):
+            flow.assert_reset_failure_response(200, url, alert + form.replace('tutor_retrieve_password', 'other_action'), 'none', 'invalid-or-expired-key')
+
+    def test_mailpit_message_snapshot_paginates_past_fifty(self) -> None:
+        flow = TestIsolatedPasswordRecoveryFlow
+        first = {"messages": [{"ID": str(n)} for n in range(50)], "total": 51}
+        second = {"messages": [{"ID": "50"}], "total": 51}
+        with patch.object(flow, 'mailpit_get', side_effect=[json.dumps(first).encode(), json.dumps(second).encode()]) as get:
+            messages = flow.mailpit_messages()
+        self.assertEqual(len(messages), 51)
+        self.assertEqual(get.call_args_list[0].args[0], '/api/v1/messages?start=0&limit=50')
+        self.assertEqual(get.call_args_list[1].args[0], '/api/v1/messages?start=50&limit=50')
+        with patch.object(flow, 'mailpit_get', return_value=b'{"messages":[],"total":1}'), self.assertRaises(AssertionError):
+            flow.mailpit_messages()
 
     def test_mailpit_uses_get_at_its_fixed_origin(self) -> None:
         class Harness:
