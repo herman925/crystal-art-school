@@ -50,6 +50,7 @@ function add_action($name,$callback){$GLOBALS['hooks'][$name]=$callback;}
 function cas_account_page_ids(){return array('dashboard'=>$GLOBALS['fixture']['id']??42);}
 function get_post($id){return (object)array('post_type'=>$GLOBALS['fixture']['type']??'page','post_status'=>$GLOBALS['fixture']['status']??'publish');}
 function home_url($path){return $GLOBALS['fixture']['home']??'https://school.example.test/';}
+function add_query_arg($key,$value,$url){return $url.(strpos($url,'?')===false?'?':'&').rawurlencode($key).'='.rawurlencode($value);}
 function wp_login_url(){return 'https://school.example.test/wp-login.php';}
 function wp_parse_url($url,$component=-1){return parse_url($url,$component);}
 function wp_unslash($value){return stripslashes($value);}
@@ -109,7 +110,7 @@ foreach(array('rp','resetpass','login','logout','register') as $action){
  foreach(array('GET','POST') as $method){$out['tokens'][$action.'_'.$method]=probe($action,$method);}
 }
 $out['error_flags']=array();
-foreach(array('invalidkey','expiredkey','unknown',array('invalidkey'),123) as $error){
+foreach(array('invalidkey','expiredkey','unknown',array('invalidkey'),123,'invalidkey<script>') as $error){
  foreach(array('GET','POST') as $method){
   $result=probe('lostpassword',$method,array(),'known@example.test',0,$error);
   $out['error_flags'][]=array('error'=>$error,'method'=>$method,'result'=>$result,'flashes'=>$GLOBALS['flashes']);
@@ -117,6 +118,7 @@ foreach(array('invalidkey','expiredkey','unknown',array('invalidkey'),123) as $e
 }
 $out['invalid_route_error']=probe('lostpassword','GET',array('target'=>'https://untrusted.example.test/'),'known@example.test',0,'expiredkey');
 $out['invalid_route_flashes']=$GLOBALS['flashes'];
+$out['notice_existing_query']=probe('lostpassword','GET',array('target'=>'https://school.example.test/dashboard/retrieve-password/?lang=en'),'known@example.test',0,'invalidkey');
 echo json_encode($out);
 '''
         cls.results = run_php(cls.php + tutor + matrix)
@@ -157,15 +159,37 @@ echo json_encode($out);
                 self.assertEqual(result, {'fallback': True})
 
     def test_only_allowlisted_scalar_get_errors_set_fixed_feedback(self) -> None:
-        self.assertEqual(len(self.results['error_flags']), 10)
-        message = '<p>This password reset link is invalid or has expired. Please request a new link.</p>'
+        self.assertEqual(len(self.results['error_flags']), 12)
         for case in self.results['error_flags']:
             with self.subTest(case=case):
                 show = case['method'] == 'GET' and case['error'] in ('invalidkey', 'expiredkey')
-                self.assertEqual(case['flashes'], {'danger': message} if show else [])
-                self.assertEqual(case['result']['url'], 'https://school.example.test/dashboard/retrieve-password/')
+                self.assertEqual(case['flashes'], [])
+                expected = 'https://school.example.test/dashboard/retrieve-password/'
+                if show:
+                    expected += '?cas_reset_notice=invalid'
+                self.assertEqual(case['result']['url'], expected)
         self.assertEqual(self.results['invalid_route_error'], {'fallback': True})
         self.assertEqual(self.results['invalid_route_flashes'], [])
+        self.assertEqual(self.results['notice_existing_query']['url'], 'https://school.example.test/dashboard/retrieve-password/?lang=en&cas_reset_notice=invalid')
+
+    def test_notice_renders_fixed_escaped_copy_without_session_start(self) -> None:
+        match = re.search(r'function cas_account_retrieve_password_before\(\)\s*\{.*?^\}', self.source, re.MULTILINE | re.DOTALL)
+        self.assertIsNotNone(match)
+        self.assertNotIn('session_start', match.group(0))
+        result = run_php(r'''
+function cas_account_is_retrieve_password(){return true;}
+function cas_account_retrieve_password_capture_active($value=null){static $active=false;if($value!==null){$active=$value;}return $active;}
+function wp_unslash($value){return stripslashes($value);}
+function esc_html__($message,$domain){return htmlspecialchars($message,ENT_QUOTES);}
+function tutor_alert($message,$type,$echo,$component){if($echo){echo $message;}}
+''' + match.group(0) + r'''
+$out=array();foreach(array('invalid','expired','unknown',array('invalid'),'<script>invalid</script>') as $notice){
+$_GET=array('cas_reset_notice'=>$notice);cas_account_retrieve_password_capture_active(false);
+ob_start();cas_account_retrieve_password_before();$inner=ob_get_clean();ob_end_clean();$out[]=$inner;
+}
+echo json_encode($out);
+''')
+        self.assertEqual(result, ['<p>This password reset link is invalid or has expired. Please request a new link.</p>', '', '', '', ''])
 
     def test_callback_never_reads_or_forwards_identity_or_redirect_input(self) -> None:
         callback, _ = callback_source(self.source)

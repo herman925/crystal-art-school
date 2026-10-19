@@ -218,14 +218,14 @@ function cas_account_redirect_password_request() {
 		|| strtolower( $url['host'] ?? '' ) !== strtolower( $site['host'] ?? '' )
 		|| ( $url['port'] ?? ( 'https' === $url['scheme'] ? 443 : 80 ) ) !== ( $site['port'] ?? ( 'https' === $site['scheme'] ? 443 : 80 ) )
 		|| isset( $url['user'] ) || isset( $url['pass'] )
-		|| ( $url['path'] ?? '' ) === wp_parse_url( wp_login_url(), PHP_URL_PATH ) ) {
+		|| rtrim( $url['path'] ?? '', '/' ) === rtrim( (string) wp_parse_url( wp_login_url(), PHP_URL_PATH ), '/' ) ) {
 		return;
 	}
 
 	// Preserve core reset-link failures without forwarding their query parameters.
 	if ( 'GET' === $method && isset( $_GET['error'] ) && is_scalar( $_GET['error'] ) // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		&& in_array( wp_unslash( $_GET['error'] ), array( 'invalidkey', 'expiredkey' ), true ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		tutor_flash_set( 'danger', '<p>' . esc_html__( 'This password reset link is invalid or has expired. Please request a new link.', 'hello-elementor-child' ) . '</p>' );
+		$target = add_query_arg( 'cas_reset_notice', 'invalid', $target );
 	}
 
 	// Do not forward posted identifiers or untrusted redirect_to parameters.
@@ -530,6 +530,11 @@ function cas_account_retrieve_password_before() {
 	echo '<main id="main" class="site-main">'; // phpcs:ignore WordPress.Security.EscapeOutput
 	cas_account_retrieve_password_capture_active( true );
 	ob_start();
+
+	if ( isset( $_GET['cas_reset_notice'] ) && is_string( $_GET['cas_reset_notice'] ) // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		&& 'invalid' === wp_unslash( $_GET['cas_reset_notice'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		tutor_alert( '<p>' . esc_html__( 'This password reset link is invalid or has expired. Please request a new link.', 'hello-elementor-child' ) . '</p>', 'danger', true, true );
+	}
 }
 
 /**
