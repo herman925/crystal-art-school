@@ -222,6 +222,12 @@ function cas_account_redirect_password_request() {
 		return;
 	}
 
+	// Preserve core reset-link failures without forwarding their query parameters.
+	if ( 'GET' === $method && isset( $_GET['error'] ) && is_scalar( $_GET['error'] ) // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		&& in_array( wp_unslash( $_GET['error'] ), array( 'invalidkey', 'expiredkey' ), true ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		tutor_flash_set( 'danger', '<p>' . esc_html__( 'This password reset link is invalid or has expired. Please request a new link.', 'hello-elementor-child' ) . '</p>' );
+	}
+
 	// Do not forward posted identifiers or untrusted redirect_to parameters.
 	if ( wp_safe_redirect( $target, 'POST' === $method ? 303 : 302 ) ) {
 		exit;

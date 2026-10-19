@@ -485,8 +485,13 @@ class TestIsolatedPasswordRecoveryFlow(unittest.TestCase):
             return "visible-feedback"
 
         self.assertEqual(path, "/dashboard/retrieve-password/")
-        self.assertEqual(kind, "tutor")
-        self.assert_tutor_reset_form(find_form(body, {"password", "confirm_password"}))
+        if kind == "none":
+            request_form = find_form(body, {"user_login", "tutor_action"})
+            fields = {item["name"]: item["value"] for item in request_form["fields"]}
+            self.assertEqual(fields["tutor_action"], "tutor_retrieve_password")
+        else:
+            self.assertEqual(kind, "tutor")
+            self.assert_tutor_reset_form(find_form(body, {"password", "confirm_password"}))
         self.assertEqual(marker, expected_marker)
         self.assertTrue(visible_messages(body), "Tutor reset errors must include a rendered alert")
         return "visible-feedback"
@@ -956,6 +961,17 @@ class TestRecoveryHarnessSafety(unittest.TestCase):
             visible_marker("This key is invalid or has already been used. Please reset your password again if needed."),
             "invalid-or-expired-key",
         )
+
+    def test_core_token_error_requires_visible_error_on_exact_tutor_request_form(self) -> None:
+        flow = TestIsolatedPasswordRecoveryFlow("test_password_recovery_email_token_and_credential_matrix")
+        form = '<form><input name="user_login"><input name="tutor_action" value="tutor_retrieve_password"></form>'
+        alert = '<div class="tutor-alert">This password reset link is invalid or has expired. Please request a new link.</div>'
+        url = EXPECTED_BASE_URL + '/dashboard/retrieve-password/'
+        self.assertEqual(flow.assert_reset_failure_response(200, url, alert + form, 'none', 'invalid-or-expired-key'), 'visible-feedback')
+        with self.assertRaises(AssertionError):
+            flow.assert_reset_failure_response(200, url, form, 'none', 'invalid-or-expired-key')
+        with self.assertRaises(AssertionError):
+            flow.assert_reset_failure_response(200, url, alert + form.replace('tutor_retrieve_password', 'other_action'), 'none', 'invalid-or-expired-key')
 
     def test_mailpit_uses_get_at_its_fixed_origin(self) -> None:
         class Harness:

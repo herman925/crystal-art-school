@@ -52,14 +52,18 @@ function get_post($id){return (object)array('post_type'=>$GLOBALS['fixture']['ty
 function home_url($path){return $GLOBALS['fixture']['home']??'https://school.example.test/';}
 function wp_login_url(){return 'https://school.example.test/wp-login.php';}
 function wp_parse_url($url,$component=-1){return parse_url($url,$component);}
+function wp_unslash($value){return stripslashes($value);}
+function esc_html__($message,$domain){return htmlspecialchars($message,ENT_QUOTES);}
+function tutor_flash_set($type,$message){$GLOBALS['flashes'][$type]=$message;}
 function wp_safe_redirect($target,$status){
     if(!empty($GLOBALS['fixture']['redirect_failure'])){return false;}
     throw new CapturedRedirect($target,$status);
 }
-function probe($action,$method,$fixture=array(),$identity='known@example.test',$native=0){
-    $GLOBALS['fixture']=$fixture;$GLOBALS['native_login']=$native;
+function probe($action,$method,$fixture=array(),$identity='known@example.test',$native=0,$error=null){
+    $GLOBALS['fixture']=$fixture;$GLOBALS['native_login']=$native;$GLOBALS['flashes']=array();
     $_SERVER['REQUEST_METHOD']=$method;
     $_GET=array('action'=>$action,'redirect_to'=>'https://untrusted.example.test/');
+    if(null!==$error){$_GET['error']=$error;}
     $_POST=array('action'=>$action,'user_login'=>$identity,'redirect_to'=>'https://untrusted.example.test/','pwd'=>'synthetic-must-not-forward');
     if(!isset($GLOBALS['hooks']['login_form_'.$action])){return array('fallback'=>true);}
     try{call_user_func($GLOBALS['hooks']['login_form_'.$action]);}
@@ -104,6 +108,15 @@ $out['local_custom_route']=probe('lostpassword','GET',array('home'=>'http://127.
 foreach(array('rp','resetpass','login','logout','register') as $action){
  foreach(array('GET','POST') as $method){$out['tokens'][$action.'_'.$method]=probe($action,$method);}
 }
+$out['error_flags']=array();
+foreach(array('invalidkey','expiredkey','unknown',array('invalidkey'),123) as $error){
+ foreach(array('GET','POST') as $method){
+  $result=probe('lostpassword',$method,array(),'known@example.test',0,$error);
+  $out['error_flags'][]=array('error'=>$error,'method'=>$method,'result'=>$result,'flashes'=>$GLOBALS['flashes']);
+ }
+}
+$out['invalid_route_error']=probe('lostpassword','GET',array('target'=>'https://untrusted.example.test/'),'known@example.test',0,'expiredkey');
+$out['invalid_route_flashes']=$GLOBALS['flashes'];
 echo json_encode($out);
 '''
         cls.results = run_php(cls.php + tutor + matrix)
@@ -143,9 +156,20 @@ echo json_encode($out);
             with self.subTest(name=name):
                 self.assertEqual(result, {'fallback': True})
 
+    def test_only_allowlisted_scalar_get_errors_set_fixed_feedback(self) -> None:
+        self.assertEqual(len(self.results['error_flags']), 10)
+        message = '<p>This password reset link is invalid or has expired. Please request a new link.</p>'
+        for case in self.results['error_flags']:
+            with self.subTest(case=case):
+                show = case['method'] == 'GET' and case['error'] in ('invalidkey', 'expiredkey')
+                self.assertEqual(case['flashes'], {'danger': message} if show else [])
+                self.assertEqual(case['result']['url'], 'https://school.example.test/dashboard/retrieve-password/')
+        self.assertEqual(self.results['invalid_route_error'], {'fallback': True})
+        self.assertEqual(self.results['invalid_route_flashes'], [])
+
     def test_callback_never_reads_or_forwards_identity_or_redirect_input(self) -> None:
         callback, _ = callback_source(self.source)
-        for forbidden in ('$_POST', '$_GET', '$_REQUEST', 'user_login', 'get_user_by', '307', '308'):
+        for forbidden in ('$_POST', "$_GET['redirect_to']", "$_GET['key']", "$_GET['login']", '$_REQUEST', 'user_login', 'get_user_by', '307', '308'):
             self.assertNotIn(forbidden, callback)
         self.assertIn('wp_safe_redirect', callback)
         self.assertIn('exit;', callback)
