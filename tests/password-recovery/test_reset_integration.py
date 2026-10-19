@@ -451,6 +451,48 @@ class TestIsolatedPasswordRecoveryFlow(unittest.TestCase):
         return bool(cls.wp_json(body))
 
     @classmethod
+    def password_hash(cls) -> str:
+        body = "$wpdb->get_var($wpdb->prepare('SELECT user_pass FROM '.$wpdb->users.' WHERE ID=%d'," + str(cls.user_id) + "));"
+        return str(cls.wp_json("global $wpdb;return " + body))
+
+    def authenticated_cookie_names(self) -> list[str]:
+        processor = next((item for item in self.client.opener.handlers if isinstance(item, HTTPCookieProcessor)), None)
+        if not processor:
+            return []
+        return sorted(
+            cookie.name
+            for cookie in processor.cookiejar
+            if cookie.name.startswith(("wordpress_logged_in_", "wordpress_sec_"))
+        )
+
+    def assert_tutor_reset_form(self, form: dict) -> None:
+        fields = {item["name"]: item["value"] for item in form["fields"]}
+        self.assertEqual(fields.get("tutor_action"), "tutor_process_reset_password")
+        self.assertTrue(fields.get("reset_key"))
+        self.assertTrue(fields.get("user_id"))
+
+    def assert_reset_failure_response(self, status: int, final_url: str, body: str, kind: str, expected_marker: str) -> str:
+        self.assertLess(status, 500)
+        marker = visible_marker(body)
+        path = urlsplit(final_url).path
+
+        if path == "/wp-login.php":
+            self.assertEqual(marker, expected_marker)
+
+            return "visible-feedback"
+
+        self.assertEqual(path, "/dashboard/retrieve-password/")
+        self.assertEqual(kind, "tutor")
+        self.assert_tutor_reset_form(find_form(body, {"password", "confirm_password"}))
+        if marker == expected_marker:
+            return "visible-feedback"
+
+        self.assertEqual(marker, "other-visible-response")
+        self.assertEqual(visible_summary(body), "<no alert text>")
+
+        return "no-visible-feedback"
+
+    @classmethod
     def mailpit_get(cls, path: str) -> bytes:
         url = urljoin(cls.mailpit_url + "/", path.lstrip("/"))
         require_same_origin(url, cls.mailpit_url, "Mailpit request")
@@ -529,7 +571,10 @@ class TestIsolatedPasswordRecoveryFlow(unittest.TestCase):
         for form in parser.forms:
             names = {item["name"] for item in form["fields"]}
             if {"pass1", "pass2"}.issubset(names) or {"password", "confirm_password"}.issubset(names):
-                return status, final_url, body, form, "wp" if "pass1" in names else "tutor"
+                kind = "wp" if "pass1" in names else "tutor"
+                if kind == "tutor":
+                    self.assert_tutor_reset_form(form)
+                return status, final_url, body, form, kind
         return status, final_url, body, {}, "none"
 
     def submit_reset(self, url: str, form: dict, kind: str, password: str, confirmation: str) -> tuple[int, str, str]:
@@ -591,37 +636,67 @@ class TestIsolatedPasswordRecoveryFlow(unittest.TestCase):
         else:
             query["reset_key"] = ["invalid-local-reset-key"]
         invalid_url = urlunsplit((parts.scheme, parts.netloc, parts.path, urlencode(query, doseq=True), ""))
+        invalid_hash_before = self.password_hash()
         invalid_status, invalid_final, invalid_body, invalid_form, invalid_kind = self.reset_form(invalid_url)
         if invalid_kind != "none":
             invalid_status, invalid_final, invalid_body = self.submit_reset(invalid_final, invalid_form, invalid_kind, self.new_password, self.new_password)
-        invalid_marker = self.visible_outcome(invalid_status, invalid_final, invalid_body, "invalid reset token", (self.email, self.login, self.old_password, self.new_password))
-        self.assertEqual(invalid_marker, "invalid-or-expired-key")
+        self.visible_outcome(invalid_status, invalid_final, invalid_body, "invalid reset token", (self.email, self.login, self.old_password, self.new_password))
+        invalid_feedback = self.assert_reset_failure_response(invalid_status, invalid_final, invalid_body, invalid_kind, "invalid-or-expired-key")
+        self.assertEqual(self.password_hash(), invalid_hash_before, "invalid token must not change the password hash")
         self.assertTrue(self.auth_ok(self.old_password), "invalid token must not change credentials")
+        self.assertFalse(self.auth_ok(self.new_password), "invalid token must not set the new password")
+        if invalid_kind == "tutor":
+            self.assertEqual(self.authenticated_cookie_names(), [], "invalid token must not sign in the synthetic user")
+            dashboard_status, dashboard_final, _ = self.client.get("/dashboard/")
+            self.assertLess(dashboard_status, 500)
+            self.assertEqual(urlsplit(dashboard_final).path, "/login/", "invalid token must not grant dashboard access")
+            if invalid_feedback == "no-visible-feedback":
+                print("TUTOR_RESET_SERVER_ALERT_ABSENT: invalid-key danger flash is not rendered by the native reset template")
 
         # Password mismatch must leave the valid email token usable and original password unchanged.
         status, page_url, body, form, kind = self.reset_form(reset_url)
         self.assertNotEqual(kind, "none", "email link must open a password reset form")
         self.assertLess(status, 500)
+        mismatch_hash_before = self.password_hash()
         mismatch_status, mismatch_final, mismatch_body = self.submit_reset(page_url, form, kind, self.new_password, self.new_password + "-mismatch")
-        mismatch_marker = self.visible_outcome(mismatch_status, mismatch_final, mismatch_body, "mismatched passwords", (self.email, self.login, self.old_password, self.new_password))
-        self.assertEqual(mismatch_marker, "password-mismatch")
+        self.visible_outcome(mismatch_status, mismatch_final, mismatch_body, "mismatched passwords", (self.email, self.login, self.old_password, self.new_password))
+        mismatch_feedback = self.assert_reset_failure_response(mismatch_status, mismatch_final, mismatch_body, kind, "password-mismatch")
+        self.assertEqual(self.password_hash(), mismatch_hash_before, "mismatched passwords must not change the password hash")
         self.assertTrue(self.auth_ok(self.old_password), "mismatched passwords must not change credentials")
+        self.assertFalse(self.auth_ok(self.new_password), "mismatched passwords must not set the new password")
+        if kind == "tutor" and mismatch_feedback == "no-visible-feedback":
+            print("TUTOR_RESET_SERVER_ALERT_ABSENT: password-mismatch danger flash is not rendered by the native reset template")
 
         # A correct confirmation resets the synthetic user's password.
         status, page_url, body, form, kind = self.reset_form(reset_url)
         valid_status, valid_final, valid_body = self.submit_reset(page_url, form, kind, self.new_password, self.new_password)
         valid_marker = self.visible_outcome(valid_status, valid_final, valid_body, "valid reset", (self.email, self.login, self.old_password, self.new_password))
-        self.assertEqual(valid_marker, "reset-success")
+        self.assertLess(valid_status, 500)
+        if kind == "wp":
+            self.assertEqual(valid_marker, "reset-success")
+        else:
+            self.assertEqual(kind, "tutor")
+            self.assertEqual(urlsplit(valid_final).path, "/dashboard/")
+            self.assertTrue(self.authenticated_cookie_names(), "Tutor valid reset must sign in the synthetic user")
+            dashboard_status, dashboard_final, _ = self.client.get("/dashboard/")
+            self.assertLess(dashboard_status, 500)
+            self.assertEqual(urlsplit(dashboard_final).path, "/dashboard/")
         self.assertTrue(self.auth_ok(self.new_password), "new password must authenticate")
         self.assertFalse(self.auth_ok(self.old_password), "old password must no longer authenticate")
+        valid_password_hash = self.password_hash()
 
         # Reuse of the consumed token cannot change the password again.
+        reused_password_hash = self.password_hash()
         reused_status, reused_final, reused_body, reused_form, reused_kind = self.reset_form(reset_url)
         if reused_kind != "none":
             reused_status, reused_final, reused_body = self.submit_reset(reused_final, reused_form, reused_kind, self.old_password, self.old_password)
-        reused_marker = self.visible_outcome(reused_status, reused_final, reused_body, "reused reset token", (self.email, self.login, self.old_password, self.new_password))
-        self.assertEqual(reused_marker, "invalid-or-expired-key")
+        self.visible_outcome(reused_status, reused_final, reused_body, "reused reset token", (self.email, self.login, self.old_password, self.new_password))
+        reused_feedback = self.assert_reset_failure_response(reused_status, reused_final, reused_body, reused_kind, "invalid-or-expired-key")
+        self.assertEqual(self.password_hash(), reused_password_hash, "reused token must not change the password hash")
         self.assertTrue(self.auth_ok(self.new_password), "reused token must not replace the new password")
+        self.assertFalse(self.auth_ok(self.old_password), "reused token must not restore the old password")
+        if reused_kind == "tutor" and reused_feedback == "no-visible-feedback":
+            print("TUTOR_RESET_SERVER_ALERT_ABSENT: reused-key danger flash is not rendered by the native reset template")
 
         # Mint a second token, age only this synthetic user's key in the local disposable DB, then verify expiry.
         before_second = {str(m.get("ID") or m.get("id") or "") for m in self.mailpit_messages()}
@@ -636,12 +711,17 @@ class TestIsolatedPasswordRecoveryFlow(unittest.TestCase):
             + "return array('ok'=>true);"
         )
         self.assertTrue(expired_state.get("ok"), "local WordPress reset key must carry its expiry timestamp")
+        expired_password_hash = self.password_hash()
         expired_status, expired_final, expired_body, expired_form, expired_kind = self.reset_form(expired_url)
         if expired_kind != "none":
             expired_status, expired_final, expired_body = self.submit_reset(expired_final, expired_form, expired_kind, self.old_password, self.old_password)
-        expired_marker = self.visible_outcome(expired_status, expired_final, expired_body, "expired reset token", (self.email, self.login, self.old_password, self.new_password))
-        self.assertEqual(expired_marker, "invalid-or-expired-key")
+        self.visible_outcome(expired_status, expired_final, expired_body, "expired reset token", (self.email, self.login, self.old_password, self.new_password))
+        expired_feedback = self.assert_reset_failure_response(expired_status, expired_final, expired_body, expired_kind, "invalid-or-expired-key")
+        self.assertEqual(self.password_hash(), expired_password_hash, "expired token must not change the password hash")
         self.assertTrue(self.auth_ok(self.new_password), "expired token must not change credentials")
+        self.assertFalse(self.auth_ok(self.old_password), "expired token must not restore the old password")
+        if expired_kind == "tutor" and expired_feedback == "no-visible-feedback":
+            print("TUTOR_RESET_SERVER_ALERT_ABSENT: expired-key danger flash is not rendered by the native reset template")
 
         print("LOCAL_MATRIX_PASS: bad nonce, empty input, known/unknown request, captured reset link, invalid token, mismatch, valid reset, reused token, expired token, old/new credential checks")
 
@@ -782,6 +862,33 @@ class TestRecoveryHarnessSafety(unittest.TestCase):
             require_same_origin("http://127.0.0.1:18090/wp-login.php?action=rp", EXPECTED_BASE_URL, "password reset link")
         with self.assertRaises(AssertionError):
             require_same_origin("http://127.0.0.1:18027/api/v1/messages", EXPECTED_MAILPIT_URL, "Mailpit request")
+
+    def test_tutor_native_no_alert_requires_exact_form_route(self) -> None:
+        flow = TestIsolatedPasswordRecoveryFlow("test_password_recovery_email_token_and_credential_matrix")
+        final_url = EXPECTED_BASE_URL + "/dashboard/retrieve-password/"
+        form = (
+            '<form><input name="tutor_action" value="tutor_process_reset_password">'
+            '<input name="reset_key" value="invalid-local-reset-key"><input name="user_id" value="9">'
+            '<input name="password"><input name="confirm_password"></form>'
+        )
+        self.assertEqual(
+            flow.assert_reset_failure_response(200, final_url, form, "tutor", "invalid-or-expired-key"),
+            "no-visible-feedback",
+        )
+        with self.assertRaises(AssertionError):
+            flow.assert_reset_failure_response(200, EXPECTED_BASE_URL + "/login/", form, "tutor", "invalid-or-expired-key")
+        with self.assertRaises(AssertionError):
+            flow.assert_reset_failure_response(
+                200,
+                final_url,
+                '<div class="tutor-alert">Unexpected server response.</div>',
+                "tutor",
+                "invalid-or-expired-key",
+            )
+        self.assertEqual(
+            visible_marker("This key is invalid or has already been used. Please reset your password again if needed."),
+            "invalid-or-expired-key",
+        )
 
     def test_mailpit_uses_get_at_its_fixed_origin(self) -> None:
         class Harness:

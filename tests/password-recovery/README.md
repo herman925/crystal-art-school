@@ -61,9 +61,16 @@ Known/unknown account enumeration is reproduced. A separate recovery-hardening c
 
 After the runs, the isolated stack contained 5 users (4 reset-test-prefix users) and 12 Mailpit messages. Some pre-existing synthetic artifacts could not be attributed. We left all records/messages in place; no volume reset or cleanup ran. Runtime WordPress is 7.1.2; live site is 7.1.3.
 
+## Repaired runtime result (2026-10-19; local only)
+
+- Runtime: WordPress 7.1.3, Tutor 4.1.0, Hello Elementor Child. Local `home` and `siteurl` were `http://127.0.0.1:18089`.
+- Active and mounted PR146 theme source matched SHA-256 `efacf9ca6ec4795848a65080d2dce76f1d594cf939a679d353ab5d0f68ed436f`.
+- The original Tutor native-login option was absent/default off. Matrix passed with `enable_tutor_native_login=0` and `=1`; option was restored to its original state.
+- Both configurations passed all nine matrix checks: nonce, empty input, known/unknown requests, local reset link, invalid token, mismatch, valid reset, reused token, expired token, and credential checks. Known/unknown responses differed in both configurations.
+- In the simulated native Tutor mode, invalid-key, mismatch, reused-key and expired-key responses returned to `/dashboard/retrieve-password/` without visible alert text. Tutor 4.1.0 sets danger flashes, but its native reset template does not render them. Invalid-token checks confirmed unchanged password hash, old credential valid, new credential invalid, no WordPress login cookie, and dashboard redirect to `/login/`. These HTTP checks do not prove browser feedback. A separate local browser check confirmed no visible alert after invalid-token submission; expired-token browser feedback remains unverified. Do not edit Tutor files.
+- Existing user IDs 2–6 and user 6's wishlist sentinel stayed unchanged. User count rose from 11 to 13. Mailpit count rose from 19 to 25. No user, message or volume cleanup ran.
+
 ## Not verified
 
-- The repaired integration harness against the local runtime.
-- SMTP delivery or mail failure logging outside local Mailpit.
-- A Tutor-rewritten reset link when `enable_tutor_native_login` is enabled. The actual reset email in this fixture used WordPress core; the Tutor reset-token GET route is covered by the GET smoke test only.
+- SMTP delivery or mail-failure logging outside local Mailpit.
 - Production password recovery or live user credentials.
