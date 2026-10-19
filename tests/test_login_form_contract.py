@@ -97,6 +97,51 @@ def test_public_recovery_route_exempts_only_tutor_retrieve_password_endpoint() -
     assert_public_recovery_route(ACCOUNT.read_text(encoding="utf-8"))
 
 
+def assert_password_recovery_outcome_is_generic(account: str) -> None:
+    for token in (
+        "function cas_account_password_recovery_input_valid()",
+        "! is_scalar( $_POST['user_login'] )",
+        "cas_account_password_recovery_request_active( false )",
+        "add_filter( 'tutor_before_retrieve_password_form_process', 'cas_account_password_recovery_preflight', PHP_INT_MAX )",
+        "add_filter( 'tutor_before_retrieve_password_form_process', 'cas_account_password_recovery_start', 1 )",
+        "add_action( 'tutor_action_tutor_retrieve_password', 'cas_account_password_recovery_finish', 20 )",
+        "add_action( 'lostpassword_post', 'cas_account_password_recovery_late_validation', PHP_INT_MAX )",
+        "$errors->has_errors()",
+        "add_action( 'wp_mail_failed', 'cas_account_password_recovery_log_mail_failure', 10, 1 )",
+        "If an account matches those details, a reset email will be sent.",
+        "tutor_flash_get( 'danger' )",
+        "tutor_flash_get( 'success' )",
+        "function cas_account_reset_password_feedback()",
+        "tutor_alert( null, 'any', true, true )",
+        "add_action( 'tutor_before_reset_password_form', 'cas_account_reset_password_feedback', 1 )",
+    ):
+        require(account, token, "password recovery privacy contract")
+
+    input_helper = re.search(r"function cas_account_password_recovery_input_valid\(\).*?\n\}", account, re.DOTALL)
+    if not input_helper:
+        raise AssertionError("password recovery input helper is missing")
+    require(input_helper.group(0), "return '' !== sanitize_user( $login );", "Tutor username semantics")
+    if "is_email" in input_helper.group(0):
+        raise AssertionError("a valid username containing @ must not require valid email syntax")
+
+    logger = re.search(
+        r"function cas_account_password_recovery_log_mail_failure\(.*?\n\}",
+        account,
+        re.DOTALL,
+    )
+    if not logger:
+        raise AssertionError("password recovery mail-failure logger is missing")
+    require(logger.group(0), "cas_audit_log", "private mail failure log")
+    require(logger.group(0), "error_log", "server fallback mail failure log")
+    for token in ("get_error_message()", "user_login", "user_email"):
+        if token in logger.group(0):
+            raise AssertionError(f"private mail failure logger must not expose {token}")
+
+
+def test_recovery_request_hides_account_existence_and_preserves_validation() -> None:
+    assert_password_recovery_outcome_is_generic(ACCOUNT.read_text(encoding="utf-8"))
+
+
 def main() -> int:
     login = LOGIN.read_text(encoding="utf-8")
     account = ACCOUNT.read_text(encoding="utf-8")
@@ -104,7 +149,8 @@ def main() -> int:
     assert_vanilla_password_toggle(login)
     assert_login_error_contract(login, account)
     assert_public_recovery_route(account)
-    print("login form contract passed: native password fallback, vanilla toggle, styled errors, public recovery route")
+    assert_password_recovery_outcome_is_generic(account)
+    print("login form contract passed: native password fallback, vanilla toggle, styled errors, public recovery and uniform reset response")
     return 0
 
 
