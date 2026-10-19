@@ -3,17 +3,16 @@
  * Student dashboard subpages (#125): the routes, and the panels the routes now open.
  *
  * The studio page (cas_account_dashboard_body) is the student's one surface, as in
- * Dashboard.dc.html. Tutor's own subpages (Courses, Billing, Profile, Settings) each print a
- * second top bar and sidebar of their own, so a student's request for one of them is sent to
- * the studio with the matching tab open. The old addresses keep working: a link in an email
- * or in Tutor's own screens lands on the right tab.
+ * Dashboard.dc.html. Tutor's own subpages (Courses, Wishlist, Billing, Profile, Settings) each
+ * print a second top bar and sidebar of their own, so a student's request for mapped pages
+ * opens the corresponding studio tab. The owner removed the Wishlist panel on 2026-10-19;
+ * its legacy address returns to the studio home without changing saved Tutor data.
  *
  * Quiz attempts and reviews are not part of the launch (#124, owner decision 2026-09-30).
  * Their tab, their links and their addresses all lead back to the studio.
  *
- * Nothing here changes how Tutor stores or handles orders, wishlists, billing or passwords:
- * the purchases table only reads Tutor's orders, the wishlist only reads Tutor's wishlist,
- * the security card is Tutor's own template, and the country is Tutor's billing country.
+ * Nothing here deletes or rewrites Tutor's stored wishlist data. The student's old wishlist
+ * route returns to the studio home, and no wishlist view is rendered.
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -56,7 +55,8 @@ function cas_dashboard_route_target() {
 
 	if ( 'courses' === $page ) {
 		if ( 'wishlist' === $sub ) {
-			return 'panel-wishlist';
+			// Keep old bookmarks safe; do not delete Tutor's saved wishlist data.
+			return 'blocked';
 		}
 
 		return in_array( $sub, array( '', 'active-courses', 'completed-courses' ), true ) ? 'panel-courses' : '';
@@ -95,11 +95,15 @@ add_action(
 );
 
 /* Tutor's Courses page offers Quiz Attempts as a tab; the route above already blocks it for
-   students, this keeps the tab off every other screen that prints the list. */
+   students. Hide that tab and Wishlist from student navigation. */
 add_filter(
 	'tutor_enrolled_courses_page_tabs',
 	function ( $tabs ) {
 		unset( $tabs['courses/my-quiz-attempts'] );
+
+		if ( class_exists( 'TUTOR\\User' ) && \TUTOR\User::is_student_view() ) {
+			unset( $tabs['courses/wishlist'] );
+		}
 
 		return $tabs;
 	}
@@ -164,38 +168,6 @@ function cas_dashboard_purchases_html( $user_id ) {
 		<?php endforeach; ?>
 		</tbody>
 	</table>
-	<?php
-
-	return (string) ob_get_clean();
-}
-
-/**
- * The student's wishlist as course cards.
- *
- * @param int $user_id User id.
- * @return string
- */
-function cas_dashboard_wishlist_html( $user_id ) {
-	$courses = function_exists( 'tutor_utils' ) ? tutor_utils()->get_wishlist( $user_id ) : array();
-
-	if ( empty( $courses ) ) {
-		return '<p class="hand-note">Courses you save appear here.</p>';
-	}
-
-	ob_start();
-	?>
-	<div class="mycourse-grid">
-		<?php foreach ( $courses as $course ) : ?>
-			<?php
-			$image = get_the_post_thumbnail_url( $course->ID, 'large' );
-			$url   = get_permalink( $course->ID );
-			?>
-			<article class="mc-course dash-card">
-				<?php if ( $image ) : ?><a href="<?php echo esc_url( $url ); ?>"><img src="<?php echo esc_url( $image ); ?>" alt="" loading="lazy" decoding="async" width="480" height="270"></a><?php endif; ?>
-				<div class="mc-body"><span class="eyebrow">Course</span><h3><?php echo esc_html( get_the_title( $course->ID ) ); ?></h3><a class="btn small" href="<?php echo esc_url( $url ); ?>">View course <span class="arr" aria-hidden="true">&#8594;</span></a></div>
-			</article>
-		<?php endforeach; ?>
-	</div>
 	<?php
 
 	return (string) ob_get_clean();

@@ -8,7 +8,6 @@
   "panels": [
     {"key": "overview", "label": "Overview"},
     {"key": "courses", "label": "My courses"},
-    {"key": "wishlist", "label": "Wishlist"},
     {"key": "progress", "label": "Progress"},
     {"key": "purchases", "label": "Purchases"},
     {"key": "account", "label": "Profile"},
@@ -47,6 +46,7 @@
     "discord-card",
     "panel-discord",
     "cas-orders",
-    "cas-enrolled"
+    "cas-enrolled",
+    "panel-wishlist"
   ]
 }
