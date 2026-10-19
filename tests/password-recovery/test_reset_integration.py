@@ -5,6 +5,7 @@ Required environment:
   CAS_RECOVERY_TEST_BASE_URL=http://127.0.0.1:18089
   CAS_RECOVERY_MAILPIT_URL=http://127.0.0.1:18026
   CAS_RECOVERY_WP_CONTAINER=cas-pr146-w1-20261019-wp-1
+  CAS_RECOVERY_MAILPIT_CONTAINER=cas-pr146-w1-20261019-mailpit-1
 
 Creates one synthetic subscriber in that disposable local database. Sends reset mail only
 through the local Mailpit sink. Never prints passwords, reset keys, mail bodies or tokens.
@@ -12,6 +13,7 @@ through the local Mailpit sink. Never prints passwords, reset keys, mail bodies 
 
 from __future__ import annotations
 
+import hashlib
 import html
 import json
 import os
@@ -19,14 +21,159 @@ import re
 import secrets
 import subprocess
 import unittest
-from html.parser import HTMLParser
-from urllib.error import HTTPError
-from urllib.parse import parse_qs, urlencode, urljoin, urlsplit, urlunsplit
-from urllib.request import HTTPRedirectHandler, HTTPCookieProcessor, ProxyHandler, Request, build_opener
+from unittest.mock import patch
 from http.cookiejar import CookieJar
+from html.parser import HTMLParser
+from pathlib import Path
+from urllib.error import HTTPError
+from urllib.parse import parse_qs, quote, urlencode, urljoin, urlsplit, urlunsplit
+from urllib.request import HTTPRedirectHandler, HTTPCookieProcessor, ProxyHandler, Request, build_opener
 
 
-LOOPBACK = {"127.0.0.1", "localhost", "::1"}
+PROJECT = "cas-pr146-w1-20261019"
+EXPECTED_BASE_URL = "http://127.0.0.1:18089"
+EXPECTED_MAILPIT_URL = "http://127.0.0.1:18026"
+EXPECTED_WP_CONTAINER = PROJECT + "-wp-1"
+EXPECTED_DB_CONTAINER = PROJECT + "-db-1"
+EXPECTED_MAILPIT_CONTAINER = PROJECT + "-mailpit-1"
+EXPECTED_NETWORK = PROJECT + "_default"
+ROOT = Path(__file__).resolve().parents[2]
+ACCOUNT_SOURCE = ROOT / "wp-content" / "themes" / "hello-elementor-child" / "inc" / "cas-account.php"
+
+
+def url_origin(url: str) -> tuple[str, str, int] | None:
+    try:
+        parts = urlsplit(url)
+        if not parts.scheme or not parts.hostname or parts.username is not None or parts.password is not None:
+            return None
+        port = parts.port if parts.port is not None else (443 if parts.scheme.lower() == "https" else 80)
+    except ValueError:
+        return None
+    return parts.scheme.lower(), parts.hostname.lower(), port
+
+
+def require_same_origin(url: str, expected: str, purpose: str) -> None:
+    if url_origin(url) is None or url_origin(url) != url_origin(expected):
+        raise AssertionError(f"refusing {purpose} outside the exact local origin")
+
+
+def require_fixture_url(value: str, expected: str, purpose: str) -> None:
+    if value.rstrip("/") != expected:
+        raise AssertionError(f"refusing unexpected {purpose} URL")
+    require_same_origin(value, expected, purpose)
+    parts = urlsplit(value)
+    if parts.path not in ("", "/") or parts.query or parts.fragment:
+        raise AssertionError(f"refusing unexpected {purpose} URL")
+
+
+def container_env(info: dict) -> dict[str, str]:
+    return dict(item.split("=", 1) for item in info.get("Config", {}).get("Env", []) if "=" in item)
+
+
+def validate_container(info: dict, name: str, service: str, published: tuple[int, int] | None = None, unpublished: tuple[int, ...] = ()) -> None:
+    labels = info.get("Config", {}).get("Labels", {}) or {}
+    if info.get("Name", "").lstrip("/") != name:
+        raise AssertionError("refusing unexpected recovery fixture container")
+    if labels.get("com.docker.compose.project") != PROJECT or labels.get("com.docker.compose.service") != service:
+        raise AssertionError("refusing container outside the exact Compose project and service")
+    if info.get("State", {}).get("Running") is not True:
+        raise AssertionError("recovery fixture container is not running")
+    networks = info.get("NetworkSettings", {}).get("Networks", {})
+    if EXPECTED_NETWORK not in networks:
+        raise AssertionError("recovery fixture container is outside the isolated network")
+    ports = info.get("NetworkSettings", {}).get("Ports", {}) or {}
+    expected_bindings = set()
+    if published:
+        internal_port, host_port = published
+        expected_bindings.add((f"{internal_port}/tcp", "127.0.0.1", str(host_port)))
+    actual_bindings = {
+        (port, binding.get("HostIp"), binding.get("HostPort"))
+        for port, bindings in ports.items()
+        for binding in (bindings or [])
+    }
+    if actual_bindings != expected_bindings:
+        raise AssertionError("recovery fixture port bindings do not match the exact local targets")
+    for internal_port in unpublished:
+        if ports.get(f"{internal_port}/tcp"):
+            raise AssertionError("recovery fixture exposed an internal-only port")
+
+
+def require_mount(info: dict, destination: str, mount_type: str, read_only: bool, name_prefix: str = "") -> None:
+    mounts = info.get("Mounts", [])
+    mount = next((item for item in mounts if item.get("Destination") == destination), None)
+    if not mount or mount.get("Type") != mount_type or mount.get("RW") is not (not read_only):
+        raise AssertionError("recovery fixture mount does not match the expected isolation")
+    if name_prefix and not str(mount.get("Name", "")).startswith(name_prefix):
+        raise AssertionError("recovery fixture data volume does not match the exact project")
+
+
+def validate_wp_environment(info: dict) -> None:
+    env = container_env(info)
+    if (env.get("WORDPRESS_DB_HOST"), env.get("WORDPRESS_DB_NAME"), env.get("WORDPRESS_DB_USER")) != ("db", "wp", "wp"):
+        raise AssertionError("WordPress container points to an unexpected database")
+    if not env.get("WORDPRESS_DB_PASSWORD"):
+        raise AssertionError("WordPress test database credentials are missing")
+
+
+def validate_db_environment(info: dict) -> None:
+    env = container_env(info)
+    if (env.get("MARIADB_DATABASE"), env.get("MARIADB_USER")) != ("wp", "wp") or not env.get("MARIADB_PASSWORD"):
+        raise AssertionError("database container is not the synthetic recovery database")
+
+
+def validate_database_pair(wp: dict, db: dict) -> None:
+    validate_wp_environment(wp)
+    validate_db_environment(db)
+    if container_env(wp).get("WORDPRESS_DB_PASSWORD") != container_env(db).get("MARIADB_PASSWORD"):
+        raise AssertionError("WordPress and database containers do not share the expected synthetic credentials")
+
+
+def validate_network(info: dict) -> None:
+    labels = info.get("Labels", {}) or {}
+    if info.get("Name") != EXPECTED_NETWORK or labels.get("com.docker.compose.project") != PROJECT:
+        raise AssertionError("refusing unexpected recovery fixture network")
+    if info.get("Internal") is not True:
+        raise AssertionError("recovery fixture network must block external egress")
+
+
+def validate_wp_runtime(runtime: dict, account_sha256: str) -> None:
+    expected = {
+        "home": EXPECTED_BASE_URL,
+        "siteurl": EXPECTED_BASE_URL,
+        "db_host": "db",
+        "db_name": "wp",
+        "db_user": "wp",
+        "db_prefix": "wp_",
+        "theme": "hello-elementor-child",
+        "tutor": "4.1.0",
+        "active_theme_sha256": account_sha256,
+        "mounted_theme_sha256": account_sha256,
+        "mailer": "smtp",
+        "mail_host": "mailpit",
+        "mail_port": 1025,
+        "mail_auth": False,
+        "mail_auto_tls": False,
+        "mail_secure": "",
+        "sendmail_path": "/bin/false",
+    }
+    for key, value in expected.items():
+        if runtime.get(key) != value:
+            raise AssertionError(f"refusing unexpected local WordPress fixture setting: {key}")
+    if "test-mail-sink.php" not in runtime.get("mu_plugins", []):
+        raise AssertionError("local Mailpit-only MU plugin is not active")
+
+
+def docker_inspect(args: list[str]) -> dict:
+    proc = subprocess.run(args, check=False, capture_output=True, text=True, timeout=30)
+    if proc.returncode:
+        raise AssertionError("could not inspect the expected local recovery fixture")
+    try:
+        result = json.loads(proc.stdout)
+    except json.JSONDecodeError as exc:
+        raise AssertionError("local recovery fixture inspection returned invalid JSON") from exc
+    if not isinstance(result, list) or len(result) != 1 or not isinstance(result[0], dict):
+        raise AssertionError("local recovery fixture inspection returned an unexpected result")
+    return result[0]
 
 
 def php_string(value: str) -> str:
@@ -140,23 +287,28 @@ def find_form(source: str, names: set[str]) -> dict:
     raise AssertionError("expected local form fields were absent")
 
 
-class LoopbackRedirectHandler(HTTPRedirectHandler):
+class ExactOriginRedirectHandler(HTTPRedirectHandler):
+    def __init__(self, allowed_origin: str) -> None:
+        super().__init__()
+        self.allowed_origin = allowed_origin
+
     def redirect_request(self, req, fp, code, msg, headers, newurl):
-        target = urlsplit(newurl)
-        if target.scheme != "http" or target.hostname not in LOOPBACK:
-            raise AssertionError("refusing redirect outside loopback")
+        require_same_origin(newurl, self.allowed_origin, "redirect")
         return super().redirect_request(req, fp, code, msg, headers, newurl)
 
 
 class LocalHttp:
     def __init__(self, base_url: str) -> None:
         self.base_url = base_url.rstrip("/")
-        self.opener = build_opener(ProxyHandler({}), HTTPCookieProcessor(CookieJar()), LoopbackRedirectHandler())
+        require_fixture_url(self.base_url, EXPECTED_BASE_URL, "WordPress")
+        self.opener = build_opener(
+            ProxyHandler({}),
+            HTTPCookieProcessor(CookieJar()),
+            ExactOriginRedirectHandler(self.base_url),
+        )
 
     def request(self, url: str, fields: dict[str, str] | None = None) -> tuple[int, str, str]:
-        parts = urlsplit(url)
-        if parts.scheme != "http" or parts.hostname not in LOOPBACK:
-            raise AssertionError("refusing non-loopback HTTP request")
+        require_same_origin(url, self.base_url, "WordPress request")
         data = urlencode(fields).encode() if fields is not None else None
         request = Request(
             url,
@@ -168,7 +320,9 @@ class LocalHttp:
         except HTTPError as error:
             response = error
         with response:
-            return response.status, response.geturl(), response.read().decode("utf-8", "replace")
+            final_url = response.geturl()
+            require_same_origin(final_url, self.base_url, "WordPress response")
+            return response.status, final_url, response.read().decode("utf-8", "replace")
 
     def get(self, path_or_url: str) -> tuple[int, str, str]:
         url = urljoin(self.base_url + "/", path_or_url.lstrip("/")) if path_or_url.startswith("/") else path_or_url
@@ -187,15 +341,19 @@ class TestIsolatedPasswordRecoveryFlow(unittest.TestCase):
         cls.base_url = os.environ.get("CAS_RECOVERY_TEST_BASE_URL", "").strip()
         cls.mailpit_url = os.environ.get("CAS_RECOVERY_MAILPIT_URL", "").strip().rstrip("/")
         cls.wp_container = os.environ.get("CAS_RECOVERY_WP_CONTAINER", "").strip()
-        if not cls.base_url or not cls.mailpit_url or not cls.wp_container:
-            raise unittest.SkipTest("set loopback URL, Mailpit URL and isolated PR146 WP container")
-        for value in (cls.base_url, cls.mailpit_url):
-            parsed = urlsplit(value)
-            if parsed.scheme != "http" or parsed.hostname not in LOOPBACK:
-                raise AssertionError("recovery integration only accepts loopback HTTP")
-        if not re.fullmatch(r"cas-pr146-w1-[a-z0-9-]+-wp-1", cls.wp_container):
-            raise AssertionError("refusing a WordPress container outside the PR146 test project")
+        cls.mailpit_container = os.environ.get("CAS_RECOVERY_MAILPIT_CONTAINER", "").strip()
+        configured = (cls.base_url, cls.mailpit_url, cls.wp_container, cls.mailpit_container)
+        if not any(configured):
+            raise unittest.SkipTest("set exact PR146 local URLs and container names to run the integration test")
+        if not all(configured):
+            raise AssertionError("all exact PR146 local URLs and container names are required")
+        require_fixture_url(cls.base_url, EXPECTED_BASE_URL, "WordPress")
+        require_fixture_url(cls.mailpit_url, EXPECTED_MAILPIT_URL, "Mailpit")
+        if cls.wp_container != EXPECTED_WP_CONTAINER or cls.mailpit_container != EXPECTED_MAILPIT_CONTAINER:
+            raise AssertionError("refusing unexpected PR146 fixture container names")
+        cls.db_container = EXPECTED_DB_CONTAINER
         cls.client = LocalHttp(cls.base_url)
+        cls.preflight()
         cls.login = "casreset" + secrets.token_hex(6)
         cls.email = cls.login + "@example.test"
         cls.old_password = secrets.token_urlsafe(24)
@@ -203,24 +361,61 @@ class TestIsolatedPasswordRecoveryFlow(unittest.TestCase):
         cls.user_id = cls.create_test_user()
 
     @classmethod
+    def preflight(cls) -> None:
+        wp = docker_inspect(["docker", "inspect", cls.wp_container])
+        db = docker_inspect(["docker", "inspect", cls.db_container])
+        mailpit = docker_inspect(["docker", "inspect", cls.mailpit_container])
+        network = docker_inspect(["docker", "network", "inspect", EXPECTED_NETWORK])
+
+        validate_container(wp, EXPECTED_WP_CONTAINER, "wp", published=(80, 18089))
+        validate_container(db, EXPECTED_DB_CONTAINER, "db", unpublished=(3306,))
+        validate_container(mailpit, EXPECTED_MAILPIT_CONTAINER, "mailpit", published=(8025, 18026), unpublished=(1025,))
+        validate_network(network)
+        validate_database_pair(wp, db)
+        require_mount(wp, "/var/www/html", "volume", read_only=False, name_prefix=PROJECT + "_wpdata")
+        require_mount(db, "/var/lib/mysql", "volume", read_only=False, name_prefix=PROJECT + "_dbdata")
+        require_mount(wp, "/var/www/html/wp-content/mu-plugins", "bind", read_only=True)
+        require_mount(wp, "/theme-src", "bind", read_only=True)
+        require_mount(wp, "/usr/local/etc/php/conf.d/zz-cas-test-mail.ini", "bind", read_only=True)
+
+        account_sha256 = hashlib.sha256(ACCOUNT_SOURCE.read_bytes()).hexdigest()
+        runtime = cls.wp_json(
+            "global $wpdb;require_once ABSPATH . WPINC . '/PHPMailer/Exception.php';require_once ABSPATH . WPINC . '/PHPMailer/PHPMailer.php';require_once ABSPATH . WPINC . '/PHPMailer/SMTP.php';$mailer=new \\PHPMailer\\PHPMailer\\PHPMailer(true);do_action('phpmailer_init',$mailer);"
+            + "return array('home'=>get_option('home'),'siteurl'=>get_option('siteurl'),"
+            + "'db_host'=>(string)$wpdb->dbhost,'db_name'=>(string)$wpdb->dbname,'db_user'=>(string)DB_USER,"
+            + "'db_prefix'=>(string)$wpdb->prefix,'theme'=>get_stylesheet(),"
+            + "'tutor'=>defined('TUTOR_VERSION')?TUTOR_VERSION:'missing',"
+            + "'active_theme_sha256'=>hash_file('sha256',get_stylesheet_directory().'/inc/cas-account.php'),"
+            + "'mounted_theme_sha256'=>hash_file('sha256','/theme-src/inc/cas-account.php'),"
+            + "'mu_plugins'=>array_values(array_map('basename',glob(WPMU_PLUGIN_DIR.'/*.php')?:array())),"
+            + "'mailer'=>$mailer->Mailer,'mail_host'=>$mailer->Host,'mail_port'=>(int)$mailer->Port,"
+            + "'mail_auth'=>(bool)$mailer->SMTPAuth,'mail_auto_tls'=>(bool)$mailer->SMTPAutoTLS,'mail_secure'=>$mailer->SMTPSecure,"
+            + "'sendmail_path'=>ini_get('sendmail_path'));"
+        )
+        validate_wp_runtime(runtime, account_sha256)
+        cls.mailpit_messages()
+
+    @classmethod
     def wp_json(cls, body: str) -> dict:
         host = urlsplit(cls.base_url).netloc
         script = (
-            f"$_SERVER['HTTP_HOST']={php_string(host)};"
-            "$_SERVER['SERVER_NAME']='127.0.0.1';"
-            "$_SERVER['REQUEST_URI']='/';"
-            "require '/var/www/html/wp-load.php';"
-            f"$result=(function(){{{body}}})();echo json_encode($result);"
+            "<?php" + chr(10)
+            + f"$_SERVER['HTTP_HOST']={php_string(host)};"
+            + "$_SERVER['SERVER_NAME']='127.0.0.1';"
+            + "$_SERVER['REQUEST_URI']='/';"
+            + "require '/var/www/html/wp-load.php';"
+            + f"$result=(function(){{{body}}})();echo json_encode($result);"
         )
         proc = subprocess.run(
-            ["docker", "exec", cls.wp_container, "php", "-r", script],
+            ["docker", "exec", "-i", cls.wp_container, "php"],
             check=False,
             capture_output=True,
+            input=script,
             text=True,
             timeout=30,
         )
         if proc.returncode:
-            raise AssertionError("local WP fixture helper failed: " + proc.stderr[-600:])
+            raise AssertionError(f"local WP fixture helper failed with exit code {proc.returncode}")
         for line in reversed(proc.stdout.splitlines()):
             try:
                 return json.loads(line)
@@ -253,14 +448,23 @@ class TestIsolatedPasswordRecoveryFlow(unittest.TestCase):
         return bool(cls.wp_json(body))
 
     @classmethod
+    def mailpit_get(cls, path: str) -> bytes:
+        url = urljoin(cls.mailpit_url + "/", path.lstrip("/"))
+        require_same_origin(url, cls.mailpit_url, "Mailpit request")
+        opener = build_opener(ProxyHandler({}), ExactOriginRedirectHandler(cls.mailpit_url))
+        request = Request(url, method="GET")
+        with opener.open(request, timeout=10) as response:
+            require_same_origin(response.geturl(), cls.mailpit_url, "Mailpit response")
+            return response.read()
+
+    @classmethod
     def mailpit_messages(cls) -> list[dict]:
-        with build_opener(ProxyHandler({})).open(cls.mailpit_url + "/api/v1/messages", timeout=10) as response:
-            return json.loads(response.read().decode("utf-8" )).get("messages", [])
+        return json.loads(cls.mailpit_get("/api/v1/messages").decode("utf-8")).get("messages", [])
 
     @classmethod
     def message_detail(cls, message_id: str) -> dict:
-        with build_opener(ProxyHandler({})).open(cls.mailpit_url + "/api/v1/message/" + message_id, timeout=10) as response:
-            return json.loads(response.read().decode("utf-8"))
+        path = "/api/v1/message/" + quote(message_id, safe="")
+        return json.loads(cls.mailpit_get(path).decode("utf-8"))
 
     @staticmethod
     def message_strings(value) -> list[str]:
@@ -289,9 +493,10 @@ class TestIsolatedPasswordRecoveryFlow(unittest.TestCase):
                 candidate = candidate.rstrip(".,);]")
                 parts = urlsplit(candidate)
                 query = parse_qs(parts.query)
-                if parts.hostname not in LOOPBACK:
-                    continue
-                if (parts.path.endswith("wp-login.php") and query.get("action") == ["rp"] and query.get("key") and query.get("login")) or (parts.path.rstrip("/").endswith("/dashboard/retrieve-password") and query.get("reset_key") and query.get("user_id")):
+                wp_reset_link = parts.path.endswith("wp-login.php") and query.get("action") == ["rp"] and query.get("key") and query.get("login")
+                tutor_reset_link = parts.path.rstrip("/").endswith("/dashboard/retrieve-password") and query.get("reset_key") and query.get("user_id")
+                if wp_reset_link or tutor_reset_link:
+                    require_same_origin(candidate, cls.base_url, "password reset link")
                     return candidate, msgid
         raise AssertionError("known synthetic user reset email/link was not captured in local Mailpit")
 
@@ -436,6 +641,186 @@ class TestIsolatedPasswordRecoveryFlow(unittest.TestCase):
         self.assertTrue(self.auth_ok(self.new_password), "expired token must not change credentials")
 
         print("LOCAL_MATRIX_PASS: bad nonce, empty input, known/unknown request, captured reset link, invalid token, mismatch, valid reset, reused token, expired token, old/new credential checks")
+
+
+class TestRecoveryHarnessSafety(unittest.TestCase):
+    @staticmethod
+    def container_info(name: str, service: str, published: tuple[int, int] | None = None) -> dict:
+        ports = {}
+        if published:
+            internal_port, host_port = published
+            ports[f"{internal_port}/tcp"] = [{"HostIp": "127.0.0.1", "HostPort": str(host_port)}]
+        return {
+            "Name": "/" + name,
+            "Config": {
+                "Labels": {
+                    "com.docker.compose.project": PROJECT,
+                    "com.docker.compose.service": service,
+                }
+            },
+            "State": {"Running": True},
+            "NetworkSettings": {"Networks": {EXPECTED_NETWORK: {}}, "Ports": ports},
+        }
+
+    def test_only_exact_fixture_origins_are_allowed(self) -> None:
+        require_fixture_url(EXPECTED_BASE_URL, EXPECTED_BASE_URL, "WordPress")
+        require_fixture_url(EXPECTED_MAILPIT_URL, EXPECTED_MAILPIT_URL, "Mailpit")
+        for target in (
+            "http://127.0.0.1:18090",
+            "https://127.0.0.1:18089",
+            "http://localhost:18089",
+            "http://127.0.0.1:18089/path",
+        ):
+            with self.subTest(target=target), self.assertRaises(AssertionError):
+                require_fixture_url(target, EXPECTED_BASE_URL, "WordPress")
+        with self.assertRaises(AssertionError):
+            require_fixture_url("http://127.0.0.1:18027", EXPECTED_MAILPIT_URL, "Mailpit")
+
+    def test_wrong_compose_project_container_and_port_fail_closed(self) -> None:
+        valid = self.container_info(EXPECTED_WP_CONTAINER, "wp", (80, 18089))
+        validate_container(valid, EXPECTED_WP_CONTAINER, "wp", published=(80, 18089))
+        for path, value in (
+            (("Config", "Labels", "com.docker.compose.project"), "other-project"),
+            (("Config", "Labels", "com.docker.compose.service"), "db"),
+            (("Name",), "/other-project-wp-1"),
+            (("NetworkSettings", "Ports", "80/tcp", 0, "HostPort"), "18090"),
+            (("NetworkSettings", "Ports", "80/tcp", 0, "HostIp"), "0.0.0.0"),
+        ):
+            info = json.loads(json.dumps(valid))
+            parent = info
+            for key in path[:-1]:
+                parent = parent[key]
+            parent[path[-1]] = value
+            with self.subTest(path=path), self.assertRaises(AssertionError):
+                validate_container(info, EXPECTED_WP_CONTAINER, "wp", published=(80, 18089))
+        exposed_db = self.container_info(EXPECTED_DB_CONTAINER, "db", (3306, 13306))
+        with self.assertRaises(AssertionError):
+            validate_container(exposed_db, EXPECTED_DB_CONTAINER, "db", unpublished=(3306,))
+
+    def test_wrong_database_environment_or_volume_is_rejected(self) -> None:
+        wp = {"Config": {"Env": ["WORDPRESS_DB_HOST=db", "WORDPRESS_DB_NAME=wp", "WORDPRESS_DB_USER=wp", "WORDPRESS_DB_PASSWORD=local"]}}
+        db = {"Config": {"Env": ["MARIADB_DATABASE=wp", "MARIADB_USER=wp", "MARIADB_PASSWORD=local"]}}
+        validate_database_pair(wp, db)
+        wrong_db = json.loads(json.dumps(wp))
+        wrong_db["Config"]["Env"][1] = "WORDPRESS_DB_NAME=production"
+        with self.assertRaises(AssertionError):
+            validate_database_pair(wrong_db, db)
+        wrong_password = json.loads(json.dumps(db))
+        wrong_password["Config"]["Env"][2] = "MARIADB_PASSWORD=other"
+        with self.assertRaises(AssertionError):
+            validate_database_pair(wp, wrong_password)
+
+        mount = {"Mounts": [{"Destination": "/var/lib/mysql", "Type": "volume", "RW": True, "Name": PROJECT + "_dbdata"}]}
+        require_mount(mount, "/var/lib/mysql", "volume", read_only=False, name_prefix=PROJECT + "_dbdata")
+        mount["Mounts"][0]["Name"] = "other-project_dbdata"
+        with self.assertRaises(AssertionError):
+            require_mount(mount, "/var/lib/mysql", "volume", read_only=False, name_prefix=PROJECT + "_dbdata")
+
+    def test_wrong_wordpress_home_theme_or_mail_transport_is_rejected(self) -> None:
+        account_sha256 = "a" * 64
+        runtime = {
+            "home": EXPECTED_BASE_URL,
+            "siteurl": EXPECTED_BASE_URL,
+            "db_host": "db",
+            "db_name": "wp",
+            "db_user": "wp",
+            "db_prefix": "wp_",
+            "theme": "hello-elementor-child",
+            "tutor": "4.1.0",
+            "active_theme_sha256": account_sha256,
+            "mounted_theme_sha256": account_sha256,
+            "mu_plugins": ["test-mail-sink.php"],
+            "mailer": "smtp",
+            "mail_host": "mailpit",
+            "mail_port": 1025,
+            "mail_auth": False,
+            "mail_auto_tls": False,
+            "mail_secure": "",
+            "sendmail_path": "/bin/false",
+        }
+        validate_wp_runtime(runtime, account_sha256)
+        for key, value in (
+            ("home", "http://127.0.0.1:18090"),
+            ("siteurl", "https://127.0.0.1:18089"),
+            ("db_host", "database.example.test"),
+            ("db_name", "production"),
+            ("db_user", "real-user"),
+            ("db_prefix", "live_"),
+            ("tutor", "4.0.0"),
+            ("active_theme_sha256", "b" * 64),
+            ("mail_host", "smtp.example.test"),
+            ("mail_port", 25),
+            ("mail_auth", True),
+            ("sendmail_path", "/usr/sbin/sendmail"),
+        ):
+            wrong_runtime = dict(runtime, **{key: value})
+            with self.subTest(key=key), self.assertRaises(AssertionError):
+                validate_wp_runtime(wrong_runtime, account_sha256)
+
+    def test_network_must_be_project_scoped_and_internal(self) -> None:
+        network = {"Name": EXPECTED_NETWORK, "Labels": {"com.docker.compose.project": PROJECT}, "Internal": True}
+        validate_network(network)
+        wrong_network = dict(network, Internal=False)
+        with self.assertRaises(AssertionError):
+            validate_network(wrong_network)
+
+    def test_cross_port_redirect_and_reset_link_are_rejected(self) -> None:
+        handler = ExactOriginRedirectHandler(EXPECTED_BASE_URL)
+        request = Request(EXPECTED_BASE_URL + "/dashboard/retrieve-password/")
+        for code in (307, 308):
+            with self.subTest(code=code), self.assertRaises(AssertionError):
+                handler.redirect_request(request, None, code, "Temporary Redirect", {}, "http://127.0.0.1:18090/wp-login.php")
+        with self.assertRaises(AssertionError):
+            require_same_origin("http://127.0.0.1:18090/wp-login.php?action=rp", EXPECTED_BASE_URL, "password reset link")
+        with self.assertRaises(AssertionError):
+            require_same_origin("http://127.0.0.1:18027/api/v1/messages", EXPECTED_MAILPIT_URL, "Mailpit request")
+
+    def test_mailpit_uses_get_at_its_fixed_origin(self) -> None:
+        class Harness:
+            mailpit_url = EXPECTED_MAILPIT_URL
+
+        class Response:
+            def __enter__(self):
+                return self
+
+            def __exit__(self, *args):
+                return None
+
+            def geturl(self):
+                return EXPECTED_MAILPIT_URL + "/api/v1/messages"
+
+            def read(self):
+                return b'{"messages":[]}'
+
+        class Opener:
+            request = None
+
+            def open(self, request, timeout):
+                self.request = request
+                return Response()
+
+        opener = Opener()
+        with patch(__name__ + ".build_opener", return_value=opener):
+            response = TestIsolatedPasswordRecoveryFlow.mailpit_get.__func__(Harness, "/api/v1/messages")
+        self.assertEqual(response, b'{"messages":[]}')
+        self.assertEqual(opener.request.get_method(), "GET")
+        require_same_origin(opener.request.full_url, EXPECTED_MAILPIT_URL, "Mailpit request")
+
+    def test_php_payload_stays_out_of_docker_exec_arguments(self) -> None:
+        class Harness:
+            base_url = EXPECTED_BASE_URL
+            wp_container = EXPECTED_WP_CONTAINER
+
+        secret = "synthetic-secret-not-for-argv"
+        result = subprocess.CompletedProcess([], 0, '{"ok":true}\n', "")
+        with patch.object(subprocess, "run", return_value=result) as run:
+            parsed = TestIsolatedPasswordRecoveryFlow.wp_json.__func__(Harness, "$password=" + php_string(secret) + ";return array('ok'=>true);")
+        command = run.call_args.args[0]
+        self.assertEqual(command, ["docker", "exec", "-i", EXPECTED_WP_CONTAINER, "php"])
+        self.assertNotIn(secret, " ".join(command))
+        self.assertIn(secret, run.call_args.kwargs["input"])
+        self.assertTrue(run.call_args.kwargs["input"].startswith("<?php\n"))
+        self.assertEqual(parsed, {"ok": True})
 
 
 if __name__ == "__main__":

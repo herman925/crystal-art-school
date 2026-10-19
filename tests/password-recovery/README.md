@@ -20,21 +20,31 @@ python3 tests/test_login_form_contract.py
 CAS_RECOVERY_TEST_BASE_URL=http://127.0.0.1:18089 python3 tests/test_password_recovery_http.py
 ```
 
-Run the full isolated reset matrix with:
+Run offline harness-safety checks with:
+
+```sh
+python3 tests/password-recovery/test_reset_integration.py TestRecoveryHarnessSafety
+```
+
+Run the full isolated reset matrix only after the PR146 fixture owner releases the stack:
 
 ```sh
 CAS_RECOVERY_TEST_BASE_URL=http://127.0.0.1:18089 \
 CAS_RECOVERY_MAILPIT_URL=http://127.0.0.1:18026 \
-CAS_RECOVERY_WP_CONTAINER=cas-pr146-w1-20261019-wp-1 \
+CAS_RECOVERY_WP_CONTAINER=cas-pr146-w1-20261019-wp-1 CAS_RECOVERY_MAILPIT_CONTAINER=cas-pr146-w1-20261019-mailpit-1 \
 python3 tests/password-recovery/test_reset_integration.py
 ```
 
-The integration harness accepts loopback URLs and a `cas-pr146-w1-*-wp-1` container only. It uses `docker exec` to create one synthetic subscriber in the isolated DB, captures mail in Mailpit, and never prints passwords, keys, or mail bodies. It does not reset volumes or delete synthetic records/messages.
+Before `wp_insert_user`, the harness checks exact Compose project/service labels, running containers, the internal project network, loopback-only WordPress and Mailpit ports, unpublished database and SMTP ports, project-scoped data volumes, matching synthetic database settings, WordPress `home`/`siteurl`, Tutor 4.1.0, active and mounted theme hashes, and the Mailpit-only PHPMailer plus `/bin/false` sendmail setting. It refuses all other WordPress or Mailpit origins. It checks every request, redirect, reset link and Mailpit GET against its exact origin. Mailpit access uses GET only. PHP payloads, including synthetic credentials, go through stdin with `docker exec -i`; no payload appears in process arguments. The harness never resets volumes or deletes users or messages.
 
-## Runtime result (2026-10-19)
+Offline tests reject wrong container/project/database/mail targets, cross-port redirects/reset links and command-line secrets. Do not run the integration matrix while another worker owns the stack.
+
+## Historical runtime result (2026-10-19; before harness guard repair)
+
+The runtime matrix below used the earlier harness revision. The safety repair has not run against a runtime yet.
 
 - Runtime: WordPress 7.1.2, Tutor 4.1.0, Hello Elementor Child active; `enable_tutor_native_login` was off, so reset emails used WordPress's `wp-login.php?action=rp` link. Worker1 verified the active theme mirror against PR146's source export.
-- The full reset matrix passed three runs; the loopback GET smoke test passed 3/3 cases.
+- The earlier full reset matrix passed three runs; the loopback GET smoke test passed 3/3 cases.
 | Case | HTTP / final route | Visible result | Mail/credential result |
 |---|---|---|---|
 | Bad Tutor nonce | 200, `/dashboard/retrieve-password/` | No visible alert text | No reset email |
@@ -53,6 +63,7 @@ After the runs, the isolated stack contained 5 users (4 reset-test-prefix users)
 
 ## Not verified
 
+- The repaired integration harness against the local runtime.
 - SMTP delivery or mail failure logging outside local Mailpit.
 - A Tutor-rewritten reset link when `enable_tutor_native_login` is enabled. The actual reset email in this fixture used WordPress core; the Tutor reset-token GET route is covered by the GET smoke test only.
 - Production password recovery or live user credentials.
