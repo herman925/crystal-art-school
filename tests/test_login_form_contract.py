@@ -105,6 +105,8 @@ def assert_password_recovery_outcome_is_generic(account: str) -> None:
         "add_filter( 'tutor_before_retrieve_password_form_process', 'cas_account_password_recovery_preflight', PHP_INT_MAX )",
         "add_filter( 'tutor_before_retrieve_password_form_process', 'cas_account_password_recovery_start', 1 )",
         "add_action( 'tutor_action_tutor_retrieve_password', 'cas_account_password_recovery_finish', 20 )",
+        "add_action( 'lostpassword_post', 'cas_account_password_recovery_late_validation', PHP_INT_MAX )",
+        "$errors->has_errors()",
         "add_action( 'wp_mail_failed', 'cas_account_password_recovery_log_mail_failure', 10, 1 )",
         "If an account matches those details, a reset email will be sent.",
         "tutor_flash_get( 'danger' )",

@@ -718,6 +718,34 @@ class TestIsolatedPasswordRecoveryFlow(unittest.TestCase):
         self.assertTrue(self.auth_ok(self.new_password), "expired token must not change credentials")
         self.assertFalse(self.auth_ok(self.old_password), "expired token must not restore the old password")
 
+        # The late WordPress anti-abuse hook runs after Tutor's preflight filter.
+        before_late_validation = len(self.mailpit_messages())
+        late_validation = self.wp_json(
+            "$_SERVER['REQUEST_METHOD']='POST';$_POST['user_login']=" + php_string(self.email) + ";"
+            + "$_POST[tutor()->nonce]=wp_create_nonce(tutor()->nonce_action);"
+            + "cas_account_password_recovery_start(null);$empty=new WP_Error();do_action('lostpassword_post',$empty);"
+            + "$empty_kept=cas_account_password_recovery_request_active()&&!$empty->has_errors();"
+            + "cas_account_password_recovery_request_active(false);"
+            + "$deny=function($errors){$errors->add('synthetic_rate_limit','Please wait before trying again.');};"
+            + "add_action('lostpassword_post',$deny);$preserved=true;"
+            + "foreach(array(" + php_string(self.email) + ",'unknown-late-validation@example.test') as $identifier){"
+            + "tutor_flash_get('danger');tutor_flash_get('success');$_POST['user_login']=$identifier;"
+            + "do_action('tutor_action_tutor_retrieve_password');"
+            + "$danger=wp_json_encode(tutor_flash_get('danger'));$success=wp_json_encode(tutor_flash_get('success'));"
+            + "$preserved=$preserved&&strpos($danger,'Please wait before trying again.')!==false"
+            + "&&strpos($success,'If an account matches')===false;}"
+            + "remove_action('lostpassword_post',$deny);"
+            + "add_filter('allow_password_reset',function(){return new WP_Error('synthetic_account_policy','Synthetic account policy detail');},PHP_INT_MAX);"
+            + "$_POST['user_login']=" + php_string(self.email) + ";do_action('tutor_action_tutor_retrieve_password');"
+            + "$policy=wp_json_encode(tutor_flash_get('success'));$danger=wp_json_encode(tutor_flash_get('danger'));"
+            + "return array('empty_kept'=>$empty_kept,'late_preserved'=>$preserved,"
+            + "'policy_masked'=>strpos($policy,'If an account matches those details')!==false&&strpos($danger,'Synthetic account policy detail')===false);"
+        )
+        for key in ("empty_kept", "late_preserved", "policy_masked"):
+            self.assertTrue(late_validation.get(key), "late validation regression failed: " + key)
+        self.assertEqual(len(self.mailpit_messages()), before_late_validation, "late anti-abuse and account-policy denials must send no mail")
+        print("LOCAL_LATE_VALIDATION_PASS: empty WP_Error accepted, known/unknown anti-abuse errors preserved, account policy masked")
+
         # Force one in-process local SMTP failure; no option or transport setting persists.
         messages_before_failure = len(self.mailpit_messages())
         failure = self.wp_json(

@@ -570,6 +570,12 @@ function cas_account_password_recovery_preflight( $result ) {
 	return $result;
 }
 
+function cas_account_password_recovery_late_validation( $errors ) {
+	if ( is_wp_error( $errors ) && $errors->has_errors() ) {
+		cas_account_password_recovery_request_active( false );
+	}
+}
+
 function cas_account_password_recovery_log_mail_failure( $error ) {
 	if ( ! cas_account_password_recovery_request_active() ) {
 		return;
@@ -601,6 +607,7 @@ function cas_account_password_recovery_finish() {
 
 add_filter( 'tutor_before_retrieve_password_form_process', 'cas_account_password_recovery_start', 1 );
 add_filter( 'tutor_before_retrieve_password_form_process', 'cas_account_password_recovery_preflight', PHP_INT_MAX );
+add_action( 'lostpassword_post', 'cas_account_password_recovery_late_validation', PHP_INT_MAX );
 add_action( 'wp_mail_failed', 'cas_account_password_recovery_log_mail_failure', 10, 1 );
 add_action( 'tutor_action_tutor_retrieve_password', 'cas_account_password_recovery_finish', 20 );
 
