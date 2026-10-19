@@ -117,6 +117,13 @@ def assert_password_recovery_outcome_is_generic(account: str) -> None:
     ):
         require(account, token, "password recovery privacy contract")
 
+    input_helper = re.search(r"function cas_account_password_recovery_input_valid\(\).*?\n\}", account, re.DOTALL)
+    if not input_helper:
+        raise AssertionError("password recovery input helper is missing")
+    require(input_helper.group(0), "return '' !== sanitize_user( $login );", "Tutor username semantics")
+    if "is_email" in input_helper.group(0):
+        raise AssertionError("a valid username containing @ must not require valid email syntax")
+
     logger = re.search(
         r"function cas_account_password_recovery_log_mail_failure\(.*?\n\}",
         account,

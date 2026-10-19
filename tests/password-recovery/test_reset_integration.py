@@ -359,8 +359,9 @@ class TestIsolatedPasswordRecoveryFlow(unittest.TestCase):
         cls.db_container = EXPECTED_DB_CONTAINER
         cls.client = LocalHttp(cls.base_url)
         cls.preflight()
-        cls.login = "casreset" + secrets.token_hex(6)
-        cls.email = cls.login + "@example.test"
+        identity = "casreset" + secrets.token_hex(6)
+        cls.login = identity + "@local"
+        cls.email = identity + "@example.test"
         cls.old_password = secrets.token_urlsafe(24)
         cls.new_password = secrets.token_urlsafe(24)
         cls.user_id = cls.create_test_user()
@@ -614,6 +615,21 @@ class TestIsolatedPasswordRecoveryFlow(unittest.TestCase):
         print(f"empty username request: status={empty_status}, path={urlsplit(empty_final).path}, visible={visible_marker(empty_body)}, message={visible_summary(empty_body)}")
         self.assertEqual(visible_marker(empty_body), "username-required")
         self.assertEqual(len(self.mailpit_messages()), len(initial_messages), "invalid nonce/empty input must send no mail")
+
+        # Tutor accepts usernames containing @ even when they are not email addresses.
+        username_status, _, username_body = self.request_reset(self.login)
+        self.assertLess(username_status, 500)
+        self.assertEqual(visible_marker(username_body), "generic-reset-outcome")
+        after_known_username = len(self.mailpit_messages())
+        self.assertEqual(after_known_username, len(initial_messages) + 1)
+        unknown_username = "unknown-" + secrets.token_hex(6) + "@local"
+        unknown_username_status, _, unknown_username_body = self.request_reset(unknown_username)
+        self.assertLess(unknown_username_status, 500)
+        self.assertEqual(visible_marker(unknown_username_body), "generic-reset-outcome")
+        self.assertEqual(visible_messages(username_body), visible_messages(unknown_username_body))
+        self.assertEqual(len(self.mailpit_messages()), after_known_username, "unknown @username must receive no mail")
+        print("LOCAL_AT_USERNAME_PASS: known/unknown @local usernames show identical generic alerts; known user alone receives mail")
+        initial_ids = {str(m.get("ID") or m.get("id") or "") for m in self.mailpit_messages()}
 
         known_status, known_final, known_body = self.request_reset(self.email)
         known_marker = self.visible_outcome(known_status, known_final, known_body, "known-account reset request", (self.email, self.login, self.old_password, self.new_password))

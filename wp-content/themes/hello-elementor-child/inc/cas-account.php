@@ -551,7 +551,7 @@ function cas_account_password_recovery_input_valid() {
 
 	$login = trim( (string) wp_unslash( $_POST['user_login'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
 
-	return '' !== sanitize_user( $login ) && ( false === strpos( $login, '@' ) || is_email( $login ) );
+	return '' !== sanitize_user( $login );
 }
 
 function cas_account_password_recovery_start( $result ) {
