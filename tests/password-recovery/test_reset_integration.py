@@ -37,6 +37,7 @@ EXPECTED_WP_CONTAINER = PROJECT + "-wp-1"
 EXPECTED_DB_CONTAINER = PROJECT + "-db-1"
 EXPECTED_MAILPIT_CONTAINER = PROJECT + "-mailpit-1"
 EXPECTED_NETWORK = PROJECT + "_default"
+EXPECTED_WP_VERSIONS = {"7.1.2", "7.1.3"}
 ROOT = Path(__file__).resolve().parents[2]
 ACCOUNT_SOURCE = ROOT / "wp-content" / "themes" / "hello-elementor-child" / "inc" / "cas-account.php"
 
@@ -159,6 +160,8 @@ def validate_wp_runtime(runtime: dict, account_sha256: str) -> None:
     for key, value in expected.items():
         if runtime.get(key) != value:
             raise AssertionError(f"refusing unexpected local WordPress fixture setting: {key}")
+    if runtime.get("wp_version") not in EXPECTED_WP_VERSIONS:
+        raise AssertionError("refusing unexpected local WordPress version")
     if "test-mail-sink.php" not in runtime.get("mu_plugins", []):
         raise AssertionError("local Mailpit-only MU plugin is not active")
 
@@ -381,7 +384,7 @@ class TestIsolatedPasswordRecoveryFlow(unittest.TestCase):
         account_sha256 = hashlib.sha256(ACCOUNT_SOURCE.read_bytes()).hexdigest()
         runtime = cls.wp_json(
             "global $wpdb;require_once ABSPATH . WPINC . '/PHPMailer/Exception.php';require_once ABSPATH . WPINC . '/PHPMailer/PHPMailer.php';require_once ABSPATH . WPINC . '/PHPMailer/SMTP.php';$mailer=new \\PHPMailer\\PHPMailer\\PHPMailer(true);do_action('phpmailer_init',$mailer);"
-            + "return array('home'=>get_option('home'),'siteurl'=>get_option('siteurl'),"
+            + "return array('wp_version'=>get_bloginfo('version'),'home'=>get_option('home'),'siteurl'=>get_option('siteurl'),"
             + "'db_host'=>(string)$wpdb->dbhost,'db_name'=>(string)$wpdb->dbname,'db_user'=>(string)DB_USER,"
             + "'db_prefix'=>(string)$wpdb->prefix,'theme'=>get_stylesheet(),"
             + "'tutor'=>defined('TUTOR_VERSION')?TUTOR_VERSION:'missing',"
@@ -719,6 +722,7 @@ class TestRecoveryHarnessSafety(unittest.TestCase):
     def test_wrong_wordpress_home_theme_or_mail_transport_is_rejected(self) -> None:
         account_sha256 = "a" * 64
         runtime = {
+            "wp_version": "7.1.3",
             "home": EXPECTED_BASE_URL,
             "siteurl": EXPECTED_BASE_URL,
             "db_host": "db",
@@ -739,7 +743,9 @@ class TestRecoveryHarnessSafety(unittest.TestCase):
             "sendmail_path": "/bin/false",
         }
         validate_wp_runtime(runtime, account_sha256)
+        validate_wp_runtime(dict(runtime, wp_version="7.1.2"), account_sha256)
         for key, value in (
+            ("wp_version", "7.1.4"),
             ("home", "http://127.0.0.1:18090"),
             ("siteurl", "https://127.0.0.1:18089"),
             ("db_host", "database.example.test"),
