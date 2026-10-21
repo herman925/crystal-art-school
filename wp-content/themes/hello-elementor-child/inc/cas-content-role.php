@@ -38,6 +38,7 @@ const CAS_CONTENT_SCREENS = array(
 	'post.php',
 	'post-new.php',
 	'async-upload.php',
+	'customize.php', // Settings are gated one by one in cas-customizer-allowlist.php.
 	'admin-ajax.php',
 	'admin-post.php',
 );
