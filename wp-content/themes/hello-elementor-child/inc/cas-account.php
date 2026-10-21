@@ -638,6 +638,33 @@ function cas_account_password_recovery_log_mail_failure( $error ) {
 	}
 }
 
+/* #157: a known account gets a reset mail and an unknown one does not, so the answer is held to a floor for both. */
+const CAS_RECOVERY_RESPONSE_FLOOR_US = 1500000;
+
+function cas_account_password_recovery_clock_start( $result ) {
+	cas_account_password_recovery_clock( microtime( true ) );
+
+	return $result;
+}
+
+function cas_account_password_recovery_clock( $start = null ) {
+	static $started = 0.0;
+
+	if ( null !== $start ) {
+		$started = (float) $start;
+	}
+
+	return $started;
+}
+
+function cas_account_password_recovery_pad() {
+	$elapsed_us = (int) ( ( microtime( true ) - cas_account_password_recovery_clock() ) * 1000000 );
+
+	if ( $elapsed_us < CAS_RECOVERY_RESPONSE_FLOOR_US ) {
+		usleep( CAS_RECOVERY_RESPONSE_FLOOR_US - $elapsed_us );
+	}
+}
+
 function cas_account_password_recovery_finish() {
 	if ( ! cas_account_password_recovery_request_active() ) {
 		return;
@@ -650,8 +677,10 @@ function cas_account_password_recovery_finish() {
 		'success',
 		'<p>' . esc_html__( 'If an account matches those details, a reset email will be sent.', 'hello-elementor-child' ) . '</p>'
 	);
+	cas_account_password_recovery_pad();
 }
 
+add_filter( 'tutor_before_retrieve_password_form_process', 'cas_account_password_recovery_clock_start', 0 );
 add_filter( 'tutor_before_retrieve_password_form_process', 'cas_account_password_recovery_start', 1 );
 add_filter( 'tutor_before_retrieve_password_form_process', 'cas_account_password_recovery_preflight', PHP_INT_MAX );
 add_action( 'lostpassword_post', 'cas_account_password_recovery_late_validation', PHP_INT_MAX );
