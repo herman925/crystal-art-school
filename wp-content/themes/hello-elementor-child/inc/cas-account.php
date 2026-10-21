@@ -638,30 +638,59 @@ function cas_account_password_recovery_log_mail_failure( $error ) {
 	}
 }
 
-/* #157: a known account gets a reset mail and an unknown one does not, so the answer is held to a floor for both. */
-const CAS_RECOVERY_RESPONSE_FLOOR_US = 1500000;
+/* #157: a reset mail is sent after the answer, so a known account answers as fast as an unknown one.
+   Only mail sent during the Tutor reset request is held; it is sent at shutdown, never dropped. */
+function cas_account_password_recovery_mail_queue( $mail = null ) {
+	static $queue = array();
 
-function cas_account_password_recovery_clock_start( $result ) {
-	cas_account_password_recovery_clock( microtime( true ) );
+	if ( null !== $mail ) {
+		$queue[] = $mail;
+	}
+
+	return $queue;
+}
+
+function cas_account_password_recovery_defer_start( $result ) {
+	if ( ! has_filter( 'pre_wp_mail', 'cas_account_password_recovery_defer_mail' ) ) {
+		add_filter( 'pre_wp_mail', 'cas_account_password_recovery_defer_mail', 10, 2 );
+		add_action( 'shutdown', 'cas_account_password_recovery_send_deferred', 0 );
+	}
 
 	return $result;
 }
 
-function cas_account_password_recovery_clock( $start = null ) {
-	static $started = 0.0;
+function cas_account_password_recovery_defer_mail( $short_circuit, $atts ) {
+	cas_account_password_recovery_mail_queue( $atts );
 
-	if ( null !== $start ) {
-		$started = (float) $start;
-	}
-
-	return $started;
+	return true;
 }
 
-function cas_account_password_recovery_pad() {
-	$elapsed_us = (int) ( ( microtime( true ) - cas_account_password_recovery_clock() ) * 1000000 );
+function cas_account_password_recovery_send_deferred() {
+	$queue = cas_account_password_recovery_mail_queue();
 
-	if ( $elapsed_us < CAS_RECOVERY_RESPONSE_FLOOR_US ) {
-		usleep( CAS_RECOVERY_RESPONSE_FLOOR_US - $elapsed_us );
+	if ( ! $queue ) {
+		return;
+	}
+
+	remove_filter( 'pre_wp_mail', 'cas_account_password_recovery_defer_mail', 10 );
+
+	if ( function_exists( 'litespeed_finish_request' ) ) {
+		litespeed_finish_request();
+	} elseif ( function_exists( 'fastcgi_finish_request' ) ) {
+		fastcgi_finish_request();
+	} else {
+		while ( ob_get_level() > 0 ) {
+			ob_end_flush();
+		}
+		flush();
+	}
+
+	foreach ( $queue as $atts ) {
+		$sent = wp_mail( $atts['to'], $atts['subject'], $atts['message'], $atts['headers'] ?? '', $atts['attachments'] ?? array() );
+
+		if ( ! $sent && function_exists( 'cas_audit_log' ) ) {
+			cas_audit_log( 'password_reset_mail_failed', 'deferred' ); // No address and no token in the log.
+		}
 	}
 }
 
@@ -677,10 +706,9 @@ function cas_account_password_recovery_finish() {
 		'success',
 		'<p>' . esc_html__( 'If an account matches those details, a reset email will be sent.', 'hello-elementor-child' ) . '</p>'
 	);
-	cas_account_password_recovery_pad();
 }
 
-add_filter( 'tutor_before_retrieve_password_form_process', 'cas_account_password_recovery_clock_start', 0 );
+add_filter( 'tutor_before_retrieve_password_form_process', 'cas_account_password_recovery_defer_start', 0 );
 add_filter( 'tutor_before_retrieve_password_form_process', 'cas_account_password_recovery_start', 1 );
 add_filter( 'tutor_before_retrieve_password_form_process', 'cas_account_password_recovery_preflight', PHP_INT_MAX );
 add_action( 'lostpassword_post', 'cas_account_password_recovery_late_validation', PHP_INT_MAX );
