@@ -31,7 +31,7 @@ BASE = "http://127.0.0.1:18089"
 
 def php(script: str) -> str:
     result = subprocess.run(
-        ["docker", "exec", "-i", CONTAINER, "php"], input="<?php\n" + script,
+        ["docker", "exec", "-i", "-u", "www-data", CONTAINER, "php"], input="<?php\n" + script,
         capture_output=True, text=True, timeout=180,
     )
     if result.returncode:
@@ -42,6 +42,12 @@ def php(script: str) -> str:
 class _NoRedirect(urllib.request.HTTPRedirectHandler):
     def redirect_request(self, req, fp, code, msg, headers, newurl):
         return None
+
+
+def ensure_private_root() -> None:
+    """The private root sits beside public_html, owned by the site user; create it that way locally."""
+    subprocess.run(["docker", "exec", "-u", "root", CONTAINER, "sh", "-c",
+                    "mkdir -p /var/www/cas-private && chown www-data:www-data /var/www/cas-private"], check=True)
 
 
 def session(login: str | None, password: str | None):
@@ -197,15 +203,13 @@ echo "cleaned\n";
 class PrivateCourseFilesTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
-        # Temporary local-test helpers: the module, and application passwords over plain HTTP.
-        subprocess.run(["docker", "cp", str(MODULE), f"{CONTAINER}:/var/www/html/wp-content/mu-plugins/cas-private-files.php"], check=True)
+        # The module is loaded by the theme (functions.php); do not copy it into mu-plugins, that redeclares it.
+        ensure_private_root()
         cls.info = json.loads(php(SETUP))
 
     @classmethod
     def tearDownClass(cls) -> None:
         php(CLEANUP)
-        subprocess.run(["docker", "exec", CONTAINER, "rm", "-f",
-                        "/var/www/html/wp-content/mu-plugins/cas-private-files.php"], check=False)
 
     LOGINS = {"enrolled": "w1enrolled", "outsider": "w1outsider", "admin": "w1admin"}
     _sessions: dict = {}
@@ -273,6 +277,43 @@ class PrivateCourseFilesTests(unittest.TestCase):
 
     def test_hook_second_run_is_a_noop(self) -> None:
         self.assertTrue(self.info["second_run_noop"])
+
+
+class PrivateDeleteRuntimeTests(unittest.TestCase):
+    """A real wp_delete_attachment() on the local site removes only that attachment's folder."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        ensure_private_root()
+        cls.info = json.loads(php(SETUP))
+
+    @classmethod
+    def tearDownClass(cls) -> None:
+        php(CLEANUP)
+
+    def test_deleting_a_private_image_removes_its_folder_and_keeps_the_rest(self) -> None:
+        script = f"""
+require '/var/www/html/wp-load.php';
+$root = dirname(untrailingslashit(ABSPATH)) . '/cas-private';
+$img = {int(self.info["img"])};
+$lesson = {int(self.info["pdf_lesson"])};
+$course = {int(self.info["pdf_course"])};
+$before = is_dir($root . '/' . $img);
+wp_delete_attachment($img, true);
+echo json_encode(array(
+    'folder_before' => $before,
+    'folder_after' => is_dir($root . '/' . $img),
+    'lesson_file' => is_file($root . '/' . $lesson . '/lesson-sheet.pdf'),
+    'course_file' => is_file($root . '/' . $course . '/course-notes.pdf'),
+    'root' => is_dir($root),
+));
+"""
+        result = json.loads(php(script))
+        self.assertTrue(result["folder_before"])
+        self.assertFalse(result["folder_after"])
+        self.assertTrue(result["lesson_file"])
+        self.assertTrue(result["course_file"])
+        self.assertTrue(result["root"])
 
 
 if __name__ == "__main__":

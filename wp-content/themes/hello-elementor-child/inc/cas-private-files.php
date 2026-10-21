@@ -338,7 +338,9 @@ add_action(
 			nocache_headers();
 			exit;
 		}
-		cas_private_log( $id, 'served' );
+		if ( '' === $size ) { // Only the original is logged: one page view must not write a line per image size.
+			cas_private_log( $id, 'served' );
+		}
 
 		$mime = get_post_mime_type( $id );
 		if ( '' !== $size ) {

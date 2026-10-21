@@ -154,6 +154,12 @@ class FollowupTests(unittest.TestCase):
         self.assertEqual(self.site.run({"action": "redirect", "get": {"cas_private_file": "999999"}, "user": {}})["status"], 404)
         self.assertIn("attachment=999999 outcome=not_found", self.site.audit_lines()[-1])
 
+    def test_no_audit_line_for_an_image_size_request(self) -> None:
+        self.site.attachment(22, ["photo.png", "photo-150.png"])
+        user = {"logged_in": True, "admin": True, "id": 3}
+        self.assertEqual(self.site.run({"action": "redirect", "get": {"cas_private_file": "22", "size": "size1"}, "user": user})["status"], 200)
+        self.assertEqual(self.site.audit_lines(), [])
+
     def test_audit_line_for_a_served_request_has_no_filename_or_email(self) -> None:
         self.site.attachment(21, ["lesson-sheet.pdf"])
         user = {"logged_in": True, "admin": True, "id": 3}
