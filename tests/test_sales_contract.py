@@ -61,6 +61,8 @@ def main() -> None:
     require(flat, "\\Tutor\\Models\\EnrollmentModel", "enrolment must go through Tutor's EnrollmentModel")
     require(flat, "$model::update_enrollments( 'completed'", "completing must update enrolment through Tutor")
     require(flat, "$model::update_enrollments( 'cancel'", "cancelling must cancel enrolment through Tutor")
+    require(flat, "if ( $model::is_enrolled( $course_id, $user_id, true ) ) { return;", "completing must not add a row when access already exists")
+    require(flat, "$enrolment_id = (int) $row->ID;", "completing must reuse an existing enrolment row, not call do_enroll over it")
 
     # POST validation runs before the admin page prints, so refusals keep their HTTP status
     require(flat, "add_action( 'load-' . $hook, 'cas_sales_on_load' );", "POST handling must run on the page load hook")

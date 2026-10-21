@@ -310,30 +310,39 @@ function cas_sales_apply_status( $order_id, $to, $accepted_unpaid = false ) {
 }
 
 /**
- * Bring the enrolment that belongs to this order into line with its new status, using Tutor's functions.
- * An enrolment that belongs to another order is left alone.
+ * Bring the student's enrolment on this course into line with the order's new status, using Tutor's functions.
+ * Completing never creates a second enrolment row: an existing row is reused and tied to this order.
+ * Cancelling only touches an enrolment that belongs to this order.
  */
 function cas_sales_sync_enrolment( $order_id, $user_id, $course_id, $to ) {
 	if ( ! class_exists( '\Tutor\Models\EnrollmentModel' ) ) {
 		return;
 	}
 
-	$model   = '\Tutor\Models\EnrollmentModel';
-	$current = $model::is_enrolled( $course_id, $user_id, false );
-
-	if ( $current && (int) $current->order_id !== $order_id ) {
-		return;
-	}
+	$model = '\Tutor\Models\EnrollmentModel';
 
 	if ( 'completed' === $to ) {
-		$enrolment_id = $current ? (int) $current->ID : (int) $model::do_enroll( $course_id, $order_id, $user_id, true );
+		if ( $model::is_enrolled( $course_id, $user_id, true ) ) {
+			return; // already has access
+		}
+
+		$row = $model::is_enrolled( $course_id, $user_id, false );
+		if ( $row ) {
+			// do_enroll() would return this row without changing it, so reuse it here.
+			$enrolment_id = (int) $row->ID;
+			update_post_meta( $enrolment_id, $model::ENROLLMENT_ORDER_ID_META, $order_id );
+		} else {
+			$enrolment_id = (int) $model::do_enroll( $course_id, $order_id, $user_id, true );
+		}
+
 		if ( $enrolment_id ) {
 			$model::update_enrollments( 'completed', array( $enrolment_id ) );
 		}
 		return;
 	}
 
-	if ( $current ) {
+	$current = $model::is_enrolled( $course_id, $user_id, false );
+	if ( $current && (int) $current->order_id === (int) $order_id ) {
 		$model::update_enrollments( 'cancel', array( (int) $current->ID ) );
 	}
 }
