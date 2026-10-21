@@ -71,6 +71,11 @@ class ContentRoleContract(unittest.TestCase):
         self.assertIn("add_action( 'admin_menu', 'cas_content_admin_menu', 999 )", ROLE)
         self.assertIn("add_action( 'admin_init', 'cas_content_screen_guard', 1 )", ROLE)
 
+    def test_create_gate_is_registered_and_covers_rest_fallback_names(self):
+        self.assertIn("add_filter( 'user_has_cap', 'cas_content_user_has_cap', 10, 4 )", ROLE)
+        self.assertIn("'create_posts', 'edit_posts'", ROLE)
+        self.assertIn("$obj->rest_base : $obj->name", ROLE, "a type with no rest_base is routed by its name")
+        self.assertIn("'elementor' ", ROLE)
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)

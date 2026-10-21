@@ -11,6 +11,7 @@ Runs only when CAS_RUNTIME_TESTS=1, because the local stack must have this branc
 import http.cookiejar
 import json
 import os
+import re
 import subprocess
 import unittest
 import urllib.error
@@ -153,7 +154,7 @@ echo 'cleaned';
         self.login()
         f = self.fx
         # REST write to the template, with a valid REST nonce for the synthetic user.
-        nonce = php(f"wp_set_current_user({f['uid']}); echo wp_create_nonce('wp_rest');").strip()
+        nonce = self.rest_nonce()
         req = urllib.request.Request(BASE + f"/wp-json/wp/v2/elementor_library/{f['template']}",
                                      data=json.dumps({"title": "W1 hacked"}).encode(), method="POST",
                                      headers={"Content-Type": "application/json", "X-WP-Nonce": nonce})
@@ -173,6 +174,42 @@ echo 'cleaned';
         except urllib.error.HTTPError:
             pass
         self.assertEqual(php("echo get_option('blogname');"), before, "blogname must not change")
+
+    def rest_nonce(self):
+        """The REST nonce a logged-in admin page hands out. A CLI nonce is tied to no session and fails."""
+        _, body, _ = get(self.session, "wp-admin/index.php")
+        found = re.search(r'wpApiSettings = \{[^}]*"nonce":"([a-f0-9]+)"', body.decode("utf-8", "replace"))
+        self.assertIsNotNone(found, "no REST nonce on the admin page")
+        return found.group(1)
+
+    def rest_post(self, route, payload):
+        nonce = self.rest_nonce()
+        req = urllib.request.Request(BASE + "/wp-json/wp/v2/" + route, data=json.dumps(payload).encode(), method="POST",
+                                     headers={"Content-Type": "application/json", "X-WP-Nonce": nonce})
+        try:
+            with self.session.open(req, timeout=30) as r:
+                return r.status
+        except urllib.error.HTTPError as e:
+            return e.code
+
+    def test_6_create_is_denied_for_closed_types_and_allowed_for_posts(self):
+        self.login()
+        # Create through REST: a closed post type, a closed core type, and an allowed type.
+        self.assertIn(self.rest_post("elementor_library", {"title": "W1 created template", "status": "draft"}), (401, 403))
+        self.assertIn(self.rest_post("pages", {"title": "W1 created page", "status": "draft"}), (401, 403))
+        self.assertEqual(self.rest_post("posts", {"title": "W1 created post", "status": "draft"}), 201)
+        # Create through wp-admin screens.
+        self.check("wp-admin/post-new.php?post_type=elementor_library", "DENIED")
+        self.check("wp-admin/post-new.php?post_type=page", "DENIED")
+        self.check("wp-admin/post-new.php", "ALLOWED")
+        # Elementor AJAX is closed to the role.
+        body = urllib.parse.urlencode({"action": "elementor_ajax", "_nonce": "x"}).encode()
+        try:
+            with self.session.open(urllib.request.Request(BASE + "/wp-admin/admin-ajax.php", data=body), timeout=30) as r:
+                reply = r.read().decode("utf-8", "replace")
+        except urllib.error.HTTPError as e:
+            reply = e.read().decode("utf-8", "replace")
+        self.assertNotIn('"success":true', reply.replace(" ", ""), "Elementor AJAX must not succeed for the role")
 
 
 if __name__ == "__main__":

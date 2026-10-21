@@ -94,6 +94,52 @@ function cas_content_map_meta_cap( $caps, $cap, $user_id, $args ) {
 }
 add_filter( 'map_meta_cap', 'cas_content_map_meta_cap', 10, 4 );
 
+/**
+ * Create is not an object cap, so map_meta_cap cannot stop it. This closes the create and edit
+ * primitives for one request when that request targets a closed post type: a wp-admin screen
+ * with a post_type off the allowlist, a REST route for such a type, or any Elementor AJAX or
+ * admin-post action. Requests for allowed types are untouched.
+ */
+function cas_content_user_has_cap( $allcaps, $caps, $args, $user ) {
+	$cap = isset( $args[0] ) ? $args[0] : '';
+	if ( ! in_array( $cap, array( 'create_posts', 'edit_posts' ), true ) || ! cas_content_is_user( $user->ID ) ) {
+		return $allcaps;
+	}
+	if ( cas_content_request_targets_closed_type() ) {
+		$allcaps[ $cap ] = false;
+	}
+	return $allcaps;
+}
+add_filter( 'user_has_cap', 'cas_content_user_has_cap', 10, 4 );
+
+/** True when this request aims at a post type that is not on the allowlist, or at Elementor. */
+function cas_content_request_targets_closed_type() {
+	$types = array();
+	if ( isset( $_REQUEST['post_type'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$types[] = sanitize_key( wp_unslash( $_REQUEST['post_type'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	}
+	if ( isset( $_REQUEST['action'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$action = sanitize_key( wp_unslash( $_REQUEST['action'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( false !== strpos( $action, 'elementor' ) ) {
+			return true;
+		}
+	}
+	if ( preg_match( '#/wp-json/wp/v2/([a-z0-9_-]+)|[?&]rest_route=/wp/v2/([a-z0-9_-]+)#', isset( $_SERVER['REQUEST_URI'] ) ? wp_unslash( $_SERVER['REQUEST_URI'] ) : '', $m ) ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+		$segment = ! empty( $m[1] ) ? $m[1] : $m[2];
+		foreach ( get_post_types( array(), 'objects' ) as $obj ) {
+			if ( $segment === ( $obj->rest_base ? $obj->rest_base : $obj->name ) ) {
+				$types[] = $obj->name;
+			}
+		}
+	}
+	foreach ( $types as $type ) {
+		if ( ! in_array( $type, CAS_CONTENT_POST_TYPES, true ) ) {
+			return true;
+		}
+	}
+	return false;
+}
+
 /** The hub is where the role lands after login. */
 function cas_content_login_redirect( $redirect_to, $requested, $user ) {
 	if ( $user instanceof WP_User && cas_content_is_user( $user->ID ) ) {
