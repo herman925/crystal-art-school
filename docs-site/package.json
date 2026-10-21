@@ -1,0 +1,12 @@
+{
+  "name": "crystal-art-school-guide",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vitepress dev site",
+    "build": "vitepress build site"
+  },
+  "devDependencies": {
+    "vitepress": "^1.6.3"
+  }
+}
