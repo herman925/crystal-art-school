@@ -37,6 +37,12 @@ def main() -> None:
         require(hub, f"'name' => '{name}'", f"the hub is missing the page card: {name}")
     require(hub, "'customize.php?autofocus[section]='", "Customizer links must deep-link with autofocus[section]")
     require(hub, "'&url='", "Customizer links must pass the page URL so the preview opens on that page")
+    require(hub, "currency, checkout and payments: ask Herman.", "the Courses card must route currency and payments to Herman")
+    if "tutor_settings" in raw:
+        raise AssertionError("the hub must not link into Tutor settings (currency and checkout are payment-critical)")
+    require(hub, "'Posts: title, text, pictures, topic and date'", "the posts line must list only what she edits")
+    if "developer" in hub.lower():
+        raise AssertionError("the developer note is internal and must not appear on the hub")
     require(hub, "cas_content_hub_list_item(", "list screens must be linked through the capability-checked list helper")
     require(hub, "current_user_can( $line['cap'] )", "each line must be capability-checked before it is shown")
 

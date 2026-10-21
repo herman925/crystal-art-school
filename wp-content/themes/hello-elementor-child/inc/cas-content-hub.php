@@ -143,9 +143,8 @@ function cas_content_hub_cards() {
 				cas_content_hub_list_item( 'Each course page: description, what you will learn, who it is for, what comes with it, and the syllabus', 'courses' ),
 				cas_content_hub_list_item( 'Course photo strip: five photos per course', 'courses' ),
 				cas_content_hub_list_item( 'Lessons: titles, videos and one-line subtitles', 'lesson' ),
-				$item( 'Currency and cart page (Tutor LMS settings)', admin_url( 'admin.php?page=tutor_settings' ), 'manage_options' ),
 			),
-			'muted' => 'Course page layout: ask Herman.',
+			'muted' => 'Course page layout, and currency, checkout and payments: ask Herman.',
 		),
 		array(
 			'name'  => 'Gallery',
@@ -168,7 +167,7 @@ function cas_content_hub_cards() {
 			'view'  => cas_content_hub_page_url( 'blog' ),
 			'items' => array(
 				$customize( 'Introduction paragraph under the blog heading', 'cas_page_blog', cas_content_hub_page_or_home( 'blog', $home ) ),
-				cas_content_hub_list_item( 'Posts: title, text, pictures, topic, date and developer\'s note', 'post' ),
+				cas_content_hub_list_item( 'Posts: title, text, pictures, topic and date', 'post' ),
 				$item( 'Topics (categories)', admin_url( 'edit-tags.php?taxonomy=category' ), 'manage_categories' ),
 			),
 			'muted' => 'Article layout and colours: ask Herman.',
