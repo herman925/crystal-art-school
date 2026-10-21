@@ -9,7 +9,7 @@
  */
 defined( 'ABSPATH' ) || exit;
 
-const CAS_AUDIT_ALERT_TO        = 'herchan925@gmail.com';
+const CAS_AUDIT_ALERT_TO        = 'hermanchan925@gmail.com';
 const CAS_AUDIT_EXPECTED_ADMINS = 2; // cas_owner, cas_dev
 
 /* Every field of a log line goes through here: valid UTF-8, no control or line-separator characters
