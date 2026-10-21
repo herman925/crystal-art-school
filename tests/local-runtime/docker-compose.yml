@@ -1,0 +1,69 @@
+# cas-local: synthetic WordPress runtime for local tests only. Never production, never public.
+# Run from anywhere (paths below are relative to this file):
+#   docker compose --env-file ~/cas-local-runtime/cas-local.env -p cas-local -f tests/local-runtime/docker-compose.yml up -d
+# The env file holds the local database passwords (mode 600, outside the repo). It is never committed.
+name: cas-local
+
+x-wp-env: &wp-env
+  WORDPRESS_DB_HOST: db
+  WORDPRESS_DB_USER: wp
+  WORDPRESS_DB_PASSWORD: ${WORDPRESS_DB_PASSWORD:?set in the env file}
+  WORDPRESS_DB_NAME: wp
+  WORDPRESS_TABLE_PREFIX: cas_
+
+services:
+  db:
+    image: mariadb:11
+    environment:
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD:?set in the env file}
+      MARIADB_DATABASE: wp
+      MARIADB_USER: wp
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD:?set in the env file}
+    healthcheck:
+      test: ["CMD", "healthcheck.sh", "--connect", "--innodb_initialized"]
+      interval: 5s
+      retries: 40
+    volumes:
+      - dbdata:/var/lib/mysql
+    # No ports: the database is reachable only from the compose network.
+
+  mailpit:
+    image: axllent/mailpit
+    ports:
+      - "127.0.0.1:18026:8025"   # Mailpit UI and API. SMTP (1025) stays on the compose network.
+
+  wordpress:
+    image: wordpress:7.1.3-php8.3-apache
+    depends_on:
+      db:
+        condition: service_healthy
+      mailpit:
+        condition: service_started
+    environment: *wp-env
+    ports:
+      - "127.0.0.1:18089:80"
+    volumes:
+      - wpdata:/var/www/html
+      - ./mail-guard.ini:/usr/local/etc/php/conf.d/zz-cas-mail-guard.ini:ro
+      - ./mu/cas-local-phpmailer.php:/var/www/html/wp-content/mu-plugins/cas-local-phpmailer.php:ro
+      # Defaults to this checkout's theme. Override with CAS_CHILD_THEME_SRC to test another revision.
+      - ${CAS_CHILD_THEME_SRC:-../../wp-content/themes/hello-elementor-child}:/var/www/html/wp-content/themes/hello-elementor-child:ro
+
+  # Optional WP-CLI container. Not started by default: docker compose ... --profile tools run --rm cli wp ...
+  cli:
+    image: wordpress:cli-php8.3
+    profiles: ["tools"]
+    user: "33:33"
+    depends_on:
+      wordpress:
+        condition: service_started
+    environment: *wp-env
+    volumes:
+      - wpdata:/var/www/html
+      - ./mail-guard.ini:/usr/local/etc/php/conf.d/zz-cas-mail-guard.ini:ro
+      - ./mu/cas-local-phpmailer.php:/var/www/html/wp-content/mu-plugins/cas-local-phpmailer.php:ro
+      - ${CAS_CHILD_THEME_SRC:-../../wp-content/themes/hello-elementor-child}:/var/www/html/wp-content/themes/hello-elementor-child:ro
+
+volumes:
+  dbdata: {}
+  wpdata: {}
