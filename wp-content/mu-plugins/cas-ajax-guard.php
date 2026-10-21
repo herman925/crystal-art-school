@@ -16,7 +16,12 @@ const CAS_AJAX_GUARD_ADMIN_ONLY = array(
 	'tutor_remove_device_manually',         // DeviceManagement.php:726 - deletes any usermeta row by id.
 	'tutor_pro_gift_enrollment',            // GiftEnrollment.php:51 - free enrolment in any course.
 	'tutor_remove_assignment_attempt',      // Assignments.php:318 - deletes any comment row by id.
-	'tutor_membership_plan_duplicate',      // MembershipController.php:254 - no nonce, no capability.
+	'tutor_membership_plan_duplicate',      // Membership plan duplicate. Nonce and capability check present from 4.1.3; kept denied (defence in depth).
+	'tutor_report_get_student_enrollments', // Tutor Pro 4.1.3 report handler; admin-only (owner review, 2026-10-20).
+	'process_tutor_template',               // Tutor Pro 4.1.3 template handler; admin-only (owner review, 2026-10-20).
+	'tutor_gc_credential_upgrade',          // Tutor Pro 4.1.3 credential handler; admin-only (owner review, 2026-10-20).
+	'tutor_template_import_list',          // Tutor Pro 4.1.3 template import listing; admin-only (owner review, 2026-10-20).
+	'install_tutor_plugin',                 // tutor-pro Admin.php:175 (4.1.3) - nonce only, runs Plugin_Upgrader for tutor.
 	'import_gradebook_sample_data',         // GradeBook.php:895 - inserts rows on every call.
 	'tutor_pn_save_subscription',           // tutor-notifications Push_Notification.php:48 - no nonce, stores any push URL. Addon off.
 	'tutor_save_notification_preference',   // NotificationPreference.php:59 - unbounded rows per user. Addon off.
