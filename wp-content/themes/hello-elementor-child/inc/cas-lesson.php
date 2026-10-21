@@ -389,8 +389,9 @@ function cas_render_lesson() {
 	$percent = $total_n ? (int) round( $done_n / $total_n * 100 ) : 0;
 	$film    = cas_lesson_film( $lesson_id );
 	$attach  = cas_lesson_attachments( $lesson_id );
+	$may_files = $enrolled || current_user_can( 'manage_options' ); // Owner policy 2026-10-20: course files on preview lessons are for enrolled students and admins.
 	$course_files = function_exists( 'tutor_utils' ) ? (array) tutor_utils()->get_attachments( $course_id ) : array();
-	$files   = array_merge( $course_files, $attach['files'] );
+	$files   = $may_files ? array_merge( $course_files, $attach['files'] ) : array();
 	$cats    = wp_get_post_terms( $course_id, 'course-category', array( 'fields' => 'names' ) );
 	$tag     = ( ! is_wp_error( $cats ) && $cats ) ? $cats[0] : '';
 	$level   = (string) get_post_meta( $course_id, '_tutor_course_level', true );
