@@ -33,6 +33,11 @@ def main() -> None:
         "<?php if ( $files ) : ?>",
         "the materials block must still render only when $files is non-empty",
     )
+    require(
+        source,
+        "<?php if ( $may_files && $attach['photos'] ) : ?>",
+        "the reference photos block must be gated by $may_files (CEO decision 2026-10-21)",
+    )
 
 
 if __name__ == "__main__":

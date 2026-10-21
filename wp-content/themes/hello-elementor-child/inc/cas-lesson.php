@@ -530,7 +530,7 @@ function cas_render_lesson() {
 					<?php endif; ?>
 				</div>
 
-				<?php if ( $attach['photos'] ) : ?>
+				<?php if ( $may_files && $attach['photos'] ) : ?>
 					<div class="curr-card materials-card ref-card" id="ref-card">
 						<div class="ch">Reference photos</div>
 						<p class="res-note">The photographs this lesson is painted from. Open one to see it full size, or download it to work from.</p>
