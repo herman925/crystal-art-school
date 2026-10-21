@@ -6,6 +6,7 @@ Uses a cached PHP image only. This is not an HTTP/runtime acceptance test.
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 import re
 import subprocess
@@ -27,7 +28,7 @@ def callback_source(source: str) -> tuple[str, str]:
 def run_php(script: str) -> dict:
     result = subprocess.run(
         ['docker', 'run', '--rm', '--pull=never', '--network', 'none', '-i',
-         '--entrypoint', 'php', 'wordpress:php8.3-apache', '-n'],
+         '--entrypoint', 'php', os.environ.get('CAS_TEST_WP_IMAGE', 'wordpress:7.1.3-php8.3-apache'), '-n'],
         input='<?php\n' + script, capture_output=True, text=True, timeout=60,
     )
     if result.returncode:
