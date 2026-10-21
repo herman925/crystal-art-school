@@ -27,11 +27,13 @@ function cas_audit_field( $value ) {
 	return str_replace( array( '\\', '|' ), array( '\\\\', '\\|' ), $text );
 }
 
+/* Returns true only when the whole line was written. Callers may ignore the result; a caller that must
+   fail closed (for example a status change) checks it. */
 function cas_audit_log( $event, $detail = '' ) {
 	$dir = dirname( ABSPATH, 3 ) . '/cas-logs'; // public_html -> crystalau.com -> domains -> home
 	$dir = is_dir( $dir ) ? $dir : dirname( ABSPATH, 4 ) . '/cas-logs';
 	if ( ! is_dir( $dir ) ) {
-		return;
+		return false;
 	}
 	$ip = cas_audit_field( isset( $_SERVER['REMOTE_ADDR'] ) ? $_SERVER['REMOTE_ADDR'] : '-' );
 	if ( ! empty( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
@@ -39,7 +41,8 @@ function cas_audit_log( $event, $detail = '' ) {
 	}
 	$uid  = function_exists( 'get_current_user_id' ) ? get_current_user_id() : 0;
 	$line = gmdate( 'Y-m-d H:i:s' ) . ' UTC | ' . $ip . ' | uid=' . $uid . ' | ' . cas_audit_field( $event ) . ' | ' . cas_audit_field( $detail ) . "\n";
-	@file_put_contents( $dir . '/audit.log', $line, FILE_APPEND | LOCK_EX );
+	$written = @file_put_contents( $dir . '/audit.log', $line, FILE_APPEND | LOCK_EX );
+	return false !== $written && strlen( $line ) === $written;
 }
 
 /* Read user rows with raw SQL only: never call get_user_meta/WP_User on an untrusted user here. */
