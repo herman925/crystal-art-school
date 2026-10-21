@@ -2420,3 +2420,22 @@ add_filter(
 	},
 	20
 );
+
+/**
+ * #151: Tutor's recovery alerts have no role, so screen readers miss them. A small script gives them role="alert" and moves focus to them.
+ */
+function cas_account_recovery_announce_script() {
+	if ( ! cas_account_is_retrieve_password() ) {
+		return;
+	}
+
+	$dir = get_stylesheet_directory();
+	wp_enqueue_script(
+		'cas-recovery-announce',
+		get_stylesheet_directory_uri() . '/js/cas-recovery-announce.js',
+		array(),
+		filemtime( $dir . '/js/cas-recovery-announce.js' ),
+		true
+	);
+}
+add_action( 'wp_enqueue_scripts', 'cas_account_recovery_announce_script' );
