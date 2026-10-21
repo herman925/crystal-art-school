@@ -21,14 +21,19 @@ def main() -> None:
     require(hub, "add_menu_page(", "the hub must be an admin menu page")
     for title in ("Website pages", "Courses & lessons", "Artwork & Showcase", "Posts & resources", "Site details"):
         require(hub, title, f"the hub is missing the task group: {title}")
-    require(hub, "$role->add_cap( CAS_CONTENT_HUB_CAP );", "the capability must be granted to the administrator role")
-    require(hub, "get_role( 'administrator' )", "the grant must target only the administrator role")
-    if hub.count("add_cap(") != 1:
-        raise AssertionError("the hub must grant exactly one capability to exactly one role")
-    if "get_role( 'subscriber' )" in hub or "'editor'" in hub or "'author'" in hub:
-        raise AssertionError("the hub must not grant anything to any other role")
-    if "add_role(" in hub or "remove_cap(" in hub:
-        raise AssertionError("slice 1 must not add roles or remove capabilities")
+    require(hub, "add_filter( 'user_has_cap', 'cas_content_hub_user_has_cap' );", "the capability must come from a user_has_cap filter")
+    require(hub, "! empty( $allcaps['manage_options'] )", "the filter must grant the capability only to users with manage_options")
+    require(hub, "$allcaps[ CAS_CONTENT_HUB_CAP ] = true;", "the filter must set the hub capability at runtime")
+    for forbidden, why in (
+        ("add_cap(", "the capability must not be written into any role"),
+        ("remove_cap(", "slice 1 must not remove capabilities"),
+        ("add_role(", "slice 1 must not add roles"),
+        ("update_option(", "the hub must not write options (no DB change, no flag)"),
+        ("get_role(", "the hub must not touch role records"),
+        ("'subscriber'", "the hub must not grant anything to subscribers"),
+    ):
+        if forbidden in hub:
+            raise AssertionError(why)
     require(
         FUNCTIONS.read_text(encoding="utf-8"),
         "require_once get_stylesheet_directory() . '/inc/cas-content-hub.php';",

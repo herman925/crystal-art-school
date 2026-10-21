@@ -1,30 +1,29 @@
 <?php
 /**
  * #150 slice 1: one task-based content hub. It only links to the existing editors.
- * It changes no editor, adds no role, and grants its capability to Administrator only.
+ * It changes no editor, adds no role, and writes nothing to the database. Administrators get its capability at runtime.
  */
 
 defined( 'ABSPATH' ) || exit;
 
-const CAS_CONTENT_HUB_CAP    = 'manage_cas_content';
-const CAS_CONTENT_HUB_OPTION = 'cas_content_hub_caps_v1';
+const CAS_CONTENT_HUB_CAP = 'manage_cas_content';
 
 /**
- * Give Administrator the hub capability once. No other role is touched.
+ * Administrators get the hub capability at runtime. Nothing is written to the roles in the database,
+ * so a Tutor update that re-runs its role installer cannot remove it, and nothing needs undoing.
+ *
+ * @param array $allcaps Every capability the user has.
+ *
+ * @return array
  */
-function cas_content_hub_grant_admin() {
-	if ( get_option( CAS_CONTENT_HUB_OPTION ) ) {
-		return;
+function cas_content_hub_user_has_cap( $allcaps ) {
+	if ( ! empty( $allcaps['manage_options'] ) ) {
+		$allcaps[ CAS_CONTENT_HUB_CAP ] = true;
 	}
 
-	$role = get_role( 'administrator' );
-	if ( $role ) {
-		$role->add_cap( CAS_CONTENT_HUB_CAP );
-	}
-
-	update_option( CAS_CONTENT_HUB_OPTION, 1, false );
+	return $allcaps;
 }
-add_action( 'init', 'cas_content_hub_grant_admin' );
+add_filter( 'user_has_cap', 'cas_content_hub_user_has_cap' );
 
 /**
  * A link is listed only when the viewer can use its editor.
