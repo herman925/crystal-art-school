@@ -19,10 +19,28 @@ const CAS_PRIVATE_META_COURSES = '_cas_private_courses'; // attachment meta: cou
 const CAS_PRIVATE_META_ORIGIN  = '_cas_private_origin';  // attachment meta: original path, for rollback.
 const CAS_PRIVATE_QUERY_VAR    = 'cas_private_file';
 
-/** The private folder, without a trailing slash. */
+/** The private folder, without a trailing slash. Created, and kept at mode 0700, when it is missing. */
 function cas_private_dir() {
 	$dir = defined( 'CAS_PRIVATE_DIR' ) ? CAS_PRIVATE_DIR : dirname( untrailingslashit( ABSPATH ) ) . '/cas-private';
-	return untrailingslashit( $dir );
+	return cas_private_ensure_dir( untrailingslashit( $dir ) );
+}
+
+/** Create a folder with mode 0700 if needed, and correct its mode if something else set it. */
+function cas_private_ensure_dir( $path ) {
+	if ( ! is_dir( $path ) ) {
+		mkdir( $path, 0700, true );
+	}
+	if ( is_dir( $path ) && ! is_link( $path ) ) {
+		chmod( $path, 0700 );
+	}
+	return $path;
+}
+
+/** One audit line per serve, denial or miss: the attachment id and the outcome, nothing else. */
+function cas_private_log( $attachment_id, $outcome ) {
+	if ( function_exists( 'cas_audit_log' ) ) {
+		cas_audit_log( 'private_file', 'attachment=' . (int) $attachment_id . ' outcome=' . $outcome );
+	}
 }
 
 /** True once an attachment has been moved out of the public uploads folder. */
@@ -136,7 +154,8 @@ function cas_private_move_attachment( $attachment_id ) {
 	}
 
 	$target_dir = cas_private_dir() . '/' . (int) $attachment_id;
-	if ( ! wp_mkdir_p( $target_dir ) ) {
+	cas_private_ensure_dir( $target_dir );
+	if ( ! is_dir( $target_dir ) ) {
 		return false;
 	}
 
@@ -179,8 +198,45 @@ function cas_private_move_file( $src, $dst ) {
 		wp_delete_file( $dst );
 		return false;
 	}
+	chmod( $dst, 0600 );
 	wp_delete_file( $src );
 	return $dst;
+}
+
+/*
+ * Deleting a private attachment deletes its folder. WordPress removes files only under the
+ * uploads folder, so the private copies would otherwise stay behind.
+ *
+ * Only a flagged attachment is touched, and only the folder named after its id, found by
+ * realpath under the private root. Symbolic links are never followed: a link inside the folder
+ * is removed as a link, and its target is left alone. Subfolders are left in place.
+ */
+add_action( 'delete_attachment', 'cas_private_on_delete', 10, 2 );
+
+function cas_private_on_delete( $post_id, $post = null ) {
+	$id = (int) $post_id;
+	if ( $id <= 0 || ! cas_private_is( $id ) ) {
+		return;
+	}
+	$root = realpath( cas_private_dir() );
+	$path = $root ? $root . '/' . $id : '';
+	if ( '' === $path || ! is_dir( $path ) || is_link( $path ) || realpath( $path ) !== $path ) {
+		return;
+	}
+	foreach ( scandir( $path ) as $name ) {
+		if ( '.' === $name || '..' === $name ) {
+			continue;
+		}
+		$item = $path . '/' . $name;
+		if ( is_link( $item ) ) {
+			unlink( $item ); // The link only; never its target.
+		} elseif ( is_file( $item ) && realpath( $item ) === $item ) {
+			unlink( $item );
+		}
+	}
+	if ( 0 === count( array_diff( scandir( $path ), array( '.', '..' ) ) ) ) {
+		rmdir( $path );
+	}
 }
 
 /*
@@ -264,21 +320,25 @@ add_action(
 		$size = isset( $_GET['size'] ) ? sanitize_key( wp_unslash( $_GET['size'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 		if ( ! $id || 'attachment' !== get_post_type( $id ) || ! cas_private_is( $id ) ) {
+			cas_private_log( $id, 'not_found' );
 			status_header( 404 );
 			nocache_headers();
 			exit;
 		}
 		if ( ! cas_private_can_download( $id ) ) {
+			cas_private_log( $id, 'denied' );
 			status_header( 403 );
 			nocache_headers();
 			exit;
 		}
 		$path = cas_private_path_for( $id, $size );
 		if ( '' === $path || ! is_file( $path ) ) {
+			cas_private_log( $id, 'not_found' );
 			status_header( 404 );
 			nocache_headers();
 			exit;
 		}
+		cas_private_log( $id, 'served' );
 
 		$mime = get_post_mime_type( $id );
 		if ( '' !== $size ) {
