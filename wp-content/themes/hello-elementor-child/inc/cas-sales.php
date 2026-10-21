@@ -255,17 +255,19 @@ function cas_sales_transition_allowed( $from, $to ) {
 }
 
 /**
- * Step two: change the order status (compare-and-set on the status read from the database) and bring the
- * student's enrolment into line, using Tutor's own enrolment functions.
+ * Step two: change the order status and bring the student's enrolment into line.
  *
- * @return bool
+ * Order of work: every check first, then the audit line, then the write. The audit line must report success
+ * (cas_audit_log() returns true only when the full line was written). If it does not, nothing is changed.
+ *
+ * @return true|'audit'|false true when changed, 'audit' when the change was refused because it could not be
+ *                            recorded, false for any other refusal.
  */
 function cas_sales_apply_status( $order_id, $to, $accepted_unpaid = false ) {
 	global $wpdb;
 
-	// Fail closed: no change is made unless the audit line can be written.
 	if ( ! function_exists( 'cas_audit_log' ) ) {
-		return false;
+		return 'audit';
 	}
 
 	$order = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . cas_sales_orders_table() . ' WHERE id = %d', $order_id ) );
@@ -280,12 +282,18 @@ function cas_sales_apply_status( $order_id, $to, $accepted_unpaid = false ) {
 	}
 
 	$order_from = $order->order_status;
-	$changed    = $wpdb->update(
+	$line       = sprintf( 'order=%d from=%s to=%s payment=%s', $order->id, $order_from, $to, $order->payment_status );
+
+	if ( true !== cas_audit_log( 'order_status_changed', $line ) ) {
+		return 'audit';
+	}
+
+	$changed = $wpdb->update(
 		cas_sales_orders_table(),
 		array(
-			'order_status' => $to,
+			'order_status'   => $to,
 			'updated_at_gmt' => current_time( 'mysql', true ),
-			'updated_by'   => get_current_user_id(),
+			'updated_by'     => get_current_user_id(),
 		),
 		array(
 			'id'           => $order->id,
@@ -294,17 +302,14 @@ function cas_sales_apply_status( $order_id, $to, $accepted_unpaid = false ) {
 	);
 
 	if ( 1 !== $changed ) {
+		// The audit line already says the change was made; record that it was not.
+		cas_audit_log( 'order_status_change_failed', sprintf( 'order=%d from=%s to=%s', $order->id, $order_from, $to ) );
 		return false;
 	}
 
 	foreach ( array_filter( array_map( 'absint', explode( ',', cas_sales_course_ids( $order->id ) ) ) ) as $course_id ) {
 		cas_sales_sync_enrolment( (int) $order->id, (int) $order->user_id, $course_id, $to );
 	}
-
-	cas_audit_log(
-		'order_status_changed',
-		sprintf( 'order=%d from=%s to=%s payment=%s', $order->id, $order_from, $to, $order->payment_status )
-	);
 
 	return true;
 }
@@ -451,8 +456,13 @@ function cas_sales_on_load() {
 		wp_die( esc_html__( 'Tick the confirmation to give access without payment.', 'hello-elementor-child' ), '', array( 'response' => 400 ) );
 	}
 
+	$result = cas_sales_apply_status( $order_id, $to, $accepted_unpaid );
+	if ( 'audit' === $result ) {
+		wp_die( esc_html__( 'Not saved: the change could not be recorded. Tell Herman.', 'hello-elementor-child' ), '', array( 'response' => 500 ) );
+	}
+
 	$GLOBALS['cas_sales_state']['notice'] = array(
-		'ok'       => cas_sales_apply_status( $order_id, $to, $accepted_unpaid ),
+		'ok'       => true === $result,
 		'order_id' => $order_id,
 		'to'       => $to,
 	);

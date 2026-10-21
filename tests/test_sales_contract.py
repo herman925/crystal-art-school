@@ -68,8 +68,14 @@ def main() -> None:
     require(flat, "add_action( 'load-' . $hook, 'cas_sales_on_load' );", "POST handling must run on the page load hook")
 
     # Fail closed on the audit line
-    require(flat, "if ( ! function_exists( 'cas_audit_log' ) ) { return false; }", "no change may be made without the audit logger")
+    require(flat, "if ( true !== cas_audit_log( 'order_status_changed', $line ) ) { return 'audit'; }", "the change must be refused unless the audit line reports success")
+    apply_at = flat.index("function cas_sales_apply_status(")
+    audit_at = flat.index("cas_audit_log( 'order_status_changed', $line )", apply_at)
+    write_at = flat.index("$wpdb->update( cas_sales_orders_table()", apply_at)
+    if not audit_at < write_at:
+        raise AssertionError("the audit line must be written before the status write")
     require(flat, "'order=%d from=%s to=%s payment=%s', $order->id, $order_from, $to, $order->payment_status", "the audit line must carry id, from, to and payment status only")
+    require(flat, "if ( 'audit' === $result ) { wp_die(", "an audit refusal must stop the request with a 500, not show as an ordinary failure")
 
     # Unpaid completion: warning and extra tick
     require(flat, WARNING, "the unpaid warning text must match Head's wording exactly")
