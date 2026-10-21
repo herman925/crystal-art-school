@@ -21,6 +21,8 @@ const CAS_AJAX_GUARD_ADMIN_ONLY = array(
 	'process_tutor_template',               // Tutor Pro 4.1.3 template handler; admin-only (owner review, 2026-10-20).
 	'tutor_gc_credential_upgrade',          // Tutor Pro 4.1.3 credential handler; admin-only (owner review, 2026-10-20).
 	'tutor_template_import_list',          // Tutor Pro 4.1.3 template import listing; admin-only (owner review, 2026-10-20).
+	'view_progress',                         // Tutor Pro Analytics.php:68 - nonce only, no capability check in the body. Guard for if the add-on is ever enabled (CEO ruling 2026-10-22; add-on is OFF on production).
+	'export_analytics',                     // Tutor Pro Analytics.php:69 - nonce only, no capability check in the body. Same ruling.
 	'install_tutor_plugin',                 // tutor-pro Admin.php:175 (4.1.3) - nonce only, runs Plugin_Upgrader for tutor.
 	'import_gradebook_sample_data',         // GradeBook.php:895 - inserts rows on every call.
 	'tutor_pn_save_subscription',           // tutor-notifications Push_Notification.php:48 - no nonce, stores any push URL. Addon off.

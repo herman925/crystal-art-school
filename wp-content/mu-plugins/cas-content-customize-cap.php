@@ -6,6 +6,9 @@
  * functions.php, so a mapping in the theme is not yet registered at that point. This mapping
  * applies to the cas_content role only. Administrators keep core's mapping.
  */
+
+defined( 'ABSPATH' ) || exit;
+
 add_filter(
 	'map_meta_cap',
 	function ( $caps, $cap, $user_id ) {
