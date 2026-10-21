@@ -48,7 +48,7 @@ const CAS_CUSTOMIZER_ALLOW_SETTINGS = array(
 );
 
 /** Panels the role may see. Every other panel is removed for the role. */
-const CAS_CUSTOMIZER_ALLOW_PANELS = array( 'cas_pages', 'cas_site' );
+const CAS_CUSTOMIZER_ALLOW_PANELS = array( 'cas_pages', 'cas_sitewide' ); // 'cas_sitewide' is the Site-wide panel id (contact, brand).
 
 function cas_customizer_allowed_setting( $id ) {
 	return in_array( $id, CAS_CUSTOMIZER_ALLOW_SETTINGS, true );

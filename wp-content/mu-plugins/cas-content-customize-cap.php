@@ -16,6 +16,10 @@ add_filter(
 		if ( ! $user || ! in_array( 'cas_content', (array) $user->roles, true ) || in_array( 'administrator', (array) $user->roles, true ) ) {
 			return $caps;
 		}
+		$role = get_role( 'cas_content' );
+		if ( ! $role || empty( $role->capabilities['manage_cas_content'] ) ) {
+			return $caps;
+		}
 		return array( 'manage_cas_content' );
 	},
 	5,

@@ -96,6 +96,30 @@ echo 'cleaned';
         self.assertIn("unauthorized", validity, f"blogname must be refused by capability: {reply}")
         self.assertEqual(php("echo get_option('blogname');"), before, "blogname must not change")
 
+    ALLOWED_SECTIONS = [
+        "cas_contact", "cas_brand", "cas_hero",
+        "cas_page_about", "cas_page_blog", "cas_page_free_videos", "cas_page_home_about",
+        "cas_page_home_blog", "cas_page_home_courses", "cas_page_home_course_overview",
+        "cas_page_home_free_videos", "cas_page_home_gallery",
+    ]
+
+    def test_every_allowlisted_section_is_offered(self):
+        self.login()
+        offered = set(self.customizer_state().get("sections", {}).keys())
+        missing = [s for s in self.ALLOWED_SECTIONS if s not in offered]
+        self.assertEqual(missing, [], "allowlisted sections must be offered to the role")
+
+    def test_publishing_from_the_contact_section_is_live(self):
+        self.login()
+        reply = self.save(self.customizer_state(), {"cas_social_youtube": "https://www.youtube.com/w1-live"})
+        self.assertTrue(reply.get("success"), reply)
+        self.assertEqual(php("echo get_theme_mod('cas_social_youtube');").strip(), "https://www.youtube.com/w1-live")
+        php("remove_theme_mod('cas_social_youtube');")
+
+    def test_customize_mapping_is_not_given_to_administrators(self):
+        out = php("echo json_encode(map_meta_cap('customize', 1));").strip()
+        self.assertNotEqual(out, json.dumps(["manage_cas_content"]), "administrators keep core's customize mapping")
+
     def test_core_sections_are_not_offered_to_the_role(self):
         self.login()
         state = self.customizer_state()
