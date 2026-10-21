@@ -291,7 +291,7 @@ Free Videos	Blurb, post body clamped to three lines (cas-free-videos.php)	yes	Da
 Free Videos	Which section a film sits in, _cas_free_video_section (cas-free-videos.php:474-491)	yes	Dashboard > Free videos > Video details	DD:1223-1226	OK
 Free Videos	Video link, YouTube or Bunny, _cas_free_video_url (cas-free-videos.php:231,247)	yes	Dashboard > Free videos > Video details	Herman's Rule 2026-08-23	OK
 Free Videos	Order within a row, menu_order ASC then date DESC (cas-free-videos.php)	yes	Dashboard > Free videos > Page attributes	Herman's Rule 2026-08-23	OK
-Free Videos	Opening line, cas_fv_intro_lede (cas-free-videos.php:399)	yes	Customize > Pages > Free videos	Herman's Rule 2026-08-23	OK
+Free Videos	Opening line, cas_fv_lead (cas-free-videos.php:399; the setting id is cas_fv_lead, the register had cas_fv_intro_lede)	yes	Customize > Pages > Free videos	Herman's Rule 2026-08-23	OK
 Free Videos	Three section introductions, cas_fv_intro_demos/quick/shorts (cas-free-videos.php:399)	yes	Customize > Pages > Free videos	DD:1228	OK
 Free Videos	Courses link inside the demos introduction, frozen into the database once she edits it (cas-free-videos.php:399)	yes	Customize > Pages > Free videos	Herman's Rule 2026-08-23	DEFECT
 Free Videos	Section set fixed at three, keys demos/quick/shorts (cas-free-videos.php:70-73)	no	-	DD:1223-1226	OK

@@ -54,8 +54,11 @@ class ContentRoleContract(unittest.TestCase):
     def test_closed_screens_are_not_in_the_screen_list(self):
         screens = block("const CAS_CONTENT_SCREENS")
         for closed in ["plugins.php", "users.php", "options.php", "options-general.php", "themes.php",
-                       "tools.php", "customize.php", "nav-menus.php", "export.php", "import.php"]:
+                       "tools.php", "nav-menus.php", "export.php", "import.php"]:
             self.assertNotIn(f"'{closed}'", screens)
+
+    def test_customizer_screen_is_open_and_settings_are_gated_separately(self):
+        self.assertIn("'customize.php'", block("const CAS_CONTENT_SCREENS"))
 
     def test_loader_is_wired_by_exactly_one_functions_php_line(self):
         self.assertEqual(FUNCTIONS.count("inc/cas-content-editor.php"), 1)

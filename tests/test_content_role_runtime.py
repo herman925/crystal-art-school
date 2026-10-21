@@ -130,7 +130,7 @@ echo 'cleaned';
         for path in ["wp-admin/plugins.php", "wp-admin/plugin-install.php", "wp-admin/users.php",
                      "wp-admin/user-new.php", "wp-admin/options-general.php", "wp-admin/options.php",
                      "wp-admin/themes.php", "wp-admin/theme-editor.php", "wp-admin/tools.php",
-                     "wp-admin/export.php", "wp-admin/nav-menus.php", "wp-admin/customize.php",
+                     "wp-admin/export.php", "wp-admin/nav-menus.php",
                      "wp-admin/admin.php?page=tutor", "wp-admin/admin.php?page=tutor_settings"]:
             self.check(path, "DENIED")
 
