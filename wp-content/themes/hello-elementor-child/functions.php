@@ -255,6 +255,7 @@ require_once get_stylesheet_directory() . '/inc/cas-showcase.php';
  * in place by the time a lesson or a film is rendered.
  */
 require_once get_stylesheet_directory() . '/inc/cas-video-token.php';
+require_once get_stylesheet_directory() . '/inc/cas-private-files.php';
 
 require_once get_stylesheet_directory() . '/inc/cas-free-videos.php';
 
