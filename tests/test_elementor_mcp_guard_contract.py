@@ -32,6 +32,10 @@ def check_guard(path: Path) -> None:
         raise AssertionError(f"guarded routes must be exactly {ROUTES}, found {listed}")
 
     require(source, "if ( ! is_array( $endpoints ) )", "the existence guard for the route table is missing")
+    # Administrators keep the editor MCP tools, so the exemption must come before the removal loop.
+    require(source, "current_user_can( 'manage_options' )", "the administrator exemption is missing")
+    if source.index("current_user_can( 'manage_options' )") > source.index("foreach ( array_keys( $endpoints )"):
+        raise AssertionError("the administrator exemption must run before the route removal")
 
     matcher = re.search(r"function cas_elementor_mcp_guard_matches\( \$route \) \{.*?\n\}\n", source, re.S)
     if not matcher:
@@ -109,6 +113,15 @@ def test_negative_missing_adapter_prefix_fails():
         except AssertionError:
             return
     raise AssertionError("contract accepted a guard without the adapter default server route")
+
+
+def test_negative_admin_exemption_removed_fails():
+    with _mutated(SOURCE, "current_user_can( 'manage_options' )", "current_user_can( 'read' )") as mutated:
+        try:
+            check_guard(mutated)
+        except AssertionError:
+            return
+    raise AssertionError("contract accepted a guard that removes routes from administrators too")
 
 
 def test_negative_existence_guard_removed_fails():

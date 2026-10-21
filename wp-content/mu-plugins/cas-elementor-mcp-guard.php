@@ -31,6 +31,10 @@ function cas_elementor_mcp_guard_matches( $route ) {
 
 /* Priority 1000 runs after every other filter on the route table. */
 add_filter( 'rest_endpoints', function ( $endpoints ) {
+	// Administrators keep these routes: the editor's global classes and variables tools call mcp-proxy.
+	if ( current_user_can( 'manage_options' ) ) {
+		return $endpoints;
+	}
 	if ( ! is_array( $endpoints ) ) {
 		return $endpoints; // Existence guard: no route table, nothing to remove.
 	}
