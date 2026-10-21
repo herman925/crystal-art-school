@@ -56,3 +56,11 @@ __pycache__/
 .env.*
 !.env.example
 /.secrets/
+
+# Guide build output and dependencies (B, 2026-10)
+docs-site/node_modules/
+docs-site/site/.vitepress/dist/
+docs-site/site/.vitepress/cache/
+# Login backstop: bcrypt hashes, never committed
+docs-site/server/users.php
+docs-site/.htpasswd
