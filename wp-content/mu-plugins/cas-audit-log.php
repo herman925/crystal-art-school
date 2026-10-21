@@ -9,8 +9,23 @@
  */
 defined( 'ABSPATH' ) || exit;
 
-const CAS_AUDIT_ALERT_TO        = 'herchan925@gmail.com';
+const CAS_AUDIT_ALERT_TO        = 'hermanchan925@gmail.com';
 const CAS_AUDIT_EXPECTED_ADMINS = 2; // cas_owner, cas_dev
+
+/* Every field of a log line goes through here: valid UTF-8, no control or line-separator characters
+   (\p{Cc}, U+2028, U+2029, U+0085), and '\' and '|' escaped so a value cannot forge a column.
+   Not idempotent: escaping an already-escaped value doubles its backslashes. Call it once per raw field. */
+function cas_audit_field( $value ) {
+	$text = (string) $value;
+	if ( ! preg_match( '//u', $text ) ) {
+		$text = function_exists( 'mb_scrub' ) ? mb_scrub( $text, 'UTF-8' ) : (string) iconv( 'UTF-8', 'UTF-8//IGNORE', $text );
+	}
+	$text = preg_replace( '/[\p{Cc}\x{2028}\x{2029}\x{0085}]+/u', ' ', $text );
+	if ( null === $text ) {
+		return '';
+	}
+	return str_replace( array( '\\', '|' ), array( '\\\\', '\\|' ), $text );
+}
 
 function cas_audit_log( $event, $detail = '' ) {
 	$dir = dirname( ABSPATH, 3 ) . '/cas-logs'; // public_html -> crystalau.com -> domains -> home
@@ -18,12 +33,12 @@ function cas_audit_log( $event, $detail = '' ) {
 	if ( ! is_dir( $dir ) ) {
 		return;
 	}
-	$ip = isset( $_SERVER['REMOTE_ADDR'] ) ? $_SERVER['REMOTE_ADDR'] : '-';
+	$ip = cas_audit_field( isset( $_SERVER['REMOTE_ADDR'] ) ? $_SERVER['REMOTE_ADDR'] : '-' );
 	if ( ! empty( $_SERVER['HTTP_X_FORWARDED_FOR'] ) ) {
-		$ip .= ' xff=' . trim( explode( ',', $_SERVER['HTTP_X_FORWARDED_FOR'] )[0] );
+		$ip .= ' xff=' . cas_audit_field( trim( explode( ',', $_SERVER['HTTP_X_FORWARDED_FOR'] )[0] ) );
 	}
 	$uid  = function_exists( 'get_current_user_id' ) ? get_current_user_id() : 0;
-	$line = gmdate( 'Y-m-d H:i:s' ) . ' UTC | ' . $ip . ' | uid=' . $uid . ' | ' . $event . ' | ' . preg_replace( '/[\r\n]+/', ' ', (string) $detail ) . "\n";
+	$line = gmdate( 'Y-m-d H:i:s' ) . ' UTC | ' . $ip . ' | uid=' . $uid . ' | ' . cas_audit_field( $event ) . ' | ' . cas_audit_field( $detail ) . "\n";
 	@file_put_contents( $dir . '/audit.log', $line, FILE_APPEND | LOCK_EX );
 }
 
