@@ -430,6 +430,12 @@ function cas_sales_on_load() {
 	global $wpdb;
 	$row = $wpdb->get_row( $wpdb->prepare( 'SELECT order_status, payment_status FROM ' . cas_sales_orders_table() . ' WHERE id = %d', $order_id ) );
 
+	// A repeated submit (double click, resent form) finds the change already made: say so and write nothing.
+	if ( $row && 'apply_status' === $post_action && $row->order_status === $to ) {
+		$GLOBALS['cas_sales_state']['notice'] = array( 'already' => true, 'order_id' => $order_id, 'to' => $to );
+		return;
+	}
+
 	if ( ! $row || ! cas_sales_transition_allowed( $row->order_status, $to ) ) {
 		wp_die( esc_html__( 'That status change is not allowed.', 'hello-elementor-child' ), '', array( 'response' => 400 ) );
 	}
@@ -469,7 +475,9 @@ function cas_sales_render() {
 	}
 
 	if ( $state['notice'] ) {
-		if ( $state['notice']['ok'] ) {
+		if ( ! empty( $state['notice']['already'] ) ) {
+			echo '<div class="notice notice-info"><p>Order ' . esc_html( (string) $state['notice']['order_id'] ) . ' is already ' . esc_html( $state['notice']['to'] ) . '. Nothing was changed.</p></div>';
+		} elseif ( $state['notice']['ok'] ) {
 			echo '<div class="notice notice-success"><p>Order ' . esc_html( (string) $state['notice']['order_id'] ) . ' is now ' . esc_html( $state['notice']['to'] ) . '.</p></div>';
 		} else {
 			echo '<div class="notice notice-error"><p>The order was not changed. It may have changed since you opened it.</p></div>';
