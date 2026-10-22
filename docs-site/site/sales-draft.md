@@ -43,7 +43,7 @@ The screen does not cancel completed orders. Do not create another order or alte
 3. Check the exported range and columns before using the file.
 4. Store it securely; do not upload it to public sharing or analysis services. Send only the necessary order information for support.
 
-Columns: order ID, date, student login, course, order status, payment status and amount. This export does not include names or email addresses. Formula-like text may have a protective leading apostrophe; do not strip it merely to change its appearance.
+Columns: order ID, date, student login, course, order status, payment status and amount. This export does not include names or email addresses. Formula-like text may deliberately have a protective leading apostrophe. Keep protective prefixes in place; removing them can undo the spreadsheet-safety protection.
 
 The list/export is capped at 200 matching orders, so it is not a complete accounting export when more match. Ask Herman if you need complete reconciliation.
 
@@ -55,4 +55,6 @@ These are not provider settlement, profit, tax records or refund reconciliation.
 
 ## If something goes wrong
 
-Unsupported course/student/order, audit failure, missing saved result or unverified restoration: follow [Troubleshooting](./money-help-draft.md), not repeated clicks. A success message does not promise a receipt or enrolment email was sent; do not repeat a money action to trigger mail.
+If recovery or restoration is uncertain, **stop and contact Herman immediately**. Do not assume that nothing changed, submit the action again, or make a second order/access change to repair it. A partial change may need checking.
+
+For other unsupported-course/student/order, audit or missing-result warnings, follow [Troubleshooting](./money-help-draft.md), not repeated clicks. A success message does not promise a receipt or enrolment email was sent; do not repeat a money action to trigger mail.
