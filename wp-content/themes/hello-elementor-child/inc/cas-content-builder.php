@@ -134,6 +134,97 @@ function cas_builder_course_for_item( $id, $type ) {
 	return 'topics' === $type && 'courses' === get_post_type( $post->post_parent ) ? (int) $post->post_parent : 0;
 }
 
+/** Native JS sends IDs as digit strings; reject floats, booleans, coercion and overflow. */
+function cas_builder_sort_id( $value ) {
+	if ( ( ! is_int( $value ) && ! is_string( $value ) ) || ! preg_match( '/^[1-9][0-9]*$/', (string) $value ) ) {
+		return false;
+	}
+	return filter_var( $value, FILTER_VALIDATE_INT, array( 'options' => array( 'min_range' => 1 ) ) );
+}
+
+/** Validate the complete native matrix before Tutor detaches/re-attaches any children. No writes here. */
+function cas_builder_validate_content_order( $raw, $target_course = null ) {
+	$invalid = new WP_Error( 'cas_sort_shape', 'Invalid curriculum order. Reload the course and try the native sorting controls again.', array( 'status' => 400 ) );
+	if ( ! is_string( $raw ) ) { return $invalid; }
+	try {
+		$order = json_decode( $raw, true, 512, JSON_THROW_ON_ERROR );
+	} catch ( JsonException $error ) {
+		return $invalid;
+	}
+	// JS uses {0: row, 1: row} and {0: id}, including {} for an empty lesson list.
+	if ( ! is_array( $order ) || ! array_is_list( $order ) ) { return $invalid; }
+	if ( array() === $order && null === $target_course ) { return $invalid; }
+	// A new, not-yet-inserted course has nothing for Tutor's empty sorter to detach.
+	if ( array() === $order && 0 === (int) $target_course ) { return 0; }
+	$topics = array();
+	$contents = array();
+	foreach ( $order as $row ) {
+		if ( ! is_array( $row ) || 2 !== count( $row ) || ! array_key_exists( 'topic_id', $row ) || ! array_key_exists( 'lesson_ids', $row )
+			|| ! is_array( $row['lesson_ids'] ) || ! array_is_list( $row['lesson_ids'] ) ) { return $invalid; }
+		$topic = cas_builder_sort_id( $row['topic_id'] );
+		if ( false === $topic || isset( $topics[ $topic ] ) ) { return $invalid; }
+		$topics[ $topic ] = true;
+		foreach ( $row['lesson_ids'] as $raw_id ) {
+			$id = cas_builder_sort_id( $raw_id );
+			if ( false === $id || isset( $contents[ $id ] ) ) { return $invalid; }
+			$contents[ $id ] = true;
+		}
+	}
+	$course = array() === $order ? (int) $target_course : cas_builder_course_for_item( array_key_first( $topics ), 'topics' );
+	if ( ! cas_builder_owns_course( $course ) ) {
+		return new WP_Error( 'cas_sort_forbidden', 'You may only sort content belonging to your own course.', array( 'status' => 403 ) );
+	}
+	global $wpdb;
+	$current_topics = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM {$wpdb->posts} WHERE post_type='topics' AND post_parent=%d AND post_status='publish'", $course ) );
+	if ( null === $current_topics || '' !== $wpdb->last_error ) { return new WP_Error( 'cas_sort_read', 'The current curriculum could not be checked. Nothing was sorted; contact Herman.', array( 'status' => 503 ) ); }
+	$current_topics = array_map( 'intval', $current_topics );
+	$topic_ids = array_keys( $topics );
+	sort( $current_topics, SORT_NUMERIC );
+	sort( $topic_ids, SORT_NUMERIC );
+	if ( $topic_ids !== $current_topics ) {
+		return new WP_Error( 'cas_sort_topics', 'The curriculum changed or some topics are missing. Reload the course before sorting.', array( 'status' => 409 ) );
+	}
+	if ( array() === $topic_ids ) { return $course; }
+	$slots = implode( ',', array_fill( 0, count( $topic_ids ), '%d' ) );
+	$children = $wpdb->get_results( $wpdb->prepare( "SELECT ID,post_type,post_status FROM {$wpdb->posts} WHERE post_parent IN ($slots)", $topic_ids ) );
+	if ( null === $children || '' !== $wpdb->last_error ) { return new WP_Error( 'cas_sort_read', 'The current curriculum could not be checked. Nothing was sorted; contact Herman.', array( 'status' => 503 ) ); }
+	$types = array_unique( apply_filters( 'tutor_course_contents_post_types', array( tutor()->lesson_post_type, tutor()->quiz_post_type ) ) );
+	$current_contents = array();
+	foreach ( $children as $child ) {
+		// Tutor clears ALL children, even those its published-content query does not display.
+		if ( 'publish' !== $child->post_status || ! in_array( $child->post_type, $types, true ) ) {
+			return new WP_Error( 'cas_sort_hidden', 'This curriculum contains hidden or unsupported items. Contact Herman before sorting.', array( 'status' => 409 ) );
+		}
+		$current_contents[] = (int) $child->ID;
+	}
+	$content_ids = array_keys( $contents );
+	sort( $current_contents, SORT_NUMERIC );
+	sort( $content_ids, SORT_NUMERIC );
+	if ( $content_ids !== $current_contents ) {
+		return new WP_Error( 'cas_sort_omission', 'Sorting cannot add or detach course items. Include every existing item, move it to another topic, or use the authorised removal controls.', array( 'status' => 409 ) );
+	}
+	return $course;
+}
+
+/** The same vendor saver also runs on course saves, not only the dedicated AJAX reorder action. */
+function cas_builder_assert_course_sort( $course_id ) {
+	if ( ! cas_content_is_user( get_current_user_id() ) || ! array_key_exists( 'tutor_topics_lessons_sorting', $_POST ) ) { return; }
+	$check = cas_builder_validate_content_order( is_string( $_POST['tutor_topics_lessons_sorting'] ) ? wp_unslash( $_POST['tutor_topics_lessons_sorting'] ) : $_POST['tutor_topics_lessons_sorting'], (int) $course_id );
+	if ( ! is_wp_error( $check ) && $check !== (int) $course_id ) {
+		$check = new WP_Error( 'cas_sort_target', 'The sorting request does not belong to this course.', array( 'status' => 403 ) );
+	}
+	if ( is_wp_error( $check ) ) {
+		$status = (int) $check->get_error_data()['status'];
+		if ( wp_doing_ajax() ) { wp_send_json_error( array( 'message' => $check->get_error_message() ), $status ); }
+		wp_die( esc_html( $check->get_error_message() ), '', array( 'response' => $status ) );
+	}
+}
+add_filter( 'wp_insert_post_data', function ( $data, $postarr ) {
+	if ( 'courses' === $data['post_type'] ) { cas_builder_assert_course_sort( (int) ( $postarr['ID'] ?? 0 ) ); }
+	return $data;
+}, -10, 2 );
+add_action( 'save_post_courses', 'cas_builder_assert_course_sort', -10 );
+
 /** Keep the native topic/lesson handlers, adding current author checks before their link-based checks. */
 add_action( 'admin_init', function () {
 	if ( ! wp_doing_ajax() || ! cas_content_is_user( get_current_user_id() ) ) {
@@ -158,11 +249,11 @@ add_action( 'admin_init', function () {
 	} elseif ( 'tutor_delete_topic' === $action ) {
 		$course = cas_builder_course_for_item( $topic, 'topics' );
 	} elseif ( 'tutor_update_course_content_order' === $action ) {
-		$order = isset( $_POST['tutor_topics_lessons_sorting'] ) && is_string( $_POST['tutor_topics_lessons_sorting'] )
-			? json_decode( wp_unslash( $_POST['tutor_topics_lessons_sorting'] ), true ) : null;
-		$first = is_array( $order ) && isset( $order[0]['topic_id'] ) && is_scalar( $order[0]['topic_id'] ) ? absint( $order[0]['topic_id'] ) : 0;
-		$course = cas_builder_course_for_item( $first, 'topics' );
-		// Tutor 4.1.3 validate_course_content_order() then checks every topic/content against this course.
+		$course = cas_builder_validate_content_order( isset( $_POST['tutor_topics_lessons_sorting'] ) && is_string( $_POST['tutor_topics_lessons_sorting'] )
+			? wp_unslash( $_POST['tutor_topics_lessons_sorting'] ) : null );
+		if ( is_wp_error( $course ) ) {
+			wp_send_json_error( array( 'message' => $course->get_error_message() ), (int) $course->get_error_data()['status'] );
+		}
 	} else {
 		$course = 'tutor_delete_lesson' === $action ? cas_builder_course_for_item( $lesson, 'lesson' ) : cas_builder_course_for_item( $topic, 'topics' );
 		if ( $lesson && cas_builder_course_for_item( $lesson, 'lesson' ) !== $course ) {
