@@ -77,6 +77,8 @@ To end that later sale, propose Regular `68` and empty Sale. Confirm Current reg
 - Existing orders are not rewritten. Do not promise instant repricing of an already-open cart, checkout or payment session; ask Herman about the specific case.
 - Do not use the ordinary builder save or an administrator account as a workaround.
 
+A reviewed local test found that a newly requested, server-rendered basket and checkout page reflected the updated price for the same signed-in basket. Historical order, item and enrolment records stayed unchanged in that test. This does **not** verify automatic refresh of an already-open browser page, cached/CDN pages, tax or coupon rules, an existing payment-provider session, or live payments. Do not promise that every open checkout changes instantly.
+
 ## If something goes wrong
 
 Read [Troubleshooting](./money-help-draft.md) before another attempt. A failed confirmation may need a fresh proposal; audit failure or unverified restoration requires stopping and contacting Herman. Closing a tab does not remove a published price, and typing the old amounts back is another money change, not a safe repair.
