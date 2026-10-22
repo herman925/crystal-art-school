@@ -65,6 +65,11 @@ def main() -> None:
     require(flat, "true !== cas_audit_log( 'manual_enrolment_attempt', $detail )", "no access change may proceed unless the attempt audit is fully written")
     require(flat, "true !== cas_audit_log( 'manual_enrolment_changed', $detail )", "final audit failure must trigger compensation")
     require(flat, "cas_enrol_restore_changes( $changes )", "failed writes or verification must restore changed rows")
+    require(flat, "wp_json_encode( cas_enrol_snapshot( $row, '' ) )", "confirmation signature must cover identity and order/product associations, not only status")
+    require(flat, "p.post_author = %d AND p.post_parent = %d AND p.post_status = %s", "undo SQL must condition exact student/course/written status")
+    require(flat, "COALESCE(om.meta_value, \\'\\') = %s AND COALESCE(pm.meta_value, \\'\\') = %s", "undo SQL must compare order/product associations inside the write")
+    require(flat, "(om.meta_id IS NOT NULL) = %d AND (pm.meta_id IS NOT NULL) = %d", "undo must distinguish absent from empty metadata")
+    require(flat, "false !== $changed && 1 === $changed && (int) $verified === $id", "undo must require one matched write plus fresh readback")
     require(flat, "if ( 'rollback' === $result ) { wp_die(", "failed compensation must not display success")
     require(flat, "student_id=%d course_id=%d action=%s enrolments=%s from=%s to=%s", "audit must contain no user name/email")
 

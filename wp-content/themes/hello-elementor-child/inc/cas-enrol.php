@@ -95,22 +95,53 @@ function cas_enrol_records( $course_id, $student_id ) {
 
 /** A stable snapshot prevents applying a confirmation after enrollment state has changed. */
 function cas_enrol_signature( array $rows ) {
-	$states = array_map( function ( $row ) { return (int) $row->ID . ':' . $row->post_status; }, $rows );
+	$states = array_map( function ( $row ) { return wp_json_encode( cas_enrol_snapshot( $row, '' ) ); }, $rows );
 	sort( $states, SORT_STRING );
 	return hash( 'sha256', implode( '|', $states ) );
 }
 
-/** Restore only enrollment rows this operation changed; newly created rows are canceled, never removed. */
+/** Tutor's updater has no expected-state predicate; undo must not overwrite a newer access decision. */
+function cas_enrol_snapshot( $row, $written_status, $created = false ) {
+	$model = cas_enrol_model();
+	return array(
+		'id' => (int) $row->ID,
+		'status' => (string) $row->post_status,
+		'created' => $created,
+		'user_id' => (int) $row->post_author,
+		'course_id' => (int) $row->post_parent,
+		'written_status' => $written_status,
+		'order_id' => (string) get_post_meta( $row->ID, $model::ENROLLMENT_ORDER_ID_META, true ),
+		'product_id' => (string) get_post_meta( $row->ID, $model::ENROLLMENT_PRODUCT_ID_META, true ),
+		'order_exists' => metadata_exists( 'post', $row->ID, $model::ENROLLMENT_ORDER_ID_META ),
+		'product_exists' => metadata_exists( 'post', $row->ID, $model::ENROLLMENT_PRODUCT_ID_META ),
+	);
+}
+
 function cas_enrol_restore_changes( array $changes ) {
+	global $wpdb;
 	$model = cas_enrol_model();
 	$ok = true;
 	foreach ( array_reverse( $changes ) as $change ) {
 		$id = (int) $change['id'];
 		$restore = $change['created'] ? 'cancel' : $change['status'];
-		if ( $restore !== get_post_status( $id ) ) {
-			$model::update_enrollments( $restore, array( $id ), false );
-		}
-		$ok = $restore === get_post_status( $id ) && $ok;
+		$from = " FROM {$wpdb->posts} p
+			LEFT JOIN {$wpdb->postmeta} om ON om.post_id = p.ID AND om.meta_key = %s
+			LEFT JOIN {$wpdb->postmeta} pm ON pm.post_id = p.ID AND pm.meta_key = %s";
+		$where = ' WHERE p.ID = %d AND p.post_type = %s AND p.post_author = %d AND p.post_parent = %d AND p.post_status = %s
+			AND COALESCE(om.meta_value, \'\') = %s AND COALESCE(pm.meta_value, \'\') = %s
+			AND (om.meta_id IS NOT NULL) = %d AND (pm.meta_id IS NOT NULL) = %d';
+		$keys = array( $model::ENROLLMENT_ORDER_ID_META, $model::ENROLLMENT_PRODUCT_ID_META );
+		$identity = array( $id, $model::POST_TYPE, $change['user_id'], $change['course_id'] );
+		$association = array( $change['order_id'], $change['product_id'], (int) $change['order_exists'], (int) $change['product_exists'] );
+		$sql = "UPDATE {$wpdb->posts} p
+			LEFT JOIN {$wpdb->postmeta} om ON om.post_id = p.ID AND om.meta_key = %s
+			LEFT JOIN {$wpdb->postmeta} pm ON pm.post_id = p.ID AND pm.meta_key = %s
+			SET p.post_status = %s" . $where;
+		$args = array_merge( $keys, array( $restore ), $identity, array( $change['written_status'] ), $association );
+		$changed = $wpdb->query( $wpdb->prepare( $sql, $args ) );
+		clean_post_cache( $id );
+		$verified = $wpdb->get_var( $wpdb->prepare( 'SELECT p.ID' . $from . $where, array_merge( $keys, $identity, array( $restore ), $association ) ) );
+		$ok = false !== $changed && 1 === $changed && (int) $verified === $id && $ok;
 	}
 	return $ok;
 }
@@ -151,12 +182,12 @@ function cas_enrol_apply( $student_id, $course_id, $operation, $expected_signatu
 			if ( $pending || $cancelled ) {
 				$reuse = $pending ? array_shift( $pending ) : array_shift( $cancelled );
 				foreach ( $pending as $row ) {
-					$changes[] = array( 'id' => (int) $row->ID, 'status' => 'pending', 'created' => false );
+					$changes[] = cas_enrol_snapshot( $row, 'cancel' );
 				}
 				if ( $pending ) {
 					$model::update_enrollments( 'cancel', array_map( function ( $row ) { return (int) $row->ID; }, $pending ), false );
 				}
-				$changes[] = array( 'id' => (int) $reuse->ID, 'status' => (string) $reuse->post_status, 'created' => false );
+				$changes[] = cas_enrol_snapshot( $reuse, 'completed' );
 				$model::update_enrollments( 'completed', array( (int) $reuse->ID ), false );
 			} else {
 				$id = (int) $model::do_enroll( (int) $course_id, 0, (int) $student_id, false );
@@ -165,7 +196,7 @@ function cas_enrol_apply( $student_id, $course_id, $operation, $expected_signatu
 					return false;
 				}
 				$created_status = (string) get_post_status( $id );
-				$changes[] = array( 'id' => $id, 'status' => $created_status, 'created' => true );
+				$changes[] = cas_enrol_snapshot( get_post( $id ), 'completed', true );
 				if ( 'completed' !== $created_status ) {
 					$model::update_enrollments( 'completed', array( $id ), false );
 				}
@@ -174,7 +205,7 @@ function cas_enrol_apply( $student_id, $course_id, $operation, $expected_signatu
 			$active = array_merge( $completed, $pending );
 			$ids = array_map( function ( $row ) { return (int) $row->ID; }, $active );
 			foreach ( $active as $row ) {
-				$changes[] = array( 'id' => (int) $row->ID, 'status' => (string) $row->post_status, 'created' => false );
+				$changes[] = cas_enrol_snapshot( $row, 'cancel' );
 			}
 			$model::update_enrollments( 'cancel', $ids, false );
 		}
