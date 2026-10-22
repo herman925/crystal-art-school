@@ -58,6 +58,10 @@ namespace {
     $order = (object)['id' => 101, 'user_id' => 7];
     check(cas_sales_access_verified($order, [34], 'completed'), 'prior access did not satisfy final completion check');
     check(cas_sales_access_verified($order, [34], 'cancelled'), 'other order access blocked valid cancellation');
+    $GLOBALS['meta'][11]['_order'] = 103;
+    check(cas_sales_restore_enrolment($snapshot) === false, 'compensation overwrote newer order association');
+    check(count($GLOBALS['writes']) === 1, 'foreign association changed before compensation refusal');
+    $GLOBALS['meta'][11]['_order'] = 101;
     $GLOBALS['rows'][0]->post_status = 'pending';
     check(!cas_sales_access_verified($order, [34], 'cancelled'), 'final check missed matching pending enrolment');
 }

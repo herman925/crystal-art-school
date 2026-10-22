@@ -243,6 +243,8 @@ function cas_sales_render_confirm( $order_id, $to ) {
 	echo '<input type="hidden" name="cas_sales_action" value="apply_status" />';
 	echo '<input type="hidden" name="order_id" value="' . esc_attr( (string) $order->id ) . '" />';
 	echo '<input type="hidden" name="to" value="' . esc_attr( $to ) . '" />';
+	echo '<input type="hidden" name="expected_payment" value="' . esc_attr( $order->payment_status ) . '" />';
+	echo '<input type="hidden" name="confirmation_token" value="' . esc_attr( wp_hash( $order->id . '|' . $to . '|' . $order->payment_status ) ) . '" />';
 
 	if ( 'paid' !== $order->payment_status && 'completed' === $to ) {
 		echo '<p><strong>No payment is recorded for this order. Completing it gives the student access for free.</strong></p>';
@@ -316,6 +318,11 @@ function cas_sales_restore_enrolment( $snapshot ) {
 
 	$model = '\\Tutor\\Models\\EnrollmentModel';
 	$id    = (int) $snapshot['id'];
+	if ( $snapshot['written_status'] !== get_post_status( $id )
+		|| (string) get_post_meta( $id, $model::ENROLLMENT_ORDER_ID_META, true ) !== (string) $snapshot['written_order_id']
+		|| (string) get_post_meta( $id, $model::ENROLLMENT_PRODUCT_ID_META, true ) !== (string) $snapshot['written_product_id'] ) {
+		return false;
+	}
 	if ( $snapshot['created'] ) {
 		$model::update_enrollments( 'cancel', array( $id ), false );
 		cas_sales_restore_enrolment_meta( $id, $model::ENROLLMENT_ORDER_ID_META, false, '' );
@@ -384,6 +391,9 @@ function cas_sales_sync_enrolment( $order_id, $user_id, $course_id, $to ) {
 		'order_id'       => get_post_meta( $id, $model::ENROLLMENT_ORDER_ID_META, true ),
 		'product_exists' => metadata_exists( 'post', $id, $model::ENROLLMENT_PRODUCT_ID_META ),
 		'product_id'     => get_post_meta( $id, $model::ENROLLMENT_PRODUCT_ID_META, true ),
+		'written_status' => 'completed' === $to ? 'completed' : 'cancel',
+		'written_order_id' => 'completed' === $to ? (int) $order_id : get_post_meta( $id, $model::ENROLLMENT_ORDER_ID_META, true ),
+		'written_product_id' => 'completed' === $to ? (int) tutor_utils()->get_course_product_id( $course_id ) : get_post_meta( $id, $model::ENROLLMENT_PRODUCT_ID_META, true ),
 	);
 
 	$target = 'completed' === $to ? 'completed' : 'cancel';
@@ -402,7 +412,7 @@ function cas_sales_sync_enrolment( $order_id, $user_id, $course_id, $to ) {
 			&& (int) get_post_meta( $id, $model::ENROLLMENT_PRODUCT_ID_META, true ) === (int) tutor_utils()->get_course_product_id( $course_id );
 	}
 	if ( ! $verified ) {
-		return cas_sales_restore_enrolment( $snapshot ) ? false : 'rollback';
+		$snapshot['failed'] = true;
 	}
 	return $snapshot;
 }
@@ -443,13 +453,13 @@ function cas_sales_access_verified( $order, $course_ids, $to ) {
 }
 
 /** Update the order and its access as one verified action. */
-function cas_sales_apply_status( $order_id, $to, $accepted_unpaid = false ) {
+function cas_sales_apply_status( $order_id, $to, $expected_payment, $accepted_unpaid = false ) {
 	global $wpdb;
 	if ( ! function_exists( 'cas_audit_log' ) ) {
 		return 'audit';
 	}
 	$order = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . cas_sales_orders_table() . ' WHERE id = %d', $order_id ) );
-	if ( ! $order || ! cas_sales_transition_allowed( $order->order_status, $to ) ) {
+	if ( ! $order || $expected_payment !== $order->payment_status || ! cas_sales_transition_allowed( $order->order_status, $to ) ) {
 		return false;
 	}
 	if ( 'paid' !== $order->payment_status && 'completed' === $to && ! $accepted_unpaid ) {
@@ -459,8 +469,14 @@ function cas_sales_apply_status( $order_id, $to, $accepted_unpaid = false ) {
 	if ( false === $course_ids ) {
 		return 'preflight';
 	}
-	if ( ! class_exists( '\\Tutor\\Models\\EnrollmentModel' ) || ( 'completed' === $to && ! cas_sales_student_marker_safe( $order->user_id ) ) ) {
+	$enrolment_model = '\\Tutor\\Models\\EnrollmentModel';
+	if ( ! class_exists( $enrolment_model ) || ( 'completed' === $to && ! cas_sales_student_marker_safe( $order->user_id ) ) ) {
 		return 'preflight';
+	}
+	foreach ( $enrolment_model::get_enrolled_data( (int) $order->user_id, 0, '' ) as $enrolment ) {
+		if ( in_array( (int) $enrolment->post_parent, $course_ids, true ) && ! in_array( $enrolment->post_status, array( 'pending', 'cancel', 'completed' ), true ) ) {
+			return 'preflight';
+		}
 	}
 
 	$order_from = $order->order_status;
@@ -482,12 +498,17 @@ function cas_sales_apply_status( $order_id, $to, $accepted_unpaid = false ) {
 	$snapshots = array();
 	foreach ( $course_ids as $course_id ) {
 		$snapshot = cas_sales_sync_enrolment( (int) $order->id, (int) $order->user_id, (int) $course_id, $to );
-		if ( false === $snapshot || 'rollback' === $snapshot ) {
-			$enrolments_restored = 'rollback' !== $snapshot;
-			foreach ( array_reverse( $snapshots ) as $previous ) {
-				$enrolments_restored = cas_sales_restore_enrolment( $previous ) && $enrolments_restored;
+		if ( false === $snapshot || ! empty( $snapshot['failed'] ) ) {
+			if ( is_array( $snapshot ) ) {
+				$snapshots[] = $snapshot;
 			}
 			$order_restored = cas_sales_restore_order_status( $order, $order_from, $to );
+			$enrolments_restored = $order_restored;
+			if ( $order_restored ) {
+				foreach ( array_reverse( $snapshots ) as $previous ) {
+					$enrolments_restored = cas_sales_restore_enrolment( $previous ) && $enrolments_restored;
+				}
+			}
 			$restored = $enrolments_restored && $order_restored;
 			cas_audit_log( $restored ? 'order_status_change_failed' : 'order_status_rollback_failed', $line . ' reason=enrolment_sync rollback=' . ( $restored ? 'verified' : 'failed' ) );
 			return $restored ? false : 'rollback';
@@ -497,11 +518,13 @@ function cas_sales_apply_status( $order_id, $to, $accepted_unpaid = false ) {
 
 	$row = $wpdb->get_row( $wpdb->prepare( 'SELECT order_status, payment_status FROM ' . cas_sales_orders_table() . ' WHERE id = %d', $order->id ) );
 	if ( ! $row || $to !== $row->order_status || $order->payment_status !== $row->payment_status || ! cas_sales_access_verified( $order, $course_ids, $to ) || true !== cas_audit_log( 'order_status_changed', $line ) ) {
-		$enrolments_restored = true;
-		foreach ( array_reverse( $snapshots ) as $previous ) {
-			$enrolments_restored = cas_sales_restore_enrolment( $previous ) && $enrolments_restored;
-		}
 		$order_restored = cas_sales_restore_order_status( $order, $order_from, $to );
+		$enrolments_restored = $order_restored;
+		if ( $order_restored ) {
+			foreach ( array_reverse( $snapshots ) as $previous ) {
+				$enrolments_restored = cas_sales_restore_enrolment( $previous ) && $enrolments_restored;
+			}
+		}
 		$restored = $enrolments_restored && $order_restored;
 		cas_audit_log( $restored ? 'order_status_change_failed' : 'order_status_rollback_failed', $line . ' reason=verify_or_audit rollback=' . ( $restored ? 'verified' : 'failed' ) );
 		return $restored ? 'audit' : 'rollback';
@@ -594,6 +617,11 @@ function cas_sales_on_load() {
 		check_admin_referer( 'cas_sales_confirm' );
 	} else {
 		check_admin_referer( 'cas_sales_apply_' . $order_id );
+		$expected_payment = $_POST['expected_payment'] ?? null;
+		$confirmation_token = $_POST['confirmation_token'] ?? null;
+		if ( ! is_string( $expected_payment ) || ! is_string( $confirmation_token ) || ! hash_equals( wp_hash( $order_id . '|' . $to . '|' . $expected_payment ), $confirmation_token ) ) {
+			wp_die( esc_html__( 'That confirmation is not valid. Review the order again.', 'hello-elementor-child' ), '', array( 'response' => 400 ) );
+		}
 	}
 
 	global $wpdb;
@@ -620,7 +648,10 @@ function cas_sales_on_load() {
 		wp_die( esc_html__( 'Tick the confirmation to give access without payment.', 'hello-elementor-child' ), '', array( 'response' => 400 ) );
 	}
 
-	$result = cas_sales_apply_status( $order_id, $to, $accepted_unpaid );
+	if ( $expected_payment !== $row->payment_status ) {
+		wp_die( esc_html__( 'Payment changed since confirmation. Review the order again.', 'hello-elementor-child' ), '', array( 'response' => 409 ) );
+	}
+	$result = cas_sales_apply_status( $order_id, $to, $expected_payment, $accepted_unpaid );
 	if ( 'preflight' === $result ) {
 		wp_die( esc_html__( 'Not saved: this order does not contain an accessible individual course and student. Tell Herman.', 'hello-elementor-child' ), '', array( 'response' => 400 ) );
 	}
