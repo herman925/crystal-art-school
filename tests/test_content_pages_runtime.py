@@ -18,7 +18,7 @@ cas_content_role_install();
 $editor = username_exists('w1pageseditor'); if (!$editor) { $editor=wp_create_user('w1pageseditor',wp_generate_password(32,false),'w1pageseditor@example.test'); }
 $reader = username_exists('w1pagesreader'); if (!$reader) { $reader=wp_create_user('w1pagesreader',wp_generate_password(32,false),'w1pagesreader@example.test'); }
 (new WP_User($editor))->set_role('cas_content'); (new WP_User($reader))->set_role('subscriber');
-$allowed = array(); foreach (array('cas-content-hub','cas-sales','cas-coupons','cas-enrol') as $page) { $allowed[$page]=cas_content_allowed_admin_page($page); }
+$allowed = array(); foreach (array('cas-content-hub','cas-sales','cas-coupons','cas-enrol','cas-course-prices') as $page) { $allowed[$page]=cas_content_allowed_admin_page($page); }
 $closed = array(); foreach (array('tutor','tutor_settings','elementor','random','cas-sales-extra') as $page) { $closed[$page]=cas_content_allowed_admin_page($page); }
 $out=array('allowed'=>$allowed,'closed'=>$closed,'editor_manage'=>user_can($editor,'manage_cas_content'),'reader_manage'=>user_can($reader,'manage_cas_content'));
 // Delete only synthetic records created by this test.
@@ -41,9 +41,9 @@ class ContentPagesRuntime(unittest.TestCase):
     def setUpClass(cls):
         cls.out = probe()
 
-    def test_content_editor_can_use_the_four_exact_page_slugs(self):
+    def test_editor_can_use_the_exact_hub_and_subpages(self):
         self.assertTrue(self.out["editor_manage"])
-        self.assertEqual(self.out["allowed"], {"cas-content-hub": True, "cas-sales": True, "cas-coupons": True, "cas-enrol": True})
+        self.assertEqual(self.out["allowed"], {"cas-content-hub": True, "cas-sales": True, "cas-coupons": True, "cas-enrol": True, "cas-course-prices": True})
 
     def test_subscriber_does_not_have_the_screen_capability(self):
         self.assertFalse(self.out["reader_manage"])

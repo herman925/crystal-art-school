@@ -12,9 +12,9 @@
 const CAS_CONTENT_ROLE         = 'cas_content';
 const CAS_CONTENT_CAP          = 'manage_cas_content';
 const CAS_CONTENT_HUB_SLUG     = 'cas-content-hub';
-const CAS_CONTENT_ROLE_VERSION = 1;
+const CAS_CONTENT_ROLE_VERSION = 2; // 2: Tutor course and lesson caps (W1-3). Bump on every change to the caps.
 
-/** Post types the role may edit, own records only. Tutor courses and lessons join in W1-3. */
+/** Post types the role may edit, own records only. Course prices are gated in cas-price-gate.php. */
 const CAS_CONTENT_POST_TYPES = array(
 	'post',
 	'attachment',
@@ -25,6 +25,8 @@ const CAS_CONTENT_POST_TYPES = array(
 	'cas_faq',
 	'cas_testimonial',
 	'cas_overview_qa',
+	'courses',
+	'lesson',
 );
 
 /** Admin screens the role may open. Everything else is sent to the hub. */
@@ -54,6 +56,9 @@ function cas_content_role_caps() {
 		'publish_posts'          => true,
 		'delete_posts'           => true,
 		'delete_published_posts' => true,
+		'edit_tutor_courses'     => true,
+		'edit_tutor_lessons'     => true,
+		'publish_tutor_lessons'  => true,
 	);
 }
 
@@ -174,7 +179,7 @@ add_action( 'admin_menu', 'cas_content_admin_menu', 999 );
 function cas_content_allowed_admin_page( $page ) {
 	$pages = apply_filters(
 		'cas_content_allowed_pages',
-		array( CAS_CONTENT_HUB_SLUG, 'cas-sales', 'cas-coupons', 'cas-enrol' )
+		array( CAS_CONTENT_HUB_SLUG, 'cas-sales', 'cas-coupons', 'cas-enrol', 'cas-course-prices' )
 	);
 	return in_array( sanitize_key( $page ), $pages, true );
 }
