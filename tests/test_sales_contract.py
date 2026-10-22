@@ -44,9 +44,19 @@ def main() -> None:
 
     # Status map: the only changes allowed
     require(flat, "const CAS_SALES_STATUS_MAP = array( 'pending' => array( 'completed', 'cancelled' ), );", "the status map must allow only pending to completed or cancelled")
+    require(flat, "function cas_sales_completed_courses( $order )", "completion must preflight the order's item set")
+    require(flat, "false === cas_sales_completed_courses( $order )", "completion must refuse unsupported or inaccessible items before writing")
+    require(flat, "$order_model::TYPE_SINGLE_ORDER !== $order->order_type", "only individual course orders may be completed")
+    require(flat, "cas_sales_order_course_ids( $order->id )", "order items must be read explicitly before access is granted")
+    require(flat, "function cas_sales_student_marker_safe( $user_id )", "before Tutor touches the student marker, read its raw safe value")
+    require(flat, "SELECT user_login FROM {$wpdb->users} WHERE ID = %d", "exported student login must use a raw user-table lookup")
+    require(flat, "SELECT ID FROM {$wpdb->users} WHERE ID = %d", "order student existence must be checked without WP_User hydration")
+    for unsafe in ("get_userdata(", "get_user_meta("):
+        if unsafe in code:
+            raise AssertionError(f"Sales must not hydrate potentially suspect student usermeta: {unsafe}")
 
-    # Hard refusals: no refund, no manage_options, no Tutor's role literal, no payment writes
-    for banned in ("manage_options", "'administrator'", "refund", "Refund", "payment_status' =>", "'completed' => array"):
+    # Hard refusals: no refund, no manage_options, no Tutor's role literal, no payment write
+    for banned in ("manage_options", "'administrator'", "refund", "Refund"):
         if banned in code:
             raise AssertionError(f"forbidden token in code: {banned}")
 
@@ -59,23 +69,40 @@ def main() -> None:
 
     # Enrolment goes through Tutor's own functions
     require(flat, "\\Tutor\\Models\\EnrollmentModel", "enrolment must go through Tutor's EnrollmentModel")
-    require(flat, "$model::update_enrollments( 'completed'", "completing must update enrolment through Tutor")
-    require(flat, "$model::update_enrollments( 'cancel'", "cancelling must cancel enrolment through Tutor")
-    require(flat, "if ( $model::is_enrolled( $course_id, $user_id, true ) ) { return;", "completing must not add a row when access already exists")
-    require(flat, "$enrolment_id = (int) $row->ID;", "completing must reuse an existing enrolment row, not call do_enroll over it")
+    require(flat, "$target = 'completed' === $to ? 'completed' : 'cancel';", "Tutor enrollment status mapping must be explicit")
+    require(flat, "$model::update_enrollments( $target, array( $id ), false )", "Tutor updates must suppress hooks that could send mail before success")
+    require(flat, "$model::do_enroll( $course_id, 0, $user_id, false )", "new access must use Tutor without notification hooks")
+    require(flat, "$model::get_enrolled_data( $user_id, 0, '' )", "all enrolment rows must be checked so a pending row cannot hide earlier purchased access")
+    require(flat, "cas_sales_restore_enrolment( $snapshot )", "failed enrollment verification must restore the prior row")
+    require(flat, "cas_sales_restore_order_status( $order, $order_from, $to )", "failed enrollment or audit verification must compensate the order status")
+    require(flat, "if ( 'cancelled' === $to && ( ! $current || (int) $current->order_id !== (int) $order_id", "cancellation must not remove access tied to another order")
+    require(flat, "if ( 'completed' === $to && 'completed' === $row->post_status ) { return array( 'changed' => false ); }", "existing access must not be modified on repeated completion")
 
     # POST validation runs before the admin page prints, so refusals keep their HTTP status
     require(flat, "add_action( 'load-' . $hook, 'cas_sales_on_load' );", "POST handling must run on the page load hook")
 
-    # Fail closed on the audit line
-    require(flat, "if ( true !== cas_audit_log( 'order_status_changed', $line ) ) { return 'audit'; }", "the change must be refused unless the audit line reports success")
+    require(flat, "if ( true !== cas_audit_log( 'order_status_change_attempt', $line ) ) { return 'audit'; }", "no money change may proceed unless the attempt audit fully writes")
     apply_at = flat.index("function cas_sales_apply_status(")
-    audit_at = flat.index("cas_audit_log( 'order_status_changed', $line )", apply_at)
+    preflight_at = flat.index("cas_sales_completed_courses( $order )", apply_at)
+    attempt_at = flat.index("cas_audit_log( 'order_status_change_attempt', $line )", apply_at)
     write_at = flat.index("$wpdb->update( cas_sales_orders_table()", apply_at)
-    if not audit_at < write_at:
-        raise AssertionError("the audit line must be written before the status write")
-    require(flat, "'order=%d from=%s to=%s payment=%s', $order->id, $order_from, $to, $order->payment_status", "the audit line must carry id, from, to and payment status only")
-    require(flat, "if ( 'audit' === $result ) { wp_die(", "an audit refusal must stop the request with a 500, not show as an ordinary failure")
+    sync_at = flat.index("cas_sales_sync_enrolment( (int) $order->id", apply_at)
+    verified_at = flat.index("cas_audit_log( 'order_status_changed', $line )", apply_at)
+    if not preflight_at < attempt_at < write_at < sync_at < verified_at:
+        raise AssertionError("preflight and attempt audit must precede writes; verified-change event must follow order and access verification")
+    update = flat[write_at:]
+    update_data_start = update.index('array(') + len('array(')
+    where_marker = update.index('), array(', update_data_start)
+    update_data = update[update_data_start:where_marker]
+    where_start = where_marker + len('), array(')
+    where_end = update.index(') )', where_start)
+    update_where = update[where_start:where_end]
+    if "'payment_status'" in update_data:
+        raise AssertionError("payment_status must not be written")
+    require(update_where, "'payment_status' => $order->payment_status", "the order update must compare the payment status it checked")
+    require(flat, "'order=%d from=%s to=%s payment=%s', $order->id, $order_from, $to, $order->payment_status", "audit lines must carry id, from, to and payment status only")
+    require(flat, "if ( 'preflight' === $result ) { wp_die(", "unsupported orders must be rejected before the attempt audit or mutation")
+    require(flat, "if ( 'rollback' === $result ) { wp_die(", "an unverified rollback must stop the request with a critical error")
 
     # Unpaid completion: warning and extra tick
     require(flat, WARNING, "the unpaid warning text must match Head's wording exactly")
@@ -85,7 +112,14 @@ def main() -> None:
     require(flat, "if ( ! $row || ! cas_sales_transition_allowed( $row->order_status, $to ) )", "the POST handler must refuse disallowed transitions with 400 before any change")
 
     # CSV export reads only
-    require(flat, "fputcsv( $out, array( 'order_id', 'date', 'student', 'course', 'order_status', 'payment_status', 'amount' ) )", "the CSV must have the agreed columns")
+    require(flat, "fputcsv( $out, array( 'order_id', 'date', 'student_login', 'course', 'order_status', 'payment_status', 'amount' ) )", "the CSV must expose the actual exported columns")
+    require(flat, "function cas_sales_csv_text( $value )", "CSV text fields need spreadsheet-formula neutralization")
+    require(flat, "[\\\\p{Cc}\\\\p{Cf}\\\\p{Z}]*[=+\\\\-@]", "CSV export must neutralize leading control, format, whitespace and formula characters")
+    require(flat, "cas_sales_csv_text( $d['student'] )", "student login must be exported as safe text")
+    require(flat, "cas_sales_csv_text( $d['course'] )", "untrusted course title must be exported as safe text")
+    export_row = flat[flat.index("fputcsv( $out, array(", flat.index("function cas_sales_maybe_export")):]
+    if "cas_sales_csv_text( number_format" in export_row or "cas_sales_csv_text( $row->id" in export_row:
+        raise AssertionError("numeric amount and order id must remain numeric/plain")
 
     # Scoped order list, not Tutor's list
     require(flat, "cas_sales_orders_table()", "orders must be read through the explicit table helper")
