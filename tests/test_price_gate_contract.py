@@ -79,6 +79,28 @@ class PriceGateContract(unittest.TestCase):
         self.assertIn("'cas-course-prices'", GATE)
         self.assertIn("'cas-price-gate'", LOADER)
 
+    def test_paid_only_positive_gate_and_legacy_zero_sale(self):
+        self.assertIn("'type'    => (string) get_post_meta", GATE)
+        self.assertIn("'paid' !== $old['type']", GATE)
+        self.assertIn("(float) $regular <= 0", GATE)
+        self.assertIn("(float) $sale <= 0", GATE)
+        self.assertIn("(float) $sale >= (float) $regular", GATE)
+        self.assertIn("0.0 === (float) $sale", GATE)
+
+    def test_native_writers_share_the_confirmation_lock(self):
+        native = GATE[GATE.index("function cas_price_native_write_lock") : GATE.index("/** Initialisation")]
+        self.assertIn("cas_price_acquire_course_lock( $course_id, $owner )", native)
+        self.assertIn("register_shutdown_function", native)
+        self.assertIn("'response' => 409", native)
+        self.assertIn("add_filter( 'wp_insert_post_data'", native)
+        for hook in ("add_post_metadata", "update_post_metadata", "delete_post_metadata"):
+            self.assertIn(f"add_filter( '{hook}', 'cas_price_coordinate_native_meta', 1, 3 )", native)
+
+    def test_initial_pending_failure_does_not_undo_an_audited_success(self):
+        pending = GATE[GATE.index("if ( 'saved' === $notice") : GATE.index("cas_price_back( array( 'course_id' => $course_id, 'cas_price_notice' => $notice )")]
+        self.assertIn("'initial_pending'", pending)
+        self.assertNotIn("cas_price_restore_pair", pending)
+
     def test_tutor_edit_caps_are_own_record_only(self):
         caps = ROLE.split("function cas_content_role_caps")[1].split("}")[0]
         for cap in ["edit_tutor_courses", "edit_tutor_lessons", "publish_tutor_lessons"]:

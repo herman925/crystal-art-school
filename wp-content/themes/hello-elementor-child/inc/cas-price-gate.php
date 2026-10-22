@@ -13,7 +13,8 @@
  *      values, that the current price is still the old one (no stale change), and the capability,
  *      logs the attempt, writes and reads back both prices, then logs the verified outcome. A failed
  *      write restores and verifies the prior pair; an unverified rollback requires operator attention.
- * Administrators are not affected. Historical orders are never touched.
+ * Native administrator/Tutor writes use the same course lock and receive a retry on contention.
+ * Historical orders are never touched.
  */
 
 const CAS_PRICE_META_KEYS = array( 'tutor_course_price', 'tutor_course_sale_price', '_tutor_course_price_type' );
@@ -165,6 +166,13 @@ function cas_price_native_write_lock( $course_id ) {
 		cas_price_release_course_lock( $course_id, $value );
 	} );
 }
+/** Reject a contended native save before the course row (not just its price meta) changes. */
+add_filter( 'wp_insert_post_data', function ( $data, $postarr ) {
+	if ( 'courses' === $data['post_type'] && ! empty( $postarr['ID'] ) && ! cas_content_is_user( get_current_user_id() ) ) {
+		cas_price_native_write_lock( (int) $postarr['ID'] );
+	}
+	return $data;
+}, 0, 2 );
 add_action( 'save_post_courses', function ( $id ) {
 	if ( ! cas_content_is_user( get_current_user_id() ) ) {
 		cas_price_native_write_lock( $id );
@@ -215,7 +223,9 @@ function cas_price_assert_publishable( $id ) {
 	cas_price_native_write_lock( $id );
 	$price = cas_price_current( $id );
 	if ( get_post_meta( $id, CAS_PRICE_PENDING_META, true ) || 'paid' !== $price['type']
-		|| ! is_numeric( $price['regular'] ) || (float) $price['regular'] <= 0 ) {
+		|| null === cas_price_clean( $price['regular'] ) || '' === $price['regular'] || (float) $price['regular'] <= 0
+		|| null === cas_price_clean( $price['sale'] )
+		|| ( '' !== $price['sale'] && ( (float) $price['sale'] <= 0 || (float) $price['sale'] >= (float) $price['regular'] ) ) ) {
 		return new WP_Error( 'cas_initial_price_required', 'Use Course prices → Set first price and confirm a positive paid-course price before publishing.', array( 'status' => 409 ) );
 	}
 	return true;
@@ -331,13 +341,16 @@ add_action( 'admin_post_cas_price_request', 'cas_price_request' );
 
 /** Block changed native role prices/type before Tutor's save callback; normal content edits still work. */
 add_action( 'wp_ajax_tutor_update_course', function () {
-	if ( ! cas_content_is_user( get_current_user_id() ) || ! function_exists( 'cas_builder_owns_course' ) ) {
+	if ( ! cas_content_is_user( get_current_user_id() ) ) {
 		return;
 	}
-	$id = absint( $_POST['course_id'] ?? 0 );
-	if ( ! cas_builder_owns_course( $id ) || ! cas_builder_nonce_valid() ) {
-		return; // The adapter/vendor authorisation gate returns the actual 403.
+	$id = isset( $_POST['course_id'] ) && is_scalar( $_POST['course_id'] ) ? absint( $_POST['course_id'] ) : 0;
+	if ( ! cas_price_user_may_edit( $id ) || (int) get_post_field( 'post_author', $id ) !== get_current_user_id()
+		|| ! function_exists( 'tutor' ) || ! isset( $_POST[ tutor()->nonce ] ) || ! is_string( $_POST[ tutor()->nonce ] )
+		|| ! wp_verify_nonce( wp_unslash( $_POST[ tutor()->nonce ] ), tutor()->nonce_action ) ) {
+		wp_send_json_error( array( 'message' => 'Not allowed.' ), 403 );
 	}
+	cas_price_native_write_lock( $id );
 	$old = cas_price_current( $id );
 	$type = isset( $_POST['pricing']['type'] ) ? $_POST['pricing']['type'] : ( $_POST['tutor_course_price_type'] ?? $old['type'] );
 	$regular = isset( $_POST['course_price'] ) ? cas_price_clean( wp_unslash( $_POST['course_price'] ) ) : $old['regular'];
@@ -425,9 +438,8 @@ function cas_price_confirm() {
 			finally { cas_price_gate_open( false ); }
 			wp_cache_delete( $course_id, 'post_meta' );
 			if ( get_post_meta( $course_id, CAS_PRICE_PENDING_META, true ) ) {
-				$restored = cas_price_restore_pair( $course_id, $data['old'], $data['new'] );
-				cas_audit_log( 'course_initial_price_failed', 'course=' . $course_id . ' rollback=' . ( $restored ? 'verified' : 'failed' ) );
-				$notice = $restored ? 'write_failed' : 'rollback_failed';
+				cas_audit_log( 'course_initial_price_pending', 'course=' . $course_id . ' price_verified=yes' );
+				$notice = 'initial_pending';
 			}
 		}
 	} finally {
@@ -452,6 +464,7 @@ function cas_price_render() {
 		'busy'     => __( 'Another price change for this course is being processed. Start again in a moment.', 'hello-elementor-child' ),
 		'write_failed' => __( 'The price fields did not both save. The previous price pair was restored and verified; nothing new was saved.', 'hello-elementor-child' ),
 		'rollback_failed' => __( 'The price change and its rollback could not be verified. Stop editing and contact Herman immediately.', 'hello-elementor-child' ),
+		'initial_pending' => __( 'The price is saved and verified, but publication is still blocked because the first-price marker could not be cleared. Contact Herman.', 'hello-elementor-child' ),
 		'saved'    => __( 'The price is saved.', 'hello-elementor-child' ),
 	);
 	$notice = isset( $_GET['cas_price_notice'] ) ? sanitize_key( wp_unslash( $_GET['cas_price_notice'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended

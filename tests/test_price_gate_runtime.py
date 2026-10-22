@@ -402,6 +402,48 @@ echo json_encode(array('claims'=>array($claim_one,$claim_two),'claim_expiry'=>$c
         finally:
             subprocess.run(["docker", "cp", str(AUDIT_SRC), f"{CONTAINER}:/var/www/html/wp-content/mu-plugins/cas-audit-log.php"], check=True)
 
+    def test_16_paid_only_and_positive_prices(self):
+        self.login()
+        course = self.fx["own"]
+        self.set_pair(course, "50", "10")
+        for regular, sale in [("0", ""), ("", ""), ("60", "0"), ("60", "60"), ("60", "61"), ("-1", "")]:
+            with self.subTest(regular=regular, sale=sale):
+                _, loc, token = self.request_change(course, regular, sale)
+                self.assertFalse(token)
+                self.assertIn("cas_price_notice=invalid", loc)
+                self.assertEqual(self.price_pair(course), {"regular": "50.00", "sale": "10.00"})
+        for course_type in ("free", "unknown", ""):
+            try:
+                php(f"update_post_meta({course}, '_tutor_course_price_type', '{course_type}');")
+                _, loc, token = self.request_change(course, "60", "20")
+                self.assertFalse(token)
+                self.assertIn("cas_price_notice=paid_only", loc)
+            finally:
+                php(f"update_post_meta({course}, '_tutor_course_price_type', 'paid');")
+
+    def test_17_legacy_zero_sale_is_no_sale(self):
+        self.login()
+        course = self.fx["own"]
+        self.set_pair(course, "50", "0")
+        _, _, token = self.request_change(course, "60", "")
+        self.assertTrue(token)
+        _, loc = self.confirm(token, {"old_regular": "50", "old_sale": "", "new_regular": "60", "new_sale": ""})
+        self.assertIn("cas_price_notice=saved", loc)
+        self.assertEqual(self.price_pair(course), {"regular": "60.00", "sale": ""})
+
+    def test_18_type_change_invalidates_pending_confirmation(self):
+        self.login()
+        course = self.fx["own"]
+        self.set_pair(course, "50", "10")
+        _, _, token = self.request_change(course, "60", "20")
+        try:
+            php(f"update_post_meta({course}, '_tutor_course_price_type', 'free');")
+            _, loc = self.confirm(token, {"old_regular": "50", "old_sale": "10", "new_regular": "60", "new_sale": "20"})
+            self.assertIn("cas_price_notice=paid_only", loc)
+            self.assertEqual(self.price_pair(course), {"regular": "50.00", "sale": "10.00"})
+        finally:
+            php(f"update_post_meta({course}, '_tutor_course_price_type', 'paid');")
+
     def test_12_administrators_are_unaffected(self):
         php(f"wp_set_current_user(1); update_post_meta({self.fx['adm']}, 'tutor_course_price', '85'); echo 'x';")
         self.assertEqual(self.price(self.fx["adm"]), "85|")
