@@ -80,22 +80,46 @@ function cas_content_role_install() {
 }
 add_action( 'init', 'cas_content_role_install', 1 );
 
+/** Own-course lesson authority for the CHECKED user, never the ambient current user or instructor links. */
+function cas_content_author_lesson_course( $lesson_id, $user_id ) {
+	if ( ( ! is_int( $lesson_id ) && ( ! is_string( $lesson_id ) || ! ctype_digit( $lesson_id ) ) )
+		|| ! ( $lesson_id = filter_var( $lesson_id, FILTER_VALIDATE_INT, array( 'options' => array( 'min_range' => 1 ) ) ) )
+		|| ! cas_content_is_user( $user_id ) || ! user_can( $user_id, CAS_CONTENT_CAP ) ) {
+		return 0;
+	}
+	global $wpdb;
+	$course = $wpdb->get_row( $wpdb->prepare(
+		"SELECT c.ID,c.post_author FROM {$wpdb->posts} l INNER JOIN {$wpdb->posts} t ON t.ID=l.post_parent AND t.post_type='topics' AND t.post_status<>'trash' INNER JOIN {$wpdb->posts} c ON c.ID=t.post_parent AND c.post_type='courses' AND c.post_status<>'trash' WHERE l.ID=%d AND l.post_type='lesson' AND l.post_status<>'trash'",
+		$lesson_id
+	) );
+	// The nested object-cap check targets a REAL course, so it cannot recurse into this lesson branch.
+	return $course && (int) $course->post_author === (int) $user_id && user_can( $user_id, 'edit_post', (int) $course->ID ) ? (int) $course->ID : 0;
+}
+
 /**
  * Object-level gate for the role. Other users are not affected.
  * A post type outside the allowlist is denied for every object cap, which covers the
- * Elementor library and pages. Everything else keeps core's mapping (own records only).
+ * Elementor library and pages. Lesson edit objects use the checked user's owning-course
+ * permission; everything else keeps core's mapping (own records only).
  */
 function cas_content_map_meta_cap( $caps, $cap, $user_id, $args ) {
 	if ( ! cas_content_is_user( $user_id ) ) {
 		return $caps;
 	}
-	$object_caps = array( 'edit_post', 'delete_post', 'read_post', 'publish_post' );
+	$object_caps = array( 'edit_post', 'edit_tutor_lesson', 'delete_post', 'read_post', 'publish_post' );
 	if ( ! in_array( $cap, $object_caps, true ) ) {
 		return $caps;
 	}
-	$post = isset( $args[0] ) ? get_post( (int) $args[0] ) : null;
-	if ( ! $post || ! in_array( $post->post_type, CAS_CONTENT_POST_TYPES, true ) ) {
+	$object = $args[0] ?? null;
+	$id = $object instanceof WP_Post ? $object->ID : $object;
+	$id = ( is_int( $id ) || ( is_string( $id ) && ctype_digit( $id ) ) ) ? (int) $id : 0;
+	$post = $id > 0 ? get_post( $id ) : null;
+	if ( ! $post || ! in_array( $post->post_type, CAS_CONTENT_POST_TYPES, true ) || ( 'edit_tutor_lesson' === $cap && 'lesson' !== $post->post_type ) ) {
 		return array( 'do_not_allow' );
+	}
+	if ( 'lesson' === $post->post_type && in_array( $cap, array( 'edit_post', 'edit_tutor_lesson' ), true ) ) {
+		$course = cas_content_author_lesson_course( (int) $post->ID, $user_id );
+		return $course ? array_merge( array( CAS_CONTENT_CAP ), map_meta_cap( 'edit_post', $user_id, $course ) ) : array( 'do_not_allow' );
 	}
 	return $caps;
 }
