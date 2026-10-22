@@ -3,7 +3,8 @@
 defined( 'ABSPATH' ) || exit;
 
 function cas_builder_is_editor() {
-	return cas_content_is_user( get_current_user_id() ) && current_user_can( CAS_CONTENT_CAP ) && current_user_can( 'edit_tutor_courses' );
+	return cas_content_is_user( get_current_user_id() ) && current_user_can( CAS_CONTENT_CAP ) && current_user_can( 'edit_tutor_courses' )
+		&& function_exists( 'cas_price_assert_publishable' );
 }
 
 function cas_builder_owns_course( $id ) {
@@ -44,6 +45,10 @@ function cas_builder_render() {
 		wp_die( 'The native course builder is unavailable. Please contact Herman.', '', array( 'response' => 503 ) );
 	}
 	$course->load_course_builder_view();
+	echo '<p class="cas-builder-price-help">';
+	echo '<a href="' . esc_url( admin_url( 'admin.php?page=' . CAS_PRICE_PAGE_SLUG ) ) . '">' . esc_html__( 'Course prices', 'hello-elementor-child' ) . '</a> — ';
+	echo esc_html__( 'Use Set first price before publishing a new course. All later price changes also need confirmation here.', 'hello-elementor-child' );
+	echo '</p>';
 }
 
 /** Authenticated, nonce-backed POST to Tutor's own draft-creation action; never a mutating GET link. */
@@ -84,30 +89,95 @@ add_action( 'admin_init', function () {
 	if ( ! cas_content_is_user( get_current_user_id() ) || ! wp_doing_ajax() ) {
 		return;
 	}
-	$action = isset( $_POST['action'] ) && is_string( $_POST['action'] ) ? sanitize_key( wp_unslash( $_POST['action'] ) ) : '';
-	$closed = array( 'tutor_save_withdraw_account', 'tutor_make_an_withdraw', 'tutor_order_refund',
+	$action = isset( $_REQUEST['action'] ) && is_string( $_REQUEST['action'] ) ? wp_unslash( $_REQUEST['action'] ) : '';
+	$closed = array( 'tutor_create_course', 'tutor_save_withdraw_account', 'tutor_make_an_withdraw', 'tutor_order_refund',
 		'tutor_option_save', 'tutor_option_default_save', 'tutor_import_settings', 'tutor_apply_settings',
-		'tutor_add_instructor', 'instructor_approval_action', 'reset_settings_data', 'load_saved_data' );
+		'tutor_add_instructor', 'instructor_approval_action', 'tutor_instructor_bulk_action', 'tutor_admin_withdraw_action', 'reset_settings_data', 'load_saved_data' );
 	if ( in_array( $action, $closed, true ) ) {
 		wp_send_json_error( array( 'message' => 'Not allowed.' ), 403 );
 	}
-	if ( ! in_array( $action, array( 'tutor_create_new_draft_course', 'tutor_create_course', 'tutor_update_course', 'tutor_course_details', 'tutor_course_contents' ), true ) ) {
+	if ( ! in_array( $action, array( 'tutor_create_new_draft_course', 'tutor_update_course', 'tutor_course_details', 'tutor_course_contents' ), true ) ) {
 		return;
 	}
-	if ( ! cas_builder_is_editor() || 'POST' !== ( $_SERVER['REQUEST_METHOD'] ?? '' ) || ! cas_builder_nonce_valid() ) {
+	if ( ! cas_builder_is_editor() || 'POST' !== ( $_SERVER['REQUEST_METHOD'] ?? '' )
+		|| $action !== ( $_POST['action'] ?? '' ) || ! cas_builder_nonce_valid() ) {
 		wp_send_json_error( array( 'message' => 'Not allowed.' ), 403 );
 	}
+	foreach ( array( 'post_author', 'post_author_override' ) as $author_key ) {
+		if ( isset( $_POST[ $author_key ] ) && ( ! is_scalar( $_POST[ $author_key ] ) || (int) $_POST[ $author_key ] !== get_current_user_id() ) ) {
+			wp_send_json_error( array( 'message' => 'Course ownership cannot be changed here.' ), 403 );
+		}
+	}
 	if ( 'tutor_create_new_draft_course' !== $action ) {
-		$id = absint( $_POST['course_id'] ?? $_POST['ID'] ?? 0 );
+		$raw_id = $_POST['course_id'] ?? $_POST['ID'] ?? 0;
+		$id = is_scalar( $raw_id ) ? absint( $raw_id ) : 0;
 		if ( ! cas_builder_owns_course( $id ) ) {
 			wp_send_json_error( array( 'message' => 'You may only edit your own courses.' ), 403 );
 		}
+		if ( 'tutor_update_course' === $action ) {
+			if ( 'yes' === ( $_POST['is_public_course'] ?? '' ) || 'yes' === ( $_POST['_tutor_is_public_course'] ?? '' ) ) {
+				wp_send_json_error( array( 'message' => 'Paid courses cannot be made publicly accessible here.' ), 403 );
+			}
+		}
+	}
+}, -10 );
+
+/** Resolve curriculum ownership from the current post-parent chain, never stale instructor links. */
+function cas_builder_course_for_item( $id, $type ) {
+	$post = get_post( (int) $id );
+	if ( ! $post || $post->post_type !== $type || 'trash' === $post->post_status ) {
+		return 0;
+	}
+	if ( 'lesson' === $type ) {
+		return cas_builder_course_for_item( $post->post_parent, 'topics' );
+	}
+	return 'topics' === $type && 'courses' === get_post_type( $post->post_parent ) ? (int) $post->post_parent : 0;
+}
+
+/** Keep the native topic/lesson handlers, adding current author checks before their link-based checks. */
+add_action( 'admin_init', function () {
+	if ( ! wp_doing_ajax() || ! cas_content_is_user( get_current_user_id() ) ) {
+		return;
+	}
+	$action = $_REQUEST['action'] ?? '';
+	if ( ! in_array( $action, array( 'tutor_save_topic', 'tutor_delete_topic', 'tutor_save_lesson', 'tutor_delete_lesson', 'tutor_lesson_details', 'tutor_update_course_content_order' ), true ) ) {
+		return;
+	}
+	if ( ! cas_builder_is_editor() || 'POST' !== ( $_SERVER['REQUEST_METHOD'] ?? '' )
+		|| $action !== ( $_POST['action'] ?? '' ) || ! cas_builder_nonce_valid() ) {
+		wp_send_json_error( array( 'message' => 'Not allowed.' ), 403 );
+	}
+	$topic = isset( $_POST['topic_id'] ) && is_scalar( $_POST['topic_id'] ) ? absint( $_POST['topic_id'] ) : 0;
+	$lesson = isset( $_POST['lesson_id'] ) && is_scalar( $_POST['lesson_id'] ) ? absint( $_POST['lesson_id'] ) : 0;
+	$course = 0;
+	if ( 'tutor_save_topic' === $action ) {
+		$course = isset( $_POST['course_id'] ) && is_scalar( $_POST['course_id'] ) ? absint( $_POST['course_id'] ) : 0;
+		if ( $topic && cas_builder_course_for_item( $topic, 'topics' ) !== $course ) {
+			$course = 0;
+		}
+	} elseif ( 'tutor_delete_topic' === $action ) {
+		$course = cas_builder_course_for_item( $topic, 'topics' );
+	} elseif ( 'tutor_update_course_content_order' === $action ) {
+		$order = isset( $_POST['tutor_topics_lessons_sorting'] ) && is_string( $_POST['tutor_topics_lessons_sorting'] )
+			? json_decode( wp_unslash( $_POST['tutor_topics_lessons_sorting'] ), true ) : null;
+		$first = is_array( $order ) && isset( $order[0]['topic_id'] ) && is_scalar( $order[0]['topic_id'] ) ? absint( $order[0]['topic_id'] ) : 0;
+		$course = cas_builder_course_for_item( $first, 'topics' );
+		// Tutor 4.1.3 validate_course_content_order() then checks every topic/content against this course.
+	} else {
+		$course = 'tutor_delete_lesson' === $action ? cas_builder_course_for_item( $lesson, 'lesson' ) : cas_builder_course_for_item( $topic, 'topics' );
+		if ( $lesson && cas_builder_course_for_item( $lesson, 'lesson' ) !== $course ) {
+			$course = 0;
+		}
+	}
+	if ( ! cas_builder_owns_course( $course ) ) {
+		wp_send_json_error( array( 'message' => 'You may only manage content belonging to your own courses.' ), 403 );
 	}
 }, -10 );
 
 /** Publish only for an authenticated, nonce-backed own-course native save with the actual publish cap. */
 function cas_builder_publish_context() {
-	return cas_builder_is_editor() && 'tutor_update_course' === ( $_POST['action'] ?? '' )
+	return wp_doing_ajax() && cas_builder_is_editor() && 'tutor_update_course' === ( $_POST['action'] ?? '' )
+		&& 'tutor_update_course' === ( $_REQUEST['action'] ?? '' )
 		&& 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? '' ) && cas_builder_nonce_valid()
 		&& cas_builder_owns_course( absint( $_POST['course_id'] ?? 0 ) ) && current_user_can( 'publish_tutor_courses' );
 }
@@ -153,7 +223,7 @@ add_filter( 'tutor_course_builder_settings', function ( $settings, $id ) {
 
 /** Approved internal instructor metadata never opens public application or payout paths to this role. */
 add_action( 'template_redirect', function () {
-	if ( cas_content_is_user( get_current_user_id() ) && in_array( $_POST['tutor_action'] ?? '', array( 'tutor_apply_instructor', 'tutor_register_instructor' ), true ) ) {
+	if ( cas_content_is_user( get_current_user_id() ) && in_array( $_REQUEST['tutor_action'] ?? '', array( 'tutor_apply_instructor', 'tutor_register_instructor' ), true ) ) {
 		wp_die( 'Not allowed.', '', array( 'response' => 403 ) );
 	}
 }, -10 );
