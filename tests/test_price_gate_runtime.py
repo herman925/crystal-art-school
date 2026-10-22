@@ -444,6 +444,38 @@ echo json_encode(array('claims'=>array($claim_one,$claim_two),'claim_expiry'=>$c
         finally:
             php(f"update_post_meta({course}, '_tutor_course_price_type', 'paid');")
 
+    def test_19_native_save_and_each_money_key_retry_before_mutation(self):
+        course = self.fx["adm"]
+        self.set_pair(course, "80", "")
+        before = php(f"echo get_post({course})->post_title;")
+        lock = json.loads(php(f"echo json_encode(cas_price_acquire_course_lock({course}, 'native-block-proof'));"))
+        self.assertIsInstance(lock, str)
+        operations = [
+            f"$_POST=array('course_price'=>'1','course_sale_price'=>'0.5','tutor_course_price_type'=>'free'); wp_update_post(array('ID'=>{course},'post_title'=>'W1 contended save'));",
+            f"update_post_meta({course}, 'tutor_course_price', '1');",
+            f"update_post_meta({course}, 'tutor_course_sale_price', '0.5');",
+            f"update_post_meta({course}, '_tutor_course_price_type', 'free');",
+        ]
+        try:
+            for operation in operations:
+                # Use the actual native callback/meta path; capture its wp_die status without exiting CLI.
+                result = json.loads(php("""
+wp_set_current_user(1);
+add_filter('wp_die_handler', function () { return function ($message, $title, $args) {
+    throw new RuntimeException((string)($args['response'] ?? 0) . '|' . $message);
+}; });
+try { """ + operation + """ echo json_encode(array('blocked'=>false)); }
+catch (RuntimeException $error) { echo json_encode(array('blocked'=>true, 'message'=>$error->getMessage())); }
+"""))
+                self.assertTrue(result["blocked"])
+                self.assertIn("409|Another price change", result["message"])
+                self.assertEqual(self.price(course), "80|")
+                self.assertEqual(php(f"echo get_post({course})->post_title;"), before)
+                self.assertEqual(php(f"echo get_post_meta({course}, '_tutor_course_price_type', true);"), "paid")
+        finally:
+            encoded = base64.b64encode(lock.encode()).decode()
+            php(f"cas_price_release_course_lock({course}, base64_decode('{encoded}'));")
+
     def test_12_administrators_are_unaffected(self):
         php(f"wp_set_current_user(1); update_post_meta({self.fx['adm']}, 'tutor_course_price', '85'); echo 'x';")
         self.assertEqual(self.price(self.fx["adm"]), "85|")
