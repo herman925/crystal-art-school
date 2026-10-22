@@ -79,6 +79,13 @@ class BuilderSortRuntime(unittest.TestCase):
                          "lesson_ids": {str(i): str(v) for i, v in enumerate(lessons)} if indexed else lessons})
         return {str(i): row for i, row in enumerate(rows)} if indexed else rows
 
+    def ajax(self, fields):
+        try:
+            with self.op.open(urllib.request.Request(self.base + "/wp-admin/admin-ajax.php", data=urllib.parse.urlencode(fields).encode()), timeout=30) as result:
+                return result.status, json.loads(result.read())
+        except urllib.error.HTTPError as error:
+            return error.code, json.loads(error.read())
+
     def post(self, raw, *, course_save=None, extra=None):
         fields = {"action": "tutor_update_course_content_order", self.fx["nonce_field"]: self.nonce, "tutor_topics_lessons_sorting": raw}
         if course_save is not None:
@@ -87,11 +94,7 @@ class BuilderSortRuntime(unittest.TestCase):
                            "course_level": "beginner", "pricing[type]": "paid", "course_price": "40" if own else "50", "course_sale_price": "31" if own else "0", "enable_qna": "no", "is_public_course": "no"})
         if extra:
             fields.update(extra)
-        try:
-            with self.op.open(urllib.request.Request(self.base + "/wp-admin/admin-ajax.php", data=urllib.parse.urlencode(fields).encode()), timeout=30) as result:
-                return result.status, json.loads(result.read())
-        except urllib.error.HTTPError as error:
-            return error.code, json.loads(error.read())
+        return self.ajax(fields)
 
     def reject_without_mutation(self, payload, status=400, *, course_save=None, raw=False):
         before = self.snapshot()
@@ -183,19 +186,63 @@ class BuilderSortRuntime(unittest.TestCase):
         self.assertEqual(int(after[self.fx["lessons"]["a1"]]["post_parent"]), self.fx["topics"]["a"])
         self.assertEqual(int(after[self.fx["lessons"]["a2"]]["menu_order"]), 0)
 
-    def test_real_last_lesson_move_allows_an_explicit_empty_source_topic(self):
-        matrix = self.matrix(indexed=True)
-        moved = self.fx["lessons"]["b1"]
-        matrix["0"]["lesson_ids"]["2"] = str(moved)
-        matrix["1"]["lesson_ids"] = {}
-        before = {int(row["ID"]): row for row in self.snapshot()}
-        status, response = self.post(json.dumps(matrix), extra={"content_parent[parent_topic_id]": self.fx["topics"]["a"], "content_parent[content_id]": moved})
+    def test_native_builder_lists_mixed_statuses_and_both_sort_entrypoints_preserve_them(self):
+        status, response = self.ajax({"action": "tutor_course_contents", self.fx["nonce_field"]: self.nonce, "course_id": self.fx["courses"]["own"]})
         self.assertEqual(status, 200, response)
-        after = {int(row["ID"]): row for row in self.snapshot()}
-        self.assertEqual(int(after[moved]["post_parent"]), self.fx["topics"]["a"])
-        for uid, old in before.items():
-            for field in ("post_status", "post_author"):
-                self.assertEqual(after[uid][field], old[field])
+        native = {int(item["ID"]): item["post_status"] for row in response["data"] for item in row["contents"]}
+        expected = {self.fx["lessons"][name]: self.fx["lesson_statuses"][name] for name in ("a1", "a2", "b1")}
+        self.assertEqual(native, expected, "use the REAL current actor's native list, not a test status override")
+        for action in (None, self.fx["courses"]["own"]):
+            for indexed in (False, True):
+                self.setUp()
+                before = {int(row["ID"]): row for row in self.snapshot()}
+                matrix = self.matrix(indexed=indexed)
+                values = [self.fx["lessons"]["a2"], self.fx["lessons"]["a1"]]
+                matrix["0" if indexed else 0]["lesson_ids"] = {str(i): str(v) for i, v in enumerate(values)} if indexed else values
+                status, response = self.post(json.dumps(matrix), course_save=action)
+                self.assertEqual(status, 200, response)
+                after = {int(row["ID"]): row for row in self.snapshot()}
+                for uid, old in before.items():
+                    for field in ("post_parent", "post_status", "post_author"):
+                        self.assertEqual(after[uid][field], old[field])
+                self.assertEqual(after[self.fx["lessons"]["a2"]]["post_status"], "draft")
+
+    def test_trash_and_unsupported_children_remain_distinct_conflicts_without_mutation(self):
+        for node in (self.fx["lessons"]["trash"], self.fx["unsupported"]):
+            target = self.fx["topics"]["a"]
+            try:
+                self.php(self.admin, f"global $wpdb; $wpdb->update($wpdb->posts,array('post_parent'=>{target}),array('ID'=>{node})); clean_post_cache({node}); return true;")
+                for action in (None, self.fx["courses"]["own"]):
+                    self.reject_without_mutation(self.matrix(), 409, course_save=action)
+                    matrix = self.matrix()
+                    matrix[0]["lesson_ids"].append(node)
+                    self.reject_without_mutation(matrix, 409, course_save=action)
+            finally:
+                original = self.fx["topics"]["foreign"]
+                self.php(self.admin, f"global $wpdb; $wpdb->update($wpdb->posts,array('post_parent'=>{original}),array('ID'=>{node})); clean_post_cache({node}); return true;")
+
+    def test_no_draft_widening_for_unscoped_published_ids_query(self):
+        parents = ",".join(str(self.fx["topics"][name]) for name in ("a", "b", "empty"))
+        ids = self.php(self.owner, f"return get_posts(array('post_type'=>array('lesson','tutor_quiz'),'post_parent__in'=>array({parents}),'post_status'=>'publish','fields'=>'ids','posts_per_page'=>-1));")
+        self.assertEqual([int(i) for i in ids], [self.fx["lessons"]["a1"]])
+
+    def test_real_last_draft_move_allows_an_explicit_empty_source_topic_on_both_entrypoints(self):
+        for action in (None, self.fx["courses"]["own"]):
+            self.setUp()
+            matrix = self.matrix(indexed=True)
+            moved = self.fx["lessons"]["b1"]
+            matrix["0"]["lesson_ids"]["2"] = str(moved)
+            matrix["1"]["lesson_ids"] = {}
+            before = {int(row["ID"]): row for row in self.snapshot()}
+            self.assertEqual(before[moved]["post_status"], "draft")
+            status, response = self.post(json.dumps(matrix), course_save=action, extra={"content_parent[parent_topic_id]": self.fx["topics"]["a"], "content_parent[content_id]": moved})
+            self.assertEqual(status, 200, response)
+            after = {int(row["ID"]): row for row in self.snapshot()}
+            self.assertEqual(int(after[moved]["post_parent"]), self.fx["topics"]["a"])
+            self.assertEqual(after[moved]["post_status"], "draft")
+            for uid, old in before.items():
+                for field in ("post_status", "post_author"):
+                    self.assertEqual(after[uid][field], old[field])
 
     def test_empty_existing_course_and_new_insert_empty_context_are_safe(self):
         empty = self.fx["courses"]["empty"]

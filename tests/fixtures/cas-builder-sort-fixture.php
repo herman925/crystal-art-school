@@ -79,9 +79,14 @@ $published = wp_update_post( array( 'ID' => $out['courses']['own'], 'post_status
 if ( is_wp_error( $published ) ) { throw new RuntimeException( $published->get_error_message() ); }
 foreach ( array( 'a', 'b', 'empty' ) as $name ) { $out['topics'][ $name ] = w1_sort_post( 'topics', $name, $owner, $out['courses']['own'] ); }
 $out['topics']['foreign'] = w1_sort_post( 'topics', 'foreign', $other, $out['courses']['foreign'] );
-foreach ( array( 'a1' => 'a', 'a2' => 'a', 'b1' => 'b', 'foreign' => 'foreign' ) as $name => $topic ) {
-	$out['lessons'][ $name ] = w1_sort_post( 'lesson', $name, 'foreign' === $name ? $other : $owner, $out['topics'][ $topic ] );
+foreach ( array( 'a1' => 'a', 'a2' => 'a', 'b1' => 'b', 'foreign' => 'foreign', 'trash' => 'foreign' ) as $name => $topic ) {
+	$out['lessons'][ $name ] = w1_sort_post( 'lesson', $name, 'foreign' === $topic ? $other : $owner, $out['topics'][ $topic ] );
+	$status = 'trash' === $name ? 'trash' : ( in_array( $name, array( 'a2', 'b1', 'foreign' ), true ) ? 'draft' : 'publish' );
+	wp_update_post( array( 'ID' => $out['lessons'][ $name ], 'post_status' => $status ) );
+	if ( $status !== get_post_status( $out['lessons'][ $name ] ) ) { throw new RuntimeException( 'Could not seed the exact lesson status.' ); }
+	$out['lesson_statuses'][ $name ] = $status;
 }
+$out['unsupported'] = w1_sort_post( 'post', 'unsupported child', $owner, $out['topics']['foreign'] );
 $ids = implode( ',', array_map( 'intval', $ledger['posts'] ) );
 $ledger['rows'] = $wpdb->get_results( "SELECT ID,post_type,post_parent,menu_order,post_status,post_author,post_title,post_content FROM {$wpdb->posts} WHERE ID IN ($ids) ORDER BY ID", ARRAY_A );
 update_option( $key, $ledger, false );

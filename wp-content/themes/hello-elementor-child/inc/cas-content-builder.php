@@ -142,8 +142,47 @@ function cas_builder_sort_id( $value ) {
 	return filter_var( $value, FILTER_VALIDATE_INT, array( 'options' => array( 'min_range' => 1 ) ) );
 }
 
+/** Only a fully checked matrix may widen Tutor's IDs-only existence checks for this request. */
+function cas_builder_sort_read_scope( $set = null ) {
+	static $scope = array();
+	if ( null !== $set ) { $scope = $set; }
+	return $scope;
+}
+
+/** Tutor lists drafts in the builder but its private sorter hardcodes publish in get_posts(). */
+add_action( 'pre_get_posts', function ( $query ) {
+	$scope = cas_builder_sort_read_scope();
+	if ( ! $scope || ! is_admin() || $scope['user'] !== get_current_user_id() || ! cas_builder_owns_course( $scope['course'] )
+		|| 'ids' !== $query->get( 'fields' ) || 'publish' !== $query->get( 'post_status' ) ) { return; }
+	$types = (array) $query->get( 'post_type' );
+	sort( $types, SORT_STRING );
+	$parents = array_map( 'intval', (array) $query->get( 'post_parent__in' ) );
+	sort( $parents, SORT_NUMERIC );
+	if ( array( 'topics' ) === $types && (int) $query->get( 'post_parent' ) === $scope['course'] && ! $parents ) {
+		$ids = $scope['topics'];
+		$statuses = $scope['topic_statuses'];
+	} elseif ( $types === $scope['types'] && $parents === $scope['topics'] ) {
+		$ids = $scope['contents'];
+		$statuses = $scope['content_statuses'];
+	} else { return; }
+	$vendor_check = false;
+	// shortcut: Tutor has no sorter-validation hook; revisit this method-name guard on Tutor upgrades.
+	foreach ( debug_backtrace( DEBUG_BACKTRACE_IGNORE_ARGS, 16 ) as $frame ) {
+		if ( ( $frame['class'] ?? '' ) === \TUTOR\Course::class && ( $frame['function'] ?? '' ) === 'validate_course_content_order' ) {
+			$vendor_check = true;
+			break;
+		}
+	}
+	if ( ! $vendor_check ) { return; }
+	// Pin to the already native-listed, graph-checked IDs; never broaden a body/front-end query.
+	$query->set( 'post__in', $ids ? $ids : array( 0 ) );
+	$query->set( 'post_status', $statuses ? $statuses : array( 'publish' ) );
+	$query->set( 'cache_results', false );
+}, 99 );
+
 /** Validate the complete native matrix before Tutor detaches/re-attaches any children. No writes here. */
 function cas_builder_validate_content_order( $raw, $target_course = null ) {
+	cas_builder_sort_read_scope( array() );
 	$invalid = new WP_Error( 'cas_sort_shape', 'Invalid curriculum order. Reload the course and try the native sorting controls again.', array( 'status' => 400 ) );
 	if ( ! is_string( $raw ) ) { return $invalid; }
 	try {
@@ -174,10 +213,26 @@ function cas_builder_validate_content_order( $raw, $target_course = null ) {
 	if ( ! cas_builder_owns_course( $course ) ) {
 		return new WP_Error( 'cas_sort_forbidden', 'You may only sort content belonging to your own course.', array( 'status' => 403 ) );
 	}
-	global $wpdb;
-	$current_topics = $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM {$wpdb->posts} WHERE post_type='topics' AND post_parent=%d AND post_status='publish'", $course ) );
-	if ( null === $current_topics || '' !== $wpdb->last_error ) { return new WP_Error( 'cas_sort_read', 'The current curriculum could not be checked. Nothing was sorted; contact Herman.', array( 'status' => 503 ) ); }
-	$current_topics = array_map( 'intval', $current_topics );
+	$unavailable = new WP_Error( 'cas_sort_read', 'The current curriculum could not be checked. Nothing was sorted; reload the course.', array( 'status' => 503 ) );
+	try {
+		// Exactly the API used by ajax_course_contents(), under this checked editor's current context.
+		$native = ( new \TUTOR\Course( false ) )->get_course_contents( $course );
+	} catch ( Throwable $error ) { return $unavailable; }
+	if ( ! is_array( $native ) ) { return $unavailable; }
+	$current_topics = array();
+	$native_contents = array();
+	foreach ( $native as $row ) {
+		if ( ! is_array( $row ) || ! isset( $row['id'], $row['contents'] ) || ! is_array( $row['contents'] ) ) { return $unavailable; }
+		$id = cas_builder_sort_id( $row['id'] );
+		if ( false === $id || isset( $current_topics[ $id ] ) ) { return $unavailable; }
+		$current_topics[ $id ] = true;
+		foreach ( $row['contents'] as $item ) {
+			$id = cas_builder_sort_id( is_object( $item ) ? ( $item->ID ?? null ) : null );
+			if ( false === $id || isset( $native_contents[ $id ] ) ) { return $unavailable; }
+			$native_contents[ $id ] = true;
+		}
+	}
+	$current_topics = array_keys( $current_topics );
 	$topic_ids = array_keys( $topics );
 	sort( $current_topics, SORT_NUMERIC );
 	sort( $topic_ids, SORT_NUMERIC );
@@ -185,24 +240,39 @@ function cas_builder_validate_content_order( $raw, $target_course = null ) {
 		return new WP_Error( 'cas_sort_topics', 'The curriculum changed or some topics are missing. Reload the course before sorting.', array( 'status' => 409 ) );
 	}
 	if ( array() === $topic_ids ) { return $course; }
+	global $wpdb;
+	$stored_topics = $wpdb->get_results( $wpdb->prepare( "SELECT ID,post_status FROM {$wpdb->posts} WHERE post_type='topics' AND post_parent=%d", $course ), OBJECT_K );
+	if ( null === $stored_topics || '' !== $wpdb->last_error ) { return $unavailable; }
+	$topic_statuses = array();
+	foreach ( $topic_ids as $id ) {
+		if ( ! isset( $stored_topics[ $id ] ) || 'trash' === $stored_topics[ $id ]->post_status ) { return $unavailable; }
+		$topic_statuses[] = $stored_topics[ $id ]->post_status;
+	}
 	$slots = implode( ',', array_fill( 0, count( $topic_ids ), '%d' ) );
 	$children = $wpdb->get_results( $wpdb->prepare( "SELECT ID,post_type,post_status FROM {$wpdb->posts} WHERE post_parent IN ($slots)", $topic_ids ) );
-	if ( null === $children || '' !== $wpdb->last_error ) { return new WP_Error( 'cas_sort_read', 'The current curriculum could not be checked. Nothing was sorted; contact Herman.', array( 'status' => 503 ) ); }
+	if ( null === $children || '' !== $wpdb->last_error ) { return $unavailable; }
 	$types = array_unique( apply_filters( 'tutor_course_contents_post_types', array( tutor()->lesson_post_type, tutor()->quiz_post_type ) ) );
+	sort( $types, SORT_STRING );
 	$current_contents = array();
+	$content_statuses = array();
 	foreach ( $children as $child ) {
-		// Tutor clears ALL children, even those its published-content query does not display.
-		if ( 'publish' !== $child->post_status || ! in_array( $child->post_type, $types, true ) ) {
-			return new WP_Error( 'cas_sort_hidden', 'This curriculum contains hidden or unsupported items. Contact Herman before sorting.', array( 'status' => 409 ) );
+		// Tutor clears ALL children; unlisted/trash/unsupported rows must never be silently detached.
+		if ( 'trash' === $child->post_status || ! in_array( $child->post_type, $types, true ) || ! isset( $native_contents[ (int) $child->ID ] ) ) {
+			return new WP_Error( 'cas_sort_hidden', 'This curriculum contains unlisted, trashed or unsupported items. Check those items before sorting.', array( 'status' => 409 ) );
 		}
 		$current_contents[] = (int) $child->ID;
+		$content_statuses[] = $child->post_status;
 	}
 	$content_ids = array_keys( $contents );
+	$native_contents = array_keys( $native_contents );
 	sort( $current_contents, SORT_NUMERIC );
+	sort( $native_contents, SORT_NUMERIC );
 	sort( $content_ids, SORT_NUMERIC );
-	if ( $content_ids !== $current_contents ) {
+	if ( $native_contents !== $current_contents || $content_ids !== $current_contents ) {
 		return new WP_Error( 'cas_sort_omission', 'Sorting cannot add or detach course items. Include every existing item, move it to another topic, or use the authorised removal controls.', array( 'status' => 409 ) );
 	}
+	cas_builder_sort_read_scope( array( 'user' => get_current_user_id(), 'course' => $course, 'topics' => $topic_ids, 'contents' => $current_contents,
+		'types' => $types, 'topic_statuses' => array_values( array_unique( $topic_statuses ) ), 'content_statuses' => array_values( array_unique( $content_statuses ) ) ) );
 	return $course;
 }
 
@@ -214,6 +284,7 @@ function cas_builder_assert_course_sort( $course_id ) {
 		$check = new WP_Error( 'cas_sort_target', 'The sorting request does not belong to this course.', array( 'status' => 403 ) );
 	}
 	if ( is_wp_error( $check ) ) {
+		cas_builder_sort_read_scope( array() );
 		$status = (int) $check->get_error_data()['status'];
 		if ( wp_doing_ajax() ) { wp_send_json_error( array( 'message' => $check->get_error_message() ), $status ); }
 		wp_die( esc_html( $check->get_error_message() ), '', array( 'response' => $status ) );
