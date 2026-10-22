@@ -20,7 +20,7 @@ class TutorSignupLockContract(unittest.TestCase):
 
     def test_enable_get_is_denied_before_tutors_default_priority_handler(self):
         self.assertIn("add_action( 'admin_init', 'cas_signup_lock_deny_tutor_enable_link', 0 )", LOCK)
-        self.assertIn("'GET' !== strtoupper", LOCK)
+        self.assertNotIn("REQUEST_METHOD", LOCK)
         self.assertIn("tutor-hide-notice", LOCK)
         self.assertIn("tutor-registration", LOCK)
         self.assertIn("status_header( 403 )", LOCK)

@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 
 /** Deny Tutor's one-click registration-enable URL before TUTOR\User::hide_notices runs. */
 function cas_signup_lock_deny_tutor_enable_link() {
-	if ( ! is_admin() || 'GET' !== strtoupper( isset( $_SERVER['REQUEST_METHOD'] ) ? $_SERVER['REQUEST_METHOD'] : '' ) ) {
+	if ( ! is_admin() ) {
 		return;
 	}
 	if ( 'registration' !== ( isset( $_GET['tutor-hide-notice'] ) ? sanitize_key( wp_unslash( $_GET['tutor-hide-notice'] ) ) : '' ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
