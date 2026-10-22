@@ -55,6 +55,16 @@ def main() -> None:
         if start >= end:
             raise AssertionError(f"audit must precede write: {write}")
 
+    require(flat, "$stored = cas_coupons_record_by_id( $new )", "create must re-read its exact persisted row")
+    require(flat, "(int) $stored->id !== (int) $new || ! cas_coupons_record_matches( $stored, $data )", "create success must match returned id and every intended field")
+    require(flat, "foreach ( $intended as $key => $value )", "readback must cover all validated fields and creation metadata")
+    require(flat, "property_exists( $stored, $key )", "missing persisted fields cannot verify successfully")
+    require(flat, "Do not submit again. Refresh the list and tell Herman.", "uncertain create must not invite duplicate submission")
+    create_at = flat.index("$stored = cas_coupons_record_by_id( $new )")
+    success_at = flat.index("'Coupon created.'", create_at)
+    if create_at >= success_at:
+        raise AssertionError("create must be verified before success notice")
+
     require(flat, "$current && 'code' !== $current->coupon_type", "editing automatic coupons must be refused")
     require(flat, "if ( 'code' !== $coupon->coupon_type )", "row actions on automatic coupons must be refused")
     require(flat, "cas_coupons_used( $coupon->coupon_code ) > 0", "used coupons must not be deleted")

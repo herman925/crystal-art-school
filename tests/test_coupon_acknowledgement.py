@@ -53,6 +53,22 @@ namespace {
     if (!isset(cas_coupons_validate($input, 0)['data'])) {
         throw new \Exception('ordinary discount unnecessarily requires acknowledgement');
     }
+    $intended = $result['data'] + ['coupon_status' => 'active', 'created_by' => 7];
+    $stored = (object)$intended;
+    $stored->created_by = '7';
+    if (!cas_coupons_record_matches($stored, $intended)) { throw new \Exception('normalised stored row refused'); }
+    foreach ($intended as $key => $value) {
+        $wrong = clone $stored;
+        $wrong->$key = $value === null ? '' : 'mismatch';
+        if (cas_coupons_record_matches($wrong, $intended)) {
+            throw new \Exception('readback mismatch accepted: ' . $key);
+        }
+    }
+    $missing = clone $stored;
+    unset($missing->applies_to);
+    if (cas_coupons_record_matches($missing, $intended) || cas_coupons_record_matches(null, $intended)) {
+        throw new \Exception('missing persisted row/field accepted');
+    }
 }
 '''.replace("COUPONS_PATH", repr(str(COUPONS)))
         result = subprocess.run([shutil.which("php"), "-r", script], capture_output=True, text=True, check=False)

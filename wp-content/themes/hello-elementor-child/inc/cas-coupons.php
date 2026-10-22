@@ -35,6 +35,30 @@ function cas_coupons_record_by_code( $code ) {
 	return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$table} WHERE coupon_code = %s", $code ) );
 }
 
+function cas_coupons_record_matches( $stored, array $intended ) {
+	if ( ! is_object( $stored ) ) {
+		return false;
+	}
+	foreach ( $intended as $key => $value ) {
+		if ( ! property_exists( $stored, $key ) ) {
+			return false;
+		}
+		$actual = $stored->$key;
+		if ( null === $value ) {
+			if ( null !== $actual ) {
+				return false;
+			}
+		} elseif ( 'discount_amount' === $key ) {
+			if ( ! is_numeric( $actual ) || number_format( (float) $actual, 2, '.', '' ) !== $value ) {
+				return false;
+			}
+		} elseif ( null === $actual || (string) $actual !== (string) $value ) {
+			return false;
+		}
+	}
+	return true;
+}
+
 function cas_coupons_records() {
 	global $wpdb;
 	$table = cas_coupons_model()->get_table_name();
@@ -196,16 +220,7 @@ function cas_coupons_on_load() {
 			}
 			$model->update_coupon( $id, $data );
 			$stored = cas_coupons_record_by_id( $id );
-			$matches = $stored
-				&& $stored->coupon_code === $data['coupon_code']
-				&& $stored->coupon_title === $data['coupon_title']
-				&& $stored->discount_type === $data['discount_type']
-				&& (float) $stored->discount_amount === (float) $data['discount_amount']
-				&& $stored->start_date_gmt === $data['start_date_gmt']
-				&& $stored->expire_date_gmt === $data['expire_date_gmt']
-				&& (int) $stored->total_usage_limit === (int) $data['total_usage_limit']
-				&& (int) $stored->per_user_usage_limit === (int) $data['per_user_usage_limit'];
-			if ( ! $matches ) {
+			if ( ! cas_coupons_record_matches( $stored, $data ) ) {
 				$GLOBALS['cas_coupons_state']['errors'] = 'Not saved: the database did not confirm the change. Tell Herman.';
 				return;
 			}
@@ -224,6 +239,11 @@ function cas_coupons_on_load() {
 			}
 			if ( ! $new ) {
 				$GLOBALS['cas_coupons_state']['errors'] = 'Not saved: the database refused the coupon. Tell Herman.';
+				return;
+			}
+			$stored = cas_coupons_record_by_id( $new );
+			if ( ! $stored || (int) $stored->id !== (int) $new || ! cas_coupons_record_matches( $stored, $data ) ) {
+				$GLOBALS['cas_coupons_state']['errors'] = 'The coupon could not be verified. Do not submit again. Refresh the list and tell Herman.';
 				return;
 			}
 			$GLOBALS['cas_coupons_state']['notice'] = array( 'text' => 'Coupon created.' );
