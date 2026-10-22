@@ -170,10 +170,16 @@ function cas_content_admin_menu() {
 }
 add_action( 'admin_menu', 'cas_content_admin_menu', 999 );
 
-/**
- * Screen guard: a direct request to a closed screen is sent to the hub. The role lacks the caps
- * these screens need anyway; this makes the refusal explicit and keeps the closed list visible.
- */
+/** Exact, closed set of content subpages the role may open. Modules still enforce their own cap and nonce. */
+function cas_content_allowed_admin_page( $page ) {
+	$pages = apply_filters(
+		'cas_content_allowed_pages',
+		array( CAS_CONTENT_HUB_SLUG, 'cas-sales', 'cas-coupons', 'cas-enrol' )
+	);
+	return in_array( sanitize_key( $page ), $pages, true );
+}
+
+/** Direct request to a closed admin screen returns to the hub. */
 function cas_content_screen_guard() {
 	if ( ! cas_content_is_user( get_current_user_id() ) ) {
 		return;
@@ -187,7 +193,7 @@ function cas_content_screen_guard() {
 	$screen_ok  = in_array( $pagenow, CAS_CONTENT_SCREENS, true );
 	$type_ok    = ! $post_type || in_array( $post_type, CAS_CONTENT_POST_TYPES, true );
 	$admin_page = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-	$page_ok    = ! $admin_page || CAS_CONTENT_HUB_SLUG === $admin_page;
+	$page_ok    = ! $admin_page || cas_content_allowed_admin_page( $admin_page );
 	if ( ! $screen_ok || ! $type_ok || ! $page_ok ) {
 		wp_safe_redirect( admin_url( 'admin.php?page=' . CAS_CONTENT_HUB_SLUG ) );
 		exit;
