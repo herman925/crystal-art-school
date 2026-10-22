@@ -115,6 +115,7 @@ add_action( 'admin_init', function () {
 			wp_send_json_error( array( 'message' => 'You may only edit your own courses.' ), 403 );
 		}
 		if ( 'tutor_update_course' === $action ) {
+			cas_builder_assert_course_sort( $id ); // Before any vendor handler can save the course row.
 			if ( 'yes' === ( $_POST['is_public_course'] ?? '' ) || 'yes' === ( $_POST['_tutor_is_public_course'] ?? '' ) ) {
 				wp_send_json_error( array( 'message' => 'Paid courses cannot be made publicly accessible here.' ), 403 );
 			}
@@ -142,6 +143,57 @@ function cas_builder_sort_id( $value ) {
 	return filter_var( $value, FILTER_VALIDATE_INT, array( 'options' => array( 'min_range' => 1 ) ) );
 }
 
+/** Pin the implementation we inspected, not just private names that a future Tutor may reuse. */
+function cas_builder_sort_compatible( $course, $needs_widening ) {
+	if ( $needs_widening && ( ! defined( 'TUTOR_VERSION' ) || '4.1.3' !== TUTOR_VERSION || ! is_admin() || 'POST' !== ( $_SERVER['REQUEST_METHOD'] ?? '' ) ) ) { return false; }
+	if ( ! function_exists( 'tutor' ) || ! function_exists( 'tutor_utils' ) ) { return false; }
+	$plugin = tutor();
+	if ( ! is_object( $plugin ) || empty( $plugin->path ) || ! is_string( $plugin->path ) ) { return false; }
+	$root = trailingslashit( $plugin->path );
+	$header = get_file_data( $root . 'tutor.php', array( 'Version' => 'Version' ) );
+	if ( $needs_widening && '4.1.3' !== ( $header['Version'] ?? '' ) ) { return false; }
+	try {
+		// shortcut: exact Tutor 4.1.3 package pins; re-review before supporting a different vendor build.
+		foreach ( array(
+			\TUTOR\Course::class => array( 'classes/Course.php', 'ff2420312a655fda5c853d4e8fa5e270ec8fed835f369117b2adba7544855467' ),
+			\TUTOR\Utils::class => array( 'classes/Utils.php', 'b5fbf74b3747b742f5f75abb3ce9043ca566670aead26fa5908087f4cacf4cf9' ),
+		) as $class => $pin ) {
+			$file = realpath( $root . $pin[0] );
+			$reflection = new ReflectionClass( $class );
+			$loaded_file = $reflection->getFileName();
+			if ( ! $file || ! is_string( $loaded_file ) || realpath( $loaded_file ) !== $file || hash_file( 'sha256', $file ) !== $pin[1] ) { return false; }
+		}
+		foreach ( array( 'get_course_contents' => array( false, 1, 1 ), 'validate_course_content_order' => array( true, 2, 3 ),
+			'save_course_content_order' => array( true, 0, 1 ), 'save_course_meta' => array( false, 2, 2 ),
+			'ajax_update_course' => array( false, 0, 0 ), 'ajax_update_course_content_order' => array( false, 0, 0 ) ) as $name => $signature ) {
+			$method = new ReflectionMethod( \TUTOR\Course::class, $name );
+			if ( $method->getDeclaringClass()->getName() !== \TUTOR\Course::class || $method->isStatic()
+				|| $method->isPrivate() !== $signature[0] || ( ! $signature[0] && ! $method->isPublic() )
+				|| $method->getNumberOfRequiredParameters() !== $signature[1] || $method->getNumberOfParameters() !== $signature[2] ) { return false; }
+		}
+	} catch ( Throwable $error ) { return false; }
+	$utils = tutor_utils();
+	if ( ! is_object( $utils ) || get_class( $utils ) !== \TUTOR\Utils::class ) { return false; }
+	$hooks = array( 'save_post_courses' => 'save_course_meta' );
+	if ( wp_doing_ajax() ) {
+		$action = $_REQUEST['action'] ?? '';
+		$actions = array( 'tutor_update_course' => 'ajax_update_course', 'tutor_update_course_content_order' => 'ajax_update_course_content_order' );
+		if ( ! is_string( $action ) || ! isset( $actions[ $action ] ) || $action !== ( $_POST['action'] ?? '' ) || ! cas_builder_nonce_valid() ) { return false; }
+		$hooks[ 'wp_ajax_' . $action ] = $actions[ $action ];
+	} elseif ( $needs_widening && ( 'editpost' !== ( $_POST['action'] ?? '' ) || cas_builder_sort_id( $_POST['post_ID'] ?? null ) !== $course
+		|| ! isset( $_POST['_wpnonce'] ) || ! is_string( $_POST['_wpnonce'] ) || ! wp_verify_nonce( wp_unslash( $_POST['_wpnonce'] ), 'update-post_' . $course ) ) ) { return false; }
+	global $wp_filter;
+	foreach ( $hooks as $hook => $method ) {
+		$found = false;
+		foreach ( $wp_filter[ $hook ]->callbacks[10] ?? array() as $registered ) {
+			$callback = $registered['function'];
+			if ( is_array( $callback ) && is_object( $callback[0] ) && get_class( $callback[0] ) === \TUTOR\Course::class && $callback[1] === $method ) { $found = true; break; }
+		}
+		if ( ! $found ) { return false; }
+	}
+	return true;
+}
+
 /** Only a fully checked matrix may widen Tutor's IDs-only existence checks for this request. */
 function cas_builder_sort_read_scope( $set = null ) {
 	static $scope = array();
@@ -152,7 +204,7 @@ function cas_builder_sort_read_scope( $set = null ) {
 /** Tutor lists drafts in the builder but its private sorter hardcodes publish in get_posts(). */
 add_action( 'pre_get_posts', function ( $query ) {
 	$scope = cas_builder_sort_read_scope();
-	if ( ! $scope || ! is_admin() || $scope['user'] !== get_current_user_id() || ! cas_builder_owns_course( $scope['course'] )
+	if ( ! $scope || empty( $scope['draft_compatible'] ) || ! is_admin() || $scope['user'] !== get_current_user_id() || ! cas_builder_owns_course( $scope['course'] )
 		|| 'ids' !== $query->get( 'fields' ) || 'publish' !== $query->get( 'post_status' ) ) { return; }
 	$types = (array) $query->get( 'post_type' );
 	sort( $types, SORT_STRING );
@@ -166,10 +218,12 @@ add_action( 'pre_get_posts', function ( $query ) {
 		$statuses = $scope['content_statuses'];
 	} else { return; }
 	$vendor_check = false;
-	// shortcut: Tutor has no sorter-validation hook; revisit this method-name guard on Tutor upgrades.
-	foreach ( debug_backtrace( DEBUG_BACKTRACE_IGNORE_ARGS, 16 ) as $frame ) {
-		if ( ( $frame['class'] ?? '' ) === \TUTOR\Course::class && ( $frame['function'] ?? '' ) === 'validate_course_content_order' ) {
-			$vendor_check = true;
+	// The first global get_posts() must be called directly by the pinned validator, not a nested query.
+	$trace = debug_backtrace( DEBUG_BACKTRACE_IGNORE_ARGS, 16 );
+	foreach ( $trace as $index => $frame ) {
+		if ( ! isset( $frame['class'] ) && ( $frame['function'] ?? '' ) === 'get_posts' ) {
+			$caller = $trace[ $index + 1 ] ?? array();
+			$vendor_check = ( $caller['class'] ?? '' ) === \TUTOR\Course::class && ( $caller['function'] ?? '' ) === 'validate_course_content_order';
 			break;
 		}
 	}
@@ -214,6 +268,39 @@ function cas_builder_validate_content_order( $raw, $target_course = null ) {
 		return new WP_Error( 'cas_sort_forbidden', 'You may only sort content belonging to your own course.', array( 'status' => 403 ) );
 	}
 	$unavailable = new WP_Error( 'cas_sort_read', 'The current curriculum could not be checked. Nothing was sorted; reload the course.', array( 'status' => 503 ) );
+	$compat_error = new WP_Error( 'cas_sort_compat', 'Sorting is unavailable for this Tutor version or request structure. Contact Herman before changing this course.', array( 'status' => 503 ) );
+	$topic_ids = array_keys( $topics );
+	sort( $topic_ids, SORT_NUMERIC );
+	global $wpdb;
+	$stored_topics = $wpdb->get_results( $wpdb->prepare( "SELECT ID,post_status FROM {$wpdb->posts} WHERE post_type='topics' AND post_parent=%d", $course ), OBJECT_K );
+	if ( null === $stored_topics || '' !== $wpdb->last_error ) { return $unavailable; }
+	$topic_statuses = array();
+	foreach ( $topic_ids as $id ) {
+		if ( ! isset( $stored_topics[ $id ] ) || 'trash' === $stored_topics[ $id ]->post_status ) {
+			return new WP_Error( 'cas_sort_topics', 'The curriculum changed or some topics are missing. Reload the course before sorting.', array( 'status' => 409 ) );
+		}
+		$topic_statuses[] = $stored_topics[ $id ]->post_status;
+	}
+	$children = array();
+	if ( $topic_ids ) {
+		$slots = implode( ',', array_fill( 0, count( $topic_ids ), '%d' ) );
+		$children = $wpdb->get_results( $wpdb->prepare( "SELECT ID,post_type,post_status FROM {$wpdb->posts} WHERE post_parent IN ($slots)", $topic_ids ) );
+		if ( null === $children || '' !== $wpdb->last_error ) { return $unavailable; }
+	}
+	$types = apply_filters( 'tutor_course_contents_post_types', array( tutor()->lesson_post_type, tutor()->quiz_post_type ) );
+	if ( ! is_array( $types ) ) { return $unavailable; }
+	$types = array_unique( $types );
+	sort( $types, SORT_STRING );
+	$content_statuses = array();
+	foreach ( $children as $child ) {
+		if ( 'trash' === $child->post_status || ! in_array( $child->post_type, $types, true ) ) {
+			return new WP_Error( 'cas_sort_hidden', 'This curriculum contains unlisted, trashed or unsupported items. Check those items before sorting.', array( 'status' => 409 ) );
+		}
+		$content_statuses[] = $child->post_status;
+	}
+	$needs_widening = (bool) array_diff( array_merge( $topic_statuses, $content_statuses ), array( 'publish' ) );
+	// Check compatibility BEFORE calling vendor code or allowing any ordinary course-row save.
+	if ( ! cas_builder_sort_compatible( $course, $needs_widening ) ) { return $compat_error; }
 	try {
 		// Exactly the API used by ajax_course_contents(), under this checked editor's current context.
 		$native = ( new \TUTOR\Course( false ) )->get_course_contents( $course );
@@ -240,28 +327,13 @@ function cas_builder_validate_content_order( $raw, $target_course = null ) {
 		return new WP_Error( 'cas_sort_topics', 'The curriculum changed or some topics are missing. Reload the course before sorting.', array( 'status' => 409 ) );
 	}
 	if ( array() === $topic_ids ) { return $course; }
-	global $wpdb;
-	$stored_topics = $wpdb->get_results( $wpdb->prepare( "SELECT ID,post_status FROM {$wpdb->posts} WHERE post_type='topics' AND post_parent=%d", $course ), OBJECT_K );
-	if ( null === $stored_topics || '' !== $wpdb->last_error ) { return $unavailable; }
-	$topic_statuses = array();
-	foreach ( $topic_ids as $id ) {
-		if ( ! isset( $stored_topics[ $id ] ) || 'trash' === $stored_topics[ $id ]->post_status ) { return $unavailable; }
-		$topic_statuses[] = $stored_topics[ $id ]->post_status;
-	}
-	$slots = implode( ',', array_fill( 0, count( $topic_ids ), '%d' ) );
-	$children = $wpdb->get_results( $wpdb->prepare( "SELECT ID,post_type,post_status FROM {$wpdb->posts} WHERE post_parent IN ($slots)", $topic_ids ) );
-	if ( null === $children || '' !== $wpdb->last_error ) { return $unavailable; }
-	$types = array_unique( apply_filters( 'tutor_course_contents_post_types', array( tutor()->lesson_post_type, tutor()->quiz_post_type ) ) );
-	sort( $types, SORT_STRING );
 	$current_contents = array();
-	$content_statuses = array();
 	foreach ( $children as $child ) {
-		// Tutor clears ALL children; unlisted/trash/unsupported rows must never be silently detached.
-		if ( 'trash' === $child->post_status || ! in_array( $child->post_type, $types, true ) || ! isset( $native_contents[ (int) $child->ID ] ) ) {
+		// Native membership and the raw graph must agree; never silently drop unlisted children.
+		if ( ! isset( $native_contents[ (int) $child->ID ] ) ) {
 			return new WP_Error( 'cas_sort_hidden', 'This curriculum contains unlisted, trashed or unsupported items. Check those items before sorting.', array( 'status' => 409 ) );
 		}
 		$current_contents[] = (int) $child->ID;
-		$content_statuses[] = $child->post_status;
 	}
 	$content_ids = array_keys( $contents );
 	$native_contents = array_keys( $native_contents );
@@ -271,8 +343,19 @@ function cas_builder_validate_content_order( $raw, $target_course = null ) {
 	if ( $native_contents !== $current_contents || $content_ids !== $current_contents ) {
 		return new WP_Error( 'cas_sort_omission', 'Sorting cannot add or detach course items. Include every existing item, move it to another topic, or use the authorised removal controls.', array( 'status' => 409 ) );
 	}
-	cas_builder_sort_read_scope( array( 'user' => get_current_user_id(), 'course' => $course, 'topics' => $topic_ids, 'contents' => $current_contents,
-		'types' => $types, 'topic_statuses' => array_values( array_unique( $topic_statuses ) ), 'content_statuses' => array_values( array_unique( $content_statuses ) ) ) );
+	if ( $needs_widening ) {
+		cas_builder_sort_read_scope( array( 'draft_compatible' => true, 'user' => get_current_user_id(), 'course' => $course, 'topics' => $topic_ids, 'contents' => $current_contents,
+			'types' => $types, 'topic_statuses' => array_values( array_unique( $topic_statuses ) ), 'content_statuses' => array_values( array_unique( $content_statuses ) ) ) );
+	}
+	try {
+		// This pinned method is read-only: prove its actual queries accept the matrix BEFORE a course save.
+		$parent = 'tutor_update_course_content_order' === ( $_REQUEST['action'] ?? '' ) ? \TUTOR\Input::post( 'content_parent', array(), \TUTOR\Input::TYPE_ARRAY ) : array();
+		$validator = new ReflectionMethod( \TUTOR\Course::class, 'validate_course_content_order' );
+		$validator->invoke( new \TUTOR\Course( false ), $course, $order, $parent );
+	} catch ( Throwable $error ) {
+		cas_builder_sort_read_scope( array() );
+		return $compat_error;
+	}
 	return $course;
 }
 

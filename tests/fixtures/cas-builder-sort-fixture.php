@@ -41,7 +41,7 @@ if ( 'setup' !== $mode || $ledger || ! function_exists( 'cas_builder_validate_co
 foreach ( array( 'w1sortowner', 'w1sortother' ) as $login ) {
 	if ( username_exists( $login ) ) { throw new RuntimeException( 'Synthetic username exists; never overwrite it.' ); }
 }
-$ledger = array( 'users' => array(), 'posts' => array() );
+$ledger = array( 'home' => home_url(), 'users' => array(), 'posts' => array() );
 add_option( $key, $ledger, '', false );
 $out = array( 'admin' => get_current_user_id(), 'home' => home_url(), 'users' => array(), 'courses' => array(), 'topics' => array(), 'lessons' => array() );
 foreach ( array( 'w1sortowner', 'w1sortother' ) as $login ) {
@@ -67,7 +67,7 @@ function w1_sort_post( $type, $title, $author, $parent = 0 ) {
 }
 $owner = $ledger['users']['w1sortowner'];
 $other = $ledger['users']['w1sortother'];
-foreach ( array( 'own' => $owner, 'foreign' => $other, 'empty' => $owner ) as $name => $author ) {
+foreach ( array( 'own' => $owner, 'foreign' => $other, 'empty' => $owner, 'publish_only' => $owner ) as $name => $author ) {
 	$id = w1_sort_post( 'courses', $name, $author );
 	update_post_meta( $id, '_tutor_course_price_type', 'paid' );
 	update_post_meta( $id, 'tutor_course_price', 'own' === $name ? '40' : '50' );
@@ -86,6 +86,10 @@ foreach ( array( 'a1' => 'a', 'a2' => 'a', 'b1' => 'b', 'foreign' => 'foreign', 
 	if ( $status !== get_post_status( $out['lessons'][ $name ] ) ) { throw new RuntimeException( 'Could not seed the exact lesson status.' ); }
 	$out['lesson_statuses'][ $name ] = $status;
 }
+$published = wp_update_post( array( 'ID' => $out['courses']['publish_only'], 'post_status' => 'publish' ), true );
+if ( is_wp_error( $published ) ) { throw new RuntimeException( $published->get_error_message() ); }
+$out['topics']['publish_only'] = w1_sort_post( 'topics', 'published control', $owner, $out['courses']['publish_only'] );
+$out['lessons']['publish_only'] = w1_sort_post( 'lesson', 'published control', $owner, $out['topics']['publish_only'] );
 $out['unsupported'] = w1_sort_post( 'post', 'unsupported child', $owner, $out['topics']['foreign'] );
 $ids = implode( ',', array_map( 'intval', $ledger['posts'] ) );
 $ledger['rows'] = $wpdb->get_results( "SELECT ID,post_type,post_parent,menu_order,post_status,post_author,post_title,post_content FROM {$wpdb->posts} WHERE ID IN ($ids) ORDER BY ID", ARRAY_A );
@@ -94,4 +98,7 @@ $out['rows'] = $ledger['rows'];
 $out['post_ids'] = $ledger['posts'];
 $out['nonce_field'] = tutor()->nonce;
 $out['module_sha256'] = hash_file( 'sha256', get_stylesheet_directory() . '/inc/cas-content-builder.php' );
+$out['vendor'] = array( 'version' => TUTOR_VERSION, 'header' => get_file_data( tutor()->path . 'tutor.php', array( 'Version' => 'Version' ) ),
+	'course_sha256' => hash_file( 'sha256', ( new ReflectionClass( \TUTOR\Course::class ) )->getFileName() ),
+	'utils_sha256' => hash_file( 'sha256', ( new ReflectionClass( \TUTOR\Utils::class ) )->getFileName() ) );
 echo wp_json_encode( $out, JSON_PRETTY_PRINT );

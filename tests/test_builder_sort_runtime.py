@@ -82,23 +82,28 @@ class BuilderSortRuntime(unittest.TestCase):
     def ajax(self, fields):
         try:
             with self.op.open(urllib.request.Request(self.base + "/wp-admin/admin-ajax.php", data=urllib.parse.urlencode(fields).encode()), timeout=30) as result:
+                self.last_headers = result.headers
                 return result.status, json.loads(result.read())
         except urllib.error.HTTPError as error:
+            self.last_headers = error.headers
             return error.code, json.loads(error.read())
 
     def post(self, raw, *, course_save=None, extra=None):
-        fields = {"action": "tutor_update_course_content_order", self.fx["nonce_field"]: self.nonce, "tutor_topics_lessons_sorting": raw}
+        fields = {"action": "tutor_update_course_content_order", self.fx["nonce_field"]: self.nonce}
+        if raw is not None:
+            fields["tutor_topics_lessons_sorting"] = raw
         if course_save is not None:
             own = course_save == self.fx["courses"]["own"]
-            fields.update({"action": "tutor_update_course", "course_id": course_save, "post_title": "W1 sort must not partially save", "post_content": "W1 sort body must not partially save", "post_status": "publish" if own else "draft",
+            published = course_save in (self.fx["courses"]["own"], self.fx["courses"]["publish_only"])
+            fields.update({"action": "tutor_update_course", "course_id": course_save, "post_title": "W1 sort must not partially save", "post_content": "W1 sort body must not partially save", "post_status": "publish" if published else "draft",
                            "course_level": "beginner", "pricing[type]": "paid", "course_price": "40" if own else "50", "course_sale_price": "31" if own else "0", "enable_qna": "no", "is_public_course": "no"})
         if extra:
             fields.update(extra)
         return self.ajax(fields)
 
-    def reject_without_mutation(self, payload, status=400, *, course_save=None, raw=False):
+    def reject_without_mutation(self, payload, status=400, *, course_save=None, raw=False, extra=None):
         before = self.snapshot()
-        got, response = self.post(payload if raw else json.dumps(payload), course_save=course_save)
+        got, response = self.post(payload if raw else json.dumps(payload), course_save=course_save, extra=extra)
         self.assertEqual(got, status, response)
         self.assertFalse(response["success"])
         self.assertEqual(self.snapshot(), before, "all parent/order/status/author/title/body rows must be unchanged")
@@ -243,6 +248,42 @@ class BuilderSortRuntime(unittest.TestCase):
             for uid, old in before.items():
                 for field in ("post_status", "post_author"):
                     self.assertEqual(after[uid][field], old[field])
+
+    def test_unsupported_nonadmin_context_rejects_before_real_course_row_mutation(self):
+        self.assertFalse(self.php(self.owner, "return is_admin();"), "probe must use the REAL non-admin context, not spoof WP_ADMIN")
+        encoded = base64.b64encode(json.dumps(self.matrix()).encode()).decode()
+        course = self.fx["courses"]["own"]
+        before = self.snapshot()
+        result = self.php(self.owner, f"""
+$_SERVER['REQUEST_METHOD']='POST';
+$_POST=array('action'=>'editpost','post_ID'=>{course},'tutor_topics_lessons_sorting'=>base64_decode('{encoded}'));
+add_filter('wp_die_handler',function(){{ return function($message,$title,$args){{ throw new RuntimeException($message,(int)$args['response']); }}; }});
+try {{ wp_update_post(array('ID'=>{course},'post_title'=>'MUST NOT SAVE','post_content'=>'MUST NOT SAVE','post_status'=>'draft')); return array('blocked'=>false); }}
+catch(RuntimeException $error){{ return array('blocked'=>true,'status'=>$error->getCode(),'scope'=>cas_builder_sort_read_scope()); }}
+""")
+        self.assertEqual(result, {"blocked": True, "status": 503, "scope": []})
+        self.assertEqual(self.snapshot(), before)
+
+    def test_unsupported_registered_hook_or_query_shape_rejects_before_native_row_mutation(self):
+        if os.environ.get("CAS_SORT_COMPAT_FAULT_READY") != "1":
+            self.skipTest("actual Review must install ONLY the local acknowledged fault fixture in its coordinated pass")
+        for fault in ("missing_save_hook", "published_only_ids"):
+            for action in (None, self.fx["courses"]["own"]):
+                self.reject_without_mutation(self.matrix(), 503, course_save=action, extra={"w1_sort_compat_fault": fault})
+        # No sort requested: ordinary published-course title/body saving remains outside the bridge.
+        status, response = self.post(None, course_save=self.fx["courses"]["publish_only"], extra={"w1_sort_compat_fault": "missing_save_hook"})
+        self.assertEqual(status, 200, response)
+        matrix = [{"topic_id": self.fx["topics"]["publish_only"], "lesson_ids": [self.fx["lessons"]["publish_only"]]}]
+        status, response = self.post(json.dumps(matrix), course_save=self.fx["courses"]["publish_only"], extra={"w1_sort_compat_fault": "published_only_ids"})
+        self.assertEqual(status, 200, response)
+
+    def test_nested_unrelated_ids_query_is_not_widened_inside_supported_validation(self):
+        if os.environ.get("CAS_SORT_COMPAT_FAULT_READY") != "1":
+            self.skipTest("local fault fixture not installed; nested-query isolation still requires actual Review")
+        status, response = self.post(json.dumps(self.matrix()), extra={"w1_sort_compat_fault": "unrelated_query"})
+        self.assertEqual(status, 200, response)
+        ids = [int(value) for value in self.last_headers.get("X-CAS-Sort-Probe", "").split(",") if value]
+        self.assertEqual(ids, [self.fx["lessons"]["a1"]], "nested matching query must stay published-only, even with a validator ancestor")
 
     def test_empty_existing_course_and_new_insert_empty_context_are_safe(self):
         empty = self.fx["courses"]["empty"]
