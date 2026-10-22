@@ -19,39 +19,70 @@ class PriceGateContract(unittest.TestCase):
             self.assertIn(f"'{key}'", GATE)
         self.assertIn("'courses' !== get_post_type", GATE)
 
-    def test_the_gate_is_open_only_inside_the_confirm_write(self):
-        self.assertEqual(GATE.count("cas_price_gate_open( true )"), 1)
-        self.assertEqual(GATE.count("cas_price_gate_open( false )"), 1)
-        self.assertLess(GATE.index("cas_price_gate_open( true )"), GATE.index("update_post_meta( $course_id, 'tutor_course_price'"))
+    def test_gate_window_resets_and_pair_is_verified(self):
+        self.assertIn("function cas_price_write_pair", GATE)
+        self.assertIn("finally", GATE)
+        self.assertIn("cas_price_gate_open( false )", GATE)
+        self.assertIn("return cas_price_current( $course_id ) === $pair", GATE)
 
-    def test_the_confirm_checks_run_in_order_and_fail_closed(self):
-        order = ["check_admin_referer( 'cas_price_confirm' )", "get_transient( 'cas_price_' . $token )",
-                 "delete_transient( 'cas_price_' . $token )", "cas_price_user_may_edit( $course_id )",
-                 "$typed !== $expected", "cas_price_current( $course_id ) !== $data['old']",
-                 "cas_audit_log( 'course_price', $line )", "update_post_meta( $course_id, 'tutor_course_price'"]
-        body = GATE[GATE.index("function cas_price_confirm()"):]
+    def test_unique_token_and_course_locks_are_atomic_and_owner_scoped(self):
+        self.assertIn("INSERT IGNORE INTO {$wpdb->options}", GATE)
+        self.assertIn("return 1 === $inserted", GATE)
+        self.assertNotIn("return add_option(", GATE)
+        self.assertIn("CAS_PRICE_COURSE_LOCK_TTL = 600", GATE)
+        self.assertIn("function cas_price_acquire_course_lock", GATE)
+        self.assertIn("$wpdb->delete( $wpdb->options, array( 'option_name' => $key, 'option_value' => $existing )", GATE)
+        self.assertIn("function cas_price_release_course_lock", GATE)
+        self.assertIn("$wpdb->delete( $wpdb->options, array( 'option_name' => $key, 'option_value' => $value )", GATE)
+        prune = GATE[GATE.index("function cas_price_prune_claims()") : GATE.index("function cas_price_claim_token(")]
+        self.assertIn("'option_value' => $row['option_value']", prune, "expired prune must CAS-delete the exact observed value")
+        self.assertNotIn("delete_option( $key )", prune, "pruning must not delete a successor's replacement lock")
+
+    def test_confirm_claims_then_locks_before_stale_read_and_releases_in_finally(self):
+        body = GATE[GATE.index("function cas_price_confirm()") : GATE.index("add_action( 'admin_post_cas_price_confirm'")]
+        order = ["cas_price_claim_token( $token", "cas_price_acquire_course_lock( $course_id",
+                 "cas_price_current( $course_id ) !== $data['old']"]
         positions = [body.index(part) for part in order]
-        self.assertEqual(positions, sorted(positions), "checks must run before the write, in this order")
-        self.assertIn("! function_exists( 'cas_audit_log' ) || ! cas_audit_log(", GATE)
+        self.assertEqual(positions, sorted(positions))
+        self.assertIn("finally", body)
+        self.assertIn("cas_price_release_course_lock( $course_id, $lock )", body)
 
-    def test_the_token_is_short_lived_single_use_and_user_bound(self):
+    def test_failed_pair_is_verified_rolled_back_and_never_called_saved(self):
+        self.assertIn("function cas_price_restore_pair", GATE)
+        self.assertIn("$current[ $field ] === $attempted[ $field ]", GATE)
+        self.assertIn("cas_price_restore_pair( $course_id, $data['old'], $data['new'] )", GATE)
+        self.assertIn("'rollback_failed'", GATE)
+        self.assertIn("Stop editing and contact Herman immediately.", GATE)
+
+    def test_audit_distinguishes_attempt_from_verified_change_and_failure(self):
+        self.assertIn("cas_audit_log( 'course_price_attempt', $line )", GATE)
+        self.assertIn("cas_audit_log( 'course_price', $line )", GATE)
+        self.assertIn("cas_audit_log( 'course_price_write_failed'", GATE)
+
+    def test_confirm_order_includes_audit_write_and_readback(self):
+        body = GATE[GATE.index("function cas_price_confirm()") : GATE.index("add_action( 'admin_post_cas_price_confirm'")]
+        order = ["cas_audit_log( 'course_price_attempt', $line )", "cas_price_write_pair( $course_id, $data['new'] )",
+                 "cas_audit_log( 'course_price', $line )", "cas_price_current( $course_id ) === $data['new']"]
+        positions = [body.index(part) for part in order]
+        self.assertEqual(positions, sorted(positions))
+
+    def test_token_is_short_lived_and_bound_to_the_user(self):
         self.assertIn("CAS_PRICE_TOKEN_TTL = 600", GATE)
         self.assertIn("(int) $data['user'] !== get_current_user_id()", GATE)
-        self.assertIn("delete_transient( 'cas_price_' . $token )", GATE)
+        self.assertIn("cas_price_claim_token( $token, (int) $data['expires'] )", GATE)
 
-    def test_the_gate_grants_no_admin_power_and_adds_no_manage_options(self):
+    def test_no_admin_power_and_exact_price_page(self):
         self.assertNotIn("'manage_options'", GATE)
-        self.assertNotIn("manage_options", ROLE.split("function cas_content_role_caps")[1].split("}")[0])
-
-    def test_the_screen_is_allowed_through_the_guard_and_loaded(self):
+        caps = ROLE.split("function cas_content_role_caps")[1].split("}")[0]
+        self.assertNotIn("manage_options", caps)
         self.assertIn("'cas-course-prices'", ROLE)
         self.assertIn("'cas-course-prices'", GATE)
         self.assertIn("'cas-price-gate'", LOADER)
 
-    def test_the_role_can_edit_courses_and_lessons_but_not_publish_courses(self):
+    def test_tutor_edit_caps_are_own_record_only(self):
         caps = ROLE.split("function cas_content_role_caps")[1].split("}")[0]
-        self.assertIn("'edit_tutor_courses'", caps)
-        self.assertIn("'edit_tutor_lessons'", caps)
+        for cap in ["edit_tutor_courses", "edit_tutor_lessons", "publish_tutor_lessons"]:
+            self.assertIn(f"'{cap}'", caps)
         self.assertNotIn("publish_tutor_courses", caps)
         self.assertNotIn("edit_others_tutor_courses", caps)
 
