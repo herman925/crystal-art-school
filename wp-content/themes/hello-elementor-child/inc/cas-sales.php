@@ -335,6 +335,8 @@ function cas_sales_restore_enrolment( $snapshot ) {
 		LEFT JOIN {$wpdb->postmeta} pm ON pm.post_id = p.ID AND pm.meta_key = %s
 		SET " . implode( ', ', $set ) . $where;
 	$changed = $wpdb->query( $wpdb->prepare( $sql, array_merge( $keys, $args, $written ) ) );
+	clean_post_cache( $id );
+	wp_cache_delete( $id, 'post_meta' );
 	if ( false === $changed || $changed < 1 ) {
 		return false;
 	}
@@ -349,18 +351,34 @@ function cas_sales_restore_enrolment( $snapshot ) {
 	if ( $delete ) {
 		$restored = array_merge( $identity, array( $status, (string) ( $order_exists ? $snapshot['order_id'] : $snapshot['written_order_id'] ), (string) ( $product_exists ? $snapshot['product_id'] : $snapshot['written_product_id'] ), (int) $snapshot['written_order_exists'], (int) $snapshot['written_product_exists'] ) );
 		$deleted = $wpdb->query( $wpdb->prepare( 'DELETE ' . implode( ', ', $delete ) . $joins . $where, array_merge( $keys, $restored ) ) );
+		clean_post_cache( $id );
+		wp_cache_delete( $id, 'post_meta' );
 		if ( false === $deleted ) {
 			return false;
 		}
 	}
-	clean_post_cache( $id );
-	wp_cache_delete( $id, 'post_meta' );
 	$row = $wpdb->get_row( $wpdb->prepare( "SELECT post_status, post_author, post_parent FROM {$wpdb->posts} WHERE ID = %d", $id ) );
 	return $row && $status === $row->post_status && (int) $row->post_author === (int) $snapshot['user_id'] && (int) $row->post_parent === (int) $snapshot['course_id']
 		&& metadata_exists( 'post', $id, $model::ENROLLMENT_ORDER_ID_META ) === $order_exists
 		&& metadata_exists( 'post', $id, $model::ENROLLMENT_PRODUCT_ID_META ) === $product_exists
 		&& ( ! $order_exists || (string) get_post_meta( $id, $model::ENROLLMENT_ORDER_ID_META, true ) === (string) $snapshot['order_id'] )
 		&& ( ! $product_exists || (string) get_post_meta( $id, $model::ENROLLMENT_PRODUCT_ID_META, true ) === (string) $snapshot['product_id'] );
+}
+
+/** Compare persisted enrolment state when a vendor write throws before returning its ID. */
+function cas_sales_enrolment_fingerprint( $rows ) {
+	$model = '\\Tutor\\Models\\EnrollmentModel';
+	$states = array();
+	foreach ( $rows as $row ) {
+		clean_post_cache( $row->ID );
+		$states[ (int) $row->ID ] = array(
+			(int) $row->post_author, (int) $row->post_parent, (string) $row->post_status,
+			metadata_exists( 'post', $row->ID, $model::ENROLLMENT_ORDER_ID_META ), get_post_meta( $row->ID, $model::ENROLLMENT_ORDER_ID_META, true ),
+			metadata_exists( 'post', $row->ID, $model::ENROLLMENT_PRODUCT_ID_META ), get_post_meta( $row->ID, $model::ENROLLMENT_PRODUCT_ID_META, true ),
+		);
+	}
+	ksort( $states );
+	return $states;
 }
 
 /** Change one course enrollment through Tutor; never send Tutor mail for an order that may roll back. */
@@ -370,11 +388,12 @@ function cas_sales_sync_enrolment( $order_id, $user_id, $course_id, $to ) {
 		return false;
 	}
 
+	$rows = array_values( array_filter( $model::get_enrolled_data( $user_id, 0, '' ), function ( $row ) use ( $course_id ) {
+		return (int) $row->post_parent === (int) $course_id;
+	} ) );
+	$before = cas_sales_enrolment_fingerprint( $rows );
 	$current = false;
-	foreach ( $model::get_enrolled_data( $user_id, 0, '' ) as $row ) {
-		if ( (int) $row->post_parent !== (int) $course_id ) {
-			continue;
-		}
+	foreach ( $rows as $row ) {
 		if ( 'completed' === $to && 'completed' === $row->post_status ) {
 			return array( 'changed' => false );
 		}
@@ -402,10 +421,23 @@ function cas_sales_sync_enrolment( $order_id, $user_id, $course_id, $to ) {
 		if ( ! cas_sales_student_marker_safe( $user_id ) ) {
 			return false;
 		}
-		$id = (int) $model::do_enroll( $course_id, 0, $user_id, false );
+		try {
+			$id = (int) $model::do_enroll( $course_id, 0, $user_id, false );
+		} catch ( \Throwable $error ) {
+			try {
+				$after = array_values( array_filter( $model::get_enrolled_data( $user_id, 0, '' ), function ( $row ) use ( $course_id ) {
+					return (int) $row->post_parent === (int) $course_id;
+				} ) );
+				$uncertain = $before !== cas_sales_enrolment_fingerprint( $after );
+			} catch ( \Throwable $verification_error ) {
+				$uncertain = true;
+			}
+			return array( 'changed' => false, 'failed' => true, 'exception' => true, 'uncertain' => $uncertain );
+		}
 		if ( ! $id ) {
 			return false;
 		}
+		clean_post_cache( $id );
 		$status = (string) get_post_status( $id );
 	}
 
@@ -428,14 +460,21 @@ function cas_sales_sync_enrolment( $order_id, $user_id, $course_id, $to ) {
 	);
 
 	$target = 'completed' === $to ? 'completed' : 'cancel';
-	if ( $status !== $target ) {
-		$model::update_enrollments( $target, array( $id ), false );
-	}
-	if ( 'completed' === $to ) {
-		update_post_meta( $id, $model::ENROLLMENT_ORDER_ID_META, (int) $order_id );
-		update_post_meta( $id, $model::ENROLLMENT_PRODUCT_ID_META, (int) tutor_utils()->get_course_product_id( $course_id ) );
+	try {
+		if ( $status !== $target ) {
+			$model::update_enrollments( $target, array( $id ), false );
+		}
+		if ( 'completed' === $to ) {
+			update_post_meta( $id, $model::ENROLLMENT_ORDER_ID_META, (int) $order_id );
+			update_post_meta( $id, $model::ENROLLMENT_PRODUCT_ID_META, (int) tutor_utils()->get_course_product_id( $course_id ) );
+		}
+	} catch ( \Throwable $error ) {
+		$snapshot['failed'] = true;
+		$snapshot['exception'] = true;
+		return $snapshot;
 	}
 
+	clean_post_cache( $id );
 	$verified = $target === get_post_status( $id );
 	if ( 'completed' === $to ) {
 		$verified = $verified
@@ -496,7 +535,11 @@ function cas_sales_apply_status( $order_id, $to, $expected_payment, $accepted_un
 	if ( 'paid' !== $order->payment_status && 'completed' === $to && ! $accepted_unpaid ) {
 		return false;
 	}
-	$course_ids = 'completed' === $to ? cas_sales_completed_courses( $order ) : cas_sales_order_course_ids( $order->id );
+	try {
+		$course_ids = 'completed' === $to ? cas_sales_completed_courses( $order ) : cas_sales_order_course_ids( $order->id );
+	} catch ( \Throwable $error ) {
+		return 'write';
+	}
 	if ( false === $course_ids ) {
 		return 'preflight';
 	}
@@ -504,7 +547,12 @@ function cas_sales_apply_status( $order_id, $to, $expected_payment, $accepted_un
 	if ( ! class_exists( $enrolment_model ) || ( 'completed' === $to && ! cas_sales_student_marker_safe( $order->user_id ) ) ) {
 		return 'preflight';
 	}
-	foreach ( $enrolment_model::get_enrolled_data( (int) $order->user_id, 0, '' ) as $enrolment ) {
+	try {
+		$existing_enrolments = $enrolment_model::get_enrolled_data( (int) $order->user_id, 0, '' );
+	} catch ( \Throwable $error ) {
+		return 'write';
+	}
+	foreach ( $existing_enrolments as $enrolment ) {
 		if ( in_array( (int) $enrolment->post_parent, $course_ids, true ) && ! in_array( $enrolment->post_status, array( 'pending', 'cancel', 'completed' ), true ) ) {
 			return 'preflight';
 		}
@@ -528,13 +576,17 @@ function cas_sales_apply_status( $order_id, $to, $expected_payment, $accepted_un
 
 	$snapshots = array();
 	foreach ( $course_ids as $course_id ) {
-		$snapshot = cas_sales_sync_enrolment( (int) $order->id, (int) $order->user_id, (int) $course_id, $to );
+		try {
+			$snapshot = cas_sales_sync_enrolment( (int) $order->id, (int) $order->user_id, (int) $course_id, $to );
+		} catch ( \Throwable $error ) {
+			$snapshot = array( 'changed' => false, 'failed' => true, 'exception' => true, 'uncertain' => true );
+		}
 		if ( false === $snapshot || ! empty( $snapshot['failed'] ) ) {
 			if ( is_array( $snapshot ) ) {
 				$snapshots[] = $snapshot;
 			}
 			$order_restored = cas_sales_restore_order_status( $order, $order_from, $to );
-			$enrolments_restored = $order_restored;
+			$enrolments_restored = $order_restored && empty( $snapshot['uncertain'] );
 			if ( $order_restored ) {
 				foreach ( array_reverse( $snapshots ) as $previous ) {
 					$enrolments_restored = cas_sales_restore_enrolment( $previous ) && $enrolments_restored;
@@ -542,13 +594,23 @@ function cas_sales_apply_status( $order_id, $to, $expected_payment, $accepted_un
 			}
 			$restored = $enrolments_restored && $order_restored;
 			cas_audit_log( $restored ? 'order_status_change_failed' : 'order_status_rollback_failed', $line . ' reason=enrolment_sync rollback=' . ( $restored ? 'verified' : 'failed' ) );
-			return $restored ? false : 'rollback';
+			if ( ! $restored ) {
+				return 'rollback';
+			}
+			return ! empty( $snapshot['exception'] ) ? 'write' : false;
 		}
 		$snapshots[] = $snapshot;
 	}
 
+	$verification_exception = false;
+	try {
+		$access_verified = cas_sales_access_verified( $order, $course_ids, $to );
+	} catch ( \Throwable $error ) {
+		$access_verified = false;
+		$verification_exception = true;
+	}
 	$row = $wpdb->get_row( $wpdb->prepare( 'SELECT order_status, payment_status FROM ' . cas_sales_orders_table() . ' WHERE id = %d', $order->id ) );
-	if ( ! $row || $to !== $row->order_status || $order->payment_status !== $row->payment_status || ! cas_sales_access_verified( $order, $course_ids, $to ) || true !== cas_audit_log( 'order_status_changed', $line ) ) {
+	if ( ! $row || $to !== $row->order_status || $order->payment_status !== $row->payment_status || ! $access_verified || true !== cas_audit_log( 'order_status_changed', $line ) ) {
 		$order_restored = cas_sales_restore_order_status( $order, $order_from, $to );
 		$enrolments_restored = $order_restored;
 		if ( $order_restored ) {
@@ -558,7 +620,7 @@ function cas_sales_apply_status( $order_id, $to, $expected_payment, $accepted_un
 		}
 		$restored = $enrolments_restored && $order_restored;
 		cas_audit_log( $restored ? 'order_status_change_failed' : 'order_status_rollback_failed', $line . ' reason=verify_or_audit rollback=' . ( $restored ? 'verified' : 'failed' ) );
-		return $restored ? 'audit' : 'rollback';
+		return $restored ? ( $verification_exception ? 'write' : 'audit' ) : 'rollback';
 	}
 	return true;
 }
@@ -659,7 +721,7 @@ function cas_sales_on_load() {
 	$row = $wpdb->get_row( $wpdb->prepare( 'SELECT order_status, payment_status FROM ' . cas_sales_orders_table() . ' WHERE id = %d', $order_id ) );
 
 	// A repeated submit (double click, resent form) finds the change already made: say so and write nothing.
-	if ( $row && 'apply_status' === $post_action && $row->order_status === $to ) {
+	if ( $row && 'apply_status' === $post_action && in_array( $to, CAS_SALES_STATUS_MAP['pending'], true ) && $row->order_status === $to ) {
 		$GLOBALS['cas_sales_state']['notice'] = array( 'already' => true, 'order_id' => $order_id, 'to' => $to );
 		return;
 	}
@@ -683,6 +745,9 @@ function cas_sales_on_load() {
 		wp_die( esc_html__( 'Payment changed since confirmation. Review the order again.', 'hello-elementor-child' ), '', array( 'response' => 409 ) );
 	}
 	$result = cas_sales_apply_status( $order_id, $to, $expected_payment, $accepted_unpaid );
+	if ( 'write' === $result ) {
+		wp_die( esc_html__( 'Not saved: the course access change failed. Tell Herman.', 'hello-elementor-child' ), '', array( 'response' => 500 ) );
+	}
 	if ( 'preflight' === $result ) {
 		wp_die( esc_html__( 'Not saved: this order does not contain an accessible individual course and student. Tell Herman.', 'hello-elementor-child' ), '', array( 'response' => 400 ) );
 	}

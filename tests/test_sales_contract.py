@@ -83,6 +83,13 @@ def main() -> None:
     require(flat, "if ( 'cancelled' === $to && ( ! $current || (int) $current->order_id !== (int) $order_id", "cancellation must not remove access tied to another order")
     require(flat, "if ( 'completed' === $to && 'completed' === $row->post_status ) { return array( 'changed' => false ); }", "existing access must not be modified on repeated completion")
 
+    require(flat, "clean_post_cache( $id ); $verified = $target === get_post_status( $id );", "native direct SQL must invalidate the post cache before status verification")
+    require(flat, "catch ( \\Throwable $error )", "vendor write exceptions must enter controlled failure handling")
+    require(flat, "$uncertain = $before !== cas_sales_enrolment_fingerprint( $after )", "a new-enrolment exception must compare fresh persisted state before claiming no change")
+    require(flat, "$order_restored && empty( $snapshot['uncertain'] )", "uncertain insertion must never be reported as verified compensation")
+    require(flat, "if ( 'write' === $result ) { wp_die(", "verified write exceptions must show a clear not-saved response, not an unhandled fatal")
+    require(flat, "in_array( $to, CAS_SALES_STATUS_MAP['pending'], true ) && $row->order_status === $to", "already-done applies only to permitted completed/cancelled replay targets")
+
     # POST validation runs before the admin page prints, so refusals keep their HTTP status
     require(flat, "add_action( 'load-' . $hook, 'cas_sales_on_load' );", "POST handling must run on the page load hook")
 

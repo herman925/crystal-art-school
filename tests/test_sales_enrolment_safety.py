@@ -26,23 +26,38 @@ namespace Tutor\Models {
             $GLOBALS['writes'][] = [$status, $ids];
             return true;
         }
-        public static function do_enroll() { throw new \Exception('existing access was not found'); }
+        public static function do_enroll($course, $order, $user, $hooks) {
+            if ($hooks) { throw new \Exception('notification hooks enabled'); }
+            if (!empty($GLOBALS['insert_before_throw'])) {
+                $GLOBALS['rows'][] = (object)['ID' => 14, 'post_author' => $user, 'post_parent' => $course, 'post_status' => 'pending'];
+            }
+            throw new \Exception('injected enrolment failure');
+        }
     }
 }
 namespace {
     define('ABSPATH', '/');
     function add_action() {}
     function get_post_status($id) {
-        foreach ($GLOBALS['rows'] as $row) { if ($row->ID === $id) { return $row->post_status; } }
+        if (isset($GLOBALS['cache'][$id])) { return $GLOBALS['cache'][$id]; }
+        foreach ($GLOBALS['rows'] as $row) { if ($row->ID === $id) { return $GLOBALS['cache'][$id] = $row->post_status; } }
         return false;
     }
+    function clean_post_cache($id) { unset($GLOBALS['cache'][$id]); }
+    function wp_cache_delete($id, $group) {}
+    function tutor_utils() { return new class { public function get_course_product_id($course) { return $course; } }; }
     function get_post_meta($id, $key, $single) { return $GLOBALS['meta'][$id][$key] ?? ''; }
     function metadata_exists($type, $id, $key) { return isset($GLOBALS['meta'][$id][$key]); }
-    function update_post_meta() { throw new \Exception('existing order association was overwritten'); }
+    function update_post_meta($id, $key, $value) {
+        if ($id === 12) { throw new \Exception('prior purchased association was overwritten'); }
+        $GLOBALS['meta'][$id][$key] = $value;
+    }
     $wpdb = new class {
         public $posts = 'synthetic_posts';
         public $postmeta = 'synthetic_postmeta';
-        public function prepare($sql, $args) { return [$sql, $args]; }
+        public $usermeta = 'synthetic_usermeta';
+        public function prepare($sql, ...$args) { return [$sql, count($args) === 1 && is_array($args[0]) ? $args[0] : $args]; }
+        public function get_var($prepared) { return null; }
         public function query($prepared) {
             [$sql, $args] = $prepared;
             foreach (['p.post_author = %d', 'p.post_parent = %d', 'p.post_status = %s', 'COALESCE(om.meta_value', 'COALESCE(pm.meta_value'] as $required) {
@@ -56,8 +71,8 @@ namespace {
     require SALES_PATH;
     function check($condition, $message) { if (!$condition) { throw new \Exception($message); } }
     $GLOBALS['rows'] = [
-        (object)['ID' => 11, 'post_parent' => 34, 'post_status' => 'pending'],
-        (object)['ID' => 12, 'post_parent' => 34, 'post_status' => 'completed'],
+        (object)['ID' => 11, 'post_author' => 7, 'post_parent' => 34, 'post_status' => 'pending'],
+        (object)['ID' => 12, 'post_author' => 7, 'post_parent' => 34, 'post_status' => 'completed'],
     ];
     $GLOBALS['meta'] = [11 => ['_order' => 101], 12 => ['_order' => 99]];
     $GLOBALS['writes'] = [];
@@ -79,6 +94,16 @@ namespace {
     $GLOBALS['meta'][11]['_order'] = 101;
     $GLOBALS['rows'][0]->post_status = 'pending';
     check(!cas_sales_access_verified($order, [34], 'cancelled'), 'final check missed matching pending enrolment');
+    $GLOBALS['rows'][] = (object)['ID' => 13, 'post_author' => 7, 'post_parent' => 35, 'post_status' => 'pending'];
+    check(get_post_status(13) === 'pending', 'cache precondition missing');
+    $completed = cas_sales_sync_enrolment(201, 7, 35, 'completed');
+    check(empty($completed['failed']) && get_post_status(13) === 'completed', 'cached pending caused false completion failure');
+    check($GLOBALS['meta'][13]['_order'] === 201, 'completion did not persist association');
+    $failure = cas_sales_sync_enrolment(202, 7, 36, 'completed');
+    check($failure['failed'] && $failure['exception'] && !$failure['uncertain'] && !$failure['changed'], 'pre-insert exception was not verified unchanged');
+    $GLOBALS['insert_before_throw'] = true;
+    $partial = cas_sales_sync_enrolment(203, 7, 37, 'completed');
+    check($partial['failed'] && $partial['exception'] && $partial['uncertain'], 'partial insertion falsely claimed restored');
 }
 '''.replace("SALES_PATH", repr(str(SALES)))
         result = subprocess.run([shutil.which("php"), "-r", script], capture_output=True, text=True, check=False)
