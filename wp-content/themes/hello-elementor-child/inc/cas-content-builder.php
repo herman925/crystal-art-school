@@ -148,8 +148,10 @@ function cas_builder_sort_compatible( $course, $needs_widening ) {
 	if ( $needs_widening && ( ! defined( 'TUTOR_VERSION' ) || '4.1.3' !== TUTOR_VERSION || ! is_admin() || 'POST' !== ( $_SERVER['REQUEST_METHOD'] ?? '' ) ) ) { return false; }
 	if ( ! function_exists( 'tutor' ) || ! function_exists( 'tutor_utils' ) ) { return false; }
 	$plugin = tutor();
-	if ( ! is_object( $plugin ) || empty( $plugin->path ) || ! is_string( $plugin->path ) ) { return false; }
-	$root = trailingslashit( $plugin->path );
+	if ( ! is_object( $plugin ) ) { return false; }
+	$path = $plugin->path;
+	if ( ! is_string( $path ) || '' === $path ) { return false; }
+	$root = trailingslashit( $path );
 	$header = get_file_data( $root . 'tutor.php', array( 'Version' => 'Version' ) );
 	if ( $needs_widening && '4.1.3' !== ( $header['Version'] ?? '' ) ) { return false; }
 	try {
