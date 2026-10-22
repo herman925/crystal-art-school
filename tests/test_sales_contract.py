@@ -68,7 +68,7 @@ def main() -> None:
     require(flat, "'order_status' => $order->order_status", "the status update must compare against the status it read")
 
     # Enrolment goes through Tutor's own functions
-    require(flat, "\\Tutor\\Models\\EnrollmentModel", "enrolment must go through Tutor's EnrollmentModel")
+    require(flat, r"\\Tutor\\Models\\EnrollmentModel", "enrolment must go through Tutor's EnrollmentModel")
     require(flat, "$target = 'completed' === $to ? 'completed' : 'cancel';", "Tutor enrollment status mapping must be explicit")
     require(flat, "$model::update_enrollments( $target, array( $id ), false )", "Tutor updates must suppress hooks that could send mail before success")
     require(flat, "$model::do_enroll( $course_id, 0, $user_id, false )", "new access must use Tutor without notification hooks")
