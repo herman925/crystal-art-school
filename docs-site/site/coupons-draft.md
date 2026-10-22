@@ -26,6 +26,12 @@ A 100% code makes the course free for anyone who successfully uses it within its
 
 Do not promise a deadline at a particular student's local midnight. Ask Herman to verify an exact timezone or checkout cut-off before advertising it.
 
+## What a checked local example shows
+
+In a local check of the site's native coupon request, an unused 10% code reduced a test basket from `29.00` to `26.10`. With one previous use and a per-user limit of one, the request was refused with a usage-limit message.
+
+Those are test amounts, not agreed course prices. This verifies the local coupon-controller request only—not an external payment, an existing payment-provider session, tax treatment, Tutor Pro integrations or a browser checkout journey. The final screens and wider payment flow still need review.
+
 ## Edit, deactivate or delete
 
 - Check the exact code before editing. The change does not refund earlier purchases.

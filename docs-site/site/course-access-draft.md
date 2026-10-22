@@ -20,6 +20,16 @@ Check the existing student and exact published course. Agree whether access shou
 
 Adding access gives the course without creating or correcting a payment record. Removing access removes access to the selected course, including access represented by existing enrolment rows; it does not issue a refund or cancel a paid order.
 
+Removing access keeps the cancelled enrolment record and the existing student account. It does not delete the person’s account or erase their student designation.
+
+Keep these actions separate:
+
+- **Remove access:** changes the student's access to the selected course.
+- **Cancel a pending order in Sales:** changes that pending order; it is not a refund and does not remove independent access from another completed purchase.
+- **Refund:** concerns a payment and is not performed by this screen. Ask Herman about the particular payment instead of substituting an access change.
+
+An isolated backend check verified that these manual access changes for an existing student left order/payment/refund records unchanged. That check is not approval of the final screens, payment-provider behaviour or automatic email content; this guide remains a draft.
+
 Do not use Remove access as an automatic refund/dispute policy. Ask Herman to check the particular order and intended access decision. A later legitimate payment/enrolment event may need investigation, not another manual correction.
 
 ## If something goes wrong
