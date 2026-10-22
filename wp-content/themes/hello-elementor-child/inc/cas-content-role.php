@@ -12,7 +12,7 @@
 const CAS_CONTENT_ROLE         = 'cas_content';
 const CAS_CONTENT_CAP          = 'manage_cas_content';
 const CAS_CONTENT_HUB_SLUG     = 'cas-content-hub';
-const CAS_CONTENT_ROLE_VERSION = 2; // 2: Tutor course and lesson caps (W1-3). Bump on every change to the caps.
+const CAS_CONTENT_ROLE_VERSION = 3; // 3: native own-course publication, gated by confirmed initial price. Bump on every change to the caps.
 
 /** Post types the role may edit, own records only. Course prices are gated in cas-price-gate.php. */
 const CAS_CONTENT_POST_TYPES = array(
@@ -57,6 +57,7 @@ function cas_content_role_caps() {
 		'delete_posts'           => true,
 		'delete_published_posts' => true,
 		'edit_tutor_courses'     => true,
+		'publish_tutor_courses'  => true,
 		'edit_tutor_lessons'     => true,
 		'publish_tutor_lessons'  => true,
 	);

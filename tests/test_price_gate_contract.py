@@ -83,7 +83,7 @@ class PriceGateContract(unittest.TestCase):
         caps = ROLE.split("function cas_content_role_caps")[1].split("}")[0]
         for cap in ["edit_tutor_courses", "edit_tutor_lessons", "publish_tutor_lessons"]:
             self.assertIn(f"'{cap}'", caps)
-        self.assertNotIn("publish_tutor_courses", caps)
+        self.assertIn("publish_tutor_courses", caps)
         self.assertNotIn("edit_others_tutor_courses", caps)
 
 

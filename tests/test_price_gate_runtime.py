@@ -50,8 +50,10 @@ $uid = username_exists('w1cascontent') ?: wp_create_user('w1cascontent', wp_gene
 $pw = wp_generate_password(32, false); wp_set_password($pw, $uid);
 (new WP_User($uid))->set_role('cas_content');
 $own = wp_insert_post(array('post_type'=>'courses','post_status'=>'draft','post_title'=>'W1 own course','post_author'=>$uid));
+update_post_meta($own, '_tutor_course_price_type', 'paid');
 update_post_meta($own, 'tutor_course_price', '50'); update_post_meta($own, 'tutor_course_sale_price', '');
 $adm = wp_insert_post(array('post_type'=>'courses','post_status'=>'draft','post_title'=>'W1 admin course','post_author'=>1));
+update_post_meta($adm, '_tutor_course_price_type', 'paid');
 update_post_meta($adm, 'tutor_course_price', '80'); update_post_meta($adm, 'tutor_course_sale_price', '');
 $wpdb->insert($wpdb->tutor_orders, array('user_id'=>$uid,'order_type'=>'course','order_status'=>'completed','payment_status'=>'paid','subtotal_price'=>'50.00','pre_tax_price'=>'50.00','total_price'=>'50.00','net_payment'=>'50.00','created_at_gmt'=>gmdate('Y-m-d H:i:s'),'created_by'=>$uid,'updated_by'=>$uid));
 $order = (int)$wpdb->insert_id;
@@ -129,7 +131,8 @@ echo 'cleaned';
         return php(f"echo get_post_meta({course}, 'tutor_course_price', true), '|', get_post_meta({course}, 'tutor_course_sale_price', true);").strip()
 
     def price_pair(self, course):
-        return json.loads(php(f"echo json_encode(cas_price_current({course}));"))
+        pair = json.loads(php(f"echo json_encode(cas_price_current({course}));"))
+        return {k:pair[k] for k in ('regular','sale')}
 
     def set_price(self, course, value):
         php(f"update_post_meta({course}, 'tutor_course_price', '{value}');")
@@ -167,7 +170,7 @@ $_POST = array();
 echo 'attempted';
 """)
         self.assertEqual(self.price(course), "50|")
-        self.assertEqual(php(f"echo get_post_meta({course}, '_tutor_course_price_type', true);").strip(), "")
+        self.assertEqual(php(f"echo get_post_meta({course}, '_tutor_course_price_type', true);").strip(), "paid")
 
     def test_1_admin_course_is_refused_at_request(self):
         self.login()
