@@ -1,10 +1,9 @@
 <?php
 /**
- * W2-2 Coupons: list, create, edit, deactivate, activate and delete, through Tutor's CouponModel.
- *
- * Every screen and POST step checks manage_cas_content and a nonce before it reads or writes. Coupons apply to
- * all courses only (no per-course or bundle rules from this screen). A coupon with usage is never deleted and its
- * code is never changed. A 100% coupon makes the course free, so it needs an extra tick.
+ * W2-2 Coupons: list, create, edit, activate/deactivate and delete. Tutor's CouponModel handles mutations and usage counts;
+ * coupon-row reads use its trusted table name without hydrating creator WP_User objects.
+ * Coupons apply to all courses only (no per-course or bundle rules here). Used coupons cannot be deleted and
+ * used codes cannot be changed. A 100% coupon makes the course free, so it needs an exact confirmation tick.
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -23,6 +22,29 @@ function cas_coupons_model() {
 	return new \Tutor\Models\CouponModel();
 }
 
+/** Read rows without Tutor's formatter, which hydrates creator WP_User objects and capabilities. */
+function cas_coupons_record_by_id( $id ) {
+	global $wpdb;
+	$table = cas_coupons_model()->get_table_name();
+	return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$table} WHERE id = %d", absint( $id ) ) );
+}
+
+function cas_coupons_record_by_code( $code ) {
+	global $wpdb;
+	$table = cas_coupons_model()->get_table_name();
+	return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM {$table} WHERE coupon_code = %s", $code ) );
+}
+
+function cas_coupons_records() {
+	global $wpdb;
+	$table = cas_coupons_model()->get_table_name();
+	$rows = $wpdb->get_results( "SELECT * FROM {$table} ORDER BY id DESC LIMIT 200" );
+	foreach ( (array) $rows as $row ) {
+		$row->usage_count = cas_coupons_used( $row->coupon_code );
+	}
+	return (array) $rows;
+}
+
 /** How many times a coupon has been used at checkout. */
 function cas_coupons_used( $coupon_code ) {
 	return (int) cas_coupons_model()->get_coupon_usage_count( $coupon_code );
@@ -37,7 +59,6 @@ function cas_coupons_used( $coupon_code ) {
  * @return array{data?: array, error?: string}
  */
 function cas_coupons_validate( array $in, $id ) {
-	$model = cas_coupons_model();
 	$title = sanitize_text_field( wp_unslash( $in['coupon_title'] ?? '' ) );
 	$code  = strtoupper( trim( sanitize_text_field( wp_unslash( $in['coupon_code'] ?? '' ) ) ) );
 	$type  = sanitize_key( $in['discount_type'] ?? '' );
@@ -51,11 +72,11 @@ function cas_coupons_validate( array $in, $id ) {
 	if ( ! preg_match( '/^[A-Z0-9_-]{3,40}$/', $code ) ) {
 		return array( 'error' => 'The code must be 3 to 40 letters, numbers, dashes or underscores.' );
 	}
-	$existing = $model->get_coupon_by_code( $code );
+	$existing = cas_coupons_record_by_code( $code );
 	if ( $existing && (int) $existing->id !== (int) $id ) {
 		return array( 'error' => 'That code is already in use.' );
 	}
-	$current = $id ? $model->get_coupon_by_id( $id ) : null;
+	$current = $id ? cas_coupons_record_by_id( $id ) : null;
 	if ( $current && $code !== $current->coupon_code && cas_coupons_used( $current->coupon_code ) > 0 ) {
 		return array( 'error' => 'This coupon has been used, so its code cannot change.' );
 	}
@@ -88,7 +109,8 @@ function cas_coupons_validate( array $in, $id ) {
 		return array( 'error' => 'Usage limits must be blank (no limit) or a whole number of at least 1.' );
 	}
 
-	if ( 'percentage' === $type && 100.0 === (float) $raw && empty( $in['accept_full_discount'] ) ) {
+	$full_discount_ack = isset( $in['accept_full_discount'] ) && is_string( $in['accept_full_discount'] ) && '1' === $in['accept_full_discount'];
+	if ( 'percentage' === $type && 100.0 === (float) $raw && ! $full_discount_ack ) {
 		return array( 'error' => 'No payment is due at 100%. This coupon makes the course free. Tick the box to confirm.' );
 	}
 
@@ -152,7 +174,7 @@ function cas_coupons_on_load() {
 
 	if ( 'save' === $action ) {
 		check_admin_referer( 'cas_coupons_save_' . $id );
-		$current = $id ? $model->get_coupon_by_id( $id ) : null;
+		$current = $id ? cas_coupons_record_by_id( $id ) : null;
 		if ( $id && ! $current ) {
 			wp_die( esc_html__( 'That coupon does not exist.', 'hello-elementor-child' ), '', array( 'response' => 404 ) );
 		}
@@ -169,11 +191,11 @@ function cas_coupons_on_load() {
 		$now  = current_time( 'mysql', true );
 		if ( $id ) {
 			$data = $checked['data'] + array( 'updated_by' => $user, 'updated_at_gmt' => $now );
-			if ( ! cas_coupons_audit( 'coupon_saved', "coupon={$id} action=update" ) ) {
+			if ( ! cas_coupons_audit( 'coupon_save_attempt', "coupon={$id} action=update" ) ) {
 				wp_die( esc_html__( 'Not saved: the change could not be recorded. Tell Herman.', 'hello-elementor-child' ), '', array( 'response' => 500 ) );
 			}
 			$model->update_coupon( $id, $data );
-			$stored = $model->get_coupon_by_id( $id );
+			$stored = cas_coupons_record_by_id( $id );
 			$matches = $stored
 				&& $stored->coupon_code === $data['coupon_code']
 				&& $stored->coupon_title === $data['coupon_title']
@@ -190,7 +212,7 @@ function cas_coupons_on_load() {
 			$GLOBALS['cas_coupons_state']['notice'] = array( 'text' => 'Coupon saved.' );
 		} else {
 			$data = $checked['data'] + array( 'coupon_status' => 'active', 'created_by' => $user, 'updated_by' => $user, 'created_at_gmt' => $now, 'updated_at_gmt' => $now );
-			if ( ! cas_coupons_audit( 'coupon_saved', 'action=create code=' . $data['coupon_code'] ) ) {
+			if ( ! cas_coupons_audit( 'coupon_save_attempt', 'action=create code=' . $data['coupon_code'] ) ) {
 				wp_die( esc_html__( 'Not saved: the change could not be recorded. Tell Herman.', 'hello-elementor-child' ), '', array( 'response' => 500 ) );
 			}
 			try {
@@ -210,7 +232,7 @@ function cas_coupons_on_load() {
 	}
 
 	check_admin_referer( 'cas_coupons_row_' . $action . '_' . $id );
-	$coupon = $id ? $model->get_coupon_by_id( $id ) : null;
+	$coupon = $id ? cas_coupons_record_by_id( $id ) : null;
 	if ( ! $coupon ) {
 		wp_die( esc_html__( 'That coupon does not exist.', 'hello-elementor-child' ), '', array( 'response' => 404 ) );
 	}
@@ -222,11 +244,11 @@ function cas_coupons_on_load() {
 		if ( cas_coupons_used( $coupon->coupon_code ) > 0 ) {
 			wp_die( esc_html__( 'This coupon has been used, so it cannot be deleted. Deactivate it instead.', 'hello-elementor-child' ), '', array( 'response' => 400 ) );
 		}
-		if ( ! cas_coupons_audit( 'coupon_deleted', "coupon={$id}" ) ) {
+		if ( ! cas_coupons_audit( 'coupon_delete_attempt', "coupon={$id}" ) ) {
 			wp_die( esc_html__( 'Not deleted: the change could not be recorded. Tell Herman.', 'hello-elementor-child' ), '', array( 'response' => 500 ) );
 		}
 		$deleted = $model->delete_coupon( $id );
-		if ( ! $deleted || $model->get_coupon_by_id( $id ) ) {
+		if ( ! $deleted || cas_coupons_record_by_id( $id ) ) {
 			$GLOBALS['cas_coupons_state']['errors'] = 'Not deleted: the database did not confirm the change. Tell Herman.';
 			return;
 		}
@@ -240,11 +262,11 @@ function cas_coupons_on_load() {
 	if ( $coupon->coupon_status !== $from_ok ) {
 		wp_die( esc_html__( 'That change is not allowed for this coupon.', 'hello-elementor-child' ), '', array( 'response' => 400 ) );
 	}
-	if ( ! cas_coupons_audit( 'coupon_status_changed', "coupon={$id} to={$to}" ) ) {
+	if ( ! cas_coupons_audit( 'coupon_status_change_attempt', "coupon={$id} to={$to}" ) ) {
 		wp_die( esc_html__( 'Not changed: the change could not be recorded. Tell Herman.', 'hello-elementor-child' ), '', array( 'response' => 500 ) );
 	}
 	$saved = $model->update_coupon( $id, array( 'coupon_status' => $to, 'updated_by' => get_current_user_id(), 'updated_at_gmt' => current_time( 'mysql', true ) ) );
-	$stored = $model->get_coupon_by_id( $id );
+	$stored = cas_coupons_record_by_id( $id );
 	if ( ! $saved || ! $stored || $stored->coupon_status !== $to ) {
 		$GLOBALS['cas_coupons_state']['errors'] = 'Not changed: the database did not confirm the change. Tell Herman.';
 		return;
@@ -254,8 +276,7 @@ function cas_coupons_on_load() {
 
 function cas_coupons_render_list() {
 	$model   = cas_coupons_model();
-	$results = $model->get_coupons( array(), '', 200 );
-	$rows    = array_values( array_filter( $results['results'] ?? array(), function ( $c ) { return 'trash' !== $c->coupon_status; } ) );
+	$rows = array_values( array_filter( cas_coupons_records(), function ( $c ) { return 'trash' !== $c->coupon_status; } ) );
 
 	if ( ! $rows ) {
 		echo '<p>No coupons yet.</p>';
@@ -364,7 +385,7 @@ function cas_coupons_render() {
 	if ( $edit_id || $new ) {
 		$values = array();
 		if ( $edit_id ) {
-			$coupon = cas_coupons_model()->get_coupon_by_id( $edit_id );
+			$coupon = cas_coupons_record_by_id( $edit_id );
 			if ( ! $coupon ) {
 				wp_die( esc_html__( 'That coupon does not exist.', 'hello-elementor-child' ), '', array( 'response' => 404 ) );
 			}

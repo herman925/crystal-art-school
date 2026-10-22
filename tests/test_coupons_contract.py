@@ -20,7 +20,15 @@ def main() -> None:
     code = "\n".join(line for line in code.splitlines() if not line.lstrip().startswith("//"))
     flat = " ".join(code.split())
 
-    require(flat, "new \\Tutor\\Models\\CouponModel()", "all writes and reads must use Tutor's CouponModel")
+    require(flat, "new \\Tutor\\Models\\CouponModel()", "coupon mutations and usage counts must use Tutor's CouponModel")
+    require(flat, "cas_coupons_model()->get_table_name()", "safe raw coupon reads must use Tutor's trusted table name")
+    require(flat, "SELECT * FROM {$table} WHERE id = %d", "coupon id read must be prepared")
+    require(flat, "SELECT * FROM {$table} WHERE coupon_code = %s", "coupon code read must be prepared")
+    require(flat, "SELECT * FROM {$table} ORDER BY id DESC LIMIT 200", "coupon list must preserve id-descending order and the 200-row bound")
+    require(flat, "cas_coupons_used( $row->coupon_code )", "list usage counts must use Tutor's CouponModel")
+    for unsafe in ("get_userdata(", "get_user_meta(", "maybe_unserialize("):
+        if unsafe in code:
+            raise AssertionError(f"coupon screens must not hydrate creator usermeta: {unsafe}")
     require(flat, "CAS_COUPONS_CAP = 'manage_cas_content'", "screen must use manage_cas_content")
     require(flat, "'cas-content-hub'", "coupon screen must be under the content hub")
     require(flat, "'cas-coupons'", "coupon slug must be cas-coupons")
@@ -37,10 +45,10 @@ def main() -> None:
         if write not in flat:
             raise AssertionError(f"expected CouponModel write is missing: {write}")
     for event, write in (
-        ("'coupon_saved', 'action=create code='", "$model->create_coupon( $data )"),
-        ("'coupon_saved', \"coupon={$id} action=update\"", "$model->update_coupon( $id, $data )"),
-        ("'coupon_deleted', \"coupon={$id}\"", "$model->delete_coupon( $id )"),
-        ("'coupon_status_changed', \"coupon={$id} to={$to}\"", "$model->update_coupon( $id, array( 'coupon_status' => $to"),
+        ("'coupon_save_attempt', 'action=create code='", "$model->create_coupon( $data )"),
+        ("'coupon_save_attempt', \"coupon={$id} action=update\"", "$model->update_coupon( $id, $data )"),
+        ("'coupon_delete_attempt', \"coupon={$id}\"", "$model->delete_coupon( $id )"),
+        ("'coupon_status_change_attempt', \"coupon={$id} to={$to}\"", "$model->update_coupon( $id, array( 'coupon_status' => $to"),
     ):
         start = flat.index(event)
         end = flat.index(write, start)
@@ -57,7 +65,7 @@ def main() -> None:
     require(flat, "(int) $raw <= $max", "usage limits must fit Tutor's field widths")
     require(flat, "cas_coupons_limit( $in['total_usage_limit'] ?? '', 4294967295 )", "total-use cap must respect Tutor's UNSIGNED INT field")
     require(flat, "cas_coupons_limit( $in['per_user_usage_limit'] ?? '', 255 )", "per-user limit must respect Tutor's TINYINT field")
-    require(flat, "'percentage' === $type && 100.0 === (float) $raw && empty( $in['accept_full_discount'] )", "100% coupons must require an extra confirmation")
+    require(flat, "is_string( $in['accept_full_discount'] ) && '1' === $in['accept_full_discount']", "100% coupons must require the exact confirmation tick value")
     require(flat, "$parsed < $start_date", "expiry cannot be earlier than start")
 
     for forbidden in ("manage_options", "'administrator'", "refund", "Refund", "$wpdb->insert", "$wpdb->update", "$wpdb->delete"):
