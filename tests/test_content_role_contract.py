@@ -43,7 +43,8 @@ class ContentRoleContract(unittest.TestCase):
         allow = block("const CAS_CONTENT_POST_TYPES")
         self.assertNotIn("elementor_library", allow)
         self.assertNotIn("'page'", allow)
-        self.assertNotIn("'courses'", allow, "Tutor courses join the allowlist in W1-3, behind the price gate")
+        self.assertIn("'courses'", allow, "Tutor courses join the allowlist in W1-3; prices are gated in cas-price-gate.php")
+        self.assertIn("'lesson'", allow)
 
     def test_allowlist_names_the_approved_content_types(self):
         allow = block("const CAS_CONTENT_POST_TYPES")
