@@ -46,6 +46,17 @@ export default defineConfig({
         ]
       },
       {
+        text: 'Money and access — draft',
+        items: [
+          { text: 'Start with the safety checklist', link: '/money-guide-draft' },
+          { text: 'Course prices — draft', link: '/course-prices-draft' },
+          { text: 'Coupons — draft', link: '/coupons-draft' },
+          { text: 'Sales and exports — draft', link: '/sales-draft' },
+          { text: 'Course access — draft', link: '/course-access-draft' },
+          { text: 'Troubleshooting — draft', link: '/money-help-draft' }
+        ]
+      },
+      {
         text: 'Pages that look after themselves',
         items: [
           { text: 'Topic, date and search pages', link: '/archives' },
