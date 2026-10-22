@@ -15,6 +15,7 @@ class SalesEnrolmentSafety(unittest.TestCase):
 namespace Tutor\Models {
     class EnrollmentModel {
         const ENROLLMENT_ORDER_ID_META = '_order';
+        const POST_TYPE = 'tutor_enrolled';
         const ENROLLMENT_PRODUCT_ID_META = '_product';
         public static function get_enrolled_data($user, $course, $status) { return $GLOBALS['rows']; }
         public static function update_enrollments($status, $ids, $hooks = true): bool {
@@ -38,6 +39,20 @@ namespace {
     function get_post_meta($id, $key, $single) { return $GLOBALS['meta'][$id][$key] ?? ''; }
     function metadata_exists($type, $id, $key) { return isset($GLOBALS['meta'][$id][$key]); }
     function update_post_meta() { throw new \Exception('existing order association was overwritten'); }
+    $wpdb = new class {
+        public $posts = 'synthetic_posts';
+        public $postmeta = 'synthetic_postmeta';
+        public function prepare($sql, $args) { return [$sql, $args]; }
+        public function query($prepared) {
+            [$sql, $args] = $prepared;
+            foreach (['p.post_author = %d', 'p.post_parent = %d', 'p.post_status = %s', 'COALESCE(om.meta_value', 'COALESCE(pm.meta_value'] as $required) {
+                if (strpos($sql, $required) === false) { throw new \Exception('conditional undo omitted identity/state'); }
+            }
+            $GLOBALS['meta'][11]['_order'] = 103;
+            if ((string)$GLOBALS['meta'][11]['_order'] !== (string)$args[count($args) - 4]) { return 0; }
+            throw new \Exception('conditional undo unexpectedly matched newer association');
+        }
+    };
     require SALES_PATH;
     function check($condition, $message) { if (!$condition) { throw new \Exception($message); } }
     $GLOBALS['rows'] = [
@@ -58,8 +73,8 @@ namespace {
     $order = (object)['id' => 101, 'user_id' => 7];
     check(cas_sales_access_verified($order, [34], 'completed'), 'prior access did not satisfy final completion check');
     check(cas_sales_access_verified($order, [34], 'cancelled'), 'other order access blocked valid cancellation');
-    $GLOBALS['meta'][11]['_order'] = 103;
     check(cas_sales_restore_enrolment($snapshot) === false, 'compensation overwrote newer order association');
+    check($GLOBALS['meta'][11]['_order'] === 103, 'conditional undo clobbered concurrent association');
     check(count($GLOBALS['writes']) === 1, 'foreign association changed before compensation refusal');
     $GLOBALS['meta'][11]['_order'] = 101;
     $GLOBALS['rows'][0]->post_status = 'pending';

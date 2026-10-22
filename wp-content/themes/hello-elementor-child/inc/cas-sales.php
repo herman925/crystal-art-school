@@ -299,41 +299,68 @@ function cas_sales_student_marker_safe( $user_id ) {
 	return null === $marker || ( is_string( $marker ) && ( '' === $marker || ctype_digit( $marker ) ) );
 }
 
-/** Restore a meta field exactly as it was before a manual enrollment change. */
-function cas_sales_restore_enrolment_meta( $enrolment_id, $key, $exists, $value ) {
-	if ( $exists ) {
-		update_post_meta( $enrolment_id, $key, $value );
-	} else {
-		delete_post_meta( $enrolment_id, $key );
-	}
-	return (bool) metadata_exists( 'post', $enrolment_id, $key ) === (bool) $exists
-		&& ( ! $exists || (string) get_post_meta( $enrolment_id, $key, true ) === (string) $value );
-}
-
-/** Compensate one enrollment row without firing Tutor emails/hooks. */
+/** Native Tutor updates are unconditional; compensation must compare ownership in the write itself. */
 function cas_sales_restore_enrolment( $snapshot ) {
 	if ( empty( $snapshot['changed'] ) ) {
 		return true;
 	}
 
+	global $wpdb;
 	$model = '\\Tutor\\Models\\EnrollmentModel';
-	$id    = (int) $snapshot['id'];
-	if ( $snapshot['written_status'] !== get_post_status( $id )
-		|| (string) get_post_meta( $id, $model::ENROLLMENT_ORDER_ID_META, true ) !== (string) $snapshot['written_order_id']
-		|| (string) get_post_meta( $id, $model::ENROLLMENT_PRODUCT_ID_META, true ) !== (string) $snapshot['written_product_id'] ) {
+	$id = (int) $snapshot['id'];
+	$status = $snapshot['created'] ? 'cancel' : $snapshot['status'];
+	$order_exists = ! $snapshot['created'] && $snapshot['order_exists'];
+	$product_exists = ! $snapshot['created'] && $snapshot['product_exists'];
+	$set = array( 'p.post_status = %s' );
+	$args = array( $status );
+	if ( $order_exists ) {
+		$set[] = 'om.meta_value = %s';
+		$args[] = $snapshot['order_id'];
+	}
+	if ( $product_exists ) {
+		$set[] = 'pm.meta_value = %s';
+		$args[] = $snapshot['product_id'];
+	}
+	$joins = " FROM {$wpdb->posts} p
+		LEFT JOIN {$wpdb->postmeta} om ON om.post_id = p.ID AND om.meta_key = %s
+		LEFT JOIN {$wpdb->postmeta} pm ON pm.post_id = p.ID AND pm.meta_key = %s";
+	$keys = array( $model::ENROLLMENT_ORDER_ID_META, $model::ENROLLMENT_PRODUCT_ID_META );
+	$where = ' WHERE p.ID = %d AND p.post_type = %s AND p.post_author = %d AND p.post_parent = %d AND p.post_status = %s
+		AND COALESCE(om.meta_value, \'\') = %s AND COALESCE(pm.meta_value, \'\') = %s
+		AND (om.meta_id IS NOT NULL) = %d AND (pm.meta_id IS NOT NULL) = %d';
+	$identity = array( $id, $model::POST_TYPE, $snapshot['user_id'], $snapshot['course_id'] );
+	$written = array_merge( $identity, array( $snapshot['written_status'], (string) $snapshot['written_order_id'], (string) $snapshot['written_product_id'], (int) $snapshot['written_order_exists'], (int) $snapshot['written_product_exists'] ) );
+	$sql = "UPDATE {$wpdb->posts} p
+		LEFT JOIN {$wpdb->postmeta} om ON om.post_id = p.ID AND om.meta_key = %s
+		LEFT JOIN {$wpdb->postmeta} pm ON pm.post_id = p.ID AND pm.meta_key = %s
+		SET " . implode( ', ', $set ) . $where;
+	$changed = $wpdb->query( $wpdb->prepare( $sql, array_merge( $keys, $args, $written ) ) );
+	if ( false === $changed || $changed < 1 ) {
 		return false;
 	}
-	if ( $snapshot['created'] ) {
-		$model::update_enrollments( 'cancel', array( $id ), false );
-		cas_sales_restore_enrolment_meta( $id, $model::ENROLLMENT_ORDER_ID_META, false, '' );
-		cas_sales_restore_enrolment_meta( $id, $model::ENROLLMENT_PRODUCT_ID_META, false, '' );
-		return 'cancel' === get_post_status( $id );
-	}
 
-	$model::update_enrollments( $snapshot['status'], array( $id ), false );
-	$order_ok = cas_sales_restore_enrolment_meta( $id, $model::ENROLLMENT_ORDER_ID_META, $snapshot['order_exists'], $snapshot['order_id'] );
-	$product_ok = cas_sales_restore_enrolment_meta( $id, $model::ENROLLMENT_PRODUCT_ID_META, $snapshot['product_exists'], $snapshot['product_id'] );
-	return $snapshot['status'] === get_post_status( $id ) && $order_ok && $product_ok;
+	$delete = array();
+	if ( ! $order_exists ) {
+		$delete[] = 'om';
+	}
+	if ( ! $product_exists ) {
+		$delete[] = 'pm';
+	}
+	if ( $delete ) {
+		$restored = array_merge( $identity, array( $status, (string) ( $order_exists ? $snapshot['order_id'] : $snapshot['written_order_id'] ), (string) ( $product_exists ? $snapshot['product_id'] : $snapshot['written_product_id'] ), (int) $snapshot['written_order_exists'], (int) $snapshot['written_product_exists'] ) );
+		$deleted = $wpdb->query( $wpdb->prepare( 'DELETE ' . implode( ', ', $delete ) . $joins . $where, array_merge( $keys, $restored ) ) );
+		if ( false === $deleted ) {
+			return false;
+		}
+	}
+	clean_post_cache( $id );
+	wp_cache_delete( $id, 'post_meta' );
+	$row = $wpdb->get_row( $wpdb->prepare( "SELECT post_status, post_author, post_parent FROM {$wpdb->posts} WHERE ID = %d", $id ) );
+	return $row && $status === $row->post_status && (int) $row->post_author === (int) $snapshot['user_id'] && (int) $row->post_parent === (int) $snapshot['course_id']
+		&& metadata_exists( 'post', $id, $model::ENROLLMENT_ORDER_ID_META ) === $order_exists
+		&& metadata_exists( 'post', $id, $model::ENROLLMENT_PRODUCT_ID_META ) === $product_exists
+		&& ( ! $order_exists || (string) get_post_meta( $id, $model::ENROLLMENT_ORDER_ID_META, true ) === (string) $snapshot['order_id'] )
+		&& ( ! $product_exists || (string) get_post_meta( $id, $model::ENROLLMENT_PRODUCT_ID_META, true ) === (string) $snapshot['product_id'] );
 }
 
 /** Change one course enrollment through Tutor; never send Tutor mail for an order that may roll back. */
@@ -386,12 +413,16 @@ function cas_sales_sync_enrolment( $order_id, $user_id, $course_id, $to ) {
 		'changed'        => true,
 		'created'        => $created,
 		'id'             => $id,
+		'user_id'        => (int) $user_id,
+		'course_id'      => (int) $course_id,
 		'status'         => $status,
 		'order_exists'   => metadata_exists( 'post', $id, $model::ENROLLMENT_ORDER_ID_META ),
 		'order_id'       => get_post_meta( $id, $model::ENROLLMENT_ORDER_ID_META, true ),
 		'product_exists' => metadata_exists( 'post', $id, $model::ENROLLMENT_PRODUCT_ID_META ),
 		'product_id'     => get_post_meta( $id, $model::ENROLLMENT_PRODUCT_ID_META, true ),
 		'written_status' => 'completed' === $to ? 'completed' : 'cancel',
+		'written_order_exists' => 'completed' === $to || metadata_exists( 'post', $id, $model::ENROLLMENT_ORDER_ID_META ),
+		'written_product_exists' => 'completed' === $to || metadata_exists( 'post', $id, $model::ENROLLMENT_PRODUCT_ID_META ),
 		'written_order_id' => 'completed' === $to ? (int) $order_id : get_post_meta( $id, $model::ENROLLMENT_ORDER_ID_META, true ),
 		'written_product_id' => 'completed' === $to ? (int) tutor_utils()->get_course_product_id( $course_id ) : get_post_meta( $id, $model::ENROLLMENT_PRODUCT_ID_META, true ),
 	);
