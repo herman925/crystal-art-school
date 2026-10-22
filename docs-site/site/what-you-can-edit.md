@@ -25,11 +25,13 @@ changing it means asking the webmaster — see [what is fixed](/limits) for why.
 | Free videos, their covers and their links | Free videos |
 | Blog articles | Posts |
 | Article topics | Posts → Categories |
-| Course titles, covers, prices, descriptions, syllabus | Tutor LMS → Courses |
+| Course titles, covers, descriptions, syllabus | Course content editor — see [Courses](/courses) |
+| Paid-course regular and sale prices | Confirmed [Course prices workflow](/course-prices-draft); draft instructions pending final review and handover |
 | Lesson titles, videos, one-line subtitles | Tutor LMS → Lessons |
-| Currency symbol, cart page | Tutor LMS → Settings |
 | Your public name on article bylines | Users → Profile |
 | How many articles fit on a topic or search page | Settings → Reading |
+
+**Currency and cart settings are managed by Herman.** They are not part of your content-editing controls. Ask Herman about a change; do not use global Tutor Settings as a workaround for a price problem.
 
 ## One thing to know before you start
 
