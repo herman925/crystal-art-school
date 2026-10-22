@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 """Private course files, end to end on the local test site (cas-local).
 
-Needs the local stack (container cas-local-wordpress-1 on 127.0.0.1:18089) and Tutor free.
-It copies the module into the local site as a temporary mu-plugin, creates synthetic
+Needs a local stack and Tutor free. Review can select its isolated stack with
+CAS_REVIEW_CONTAINER and CAS_LOCAL_BASE (defaults remain cas-local on 127.0.0.1:18089).
+The module is already loaded by the theme; it creates synthetic
 students, course, topic, lesson and attachments, runs the attachment hook, then checks:
 logged-out 403; enrolled 200 with a matching sha256; not enrolled 403; administrator 200;
 the lesson's attachment resolves to its course; direct uploads URLs (original and every
@@ -25,8 +26,8 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 MODULE = ROOT / "wp-content/themes/hello-elementor-child/inc/cas-private-files.php"
-CONTAINER = "cas-local-wordpress-1"
-BASE = "http://127.0.0.1:18089"
+CONTAINER = os.environ.get("CAS_REVIEW_CONTAINER", "cas-local-wordpress-1")
+BASE = os.environ.get("CAS_LOCAL_BASE", "http://127.0.0.1:18089")
 
 
 def php(script: str) -> str:
@@ -93,6 +94,8 @@ function w1_user($login, $role) {
 $enrolled = w1_user('w1enrolled', 'subscriber');
 $outsider = w1_user('w1outsider', 'subscriber');
 $admin    = w1_user('w1admin', 'administrator');
+// Fixture assignment is an explicit synthetic administrator action, never an anonymous writer.
+wp_set_current_user($admin['id']);
 
 $course = wp_insert_post(array('post_type' => 'courses', 'post_status' => 'publish', 'post_title' => 'W1 private test course'));
 $topic  = wp_insert_post(array('post_type' => 'topics', 'post_status' => 'publish', 'post_parent' => $course, 'post_title' => 'W1 topic'));
