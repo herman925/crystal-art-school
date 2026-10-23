@@ -1,50 +1,42 @@
 # What you can edit
 
-Everything on this page you can change yourself. Anything not listed here is fixed, and
-changing it means asking the webmaster — see [what is fixed](/limits) for why.
+> **Draft — the limited-account routes and money instructions still need final checks and handover.**
 
-| What | Where |
+Use only the approved controls available in your content account. This is not an administrator account, and records belonging to another user may not be editable. If a control or expected record is missing, ask the webmaster; do not use an administrator login, create a duplicate or try another settings route. See [what is fixed](/limits).
+
+Start from **Content hub**. Its page cards open the approved settings and lists.
+
+| What | Where to start |
 |---|---|
-| Header logo, hero signature mark, footer signature | Customize → Site-wide → Logo and signature |
-| Instagram, Facebook, YouTube, contact email | Customize → Site-wide → Contact and social links |
-| The links across the top of the site | Appearance → Menus |
-| Homepage banner: 3 slides, each with a title, a description and two images | Customize → Pages → Home |
-| Homepage free videos card: photograph and description | Customize → Pages → Home — Free videos card |
-| Homepage About Crystal card: photograph | Customize → Pages → Home — About Crystal |
-| The paragraph under "Shop all courses" on the homepage | Customize → Pages → Home — Shop all courses |
-| Homepage art gallery card: the hover line | Customize → Pages → Home — art gallery card |
-| Homepage TOOLS square: background photograph | Customize → Pages → Home — blog & tools |
-| About page: opening paragraph, portrait, quotation, three essays | Customize → Pages → About |
-| The three photograph strips on the About page | About photos |
-| The paragraph under the blog page heading | Customize → Pages → Blog |
-| The opening line and three row introductions on Free videos | Customize → Pages → Free videos |
-| Student comments on the homepage | Testimonials |
+| Logo and signature images | Content hub → Every page → brand controls |
+| Contact email and social links | Content hub → Every page → contact controls |
+| Menu labels, links and order | Request a change from the webmaster |
+| Homepage banner words and images | Content hub → Home → homepage banner |
+| Homepage free-video card, About photograph and course introduction | The corresponding links in Content hub → Home |
+| Homepage gallery hover line and TOOLS photograph | The corresponding links in Content hub → Home |
+| Course overview paragraphs, principles and questions | Content hub → Home → the course-overview links |
+| About text and portrait | Content hub → About → the approved writing and portrait links |
+| About photograph strips | About photos, reached through Content hub → About |
+| Blog introduction | Content hub → Blog → introduction |
+| Free-video introduction and films | Content hub → Free videos |
+| Student comments | Testimonials |
 | Questions and answers | FAQ |
-| Paintings, prices, Etsy links, sold status | Artwork |
-| Student work on the showcase wall | Student work |
-| Free videos, their covers and their links | Free videos |
-| Blog articles | Posts |
-| Article topics | Posts → Categories |
-| Course titles, covers, prices, descriptions, syllabus | Tutor LMS → Courses |
-| Lesson titles, videos, one-line subtitles | Tutor LMS → Lessons |
-| Currency symbol, cart page | Tutor LMS → Settings |
-| Your public name on article bylines | Users → Profile |
-| How many articles fit on a topic or search page | Settings → Reading |
+| Paintings, artwork prices and Etsy links | Artwork |
+| Student showcase pieces | Student work |
+| Blog articles and their pictures | Posts |
+| An article's topic | Choose an existing category in the article editor; request a new topic from the webmaster |
+| Course content | The course editor — see [Courses](/courses) |
+| Paid-course regular and sale prices | The confirmed [Course prices workflow](/course-prices-draft) |
+| Lessons | Open the relevant course's lesson controls through Content hub |
+| Order lookup and supported pending-order corrections | Content hub → Sales, after money-guide handover |
+| Agreed manual course-access corrections | Content hub → Course access, after money-guide handover |
+| Your public display name | Your own profile |
+| Article page size, currency, cart and payment settings | Managed by the webmaster |
 
-## One thing to know before you start
+## Shared information
 
-**The contact details are shared.** Your email address and social links appear in the
-footer of every page, on the FAQ page, on the About page and in the "Follow along" strip on
-the homepage. They are one setting, so changing it in Customize changes all of them at
-once. That is deliberate — it means they can never disagree with each other.
+The contact settings feed several pages and the footer. Change the shared setting once rather than trying to maintain separate copies.
 
-**Some boxes replace but do not clear.** On the About page, emptying
-a text box or pressing **Remove image** puts the original back. It was built that way to stop
-a blank space reaching a live page. Ask the webmaster if you want one of them genuinely empty.
+Some About fields restore their original text or picture if emptied. If you want one genuinely removed, ask the webmaster. The approved homepage card descriptions can be cleared where the relevant page explains that behaviour.
 
-The five homepage card settings are the other way round: empty one of those boxes and the
-paragraph or line genuinely disappears.
-
-**Parts of the homepage are waiting on you, not on the webmaster.** The row of courses, the art
-gallery card and the row of articles are all built. Each one shows nothing at all until
-there is something published to show. See [the rest of the homepage](/homepage-cards).
+Published courses, artwork and articles supply parts of the homepage automatically. See [the rest of the homepage](/homepage-cards). A missing section may mean the necessary content has not been published, not that you need access to a design tool.

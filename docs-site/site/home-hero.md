@@ -1,6 +1,6 @@
 # The homepage banner
 
-**Customize → Pages → Home.**
+Open **Content hub → Home** and choose the homepage-banner link. It opens the approved slide settings. The account route still needs final checks and handover.
 
 The banner is a carousel of **three slides**. Each slide has four fields you control:
 

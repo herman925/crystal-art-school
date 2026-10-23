@@ -1,43 +1,37 @@
 # Logging in
 
+> **Draft — the limited-account navigation still needs final checks and handover.**
+
 ## The address
 
-Go to **crystalau.com/wp-admin** and sign in with the username and password the webmaster sent you
-separately.
+Go to **crystalau.com/wp-admin** and sign in with the username and password supplied separately by the webmaster. Do not put a password in this guide, an email screenshot or a shared note.
 
-Your password is not written down in this guide, and it should not be written anywhere
-other people can read. If you lose it, use **Lost your password?** on the sign-in screen —
-the reset link goes to your own email.
+If you lose it, use **Lost your password?** on the sign-in screen. The reset link goes to your own email. If it does not arrive, check the spam folder and contact the webmaster; do not use someone else's account.
 
-Your password was changed on 30 September 2026, for security. If your old one no longer works, that is why: use the new one the webmaster sent you.
+## Your content account
 
-## What you will see
+Your account is a **limited content-editing account, not an administrator account**. It is intended to open **Content hub** after sign-in. That page groups the available tasks by website page and links to the approved editing controls.
 
-The dark column down the left is the menu. The items you will use:
-
-| Menu item | What it holds |
+| Area | What you use it for |
 |---|---|
+| **Content hub** | Start here for page text, photographs, courses and the money tools |
 | **Posts** | Your blog articles |
-| **Artwork** | The gallery — your paintings, with prices and Etsy links |
-| **FAQ** | The questions and answers on the FAQ page |
-| **Testimonials** | Student comments shown on the homepage |
-| **Tutor LMS** | Courses, lessons, prices, students, orders |
-| **Appearance → Customize** | Logo, contact details, the homepage banner |
-| **Appearance → Menus** | The links across the top of the site |
+| **Media** | Photographs and other approved files |
+| Content lists such as **Artwork**, **FAQ** and **Testimonials** | Entries assigned to your account |
+| Your profile | Your own public display name and account details |
 
-There are other items. You do not need them, and some of them can break the site. If it is
-not in the table above and this guide does not mention it, leave it alone.
+Only records and controls available to your account can be changed. If a course or entry is missing or access is refused, ask the webmaster to check ownership and access. Do not duplicate it, borrow an administrator login or try another settings page.
 
-## Two accounts
+## Settings reached through the hub
 
-There are two administrator accounts — yours and the webmaster's. You will sometimes see their name
-against a change in the history. That is expected.
+The hub's page links open only the approved text, image, brand and contact settings. They are not permission to redesign the site or use all Appearance settings. Navigation menus, payment configuration, currency, cart settings and site administration remain with the webmaster.
+
+Course prices have their own review and confirmation process. Sales and Course access are separate tools, not administrator shortcuts. Read the draft money guides and wait for their final handover before use.
 
 ## Signing out
 
-Hover your name in the top right and choose **Log Out**. Do this on any computer that is
-not yours.
+Use your name at the top of the dashboard and choose **Log Out**. Always sign out on a shared computer.
 
-## Emails the site sends
+## Emails
 
-The site sends its emails from **hello@crystalau.com**. That covers a password reset now, and a receipt after a purchase later. If one does not arrive, look in the spam folder first. The current email plan allows about 100 emails a day, which is far more than the site needs today.
+A requested password reset is not complete until you receive and use the link. Likewise, an order result is not proof that a receipt was delivered. If an expected message does not arrive, contact the webmaster rather than repeating a purchase or money action.

@@ -2,9 +2,7 @@
 
 # Launch call: agenda and what to prepare
 
-This is a 45-minute online call. We go through the open questions one by one, so that the
-site can launch without surprises. Nothing needs to be finished before the call. We just
-need the answers and the details.
+This is a 45-minute online call to review outstanding launch questions and agree the next steps. Bring the information you have; the call is not permission to open payments or registration before their checks are complete.
 
 ## The agenda
 
@@ -36,8 +34,8 @@ Total: 45 minutes.
 
 - Card payments only at launch (PayPal can come later).
 - All prices in pounds.
-- Receipts are sent by the website.
-- New students confirm their email address.
+- Receipt delivery must be checked before payments open.
+- Email confirmation for new students must be checked before registration opens.
 
 ## After the call
 

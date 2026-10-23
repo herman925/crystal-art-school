@@ -1,15 +1,13 @@
 # The menu across the top
 
-**Appearance → Menus.**
+The menu's labels, destinations and order are managed by **the webmaster**. Your limited content account does not provide the site's menu-management screen.
 
-You can rename an item, drag items into a different order, and drag one slightly right to
-make it a sub-item.
+To request a change, send:
 
-Two cautions:
+1. The existing label and the correction you want.
+2. Which page it should open, if the destination needs changing.
+3. The intended position, if you are requesting a different order.
 
-**Do not empty the menu.** If every item is removed, the site shows no navigation at all —
-not a default menu, nothing. Visitors would have no way to move around.
+The sequence is part of the agreed design. A change must be checked on a phone as well as a wider screen. Do not try to recreate the menu through page text or ask for an administrator login as a workaround.
 
-**The order was designed.** The sequence of links was part of the agreed design, so
-reordering them is a design change rather than a correction. Fixing a typo in a label is
-fine; rearranging the whole bar is worth a message to the webmaster first.
+An empty or incorrect menu can prevent visitors reaching important pages. If a link appears wrong, report the visible label and the page it opens; do not delete account or checkout pages to repair it.
