@@ -1,13 +1,12 @@
 # What you can edit
 
-Everything on this page you can change yourself. Anything not listed here is fixed, and
-changing it means asking the webmaster — see [what is fixed](/limits) for why.
+This page separates content-editing tasks from settings managed by Herman; it does not grant access to every WordPress screen. Use only the approved controls available in your content account. If a control is missing or access is refused, ask Herman rather than using an administrator account or another settings route. Final navigation and draft money instructions still require review and handover — see [what is fixed](/limits).
 
 | What | Where |
 |---|---|
 | Header logo, hero signature mark, footer signature | Customize → Site-wide → Logo and signature |
 | Instagram, Facebook, YouTube, contact email | Customize → Site-wide → Contact and social links |
-| The links across the top of the site | Appearance → Menus |
+| The links across the top of the site | Managed by Herman — ask for a menu change |
 | Homepage banner: 3 slides, each with a title, a description and two images | Customize → Pages → Home |
 | Homepage free videos card: photograph and description | Customize → Pages → Home — Free videos card |
 | Homepage About Crystal card: photograph | Customize → Pages → Home — About Crystal |
@@ -25,11 +24,13 @@ changing it means asking the webmaster — see [what is fixed](/limits) for why.
 | Free videos, their covers and their links | Free videos |
 | Blog articles | Posts |
 | Article topics | Posts → Categories |
-| Course titles, covers, prices, descriptions, syllabus | Tutor LMS → Courses |
+| Course titles, covers, descriptions, syllabus | Course content editor — see [Courses](/courses) |
+| Paid-course regular and sale prices | Confirmed [Course prices workflow](/course-prices-draft); draft instructions pending final review and handover |
 | Lesson titles, videos, one-line subtitles | Tutor LMS → Lessons |
-| Currency symbol, cart page | Tutor LMS → Settings |
 | Your public name on article bylines | Users → Profile |
-| How many articles fit on a topic or search page | Settings → Reading |
+| How many articles fit on a topic or search page | Managed by Herman — ask for a page-size change |
+
+**Currency and cart settings are managed by Herman.** They are not part of your content-editing controls. Ask Herman about a change; do not use global Tutor Settings as a workaround for a price problem.
 
 ## One thing to know before you start
 

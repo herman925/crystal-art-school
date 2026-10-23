@@ -1,12 +1,12 @@
 # Courses
 
-**Tutor LMS → Courses.** Nearly everything a visitor reads about a course is yours to edit.
+**Course content and course prices use separate workflows.** Use the course editor for titles, images, descriptions and lessons. Set or change paid-course prices only through the confirmed [Course prices workflow](/course-prices-draft), not the ordinary course-save button. Those money instructions remain a draft pending final review and handover.
 
 | Field | Where it shows |
 |---|---|
 | **Title** | Course card and course page |
 | **Featured image** | The cover on both |
-| **Regular price / Sale price** | Both. A sale price crosses out the regular one |
+| **Regular price / Sale price** | Both; change only through the confirmed [Course prices workflow](/course-prices-draft). A sale price crosses out the regular one |
 | **Difficulty level** | The small chips under the title |
 | **Category** | The tag above the title |
 | **Description** | The paragraph under the course title |
@@ -28,9 +28,9 @@ the site does that.
 
 ## Prices
 
-The number goes in without a currency symbol — the symbol comes from **Tutor LMS →
-Settings** and is currently the pound sign. Changing it there changes every price on the
-site at once.
+Use **Course prices** and its separate review/confirmation step for paid-course amounts; follow the [draft instructions](/course-prices-draft) only after final review and handover. Enter numbers without a currency symbol, and leave Sale empty when no sale is intended.
+
+The agreed course currency is GBP (£). **Currency and cart settings are managed by Herman**, not through your content-editing controls. Do not change them in Tutor Settings; ask Herman if anything appears wrong.
 
 The lesson count and total runtime under each course are worked out from the lessons
 themselves. You cannot type them, and they correct themselves when you add a lesson.
@@ -76,6 +76,6 @@ You decided this on 28 August 2026, replacing the earlier three-level plan.
 
 ## Draft and published
 
-A course set to **Draft** is invisible to visitors. The four current courses are drafts
-because their titles and prices have not been signed off yet. Publishing one makes it
-buyable, so publish deliberately.
+A draft is not a published course. For a new paid course, save the content as a draft, set and confirm its first price through **Course prices**, reload the same saved course, and publish only when the content, price and launch timing are agreed. A saved price does not publish the course.
+
+For an already published course, use the same confirmed price process for money changes; do not use the ordinary content-save button to change its price. Follow the [draft Course prices guide](/course-prices-draft) after final review and handover, and ask Herman if the current course status is unclear.
