@@ -83,7 +83,7 @@ function cas_render_header() {
 				<div class="nav-auth">
 					<a class="cart-btn" href="<?php echo esc_url( get_permalink( get_page_by_path( 'checkout' ) ) ); ?>" aria-label="Shopping cart">
 						<?php echo cas_header_icon( 'cart' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
-						<span class="cart-badge" aria-hidden="true">0</span>
+						<span class="cart-badge" aria-hidden="true" hidden style="display:none;"></span>
 					</a>
 					<?php if ( ! is_user_logged_in() ) : ?>
 						<a class="btn ghost" href="<?php echo esc_url( function_exists( 'cas_account_login_url' ) ? cas_account_login_url() : wp_login_url() ); ?>">Log in</a>

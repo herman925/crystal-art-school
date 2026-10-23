@@ -107,6 +107,7 @@ add_action(
 );
 
 require_once get_stylesheet_directory() . '/inc/cas-header.php';
+require_once get_stylesheet_directory() . '/inc/cas-cart-count.php';
 
 /**
  * Site-wide behaviour ported from the prototype's js/site-extras.js: the one polite
@@ -142,6 +143,10 @@ add_action(
 
 		wp_enqueue_style( 'cas-nav', $uri . '/css/cas-nav.css', [ 'cas-industrial-3' ], filemtime( $dir . '/css/cas-nav.css' ) );
 		wp_enqueue_script( 'cas-header', $uri . '/js/cas-header.js', [], filemtime( $dir . '/js/cas-header.js' ), true );
+		wp_localize_script( 'cas-header', 'casCartCount', [
+			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
+			'nonce'   => wp_create_nonce( 'cas_cart_count' ),
+		] );
 	},
 	21
 );
