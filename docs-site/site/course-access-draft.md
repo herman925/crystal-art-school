@@ -30,7 +30,31 @@ Keep these actions separate:
 
 An isolated backend check verified that these manual access changes for an existing student left order/payment/refund records unchanged. That check is not approval of the final screens, payment-provider behaviour or automatic email content; this guide remains a draft.
 
-Do not use Remove access as an automatic refund/dispute policy. Ask Herman to check the particular order and intended access decision. A later legitimate payment/enrolment event may need investigation, not another manual correction.
+This content-access form does not implement a refund or dispute policy. The recorded operator procedure below is separate: neither a payment refund nor a bank dispute should be treated as an automatic access change.
+
+## Operator-only refunds and bank disputes
+
+> **Recorded intended operator workflow — not a verified live runbook.** This section records the operating rule chosen on 20 October 2026. The current native Tutor admin screen, remove-enrolment control, provider behaviour and end-to-end result remain unverified and must be checked before live use.
+
+The business policy remains **no refunds**. These operator instructions do not offer refunds to students. **Financial refund and payment-dispute handling belongs to Herman**, not to the limited content-editing account. Do not share or borrow an administrator login.
+
+Your approved **Add access / Remove access** controls remain available for agreed manual access corrections. They do not perform a financial refund or change the bank/provider dispute, and this operator procedure does not remove those existing controls.
+
+### A refund handled by Herman
+
+1. Identify the exact payment/order, existing student and affected course before taking any action.
+2. The recorded route is the order's **refund flow in Tutor's admin**, with **remove enrolment selected**. The actual native control and current behaviour must be verified before this draft is used. If the control is absent or unclear, stop rather than substituting another action.
+3. **Do not issue the refund from Stripe's dashboard.** That is not the recorded operator route, and a payment-provider action must not be assumed to remove Tutor access.
+4. Check the payment result and course-access result separately. Do not treat an order label, success notice or missing email as proof of both.
+5. If someone already refunded through Stripe or the result is uncertain, do not issue a second refund. Record what happened and let Herman reconcile the payment and access state.
+
+### A bank dispute
+
+1. Record the dispute reference and identify the student, course and order. Do not issue a new refund merely because a bank dispute exists.
+2. The recorded intended rule is to **cancel the affected student's course enrolment in Tutor**, coordinated by Herman. Do not assume the dispute automatically did this, and do not describe it as a change to the dispute's bank/provider status.
+3. Verify the affected course-access state separately; do not delete the student's account or claim a receipt/email was sent.
+
+If the same course has another independent valid purchase or grant of access, or the affected enrolment is ambiguous, stop for Herman to resolve that entitlement before acting. This draft does not decide how to cancel one entitlement without affecting another. An uncertain payment/access result always means stop and reconcile, not repeat an action or infer that nothing changed.
 
 ## If something goes wrong
 

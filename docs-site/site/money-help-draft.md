@@ -66,6 +66,7 @@ Closing a tab does not remove a published price. Manually typing the old amounts
 - **Access changed after review:** request a fresh review only after the current state is clear.
 - **Audit/database/save failure:** do not treat the change as completed. Stop and ask Herman.
 - **Restoration could not be verified:** stop immediately. Partial state may need checking; do not submit a compensating change yourself.
+- **Refund or bank dispute:** financial handling belongs to Herman; the limited content account does not gain refund/admin rights. Read the [recorded intended operator workflow](./course-access-draft.md#operator-only-refunds-and-bank-disputes): the refund route is Tutor admin with remove enrolment selected, not Stripe's dashboard; the bank-dispute rule calls for cancellation of the affected enrolment in Tutor, coordinated by Herman. Current native screens/controls/provider execution remain unverified. Your agreed manual-access controls are unchanged. Do not improvise a refund, repeat an uncertain payment action or assume access changed automatically.
 - **No email appeared:** a saved result is not a delivery promise. Do not repeat the order/access action to trigger mail.
 
 ## Lost response or stalled browser
