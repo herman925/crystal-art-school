@@ -21,11 +21,9 @@ If the Etsy URL is empty, **no Buy button appears at all**. That is deliberate â
 better than a button that goes to a search page and leaves the visitor to hunt. So a
 painting with no link is a painting on display, not for sale.
 
-## The gallery is empty at the moment
+## If the gallery is empty
 
-Nothing is published yet, so a visitor sees the page's introduction and a line saying so.
-The photographs of your paintings are ready and waiting; what is missing is the words that
-go with each one.
+Until artwork is published, visitors see the page's introduction and its empty-gallery message. Check the current list instead of assuming photographs alone are enough to publish a painting.
 
 For every painting you want shown, four things are needed before it can go up:
 

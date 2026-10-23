@@ -1,102 +1,51 @@
 # The rest of the homepage
 
-Below the banner the homepage is a row of small cards and two moving rows of content. Some
-of it you set here. Most of it fills itself from lists you already keep — your courses, your
-paintings, your articles — so there is nothing to copy across by hand.
+> **Draft — limited-account routes still need final checks and handover.**
 
-## The five settings
+Below the banner, some cards use approved text or photographs and other sections fill themselves from your published courses, artwork and articles. You do not need to copy the same content into several places.
 
-All of them are under **Appearance → Customize → Pages**.
+## Start from Content hub
 
-| Setting | Panel | What it does |
-|---|---|---|
-| Photograph, description | Home — Free videos card | The small card linking to the Free videos page |
-| Photograph | Home — About Crystal | The portrait card with your four social buttons |
-| Introduction | Home — Shop all courses | The paragraph under the "Shop all courses" heading |
-| Hover line | Home — art gallery card | The sentence that appears when a visitor points at the gallery card |
-| Photograph | Home — blog & tools | The background of the dark TOOLS square |
+Open **Content hub → Home** and choose the link for the part you want to change. It opens the approved setting or content list, not a general page-design screen.
 
-Every one of them shows what is on the site now, so you can see what you are replacing.
+| What you change | Where it appears |
+|---|---|
+| Free-video card photograph and description | The card linking to Free videos |
+| About photograph | The About Crystal card |
+| Course introduction | Under Shop all courses |
+| Gallery hover line | Over the gallery card when a visitor points at it |
+| TOOLS photograph | Behind the TOOLS square |
+| Course-overview paragraphs and principles | The course-overview section |
+| Course-overview questions | The separate questions list linked from the Home card |
 
-## The Free videos card
+Check the preview and use **Publish** when an approved settings change is ready. Content-list entries have their own save and publication controls.
 
-Two boxes. The **photograph** fills the whole card and is cropped to a square, so a square
-picture is the safe choice — the recommended size is written beside the field.
+## Photographs and short descriptions
 
-The **description** is hidden until a visitor points at the card. On a phone there is no
-pointing, so it is simply always visible. Keep it to one sentence for that reason.
+The Free videos and About card photographs are cropped to a square. Use a photograph with its important subject near the centre. The suggested size beside a field helps you choose a suitable image.
 
-Empty the description box and the card shows its title alone, which is what the design asks
-for. The title, the play mark and where the card leads are fixed.
+Keep the Free videos description short. It appears when a visitor points at the card and remains visible on a phone. Clearing that approved description leaves the card's fixed title.
 
-## The About Crystal card
+If a photograph changes, tell the webmaster if its written description for screen-reader users also needs updating.
 
-One box: the **photograph**. It is cropped to a square.
+## Shared contact links
 
-The four social buttons under it are not set here — they are the same Instagram, Facebook,
-YouTube and email you set once under **Customize → Site-wide → Contact and social links**,
-and the same four that appear in the footer and in the "Follow along" strip. That is
-deliberate, so the three can never disagree.
+The social and email buttons come from the approved contact settings in **Content hub → Every page**, not a separate copy on each card. Change the shared value once.
 
-One thing to tell the webmaster if you change this picture: the written description of it, the part
-a screen reader reads aloud, still describes the original photograph. It is one line for him
-to correct.
+## Courses and artwork
 
-## Shop all courses
+The course row uses published courses and their saved order. Edit the underlying course rather than trying to arrange another copy here. See [Courses](/courses).
 
-**The introduction** is yours. Empty the box and the paragraph disappears — this one really
-does clear, unlike the boxes on the About page.
-
-**The row of courses builds itself.** It shows your published courses, newest ten at most,
-in the order set by **Page attributes → Order** on each course. There is nothing to arrange
-here. See [Courses](/courses) for the fields on each card.
-
-**The heading and the arrows are fixed.**
-
-## The art gallery card
-
-One box: the **hover line**, the sentence that appears when a visitor points at the card.
-Empty it and no sentence appears.
-
-**The picture on the card is your first painting** — whichever piece sits first in
-**Artwork**, by the Order number. Change the Order, or change that painting's photograph,
-and the card follows. There is no separate picture to keep in step, on purpose.
+The gallery card uses the first published artwork in its list. Its photograph and saved order affect the homepage too. The gallery hover line is a separate approved setting and can be cleared.
 
 ## Blog and tools
 
-**The row of articles builds itself** from your six newest published articles. An article
-with no **Featured image** is skipped, because the card is mostly picture.
+The article row uses the newest published articles with a Featured image. An article without a picture may not appear there.
 
-**The TOOLS square** takes an optional background photograph. With no photograph it is a
-plain dark square with a spanner on it, which is how it was designed — the photograph is
-there if you want it.
+The TOOLS square links to articles filed under Tools. Assign an existing category in the article editor. If the topic is unavailable, request it from the webmaster rather than opening category-management settings.
 
-That square links to your articles filed under the topic **Tools**. Until an article carries
-that category the link leads to an empty list, so file one there before you point anyone at
-the homepage.
+## If something is missing
 
-## Why parts of the homepage look empty
+A section that depends on published content can be absent when nothing suitable has been published. Check the relevant course, artwork or article and its picture first; do not change unrelated settings to make it appear.
 
-Three blocks are built and waiting, and each of them shows **nothing at all** until there is
-something real to show — not an empty heading over a blank space.
-
-| Block | Appears when |
-|---|---|
-| Shop all courses | At least one course is published. All four are still drafts |
-| Art gallery card | At least one painting is published under **Artwork** |
-| Blog and tools | At least one article is published **with a Featured image** |
-
-So the homepage will grow on its own as you publish. Nothing more needs building for those
-three.
-
-## Two things the webmaster still owes the homepage
-
-**The "New release" panel** in the middle of the top row is not built yet, so on a wide
-screen that row stops about a third short of the rest of the page. On a narrow screen it
-looks correct. It is on his list.
-
-**Your "Course overview" writing** — the two opening paragraphs, the two numbered points and
-the four questions you answered yourself — is not on the site yet. Nothing has been lost;
-your text is safe and unchanged. The question of how you will edit it has now been settled
-(the two paragraphs and points will be boxes like the other homepage settings, and the four
-questions will be a list you can add to), and it is on his list to build.
+Featured-course panels and the course overview are not permission to redesign the page. If an expected panel or editing link is missing, send the page and intended change to the webmaster. Do not assume an old list of unfinished items still describes the current site.

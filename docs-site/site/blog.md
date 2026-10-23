@@ -7,15 +7,7 @@ not configured.
 
 Paragraph, Heading, Image, List, Quote, Separator, Gallery, Columns, Group and Cover.
 
-That is the working set for an article, and it is deliberately not the whole list
-WordPress offers. Two are left out on purpose:
-
-- **Custom HTML** — becomes a block you cannot edit visually afterwards. Once it is in a
-  post, changing it means editing code.
-- **Table** — does not survive narrow screens, and roughly half your readers are on a phone.
-
-For anything a table would have done, a heading with a short list underneath reads better
-on a phone anyway.
+Use that working set for the article. Advanced custom formatting and wide tables are not part of these instructions. For information that would otherwise need a table, use a heading with a short list underneath so it remains readable on a phone.
 
 ## Photographs in articles
 
@@ -28,8 +20,7 @@ is two clicks instead of hunting for a layout block.
 Every article carries a topic — the ribbon down the side of the featured card, the small
 label on each card in the list, and the row of filter buttons above them.
 
-That comes from the article's **Category**, set in the box on the right of the editor. Add
-new categories under **Posts → Categories**.
+Choose an existing **Category** in the article editor. Request a new topic from the webmaster; the limited content account does not provide category-management screens.
 
 Two cautions:
 
@@ -81,16 +72,11 @@ Beside that row is a dark **TOOLS** square. It leads to your articles filed unde
 
 ## The introduction on the blog page
 
-**Customize → Pages → Blog.** One box: the paragraph under the "The journal" heading. Empty
-it and the paragraph disappears.
+Use the Blog card in **Content hub** and choose its introduction link. The approved box changes the paragraph under the journal heading. Empty it and the paragraph disappears.
 
 ## Your three existing articles
 
-The three pieces you wrote are drafted and waiting on you. Each carries a visible note
-listing small corrections that were made — spellings of brand names, one mistranslated
-material, passive sentences rewritten in your voice. **Read the note, then delete it**
-before publishing. An article that goes live with the note still showing tells every reader
-it was edited by someone else.
+The supplied articles may carry a note listing proposed corrections, such as brand spellings or changes to wording. Check those changes before publishing. Clear the note only if you approve them; otherwise ask the webmaster to resolve the wording first. Do not publish an article while an unresolved editing note is visible.
 
 The note is a box on the right of the editor called **Developer's note**. Clear it and press
 Update, and the amber panel disappears from the article. Nothing else to undo.

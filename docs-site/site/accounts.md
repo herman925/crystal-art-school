@@ -1,50 +1,48 @@
 # Signing in, baskets and the dashboard
 
-These are the pages a **student** uses: signing in, creating an account, their own dashboard,
-the basket and the checkout. They now wear the site's own banner and cards instead of looking
-like a different website.
+> **Draft — account and buying instructions still need final screen checks and handover. This page does not authorise opening payments or registration.**
 
-**There is nothing to edit on any of them.** No settings box, no list. Everything a visitor
-reads there is either part of the design or comes from somewhere you already control.
+These are the pages a student uses: signing in, creating an account when registration is open, their own dashboard, the basket and checkout. Their layout and wording are managed by the webmaster, not through your content-editing account.
 
-## Where the words actually come from
+## The student's route
+
+1. Read a course's public information and watch any lesson explicitly offered as a free preview.
+2. Add the intended course to the basket and check the course and amount before checkout.
+3. Follow the sign-in or account instructions offered on the site. Registration must be opened and checked by the webmaster first.
+4. At launch, the agreed payment plan is **card only**. PayPal is not part of these launch instructions.
+5. After a successful purchase has been confirmed, use the student's dashboard to find the course and lessons.
+
+A basket, an order marked completed and a recorded payment are different things. Do not tell a buyer that money arrived or an email was delivered merely because one page changed. If the result is unclear, stop and ask the webmaster rather than telling the student to pay again.
+
+## What the student controls
 
 | What a student sees | Where it comes from |
 |---|---|
-| Their name, picture and joining date | Their own account, under **Users** |
-| How many courses they are taking, how many lessons they have finished | Worked out from the courses themselves |
-| Course names, prices, the basket, the order | **Tutor LMS** |
-| The headings, the steps across the top of the basket | Fixed by the design |
+| Their name and profile picture | Their own profile |
+| Their courses and progress | Their purchases, enrolments and lesson activity |
+| Course names, images and current prices | The course content and confirmed price settings |
+| The headings and checkout steps | The fixed site design |
 
-## New accounts are switched off
+A student can manage their own account; this is not access to the site's content-editing screens.
 
-Today nobody can create an account. The **Sign up** button at the top of the site leads to a
-short message saying so, rather than an error.
+## Registration and payment opening
 
-This is switched off on purpose, for security. **Please do not turn it on yourself.**
-The webmaster switches it back on once the safety checks are done.
+Registration and live-payment opening are managed by the webmaster. Do not try to enable them from another settings page. Email confirmation, the buying journey and the messages sent to students must be checked before launch. A planned receipt is not proof that a particular email arrived.
 
-## Where orders and students appear
+## Your order and access tools
 
-Under **Tutor LMS** in the dashboard menu: **Orders** for what has been bought, **Students**
-for who is enrolled. Neither needs anything from you until the site is taking money.
+Your limited content account uses **Content hub → Sales** to inspect orders and the separately confirmed changes described in the [Sales guide](./sales-draft.md). It does not provide the administrator's Tutor Orders or Students screens.
 
-## What students can and cannot do in a lesson
+Use **Content hub → Course access** only for an agreed one-off access correction. That does not create a student account, collect a payment, refund money or change an order. Follow the [Course access guide](./course-access-draft.md), including its separate operator-only refund and bank-dispute instructions.
 
-For now a student can watch the lessons and use their own dashboard. The question box, the
-comments under a lesson and the private lesson notes are switched off. If you want any of
-them back, tell the webmaster. They are switched on one at a time, after a check.
+Financial refunds and payment disputes belong to the webmaster. Do not borrow an administrator account or use a payment dashboard as a workaround. Your agreed manual-access controls remain separate.
 
-## Two things not finished
+## Lessons and support
 
-**The basket count at the top of the site always reads 0**, even with something in the
-basket. It is part of the payment work, not something you can set.
+The launch course product is video study with the course's included materials, not membership tiers, assignment marking or a question-and-answer service. Lesson comments and private notes are not offered by these instructions. Ask the webmaster about a requested service change rather than enabling a setting yourself.
 
-**Payment is not open yet.** Card and PayPal payments are being tested, so the checkout cannot
-take a real payment. Opening it is a launch task, not a setting.
+If the basket badge, order, payment or access appears inconsistent, record the course, order number and exact message and contact the webmaster. Do not change another value to make the screens agree.
 
-## Do not rename or delete these pages
+## Leave the account pages in place
 
-**Log in**, **Sign up**, **Dashboard**, **Cart** and **Checkout** are pages in the **Pages**
-list. Renaming one, or moving it to the bin, breaks the buttons that point at it — including
-the basket icon at the top of every page. Leave them where they are.
+Do not rename or delete the Log in, Sign up, Dashboard, Cart or Checkout pages. Their arrangement and destinations are managed by the webmaster. The limited content account is not a general page-administration account.

@@ -24,8 +24,7 @@ edges before uploading.
 
 ## Use the student's username
 
-Put the name the student uses on the site, not their legal name. That is what was agreed,
-and it is what the member terms will cover.
+Use the student's agreed public username, not their legal name. Obtain permission before publishing a credit or photograph; having an account is not permission to publish their details.
 
 If you are not sure what a student is happy to have published, leave the box empty. The
 piece still goes on the wall, just without a credit.

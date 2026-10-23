@@ -1,6 +1,6 @@
 # Logo, signature and contact details
 
-All of this is in **Appearance → Customize → Site-wide**. Remember to press **Publish**.
+Start from **Content hub → Every page** and choose the approved logo/signature or contact link. These open only the settings available to your content account, not the full Appearance menu. Check the preview and press **Publish** when ready. The account routes still need final checks and handover.
 
 ## Logo and signature
 
@@ -22,7 +22,7 @@ it changes six pages at once. That is worth knowing before you try a new version
 
 Four settings: **Instagram URL**, **Facebook URL**, **YouTube URL**, **Contact email**.
 
-Paste the full web address for the social links, starting with `https://`. The site works
+Paste the full web address for the social links, starting with https://. The site works
 out what to display from the address, so you do not type your handle separately.
 
 These four values feed the footer of every page, the FAQ page, the About page and the

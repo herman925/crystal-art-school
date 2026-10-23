@@ -1,11 +1,10 @@
 # The About page
 
-Two places. **Customize → Pages → About** holds your words and your portrait. **About
-photos** in the dashboard menu holds the three photograph strips.
+Start from **Content hub → About**. Its approved writing and portrait links open the relevant settings; **About photos** holds the three photograph strips. The limited-account routes still need final checks and handover.
 
 ## Your words and your portrait
 
-**Customize → Pages → About.**
+Use the approved About writing and portrait links in **Content hub**.
 
 | Field | Where it shows |
 |---|---|
@@ -19,9 +18,7 @@ photos** in the dashboard menu holds the three photograph strips.
 Each box already contains what is on the site now, so you can read it and change what you
 want rather than starting from a blank page.
 
-The three essay boxes contain a little markup — `<p>` around each paragraph, `<em>` for
-italics. Type between those marks and leave them where they are. If you would rather delete
-the lot and type plain text with a blank line between paragraphs, that also works.
+You can enter plain text with a blank line between paragraphs. If an existing box contains formatting you are not sure how to change, ask the webmaster rather than editing unfamiliar formatting.
 
 ## One thing that will surprise you
 
@@ -65,6 +62,4 @@ original by accident. Send changes to the webmaster.
 
 **Section headings, the greeting and the buttons.** Part of the design.
 
-**Two blocks of your writing** — the teaching philosophy section and the welcome cards near
-the bottom — are still in code rather than in a box. That is an oversight rather than a
-decision. Ask the webmaster and they can be opened the same way as the rest.
+**The teaching-philosophy writing and welcome cards near the bottom** are not available in the current editing controls. Send the proposed wording to the webmaster for a reviewed change.

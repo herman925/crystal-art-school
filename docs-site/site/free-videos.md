@@ -1,87 +1,56 @@
 # Free videos
 
-Two places. **Free videos** in the dashboard menu holds the films. **Customize → Pages →
-Free videos** holds the four paragraphs of writing on that page.
+> **Draft — limited-account routes still need final checks and handover.**
 
-## The films
+Use **Content hub → Free videos** for the approved introduction links and film list. The page presents public films; it is separate from paid course lessons.
 
-**Free videos → Add new.** One entry per film.
+## Add or edit a film
 
-| Field | Notes |
+Choose the film list and add an entry, or open an entry available to your account.
+
+| Field | What it changes |
 |---|---|
-| **Title** | Shown on the card and above the player |
-| **Featured image** | The cover photograph. Required |
-| **Content** | A short blurb under the title. Three lines, then it stops |
-| **Section** | In the **Video details** box on the right. Which row it appears in |
-| **Video link** | In the **Video details** box on the right |
+| **Title** | The name on the card and above the player |
+| **Featured image** | The cover photograph |
+| **Content** | The short description under the title |
+| **Section** | Which row the film belongs to |
+| **Video link** | The film to play |
 | **Page attributes → Order** | Position in its row, lowest first |
+
+If a film is not available to your account, ask the webmaster to check access rather than making a duplicate.
 
 ## The three rows
 
-| Section | Shape | Usually |
+| Section | Picture shape | Typical use |
 |---|---|---|
 | Step-by-step demos | Wide | Longer teaching films |
 | Quick inspiration & bite-sized tips | Wide | Short tips |
-| Shorts | Tall | Phone-shaped clips from Instagram or YouTube |
+| Shorts | Tall | Phone-shaped clips |
 
-Pick the section from the dropdown. There are three and there will be three — the shape of
-the cards is tied to which row they sit in.
+Choose the section from the available list. The row shapes and headings are fixed; request a change from the webmaster if needed.
 
-The newest **Step-by-step demo** also plays in the large panel near the top of the page. You
-do not set that anywhere; it follows the order and the publish date.
+The featured film near the top is drawn from the step-by-step demos. Check the published page after changing order or publication dates.
 
 ## The video link
 
-Paste the address of the film. Any of these work:
+Use a suitable YouTube page, Shorts or youtu.be address, or the video link/reference supplied by the webmaster for a film already hosted for this site. Do not paste a password or a private account-management link.
 
-- a normal YouTube page address
-- a YouTube **Shorts** address
-- a shortened `youtu.be` address
-- an address for a film already hosted for this site
+This box does not upload a new film. For a new video file or a replacement, ask the webmaster to arrange hosting first, then update the approved film reference. Do not assume an upload tool has been added to the site.
 
-If the box is empty the card still appears, marked **Coming soon**, and clicking it does
-nothing. That is deliberate — better than a card that looks playable and is not.
+If the link is empty or cannot be played, check the card and player before directing visitors to it. Ask the webmaster if the intended film does not open; do not try unrelated account settings.
 
-## The cover photograph is required
+## Cover photographs
 
-A film with no cover does not appear on the page. The **Free videos** list has a **Cover**
-column that says "Missing — not shown on the page" so you can find it.
+A film without its required cover can be left out of the page. Check the list's cover warning before publishing. Use a wide picture for a wide film and a tall picture for Shorts; cropping can remove the important subject.
 
-Wide films want a wide photograph, Shorts want a tall one. Whatever you upload is cropped to
-fit, so the layout cannot break — but a tall photo cropped into a wide slot loses most of
-itself.
-
-Take the cover from the film itself where you can. A still from the middle of the demo says
-more than a title card.
+A still from the lesson is usually clearer than a title card. Check the finished card on a phone as well as a wider screen.
 
 ## The writing on the page
 
-**Customize → Pages → Free videos.** Four boxes:
+The approved introduction links in Content hub open the opening line and the three row introductions. Clearing one removes that paragraph.
 
-- the opening line under the page title
-- one introduction for each of the three rows
+If an introduction contains a course link, leave its destination unchanged unless an agreed change is being made. Ask the webmaster to change a destination you cannot edit safely.
 
-Each one already contains what is on the site now, so you can see what you are replacing.
-Empty a box and that paragraph simply disappears.
+## Check what is published
 
-The first box in that panel currently contains a web link written out in full, in the middle
-of the sentence. If you edit that paragraph, leave the link alone — it points at the course
-catalogue.
-
-## What is still outstanding
-
-The films you sent as video files, not as links, have not been uploaded to the video service yet, so they cannot be pointed
-at from here. And nothing has been chosen for the **Quick inspiration** row — that row shows
-its empty message until you say which films belong in it.
-
-## What is on the page today
-
-Twelve of your films are published: five in **Step-by-step demos** and seven in **Shorts**.
-Each carries the title you gave it and its own cover picture from your channel.
-
-None of them has a description. You supplied titles and links only, and a description written
-for you would be someone else's words about your own film. Add one whenever you want to — the
-card reads perfectly well without it.
-
-The third row is called **Shorts** because a name was needed. If you would rather it were
-Reels, Sketchbook Moments or something else, say so; it is one word to change.
+Use the film list and public page to check the current titles, covers, descriptions and row order. Do not rely on an old fixed film count. Add descriptions in your own approved words; an empty row may simply need suitable films to be supplied or published.

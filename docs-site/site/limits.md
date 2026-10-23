@@ -1,88 +1,49 @@
 # What is fixed, and why
 
-Some things are deliberately not editable. It is worth knowing which, so you do not spend
-time hunting for a setting that does not exist.
+Your content account is deliberately limited. It lets you maintain approved content without changing the whole site's design, payment setup or other people's accounts. If a control is missing, ask the webmaster rather than trying another settings route.
 
 ## Fixed by design
 
-**Section headings, button labels and where buttons go.** "Shop All Courses", "Add to
-Cart", "See the tiers" and the rest. These were agreed as part of the design, and several
-of them have to match what happens when a visitor clicks.
+**Section headings, button labels and destinations.** Labels such as Shop All Courses and Add to Cart need to match the journey a visitor follows.
 
-**Layout, colours, fonts and icons.** The whole look of the site.
+**Layout, colours, fonts and icons.** These keep the pages consistent and readable across phones, tablets and wider screens.
 
-**Page structure.** Which sections appear on a page and in what order.
+**Page structure.** Which sections appear and their order are managed by the webmaster.
 
-## The header and the footer
+## The header and footer
 
-The strip across the top of every page and the block at the bottom are not edited the way the
-rest of the site is, and it is worth knowing where they actually live — the obvious route
-leads nowhere.
+Use the **Every page** card in Content hub for the approved brand and contact controls. You do not need a page-design tool to change those fields.
 
-If you open **Customize → Header & Footer**, Elementor offers a **Start Designing** button.
-Pressing it shows a single small box with a short label in it and nothing else. That is not
-a fault. Elementor is only *placing* the header and footer on the page; it is not where
-their contents are kept.
-
-Everything in them that you would want to change is editable. Just from elsewhere:
-
-| What | Where |
+| What | How it is managed |
 |---|---|
-| The links across the top, their wording and their order | Appearance → Menus |
-| Your logo | Customize → Site-wide → Logo and signature |
-| The signature in the footer | The same place |
-| Instagram, Facebook, YouTube, your email | Customize → Site-wide → Contact and social links |
-| The footer's column links | They follow the pages by themselves |
-| The year in the copyright line | It updates by itself |
+| Menu labels, destinations and order | Request a change from the webmaster |
+| Logo and signature images | Approved brand links in Content hub |
+| Contact email and social links | Approved contact links in Content hub |
+| Footer layout and column arrangement | Managed by the webmaster |
+| Copyright year | Updates automatically |
 
-Two things in the footer are **not** editable and should be: the sentence under your
-signature, and the description that goes with the logo. Both are wording, so by the normal
-rule they are yours. Ask the webmaster for them.
+Some footer captions are not available in your editing controls. Send the intended wording to the webmaster instead of trying to change the footer layout.
 
-**Why the header and footer are built this way.** They appear on every page, and the way they
-fold down for phones and tablets is precise. A change that looks fine on a laptop can push the
-menu off the edge of a phone, on every page at once, and nobody notices until a visitor does.
-Wording and photographs are different: if one is wrong, you can see it is wrong and change it
-back. So the rule is roughly — **anything where a mistake is visible is yours; anything where
-a mistake hides until someone else finds it stays with the webmaster.**
+## Account and financial settings
 
-That is not a restriction on what you own. The website, the domain, the hosting and every
-licence are in your name, and any developer can be handed the whole thing tomorrow.
+Your content account is not an administrator account. Menus, site-wide reading settings, plugins, other users' accounts, currency, checkout and payment-provider configuration are not self-service content tasks.
 
-## Fixed because nobody has decided yet
+Confirmed course prices, Sales and Course access are separate approved workflows with deliberate checks. Their instructions remain drafts until final checks and handover. A missing control is not permission to use an administrator account or change another setting.
 
-A group of things are not editable simply because nobody ruled on whether they should be.
-That is not a decision anyone made — the agreed design document simply never covered them.
+## Other content changes
 
-The About page used to be the clearest example, and most of it has since been opened: your
-opening paragraph, your quotation, the three essays, your portrait and all three photograph
-strips are yours now. See [the About page](/about-page).
+The approved About text, portrait and photograph strips are described on [the About page](/about-page). If another caption or paragraph has no editing control, send the proposed change to the webmaster. A review is needed before additional fields or services are opened.
 
-What is left in this group is smaller and less visible — the wording on some empty pages, a
-few captions, the count on the shopping cart, the sign-in and basket pages. The webmaster has a full
-list and is working through it. If there is something you expect to be able to change and
-cannot, say so; it may simply be an item nobody thought to ask about.
+## Sensitive content
 
-## Fixed because it is risky
+**Awards and certificate records.** These are public claims about your credentials; some images have personal details deliberately hidden. Send changes to the webmaster rather than replacing an image with an unchecked original.
 
-**The award and exhibition rows on the About page.** These are public claims about your
-credentials, and one of the certificate scans is deliberately blurred to hide personal
-details. An open editing box there is an easy way to publish something unchecked, or to
-overwrite the blurred scan with the original by accident. Send changes to the webmaster instead.
+**Student credits.** Use the agreed public username and only publish a name or picture with the student's permission. Do not assume permission merely because the person has an account.
 
-**The names on the student showcase.** You choose them, but choose the username a student
-uses on the site rather than their real name. That is what the member terms will cover, and
-the wall is a public page.
+**The homepage banner arrangement.** Its three slides' approved words and images can change; the arrangement remains fixed so the page works across screen sizes.
 
-**The homepage banner layout.** You can change all three slides' words and pictures. The
-arrangement itself is fixed, because it has to hold together on every screen size.
+## Content that fills itself
 
-## Fixed because it builds itself
+The homepage's course row, gallery card and article row come from the corresponding published content. Change the underlying course, artwork or article instead of trying to edit a second copy. See [the rest of the homepage](/homepage-cards).
 
-Three parts of the homepage — the row of courses, the art gallery card and the row of
-articles — have no settings, and should not. They are built from your courses, your paintings
-and your articles, so the way to change them is to change those. See
-[the rest of the homepage](/homepage-cards).
-
-The same is true of the topic, date and search pages: they are made from your articles. See
-[topic, date and search pages](/archives).
+The topic, date and search pages also come from your articles. See [topic, date and search pages](/archives).

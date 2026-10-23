@@ -6,7 +6,7 @@
 - The **body** is the answer. Bold, links and lists all work.
 - **Page attributes → Order** sets the position. Lower numbers come first.
 
-Add, edit and delete freely. The FAQ page picks up whatever is published.
+Manage the entries available to your account. The FAQ page shows published entries. If an expected question is missing, ask the webmaster to check access rather than creating a duplicate.
 
 ## Answers that are not yours to guess
 

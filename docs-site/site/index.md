@@ -1,33 +1,26 @@
 # Your site guide
 
-This guide covers the parts of **crystalau.com** you can change yourself, without asking
-anyone. Each page says where the setting lives and what it affects, because a few settings
-appear in more than one place on the site.
+This guide explains the content tasks available to your limited editing account on **crystalau.com**, what each change affects and when to ask the webmaster. It is not permission to use every dashboard screen.
 
-## Two places to edit, and the difference matters
+> **Role and money instructions remain drafts pending final checks and handover. Nothing here authorises opening registration, payments or a new service.**
 
-Almost everything you change lives in one of two places.
+## Start from Content hub
 
-**Appearance → Customize** is for things there is exactly one of — your logo, your email
-address, the three homepage banner slides. The page updates live beside the settings, and
-nothing is saved until you press **Publish**.
+**Content hub** groups available editing links by website page. Use those links for approved text, image, brand and contact settings. Check the preview and press **Publish** when a settings change is ready.
 
-**Lists in the dashboard** are for things there can be any number of — FAQ entries,
-testimonials, artwork, blog posts, courses. Each one is its own item. Add, reorder and
-delete freely.
+Lists such as **Posts**, **FAQ**, **Artwork** and **Testimonials** hold individual entries. You may manage records available to your account, not every record belonging to another user. If an expected item is missing, ask the webmaster to check it rather than creating a duplicate.
 
-The rule of thumb: if you might one day want a second one, it is a list. If there can only
-ever be one, it is in Customize.
+Navigation menus, site-wide settings, payment configuration and other users' accounts remain with the webmaster. Course prices, orders and course access use separate confirmed workflows; do not try to change prices through an ordinary content save.
 
 ## Where to start
 
-1. [Logging in](/logging-in) — the address, and what you will see.
-2. [What you can edit](/what-you-can-edit) — one table covering the whole site.
-3. Then pick the page that matches what you want to change.
+1. [Logging in](/logging-in) — sign-in and the limited account.
+2. [What you can edit](/what-you-can-edit) — the editing map and managed settings.
+3. [Money and access](./money-guide-draft.md) — the safety checklist and draft instructions.
+4. Choose the public page or content task you want to update.
 
-## If something looks wrong after you save
+## If something looks wrong after a save
 
-Nothing you can do from the dashboard is permanent. Every text change can be typed back,
-and WordPress keeps earlier versions of blog posts and course descriptions under
-**Revisions**. If a page looks broken and you cannot see why, send the webmaster the address of
-the page and roughly what you changed.
+Do not assume every change is reversible or that an error means nothing happened. Preserve any unsaved text, note the page and exact message, and contact the webmaster before making another change.
+
+Blog posts may offer earlier saved versions, but that is not a promise to undo deleted files, payments, published prices or access changes. For an uncertain money result, stop and follow the dedicated troubleshooting instructions.
