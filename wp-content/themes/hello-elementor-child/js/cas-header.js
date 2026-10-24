@@ -44,30 +44,63 @@
 		}
 	} );
 
-	/* The count belongs in the button's accessible name. The badge itself stays
-	   aria-hidden, or the count is announced twice. */
-	( function renderCart() {
-		var n = 0;
+	( function () {
+		var sequence = 0;
 
-		try {
-			n = JSON.parse( localStorage.getItem( 'cas-cart' ) || '[]' ).reduce( function ( a, i ) {
-				return a + ( i.qty || 1 );
-			}, 0 );
-		} catch ( e ) {}
-
-		var badge = document.querySelector( '.cart-badge' );
-
-		if ( ! badge ) {
-			return;
+		function renderCart( count ) {
+			document.querySelectorAll( '.cart-badge' ).forEach( function ( badge ) {
+				var known = Number.isSafeInteger( count ) && count >= 0;
+				badge.textContent = known ? count : '';
+				badge.hidden = ! known || count === 0;
+				badge.style.display = known && count > 0 ? 'grid' : 'none';
+				var button = badge.closest( '.cart-btn' );
+				if ( button ) {
+					button.setAttribute( 'aria-label', known
+						? 'Shopping cart, ' + count + ( count === 1 ? ' item' : ' items' )
+						: 'Shopping cart, item count unavailable' );
+				}
+			} );
 		}
 
-		badge.textContent = n;
-		badge.style.display = n > 0 ? 'grid' : 'none';
-
-		var btn = badge.closest( '.cart-btn' );
-
-		if ( btn ) {
-			btn.setAttribute( 'aria-label', n > 0 ? 'Shopping cart, ' + n + ' items' : 'Shopping cart' );
+		function refreshCart() {
+			var request = ++sequence;
+			renderCart( null );
+			if ( ! window.casCartCount || ! document.querySelector( '.cart-badge' ) ) {
+				return;
+			}
+			var data = new URLSearchParams();
+			data.set( 'action', 'cas_cart_count' );
+			data.set( 'nonce', window.casCartCount.nonce );
+			fetch( window.casCartCount.ajaxUrl, {
+				method: 'POST',
+				credentials: 'same-origin',
+				cache: 'no-store',
+				redirect: 'error',
+				body: data,
+			} ).then( function ( response ) {
+				if ( ! response.ok ) {
+					throw new Error( 'Cart count unavailable' );
+				}
+				return response.json();
+			} ).then( function ( response ) {
+				if ( request === sequence && response.success === true && response.data && response.data.known === true ) {
+					renderCart( response.data.count );
+				}
+			} ).catch( function () {
+				if ( request === sequence ) {
+					renderCart( null );
+				}
+			} );
 		}
+
+		document.addEventListener( 'tutorAddToCartEvent', refreshCart );
+		document.addEventListener( 'tutorRemoveCartEvent', refreshCart );
+		window.addEventListener( 'focus', refreshCart );
+		window.addEventListener( 'pageshow', refreshCart );
+		window.addEventListener( 'pagehide', function () {
+			++sequence;
+			renderCart( null );
+		} );
+		refreshCart();
 	} )();
 } )();
