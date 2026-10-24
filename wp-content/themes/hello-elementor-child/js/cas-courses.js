@@ -1,6 +1,4 @@
-/* Add to cart on the catalogue cards.
-   Posts to Tutor's own native cart endpoint rather than keeping a separate cart, so
-   the count in the header and whatever checkout does stay consistent with Tutor. */
+/* Add to cart on the catalogue cards through Tutor's native endpoint. */
 ( function () {
 	'use strict';
 
@@ -44,16 +42,14 @@
 					   is in the cart — so it must not read as one. */
 					var already = parsed && /already in the cart/i.test( parsed.message || '' );
 
-					return { ok: r.ok || already, already: already };
+					return { ok: r.ok || already, already: already, cartCount: parsed && parsed.data ? parsed.data.cart_count : null };
 				} );
 			} )
 			.then( function ( res ) {
 				if ( res && res.ok ) {
 					btn.innerHTML = res.already ? 'In cart' : 'Added';
-					/* The header badge reads Tutor's cart, so it only updates on the next
-					   page load. Rather than fake a count, the button says what happened
-					   and the visitor can go to the cart when ready. */
 					btn.classList.add( 'is-added' );
+					document.dispatchEvent( new CustomEvent( 'tutorAddToCartEvent', { detail: { cart_count: res.cartCount } } ) );
 				} else {
 					btn.innerHTML = 'Try again';
 					btn.disabled = false;

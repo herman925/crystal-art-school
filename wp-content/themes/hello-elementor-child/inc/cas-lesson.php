@@ -14,9 +14,11 @@
  * the ordinary lesson view through `template_include` — the same route inc/cas-course-single.php
  * takes for the single course — and hands everything else back to Tutor untouched.
  *
- * Tutor still owns access, progress and completion. The access test is Tutor's own
- * CourseModel::has_course_content_access(), the same call the stock template makes, and
- * anyone it refuses falls through to Tutor's enrolment / sign-in screen. Completing a lesson
+ * Tutor still owns student access, progress and completion. The student access test is Tutor's own
+ * CourseModel::has_course_content_access(), the same call the stock template makes. A separate
+ * current-course-author exception at this page's gate permits the verified limited editor to
+ * preview their own work, without enrolment or a global Tutor-access override. Everyone else
+ * refused by Tutor falls through to its enrolment / sign-in screen. Completing a lesson
  * is Tutor's own form post (`tutor_action=tutor_complete_lesson`, with its nonce), so its
  * checks and its `tutor_lesson_completed_*` hooks all run.
  *
@@ -34,6 +36,11 @@
 
 defined( 'ABSPATH' ) || exit;
 
+/** View-only author decision; capability mapping uses the separate helper's explicit checked user ID. */
+function cas_lesson_author_course( $lesson_id ) {
+	return function_exists( 'cas_content_author_lesson_course' ) ? cas_content_author_lesson_course( $lesson_id, get_current_user_id() ) : 0;
+}
+
 /**
  * The course a lesson belongs to, or 0.
  *
@@ -42,6 +49,10 @@ defined( 'ABSPATH' ) || exit;
  * @return int
  */
 function cas_lesson_course_id( $lesson_id ) {
+	$author_course = cas_lesson_author_course( $lesson_id );
+	if ( $author_course ) {
+		return $author_course;
+	}
 	if ( ! function_exists( 'tutor_utils' ) ) {
 		return 0;
 	}
@@ -52,9 +63,9 @@ function cas_lesson_course_id( $lesson_id ) {
 /**
  * Whether this request is the ordinary lesson view that this file renders.
  *
- * Anything else — another post type, one of Tutor's learning-area sub-pages, or a visitor
- * Tutor would refuse — is left to Tutor. Memoised because the asset hook and the template
- * filter both ask.
+ * Anything else — another post type, a learning-area sub-page, or a visitor refused by both
+ * the narrow author check and Tutor — is left to Tutor. Memoised because the asset hook and
+ * the template filter both ask.
  *
  * @return bool
  */
@@ -82,15 +93,24 @@ function cas_lesson_is_ours() {
 	if ( ! $lesson_id || ! $course_id ) {
 		return $ours;
 	}
-
+	if ( cas_lesson_author_course( $lesson_id ) === $course_id ) {
+		return $ours = true;
+	}
 	try {
+		$enrolled = \Tutor\Models\EnrollmentModel::is_enrolled( $course_id );
+		$public = \TUTOR\Course_List::is_public( $course_id );
+		// A limited editor's stale instructor link must not substitute for actual course authorship.
+		if ( function_exists( 'cas_content_is_user' ) && cas_content_is_user( get_current_user_id() )
+			&& ! $enrolled && ! $public && ! get_post_meta( $lesson_id, '_is_preview', true ) ) {
+			return $ours;
+		}
 		$ours = (bool) \Tutor\Models\CourseModel::has_course_content_access(
 			array(
 				'current_post_type' => 'lesson',
 				'current_post_id'   => $lesson_id,
 				'course_id'         => $course_id,
-				'is_public'         => \TUTOR\Course_List::is_public( $course_id ),
-				'is_enrolled'       => \Tutor\Models\EnrollmentModel::is_enrolled( $course_id ),
+				'is_public'         => $public,
+				'is_enrolled'       => $enrolled,
 			)
 		);
 	} catch ( \Throwable $e ) {
@@ -99,6 +119,19 @@ function cas_lesson_is_ours() {
 
 	return $ours;
 }
+
+/** The author view may contain unpublished content and signed video addresses; never shared-cache it. */
+add_action( 'template_redirect', function () {
+	if ( ! is_singular( 'lesson' ) || isset( $_GET['subpage'] ) || ! cas_lesson_author_course( get_queried_object_id() ) ) {
+		return;
+	}
+	if ( ! defined( 'DONOTCACHEPAGE' ) ) { define( 'DONOTCACHEPAGE', true ); }
+	nocache_headers();
+	if ( ! headers_sent() ) {
+		header( 'Cache-Control: private, no-store, no-cache, must-revalidate, max-age=0', true );
+		header( 'Vary: Cookie', false );
+	}
+}, -10 );
 
 /**
  * Tutor swaps the learning-area template in through `template_include`, so the theme file
@@ -161,8 +194,8 @@ function cas_lesson_clock( $seconds ) {
 
 /**
  * Whether the current visitor may open a lesson that is not free, public or theirs by
- * enrolment — an administrator or the course's own instructor, for instance. Tutor's own
- * test decides, so the list never offers a link that Tutor would then refuse.
+ * enrolment. The verified current course author has a separate page-local preview exception;
+ * other visitors retain Tutor's own test.
  *
  * @param int $lesson_id Lesson post ID.
  * @param int $course_id Course post ID.
@@ -175,6 +208,14 @@ function cas_lesson_can_open( $lesson_id, $course_id ) {
 	}
 
 	try {
+		$author_course = cas_lesson_author_course( $lesson_id );
+		if ( $author_course ) {
+			return $author_course === (int) $course_id;
+		}
+		if ( function_exists( 'cas_content_is_user' ) && cas_content_is_user( get_current_user_id() )
+			&& ! get_post_meta( $lesson_id, '_is_preview', true ) && ! \Tutor\Models\EnrollmentModel::is_enrolled( $course_id ) ) {
+			return false;
+		}
 		return (bool) \Tutor\Models\CourseModel::has_course_content_access(
 			array(
 				'current_post_type' => 'lesson',
@@ -203,9 +244,12 @@ function cas_lesson_outline( $course_id ) {
 	$user_id  = get_current_user_id();
 	$enrolled = (bool) \Tutor\Models\EnrollmentModel::is_enrolled( $course_id );
 	$public   = (bool) \TUTOR\Course_List::is_public( $course_id );
+	$author   = (int) $course_id > 0 && cas_lesson_author_course( get_queried_object_id() ) === (int) $course_id;
+	$statuses = $author ? array( 'publish', 'draft', 'pending', 'private', 'future', 'auto-draft' ) : 'publish';
 	$topics   = get_posts(
 		array(
 			'post_type'   => 'topics',
+			'post_status' => $statuses,
 			'post_parent' => $course_id,
 			'numberposts' => -1,
 			'orderby'     => 'menu_order',
@@ -218,6 +262,7 @@ function cas_lesson_outline( $course_id ) {
 		$lessons = get_posts(
 			array(
 				'post_type'   => 'lesson',
+				'post_status' => $statuses,
 				'post_parent' => $topic->ID,
 				'numberposts' => -1,
 				'orderby'     => 'menu_order',
@@ -389,8 +434,19 @@ function cas_render_lesson() {
 	$percent = $total_n ? (int) round( $done_n / $total_n * 100 ) : 0;
 	$film    = cas_lesson_film( $lesson_id );
 	$attach  = cas_lesson_attachments( $lesson_id );
-	$may_files = $enrolled || current_user_can( 'manage_options' ); // Owner policy 2026-10-20: course files on preview lessons are for enrolled students and admins.
+	$author = cas_lesson_author_course( $lesson_id ) === (int) $course_id;
+	$may_files = $enrolled || current_user_can( 'manage_options' ) || $author;
 	$course_files = function_exists( 'tutor_utils' ) ? (array) tutor_utils()->get_attachments( $course_id ) : array();
+	if ( $author && ! $enrolled && ! current_user_can( 'manage_options' ) ) {
+		// Stage permission is not file permission: the separate provenance/download handler decides each file.
+		$can_file = static function ( $file ) {
+			return ! empty( $file->id ) && function_exists( 'cas_private_author_can_download' ) && cas_private_author_can_download( (int) $file->id );
+		};
+		$course_files = array_values( array_filter( $course_files, $can_file ) );
+		foreach ( array( 'photos', 'files' ) as $group ) {
+			$attach[ $group ] = array_values( array_filter( $attach[ $group ], $can_file ) );
+		}
+	}
 	$files   = $may_files ? array_merge( $course_files, $attach['files'] ) : array();
 	$cats    = wp_get_post_terms( $course_id, 'course-category', array( 'fields' => 'names' ) );
 	$tag     = ( ! is_wp_error( $cats ) && $cats ) ? $cats[0] : '';

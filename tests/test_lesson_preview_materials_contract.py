@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Contract for #148: course materials on a lesson page are for enrolled students and admins only."""
+"""Contract for #148: enrolled/admin files, plus narrowly verified author references (2026-10-23)."""
 from pathlib import Path
 
 SOURCE = Path(__file__).parents[1] / "wp-content/themes/hello-elementor-child/inc/cas-lesson.php"
@@ -15,8 +15,13 @@ def main() -> None:
 
     require(
         source,
-        "$may_files = $enrolled || current_user_can( 'manage_options' );",
-        "materials must be gated by enrolment or admin (owner policy 2026-10-20)",
+        "$may_files = $enrolled || current_user_can( 'manage_options' ) || $author;",
+        "materials need enrolment/admin or the explicit current-course-author decision",
+    )
+    require(
+        source,
+        "function_exists( 'cas_private_author_can_download' ) && cas_private_author_can_download( (int) $file->id )",
+        "author stage access must not replace the separate per-file provenance/download decision",
     )
     require(
         source,
@@ -42,4 +47,4 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-    print("ok: lesson materials are gated by enrolment or admin")
+    print("ok: lesson materials retain student/admin gates and require separate author file authority")

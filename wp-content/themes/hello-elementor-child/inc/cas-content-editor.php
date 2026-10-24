@@ -11,6 +11,7 @@ function cas_content_editor_load() {
 		'cas-content-role',
 		'cas-customizer-allowlist',
 		'cas-price-gate',
+		'cas-content-builder',
 		'cas-sales',
 		'cas-coupons',
 		'cas-enrol',

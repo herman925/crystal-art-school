@@ -8,11 +8,11 @@ ROLE = (ROOT / "wp-content/themes/hello-elementor-child/inc/cas-content-role.php
 
 
 class ContentPagesContract(unittest.TestCase):
-    def test_only_hub_sales_coupons_and_enrol_are_default_allowed(self):
+    def test_only_the_hub_and_approved_route_a_screens_are_allowed(self):
         start = ROLE.index("function cas_content_allowed_admin_page")
         end = ROLE.index("\n}", start)
         block = ROLE[start:end]
-        self.assertIn("array( CAS_CONTENT_HUB_SLUG, 'cas-sales', 'cas-coupons', 'cas-enrol' )", block)
+        self.assertIn("array( CAS_CONTENT_HUB_SLUG, 'cas-sales', 'cas-coupons', 'cas-enrol', 'cas-course-prices' )", block)
         self.assertIn("in_array( sanitize_key( $page ), $pages, true )", block)
         self.assertNotIn("strpos", block)
         self.assertNotIn("preg_match", block)
