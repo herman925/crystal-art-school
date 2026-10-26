@@ -21,7 +21,9 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 	function get_current_user_id() { return $GLOBALS['about_actor']; }
 	function wp_verify_nonce( $nonce, $action ) { return $GLOBALS['about_nonce'] && 'fixture-only' === $nonce && $GLOBALS['about_action'] === $action; }
 	function wp_unslash( $value ) { return stripslashes( $value ); }
-	function wp_kses_post( $value ) { return $value; }
+	function wp_kses_post( $value ) { $GLOBALS['prose_sanitizers'][] = 'wp_kses_post'; return $value; }
+	function sanitize_text_field( $value ) { $GLOBALS['prose_sanitizers'][] = 'sanitize_text_field'; return $value; }
+	function sanitize_textarea_field( $value ) { $GLOBALS['prose_sanitizers'][] = 'sanitize_textarea_field'; return $value; }
 	function wp_hash( $value ) { return hash_hmac( 'sha256', $value, 'synthetic-fixture-only' ); }
 	function get_option( $name ) {
 		if ( 'stylesheet' === $name ) { return 'hello-elementor-child'; }
@@ -30,6 +32,12 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 	function wp_cache_delete( $key, $group ) { $GLOBALS['about_evictions'][] = array( $key, $group ); return true; }
 	function cas_blog_intro_default() { return 'Blog shipped wording'; }
 	function cas_fv_intro_default( $key ) { return 'Free Videos shipped ' . $key; }
+	define( 'CAS_HOME_GALLERY_SUB_DEFAULT', 'Synthetic gallery wording' );
+	function cas_home_free_videos_text_default() { return 'Synthetic free-video card wording'; }
+	function cas_home_courses_lede_default() { return 'Synthetic course rail wording'; }
+	function cas_overview_lede_1_default() { return 'Synthetic overview paragraph one'; }
+	function cas_overview_lede_2_default() { return 'Synthetic overview paragraph two'; }
+	function cas_overview_principle_default( $n, $part ) { return 'Synthetic principle ' . $n . ' ' . $part; }
 	function cas_about_fields() {
 		$fields = array();
 		foreach ( array( 'cas_about_intro', 'cas_about_quote', 'cas_about_journey_body', 'cas_about_community_body', 'cas_about_instructor_body' ) as $key ) {
@@ -74,6 +82,7 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 		$GLOBALS['about_action'] = 'cas_content_about_save';
 		$GLOBALS['about_cached'] = null;
 		$GLOBALS['about_evictions'] = array();
+		$GLOBALS['prose_sanitizers'] = array();
 		$_SERVER['REQUEST_METHOD'] = 'POST';
 		$_POST = array( '_wpnonce' => 'fixture-only' );
 		$mods = array_fill_keys( array_keys( cas_about_fields() ), 'Original' );
@@ -93,6 +102,7 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 	require dirname( __DIR__, 2 ) . '/wp-content/themes/hello-elementor-child/inc/cas-content-about.php';
 	require dirname( __DIR__, 2 ) . '/wp-content/themes/hello-elementor-child/inc/cas-content-blog.php';
 	require dirname( __DIR__, 2 ) . '/wp-content/themes/hello-elementor-child/inc/cas-content-free-videos.php';
+	require dirname( __DIR__, 2 ) . '/wp-content/themes/hello-elementor-child/inc/cas-content-home.php';
 	require dirname( __DIR__, 2 ) . '/wp-content/themes/hello-elementor-child/inc/cas-content-prose.php';
 	$cases = 0;
 	$before = about_reset();
@@ -184,7 +194,7 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 	function prose_submit( $group, $before, $proposed, $fields ) {
 		return cas_content_prose_save( $group, 'theme_mods_hello-elementor-child', cas_content_prose_snapshot( $group, 'theme_mods_hello-elementor-child', $before ), array_map( 'addslashes', array_intersect_key( $proposed, $fields ) ) );
 	}
-	foreach ( array( 'blog', 'free-videos' ) as $group ) {
+	foreach ( array( 'blog', 'free-videos', 'home' ) as $group ) {
 		list( $before, $fields, $config ) = prose_fixture( $group );
 		$key = array_key_first( $fields ); $proposed = $before; $proposed[ $key ] = '<strong>New text</strong>';
 		about_expect( 'saved' === prose_submit( $group, $before, $proposed, $fields ) && unserialize( $wpdb->row['option_value'] ) === $proposed, 'Selected group save changed other values' ); ++$cases;
@@ -220,6 +230,14 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 		about_error( cas_content_prose_save( $group, 'theme_mods_hello-elementor-child', cas_content_prose_snapshot( 'about', 'theme_mods_hello-elementor-child', $before ), array_intersect_key( $before, $fields ) ), $config['error'] . '_stale' );
 		about_expect( 0 === $wpdb->writes, 'Cross-page snapshot accepted' ); ++$cases;
 	}
+	list( $before, $fields, $config ) = prose_fixture( 'home' );
+	$input = array_intersect_key( $before, $fields );
+	about_expect( cas_content_home_clean( $input ) === $input && array_count_values( $GLOBALS['prose_sanitizers'] ) === array( 'wp_kses_post' => 1, 'sanitize_text_field' => 1, 'sanitize_textarea_field' => 7 ), 'Home native sanitizer dispatch changed' ); ++$cases;
+	$GLOBALS['prose_sanitizers'] = array();
+	$empty = array_fill_keys( array_keys( $fields ), '' );
+	about_expect( cas_content_home_clean( $empty ) === $empty, 'Cleared Home fields restored defaults' ); ++$cases;
+	$proposed = $before; $proposed['cas_home_overview_point_1_t'] = '';
+	about_expect( 'saved' === prose_submit( 'home', $before, $proposed, $fields ) && unserialize( $wpdb->row['option_value'] )['cas_home_overview_point_1_b'] === $before['cas_home_overview_point_1_b'], 'Clearing point title erased stored body' ); ++$cases;
 	about_reset();
 	about_error( cas_content_prose_save( 'unapproved', 'theme_mods_hello-elementor-child', '', array() ), 'prose_denied' );
 	about_expect( 0 === $wpdb->writes, 'Unapproved group wrote' ); ++$cases;
