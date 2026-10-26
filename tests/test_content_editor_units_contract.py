@@ -1,4 +1,4 @@
-"""Prepared source-only controls contracts; no save route or runtime proof."""
+"""Closed Blog/Free Videos contracts; native runtime acceptance belongs to Review."""
 
 import re
 import unittest
@@ -32,11 +32,11 @@ class ContentEditorUnitsContract(unittest.TestCase):
         self.assertIn("array_diff_key( $fields, $input )", source)
         self.assertIn("Leave a box empty to hide that paragraph", source)
 
-    def test_preparation_preserves_native_controls_without_activation(self):
+    def test_native_controls_reuse_the_closed_save_flow(self):
         allowlist = (INC / "cas-customizer-allowlist.php").read_text()
         for filename in ("cas-content-blog.php", "cas-content-free-videos.php"):
             source = (INC / filename).read_text()
-            self.assertIn("PREPARATION ONLY", source)
+            self.assertIn("cas_content_prose_page(", source)
             self.assertIn("current_user_can( CAS_CONTENT_CAP )", source)
             self.assertIn("wp_kses_post( wp_unslash(", source)
             self.assertIn("array_key_exists( $key, $values )", source)
@@ -47,6 +47,19 @@ class ContentEditorUnitsContract(unittest.TestCase):
             selector = source.split("_fields()", 1)[1].split("_clean(", 1)[0]
             for key in re.findall(r"'(cas_(?:blog_intro|fv_lead|fv_intro_[a-z]+))'", selector):
                 self.assertIn("'" + key + "'", allowlist)
+
+    def test_loader_hub_and_page_routes(self):
+        loader = (INC / "cas-content-editor.php").read_text()
+        hub = (INC / "cas-content-hub.php").read_text()
+        shared = (INC / "cas-content-prose.php").read_text()
+        for module in ("cas-content-blog", "cas-content-free-videos", "cas-content-prose"):
+            self.assertEqual(loader.count("'" + module + "'"), 1)
+        for slug in ("cas-content-blog", "cas-content-free-videos"):
+            self.assertIn("admin.php?page=" + slug, hub)
+            self.assertIn("'slug' => '" + slug + "'", shared)
+        self.assertIn("$_POST[ $config['input'] ]", shared)
+        self.assertIn("$_POST[ $config['snapshot'] ]", shared)
+        self.assertIn("call_user_func( $config['controls'], $values )", shared)
 
 
 if __name__ == "__main__":

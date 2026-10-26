@@ -166,7 +166,7 @@ function cas_content_hub_cards() {
 			'name'  => 'Blog',
 			'view'  => cas_content_hub_page_url( 'blog' ),
 			'items' => array(
-				$customize( 'Introduction paragraph under the blog heading', 'cas_page_blog', cas_content_hub_page_or_home( 'blog', $home ) ),
+				$item( 'Introduction paragraph under the blog heading', admin_url( 'admin.php?page=cas-content-blog' ), CAS_CONTENT_HUB_CAP ),
 				cas_content_hub_list_item( 'Posts: title, text, pictures, topic and date', 'post' ),
 				$item( 'Topics (categories)', admin_url( 'edit-tags.php?taxonomy=category' ), 'manage_categories' ),
 			),
@@ -187,8 +187,8 @@ function cas_content_hub_cards() {
 			'name'  => 'Free videos',
 			'view'  => cas_content_hub_page_url( 'free-videos' ),
 			'items' => array(
-				$customize( 'Opening line and the three section introductions', 'cas_page_free_videos', cas_content_hub_page_or_home( 'free-videos', $home ) ),
-				$customize( 'Courses link inside the demos introduction', 'cas_page_free_videos', cas_content_hub_page_or_home( 'free-videos', $home ) ),
+				$item( 'Opening line and the three section introductions', admin_url( 'admin.php?page=cas-content-free-videos' ), CAS_CONTENT_HUB_CAP ),
+				$item( 'Courses link inside the demos introduction', admin_url( 'admin.php?page=cas-content-free-videos' ), CAS_CONTENT_HUB_CAP ),
 				cas_content_hub_list_item( 'Films: title, cover, blurb, section, video link and order', 'cas_free_video' ),
 			),
 			'muted' => 'Section layout: ask Herman.',

@@ -2,7 +2,6 @@
 
 defined( 'ABSPATH' ) || exit;
 
-// PREPARATION ONLY: controls and sanitiser; no routes, writes or save integration.
 function cas_content_free_videos_fields() {
 	return array(
 		'cas_fv_lead'         => array( 'label' => 'Opening line', 'default' => cas_fv_intro_default( 'lead' ) ),
@@ -51,4 +50,8 @@ function cas_content_free_videos_controls( $values ) {
 			),
 		) );
 	}
+}
+
+function cas_content_free_videos_page() {
+	cas_content_prose_page( 'free-videos' );
 }

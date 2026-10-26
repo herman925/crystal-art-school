@@ -2,7 +2,6 @@
 
 defined( 'ABSPATH' ) || exit;
 
-// PREPARATION ONLY: controls and sanitiser; no routes, writes or save integration.
 function cas_content_blog_fields() {
 	return array(
 		'cas_blog_intro' => array(
@@ -44,4 +43,8 @@ function cas_content_blog_controls( $values ) {
 			),
 		) );
 	}
+}
+
+function cas_content_blog_page() {
+	cas_content_prose_page( 'blog' );
 }
