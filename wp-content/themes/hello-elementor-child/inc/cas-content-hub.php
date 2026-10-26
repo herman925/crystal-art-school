@@ -176,7 +176,7 @@ function cas_content_hub_cards() {
 			'name'  => 'About',
 			'view'  => cas_content_hub_page_url( 'about' ),
 			'items' => array(
-				$customize( 'Opening paragraph, quotation and the three essays', 'cas_page_about', cas_content_hub_page_or_home( 'about', $home ) ),
+				$item( 'Opening paragraph, quotation and the three essays', admin_url( 'admin.php?page=cas-content-about' ), CAS_CONTENT_HUB_CAP ),
 				$customize( 'Portrait photograph', 'cas_page_about', cas_content_hub_page_or_home( 'about', $home ) ),
 				cas_content_hub_list_item( 'Carousel photos: live drawing, exhibitions and Artful Living', 'cas_about_photo' ),
 				$customize( 'Contact email and social handles shown on the page', 'cas_contact', cas_content_hub_page_or_home( 'about', $home ) ),
