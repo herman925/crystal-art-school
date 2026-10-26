@@ -14,6 +14,7 @@ function cas_content_editor_load() {
 		'cas-content-blog',
 		'cas-content-free-videos',
 		'cas-content-home',
+		'cas-content-contact',
 		'cas-content-prose',
 		'cas-price-gate',
 		'cas-content-builder',

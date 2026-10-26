@@ -71,11 +71,11 @@ class AboutFormContract(unittest.TestCase):
         self.assertEqual(hub.count("admin.php?page=cas-content-about"), 1)
         self.assertIn("Portrait photograph', 'cas_page_about'", hub)
         self.assertIn("cas_content_prose_page( 'about' )", MODULE)
-        self.assertIn("array( 'cas-content-about', 'cas-content-blog', 'cas-content-free-videos', 'cas-content-home' )", SHARED)
+        self.assertIn("array( 'cas-content-about', 'cas-content-blog', 'cas-content-free-videos', 'cas-content-home', 'cas-content-contact' )", SHARED)
 
-    def test_only_four_closed_server_selected_groups(self):
+    def test_only_five_closed_server_selected_groups(self):
         config = SHARED.split("function cas_content_prose_config(", 1)[1].split("function cas_content_prose_allowed_pages", 1)[0]
-        self.assertEqual(re.findall(r"^\t\t'([^']+)' => array", config, re.MULTILINE), ["about", "blog", "free-videos", "home"])
+        self.assertEqual(re.findall(r"^\t\t'([^']+)' => array", config, re.MULTILINE), ["about", "blog", "free-videos", "home", "contact"])
         self.assertNotIn("$_POST['group']", SHARED)
         self.assertNotIn("apply_filters(", SHARED)
         self.assertIn("$config = cas_content_prose_config( $group );", SHARED)

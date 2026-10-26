@@ -24,12 +24,22 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 	function wp_kses_post( $value ) { $GLOBALS['prose_sanitizers'][] = 'wp_kses_post'; return $value; }
 	function sanitize_text_field( $value ) { $GLOBALS['prose_sanitizers'][] = 'sanitize_text_field'; return $value; }
 	function sanitize_textarea_field( $value ) { $GLOBALS['prose_sanitizers'][] = 'sanitize_textarea_field'; return $value; }
+	function esc_url_raw( $value ) { $GLOBALS['prose_sanitizers'][] = 'esc_url_raw'; return $value; }
+	function sanitize_email( $value ) { $GLOBALS['prose_sanitizers'][] = 'sanitize_email'; return $value; }
 	function wp_hash( $value ) { return hash_hmac( 'sha256', $value, 'synthetic-fixture-only' ); }
 	function get_option( $name ) {
 		if ( 'stylesheet' === $name ) { return 'hello-elementor-child'; }
 		return $GLOBALS['about_cached'] ?? unserialize( $GLOBALS['wpdb']->row['option_value'], array( 'allowed_classes' => false ) );
 	}
 	function wp_cache_delete( $key, $group ) { $GLOBALS['about_evictions'][] = array( $key, $group ); return true; }
+	function cas_social_defaults() {
+		return array(
+			'instagram' => array( 'label' => 'Synthetic Instagram', 'default' => 'https://example.invalid/instagram' ),
+			'facebook' => array( 'label' => 'Synthetic Facebook', 'default' => 'https://example.invalid/facebook' ),
+			'youtube' => array( 'label' => 'Synthetic YouTube', 'default' => 'https://example.invalid/youtube' ),
+			'email' => array( 'label' => 'Synthetic email', 'default' => 'fixture@example.invalid' ),
+		);
+	}
 	function cas_blog_intro_default() { return 'Blog shipped wording'; }
 	function cas_fv_intro_default( $key ) { return 'Free Videos shipped ' . $key; }
 	define( 'CAS_HOME_GALLERY_SUB_DEFAULT', 'Synthetic gallery wording' );
@@ -103,6 +113,7 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 	require dirname( __DIR__, 2 ) . '/wp-content/themes/hello-elementor-child/inc/cas-content-blog.php';
 	require dirname( __DIR__, 2 ) . '/wp-content/themes/hello-elementor-child/inc/cas-content-free-videos.php';
 	require dirname( __DIR__, 2 ) . '/wp-content/themes/hello-elementor-child/inc/cas-content-home.php';
+	require dirname( __DIR__, 2 ) . '/wp-content/themes/hello-elementor-child/inc/cas-content-contact.php';
 	require dirname( __DIR__, 2 ) . '/wp-content/themes/hello-elementor-child/inc/cas-content-prose.php';
 	$cases = 0;
 	$before = about_reset();
@@ -186,7 +197,9 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 		$mods = about_reset();
 		$config = cas_content_prose_config( $group );
 		$fields = call_user_func( $config['fields'] );
-		foreach ( $fields as $key => $field ) { $mods[ $key ] = 'Original'; }
+		foreach ( $fields as $key => $field ) {
+			$mods[ $key ] = 'contact' === $group ? ( 'cas_social_email' === $key ? 'fixture@example.invalid' : 'https://example.invalid/original' ) : 'Original';
+		}
 		$GLOBALS['wpdb']->row['option_value'] = serialize( $mods );
 		$GLOBALS['about_action'] = $config['nonce'];
 		return array( $mods, $fields, $config );
@@ -194,9 +207,9 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 	function prose_submit( $group, $before, $proposed, $fields ) {
 		return cas_content_prose_save( $group, 'theme_mods_hello-elementor-child', cas_content_prose_snapshot( $group, 'theme_mods_hello-elementor-child', $before ), array_map( 'addslashes', array_intersect_key( $proposed, $fields ) ) );
 	}
-	foreach ( array( 'blog', 'free-videos', 'home' ) as $group ) {
+	foreach ( array( 'blog', 'free-videos', 'home', 'contact' ) as $group ) {
 		list( $before, $fields, $config ) = prose_fixture( $group );
-		$key = array_key_first( $fields ); $proposed = $before; $proposed[ $key ] = '<strong>New text</strong>';
+		$key = array_key_first( $fields ); $proposed = $before; $proposed[ $key ] = 'contact' === $group ? 'https://example.invalid/new' : '<strong>New text</strong>';
 		about_expect( 'saved' === prose_submit( $group, $before, $proposed, $fields ) && unserialize( $wpdb->row['option_value'] ) === $proposed, 'Selected group save changed other values' ); ++$cases;
 
 		list( $before, $fields, $config ) = prose_fixture( $group );
@@ -214,7 +227,7 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 		$proposed = $before; $proposed[ $key ] = 'New';
 		$wpdb->before_write = static function ( $db ) { $m = unserialize( $db->row['option_value'] ); $m['unrelated']['marker'] = 'Concurrent'; $db->row['option_value'] = serialize( $m ); };
 		about_error( prose_submit( $group, $before, $proposed, $fields ), $config['error'] . '_stale' );
-		about_expect( 1 === $wpdb->writes && 'Original' === unserialize( $wpdb->row['option_value'] )[ $key ], 'Group CAS retried or overwrote' ); ++$cases;
+		about_expect( 1 === $wpdb->writes && $before[ $key ] === unserialize( $wpdb->row['option_value'] )[ $key ], 'Group CAS retried or overwrote' ); ++$cases;
 
 		list( $before, $fields, $config ) = prose_fixture( $group );
 		$input = array_intersect_key( $before, $fields ); $input['cas_about_quote'] = 'Forged field';
@@ -238,6 +251,14 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 	about_expect( cas_content_home_clean( $empty ) === $empty, 'Cleared Home fields restored defaults' ); ++$cases;
 	$proposed = $before; $proposed['cas_home_overview_point_1_t'] = '';
 	about_expect( 'saved' === prose_submit( 'home', $before, $proposed, $fields ) && unserialize( $wpdb->row['option_value'] )['cas_home_overview_point_1_b'] === $before['cas_home_overview_point_1_b'], 'Clearing point title erased stored body' ); ++$cases;
+	list( $before, $fields, $config ) = prose_fixture( 'contact' );
+	$input = array_intersect_key( $before, $fields );
+	about_expect( cas_content_contact_clean( $input ) === $input && array_count_values( $GLOBALS['prose_sanitizers'] ) === array( 'esc_url_raw' => 3, 'sanitize_email' => 1 ), 'Shared contact sanitizer dispatch changed' ); ++$cases;
+	$empty = array_fill_keys( array_keys( $fields ), '' );
+	about_expect( cas_content_contact_clean( $empty ) === $empty, 'Cleared shared contact values restored defaults' ); ++$cases;
+	$forged = $input; unset( $forged['cas_social_youtube'] ); $forged['cas_logo'] = 'forged';
+	about_error( cas_content_prose_save( 'contact', 'theme_mods_hello-elementor-child', cas_content_prose_snapshot( 'contact', 'theme_mods_hello-elementor-child', $before ), $forged ), 'cas_contact_input' );
+	about_expect( 0 === $wpdb->writes, 'Equal-count foreign contact key wrote' ); ++$cases;
 	about_reset();
 	about_error( cas_content_prose_save( 'unapproved', 'theme_mods_hello-elementor-child', '', array() ), 'prose_denied' );
 	about_expect( 0 === $wpdb->writes, 'Unapproved group wrote' ); ++$cases;

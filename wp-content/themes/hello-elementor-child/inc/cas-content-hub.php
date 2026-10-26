@@ -180,7 +180,7 @@ function cas_content_hub_cards() {
 				$item( 'Opening paragraph, quotation and the three essays', admin_url( 'admin.php?page=cas-content-about' ), CAS_CONTENT_HUB_CAP ),
 				$customize( 'Portrait photograph', 'cas_page_about', cas_content_hub_page_or_home( 'about', $home ) ),
 				cas_content_hub_list_item( 'Carousel photos: live drawing, exhibitions and Artful Living', 'cas_about_photo' ),
-				$customize( 'Contact email and social handles shown on the page', 'cas_contact', cas_content_hub_page_or_home( 'about', $home ) ),
+				$item( 'Contact email and social handles shown on the page', admin_url( 'admin.php?page=cas-content-contact' ), CAS_CONTENT_HUB_CAP ),
 			),
 			'muted' => 'Layout and the honours table: ask Herman.',
 		),
@@ -207,7 +207,7 @@ function cas_content_hub_cards() {
 			'view'  => null,
 			'items' => array(
 				$customize( 'Logo, hero signature and footer signature', 'cas_brand', $home ),
-				$customize( 'Contact email and social links (buttons and footer)', 'cas_contact', $home ),
+				$item( 'Contact email and social links (buttons and footer)', admin_url( 'admin.php?page=cas-content-contact' ), CAS_CONTENT_HUB_CAP ),
 				$item( 'Top menu labels and order (Appearance > Menus)', admin_url( 'nav-menus.php' ), 'edit_theme_options' ),
 			),
 			'muted' => 'Footer layout and colours: ask Herman.',

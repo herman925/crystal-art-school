@@ -36,17 +36,25 @@ function cas_content_prose_config( $group ) {
 			'description' => 'Edit the two card descriptions, Shop all courses introduction and six Course overview fields. Images, hero slides, section headings and list entries are unchanged.',
 			'empty' => 'Clearing a field hides that text. Clearing a point title also hides that point and its body, without deleting the saved body text.',
 		),
+		'contact' => array(
+			'title' => 'Site-wide contact and social links', 'slug' => 'cas-content-contact', 'callback' => 'cas_content_contact_page',
+			'fields' => 'cas_content_contact_fields', 'clean' => 'cas_content_contact_clean', 'controls' => 'cas_content_contact_controls',
+			'input' => 'cas_contact_fields', 'snapshot' => 'cas_contact_snapshot', 'nonce' => 'cas_content_contact_save',
+			'error' => 'contact', 'input_error' => 'cas_contact_input',
+			'description' => 'Edit the existing shared social URLs and contact email used across the homepage, footer, FAQ and About/contact surfaces. Changing one value affects all its existing consumers.',
+			'empty' => 'Empty fields stay empty; they do not restore defaults. The existing renderer still prints its links, so clearing a value can leave an empty link or email destination.',
+		),
 	);
 	return is_string( $group ) && isset( $pages[ $group ] ) ? $pages[ $group ] : null;
 }
 
 function cas_content_prose_allowed_pages( $pages ) {
-	return array_merge( $pages, array( 'cas-content-about', 'cas-content-blog', 'cas-content-free-videos', 'cas-content-home' ) );
+	return array_merge( $pages, array( 'cas-content-about', 'cas-content-blog', 'cas-content-free-videos', 'cas-content-home', 'cas-content-contact' ) );
 }
 add_filter( 'cas_content_allowed_pages', 'cas_content_prose_allowed_pages' );
 
 function cas_content_prose_menu() {
-	foreach ( array( 'about', 'blog', 'free-videos', 'home' ) as $group ) {
+	foreach ( array( 'about', 'blog', 'free-videos', 'home', 'contact' ) as $group ) {
 		$page = cas_content_prose_config( $group );
 		add_submenu_page( CAS_CONTENT_HUB_SLUG, $page['title'], $page['title'], CAS_CONTENT_CAP, $page['slug'], $page['callback'] );
 	}
@@ -177,7 +185,7 @@ function cas_content_prose_page( $group ) {
 	}
 	$blocked = is_wp_error( $row ) || ( is_wp_error( $result ) && ( $config['input_error'] !== $result->get_error_code() || ! is_string( $submitted_snapshot ) || ! hash_equals( cas_content_prose_snapshot( $group, $option, $row['mods'] ), $submitted_snapshot ) ) );
 	echo '<div class="wrap"><h1>' . esc_html( $config['title'] ) . '</h1><p>' . esc_html( $config['description'] ) . '</p>';
-	echo '<p><strong>' . esc_html( $config['empty'] ) . '</strong> Saving changes the page text. Cached public pages may take time to refresh.</p>';
+	echo '<p><strong>' . esc_html( $config['empty'] ) . '</strong> Saving changes the values used on the site. Cached public pages may take time to refresh.</p>';
 	if ( is_wp_error( $result ) || is_wp_error( $row ) ) {
 		$error = is_wp_error( $result ) ? $result : $row;
 		echo '<div class="notice notice-error" role="alert"><p>' . esc_html( $error->get_error_message() ) . '</p></div>';
