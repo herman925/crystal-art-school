@@ -22,5 +22,5 @@ Six subjects need a definite, checked answer rather than a reasonable-sounding o
 Whatever is typed into an FAQ entry becomes the site's promise about these, and a student
 can hold you to it. Confirm the wording with the webmaster before publishing changes to those six.
 
-Two answers currently on the site are waiting on exactly this — one about how long access
-lasts, one about paying by card without a PayPal account. Both are flagged with the webmaster.
+The access-duration answer has already been confirmed and updated. Any claim about paying
+by card without a PayPal account must be checked with the webmaster before it is published.
