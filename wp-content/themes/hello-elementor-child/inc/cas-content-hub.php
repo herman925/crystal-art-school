@@ -120,7 +120,8 @@ function cas_content_hub_cards() {
 			'view'  => $home,
 			'items' => array(
 				$customize( 'Homepage banner: three slides, each with a title, a description and two photos', 'cas_hero', $home ),
-				$customize( 'Free videos card: its photo and hover text', 'cas_page_home_free_videos', $home ),
+				$customize( 'Free videos card: photograph', 'cas_page_home_free_videos', $home ),
+				$item( 'Free videos card: description', admin_url( 'admin.php?page=cas-content-home' ), CAS_CONTENT_HUB_CAP ),
 				$customize( 'About Crystal card: its photo', 'cas_page_home_about', $home ),
 				$customize( 'Shop all courses introduction', 'cas_page_home_courses', $home ),
 				$customize( 'Course overview: two opening paragraphs and two principles', 'cas_page_home_course_overview', $home ),

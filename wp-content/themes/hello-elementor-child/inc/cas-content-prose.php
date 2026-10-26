@@ -28,17 +28,25 @@ function cas_content_prose_config( $group ) {
 			'description' => 'Edit the opening line and three section introductions. Video records, headings and layout are unchanged.',
 			'empty' => 'Leaving a box empty hides that paragraph; it does not restore shipped wording.',
 		),
+		'home' => array(
+			'title' => 'Home text', 'slug' => 'cas-content-home', 'callback' => 'cas_content_home_page',
+			'fields' => 'cas_content_home_fields', 'clean' => 'cas_content_home_clean', 'controls' => 'cas_content_home_controls',
+			'input' => 'cas_home_fields', 'snapshot' => 'cas_home_snapshot', 'nonce' => 'cas_content_home_save',
+			'error' => 'home', 'input_error' => 'cas_home_input',
+			'description' => 'Edit the two card descriptions, Shop all courses introduction and six Course overview fields. Images, hero slides, section headings and list entries are unchanged.',
+			'empty' => 'Clearing a field hides that text. Clearing a point title also hides that point and its body, without deleting the saved body text.',
+		),
 	);
 	return is_string( $group ) && isset( $pages[ $group ] ) ? $pages[ $group ] : null;
 }
 
 function cas_content_prose_allowed_pages( $pages ) {
-	return array_merge( $pages, array( 'cas-content-about', 'cas-content-blog', 'cas-content-free-videos' ) );
+	return array_merge( $pages, array( 'cas-content-about', 'cas-content-blog', 'cas-content-free-videos', 'cas-content-home' ) );
 }
 add_filter( 'cas_content_allowed_pages', 'cas_content_prose_allowed_pages' );
 
 function cas_content_prose_menu() {
-	foreach ( array( 'about', 'blog', 'free-videos' ) as $group ) {
+	foreach ( array( 'about', 'blog', 'free-videos', 'home' ) as $group ) {
 		$page = cas_content_prose_config( $group );
 		add_submenu_page( CAS_CONTENT_HUB_SLUG, $page['title'], $page['title'], CAS_CONTENT_CAP, $page['slug'], $page['callback'] );
 	}
