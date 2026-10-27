@@ -17,7 +17,7 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 	function add_action( ...$args ) {}
 	function add_filter( ...$args ) {}
 	function do_action( ...$args ) {}
-	function current_user_can( $cap ) { return $GLOBALS['about_cap'] && 'manage_cas_content' === $cap; }
+	function current_user_can( $cap ) { return 'upload_files' === $cap ? $GLOBALS['hero_upload'] : ( $GLOBALS['about_cap'] && 'manage_cas_content' === $cap ); }
 	function get_current_user_id() { return $GLOBALS['about_actor']; }
 	function wp_verify_nonce( $nonce, $action ) { return $GLOBALS['about_nonce'] && 'fixture-only' === $nonce && $GLOBALS['about_action'] === $action; }
 	function wp_unslash( $value ) { return stripslashes( $value ); }
@@ -48,6 +48,23 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 	function cas_overview_lede_1_default() { return 'Synthetic overview paragraph one'; }
 	function cas_overview_lede_2_default() { return 'Synthetic overview paragraph two'; }
 	function cas_overview_principle_default( $n, $part ) { return 'Synthetic principle ' . $n . ' ' . $part; }
+	define( 'CAS_PRIVATE_QUERY_VAR', 'cas_private_file' );
+	define( 'CAS_PRIVATE_META_FLAG', '_cas_private' );
+	function wp_parse_url( $url, $part ) { return parse_url( $url, $part ); }
+	function wp_parse_str( $query, &$args ) { parse_str( $query, $args ); }
+	function attachment_url_to_postid( $url ) { return $GLOBALS['hero_assets'][ $url ]['id'] ?? 0; }
+	function wp_attachment_is_image( $id ) { foreach ( $GLOBALS['hero_assets'] as $asset ) { if ( $asset['id'] === $id ) { return $asset['image']; } } return false; }
+	function cas_private_is( $id ) { foreach ( $GLOBALS['hero_assets'] as $asset ) { if ( $asset['id'] === $id ) { return $asset['private']; } } return false; }
+	function get_post_status( $id ) { foreach ( $GLOBALS['hero_assets'] as $asset ) { if ( $asset['id'] === $id ) { return $asset['status']; } } return false; }
+	function cas_hero_fields() {
+		return array(
+			'title' => array( 'label' => 'Title', 'type' => 'textarea', 'desc' => 'Line breaks are kept.' ),
+			'subtitle' => array( 'label' => 'Description', 'type' => 'textarea', 'desc' => '' ),
+			'large' => array( 'label' => 'Large image', 'type' => 'image', 'desc' => 'Recommended 974 x 774px.' ),
+			'small' => array( 'label' => 'Small image', 'type' => 'image', 'desc' => 'Recommended 560 x 490px.' ),
+		);
+	}
+	function cas_hero_default( $slide, $part ) { return in_array( $part, array( 'large', 'small' ), true ) ? 'https://example.invalid/theme-' . $slide . '-' . $part . '.jpg' : 'Synthetic slide ' . $slide . ' ' . $part; }
 	function cas_about_fields() {
 		$fields = array();
 		foreach ( array( 'cas_about_intro', 'cas_about_quote', 'cas_about_journey_body', 'cas_about_community_body', 'cas_about_instructor_body' ) as $key ) {
@@ -93,6 +110,14 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 		$GLOBALS['about_cached'] = null;
 		$GLOBALS['about_evictions'] = array();
 		$GLOBALS['prose_sanitizers'] = array();
+		$GLOBALS['hero_upload'] = true;
+		$GLOBALS['hero_assets'] = array(
+			'https://example.invalid/public-image.jpg' => array( 'id' => 101, 'image' => true, 'private' => false, 'status' => 'inherit' ),
+			'https://example.invalid/private-image.jpg' => array( 'id' => 102, 'image' => true, 'private' => true, 'status' => 'inherit' ),
+			'https://example.invalid/not-image.pdf' => array( 'id' => 103, 'image' => false, 'private' => false, 'status' => 'inherit' ),
+			'https://example.invalid/private-post.jpg' => array( 'id' => 104, 'image' => true, 'private' => false, 'status' => 'private' ),
+		);
+		$_REQUEST = array();
 		$_SERVER['REQUEST_METHOD'] = 'POST';
 		$_POST = array( '_wpnonce' => 'fixture-only' );
 		$mods = array_fill_keys( array_keys( cas_about_fields() ), 'Original' );
@@ -114,6 +139,7 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 	require dirname( __DIR__, 2 ) . '/wp-content/themes/hello-elementor-child/inc/cas-content-free-videos.php';
 	require dirname( __DIR__, 2 ) . '/wp-content/themes/hello-elementor-child/inc/cas-content-home.php';
 	require dirname( __DIR__, 2 ) . '/wp-content/themes/hello-elementor-child/inc/cas-content-contact.php';
+	require dirname( __DIR__, 2 ) . '/wp-content/themes/hello-elementor-child/inc/cas-content-hero.php';
 	require dirname( __DIR__, 2 ) . '/wp-content/themes/hello-elementor-child/inc/cas-content-prose.php';
 	$cases = 0;
 	$before = about_reset();
@@ -198,7 +224,11 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 		$config = cas_content_prose_config( $group );
 		$fields = call_user_func( $config['fields'] );
 		foreach ( $fields as $key => $field ) {
-			$mods[ $key ] = 'contact' === $group ? ( 'cas_social_email' === $key ? 'fixture@example.invalid' : 'https://example.invalid/original' ) : 'Original';
+			if ( 'contact' === $group ) {
+				$mods[ $key ] = 'cas_social_email' === $key ? 'fixture@example.invalid' : 'https://example.invalid/original';
+			} else {
+				$mods[ $key ] = 'hero' === $group && 'image' === $field['type'] ? 'https://example.invalid/public-image.jpg' : 'Original';
+			}
 		}
 		$GLOBALS['wpdb']->row['option_value'] = serialize( $mods );
 		$GLOBALS['about_action'] = $config['nonce'];
@@ -207,7 +237,7 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 	function prose_submit( $group, $before, $proposed, $fields ) {
 		return cas_content_prose_save( $group, 'theme_mods_hello-elementor-child', cas_content_prose_snapshot( $group, 'theme_mods_hello-elementor-child', $before ), array_map( 'addslashes', array_intersect_key( $proposed, $fields ) ) );
 	}
-	foreach ( array( 'blog', 'free-videos', 'home', 'contact' ) as $group ) {
+	foreach ( array( 'blog', 'free-videos', 'home', 'contact', 'hero' ) as $group ) {
 		list( $before, $fields, $config ) = prose_fixture( $group );
 		$key = array_key_first( $fields ); $proposed = $before; $proposed[ $key ] = 'contact' === $group ? 'https://example.invalid/new' : '<strong>New text</strong>';
 		about_expect( 'saved' === prose_submit( $group, $before, $proposed, $fields ) && unserialize( $wpdb->row['option_value'] ) === $proposed, 'Selected group save changed other values' ); ++$cases;
@@ -259,6 +289,36 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 	$forged = $input; unset( $forged['cas_social_youtube'] ); $forged['cas_logo'] = 'forged';
 	about_error( cas_content_prose_save( 'contact', 'theme_mods_hello-elementor-child', cas_content_prose_snapshot( 'contact', 'theme_mods_hello-elementor-child', $before ), $forged ), 'cas_contact_input' );
 	about_expect( 0 === $wpdb->writes, 'Equal-count foreign contact key wrote' ); ++$cases;
+	list( $before, $fields, $config ) = prose_fixture( 'hero' );
+	$input = array_intersect_key( $before, $fields );
+	about_expect( cas_content_hero_clean( $input ) === $input && array_count_values( $GLOBALS['prose_sanitizers'] ) === array( 'wp_kses_post' => 6, 'esc_url_raw' => 6 ), 'Hero native sanitizer dispatch or URL strings changed' ); ++$cases;
+	$empty = array_fill_keys( array_keys( $fields ), '' );
+	about_expect( cas_content_hero_clean( $empty ) === $empty, 'Cleared Hero slots restored defaults' ); ++$cases;
+	foreach ( array( 'https://example.invalid/?cas_private_file=9', 'https://example.invalid/private-image.jpg', 'https://example.invalid/not-image.pdf', 'https://example.invalid/private-post.jpg', 101 ) as $bad_image ) {
+		$bad = $input; $bad['cas_hero_1_large'] = $bad_image;
+		about_error( cas_content_hero_clean( $bad ), 'cas_hero_input' ); ++$cases;
+	}
+	$bad = $input; unset( $bad['cas_hero_1_subtitle'] ); $bad['cas_hero_1_cta'] = 'forged';
+	about_error( cas_content_hero_clean( $bad ), 'cas_hero_input' ); ++$cases;
+	$GLOBALS['hero_upload'] = false;
+	$proposed = $before; $proposed['cas_hero_1_title'] = "New\nheading";
+	about_expect( 'saved' === prose_submit( 'hero', $before, $proposed, $fields ), 'No-upload text editing was dropped' ); ++$cases;
+	about_reset();
+	$query = array( 'author' => 12, 'meta_query' => array( array( 'key' => 'existing', 'value' => 'yes' ) ) );
+	about_expect( cas_content_hero_media_query( $query ) === $query, 'Unmarked native media query changed' ); ++$cases;
+	$_REQUEST = array( 'query' => array( 'cas_hero_media' => 'fixture-only' ) ); $GLOBALS['about_action'] = 'cas_hero_media';
+	$filtered = cas_content_hero_media_query( $query );
+	about_expect( $filtered['author'] === 12 && $filtered['post_mime_type'] === 'image' && $filtered['post_status'] === 'inherit' && $filtered['meta_query'] === array( 'relation' => 'AND', $query['meta_query'], array( 'key' => '_cas_private', 'compare' => 'NOT EXISTS' ) ), 'Scoped public media constraints lost' ); ++$cases;
+	foreach ( array( 'nonce', 'upload', 'cap', 'nonce-array' ) as $denial ) {
+		about_reset(); $GLOBALS['about_action'] = 'cas_hero_media'; $_REQUEST = array( 'query' => array( 'cas_hero_media' => 'fixture-only' ) );
+		if ( 'nonce' === $denial ) { $GLOBALS['about_nonce'] = false; }
+		if ( 'upload' === $denial ) { $GLOBALS['hero_upload'] = false; }
+		if ( 'cap' === $denial ) { $GLOBALS['about_cap'] = false; }
+		if ( 'nonce-array' === $denial ) { $_REQUEST['query']['cas_hero_media'] = array(); }
+		about_expect( cas_content_hero_media_query( array() )['post__in'] === array( 0 ), 'Unauthorised Hero library query accepted' ); ++$cases;
+	}
+	about_reset(); $GLOBALS['about_action'] = 'cas_hero_media'; $_REQUEST = array( 'query' => array( 'cas_hero_media' => 'fixture-only' ) );
+	about_expect( cas_content_hero_media_query( array( 'meta_query' => 'invalid' ) )['post__in'] === array( 0 ), 'Malformed existing media constraints accepted' ); ++$cases;
 	about_reset();
 	about_error( cas_content_prose_save( 'unapproved', 'theme_mods_hello-elementor-child', '', array() ), 'prose_denied' );
 	about_expect( 0 === $wpdb->writes, 'Unapproved group wrote' ); ++$cases;

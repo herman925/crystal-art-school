@@ -44,17 +44,25 @@ function cas_content_prose_config( $group ) {
 			'description' => 'Edit the existing shared social URLs and contact email used across the homepage, footer, FAQ and About/contact surfaces. Changing one value affects all its existing consumers.',
 			'empty' => 'Empty fields stay empty; they do not restore defaults. The existing renderer still prints its links, so clearing a value can leave an empty link or email destination.',
 		),
+		'hero' => array(
+			'title' => 'Homepage carousel', 'slug' => 'cas-content-hero', 'callback' => 'cas_content_hero_page',
+			'fields' => 'cas_content_hero_fields', 'clean' => 'cas_content_hero_clean', 'controls' => 'cas_content_hero_controls',
+			'input' => 'cas_hero_fields', 'snapshot' => 'cas_hero_snapshot', 'nonce' => 'cas_content_hero_save',
+			'error' => 'hero', 'input_error' => 'cas_hero_input',
+			'description' => 'Edit the existing three slides: title, description, large image and small image. The CTA, layout, image crop slots and motion remain unchanged.',
+			'empty' => 'Cleared fields stay blank rather than restoring defaults. Clearing an image omits it; clearing the first title leaves the main heading empty.',
+		),
 	);
 	return is_string( $group ) && isset( $pages[ $group ] ) ? $pages[ $group ] : null;
 }
 
 function cas_content_prose_allowed_pages( $pages ) {
-	return array_merge( $pages, array( 'cas-content-about', 'cas-content-blog', 'cas-content-free-videos', 'cas-content-home', 'cas-content-contact' ) );
+	return array_merge( $pages, array( 'cas-content-about', 'cas-content-blog', 'cas-content-free-videos', 'cas-content-home', 'cas-content-contact', 'cas-content-hero' ) );
 }
 add_filter( 'cas_content_allowed_pages', 'cas_content_prose_allowed_pages' );
 
 function cas_content_prose_menu() {
-	foreach ( array( 'about', 'blog', 'free-videos', 'home', 'contact' ) as $group ) {
+	foreach ( array( 'about', 'blog', 'free-videos', 'home', 'contact', 'hero' ) as $group ) {
 		$page = cas_content_prose_config( $group );
 		add_submenu_page( CAS_CONTENT_HUB_SLUG, $page['title'], $page['title'], CAS_CONTENT_CAP, $page['slug'], $page['callback'] );
 	}
