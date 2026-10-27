@@ -26,6 +26,9 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 	function sanitize_textarea_field( $value ) { $GLOBALS['prose_sanitizers'][] = 'sanitize_textarea_field'; return $value; }
 	function esc_url_raw( $value ) { $GLOBALS['prose_sanitizers'][] = 'esc_url_raw'; return $value; }
 	function sanitize_email( $value ) { $GLOBALS['prose_sanitizers'][] = 'sanitize_email'; return $value; }
+	function esc_attr( $value ) { return htmlspecialchars( $value, ENT_QUOTES, 'UTF-8' ); }
+	function esc_html( $value ) { return htmlspecialchars( $value, ENT_QUOTES, 'UTF-8' ); }
+	function esc_url( $value ) { return $value; }
 	function wp_hash( $value ) { return hash_hmac( 'sha256', $value, 'synthetic-fixture-only' ); }
 	function get_option( $name ) {
 		if ( 'stylesheet' === $name ) { return 'hello-elementor-child'; }
@@ -389,6 +392,15 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 		$all_fields = array_merge( $all_fields, array_keys( call_user_func( $config['fields'] ) ) );
 	}
 	about_expect( count( $all_fields ) === 42 && count( array_unique( $all_fields ) ) === 42, 'Fixed image completion changed the forty-two-field boundary' ); ++$cases;
+	about_reset();
+	foreach ( array( true, false ) as $restore ) {
+		foreach ( array( '', 'https://example.invalid/public-image.jpg' ) as $value ) {
+			$field = array( 'label' => 'Synthetic image field', 'default' => 'https://example.invalid/public-image.jpg', 'restore' => $restore );
+			ob_start(); cas_content_image_slot( 'synthetic_image', 'synthetic[image]', $value, $field, true ); $markup = ob_get_clean();
+			$choose = $value ? 'Replace image' : 'Choose image'; $clear = $restore ? 'Use shipped default' : 'Clear slot';
+			about_expect( str_contains( $markup, 'aria-label="' . $choose . ' for Synthetic image field"' ) && str_contains( $markup, '>' . $choose . '</button>' ) && str_contains( $markup, 'aria-label="' . $clear . ' for Synthetic image field"' ) && str_contains( $markup, '>' . $clear . '</button>' ), 'Initial visible and accessible image action names disagree' ); ++$cases;
+		}
+	}
 	about_reset();
 	about_error( cas_content_prose_save( 'unapproved', 'theme_mods_hello-elementor-child', '', array() ), 'prose_denied' );
 	about_expect( 0 === $wpdb->writes, 'Unapproved group wrote' ); ++$cases;

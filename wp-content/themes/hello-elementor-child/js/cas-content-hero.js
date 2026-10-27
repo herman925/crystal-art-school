@@ -34,7 +34,7 @@
 				slot.find( '.cas-hero-image-preview' ).empty().append(
 					$( '<img>', { src: image.url, alt: '' } ).css( { maxWidth: '240px', height: 'auto', display: 'block' } )
 				);
-				slot.find( '.cas-hero-image-choose' ).text( 'Replace image' );
+				slot.find( '.cas-hero-image-choose' ).text( 'Replace image' ).attr( 'aria-label', 'Replace image for ' + slot.data( 'casLabel' ) );
 				slot.find( '.cas-hero-media-error' ).prop( 'hidden', true );
 			} );
 			slot.data( 'casHeroFrame', frame );
@@ -52,7 +52,7 @@
 				$( '<img>', { src: fallback, alt: '' } ).css( { maxWidth: '240px', height: 'auto', display: 'block' } )
 			);
 		}
-		slot.find( '.cas-hero-image-choose' ).text( 'Choose image' );
+		slot.find( '.cas-hero-image-choose' ).text( 'Choose image' ).attr( 'aria-label', 'Choose image for ' + slot.data( 'casLabel' ) );
 		slot.find( '.cas-hero-media-error' ).prop( 'hidden', true );
 	} );
 } )( jQuery );

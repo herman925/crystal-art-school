@@ -66,6 +66,14 @@ class FixedImagesContract(unittest.TestCase):
         self.assertIn("current_user_can( CAS_CONTENT_CAP )", MODULE)
         self.assertIn("current_user_can( 'upload_files' )", MODULE)
 
+    def test_action_names_contain_visible_text_and_field_context(self):
+        script = (INC.parent / "js/cas-content-hero.js").read_text()
+        for text in ("$choose_text = $value ? 'Replace image' : 'Choose image';", "$clear_text = ! empty( $field['restore'] ) ? 'Use shipped default' : 'Clear slot';", "$choose_text . ' for ' . $field['label']", "$clear_text . ' for ' . $field['label']", "esc_html( $choose_text )", "esc_html( $clear_text )", "data-cas-label="):
+            self.assertIn(text, MEDIA)
+        self.assertIn(".text( 'Replace image' ).attr( 'aria-label', 'Replace image for ' + slot.data( 'casLabel' ) )", script)
+        self.assertIn(".text( 'Choose image' ).attr( 'aria-label', 'Choose image for ' + slot.data( 'casLabel' ) )", script)
+        self.assertNotIn("esc_attr( 'Clear ' . $field['label'] )", MEDIA)
+
 
 if __name__ == "__main__":
     unittest.main()

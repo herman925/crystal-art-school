@@ -9,7 +9,7 @@ const frames = [];
 const document = {};
 const config = { allowed: true, nonce: 'synthetic-only', privateQuery: 'cas_private_file' };
 function slot() {
-	return { value: '', preview: [], hidden: true, text: 'Choose image', data: {} };
+	return { value: '', preview: [], hidden: true, text: 'Choose image', aria: 'Choose image for Synthetic image field', data: { casLabel: 'Synthetic image field' } };
 }
 function wrapped( s ) {
 	return {
@@ -20,6 +20,7 @@ function wrapped( s ) {
 				empty() { s.preview = []; return control; },
 				append( value ) { s.preview.push( value ); return control; },
 				text( value ) { s.text = value; return control; },
+				attr( name, value ) { assert.equal( selector, '.cas-hero-image-choose' ); assert.equal( name, 'aria-label' ); s.aria = value; return control; },
 				prop( name, value ) { assert.equal( selector, '.cas-hero-media-error' ); assert.equal( name, 'hidden' ); s.hidden = value; return control; }
 			};
 			return control;
@@ -60,6 +61,8 @@ frame.events.select();
 assert.equal( s.value, frame.selected.url );
 assert.notEqual( s.value, frame.selected.id );
 assert.equal( s.preview[ 0 ].attrs.src, frame.selected.url );
+assert.equal( s.text, 'Replace image' );
+assert.equal( s.aria, 'Replace image for ' + s.data.casLabel );
 frame.selected = { id: 102, type: 'image', url: 'https://example.invalid/replacement.jpg' };
 frame.events.select();
 assert.equal( s.value, frame.selected.url );
@@ -84,6 +87,7 @@ assert.equal( s.value, '' );
 assert.equal( s.preview.length, 0 );
 assert.equal( s.hidden, true );
 assert.equal( s.text, 'Choose image' );
+assert.equal( s.aria, 'Choose image for ' + s.data.casLabel );
 const restored = slot();
 restored.value = 'https://example.invalid/replacement.jpg';
 restored.data.casFallback = 'https://example.invalid/shipped.jpg';
@@ -91,4 +95,17 @@ clear.call( restored );
 assert.equal( restored.value, '' );
 assert.equal( restored.preview[ 0 ].attrs.src, restored.data.casFallback );
 assert.equal( restored.text, 'Choose image' );
-console.log( JSON.stringify( { synthetic_media_cases: 8, native_runtime_proof: false } ) );
+assert.equal( restored.aria, 'Choose image for ' + restored.data.casLabel );
+config.allowed = true;
+const alternate = slot();
+alternate.data.casLabel = 'Alternate image context';
+choose.call( alternate );
+const alternateFrame = frames[ frames.length - 1 ];
+alternateFrame.selected = { type: 'image', url: 'https://example.invalid/alternate.jpg' };
+alternateFrame.events.select();
+assert.equal( alternate.text, 'Replace image' );
+assert.equal( alternate.aria, 'Replace image for Alternate image context' );
+clear.call( alternate );
+assert.equal( alternate.text, 'Choose image' );
+assert.equal( alternate.aria, 'Choose image for Alternate image context' );
+console.log( JSON.stringify( { synthetic_media_cases: 9, native_runtime_proof: false } ) );

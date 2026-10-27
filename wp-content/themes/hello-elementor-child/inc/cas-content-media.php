@@ -61,12 +61,14 @@ function cas_content_image_slot( $key, $name, $value, $field, $can_media ) {
 	$fallback = ! empty( $field['restore'] ) && cas_content_hero_image_allowed( $field['default'] ) ? $field['default'] : '';
 	$preview = '' === $value ? $fallback : $value;
 	$allowed = cas_content_hero_image_allowed( $preview );
-	echo '<div class="cas-hero-image-slot" data-cas-fallback="' . esc_attr( $fallback ) . '"><input type="hidden" id="' . esc_attr( $key ) . '" name="' . esc_attr( $name ) . '" value="' . esc_attr( $value ) . '"><div class="cas-hero-image-preview">';
+	$choose_text = $value ? 'Replace image' : 'Choose image';
+	$clear_text = ! empty( $field['restore'] ) ? 'Use shipped default' : 'Clear slot';
+	echo '<div class="cas-hero-image-slot" data-cas-label="' . esc_attr( $field['label'] ) . '" data-cas-fallback="' . esc_attr( $fallback ) . '"><input type="hidden" id="' . esc_attr( $key ) . '" name="' . esc_attr( $name ) . '" value="' . esc_attr( $value ) . '"><div class="cas-hero-image-preview">';
 	if ( $preview && $allowed ) {
 		echo '<img src="' . esc_url( $preview ) . '" alt="" style="max-width:240px;height:auto;display:block">';
 	}
-	echo '</div><button type="button" class="button cas-hero-image-choose" aria-label="' . esc_attr( 'Choose image for ' . $field['label'] ) . '"' . ( $can_media ? '' : ' disabled' ) . '>' . esc_html( $value ? 'Replace image' : 'Choose image' ) . '</button> ';
-	echo '<button type="button" class="button-link cas-hero-image-clear" aria-label="' . esc_attr( 'Clear ' . $field['label'] ) . '">' . esc_html( ! empty( $field['restore'] ) ? 'Use shipped default' : 'Clear slot' ) . '</button><p class="description cas-hero-media-error" role="alert"' . ( $allowed ? ' hidden' : '' ) . '>Choose a known public original image from Media; private files and unresolved local uploads are not allowed.</p></div>';
+	echo '</div><button type="button" class="button cas-hero-image-choose" aria-label="' . esc_attr( $choose_text . ' for ' . $field['label'] ) . '"' . ( $can_media ? '' : ' disabled' ) . '>' . esc_html( $choose_text ) . '</button> ';
+	echo '<button type="button" class="button-link cas-hero-image-clear" aria-label="' . esc_attr( $clear_text . ' for ' . $field['label'] ) . '">' . esc_html( $clear_text ) . '</button><p class="description cas-hero-media-error" role="alert"' . ( $allowed ? ' hidden' : '' ) . '>Choose a known public original image from Media; private files and unresolved local uploads are not allowed.</p></div>';
 }
 
 function cas_content_hero_enqueue() {
