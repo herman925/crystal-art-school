@@ -49,7 +49,7 @@ class HomeProseContract(unittest.TestCase):
         self.assertIn("'fields' => 'cas_content_home_fields'", shared)
         self.assertIn("without deleting the saved body text", shared)
         self.assertEqual(loader.count("'cas-content-home'"), 1)
-        self.assertEqual(hub.count("admin.php?page=cas-content-home"), 4)
+        self.assertEqual(hub.count("'admin.php?page=cas-content-home'"), 4)
         self.assertEqual(hub.count("admin.php?page=cas-content-home-images"), 3)
         self.assertIn("'fields' => 'cas_content_home_images_fields'", shared)
 

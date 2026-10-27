@@ -68,7 +68,7 @@ class AboutFormContract(unittest.TestCase):
         hub = (INC / "cas-content-hub.php").read_text()
         self.assertEqual(loader.count("'cas-content-about'"), 1)
         self.assertEqual(loader.count("'cas-content-prose'"), 1)
-        self.assertEqual(hub.count("admin.php?page=cas-content-about"), 1)
+        self.assertEqual(hub.count("'admin.php?page=cas-content-about'"), 1)
         self.assertEqual(hub.count("admin.php?page=cas-content-about-image"), 1)
         self.assertIn("cas_content_prose_page( 'about' )", MODULE)
         self.assertIn("array( 'cas-content-about', 'cas-content-blog', 'cas-content-free-videos', 'cas-content-home', 'cas-content-contact', 'cas-content-hero', 'cas-content-home-images', 'cas-content-about-image', 'cas-content-brand-images' )", SHARED)
