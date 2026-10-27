@@ -43,7 +43,7 @@ class SharedContactContract(unittest.TestCase):
         self.assertEqual(loader.count("'cas-content-contact'"), 1)
         self.assertEqual(hub.count("admin.php?page=cas-content-contact"), 2)
         self.assertIn("'name'  => 'Every page'", hub)
-        self.assertIn("Logo, hero signature and footer signature', 'cas_brand'", hub)
+        self.assertEqual(hub.count("admin.php?page=cas-content-brand-images"), 1)
 
 
 if __name__ == "__main__":

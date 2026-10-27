@@ -9,7 +9,7 @@
 		}
 		if ( ! frame ) {
 			frame = wp.media( {
-				title: 'Choose a public carousel image',
+				title: 'Choose a public site image',
 				library: { type: 'image', cas_hero_media: casHeroMedia.nonce },
 				button: { text: 'Use this image' },
 				multiple: false
@@ -45,7 +45,13 @@
 	$( document ).on( 'click', '.cas-hero-image-clear', function () {
 		var slot = $( this ).closest( '.cas-hero-image-slot' );
 		slot.find( 'input[type=hidden]' ).val( '' );
+		var fallback = slot.data( 'casFallback' ) || '';
 		slot.find( '.cas-hero-image-preview' ).empty();
+		if ( fallback ) {
+			slot.find( '.cas-hero-image-preview' ).append(
+				$( '<img>', { src: fallback, alt: '' } ).css( { maxWidth: '240px', height: 'auto', display: 'block' } )
+			);
+		}
 		slot.find( '.cas-hero-image-choose' ).text( 'Choose image' );
 		slot.find( '.cas-hero-media-error' ).prop( 'hidden', true );
 	} );

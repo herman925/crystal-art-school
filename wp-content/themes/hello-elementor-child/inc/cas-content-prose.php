@@ -52,17 +52,41 @@ function cas_content_prose_config( $group ) {
 			'description' => 'Edit the existing three slides: title, description, large image and small image. The CTA, layout, image crop slots and motion remain unchanged.',
 			'empty' => 'Cleared fields stay blank rather than restoring defaults. Clearing an image omits it; clearing the first title leaves the main heading empty.',
 		),
+		'home-images' => array(
+			'title' => 'Home photographs', 'slug' => 'cas-content-home-images', 'callback' => 'cas_content_home_images_page',
+			'fields' => 'cas_content_home_images_fields', 'clean' => 'cas_content_home_images_clean', 'controls' => 'cas_content_home_images_controls',
+			'input' => 'cas_home_image_fields', 'snapshot' => 'cas_home_images_snapshot', 'nonce' => 'cas_content_home_images_save',
+			'error' => 'home_images', 'input_error' => 'cas_home_images_input',
+			'description' => 'Edit the three existing Home photographs. Text, artwork records, crop slots and layout remain unchanged.',
+			'empty' => 'Clearing About Crystal or Free videos restores its shipped photograph. Clearing the optional TOOLS photograph leaves the plain dark card.',
+		),
+		'about-image' => array(
+			'title' => 'About portrait', 'slug' => 'cas-content-about-image', 'callback' => 'cas_content_about_image_page',
+			'fields' => 'cas_content_about_image_fields', 'clean' => 'cas_content_about_image_clean', 'controls' => 'cas_content_about_image_controls',
+			'input' => 'cas_about_image_fields', 'snapshot' => 'cas_about_image_snapshot', 'nonce' => 'cas_content_about_image_save',
+			'error' => 'about_image', 'input_error' => 'cas_about_image_input',
+			'description' => 'Edit the existing portrait photograph. The arched crop, text, carousels and honours table remain unchanged.',
+			'empty' => 'Clearing the portrait stores an empty URL and restores the shipped photograph; it does not remove the portrait space.',
+		),
+		'brand-images' => array(
+			'title' => 'Site-wide brand images', 'slug' => 'cas-content-brand-images', 'callback' => 'cas_content_brand_images_page',
+			'fields' => 'cas_content_brand_images_fields', 'clean' => 'cas_content_brand_images_clean', 'controls' => 'cas_content_brand_images_controls',
+			'input' => 'cas_brand_image_fields', 'snapshot' => 'cas_brand_images_snapshot', 'nonce' => 'cas_content_brand_images_save',
+			'error' => 'brand_images', 'input_error' => 'cas_brand_images_input',
+			'description' => 'Edit the existing header logo, shared signature mark and footer signature. Their native sizing, recolouring and placements remain unchanged.',
+			'empty' => 'Clearing a brand URL restores its shipped asset, not an empty layout. These shared images affect their existing site-wide consumers; native upload type restrictions remain.',
+		),
 	);
 	return is_string( $group ) && isset( $pages[ $group ] ) ? $pages[ $group ] : null;
 }
 
 function cas_content_prose_allowed_pages( $pages ) {
-	return array_merge( $pages, array( 'cas-content-about', 'cas-content-blog', 'cas-content-free-videos', 'cas-content-home', 'cas-content-contact', 'cas-content-hero' ) );
+	return array_merge( $pages, array( 'cas-content-about', 'cas-content-blog', 'cas-content-free-videos', 'cas-content-home', 'cas-content-contact', 'cas-content-hero', 'cas-content-home-images', 'cas-content-about-image', 'cas-content-brand-images' ) );
 }
 add_filter( 'cas_content_allowed_pages', 'cas_content_prose_allowed_pages' );
 
 function cas_content_prose_menu() {
-	foreach ( array( 'about', 'blog', 'free-videos', 'home', 'contact', 'hero' ) as $group ) {
+	foreach ( array( 'about', 'blog', 'free-videos', 'home', 'contact', 'hero', 'home-images', 'about-image', 'brand-images' ) as $group ) {
 		$page = cas_content_prose_config( $group );
 		add_submenu_page( CAS_CONTENT_HUB_SLUG, $page['title'], $page['title'], CAS_CONTENT_CAP, $page['slug'], $page['callback'] );
 	}

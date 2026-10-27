@@ -67,11 +67,22 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 		);
 	}
 	function cas_hero_default( $slide, $part ) { return in_array( $part, array( 'large', 'small' ), true ) ? 'https://example.invalid/theme-' . $slide . '-' . $part . '.jpg' : 'Synthetic slide ' . $slide . ' ' . $part; }
+	function get_stylesheet_directory_uri() { return 'https://example.invalid/theme'; }
+	function cas_home_about_default_image() { return get_stylesheet_directory_uri() . '/img/A3.jpeg'; }
+	function cas_home_free_videos_photo_default() { return 'https://example.invalid/public-image.jpg'; }
+	function cas_brand_assets() {
+		return array(
+			'cas_logo' => array( 'label' => 'Synthetic header logo', 'fallback' => '/img/lau-logo.png', 'desc' => 'Synthetic transparency hint' ),
+			'cas_logo2' => array( 'label' => 'Synthetic shared mark', 'fallback' => '/img/logo2.png', 'desc' => 'Synthetic transparency hint' ),
+			'cas_signature' => array( 'label' => 'Synthetic footer mark', 'fallback' => '/img/signature.png', 'desc' => 'Synthetic transparency hint' ),
+		);
+	}
 	function cas_about_fields() {
 		$fields = array();
 		foreach ( array( 'cas_about_intro', 'cas_about_quote', 'cas_about_journey_body', 'cas_about_community_body', 'cas_about_instructor_body' ) as $key ) {
 			$fields[ $key ] = array( 'type' => in_array( $key, array( 'cas_about_intro', 'cas_about_quote' ), true ) ? 'inline' : 'block', 'default' => 'Shipped wording' );
 		}
+		$fields['cas_about_portrait'] = array( 'label' => 'Synthetic portrait', 'type' => 'image', 'desc' => 'Recommended 1168 x 1400px.', 'default' => '/img/ProfilePic.jpg' );
 		return $fields;
 	}
 
@@ -133,7 +144,7 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 		return $mods;
 	}
 	function about_submit( $before, $proposed ) {
-		$input = array_map( 'addslashes', array_intersect_key( $proposed, cas_about_fields() ) );
+		$input = array_map( 'addslashes', array_intersect_key( $proposed, cas_content_about_fields() ) );
 		return cas_content_prose_save( 'about', 'theme_mods_hello-elementor-child', cas_content_prose_snapshot( 'about', 'theme_mods_hello-elementor-child', $before ), $input );
 	}
 	function about_error( $result, $code ) {
@@ -145,7 +156,9 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 	require dirname( __DIR__, 2 ) . '/wp-content/themes/hello-elementor-child/inc/cas-content-free-videos.php';
 	require dirname( __DIR__, 2 ) . '/wp-content/themes/hello-elementor-child/inc/cas-content-home.php';
 	require dirname( __DIR__, 2 ) . '/wp-content/themes/hello-elementor-child/inc/cas-content-contact.php';
+	require dirname( __DIR__, 2 ) . '/wp-content/themes/hello-elementor-child/inc/cas-content-media.php';
 	require dirname( __DIR__, 2 ) . '/wp-content/themes/hello-elementor-child/inc/cas-content-hero.php';
+	require dirname( __DIR__, 2 ) . '/wp-content/themes/hello-elementor-child/inc/cas-content-images.php';
 	require dirname( __DIR__, 2 ) . '/wp-content/themes/hello-elementor-child/inc/cas-content-prose.php';
 	$cases = 0;
 	$before = about_reset();
@@ -189,12 +202,12 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 		if ( 'nonce' === $denial ) { $GLOBALS['about_nonce'] = false; }
 		if ( 'nonce-array' === $denial ) { $_POST['_wpnonce'] = array(); }
 		if ( 'actor' === $denial ) { $GLOBALS['about_actor'] = 13; }
-		about_error( cas_content_prose_save( 'about', 'theme_mods_hello-elementor-child', $snapshot, array_intersect_key( $proposed, cas_about_fields() ) ), 'actor' === $denial ? 'about_stale' : 'about_denied' );
+		about_error( cas_content_prose_save( 'about', 'theme_mods_hello-elementor-child', $snapshot, array_intersect_key( $proposed, cas_content_about_fields() ) ), 'actor' === $denial ? 'about_stale' : 'about_denied' );
 		about_expect( 0 === $wpdb->writes, 'Denied request wrote' ); ++$cases;
 	}
 
 	foreach ( array( 'extra', 'missing', 'array', 'inline-block' ) as $bad ) {
-		$before = about_reset(); $input = array_intersect_key( $before, cas_about_fields() );
+		$before = about_reset(); $input = array_intersect_key( $before, cas_content_about_fields() );
 		if ( 'extra' === $bad ) { $input['cas_about_portrait'] = 'forged.jpg'; }
 		if ( 'missing' === $bad ) { unset( $input['cas_about_quote'] ); }
 		if ( 'array' === $bad ) { $input['cas_about_quote'] = array(); }
@@ -233,7 +246,7 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 			if ( 'contact' === $group ) {
 				$mods[ $key ] = 'cas_social_email' === $key ? 'fixture@example.invalid' : 'https://example.invalid/original';
 			} else {
-				$mods[ $key ] = 'hero' === $group && 'image' === $field['type'] ? 'https://example.invalid/public-image.jpg' : 'Original';
+				$mods[ $key ] = ( 'hero' === $group && 'image' === $field['type'] ) || in_array( $group, array( 'home-images', 'about-image', 'brand-images' ), true ) ? 'https://example.invalid/public-image.jpg' : 'Original';
 			}
 		}
 		$GLOBALS['wpdb']->row['option_value'] = serialize( $mods );
@@ -243,9 +256,9 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 	function prose_submit( $group, $before, $proposed, $fields ) {
 		return cas_content_prose_save( $group, 'theme_mods_hello-elementor-child', cas_content_prose_snapshot( $group, 'theme_mods_hello-elementor-child', $before ), array_map( 'addslashes', array_intersect_key( $proposed, $fields ) ) );
 	}
-	foreach ( array( 'blog', 'free-videos', 'home', 'contact', 'hero' ) as $group ) {
+	foreach ( array( 'blog', 'free-videos', 'home', 'contact', 'hero', 'home-images', 'about-image', 'brand-images' ) as $group ) {
 		list( $before, $fields, $config ) = prose_fixture( $group );
-		$key = array_key_first( $fields ); $proposed = $before; $proposed[ $key ] = 'contact' === $group ? 'https://example.invalid/new' : '<strong>New text</strong>';
+		$key = array_key_first( $fields ); $proposed = $before; $proposed[ $key ] = in_array( $group, array( 'contact', 'home-images', 'about-image', 'brand-images' ), true ) ? 'https://example.invalid/new' : '<strong>New text</strong>';
 		about_expect( 'saved' === prose_submit( $group, $before, $proposed, $fields ) && unserialize( $wpdb->row['option_value'] ) === $proposed, 'Selected group save changed other values' ); ++$cases;
 
 		list( $before, $fields, $config ) = prose_fixture( $group );
@@ -352,6 +365,30 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 	}
 	about_reset(); $GLOBALS['about_action'] = 'cas_hero_media'; $_REQUEST = array( 'query' => array( 'cas_hero_media' => 'fixture-only' ) );
 	about_expect( cas_content_hero_media_query( array( 'meta_query' => 'invalid' ) )['post__in'] === array( 0 ), 'Malformed existing media constraints accepted' ); ++$cases;
+	foreach ( array( 'home-images', 'about-image', 'brand-images' ) as $group ) {
+		list( $before, $fields, $config ) = prose_fixture( $group );
+		$input = array_intersect_key( $before, $fields );
+		about_expect( call_user_func( $config['clean'], $input ) === $input && array_count_values( $GLOBALS['prose_sanitizers'] ) === array( 'esc_url_raw' => count( $fields ) ), 'Image group native URL sanitizer dispatch changed' ); ++$cases;
+		$empty = array_fill_keys( array_keys( $fields ), '' );
+		about_expect( call_user_func( $config['clean'], $empty ) === $empty, 'Image group clear rewrote stored URLs to defaults' ); ++$cases;
+		foreach ( array_keys( $fields ) as $key ) {
+			foreach ( array( 101, 'https://example.invalid/?cas_private_file=9', 'https://example.invalid/wp-content/uploads/private-300x200.jpg' ) as $bad_image ) {
+				$bad = $input; $bad[ $key ] = $bad_image;
+				about_error( call_user_func( $config['clean'], $bad ), $config['input_error'] ); ++$cases;
+			}
+		}
+		$restore = array_column( $fields, 'restore' );
+		about_expect( $restore === ( 'home-images' === $group ? array( true, true, false ) : array_fill( 0, count( $fields ), true ) ), 'Native empty/default policy changed' ); ++$cases;
+		$GLOBALS['hero_upload'] = false;
+		$proposed = $before; $proposed[ array_key_first( $fields ) ] = '';
+		about_expect( 'saved' === prose_submit( $group, $before, $proposed, $fields ), 'Image clearing was coupled to upload permission' ); ++$cases;
+	}
+	$all_fields = array();
+	foreach ( array( 'about', 'blog', 'free-videos', 'home', 'contact', 'hero', 'home-images', 'about-image', 'brand-images' ) as $group ) {
+		$config = cas_content_prose_config( $group );
+		$all_fields = array_merge( $all_fields, array_keys( call_user_func( $config['fields'] ) ) );
+	}
+	about_expect( count( $all_fields ) === 42 && count( array_unique( $all_fields ) ) === 42, 'Fixed image completion changed the forty-two-field boundary' ); ++$cases;
 	about_reset();
 	about_error( cas_content_prose_save( 'unapproved', 'theme_mods_hello-elementor-child', '', array() ), 'prose_denied' );
 	about_expect( 0 === $wpdb->writes, 'Unapproved group wrote' ); ++$cases;

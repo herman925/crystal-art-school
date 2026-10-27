@@ -50,9 +50,8 @@ class HomeProseContract(unittest.TestCase):
         self.assertIn("without deleting the saved body text", shared)
         self.assertEqual(loader.count("'cas-content-home'"), 1)
         self.assertEqual(hub.count("admin.php?page=cas-content-home"), 4)
-        self.assertIn("Free videos card: photograph', 'cas_page_home_free_videos'", hub)
-        self.assertIn("About Crystal card: its photo', 'cas_page_home_about'", hub)
-        self.assertIn("TOOLS background photo', 'cas_page_home_blog'", hub)
+        self.assertEqual(hub.count("admin.php?page=cas-content-home-images"), 3)
+        self.assertIn("'fields' => 'cas_content_home_images_fields'", shared)
 
 
 if __name__ == "__main__":
