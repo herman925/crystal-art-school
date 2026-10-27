@@ -59,6 +59,17 @@ class HeroEditorContract(unittest.TestCase):
         self.assertIn("Free videos card: photograph', 'cas_page_home_free_videos'", hub)
         self.assertIn("Portrait photograph', 'cas_page_about'", hub)
 
+    def test_unresolved_local_uploads_fail_closed_without_rewriting_storage(self):
+        self.assertIn("$lookup = preg_replace( '/[?#].*$/', '', $url );", MODULE)
+        self.assertIn("attachment_url_to_postid( $lookup )", MODULE)
+        self.assertIn("wp_get_upload_dir()", MODULE)
+        self.assertIn("home_url( '/' )", MODULE)
+        self.assertIn("rawurldecode( $path )", MODULE)
+        self.assertIn("$lookup === cas_hero_default( $slide, $part )", MODULE)
+        self.assertIn("return ! cas_content_hero_local_upload( $lookup );", MODULE)
+        self.assertIn("$clean[ $key ] = $value;", MODULE)
+        self.assertNotIn("return ! $attachment ||", MODULE)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -50,7 +50,9 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 	function cas_overview_principle_default( $n, $part ) { return 'Synthetic principle ' . $n . ' ' . $part; }
 	define( 'CAS_PRIVATE_QUERY_VAR', 'cas_private_file' );
 	define( 'CAS_PRIVATE_META_FLAG', '_cas_private' );
-	function wp_parse_url( $url, $part ) { return parse_url( $url, $part ); }
+	function wp_parse_url( $url, $part = -1 ) { return parse_url( $url, $part ); }
+	function wp_get_upload_dir() { return array( 'baseurl' => 'https://example.invalid/wp-content/uploads' ); }
+	function home_url( $path = '/' ) { return 'https://example.invalid/' . ltrim( $path, '/' ); }
 	function wp_parse_str( $query, &$args ) { parse_str( $query, $args ); }
 	function attachment_url_to_postid( $url ) { return $GLOBALS['hero_assets'][ $url ]['id'] ?? 0; }
 	function wp_attachment_is_image( $id ) { foreach ( $GLOBALS['hero_assets'] as $asset ) { if ( $asset['id'] === $id ) { return $asset['image']; } } return false; }
@@ -116,6 +118,10 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 			'https://example.invalid/private-image.jpg' => array( 'id' => 102, 'image' => true, 'private' => true, 'status' => 'inherit' ),
 			'https://example.invalid/not-image.pdf' => array( 'id' => 103, 'image' => false, 'private' => false, 'status' => 'inherit' ),
 			'https://example.invalid/private-post.jpg' => array( 'id' => 104, 'image' => true, 'private' => false, 'status' => 'private' ),
+			'https://example.invalid/wp-content/uploads/manual.pdf' => array( 'id' => 105, 'image' => false, 'private' => false, 'status' => 'inherit' ),
+			'https://example.invalid/wp-content/uploads/private.jpg' => array( 'id' => 106, 'image' => true, 'private' => true, 'status' => 'inherit' ),
+			'https://example.invalid/wp-content/uploads/trashed.jpg' => array( 'id' => 107, 'image' => true, 'private' => false, 'status' => 'trash' ),
+			'https://example.invalid/wp-content/uploads/public.jpg' => array( 'id' => 108, 'image' => true, 'private' => false, 'status' => 'inherit' ),
 		);
 		$_REQUEST = array();
 		$_SERVER['REQUEST_METHOD'] = 'POST';
@@ -298,6 +304,33 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 		$bad = $input; $bad['cas_hero_1_large'] = $bad_image;
 		about_error( cas_content_hero_clean( $bad ), 'cas_hero_input' ); ++$cases;
 	}
+	foreach ( array(
+		'https://example.invalid/wp-content/uploads/manual.pdf?v=1',
+		'https://example.invalid/wp-content/uploads/manual.pdf#preview',
+		'https://example.invalid/wp-content/uploads/private.jpg?v=1#preview',
+		'https://example.invalid/wp-content/uploads/private.jpg#preview',
+		'https://example.invalid/wp-content/uploads/private-300x200.jpg',
+		'https://example.invalid/wp-content/uploads/trashed-300x200.jpg',
+		'https://example.invalid/wp-content/uploads/manual-300x200.pdf',
+		'https://example.invalid/wp-content/uploads/unknown.jpg',
+		'/wp-content/uploads/private-300x200.jpg',
+		'https://example.invalid/else/../wp-content/uploads/private-300x200.jpg',
+		'https://example.invalid/wp-content/%75ploads/private-300x200.jpg',
+		'https://example.invalid/wp-content/uploads/public-300x200.jpg',
+	) as $variant ) {
+		about_expect( 0 === attachment_url_to_postid( $variant ), 'Native exact-lookup model must leave suffixed/derived variants unresolved' );
+		$bad = $input; $bad['cas_hero_1_large'] = $variant;
+		about_error( cas_content_hero_clean( $bad ), 'cas_hero_input' ); ++$cases;
+	}
+	$public_suffix = 'https://example.invalid/wp-content/uploads/public.jpg?v=1#preview';
+	$public_input = $input; $public_input['cas_hero_1_large'] = $public_suffix;
+	about_expect( cas_content_hero_clean( $public_input )['cas_hero_1_large'] === $public_suffix, 'Public original suffix was rejected or storage URL rewritten' ); ++$cases;
+	foreach ( array( 1, 2, 3 ) as $slide ) {
+		foreach ( array( 'large', 'small' ) as $part ) {
+			about_expect( cas_content_hero_image_allowed( cas_hero_default( $slide, $part ) ), 'Fixed theme default rejected' ); ++$cases;
+		}
+	}
+	about_expect( cas_content_hero_image_allowed( 'https://external.example.invalid/image-300x200.jpg?v=1#preview' ), 'Unknown external URL semantics changed' ); ++$cases;
 	$bad = $input; unset( $bad['cas_hero_1_subtitle'] ); $bad['cas_hero_1_cta'] = 'forged';
 	about_error( cas_content_hero_clean( $bad ), 'cas_hero_input' ); ++$cases;
 	$GLOBALS['hero_upload'] = false;

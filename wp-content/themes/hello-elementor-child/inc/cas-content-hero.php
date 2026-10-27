@@ -18,6 +18,34 @@ function cas_content_hero_fields() {
 	return $fields;
 }
 
+function cas_content_hero_local_upload( $url ) {
+	$parts = wp_parse_url( $url );
+	$uploads = wp_get_upload_dir();
+	$base = wp_parse_url( $uploads['baseurl'] );
+	$home = wp_parse_url( home_url( '/' ) );
+	if ( ! is_array( $parts ) || ! is_array( $base ) ) {
+		return true;
+	}
+	$host = rtrim( strtolower( rawurldecode( $parts['host'] ?? '' ) ), '.' );
+	$hosts = array( rtrim( strtolower( $base['host'] ?? '' ), '.' ), rtrim( strtolower( $home['host'] ?? '' ), '.' ) );
+	if ( $host && ! in_array( $host, $hosts, true ) ) {
+		return false;
+	}
+	$paths = array();
+	foreach ( array( $parts['path'] ?? '', $base['path'] ?? '' ) as $path ) {
+		$segments = array();
+		foreach ( explode( '/', str_replace( '\\', '/', rawurldecode( $path ) ) ) as $part ) {
+			if ( '..' === $part ) {
+				array_pop( $segments );
+			} elseif ( '' !== $part && '.' !== $part ) {
+				$segments[] = $part;
+			}
+		}
+		$paths[] = '/' . implode( '/', $segments );
+	}
+	return false !== strpos( $paths[0], '%' ) || $paths[0] === $paths[1] || 0 === strpos( $paths[0], rtrim( $paths[1], '/' ) . '/' );
+}
+
 function cas_content_hero_image_allowed( $url ) {
 	if ( '' === $url ) {
 		return true;
@@ -29,8 +57,20 @@ function cas_content_hero_image_allowed( $url ) {
 			return false;
 		}
 	}
-	$attachment = attachment_url_to_postid( $url );
-	return ! $attachment || ( wp_attachment_is_image( $attachment ) && ! in_array( get_post_status( $attachment ), array( 'private', 'trash' ), true ) && ! cas_private_is( $attachment ) );
+	$lookup = preg_replace( '/[?#].*$/', '', $url );
+	$attachment = attachment_url_to_postid( $lookup );
+	if ( $attachment ) {
+		return wp_attachment_is_image( $attachment ) && ! in_array( get_post_status( $attachment ), array( 'private', 'trash' ), true ) && ! cas_private_is( $attachment );
+	}
+	foreach ( array( 1, 2, 3 ) as $slide ) {
+		foreach ( array( 'large', 'small' ) as $part ) {
+			if ( $lookup === cas_hero_default( $slide, $part ) ) {
+				return true;
+			}
+		}
+	}
+	// Unknown managed-upload URLs are not evidence of a public image or derivative ownership.
+	return ! cas_content_hero_local_upload( $lookup );
 }
 
 function cas_content_hero_clean( $input ) {
@@ -46,7 +86,7 @@ function cas_content_hero_clean( $input ) {
 		$value = wp_unslash( $input[ $key ] );
 		$value = 'image' === $field['type'] ? esc_url_raw( $value ) : wp_kses_post( $value );
 		if ( 'image' === $field['type'] && ! cas_content_hero_image_allowed( $value ) ) {
-			return new WP_Error( 'cas_hero_input', 'Private course files and non-image attachments cannot be used in the public carousel. Choose a public image or clear the slot.' );
+			return new WP_Error( 'cas_hero_input', 'Use a known public original image from Media or clear the slot. Private, non-image or unresolved local-upload URLs cannot be used in the public carousel.' );
 		}
 		$clean[ $key ] = $value;
 	}
