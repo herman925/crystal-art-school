@@ -158,10 +158,8 @@ function cas_render_home_gallery() {
 
 /**
  * The featured image of the first published piece in the client's own Gallery
- * curation. Same order as the Gallery page itself (cas-gallery.php:278-281), so
- * the card and the page agree about which piece leads: menu_order is the sort
- * field section 9 opens to her, and date only breaks ties between pieces she
- * left at 0.
+ * curation. Home sorts by menu_order ascending, then publication date descending;
+ * the Gallery page sorts independently by publication date, so its lead may differ.
  *
  * The meta query is what makes "first" mean "first piece that has a picture". An
  * artwork saved without a featured image is skipped here exactly as it is
