@@ -458,7 +458,7 @@ function cas_gallery_filter_rail( array $items ) {
 	$media = array_values( $media );
 	$groups = '';
 
-	if ( count( $media ) > 1 ) {
+	if ( count( $media ) > 0 ) {
 		$groups .= '<div class="fgroup" data-group="medium">'
 			. '<div class="fg-title">Medium</div>'
 			. '<div class="fg-opts">'
@@ -626,8 +626,15 @@ function cas_artwork_card( $post, $index ) {
 		</div>
 		<div class="art-meta">
 			<h3 class="art-title"><?php echo esc_html( $title ); ?></h3>
-			<?php if ( $sold ) : ?>
-				<div class="art-tagrow"><span class="art-tagchip">Sold</span></div>
+			<?php if ( '' !== $medium || $sold ) : ?>
+				<div class="art-tagrow">
+					<?php if ( '' !== $medium ) : ?>
+						<span class="art-tagchip"><?php echo esc_html( $medium ); ?></span>
+					<?php endif; ?>
+					<?php if ( $sold ) : ?>
+						<span class="art-tagchip">Sold</span>
+					<?php endif; ?>
+				</div>
 			<?php endif; ?>
 			<?php if ( $has_desc ) : ?>
 				<div class="cas-art-desc" hidden><?php echo wp_kses_post( $description ); ?></div>
