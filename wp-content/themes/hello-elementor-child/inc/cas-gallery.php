@@ -458,7 +458,7 @@ function cas_gallery_filter_rail( array $items ) {
 	$media = array_values( $media );
 	$groups = '';
 
-	if ( count( $media ) > 1 ) {
+	if ( count( $media ) > 0 ) {
 		$groups .= '<div class="fgroup" data-group="medium">'
 			. '<div class="fg-title">Medium</div>'
 			. '<div class="fg-opts">'
