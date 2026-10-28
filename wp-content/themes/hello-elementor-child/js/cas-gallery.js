@@ -342,10 +342,15 @@
 		mTitle.textContent = title ? title.textContent : '';
 		var sub = card.querySelector( '.art-sub' );
 		var size = card.querySelector( '.art-size' );
-		mSub.textContent = sub ? sub.textContent : '';
-		mSub.hidden = ! sub;
-		mSpec.querySelector( 'dd' ).textContent = size ? size.textContent : '';
-		mSpec.hidden = ! size;
+		if ( mSub ) {
+			mSub.textContent = sub ? sub.textContent : '';
+			mSub.hidden = ! sub;
+		}
+		if ( mSpec ) {
+			var sizeValue = mSpec.querySelector( 'dd' );
+			if ( sizeValue ) { sizeValue.textContent = size ? size.textContent : ''; }
+			mSpec.hidden = ! size || ! sizeValue;
+		}
 
 		/* Every value below is copied from markup this file printed and escaped,
 		   so innerHTML here carries nothing the server did not already approve. */
