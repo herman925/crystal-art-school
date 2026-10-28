@@ -842,6 +842,8 @@ function cas_gallery_css() {
 /* Active-filter chips are real buttons, so neutralise browser button chrome. */
 button.active-tag { margin: 0; border: 0; line-height: 1.25; font-weight: 500; -webkit-appearance: none; appearance: none; }
 .filter-panel .fp-clear { padding: 1px 6px; border-radius: 0; }
+.store-grid > .art-card, .art-modal .am-body { min-width: 0; }
+.art-title, .art-sub, .art-size, .art-modal .am-title, .art-modal .am-sub, .art-modal .am-desc, .art-modal .am-spec dd { overflow-wrap: anywhere; }
 .art-modal .am-sub[hidden], .art-modal .am-spec[hidden] { display: none; }
 CSS;
 }
