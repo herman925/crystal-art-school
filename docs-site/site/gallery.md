@@ -15,10 +15,10 @@
 | **Type** | Optional; under Sale details |
 | **Page attributes → Order** | Breaks ties between paintings with the same publication date; also controls the homepage card order |
 
-**The Gallery ordering update and the Size and Type fields are awaiting native acceptance
-and deployment.** Do not rely on them until the update has been checked and deployed. Type
-is optional, not a publishing requirement; the Type filter appears only when at least two
-distinct real Type values exist. Leave unknown Types empty rather than making them up.
+**The Gallery ordering update and the Size and Type fields are live and independently checked.**
+Reload any artwork form left open before the update before editing. Type is optional,
+not a publishing requirement; the Type filter appears only when at least two distinct
+real Type values exist. Leave unknown Types empty rather than making them up.
 
 The Gallery's **Newest** and **Oldest** choices sort by publication date, newest first or
 oldest first respectively. For paintings with the same publication date, lower Order numbers
