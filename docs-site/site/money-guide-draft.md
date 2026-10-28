@@ -2,6 +2,12 @@
 
 > **Draft — not approved for live use.** The final screens and buying process need checking before handover. This draft is not permission to make live changes.
 
+## Payment testing is not a live launch
+
+The payment build is being checked in test mode. These instructions do not authorise enabling live payments, opening registration or changing payment-provider settings. The webmaster must confirm the current environment before a payment test. Do not use real card details for a test or treat a test order as money received.
+
+The operational screens described below and the student checkout are separate checks. A working price, coupon, order or access form does not establish that live checkout, receipt delivery or the business prerequisites are ready. The final screen checks and handover warning above still applies.
+
 ## Quick safety checklist
 
 1. Check the exact course, student or order. A similar name is not enough.

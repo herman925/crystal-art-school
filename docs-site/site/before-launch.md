@@ -10,7 +10,7 @@ Thank you for everything you have already done. This page lists what we still ne
 | 4 | The title and price of each course. <!-- #89 --> | Confirm the approved name and amount for every course before launch. | Send them to the webmaster in one list. | To do |
 | 5 | Your purchase terms, privacy policy and member terms. <!-- #90 --> | Buyers need to see these before they pay. | Send your wording, or your adviser's, to the webmaster. | To do |
 | 6 | The course notes and reference photos for each course. <!-- #58 --> | Enrolled students will find them on the course's lessons. | Send the files to the webmaster by email or with a shared folder link. | To do |
-| 7 | Details for the gallery. Optional before launch. <!-- #96 --> | An empty gallery is fine for now. | Send titles and photos when you are ready. | To do |
+| 7 | Any remaining artwork details and individual Etsy listing links. Optional before launch. <!-- #96 --> | The Gallery is populated. A painting without an Etsy URL remains on display without a Buy button. | Send missing details and the matching listing links to the webmaster; do not invent an unknown Type. | Check remaining details |
 | 8 | Which address your current website is on, and whether it should redirect to the new site or stay as it is. <!-- #95 --> | Visitors who use the old address should not get lost. | Tell the webmaster the address, and your choice. | To do |
 | 9 | The date you would like the site to open to students. <!-- #116 --> | It sets the order of the last checks. | Tell the webmaster the date you have in mind. | To do |
 
