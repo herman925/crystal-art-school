@@ -10,7 +10,19 @@
 | **Price** | Under Sale details |
 | **Etsy URL** | Under Sale details |
 | **Stock status** | Under Sale details |
-| **Page attributes → Order** | Position in the grid, lowest first |
+| **Medium** | Under Sale details |
+| **Size** | Under Sale details |
+| **Type** | Optional; under Sale details |
+| **Page attributes → Order** | Breaks ties between paintings with the same publication date; also controls the homepage card order |
+
+**The Gallery ordering update and the Size and Type fields are awaiting native acceptance
+and deployment.** Do not rely on them until the update has been checked and deployed. Type
+is optional, not a publishing requirement; the Type filter appears only when at least two
+distinct real Type values exist. Leave unknown Types empty rather than making them up.
+
+The Gallery's **Newest** and **Oldest** choices sort by publication date, newest first or
+oldest first respectively. For paintings with the same publication date, lower Order numbers
+come first.
 
 ## The Etsy link is what makes it buyable
 
@@ -29,8 +41,7 @@ For every painting you want shown, four things are needed before it can go up:
 
 1. Its name.
 2. Its price, and whether it is on offer.
-3. Whether it is watercolour or oil, and whether it is an original or a print — the page
-   offers visitors a filter on both, so the answers have to be right.
+3. The medium, such as watercolour or oil. Type is optional and is not required to publish.
 4. Its Etsy address, or a decision that it is on display rather than for sale.
 
 Send those and the paintings can go up together.
@@ -40,10 +51,11 @@ Send those and the paintings can go up together.
 Shoot square-on in even light, and crop to the painting's edges. The grid crops what you
 upload to fit, so a photo with a lot of table around it loses the painting.
 
-## Your first painting is also on the homepage
+## The homepage gallery card
 
-The small **Art Gallery** card on the homepage shows whichever painting sits first in this
-list, by its Order number. There is no second picture to keep in step — change the Order, or
-change that painting's photograph, and the homepage card follows.
+The small **Art Gallery** card on the homepage uses the published painting with a photograph
+and the lowest Order number. If Order numbers match, the more recently published painting
+comes first. Change that painting's Order or photograph, and the card follows. The Gallery
+page sorts independently by publication date, so it may lead with a different painting.
 
 Until one painting is published, that card does not appear on the homepage at all.

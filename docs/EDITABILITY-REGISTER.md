@@ -6,9 +6,11 @@ One row per field: what the direction document decided, what the shipped theme a
 does, and where the two disagree.
 
 `docs/20260804_Design_Direction.md` is cited as `DD:<line>`. Code paths are relative to
-`wp-content/themes/hello-elementor-child/`.
+`wp-content/themes/hello-elementor-child/`. The DD copy behind the historical line citations is not in the repository.
 
-**281 rows: 192 OK, 41 DEFECT, 48 UNDECIDED.**
+The candidate Gallery rows below describe the pending source; native Review, the guarded size migration and deployment remain open.
+
+**284 rows: 196 OK, 41 DEFECT, 47 UNDECIDED.**
 
 Counted from the TSV, not estimated. Previously 221 rows: 138 OK, 37 DEFECT, 46 UNDECIDED.
 The homepage build added 54 rows because five sections that had one row each — "whole
@@ -112,7 +114,7 @@ Home - Course card	No Sale ribbon on the homepage card; the struck former price 
 Home - Course card	Media tag, title, regular and sale price, ADD button, all read from Tutor (cas-home-courses.php)	yes	Tutor LMS > Courses	1.4.14 default-closed	DEFECT
 Home - Art Gallery promo card	Hover line, cas_home_gallery_sub (cas-home-gallery.php)	yes	Customize > Pages > Home - art gallery card	DD 3.6	OK
 Home - Art Gallery promo card	Card picture, the featured image of the first published artwork; no second store (cas-home-gallery.php)	yes	Dashboard > Artwork	Herman's Rule 2026-08-23	OK
-Home - Art Gallery promo card	Which artwork leads, menu_order ASC then date DESC, the order the Gallery page uses	yes	Dashboard > Artwork > Page attributes	Herman's Rule 2026-08-23	OK
+Home - Art Gallery promo card	Which artwork leads, menu_order ASC then date DESC; Gallery independently starts with newest publication date	yes	Dashboard > Artwork > Page attributes	Herman's Rule 2026-08-23	OK
 Home - Art Gallery promo card	Heading "Art Gallery", the mark and the link to the Gallery page	no	-	DD:313	OK
 Home - Art Gallery promo card	The card renders nothing at all until an artwork is published (cas-home-gallery.php)	no	-	Herman's Rule 2026-08-23	OK
 Home - Art Gallery promo card	Emptying the hover line drops the line rather than restoring the shipped default	no	-	Herman's Rule 2026-08-23	OK
@@ -190,22 +192,25 @@ Lesson page	lesson_description, field cancelled	no	-	DD:239	OK
 Lesson page	Image-and-text block reads the course-level blurb (cas-course-single.php:103)	yes	Tutor LMS > Courses	DD:240,884-885	OK
 Lesson page	Manual timecode and chapter-title fields, not created	no	-	DD:936	OK
 Lesson page	Your Progress, lesson list, page footer	no	-	1.4.14 default-closed	UNDECIDED
-Gallery	Artwork image, featured image (cas-gallery.php:342)	yes	Dashboard > Artwork	DD:1004	OK
-Gallery	Artwork name, post title (cas-gallery.php:347)	yes	Dashboard > Artwork	DD:1004	OK
-Gallery	Description, post content (cas-gallery.php:387)	yes	Dashboard > Artwork	DD:1004	OK
-Gallery	Price, _cas_artwork_price (cas-gallery.php:18,82,184)	yes	Dashboard > Artwork > Sale details	DD:1004	OK
-Gallery	Etsy URL, _cas_artwork_etsy_url (cas-gallery.php:19,94,191)	yes	Dashboard > Artwork > Sale details	DD:1004	OK
-Gallery	Stock status, _cas_artwork_stock (cas-gallery.php:20,106,201)	yes	Dashboard > Artwork > Sale details	DD:1004	OK
-Gallery	Sort order, menu_order (cas-gallery.php:278-281)	yes	Dashboard > Artwork	DD:1004	OK
-Gallery	On-site Add to Cart, removed from card and modal (cas-gallery.php:11-14)	no	-	DD:999-1000	OK
-Gallery	Introduction paragraph, Crystal's own text unrewritten (cas-gallery.php:303)	no	-	DD:962	OK
-Gallery	Hero eyebrow and title (cas-gallery.php:292)	no	-	DD:313	OK
-Gallery	"Buy on Etsy" / "View details" / "Sold" labels (cas-gallery.php:404,415,417)	no	-	DD:313	OK
-Gallery	Modal chrome, Close / close glyph / title placeholder (cas-gallery.php:477,485,493)	no	-	DD:313	OK
-Gallery	Ornate frame graphic deer-black.svg (cas-gallery.php:454-455)	no	-	DD:313	OK
-Gallery	Empty state "No artwork is published yet." (cas-gallery.php:323)	no	-	1.4.14 default-closed	UNDECIDED
-Gallery	Medium/format chips, size line, was-price, Sale ribbon, not rendered (cas-gallery.php:11-14)	no	-	1.4.14 default-closed	UNDECIDED
-Gallery	Filter by medium, price or date, promised in the intro copy, not implemented	no	-	1.4.14 default-closed	UNDECIDED
+Gallery	Artwork image, featured image (cas-gallery.php:603)	yes	Dashboard > Artwork	DD:1004	OK
+Gallery	Artwork name, post title (cas-gallery.php:608)	yes	Dashboard > Artwork	DD:1004	OK
+Gallery	Description, post content (cas-gallery.php:652)	yes	Dashboard > Artwork	DD:1004	OK
+Gallery	Price, _cas_artwork_price (cas-gallery.php:11,78,207)	yes	Dashboard > Artwork > Sale details	DD:1004	OK
+Gallery	Etsy URL, _cas_artwork_etsy_url (cas-gallery.php:12,90,208)	yes	Dashboard > Artwork > Sale details	DD:1004	OK
+Gallery	Stock status, _cas_artwork_stock (cas-gallery.php:13,102,209)	yes	Dashboard > Artwork > Sale details	DD:1004	OK
+Gallery	Curation / date-tiebreak, menu_order (cas-gallery.php:377-380)	yes	Dashboard > Artwork > Page Attributes > Order	DD:1004	OK
+Gallery	Medium, _cas_artwork_medium (cas-gallery.php:14,114,210)	yes	Dashboard > Artwork > Sale details	Gallery medium-filter decision 2026-08-28	OK
+Gallery	Size, _cas_artwork_size (cas-gallery.php:16,125,212)	yes	Dashboard > Artwork > Sale details	User grant 2026-10-28	OK
+Gallery	Optional type, _cas_artwork_type (cas-gallery.php:15,125,211)	yes	Dashboard > Artwork > Sale details	User grant 2026-10-28	OK
+Gallery	On-site Add to Cart, absent from card and modal (cas-gallery.php:692-696,770-771)	no	-	DD:999-1000	OK
+Gallery	Introduction paragraph, Crystal's own text unrewritten (cas-gallery.php:426)	no	-	DD:962	OK
+Gallery	Hero eyebrow and title (cas-gallery.php:415)	no	-	DD:313	OK
+Gallery	"Buy on Etsy" / "View details" / "Sold" labels (cas-gallery.php:680,693,695)	no	-	DD:313	OK
+Gallery	Modal chrome, Close / close glyph / title placeholder (cas-gallery.php:750-762)	no	-	DD:313	OK
+Gallery	Ornate frame graphic deer-black.svg (cas-gallery.php:730-731)	no	-	DD:313	OK
+Gallery	Empty state "No artwork is published yet." (cas-gallery.php:446)	no	-	1.4.14 default-closed	UNDECIDED
+Gallery	Was-price and Sale ribbon remain absent; no client source (cas-gallery.php:665-699)	no	-	1.4.14 default-closed	UNDECIDED
+Gallery	Medium and price filters, date/price sorting, optional type filter (cas-gallery.php:469-558)	no	-	User instructions 2026-10-27 and 2026-10-28	OK
 Showcase	Piece title, post title (cas-showcase.php)	yes	Dashboard > Student work	Herman's Rule 2026-08-23	OK
 Showcase	Photograph, featured image; a piece without one is skipped (cas-showcase.php)	yes	Dashboard > Student work	Herman's Rule 2026-08-23	OK
 Showcase	Student credit, _cas_showcase_student (cas-showcase.php:26)	yes	Dashboard > Student work > Credit	Herman's Rule 2026-08-23	OK

@@ -17,8 +17,9 @@
 		var clear      = document.getElementById( 'artwork-filter-clear' );
 		var sortRail   = document.getElementById( 'artwork-sort' );
 		var mediumRail = document.querySelector( '.fgroup[data-group="medium"]' );
-		var featured   = cells.slice();
-		var state      = { medium: [], maxPrice: Infinity, sort: 'featured' };
+		var typeRail   = document.querySelector( '.fgroup[data-group="type"]' );
+		var initialOrder = cells.slice();
+		var state      = { medium: [], type: [], maxPrice: Infinity, sort: 'newest' };
 
 		function esc( value ) {
 			return String( value == null ? '' : value )
@@ -45,6 +46,9 @@
 			if ( state.medium.length && state.medium.indexOf( cell.getAttribute( 'data-medium' ) ) < 0 ) {
 				return false;
 			}
+			if ( state.type.length && state.type.indexOf( cell.getAttribute( 'data-type' ) ) < 0 ) {
+				return false;
+			}
 
 			/* An unpriced piece remains visible at "Any price" but cannot claim to
 			   satisfy a finite maximum. */
@@ -58,18 +62,13 @@
 			return true;
 		}
 
-		function updateMediumButtons() {
-			if ( ! mediumRail ) {
+		function updateFilterButtons( rail, group ) {
+			if ( ! rail ) {
 				return;
 			}
 
-			var buttons = mediumRail.querySelectorAll( '.fopt' );
-			Array.prototype.forEach.call( buttons, function ( button ) {
-				var value = button.getAttribute( 'data-val' );
-				var active = value === 'all'
-					? state.medium.length === 0
-					: state.medium.indexOf( value ) >= 0;
-
+			Array.prototype.forEach.call( rail.querySelectorAll( '.fopt' ), function ( button ) {
+				var active = state[ group ].indexOf( button.getAttribute( 'data-val' ) ) >= 0;
 				button.classList.toggle( 'active', active );
 				button.setAttribute( 'aria-pressed', active ? 'true' : 'false' );
 			} );
@@ -84,7 +83,7 @@
 			var top    = parseFloat( slider.max );
 			var symbol = priceVal.getAttribute( 'data-symbol' ) || '';
 
-			return value >= top ? 'Any price' : 'Up to ' + symbol + formatPrice( value );
+			return value >= top ? 'Up to ' + symbol + formatPrice( top ) + '+' : 'Up to ' + symbol + formatPrice( value );
 		}
 
 		function syncPrice() {
@@ -109,10 +108,12 @@
 				return;
 			}
 
-			var html = state.medium.map( function ( medium ) {
-				return '<button class="active-tag" type="button" data-filter="medium" data-val="'
-					+ esc( medium ) + '" aria-label="Remove medium filter: ' + esc( medium ) + '">'
-					+ esc( medium ) + '</button>';
+			var html = [ 'medium', 'type' ].map( function ( group ) {
+				return state[ group ].map( function ( value ) {
+					return '<button class="active-tag" type="button" data-filter="' + group + '" data-val="'
+						+ esc( value ) + '" aria-label="Remove ' + group + ' filter: ' + esc( value ) + '">'
+						+ esc( value ) + '</button>';
+				} ).join( '' );
 			} ).join( '' );
 
 			if ( state.maxPrice !== Infinity ) {
@@ -146,28 +147,25 @@
 		}
 
 		function sortCells() {
-			var order = featured.slice();
+			var order = initialOrder.slice();
 
-			if ( state.sort !== 'featured' ) {
-				order.sort( function ( first, second ) {
-					var a;
-					var b;
+			order.sort( function ( first, second ) {
+				var a;
+				var b;
 
-					if ( state.sort === 'newest' || state.sort === 'oldest' ) {
-						a = parseInt( first.getAttribute( 'data-date' ), 10 ) || 0;
-						b = parseInt( second.getAttribute( 'data-date' ), 10 ) || 0;
-						return state.sort === 'newest' ? b - a : a - b;
-					}
+				if ( state.sort === 'newest' || state.sort === 'oldest' ) {
+					a = parseInt( first.getAttribute( 'data-date' ), 10 ) || 0;
+					b = parseInt( second.getAttribute( 'data-date' ), 10 ) || 0;
+					return state.sort === 'newest' ? b - a : a - b;
+				}
 
-					a = cellPrice( first );
-					b = cellPrice( second );
-					/* Unknown prices go last in either price order. */
-					if ( null === a && null === b ) { return 0; }
-					if ( null === a ) { return 1; }
-					if ( null === b ) { return -1; }
-					return state.sort === 'price-asc' ? a - b : b - a;
-				} );
-			}
+				a = cellPrice( first );
+				b = cellPrice( second );
+				if ( null === a && null === b ) { return 0; }
+				if ( null === a ) { return 1; }
+				if ( null === b ) { return -1; }
+				return state.sort === 'price-asc' ? a - b : b - a;
+			} );
 
 			order.forEach( function ( cell ) {
 				grid.appendChild( cell );
@@ -186,28 +184,26 @@
 			} );
 		}
 
-		if ( mediumRail ) {
-			Array.prototype.forEach.call( mediumRail.querySelectorAll( '.fopt' ), function ( button ) {
+		function wireFilter( rail, group ) {
+			if ( ! rail ) {
+				return;
+			}
+			Array.prototype.forEach.call( rail.querySelectorAll( '.fopt' ), function ( button ) {
 				button.addEventListener( 'click', function () {
 					var value = button.getAttribute( 'data-val' );
-					var index;
-
-					if ( value === 'all' ) {
-						state.medium = [];
+					var index = state[ group ].indexOf( value );
+					if ( index >= 0 ) {
+						state[ group ].splice( index, 1 );
 					} else {
-						index = state.medium.indexOf( value );
-						if ( index >= 0 ) {
-							state.medium.splice( index, 1 );
-						} else {
-							state.medium.push( value );
-						}
+						state[ group ].push( value );
 					}
-
-					updateMediumButtons();
+					updateFilterButtons( rail, group );
 					apply();
 				} );
 			} );
 		}
+		wireFilter( mediumRail, 'medium' );
+		wireFilter( typeRail, 'type' );
 
 		if ( slider && priceUI && priceVal ) {
 			slider.addEventListener( 'input', syncPrice );
@@ -235,31 +231,43 @@
 					return;
 				}
 
-				if ( button.getAttribute( 'data-filter' ) === 'medium' ) {
+				var group = button.getAttribute( 'data-filter' );
+				var focusTarget = clear;
+				if ( group === 'medium' || group === 'type' ) {
 					var value = button.getAttribute( 'data-val' );
-					var index = state.medium.indexOf( value );
+					var index = state[ group ].indexOf( value );
+					var rail = group === 'medium' ? mediumRail : typeRail;
 					if ( index >= 0 ) {
-						state.medium.splice( index, 1 );
+						state[ group ].splice( index, 1 );
 					}
-					updateMediumButtons();
+					updateFilterButtons( rail, group );
+					if ( rail ) {
+						Array.prototype.forEach.call( rail.querySelectorAll( '.fopt' ), function ( option ) {
+							if ( option.getAttribute( 'data-val' ) === value ) { focusTarget = option; }
+						} );
+					}
 				} else if ( slider ) {
 					slider.value = slider.max;
 					syncPrice();
+					focusTarget = slider;
 				}
 
 				apply();
+				if ( focusTarget ) { focusTarget.focus(); }
 			} );
 		}
 
 		if ( clear ) {
 			clear.addEventListener( 'click', function () {
 				state.medium = [];
-				state.sort = 'featured';
+				state.type = [];
+				state.sort = 'newest';
 				if ( slider ) {
 					slider.value = slider.max;
 					syncPrice();
 				}
-				updateMediumButtons();
+				updateFilterButtons( mediumRail, 'medium' );
+				updateFilterButtons( typeRail, 'type' );
 				setSortActive();
 				sortCells();
 				apply();
@@ -270,7 +278,9 @@
 		}
 
 		setSortActive();
-		updateMediumButtons();
+		updateFilterButtons( mediumRail, 'medium' );
+		updateFilterButtons( typeRail, 'type' );
+		sortCells();
 		apply();
 	}
 
@@ -286,6 +296,8 @@
 	var mFrame = modal.querySelector( '.am-frame' );
 	var mBox   = modal.querySelector( '.am-frame .am-img' );
 	var mTitle = document.getElementById( 'am-title' );
+	var mSub   = document.getElementById( 'am-sub' );
+	var mSpec  = document.getElementById( 'am-spec' );
 	var mTags  = document.getElementById( 'am-tags' );
 	var mDesc  = document.getElementById( 'am-desc' );
 	var mPrice = document.getElementById( 'am-price' );
@@ -328,6 +340,17 @@
 
 		var title = card.querySelector( '.art-title' );
 		mTitle.textContent = title ? title.textContent : '';
+		var sub = card.querySelector( '.art-sub' );
+		var size = card.querySelector( '.art-size' );
+		if ( mSub ) {
+			mSub.textContent = sub ? sub.textContent : '';
+			mSub.hidden = ! sub;
+		}
+		if ( mSpec ) {
+			var sizeValue = mSpec.querySelector( 'dd' );
+			if ( sizeValue ) { sizeValue.textContent = size ? size.textContent : ''; }
+			mSpec.hidden = ! size || ! sizeValue;
+		}
 
 		/* Every value below is copied from markup this file printed and escaped,
 		   so innerHTML here carries nothing the server did not already approve. */

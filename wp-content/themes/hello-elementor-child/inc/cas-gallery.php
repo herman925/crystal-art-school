@@ -4,15 +4,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Gallery — Crystal's own artwork, sold through Etsy.
  *
- * The design session of 2026-08-28 adds a medium field so the locked introduction's
- * filter promise is true. The open fields are now image, name, description, medium,
- * price, Etsy URL, stock status and sort order. Five are native WordPress (featured
- * image, title, editor, menu order and the post date used for date-added sorting); the
- * remaining four are the post meta registered below. Everything else the prototype
- * card shows — the format chip, the "30 x 40 cm" size line, the struck-through
- * was-price and its Sale ribbon — is fed by fields the chapter does not open, so under
- * the default-closed rule (1.4.14) those elements are not rendered at all rather than
- * being backed by a field nobody agreed to.
+ * Artwork content and sale details are edited on the native Artwork screen.
  */
 
 const CAS_ARTWORK_POST_TYPE    = 'cas_artwork';
@@ -20,6 +12,8 @@ const CAS_ARTWORK_META_PRICE   = '_cas_artwork_price';
 const CAS_ARTWORK_META_ETSY    = '_cas_artwork_etsy_url';
 const CAS_ARTWORK_META_STOCK   = '_cas_artwork_stock';
 const CAS_ARTWORK_META_MEDIUM  = '_cas_artwork_medium';
+const CAS_ARTWORK_META_TYPE    = '_cas_artwork_type';
+const CAS_ARTWORK_META_SIZE    = '_cas_artwork_size';
 
 
 /* ------------------------------------------------------------------
@@ -128,6 +122,19 @@ function cas_register_artwork_meta() {
 			'auth_callback'     => $can_edit,
 		)
 	);
+	foreach ( array( CAS_ARTWORK_META_TYPE, CAS_ARTWORK_META_SIZE ) as $key ) {
+		register_post_meta(
+			CAS_ARTWORK_POST_TYPE,
+			$key,
+			array(
+				'type'              => 'string',
+				'single'            => true,
+				'show_in_rest'      => false,
+				'sanitize_callback' => 'sanitize_text_field',
+				'auth_callback'     => $can_edit,
+			)
+		);
+	}
 }
 add_action( 'init', 'cas_register_artwork_meta' );
 
@@ -201,6 +208,8 @@ function cas_render_artwork_meta_box( $post ) {
 	$etsy   = get_post_meta( $post->ID, CAS_ARTWORK_META_ETSY, true );
 	$stock  = get_post_meta( $post->ID, CAS_ARTWORK_META_STOCK, true );
 	$medium = get_post_meta( $post->ID, CAS_ARTWORK_META_MEDIUM, true );
+	$type   = get_post_meta( $post->ID, CAS_ARTWORK_META_TYPE, true );
+	$size   = get_post_meta( $post->ID, CAS_ARTWORK_META_SIZE, true );
 	$stock  = ( 'sold' === $stock ) ? 'sold' : 'available';
 	?>
 	<p>
@@ -216,6 +225,16 @@ function cas_render_artwork_meta_box( $post ) {
 			Used to build the Gallery&rsquo;s medium filter. Pick an existing value where
 			possible so the same medium does not become two separate buttons.
 		</span>
+	</p>
+	<p>
+		<label for="cas-artwork-type"><strong>Type</strong></label><br>
+		<input type="text" id="cas-artwork-type" name="cas_artwork_type" class="widefat" value="<?php echo esc_attr( $type ); ?>">
+		<span class="description">Optional; leave blank when the type is not known.</span>
+	</p>
+	<p>
+		<label for="cas-artwork-size"><strong>Size</strong></label><br>
+		<input type="text" id="cas-artwork-size" name="cas_artwork_size" class="widefat" value="<?php echo esc_attr( $size ); ?>">
+		<span class="description">Enter the artwork's size as supplied.</span>
 	</p>
 	<p>
 		<label for="cas-artwork-price"><strong>Price (&pound;)</strong></label><br>
@@ -300,6 +319,12 @@ function cas_save_artwork_details( $post_id ) {
 	update_post_meta( $post_id, CAS_ARTWORK_META_ETSY, $etsy );
 	update_post_meta( $post_id, CAS_ARTWORK_META_STOCK, $stock );
 	update_post_meta( $post_id, CAS_ARTWORK_META_MEDIUM, $medium );
+	if ( isset( $_POST['cas_artwork_type'] ) && is_string( $_POST['cas_artwork_type'] ) ) {
+		update_post_meta( $post_id, CAS_ARTWORK_META_TYPE, wp_unslash( $_POST['cas_artwork_type'] ) );
+	}
+	if ( isset( $_POST['cas_artwork_size'] ) && is_string( $_POST['cas_artwork_size'] ) ) {
+		update_post_meta( $post_id, CAS_ARTWORK_META_SIZE, wp_unslash( $_POST['cas_artwork_size'] ) );
+	}
 }
 add_action( 'save_post_' . CAS_ARTWORK_POST_TYPE, 'cas_save_artwork_details' );
 
@@ -349,11 +374,10 @@ function cas_render_gallery() {
 			'post_type'      => CAS_ARTWORK_POST_TYPE,
 			'post_status'    => 'publish',
 			'posts_per_page' => -1,
-			// Menu order is the client's own curation — the "sort order" field the
-			// chapter opens. Date only breaks ties between pieces she left at 0.
+			// Publication date drives Newest; the client's order breaks date ties.
 			'orderby'        => array(
-				'menu_order' => 'ASC',
 				'date'       => 'DESC',
+				'menu_order' => 'ASC',
 			),
 			'no_found_rows'  => true,
 		)
@@ -372,6 +396,7 @@ function cas_render_gallery() {
 		$items[] = array(
 			'html'   => $card,
 			'medium' => trim( (string) get_post_meta( $post->ID, CAS_ARTWORK_META_MEDIUM, true ) ),
+			'type'   => trim( (string) get_post_meta( $post->ID, CAS_ARTWORK_META_TYPE, true ) ),
 			'price'  => is_numeric( $price ) ? (float) $price : null,
 			'date'   => (int) get_post_time( 'U', true, $post ),
 		);
@@ -443,11 +468,15 @@ function cas_render_gallery() {
  */
 function cas_gallery_filter_rail( array $items ) {
 	$media  = array();
+	$types  = array();
 	$prices = array();
 
 	foreach ( $items as $item ) {
 		if ( '' !== $item['medium'] && ! in_array( $item['medium'], $media, true ) ) {
 			$media[] = $item['medium'];
+		}
+		if ( '' !== $item['type'] && ! in_array( $item['type'], $types, true ) ) {
+			$types[] = $item['type'];
 		}
 		if ( null !== $item['price'] ) {
 			$prices[] = $item['price'];
@@ -456,13 +485,14 @@ function cas_gallery_filter_rail( array $items ) {
 
 	natcasesort( $media );
 	$media = array_values( $media );
+	natcasesort( $types );
+	$types = array_values( $types );
 	$groups = '';
 
 	if ( count( $media ) > 0 ) {
 		$groups .= '<div class="fgroup" data-group="medium">'
 			. '<div class="fg-title">Medium</div>'
-			. '<div class="fg-opts">'
-			. cas_gallery_filter_chip( 'all', 'Any', true );
+			. '<div class="fg-opts">';
 
 		foreach ( $media as $medium ) {
 			$groups .= cas_gallery_filter_chip( $medium, $medium );
@@ -471,18 +501,26 @@ function cas_gallery_filter_rail( array $items ) {
 		$groups .= '</div></div>';
 	}
 
+	if ( count( $types ) > 1 ) {
+		$groups .= '<div class="fgroup" data-group="type"><div class="fg-title">Type</div><div class="fg-opts">';
+		foreach ( $types as $type ) {
+			$groups .= cas_gallery_filter_chip( $type, $type );
+		}
+		$groups .= '</div></div>';
+	}
+
 	if ( $prices && min( $prices ) < max( $prices ) ) {
 		$range = cas_gallery_price_range( $prices );
 		$groups .= '<div class="fgroup" data-group="price">'
 			. '<div class="fg-title">Max price</div>'
-			. '<div class="price-val" id="artwork-price-val" data-symbol="£">Any price</div>'
+			. '<div class="price-val" id="artwork-price-val" data-symbol="£">' . esc_html( 'Up to £' . $range['max'] . '+' ) . '</div>'
 			. '<div class="slider-wrap">'
 			. '<div class="slider-ui" id="artwork-price-ui" style="--pct:100%;">'
 			. '<div class="slider-track"></div><div class="slider-fill"></div>'
 			. '<input class="price-slider" id="artwork-price-slider" type="range"'
 			. ' min="' . esc_attr( $range['min'] ) . '" max="' . esc_attr( $range['max'] ) . '"'
 			. ' step="' . esc_attr( $range['step'] ) . '" value="' . esc_attr( $range['max'] ) . '"'
-			. ' aria-label="Maximum price" aria-valuetext="Any price">'
+			. ' aria-label="Maximum price" aria-valuetext="' . esc_attr( 'Up to £' . $range['max'] . '+' ) . '">'
 			. '<div class="slider-knob"></div>'
 			. '</div>'
 			. '<div class="price-scale">'
@@ -505,8 +543,7 @@ function cas_gallery_filter_rail( array $items ) {
 		$sort = '<aside class="filter-panel sort-panel" aria-label="Sort artwork">'
 			. '<div class="fp-head"><span class="fp-title">Sort by</span></div>'
 			. '<div class="fg-opts" id="artwork-sort">'
-			. cas_gallery_filter_chip( 'featured', 'Featured', true )
-			. cas_gallery_filter_chip( 'newest', 'Newest' )
+			. cas_gallery_filter_chip( 'newest', 'Newest', true )
 			. cas_gallery_filter_chip( 'oldest', 'Oldest' )
 			. cas_gallery_filter_chip( 'price-asc', 'Price ↑' )
 			. cas_gallery_filter_chip( 'price-desc', 'Price ↓' )
@@ -573,6 +610,8 @@ function cas_artwork_card( $post, $index ) {
 	$etsy   = get_post_meta( $post->ID, CAS_ARTWORK_META_ETSY, true );
 	$sold   = ( 'sold' === get_post_meta( $post->ID, CAS_ARTWORK_META_STOCK, true ) );
 	$medium = trim( (string) get_post_meta( $post->ID, CAS_ARTWORK_META_MEDIUM, true ) );
+	$type   = trim( (string) get_post_meta( $post->ID, CAS_ARTWORK_META_TYPE, true ) );
+	$size   = trim( (string) get_post_meta( $post->ID, CAS_ARTWORK_META_SIZE, true ) );
 	$date   = (int) get_post_time( 'U', true, $post );
 
 	// The ratio comes from the file the client actually uploaded. The prototype
@@ -615,7 +654,7 @@ function cas_artwork_card( $post, $index ) {
 
 	ob_start();
 	?>
-	<article class="art-card" data-medium="<?php echo esc_attr( $medium ); ?>" data-price="<?php echo esc_attr( is_numeric( $price ) ? $price : '' ); ?>" data-date="<?php echo esc_attr( $date ); ?>">
+	<article class="art-card" data-medium="<?php echo esc_attr( $medium ); ?>" data-type="<?php echo esc_attr( $type ); ?>" data-price="<?php echo esc_attr( is_numeric( $price ) ? $price : '' ); ?>" data-date="<?php echo esc_attr( $date ); ?>">
 		<div class="art-frame-wrap">
 			<figure class="art-frame<?php echo ( $ratio > 1.15 ) ? ' land' : ''; ?>">
 				<div class="art-img" style="--r:<?php echo esc_attr( $ratio ); ?>"><?php
@@ -626,6 +665,12 @@ function cas_artwork_card( $post, $index ) {
 		</div>
 		<div class="art-meta">
 			<h3 class="art-title"><?php echo esc_html( $title ); ?></h3>
+			<?php if ( '' !== $type ) : ?>
+				<div class="art-sub"><?php echo esc_html( $type ); ?></div>
+			<?php endif; ?>
+			<?php if ( '' !== $size ) : ?>
+				<div class="art-size"><?php echo esc_html( $size ); ?></div>
+			<?php endif; ?>
 			<?php if ( '' !== $medium || $sold ) : ?>
 				<div class="art-tagrow">
 					<?php if ( '' !== $medium ) : ?>
@@ -713,9 +758,11 @@ function cas_artwork_modal() {
 				</figure>
 			</div>
 			<div class="am-body">
+				<span class="am-sub" id="am-sub" hidden></span>
 				<h2 class="am-title" id="am-title">&mdash;</h2>
 				<div class="am-tags" id="am-tags"></div>
 				<div class="am-desc" id="am-desc"></div>
+				<dl class="am-spec" id="am-spec" hidden><dt>Size</dt><dd></dd></dl>
 				<div class="am-price" id="am-price" style="display:none;"></div>
 				<div class="am-actions">
 					<!-- Hidden by inline style, not by the `hidden` attribute: the UA rule
@@ -794,5 +841,9 @@ function cas_gallery_css() {
 
 /* Active-filter chips are real buttons, so neutralise browser button chrome. */
 button.active-tag { margin: 0; border: 0; line-height: 1.25; font-weight: 500; -webkit-appearance: none; appearance: none; }
+.filter-panel .fp-clear { padding: 1px 6px; border-radius: 0; }
+.store-grid > .art-card, .art-modal .am-body { min-width: 0; }
+.art-title, .art-sub, .art-size, .art-modal .am-title, .art-modal .am-sub, .art-modal .am-desc, .art-modal .am-spec dd { overflow-wrap: anywhere; }
+.art-modal .am-sub[hidden], .art-modal .am-spec[hidden] { display: none; }
 CSS;
 }
