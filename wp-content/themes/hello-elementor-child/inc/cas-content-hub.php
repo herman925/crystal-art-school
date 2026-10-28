@@ -150,7 +150,7 @@ function cas_content_hub_cards() {
 			'name'  => 'Gallery',
 			'view'  => cas_content_hub_page_url( 'gallery' ),
 			'items' => array(
-				cas_content_hub_list_item( 'Artworks: image, name, description, price, Etsy link, stock and order', 'cas_artwork' ),
+				cas_content_hub_list_item( 'Artworks: image, name and description; Sale details: price, Etsy link, stock, medium, Size and optional Type; Page Attributes: Order', 'cas_artwork' ),
 			),
 			'muted' => 'Grid layout: ask Herman.',
 		),

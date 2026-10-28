@@ -87,7 +87,7 @@ add_action(
 		 */
 		$pointers = [
 			'cas_page_faq'       => [ 'FAQ', 20, 'Questions and answers are edited under <strong>Dashboard &rarr; FAQ</strong>. Each entry is one question: the title is the question, the body is the answer. The order comes from the <strong>Order</strong> box under Page Attributes &mdash; lower numbers first.' ],
-			'cas_page_gallery'   => [ 'Gallery', 30, 'Artworks are edited under <strong>Dashboard &rarr; Artworks</strong>. Each artwork carries an image, name, description, price, Etsy link, stock status and sort order.' ],
+			'cas_page_gallery'   => [ 'Gallery', 30, 'Artworks are edited under <strong>Dashboard &rarr; Artworks</strong>. Each artwork carries an image, name and description. Under <strong>Sale details</strong>, edit the price, Etsy link, stock status, medium, Size and optional Type. The <strong>Order</strong> box is under Page Attributes.' ],
 			'cas_page_about'     => [ 'About', 40, 'The About page is fixed for this round. Its text and images are not editable from here &mdash; ask Herman to change anything on it.' ],
 			'cas_page_courses'   => [ 'Courses', 50, 'Courses, lessons, prices and videos are all edited under <strong>Dashboard &rarr; Tutor LMS</strong>, not here.' ],
 			'cas_page_showcase'  => [ 'Showcase', 60, 'Student work is edited under <strong>Dashboard &rarr; Student work</strong>. Each piece is one photograph, with the student&rsquo;s name and the medium beside it. Everything else on that page is part of its design. The wall runs by the <strong>Order</strong> number inside each piece, in its Page Attributes box &mdash; lowest first, and anything left at 0 sits at the front, newest first. There is no drag-and-drop.' ],
