@@ -12,6 +12,25 @@
 
 defined( 'ABSPATH' ) || exit;
 
+// Elementor's full-width template prints Home content without a main landmark.
+add_action(
+	'elementor/page_templates/header-footer/before_content',
+	function () {
+		if ( is_front_page() ) {
+			echo '<main id="content" tabindex="-1">';
+		}
+	}
+);
+
+add_action(
+	'elementor/page_templates/header-footer/after_content',
+	function () {
+		if ( is_front_page() ) {
+			echo '</main>';
+		}
+	}
+);
+
 /**
  * Testimonials.
  *
