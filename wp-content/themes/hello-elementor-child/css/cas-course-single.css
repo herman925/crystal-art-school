@@ -21,6 +21,8 @@
 .cas-course-page .syl-preview { color: var(--marine); }
 .cas-course-page .syl-spans { color: var(--muted); }
 .cas-course-page .course-purchased { font-size: 16px; }
+.cas-course-page .course-terms-note { margin-bottom: 1em; }
+.cas-course-page .course-tier-note { margin-top: 1em; margin-bottom: 1em; }
 .cas-course-page .syl-more:focus { background: transparent; color: var(--muted); }
 .cas-course-page .syl-more:hover { background: transparent; color: var(--coral-ink); }
 .cas-course-page .course-buy button.btn { line-height: normal; }

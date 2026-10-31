@@ -90,6 +90,9 @@ check( ! str_contains( $html, '<img src=x' ) && str_contains( $html, '&lt;img sr
 check( ! str_contains( $html, '<a class="syl-row"' ), 'Paid lesson rows must not link for a locked visitor.' );
 $flat = cas_render_course_syllabus( array( 'items' => array( $items[0] ) ) );
 check( ! str_contains( $flat, 'syl-phase-btn' ) && ! str_contains( $flat, ' hidden' ), 'A single unmodularised course must have the prototype flat syllabus.' );
+$fixture_meta[201]['_is_preview'] = '1';
+check( str_contains( cas_render_course_syllabus( array( 'items' => array( $items[0] ) ) ), 'free preview' ), 'An unpaid visitor must see the preview label.' );
+check( ! str_contains( cas_render_course_syllabus( array( 'items' => array( $items[0] ) ), true ), 'free preview' ), 'An enrolled visitor must see the normal unlocked syllabus.' );
 echo "PASS: lesson authoring guards, combined numbering, phase totals, detail disclosures, escaping and flat syllabuses\n";
 
 $fixture_outline = array( 'items' => array( array( 'seconds' => 9300 ), array( 'seconds' => 35 ) ) );

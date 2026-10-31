@@ -327,7 +327,7 @@ function cas_render_course_attachments( $course_id ) {
 }
 
 /** The real Tutor curriculum, with the prototype's collapsed phases and lesson covers. */
-function cas_render_course_syllabus( $outline ) {
+function cas_render_course_syllabus( $outline, $enrolled = false ) {
 	$phases = array();
 	foreach ( $outline['items'] as $index => $item ) { $phases[ $item['topic'] ][ $index ] = $item; }
 	$phased = count( $phases ) > 1;
@@ -362,7 +362,7 @@ function cas_render_course_syllabus( $outline ) {
 							<?php if ( $item['open'] ) : ?><a class="syl-row" href="<?php echo esc_url( $item['url'] ); ?>"><?php else : ?><div class="syl-row is-locked"><?php endif; ?>
 								<div class="syl-num"><?php echo $item['done'] ? '&#10003;' : esc_html( $span > 1 ? $number . ' & ' . ( $number + $span - 1 ) : $number ); ?></div>
 								<div>
-									<div class="syl-title"><?php echo esc_html( $item['title'] ); ?><?php if ( get_post_meta( $item['id'], '_is_preview', true ) ) : ?> <span class="syl-preview">free preview</span><?php endif; ?><?php if ( $span > 1 ) : ?> <span class="syl-spans"><?php echo 2 === $span ? 'one film, two lessons' : esc_html( 'one film, ' . $span . ' lessons' ); ?></span><?php endif; ?></div>
+									<div class="syl-title"><?php echo esc_html( $item['title'] ); ?><?php if ( ! $enrolled && get_post_meta( $item['id'], '_is_preview', true ) ) : ?> <span class="syl-preview">free preview</span><?php endif; ?><?php if ( $span > 1 ) : ?> <span class="syl-spans"><?php echo 2 === $span ? 'one film, two lessons' : esc_html( 'one film, ' . $span . ' lessons' ); ?></span><?php endif; ?></div>
 									<?php $subtitle = wp_strip_all_tags( get_post_field( 'post_content', $item['id'] ) ); ?>
 									<?php if ( $subtitle ) : ?><div class="syl-sub"><?php echo esc_html( $subtitle ); ?></div><?php endif; ?>
 								</div>
@@ -496,7 +496,7 @@ function cas_render_course_single() {
 						<?php if ( $enrolled ) : ?>
 							<span class="course-purchased">Purchased &#10003;</span>
 						<?php elseif ( $is_sale ) : ?>
-							<s class="was"><?php echo esc_html( cas_course_price( $reg ) ); ?></s><b class="now"><?php echo esc_html( cas_course_price( $sale ) ); ?></b>
+							<s class="was"><?php echo esc_html( cas_course_price( $reg ) ); ?></s><span class="now"><?php echo esc_html( cas_course_price( $sale ) ); ?></span>
 						<?php else : ?>
 							<?php echo esc_html( cas_course_price( $reg ) ); ?>
 						<?php endif; ?>
@@ -565,7 +565,7 @@ function cas_render_course_single() {
 					<div class="eyebrow"><span class="star" aria-hidden="true">&#10038;</span> Phase by phase, lesson by lesson</div>
 					<h2 class="section-title">Syllabus</h2>
 				</div>
-				<?php echo cas_render_course_syllabus( $outline ); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped by the renderer. ?>
+				<?php echo cas_render_course_syllabus( $outline, $enrolled ); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped by the renderer. ?>
 				<div class="course-teacher reveal-one">
 					<img src="<?php echo esc_url( cas_about_value( 'cas_about_portrait' ) ); ?>" alt="Crystal Lau" width="74" height="74" loading="lazy" decoding="async">
 					<div>
