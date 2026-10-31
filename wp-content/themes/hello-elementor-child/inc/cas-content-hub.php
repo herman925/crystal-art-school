@@ -135,12 +135,9 @@ function cas_content_hub_cards() {
 			'items' => array(
 				$item( 'Edit Home: banner, page text and photographs', admin_url( 'admin.php?page=cas-content-home-page' ), CAS_CONTENT_HUB_CAP ),
 				cas_content_hub_list_item( 'Course overview questions', 'cas_overview_qa' ),
-				$item( 'Choose the Homepage Gallery Image', admin_url( 'admin.php?page=cas-content-home-page#home-gallery-image' ), CAS_CONTENT_HUB_CAP ),
-				cas_content_hub_list_item( 'Blog posts shown here: the six newest with a picture', 'post' ),
 				cas_content_hub_list_item( 'Student Comments: Order, Member and Text (Display Limit in Edit Home)', 'cas_testimonial' ),
-				cas_content_hub_list_item( 'Course rail: the courses shown here', 'courses' ),
 			),
-			'muted' => 'Layout and the order of sections: ask the webmaster.',
+			'muted' => 'Courses appear automatically: up to 10 published courses, sorted by course order, then newest first. Blog posts appear automatically: the six newest published posts with a featured image. Layout and the order of sections: ask the webmaster.',
 		),
 		array(
 			'name'  => 'Courses',
