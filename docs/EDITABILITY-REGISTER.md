@@ -846,6 +846,11 @@ Free Videos closing band. That is now the pattern to check first on any new page
 
 Crystal removed the tier model on WhatsApp: 「我決定簡單些，只提供觀看課程，不設批改及Q & A」.
 Paid now unlocks a course's video lessons and downloadable materials; unpaid sees public pages.
+
+**Owner clarification, 2026-11-01:** removing or replacing a course/lesson attachment revokes
+that course student’s saved download link. A shared file remains available only through
+another current course attachment for which the student is enrolled. Administrators retain
+file-management access; limited editors require a current, protected own-course reference.
 No Wanderer / Apprentice / Fellow, no Discord, no Q&A, no assignment marking.
 
 **These rows in the register below describe fields that are being removed from the site and

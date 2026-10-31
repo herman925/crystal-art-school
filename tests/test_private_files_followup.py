@@ -143,6 +143,26 @@ class FollowupTests(unittest.TestCase):
         self.assertTrue(moved.is_file(), "original was not moved into the private folder")
         self.assertEqual(mode(moved), "600")
 
+    def test_unscaled_original_and_edit_backups_are_also_private(self) -> None:
+        folder = self.site.attachment(15, ["photo-scaled.png", "photo-150.png"], private=False)
+        (folder / "photo.png").write_bytes(b"unscaled original")
+        (folder / "photo-backup.png").write_bytes(b"edit backup")
+        self.site.meta[15]["_wp_attachment_metadata"]["original_image"] = "photo.png"
+        self.site.meta[15]["_wp_attachment_backup_sizes"] = {"full-orig": {"file": "photo-backup.png"}}
+        self.site.run({"action": "move", "id": 15, "user": {}})
+        for name in ["photo-scaled.png", "photo-150.png", "photo.png", "photo-backup.png"]:
+            self.assertFalse((folder / name).exists(), name)
+            self.assertTrue((self.site.private / "15" / name).is_file(), name)
+
+    def test_failed_variant_copy_keeps_every_public_source_for_retry(self) -> None:
+        folder = self.site.attachment(16, ["photo.png", "photo-150.png"], private=False)
+        destination = self.site.private / "16"
+        destination.mkdir()
+        (destination / "photo-150.png").mkdir()  # A directory cannot be overwritten with a file.
+        self.site.run({"action": "move", "id": 16, "user": {}})
+        self.assertTrue((folder / "photo.png").is_file())
+        self.assertTrue((folder / "photo-150.png").is_file())
+
     # Audit lines: one per serve, denial or miss, with the id and the outcome only.
 
     def test_audit_line_for_a_denied_request(self) -> None:

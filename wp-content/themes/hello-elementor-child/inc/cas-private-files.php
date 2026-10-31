@@ -16,7 +16,7 @@
 defined( 'ABSPATH' ) || exit;
 
 const CAS_PRIVATE_META_FLAG    = '_cas_private';         // attachment meta: 1 once moved.
-const CAS_PRIVATE_META_COURSES = '_cas_private_courses'; // attachment meta: course IDs allowed to download.
+const CAS_PRIVATE_META_COURSES = '_cas_private_courses'; // attachment meta: recorded courses; current references are also required.
 const CAS_PRIVATE_META_ORIGIN  = '_cas_private_origin';  // attachment meta: original path, for rollback.
 const CAS_PRIVATE_QUERY_VAR    = 'cas_private_file';
 const CAS_PRIVATE_META_REFS    = '_cas_private_author_refs'; // protected source/course/list binding, never a growing grant.
@@ -395,8 +395,8 @@ function cas_private_sweep() {
 }
 
 /**
- * Make one attachment private. Idempotent: the allow-list only grows, and an attachment that is
- * already private is not moved again.
+ * Make one attachment private. Historical course IDs are retained; downloads also require a
+ * current reference. An attachment that is already private is not moved again.
  */
 function cas_private_secure_attachment( $attachment_id, $course_ids ) {
 	if ( $attachment_id <= 0 || 'attachment' !== get_post_type( $attachment_id ) ) {
@@ -433,28 +433,30 @@ function cas_private_move_attachment( $attachment_id ) {
 		return false;
 	}
 
-	$moves = array();
-	$moved = cas_private_move_file( $file, $target_dir . '/' . basename( $file ) );
-	if ( ! $moved ) {
-		return false;
+	$meta = wp_get_attachment_metadata( $attachment_id );
+	$variants = array_merge(
+		isset( $meta['sizes'] ) && is_array( $meta['sizes'] ) ? $meta['sizes'] : array(),
+		(array) get_post_meta( $attachment_id, '_wp_attachment_backup_sizes', true )
+	);
+	if ( ! empty( $meta['original_image'] ) ) {
+		$variants[] = array( 'file' => $meta['original_image'] );
 	}
-	$moves[] = $moved;
-
-	$meta  = wp_get_attachment_metadata( $attachment_id );
-	$sizes = isset( $meta['sizes'] ) && is_array( $meta['sizes'] ) ? $meta['sizes'] : array();
-	$dir   = dirname( $file );
-	foreach ( $sizes as $name => $size ) {
-		if ( empty( $size['file'] ) ) {
-			continue;
-		}
-		$src = $dir . '/' . $size['file'];
-		if ( is_file( $src ) ) {
-			$done = cas_private_move_file( $src, $target_dir . '/' . $size['file'] );
-			if ( ! $done ) {
-				return false; // Stop with the original still public; the next run retries.
-			}
-			$moves[] = $done;
-		}
+	$files = array();
+	foreach ( $variants as $size ) {
+		if ( empty( $size['file'] ) || ! is_string( $size['file'] ) || basename( $size['file'] ) !== $size['file'] ) { continue; }
+		$src = dirname( $file ) . '/' . $size['file'];
+		if ( is_file( $src ) ) { $files[ $src ] = $target_dir . '/' . $size['file']; }
+	}
+	$files[ $file ] = $target_dir . '/' . basename( $file );
+	// Verify every copy before deleting anything; delete the current original last so failures can retry.
+	foreach ( $files as $src => $dst ) {
+		if ( ! cas_private_copy_file( $src, $dst ) ) { return false; }
+	}
+	unset( $files[ $file ] );
+	$files[ $file ] = $target_dir . '/' . basename( $file );
+	foreach ( $files as $src => $dst ) {
+		wp_delete_file( $src );
+		if ( file_exists( $src ) ) { return false; }
 	}
 
 	update_post_meta( $attachment_id, CAS_PRIVATE_META_ORIGIN, $file );
@@ -463,8 +465,8 @@ function cas_private_move_attachment( $attachment_id ) {
 	return true;
 }
 
-/** Copy, verify by SHA-256, then remove the public copy. Returns the new path, or false. */
-function cas_private_move_file( $src, $dst ) {
+/** Stage a verified private copy without deleting the source. Returns the new path, or false. */
+function cas_private_copy_file( $src, $dst ) {
 	if ( ! copy( $src, $dst ) ) {
 		return false;
 	}
@@ -472,8 +474,7 @@ function cas_private_move_file( $src, $dst ) {
 		wp_delete_file( $dst );
 		return false;
 	}
-	chmod( $dst, 0600 );
-	wp_delete_file( $src );
+	if ( ! chmod( $dst, 0600 ) ) { return false; }
 	return $dst;
 }
 
@@ -551,7 +552,7 @@ add_filter(
 	5
 );
 
-/** Admin/enrolled access is unchanged; current limited authors additionally need protected current references. */
+/** Enrolment grants access only while an attachment is still referenced by that course. */
 function cas_private_can_download( $attachment_id ) {
 	if ( ! is_user_logged_in() ) {
 		return false;
@@ -565,8 +566,16 @@ function cas_private_can_download( $attachment_id ) {
 	if ( ! class_exists( '\Tutor\Models\EnrollmentModel' ) ) {
 		return false;
 	}
-	foreach ( array_map( 'intval', (array) get_post_meta( $attachment_id, CAS_PRIVATE_META_COURSES, true ) ) as $course_id ) {
-		if ( $course_id && \Tutor\Models\EnrollmentModel::is_enrolled( $course_id, get_current_user_id() ) ) {
+	global $wpdb;
+	$allowed = array_map( 'intval', (array) get_post_meta( $attachment_id, CAS_PRIVATE_META_COURSES, true ) );
+	$rows = (array) $wpdb->get_results( "SELECT r.post_id,r.meta_value FROM {$wpdb->postmeta} r INNER JOIN {$wpdb->posts} p ON p.ID=r.post_id AND p.post_type IN ('courses','lesson') WHERE r.meta_key='_tutor_attachments'" );
+	$counts = array_count_values( array_map( static function ( $row ) { return (int) $row->post_id; }, $rows ) );
+	foreach ( $rows as $row ) {
+		if ( 1 !== $counts[ (int) $row->post_id ] ) { continue; }
+		$ids = cas_private_reference_ids( cas_private_reference_decode( $row->meta_value ) );
+		if ( false === $ids || ! in_array( (int) $attachment_id, $ids, true ) ) { continue; }
+		$course = cas_private_author_course( $row->post_id );
+		if ( $course && in_array( (int) $course->ID, $allowed, true ) && \Tutor\Models\EnrollmentModel::is_enrolled( (int) $course->ID, get_current_user_id() ) ) {
 			return true;
 		}
 	}
