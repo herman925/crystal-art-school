@@ -9,9 +9,27 @@
 
 defined( 'ABSPATH' ) || exit;
 
+// Keep browser normalisation below the prototype; Hello's decorative defaults are not our design.
+add_filter( 'hello_elementor_enqueue_style', '__return_false' );
+
 add_action(
 	'wp_enqueue_scripts',
 	function () {
+		$parent_reset = wp_json_encode( get_template_directory_uri() . '/assets/css/reset.css?ver=' . rawurlencode( wp_get_theme( get_template() )->get( 'Version' ) ) );
+		wp_register_style( 'hello-elementor', false, [], null );
+		wp_enqueue_style( 'hello-elementor' );
+		wp_add_inline_style( 'hello-elementor', <<<CSS
+@import url({$parent_reset}) layer(cas-parent-reset);
+@layer cas-parent-reset {
+  a, a:hover, a:active { color: inherit; }
+  button, [type="button"], [type="submit"] { color: inherit; border-color: currentColor; }
+  button:hover, button:focus, [type="button"]:hover, [type="button"]:focus,
+  [type="submit"]:hover, [type="submit"]:focus {
+    background-color: transparent; color: inherit; text-decoration: none;
+  }
+}
+CSS
+		);
 		wp_enqueue_style( 'hello-elementor-parent', get_template_directory_uri() . '/style.css', [], null );
 
 		wp_enqueue_style(
@@ -28,7 +46,7 @@ add_action(
 			wp_enqueue_style(
 				'cas-' . $handle,
 				$base . $handle . '.css',
-				0 === $i ? [ 'cas-fonts' ] : [ 'cas-industrial-' . $i ],
+				0 === $i ? [ 'hello-elementor', 'cas-fonts' ] : [ 'cas-industrial-' . $i ],
 				filemtime( $dir . $handle . '.css' )
 			);
 		}

@@ -15,6 +15,11 @@ remain excluded. The old held review stack was not bootstrapped or changed.
 Last reported acceptance coverage remains **63/110**. It is not build completion; no build-only
 percentage has been calculated.
 
+**Public interaction colours — 2026-11-01:** deployed the shared parent-style cascade fix
+and prototype keyboard ring for Tutor buttons. Hello's pink/purple hover/focus defaults no
+longer override the prototype in either A/light or D/dark. See [interaction-style receipt](PROTOTYPE-INTERACTION-STYLES-2026-11-01.md).
+This changes styling only; the previous operational holds and acceptance score remain.
+
 **Home image editing follow-up — 2026-11-01:** the owner requested an explicit-only gallery
 chooser, the prototype TOOLS photograph, slide tabs, responsive image panes, aligned image
 buttons/recommendations and crop/reposition controls. See [Home image editing](HOME-IMAGE-EDITING-2026-11-01.md)

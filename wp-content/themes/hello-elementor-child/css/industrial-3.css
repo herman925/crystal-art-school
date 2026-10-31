@@ -1353,6 +1353,7 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
    ============================================================ */
 .cas-root a:focus-visible,
 .cas-root button:focus-visible,
+.cas-root .tutor-btn:focus-visible:not(:disabled):not([disabled]):not(.disabled),
 .cas-root summary:focus-visible,
 .cas-root input:focus-visible,
 .cas-root select:focus-visible,
