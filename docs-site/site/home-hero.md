@@ -1,6 +1,6 @@
 # The homepage banner
 
-> **Draft — the combined editing page awaits installation, checks and account handover.**
+> **Draft — use these editing instructions after account handover.**
 
 Open **Content hub → Home → Edit Home**. The homepage banner, page text and photographs
 are on the same editing page. The banner controls are grouped by slide.

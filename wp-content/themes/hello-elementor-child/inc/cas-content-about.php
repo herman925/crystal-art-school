@@ -53,7 +53,7 @@ function cas_content_about_controls( $values, $input_name = 'cas_about_fields' )
 				'forced_root_block' => $inline ? false : 'p',
 				'toolbar1'          => $inline ? 'bold italic link unlink undo redo' : 'styleselect bold italic bullist numlist link unlink undo redo',
 				'toolbar2'          => '',
-				'style_formats'     => array( array( 'title' => 'Paragraph', 'block' => 'p' ), array( 'title' => 'Cross-heading', 'block' => 'h3', 'classes' => 'bio-sub' ) ),
+				'style_formats'     => wp_json_encode( array( array( 'title' => 'Paragraph', 'block' => 'p' ), array( 'title' => 'Cross-heading', 'block' => 'h3', 'classes' => 'bio-sub' ) ) ),
 			),
 		) );
 	}

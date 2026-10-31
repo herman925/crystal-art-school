@@ -7,17 +7,17 @@ The [dated handoff #211](https://github.com/herman925/crystal-art-school/issues/
 [payment map #104](https://github.com/herman925/crystal-art-school/issues/104) supersede
 conflicting historical state below. Closing #211 completed the handoff record, not the website.
 The new assignment initially resumed source implementation only. The owner subsequently
-requested testing: scoped source/synthetic checks and local guide build/browser checks now
-passed as detailed below. Deployment, production/account actions and incident-held operations
-remain suspended. Native WordPress workflows need an approved test target; the old held
-review stack was not bootstrapped or changed.
+requested testing and then explicitly requested round review and deployment. Source/synthetic
+checks and a new independent local WordPress fixed-editor review passed as detailed below.
+Release preparation is authorised; real account/payment/launch and incident-held operations
+remain excluded. The old held review stack was not bootstrapped or changed.
 
 Last reported acceptance coverage remains **63/110**. It is not build completion; no build-only
 percentage has been calculated.
 
 | Classification | Current evidence and next action |
 |---|---|
-| Source implementation, scoped local checks passed | `takeover/client-editing-20261031` composes the existing PR #201 controls into five page editors covering the same 42 fields. 195 PHP synthetic cases, 46 source contracts and 9 mocked JS cases passed. Native WordPress/media/SQL/browser acceptance remains open; Route B is unaccepted and undeployed. [Full scope and results](ROUTE-B-SOURCE-2026-10-31.md). Original PR #201 at `45996731a30c640b41ada90c9ecc62e260a4e92c`, guide #203 and log runbook #204 remain untouched/open. |
+| Native fixed-editor review passed; release preparing | `takeover/client-editing-20261031` composes the existing PR #201 controls into five page editors covering the same 42 fields. Fresh native browser/SQL/cache/media checks passed, including upload and rich-text saves; two real native defects were fixed. 195 PHP cases, 46 source contracts and now 14 mocked JS cases passed. This is not full course-authoring, production ownership or client handover acceptance. [Full scope and results](ROUTE-B-SOURCE-2026-10-31.md). Original PR #201 at `45996731a30c640b41ada90c9ecc62e260a4e92c`, guide #203 and log runbook #204 remain untouched/open. |
 | Source correction, controlled render checks passed | Lesson content renders once with its own cover. Testing found and fixed a missing H1 when lesson text was empty; four fragment-render cases and the existing lesson access/material source contracts now pass. This is not an enrolled native lesson/UI pass. Nothing deployed or published. |
 | Published fix, source reconciled | The 22-page guide Sign out overlay is already published. Local commit `0f32f88` records its exact navigation config source; see [source reconciliation](../docs-site/SIGNOUT-SOURCE-20261031.md). Original checkout's modified config, helpers and private evidence remain untouched. No rebuild or publication. |
 | Built, outstanding verification | Native authoring/media/five-photo workflows, enrolled progress/completion, recovery, provider checkout/webhook/receipt and final guide-reader behaviour. Keep the detailed pending list in #211; do not classify each as missing code. |

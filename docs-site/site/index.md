@@ -2,7 +2,7 @@
 
 This guide explains the content tasks available to your limited editing account on **crystalau.com**, what each change affects and when to ask the webmaster. It is not permission to use every dashboard screen.
 
-> **The combined editing pages await installation, checks and account handover. Role and money instructions also remain drafts. Nothing here authorises opening registration, payments or a new service.**
+> **Role and money instructions remain drafts until their final checks and account handover. Nothing here authorises opening registration, payments or a new service.**
 
 ## Start from Content hub
 
@@ -20,7 +20,7 @@ Navigation menus, site-wide settings, payment configuration and other users' acc
 
 1. [Logging in](/logging-in) — sign-in and the limited account.
 2. [What you can edit](/what-you-can-edit) — the editing map and managed settings.
-3. [Money and access](./money-guide-draft.md) — the safety checklist and draft instructions.
+3. Money and access (available after handover) — the safety checklist and draft instructions.
 4. Choose the public page or content task you want to update.
 
 ## If something looks wrong after a save

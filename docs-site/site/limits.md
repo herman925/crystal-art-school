@@ -12,7 +12,7 @@ Your content account is deliberately limited. It lets you maintain approved cont
 
 ## The header and footer
 
-Once the combined editing page has been installed and handed over, use **Every page → Edit
+After account handover, use **Every page → Edit
 Site details** in Content hub for the approved brand and contact controls.
 
 | What | How it is managed |

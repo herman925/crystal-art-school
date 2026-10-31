@@ -31,9 +31,9 @@ Registration and live-payment opening are managed by the webmaster. Do not try t
 
 ## Your order and access tools
 
-Your limited content account uses **Content hub → Sales** to inspect orders and the separately confirmed changes described in the [Sales guide](./sales-draft.md). It does not provide the administrator's Tutor Orders or Students screens.
+Your limited content account uses **Content hub → Sales** to inspect orders and the separately confirmed changes described in the Sales guide (available after handover). It does not provide the administrator's Tutor Orders or Students screens.
 
-Use **Content hub → Course access** only for an agreed one-off access correction. That does not create a student account, collect a payment, refund money or change an order. Follow the [Course access guide](./course-access-draft.md), including its separate operator-only refund and bank-dispute instructions.
+Use **Content hub → Course access** only for an agreed one-off access correction. That does not create a student account, collect a payment, refund money or change an order. Follow the Course access guide (available after handover), including its separate operator-only refund and bank-dispute instructions.
 
 Financial refunds and payment disputes belong to the webmaster. Do not borrow an administrator account or use a payment dashboard as a workaround. Your agreed manual-access controls remain separate.
 

@@ -29,8 +29,14 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 	function esc_attr( $value ) { return htmlspecialchars( $value, ENT_QUOTES, 'UTF-8' ); }
 	function esc_html( $value ) { return htmlspecialchars( $value, ENT_QUOTES, 'UTF-8' ); }
 	function esc_textarea( $value ) { return htmlspecialchars( $value, ENT_QUOTES, 'UTF-8' ); }
+	function wp_json_encode( $value ) { return json_encode( $value ); }
 	function wp_editor( $value, $id, $settings ) {
 		// Check actual field binding only; this is not native TinyMCE/editor UI proof.
+		if ( isset( $settings['tinymce']['style_formats'] ) ) {
+			about_expect( is_string( $settings['tinymce']['style_formats'] ), 'WordPress TinyMCE format settings must be encoded JSON, not a PHP array' );
+			$formats = json_decode( $settings['tinymce']['style_formats'], true, 512, JSON_THROW_ON_ERROR );
+			about_expect( is_array( $formats ) && $formats[1]['block'] === 'h3' && $formats[1]['classes'] === 'bio-sub', 'Native cross-heading format contract changed' );
+		}
 		echo '<textarea id="' . esc_attr( $id ) . '" name="' . esc_attr( $settings['textarea_name'] ) . '">' . esc_textarea( $value ) . '</textarea>';
 	}
 	function esc_url( $value ) { return $value; }

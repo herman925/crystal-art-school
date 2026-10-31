@@ -1,7 +1,7 @@
 # Route B unified editing — source candidate, 2026-10-31
 
-**Scoped local checks passed; native WordPress workflows remain untested. Not installed,
-merged or deployed.** The source checkpoint originally deferred all testing. The owner
+**Source and scoped native fixed-editor checks passed; release preparation in progress.**
+The source checkpoint originally deferred all testing. The owner
 subsequently requested testing, and the bounded checks below were executed on 2026-10-31.
 
 This candidate is on `takeover/client-editing-20261031`, based on main
@@ -80,6 +80,48 @@ The only running WordPress environment is the old review stack, with older mount
 and held incident state. It was inspected for container/mount identity only, without
 bootstrapping WordPress or changing its files/database. A designated approved staging target
 or a separately chosen fresh local instance is required for the remaining native checks.
+
+## Native review and release preparation — 2026-10-31
+
+The owner subsequently requested a round check and deployment. A **new**, independent Docker
+project `cas-takeover-20261031-084505` was created with fresh synthetic data. The held old
+stack, shared accounts and learner fixtures were not changed. This environment uses PHP
+8.3.36, WordPress 7.1.3, Tutor 4.1.3 and Elementor 4.3.5; Tutor Pro is absent. It has an
+internal-only Docker network, blocked external WordPress requests and disabled mail.
+This is sufficient for the native fixed-editor checks below, not full production parity.
+
+Twenty native browser checks passed across login/menu restrictions, the five forms and all
+42 fields, Home SQL/cache readback, stale tabs, unknown fields, bad nonce, public selection,
+private-marked-image rejection without partial text save, clear, About/Blog/Free Videos native
+TinyMCE save/reload, shared contact save/reload, subscriber denial, mobile layout and browser
+exceptions. Additional native file-chooser checks passed for PNG upload, replacement and
+shipped-default restoration. Final DB checks confirmed saved values, preserved unrelated
+settings, rejected foreign fields, retained media files and unchanged restricted capabilities.
+
+Two real defects were found and fixed before release:
+
+- About's `style_formats` must be JSON for the WordPress TinyMCE initializer; the original PHP
+  array caused `Cannot create property 'name' on string 'A'` and prevented rich editors loading.
+- WordPress does not observe uploads for a query containing the custom nonce filter. Completed
+  uploads now trigger a scoped server-filtered library refresh before selection, preserving
+  public/private validation instead of admitting the unfiltered upload queue.
+
+The PHP synthetic suite remains 195 passing cases with a new TinyMCE settings assertion; the
+media JavaScript suite now has 14 passing cases. Existing failed runs, including environment
+setup and test assumptions, are retained privately under
+`~/cas-evidence/overhaul-review-20261031T084505Z/`. No credentials or raw logs are uploaded.
+
+Production preimages of all four replaced existing runtime files matched current main; ten
+new files were absent as expected. Only those 14 theme files are in the runtime release.
+The guide release preserves the current 22-page inventory and published navigation, excludes
+the six unpublished drafts from pages/chunks/search, and replaces their links with handover
+references. All 18 changed document bodies were reviewed; other document text is unchanged.
+Authentication, reader configuration and server files are excluded and hash-guarded.
+
+Native full course/five-photo/material authoring, production record ownership, Tutor Pro,
+enrolled learning/completion, provider payments, real-reader PHP logout, human assistive
+technology and launch/account decisions retain their separate outstanding gates. No weighted
+acceptance-score increment is claimed by these new checks.
 
 For native testing, include combined text/image saves, all-or-nothing validation, stale and
 foreign inputs/nonces/snapshots, concurrent saves/cache readback, restricted-role routes and

@@ -1,6 +1,6 @@
 # Free videos
 
-> **Draft — the editing page awaits installation, checks and account handover.**
+> **Draft — use these editing instructions after account handover.**
 
 Use **Content hub → Free videos** for the introduction editing page and film list. The page
 presents public films; it is separate from paid course lessons.

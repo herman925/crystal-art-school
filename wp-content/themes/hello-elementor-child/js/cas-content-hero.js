@@ -14,6 +14,24 @@
 				button: { text: 'Use this image' },
 				multiple: false
 			} );
+			// The nonce-filtered native query does not observe uploads; recheck completed images on the server.
+			if ( wp.Uploader && wp.Uploader.queue ) {
+				wp.Uploader.queue.on( 'change:uploading', function ( attachment ) {
+					if ( attachment.get( 'uploading' ) || attachment.get( 'type' ) !== 'image' || ! frame.$el.is( ':visible' ) ) {
+						return;
+					}
+					var library = frame.state().get( 'library' );
+					library.props.set( 'cas_hero_refresh', Date.now() );
+					library.more().done( function () {
+						if ( ! frame.$el.is( ':visible' ) ) { return; }
+						var approved = library.get( attachment.id );
+						frame.state().get( 'selection' ).reset( approved ? [ approved ] : [] );
+						slot.find( '.cas-hero-media-error' ).prop( 'hidden', !! approved );
+					} ).fail( function () {
+						slot.find( '.cas-hero-media-error' ).prop( 'hidden', false );
+					} );
+				} );
+			}
 			frame.on( 'select', function () {
 				var selected = frame.state().get( 'selection' ).first();
 				var image = selected && selected.toJSON();

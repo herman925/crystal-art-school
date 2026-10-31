@@ -1,13 +1,13 @@
 # Courses
 
-**Course content and course prices use separate workflows.** Use the course editor for titles, images, descriptions and lessons. Set or change paid-course prices only through the confirmed [Course prices workflow](/course-prices-draft), not the ordinary course-save button. Those money instructions remain a draft pending final review and handover.
+**Course content and course prices use separate workflows.** Use the course editor for titles, images, descriptions and lessons. Set or change paid-course prices only through the confirmed Course prices workflow (available after handover), not the ordinary course-save button. Those money instructions remain a draft pending final review and handover.
 
 | Field | Where it shows |
 |---|---|
 | **Title** | Course card and course page |
 | **Featured image** | The catalogue card cover. On the course page it is used only as a fallback when the **Large image** slot is empty |
 | **Course photographs** | Five independent slots on the course page: **Large image** and **Small image 1**–**Small image 4** |
-| **Regular price / Sale price** | Both; change only through the confirmed [Course prices workflow](/course-prices-draft). A sale price crosses out the regular one |
+| **Regular price / Sale price** | Both; change only through the confirmed Course prices workflow (available after handover). A sale price crosses out the regular one |
 | **Difficulty level** | The small chips under the title |
 | **Category** | The tag above the title |
 | **Description** | The paragraph under the course title |
@@ -29,7 +29,7 @@ the site does that.
 
 ## Prices
 
-Use **Course prices** and its separate review/confirmation step for paid-course amounts; follow the [draft instructions](/course-prices-draft) only after final review and handover. Enter numbers without a currency symbol, and leave Sale empty when no sale is intended.
+Use **Course prices** and its separate review/confirmation step for paid-course amounts; follow the draft instructions (available after handover) only after final review and handover. Enter numbers without a currency symbol, and leave Sale empty when no sale is intended.
 
 The agreed course currency is GBP (£). **Currency and cart settings are managed by the webmaster**, not through your content-editing controls. Do not change them in Tutor Settings; ask the webmaster if anything appears wrong.
 
@@ -78,4 +78,4 @@ You decided this on 28 August 2026, replacing the earlier three-level plan.
 
 A draft is not a published course. For a new paid course, save the content as a draft, set and confirm its first price through **Course prices**, reload the same saved course, and publish only when the content, price and launch timing are agreed. A saved price does not publish the course.
 
-For an already published course, use the same confirmed price process for money changes; do not use the ordinary content-save button to change its price. Follow the [draft Course prices guide](/course-prices-draft) after final review and handover, and ask the webmaster if the current course status is unclear.
+For an already published course, use the same confirmed price process for money changes; do not use the ordinary content-save button to change its price. Follow the draft Course prices guide (available after handover) after final review and handover, and ask the webmaster if the current course status is unclear.

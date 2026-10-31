@@ -10,7 +10,7 @@ If you lose it, use **Lost your password?** on the sign-in screen. The reset lin
 
 ## Your content account
 
-Your account is a **limited content-editing account, not an administrator account**. It is intended to open **Content hub** after sign-in. That page groups the available tasks by website page and links to the approved editing controls.
+At handover, your content account will be a **limited content-editing account, not an administrator account**. It is intended to open **Content hub** after sign-in. That page groups the available tasks by website page and links to the approved editing controls.
 
 | Area | What you use it for |
 |---|---|

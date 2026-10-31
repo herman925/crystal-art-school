@@ -1,6 +1,6 @@
 # The About page
 
-> **Draft — the combined editing page awaits installation, checks and account handover.**
+> **Draft — use these editing instructions after account handover.**
 
 Start from **Content hub → About → Edit About**. The writing and portrait are together on
 one editing page. **About photos** holds the three photograph strips.

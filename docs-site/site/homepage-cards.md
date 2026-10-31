@@ -1,6 +1,6 @@
 # The rest of the homepage
 
-> **Draft — the combined editing page awaits installation, checks and account handover.**
+> **Draft — use these editing instructions after account handover.**
 
 Below the banner, some cards use approved text or photographs and other sections fill themselves from your published courses, artwork and articles. You do not need to copy the same content into several places.
 

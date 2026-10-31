@@ -1,6 +1,6 @@
 # Logo, signature and contact details
 
-> **Draft — the combined editing page awaits installation, checks and account handover.**
+> **Draft — use these editing instructions after account handover.**
 
 Start from **Content hub → Every page → Edit Site details**. Contact details, social links,
 the logo and both signature images are on one editing page. Change the intended fields and

@@ -6,6 +6,7 @@ const path = require( 'node:path' );
 const vm = require( 'node:vm' );
 const handlers = {};
 const frames = [];
+const uploadHandlers = [];
 const document = {};
 const config = { allowed: true, nonce: 'synthetic-only', privateQuery: 'cas_private_file' };
 function slot() {
@@ -38,14 +39,23 @@ function jquery( object, attrs ) {
 }
 const wp = { media( options ) {
 	const frame = {
-		options, events: {}, selected: null, opens: 0,
+		options, events: {}, selected: null, opens: 0, visible: true, approvedUpload: null, refreshes: 0,
+		$el: { is() { return frame.visible; } },
 		on( event, callback ) { this.events[ event ] = callback; },
 		open() { this.opens++; },
-		state() { return { get: name => { assert.equal( name, 'selection' ); return { first: () => this.selected && { toJSON: () => this.selected } }; } }; }
+		state() { return { get: name => {
+			if ( name === 'library' ) { return {
+				props: { set( key, value ) { assert.equal( key, 'cas_hero_refresh' ); assert.equal( typeof value, 'number' ); frame.refreshes++; } },
+				more() { return { done( callback ) { callback(); return { fail() {} }; } }; },
+				get( id ) { return frame.approvedUpload && frame.approvedUpload.id === id ? frame.approvedUpload : undefined; }
+			}; }
+			assert.equal( name, 'selection' );
+			return { first: () => this.selected && { toJSON: () => this.selected }, reset: values => { frame.selected = values[0] || null; } };
+		} }; }
 	};
 	frames.push( frame );
 	return frame;
-} };
+}, Uploader: { queue: { on( event, callback ) { assert.equal( event, 'change:uploading' ); uploadHandlers.push( callback ); } } } };
 const source = fs.readFileSync( path.join( __dirname, '../wp-content/themes/hello-elementor-child/js/cas-content-hero.js' ), 'utf8' );
 vm.runInNewContext( source, { jQuery: jquery, document, wp, casHeroMedia: config, URL, window: { wp, location: { href: 'https://example.invalid/admin.php' } } } );
 const s = slot();
@@ -108,4 +118,23 @@ assert.equal( alternate.aria, 'Replace image for Alternate image context' );
 clear.call( alternate );
 assert.equal( alternate.text, 'Choose image' );
 assert.equal( alternate.aria, 'Choose image for Alternate image context' );
-console.log( JSON.stringify( { synthetic_media_cases: 9, native_runtime_proof: false } ) );
+const uploaded = { id: 301, get: key => ( { uploading: false, type: 'image' } )[ key ] };
+frame.visible = false;
+uploadHandlers[0]( uploaded );
+assert.equal( frame.refreshes, 0 );
+frame.visible = true;
+uploadHandlers[0]( { id: 302, get: key => ( { uploading: true, type: 'image' } )[ key ] } );
+assert.equal( frame.refreshes, 0 );
+frame.approvedUpload = { id: 301, type: 'image', url: 'https://example.invalid/new-public-image.png' };
+uploadHandlers[0]( uploaded );
+assert.equal( frame.refreshes, 1 );
+assert.equal( frame.selected, frame.approvedUpload );
+assert.equal( s.value, '' ); // Approval selects the model; only Use this image fills the field.
+frame.events.select();
+assert.equal( s.value, frame.approvedUpload.url );
+frame.approvedUpload = null;
+uploadHandlers[0]( uploaded );
+assert.equal( frame.selected, null );
+assert.equal( s.hidden, false );
+assert.equal( s.value, 'https://example.invalid/new-public-image.png' );
+console.log( JSON.stringify( { synthetic_media_cases: 14, native_runtime_proof: false } ) );
