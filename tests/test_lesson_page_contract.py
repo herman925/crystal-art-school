@@ -57,7 +57,8 @@ def main() -> None:
 
     # Nothing from the prototype's demo copy is invented.
     code = re.sub(r"/\*.*?\*/", "", lesson, flags=re.S)  # the docblocks explain what was left out
-    for demo in ("Taught by", "Take it slowly", "Share your skies", "You painted the whole sky"):
+    require(code, "'Taught by'    => 'Crystal Lau'", "the fixed known teacher fact must match the prototype")
+    for demo in ("Take it slowly", "Share your skies", "You painted the whole sky"):
         forbid(code, demo, "demo copy must not be shipped: " + demo)
 
     # Tour: empty override, plus the new-student flag.

@@ -8,9 +8,8 @@
  * the links come from the `cas-primary` WordPress menu instead, so they stay editable
  * in Appearance > Menus.
  *
- * The Courses mega-drawer is deliberately not reproduced. It exists in the prototype
- * but the direction document does not specify it, so it is left out of this pass
- * rather than ported on assumption.
+ * The Courses disclosure follows the desktop prototype; its medium links come from
+ * the published catalogue taxonomy, while labels/order of the main menu stay in WordPress.
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -25,6 +24,41 @@ function cas_header_icon( $name ) {
 	return $icons[ $name ] ?? '';
 }
 
+/** Match destinations, so renaming/reordering a menu label does not break its behaviour. */
+function cas_header_item_is( $item, $slug ) {
+	if ( untrailingslashit( cas_page_url( $slug ) ) === untrailingslashit( home_url( '/' ) ) ) { return false; }
+	$url = wp_parse_url( (string) ( $item->url ?? '' ) );
+	$target = wp_parse_url( cas_page_url( $slug ) );
+	if ( ! is_array( $url ) || ! is_array( $target )
+		|| strtolower( $url['host'] ?? $target['host'] ?? '' ) !== strtolower( $target['host'] ?? '' )
+		|| untrailingslashit( $url['path'] ?? '/' ) !== untrailingslashit( $target['path'] ?? '/' ) ) { return false; }
+	wp_parse_str( $target['query'] ?? '', $expected );
+	wp_parse_str( $url['query'] ?? '', $actual );
+	foreach ( $expected as $key => $value ) { if ( ! isset( $actual[ $key ] ) || $actual[ $key ] !== $value ) { return false; } }
+	return true;
+}
+
+function cas_header_course_drawer() {
+	$base = cas_page_url( 'courses' );
+	$links = array( array( 'All courses', $base, true ) );
+	$terms = get_terms( array( 'taxonomy' => 'course-category', 'hide_empty' => true, 'orderby' => 'count', 'order' => 'DESC' ) );
+	if ( ! is_wp_error( $terms ) ) {
+		foreach ( $terms as $term ) { $links[] = array( $term->name, add_query_arg( 'cat', $term->name, $base ), false ); }
+	}
+	$links[] = array( 'Beginners', add_query_arg( 'cat', 'Beginners', $base ), false );
+	$out = '<button class="nav-caret-btn" type="button" aria-expanded="false" aria-controls="cas-nav-courses" aria-label="Show course categories"><svg class="nav-caret" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 4.5 6 8.5 10 4.5"></path></svg></button>';
+	$out .= '<div class="nav-mega" id="cas-nav-courses"><span class="mega-eyebrow">By medium <em>&middot; most popular first</em></span><div class="mega-cats">';
+	foreach ( $links as $link ) { $out .= '<a class="mega-cat' . ( $link[2] ? ' is-all' : '' ) . '" href="' . esc_url( $link[1] ) . '"><span>' . esc_html( $link[0] ) . '</span></a>'; }
+	return $out . '</div></div>';
+}
+add_filter( 'nav_menu_css_class', function ( $classes, $item, $args ) {
+	if ( 'cas-primary' === ( $args->theme_location ?? '' ) && 'nav-links' === ( $args->menu_class ?? '' ) && cas_header_item_is( $item, 'courses' ) ) { $classes[] = 'nav-drop'; }
+	return $classes;
+}, 10, 3 );
+add_filter( 'walker_nav_menu_start_el', function ( $html, $item, $depth, $args ) {
+	return 0 === $depth && 'cas-primary' === ( $args->theme_location ?? '' ) && 'nav-links' === ( $args->menu_class ?? '' ) && cas_header_item_is( $item, 'courses' ) ? $html . cas_header_course_drawer() : $html;
+}, 10, 4 );
+
 /**
  * The prototype marks the current page with `class="active"` on the anchor. WordPress
  * marks it on the <li> instead, so the class is moved onto the link and the CSS needs
@@ -37,7 +71,10 @@ add_filter(
 			return $atts;
 		}
 
-		if ( in_array( 'current-menu-item', (array) $item->classes, true ) || ! empty( $item->current ) ) {
+		if ( 'nav-links' === ( $args->menu_class ?? '' ) && cas_header_item_is( $item, 'courses' ) ) { $atts['class'] = trim( ( $atts['class'] ?? '' ) . ' nav-trigger' ); }
+		$section = ( cas_header_item_is( $item, 'courses' ) && ( is_post_type_archive( 'courses' ) || is_singular( array( 'courses', 'lesson' ) ) || is_tax( 'course-category' ) ) )
+			|| ( cas_header_item_is( $item, 'blog' ) && is_singular( 'post' ) );
+		if ( $section || in_array( 'current-menu-item', (array) $item->classes, true ) || ! empty( $item->current ) ) {
 			$atts['class'] = trim( ( $atts['class'] ?? '' ) . ' active' );
 		}
 
@@ -81,7 +118,7 @@ function cas_render_header() {
 				</a>
 				<?php echo $menu; // phpcs:ignore WordPress.Security.EscapeOutput ?>
 				<div class="nav-auth">
-					<a class="cart-btn" href="<?php echo esc_url( get_permalink( get_page_by_path( 'checkout' ) ) ); ?>" aria-label="Shopping cart">
+					<a class="cart-btn" href="<?php echo esc_url( function_exists( 'cas_account_cart_url' ) ? cas_account_cart_url() : cas_page_url( 'checkout' ) ); ?>" aria-label="Shopping cart">
 						<?php echo cas_header_icon( 'cart' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 						<span class="cart-badge" aria-hidden="true" hidden style="display:none;"></span>
 					</a>
@@ -90,6 +127,10 @@ function cas_render_header() {
 						<?php if ( get_option( 'users_can_register' ) ) : ?>
 							<a class="btn primary" href="<?php echo esc_url( ( function_exists( 'cas_account_signup_url' ) ? cas_account_signup_url() : '' ) ?: wp_registration_url() ); ?>">Sign up</a>
 						<?php endif; ?>
+					<?php else : ?>
+						<?php $member = wp_get_current_user(); $first_name = explode( ' ', trim( $member->display_name ) )[0]; $studio = function_exists( 'cas_account_dashboard_url' ) ? cas_account_dashboard_url() : home_url( '/' ); ?>
+						<a class="btn ghost cas-desktop-member" href="<?php echo esc_url( wp_logout_url( home_url( '/' ) ) ); ?>">Log out</a>
+						<a class="nav-user cas-desktop-member" href="<?php echo esc_url( $studio ); ?>" style="text-decoration:none;"><img src="<?php echo esc_url( get_avatar_url( $member->ID, array( 'size' => 64 ) ) ); ?>" alt=""><span class="nm"><?php echo esc_html( $first_name ); ?></span></a>
 					<?php endif; ?>
 					<button class="mode-toggle" type="button" aria-pressed="true" aria-label="Dark mode" title="Light / dark mode">
 						<?php

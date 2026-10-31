@@ -73,7 +73,7 @@
          ============================================================ */
       if (finePointer) {
         /* magnetic primary buttons */
-        qa('.btn.primary, .btn-big, .cc-btn.primary, .cover-btn.primary').forEach(function (b) {
+        qa('.btn.primary, .btn-big, .cc-btn.primary, .cover-btn.primary, .tutor-btn-primary').forEach(function (b) {
           var qx = g.quickTo(b, 'x', { duration: .35, ease: 'power3.out' });
           var qy = g.quickTo(b, 'y', { duration: .35, ease: 'power3.out' });
           b.addEventListener('mousemove', function (e) {

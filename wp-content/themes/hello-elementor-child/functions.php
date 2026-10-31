@@ -22,6 +22,10 @@ add_action(
 @import url({$parent_reset}) layer(cas-parent-reset);
 @layer cas-parent-reset {
   a, a:hover, a:active { color: inherit; }
+  @media (min-width: 861px) {
+    h1, h2, h3, h4, h5, h6, label { line-height: inherit; }
+    button, [type="button"], [type="submit"] { line-height: normal; border-radius: revert-layer; }
+  }
   button, [type="button"], [type="submit"] { color: inherit; border-color: currentColor; }
   button:hover, button:focus, [type="button"]:hover, [type="button"]:focus,
   [type="submit"]:hover, [type="submit"]:focus {

@@ -59,7 +59,6 @@ function cas_render_testimonials() {
 							<?php if ( $q['avatar'] ) : ?><img class="who-avatar" src="<?php echo esc_url( $q['avatar'] ); ?>" alt="" loading="lazy"><?php else : ?><span class="who-avatar" aria-hidden="true"></span><?php endif; ?>
 							<div>
 								<strong><?php echo esc_html( $q['name'] ); ?></strong>
-								<div class="hand-note">Profile picture &amp; username &mdash; from the member record</div>
 							</div>
 						</div>
 						<div class="q"><?php echo esc_html( $q['quote'] ); ?></div>

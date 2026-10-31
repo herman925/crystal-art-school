@@ -106,10 +106,8 @@ function cas_render_faq() {
 	endif;
 	?>
 	<main class="container" id="content" tabindex="-1">
-		<section id="faq" class="section" aria-labelledby="faq-h">
-			<div class="section-head">
-				<h2 class="section-title" id="faq-h">Frequently asked questions</h2>
-			</div>
+		<section id="faq" class="section cas-faq-main" aria-labelledby="faq-h">
+			<h2 class="section-title" id="faq-h" style="margin-bottom:6px;">Frequently asked questions</h2>
 			<div class="acc-list">
 				<?php foreach ( cas_faq_items() as $item ) : ?>
 					<details class="acc-item">
@@ -123,19 +121,7 @@ function cas_render_faq() {
 			</div>
 		</section>
 
-		<section class="section">
-			<div class="section-head">
-				<h2 class="section-title">Ask me directly.</h2>
-			</div>
-			<p class="shop-lede">
-				If your question isn&rsquo;t here, email
-				<a href="mailto:<?php echo esc_attr( cas_social()['email'] ); ?>"><?php echo esc_html( cas_social()['email'] ); ?></a>
-				and Crystal will answer.
-			</p>
-			<div class="social-row"><?php echo cas_social_links( 'social-btn' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></div>
-		</section>
-
-		<section class="section">
+		<section class="section cas-faq-followup">
 			<div class="band-forest reveal-one">
 				<div style="flex:1;">
 					<div class="eyebrow"><span class="star">&#10022;</span> Still curious?</div>
