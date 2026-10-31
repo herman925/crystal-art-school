@@ -26,11 +26,13 @@ function cas_course_chips( $course_id ) {
 	$level   = get_post_meta( $course_id, '_tutor_course_level', true );
 	$lessons = (int) tutor_utils()->get_lesson_count_by_course( $course_id );
 	$runtime = cas_course_runtime( $course_id );
+	$media   = wp_get_post_terms( $course_id, 'course-category', array( 'fields' => 'names' ) );
 
 	return array_values(
 		array_filter(
 			[
-				$runtime ? '~' . $runtime : '',
+				! is_wp_error( $media ) && $media ? $media[0] : '',
+				$runtime,
 				$lessons ? $lessons . ( 1 === $lessons ? ' lesson' : ' lessons' ) : '',
 				$level ? str_replace( '-', ' ', $level ) : '',
 			]
@@ -61,6 +63,79 @@ function cas_course_photo_fields() {
 		'_cas_course_photo_4'     => 'Small image 4',
 	];
 }
+
+/** Native Tutor builder fields use the same five attachment IDs as the classic editor. */
+add_action( 'tutor_course_builder_footer', function () {
+	$id = isset( $_GET['course_id'] ) && is_scalar( $_GET['course_id'] ) ? absint( $_GET['course_id'] ) : 0;
+	if ( ! $id || 'courses' !== get_post_type( $id ) || ! current_user_can( 'edit_post', $id ) ) { return; }
+	$fields = array();
+	foreach ( cas_course_photo_fields() as $key => $label ) {
+		$attachment = (int) get_post_meta( $id, $key, true );
+		$fields[] = array(
+			'name' => $key, 'type' => 'image', 'label' => 'Course Page — ' . $label,
+			'defaultValue' => array( 'id' => $attachment, 'url' => $attachment ? (string) wp_get_attachment_image_url( $attachment, 'large' ) : '' ),
+			'buttonText' => 'Choose or Upload Picture',
+			'helpText' => '_cas_course_photo_large' === $key
+				? 'The main course-page photograph (3:2). This five-photo set is separate from the Featured Image used on course cards. Save with Update.'
+				: 'One of the four detail photographs below the main picture (4:3). Clicked thumbnails enlarge on the course page. Save with Update.',
+		);
+	}
+	$dir = get_stylesheet_directory();
+	wp_enqueue_script( 'cas-course-builder-photos', get_stylesheet_directory_uri() . '/js/cas-course-builder-photos.js', array( 'tutor-course-builder' ), filemtime( $dir . '/js/cas-course-builder-photos.js' ), true );
+	wp_localize_script( 'cas-course-builder-photos', 'casCoursePhotoFields', $fields );
+} );
+
+add_filter( 'tutor_course_details_response', function ( $data ) {
+	foreach ( cas_course_photo_fields() as $key => $label ) {
+		$id = (int) get_post_meta( (int) $data['ID'], $key, true );
+		$data[ $key ] = array( 'id' => $id, 'url' => $id ? (string) wp_get_attachment_image_url( $id, 'large' ) : '' );
+	}
+	return $data;
+} );
+
+/** Validate the whole selection before changing any of the stored photographs. */
+function cas_course_builder_photo_ids( $params ) {
+	$ids = array();
+	foreach ( cas_course_photo_fields() as $key => $label ) {
+		if ( ! array_key_exists( $key, $params ) ) { continue; }
+		$value = $params[ $key ];
+		if ( is_string( $value ) && '' !== $value && ! ctype_digit( $value ) ) {
+			$decoded = json_decode( $value, true );
+			if ( JSON_ERROR_NONE !== json_last_error() ) { $decoded = json_decode( wp_unslash( $value ), true ); }
+			if ( JSON_ERROR_NONE !== json_last_error() ) { return new WP_Error( 'cas_course_photo', 'Invalid course photograph selection. Please choose it again.' ); }
+			$value = $decoded;
+		}
+		$raw = is_array( $value ) ? ( $value['id'] ?? null ) : $value;
+		if ( null === $value || '' === $value ) { $raw = 0; }
+		if ( ( ! is_int( $raw ) && ! is_string( $raw ) ) || ! preg_match( '/^(0|[1-9][0-9]*)$/', (string) $raw ) ) {
+			return new WP_Error( 'cas_course_photo', 'Please choose a valid course photograph from the Media Library.' );
+		}
+		$id = filter_var( $raw, FILTER_VALIDATE_INT, array( 'options' => array( 'min_range' => 0 ) ) );
+		if ( false === $id || ( $id && ( ! wp_attachment_is_image( $id ) || 'trash' === get_post_status( $id )
+			|| ! current_user_can( 'read_post', $id ) || ( function_exists( 'cas_private_is' ) && cas_private_is( $id ) ) ) ) ) {
+			return new WP_Error( 'cas_course_photo', 'Course photographs must be available public images, not private course materials.' );
+		}
+		$ids[ $key ] = $id;
+	}
+	return $ids;
+}
+
+add_filter( 'tutor_is_error_before_course_update', function ( $error, $params ) {
+	if ( is_wp_error( $error ) ) { return $error; }
+	$ids = cas_course_builder_photo_ids( $params );
+	return is_wp_error( $ids ) ? $ids : $error;
+}, 10, 2 );
+
+add_action( 'tutor_after_prepare_update_post_meta', function ( $id, $params ) {
+	if ( 'courses' !== get_post_type( $id ) || ! current_user_can( 'edit_post', $id )
+		|| ! function_exists( 'cas_builder_nonce_valid' ) || ! cas_builder_nonce_valid() ) { return; }
+	$ids = cas_course_builder_photo_ids( $params );
+	if ( is_wp_error( $ids ) ) { return; }
+	foreach ( $ids as $key => $attachment ) {
+		if ( $attachment ) { update_post_meta( $id, $key, $attachment ); }
+		else { delete_post_meta( $id, $key ); }
+	}
+}, 10, 2 );
 
 /**
  * Registering the meta rather than trusting the save handler alone means absint
@@ -156,6 +231,47 @@ function cas_render_course_attachments( $course_id ) {
 	return (string) ob_get_clean();
 }
 
+/** The real Tutor curriculum, with the prototype's collapsed phases and lesson covers. */
+function cas_render_course_syllabus( $outline ) {
+	$phases = array();
+	foreach ( $outline['items'] as $index => $item ) { $phases[ $item['topic'] ][ $index ] = $item; }
+	ob_start();
+	?>
+	<div id="co-syllabus" class="syllabus">
+		<?php foreach ( $phases as $topic => $items ) : $first = reset( $items ); ?>
+			<div class="syl-phase">
+				<button type="button" class="syl-phase-btn" aria-expanded="false" aria-controls="cas-phase-<?php echo esc_attr( $topic ); ?>">
+					<span class="sp-n">Phase <?php echo esc_html( $topic + 1 ); ?></span>
+					<span class="sp-name"><?php echo esc_html( $first['topic_t'] ); ?></span>
+					<span class="sp-count"><?php echo esc_html( count( $items ) . ( 1 === count( $items ) ? ' lesson' : ' lessons' ) ); ?></span>
+					<svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h16L12 18z"/></svg>
+				</button>
+				<div id="cas-phase-<?php echo esc_attr( $topic ); ?>" class="syl-phase-body" hidden>
+					<?php foreach ( $items as $index => $item ) : ?>
+						<div class="syl-item" data-odd="<?php echo esc_attr( $index % 2 ); ?>">
+							<?php if ( $item['open'] ) : ?><a class="syl-row" href="<?php echo esc_url( $item['url'] ); ?>"><?php else : ?><div class="syl-row is-locked"><?php endif; ?>
+								<div class="syl-num"><?php echo $item['done'] ? '&#10003;' : esc_html( $index + 1 ); ?></div>
+								<div>
+									<div class="syl-title"><?php echo esc_html( $item['title'] ); ?><?php if ( get_post_meta( $item['id'], '_is_preview', true ) ) : ?> <span class="chip">Free preview</span><?php endif; ?></div>
+									<?php $subtitle = wp_strip_all_tags( get_post_field( 'post_content', $item['id'] ) ); ?>
+									<?php if ( $subtitle ) : ?><div class="syl-sub"><?php echo esc_html( $subtitle ); ?></div><?php endif; ?>
+								</div>
+								<div class="syl-len">
+									<?php if ( ! $item['open'] ) : ?><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" role="img" aria-label="Locked"><rect x="4" y="10" width="16" height="11" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg><?php endif; ?>
+									<?php echo esc_html( $item['seconds'] ? cas_lesson_clock( $item['seconds'] ) : '' ); ?>
+								</div>
+								<?php if ( $item['thumb'] ) { echo wp_get_attachment_image( $item['thumb'], 'thumbnail', false, array( 'class' => 'syl-thumb', 'alt' => '', 'loading' => 'lazy', 'decoding' => 'async' ) ); } ?>
+							<?php if ( $item['open'] ) : ?></a><?php else : ?></div><?php endif; ?>
+						</div>
+					<?php endforeach; ?>
+				</div>
+			</div>
+		<?php endforeach; ?>
+	</div>
+	<?php
+	return ob_get_clean();
+}
+
 function cas_render_course_single() {
 	$id = get_the_ID();
 
@@ -177,22 +293,15 @@ function cas_render_course_single() {
 	$materials = cas_course_lines( $id, '_tutor_course_material_includes' );
 	$attachments_markup = cas_render_course_attachments( $id );
 
-	$topics = get_posts(
-		[
-			'post_type'   => 'topics',
-			'post_parent' => $id,
-			'numberposts' => -1,
-			'orderby'     => 'menu_order',
-			'order'       => 'ASC',
-		]
-	);
+	$outline = cas_lesson_outline( $id );
 
 	ob_start();
 	?>
-	<div class="pg-wrap">
+	<div class="container cas-course-page">
+		<div class="logo2 is-center"><img src="<?php echo esc_url( cas_brand_image( 'cas_logo2' ) ); ?>" alt="Crystal Lau Art" decoding="async"></div>
 		<div class="crumbs">
 			<a href="<?php echo esc_url( get_post_type_archive_link( 'courses' ) ); ?>">Courses</a>
-			<span aria-hidden="true">/</span>
+			<span aria-hidden="true">&rarr;</span>
 			<span id="crumb-title"><?php echo esc_html( get_the_title( $id ) ); ?></span>
 		</div>
 
@@ -226,6 +335,7 @@ function cas_render_course_single() {
 						);
 					}
 					?>
+					<?php if ( $is_sale ) : ?><span class="sale-flag">Sale</span><?php endif; ?>
 				</div>
 				<?php
 				/* The strip lists every picture in the set, the large one included, so
@@ -267,34 +377,45 @@ function cas_render_course_single() {
 				<div class="course-buy">
 					<div id="co-price" class="course-price">
 						<?php if ( $is_sale ) : ?>
-							<s><?php echo esc_html( $sym . $reg ); ?></s> <b class="now"><?php echo esc_html( $sym . $sale ); ?></b>
+							<s class="was"><?php echo esc_html( $sym . $reg ); ?></s> <b class="now"><?php echo esc_html( $sym . $sale ); ?></b>
 						<?php else : ?>
 							<b class="now"><?php echo esc_html( $sym . $reg ); ?></b>
 						<?php endif; ?>
 					</div>
-					<button class="cover-btn primary" type="button" data-cas-add-to-cart data-course-id="<?php echo esc_attr( $id ); ?>">Add to cart</button>
+					<button class="btn primary" type="button" data-cas-add-to-cart data-course-id="<?php echo esc_attr( $id ); ?>">Add to cart</button>
 				</div>
 			</div>
 
 			<div class="course-right">
 				<?php if ( $tag ) : ?>
-					<div class="eyebrow"><?php echo esc_html( $tag ); ?></div>
+					<div class="eyebrow"><span class="star" aria-hidden="true">&#10038;</span> <?php echo esc_html( $tag ); ?> course</div>
 				<?php endif; ?>
-				<h1 id="co-title" class="marker-title"><?php echo esc_html( get_the_title( $id ) ); ?></h1>
+				<h1 id="co-title" class="marker-title font-a"><?php echo esc_html( get_the_title( $id ) ); ?></h1>
+				<?php $film = cas_lesson_film( $id ); ?>
+				<div id="co-highlight" class="co-highlight<?php echo $film['src'] || $film['native'] ? ' has-video' : ''; ?>">
+					<?php if ( $film['src'] ) : ?>
+						<iframe class="gdrive-frame" src="<?php echo esc_url( $film['src'] ); ?>" title="Course preview" allow="autoplay; fullscreen" allowfullscreen loading="lazy"></iframe>
+					<?php elseif ( $film['native'] ) : ?>
+						<?php echo $film['native']; // phpcs:ignore WordPress.Security.EscapeOutput -- Tutor's native video renderer. ?>
+					<?php else : ?>
+						<div class="co-highlight-empty">Course highlights video &mdash; to be supplied</div>
+					<?php endif; ?>
+				</div>
 				<div id="co-blurb" class="lead"><?php echo wpautop( wp_kses_post( get_post_field( 'post_content', $id ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></div>
 				<div id="co-chips" class="course-meta-chips">
 					<?php foreach ( cas_course_chips( $id ) as $chip ) : ?>
-						<span class="chip"><?php echo esc_html( $chip ); ?></span>
+						<span class="cmc <?php echo preg_match( '/^[0-9]+ lessons?$/', $chip ) ? 'is-fact' : 'is-filter'; ?>"><?php echo esc_html( $chip ); ?></span>
 					<?php endforeach; ?>
 				</div>
+				<p class="course-terms-note">Access period and refund terms to be confirmed &mdash; both will be published here before launch.</p>
 			</div>
 		</header>
 
 		<?php if ( $benefits ) : ?>
 			<section id="learn" class="section">
 				<div class="section-head">
-					<div class="eyebrow">What you will learn</div>
-					<h2 class="section-title">By the end of this course</h2>
+					<div class="eyebrow"><span class="star" aria-hidden="true">&#10038;</span> By the end</div>
+					<h2 class="section-title">What you'll learn</h2>
 				</div>
 				<ul id="co-learn" class="learn-list">
 					<?php foreach ( $benefits as $b ) : ?>
@@ -304,55 +425,19 @@ function cas_render_course_single() {
 			</section>
 		<?php endif; ?>
 
-		<?php if ( $topics ) : ?>
+		<?php if ( $outline['items'] ) : ?>
 			<section id="syllabus" class="section">
 				<div class="section-head">
-					<div class="eyebrow">Syllabus</div>
-					<h2 class="section-title">What is inside</h2>
+					<div class="eyebrow"><span class="star" aria-hidden="true">&#10038;</span> Phase by phase, lesson by lesson</div>
+					<h2 class="section-title">Syllabus</h2>
 				</div>
-				<div id="co-syllabus" class="syllabus">
-					<?php
-					$n = 0;
-
-					foreach ( $topics as $topic ) :
-						$lessons = get_posts(
-							[
-								'post_type'   => 'lesson',
-								'post_parent' => $topic->ID,
-								'numberposts' => -1,
-								'orderby'     => 'menu_order',
-								'order'       => 'ASC',
-							]
-						);
-
-						foreach ( $lessons as $lesson ) :
-							$n++;
-							$video   = get_post_meta( $lesson->ID, '_video', true );
-							$rt      = $video['runtime'] ?? [];
-							$mins    = (int) ( $rt['hours'] ?? 0 ) * 60 + (int) ( $rt['minutes'] ?? 0 );
-							$preview = get_post_meta( $lesson->ID, '_is_preview', true );
-							?>
-							<div class="syl-item">
-								<div class="syl-row">
-									<div class="syl-num"><?php echo esc_html( sprintf( '%02d', $n ) ); ?></div>
-									<div>
-										<div class="syl-title">
-											<?php echo esc_html( $lesson->post_title ); ?>
-											<?php if ( $preview ) : ?>
-												<span class="chip">Free preview</span>
-											<?php endif; ?>
-										</div>
-										<?php if ( $lesson->post_content ) : ?>
-											<div class="syl-sub"><?php echo esc_html( wp_strip_all_tags( $lesson->post_content ) ); ?></div>
-										<?php endif; ?>
-									</div>
-									<div class="syl-len"><?php echo esc_html( $mins ? $mins . 'm' : '' ); ?></div>
-								</div>
-							</div>
-							<?php
-						endforeach;
-					endforeach;
-					?>
+				<?php echo cas_render_course_syllabus( $outline ); // phpcs:ignore WordPress.Security.EscapeOutput -- escaped by the renderer. ?>
+				<div class="course-teacher">
+					<img src="<?php echo esc_url( cas_about_value( 'cas_about_portrait' ) ); ?>" alt="Crystal Lau" width="74" height="74" loading="lazy" decoding="async">
+					<div>
+						<h3 class="marker-title">Taught by Crystal Lau</h3>
+						<p><?php echo esc_html( wp_strip_all_tags( html_entity_decode( cas_about_value( 'cas_about_intro' ), ENT_QUOTES, 'UTF-8' ) ) ); ?> <a class="link-squiggle" href="<?php echo esc_url( cas_page_url( 'about' ) ); ?>">More about Crystal &rarr;</a></p>
+					</div>
 				</div>
 			</section>
 		<?php endif; ?>
@@ -360,8 +445,8 @@ function cas_render_course_single() {
 		<?php if ( $audience ) : ?>
 			<section id="who" class="section">
 				<div class="section-head">
-					<div class="eyebrow">Who it is for</div>
-					<h2 class="section-title">This course suits</h2>
+					<div class="eyebrow"><span class="star" aria-hidden="true">&#10038;</span> Is this you?</div>
+					<h2 class="section-title">Who this course is for</h2>
 				</div>
 				<div id="co-who">
 					<?php
@@ -426,7 +511,7 @@ function cas_render_course_single() {
 						<div class="eyebrow"><span class="star">&#10038;</span> Not ready to buy?</div>
 						<h2 class="marker-title font-a" style="font-size:clamp(31px,3.1vw,44px);">Try the free videos first.</h2>
 					</div>
-					<a class="btn-big btn-marine" href="<?php echo esc_url( $fv_page ); ?>" style="flex:none;">Watch free videos &rarr;</a>
+					<a class="btn-big" href="<?php echo esc_url( $fv_page ); ?>" style="flex:none;">Watch free videos &rarr;</a>
 				</div>
 			</section>
 		<?php endif; ?>
@@ -502,13 +587,11 @@ add_action(
 
 		$dir = get_stylesheet_directory();
 		$uri = get_stylesheet_directory_uri();
+		wp_enqueue_style( 'cas-course-single', $uri . '/css/cas-course-single.css', array( 'cas-industrial-3' ), filemtime( $dir . '/css/cas-course-single.css' ) );
 
 		wp_enqueue_script( 'cas-courses', $uri . '/js/cas-courses.js', [], filemtime( $dir . '/js/cas-courses.js' ), true );
 
-		/* A course with one picture has no strip, so it has nothing to switch. */
-		if ( count( cas_course_photos( get_queried_object_id() ) ) > 1 ) {
-			wp_enqueue_script( 'cas-course-photos', $uri . '/js/cas-course-photos.js', [], filemtime( $dir . '/js/cas-course-photos.js' ), true );
-		}
+		wp_enqueue_script( 'cas-course-photos', $uri . '/js/cas-course-photos.js', [], filemtime( $dir . '/js/cas-course-photos.js' ), true );
 
 		wp_localize_script(
 			'cas-courses',

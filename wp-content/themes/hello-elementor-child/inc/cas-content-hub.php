@@ -70,7 +70,7 @@ function cas_content_hub_list_item( $text, $post_type ) {
 
 	return array(
 		'text' => $text,
-		'url'  => admin_url( 'edit.php?post_type=' . $post_type ),
+		'url'  => admin_url( 'courses' === $post_type && current_user_can( 'manage_tutor_instructor' ) ? 'admin.php?page=tutor' : 'edit.php?post_type=' . $post_type ),
 		'cap'  => $object->cap->edit_posts,
 	);
 }

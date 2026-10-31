@@ -9,6 +9,18 @@
 
 	var strip = document.getElementById( 'co-thumbs' );
 	var cover = document.getElementById( 'co-cover' );
+	var syllabus = document.getElementById( 'co-syllabus' );
+	if ( syllabus ) {
+		syllabus.addEventListener( 'click', function ( ev ) {
+			var button = ev.target.closest( '.syl-phase-btn' );
+			if ( ! button ) { return; }
+			var body = document.getElementById( button.getAttribute( 'aria-controls' ) );
+			if ( ! body ) { return; }
+			var expanded = button.getAttribute( 'aria-expanded' ) === 'true';
+			button.setAttribute( 'aria-expanded', expanded ? 'false' : 'true' );
+			body.hidden = expanded;
+		} );
+	}
 
 	if ( ! strip || ! cover ) {
 		return;
