@@ -185,3 +185,10 @@ was unavailable; the existing isolated WordPress fixture and Playwright were reu
 About reference and final captures were compared for material, stitch/radius, typography,
 palette, spacing and responsive behaviour. A paper workspace and native toolbar are intentional
 admin adaptations. Private references/captures remain at `~/cas-evidence/cms-studio-theme-20261031/`.
+
+Visual release **`89598e3efbfcd69bc4f88f59d7db488aa10fe6bf`** is merged and deployed. All
+eight scoped presentation files were backed up, installed and read back by SHA256. The five
+PHP files passed server-side syntax checks. All three new stylesheets returned HTTPS 200
+with exact release hashes, and public Home remained 200. The remote private rollback backup
+is `/home/u202887698/backups/cms-studio-theme-20261031/`. No guide publication, real account,
+content-data, payment, role or schema changes were made for this visual follow-up.

@@ -15,6 +15,13 @@ remain excluded. The old held review stack was not bootstrapped or changed.
 Last reported acceptance coverage remains **63/110**. It is not build completion; no build-only
 percentage has been calculated.
 
+**Visual follow-up deployed:** `89598e3efbfcd69bc4f88f59d7db488aa10fe6bf` themes the content
+hub and fixed editors using the About page's leather, stitch, fonts and palette. Nine cards
+have primary actions and expandable secondary tasks; writing surfaces are leather, with
+responsive Save controls. Scoped native visual/save checks, 205 PHP cases and 46 contracts
+passed. Eight presentation files and their served CSS hashes were verified. Existing data,
+permissions, guide auth, real roles and financial settings are unchanged by this follow-up.
+
 | Classification | Current evidence and next action |
 |---|---|
 | Merged/deployed; native fixed-editor checks passed | Main release `4116b5f3c8b15ff916f2b5aff7c204970186eb96` installs the five page editors covering the same 42 fields. Fresh native save/media/capability checks passed; About TinyMCE and upload-selection defects were fixed. 195 PHP cases, 46 source contracts and 14 mocked JS cases passed. 14 theme and 86 guide files were hash-verified; 22-page inventory/auth preserved. This is not full course-authoring, production ownership or client handover acceptance. [Full receipt](ROUTE-B-SOURCE-2026-10-31.md#production-release-receipt--2026-10-31). Original PR #201 at `45996731a30c640b41ada90c9ecc62e260a4e92c`, guide #203 and log runbook #204 remain preserved/open. |
