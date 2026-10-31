@@ -72,7 +72,10 @@ Beside that row is a dark **TOOLS** square. It leads to your articles filed unde
 
 ## The introduction on the blog page
 
-Use the Blog card in **Content hub** and choose its introduction link. The approved box changes the paragraph under the journal heading. Empty it and the paragraph disappears.
+The prepared Blog editing page awaits installation, checks and handover. Once available,
+use the Blog card in **Content hub** and choose its introduction link. Save the introduction
+with its **Save** button. Empty it and the paragraph disappears. The related links open the
+separate article list; the saved-page link opens the public Blog in another tab.
 
 ## Your three existing articles
 

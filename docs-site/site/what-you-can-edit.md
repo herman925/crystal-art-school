@@ -1,21 +1,28 @@
 # What you can edit
 
-> **Draft — the limited-account routes and money instructions still need final checks and handover.**
+> **Draft — the combined editing pages await installation, checks and account handover. Use these instructions once the webmaster confirms they are available. Money instructions also await handover.**
 
 Use only the approved controls available in your content account. This is not an administrator account, and records belonging to another user may not be editable. If a control or expected record is missing, ask the webmaster; do not use an administrator login, create a duplicate or try another settings route. See [what is fixed](/limits).
 
 Start from **Content hub**. Its page cards open the approved settings and lists.
 
+Home brings its banner, text and photographs onto one editing page. About brings its writing
+and portrait together. Site details brings contact, social links and brand images together.
+Use **Save Home**, **Save About** or **Save Site details** to save all fields on that page.
+Blog and Free videos have their own introduction pages. Repeating entries, such as artwork,
+articles and photograph strips, keep their separate content lists.
+
 | What | Where to start |
 |---|---|
-| Logo and signature images | Content hub → Every page → brand controls |
-| Contact email and social links | Content hub → Every page → contact controls |
+| Logo and signature images | Content hub → Every page → Edit Site details |
+| Contact email and social links | Content hub → Every page → Edit Site details |
 | Menu labels, links and order | Request a change from the webmaster |
-| Homepage banner words and images | Content hub → Home → homepage banner |
-| Homepage free-video card, About photograph and course introduction | The corresponding links in Content hub → Home |
-| Homepage gallery hover line and TOOLS photograph | The corresponding links in Content hub → Home |
-| Course overview paragraphs, principles and questions | Content hub → Home → the course-overview links |
-| About text and portrait | Content hub → About → the approved writing and portrait links |
+| Homepage banner words and images | Content hub → Home → Edit Home |
+| Homepage free-video card, About photograph and course introduction | Content hub → Home → Edit Home |
+| Homepage gallery hover line and TOOLS photograph | Content hub → Home → Edit Home |
+| Course overview paragraphs and principles | Content hub → Home → Edit Home |
+| Course overview questions | The separate questions list on the Home card or editing page |
+| About text and portrait | Content hub → About → Edit About |
 | About photograph strips | About photos, reached through Content hub → About |
 | Blog introduction | Content hub → Blog → introduction |
 | Free-video introduction and films | Content hub → Free videos |
@@ -34,6 +41,16 @@ Start from **Content hub**. Its page cards open the approved settings and lists.
 | Article page size, currency, cart and payment settings | Managed by the webmaster |
 
 ## Shared information
+
+Changing an image uses **Choose image** or **Replace image**. Finish by saving the page;
+choosing a photograph alone does not save it. Clearing a slot never deletes the photograph
+from the media library. The control explains whether clearing restores the original picture
+or leaves the slot empty.
+
+If saving reports that someone else changed the content, copy your unsaved work, reload and
+compare before editing again. If saving cannot be confirmed, ask the webmaster to check the
+saved version before trying again. Save before opening a related content list. Where offered,
+**View saved page** opens the public page in another tab; it does not show unsaved changes.
 
 The contact settings feed several pages and the footer. Change the shared setting once rather than trying to maintain separate copies.
 

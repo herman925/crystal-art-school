@@ -1,10 +1,15 @@
 # The About page
 
-Start from **Content hub → About**. Its approved writing and portrait links open the relevant settings; **About photos** holds the three photograph strips. The limited-account routes still need final checks and handover.
+> **Draft — the combined editing page awaits installation, checks and account handover.**
+
+Start from **Content hub → About → Edit About**. The writing and portrait are together on
+one editing page. **About photos** holds the three photograph strips.
 
 ## Your words and your portrait
 
-Use the approved About writing and portrait links in **Content hub**.
+Edit the intended fields and press **Save About**. This saves the writing and portrait
+together. **View saved page** opens the website in another tab after saving; it does not
+show unsaved changes.
 
 | Field | Where it shows |
 |---|---|
@@ -23,8 +28,8 @@ You can enter plain text with a blank line between paragraphs. If an existing bo
 ## One thing that will surprise you
 
 **Emptying a box puts the old text back.** If you delete the quotation entirely and press
-Publish, the original quotation reappears. The same happens if you press **Remove image** on
-the portrait — the original portrait comes back.
+**Save About**, the original quotation reappears. **Use shipped default** on the portrait
+also restores the original picture when saved. It does not delete an uploaded photograph.
 
 This was built to stop a blank space appearing on a live page, but it does mean "delete
 this" is not something these boxes can do. If you want a paragraph gone rather than

@@ -1,8 +1,9 @@
 # Free videos
 
-> **Draft — limited-account routes still need final checks and handover.**
+> **Draft — the editing page awaits installation, checks and account handover.**
 
-Use **Content hub → Free videos** for the approved introduction links and film list. The page presents public films; it is separate from paid course lessons.
+Use **Content hub → Free videos** for the introduction editing page and film list. The page
+presents public films; it is separate from paid course lessons.
 
 ## Add or edit a film
 
@@ -47,7 +48,9 @@ A still from the lesson is usually clearer than a title card. Check the finished
 
 ## The writing on the page
 
-The approved introduction links in Content hub open the opening line and the three row introductions. Clearing one removes that paragraph.
+The introduction link opens the opening line and the three row introductions together.
+Use its **Save** button to save all four fields. Clearing one removes that paragraph.
+Related links open the film list and the saved public page; save before opening another editor.
 
 If an introduction contains a course link, leave its destination unchanged unless an agreed change is being made. Ask the webmaster to change a destination you cannot edit safely.
 

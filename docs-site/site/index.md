@@ -2,11 +2,15 @@
 
 This guide explains the content tasks available to your limited editing account on **crystalau.com**, what each change affects and when to ask the webmaster. It is not permission to use every dashboard screen.
 
-> **Role and money instructions remain drafts pending final checks and handover. Nothing here authorises opening registration, payments or a new service.**
+> **The combined editing pages await installation, checks and account handover. Role and money instructions also remain drafts. Nothing here authorises opening registration, payments or a new service.**
 
 ## Start from Content hub
 
-**Content hub** groups available editing links by website page. Use those links for approved text, image, brand and contact settings. Check the preview and press **Publish** when a settings change is ready.
+**Content hub** groups editing by website page. Home and About each bring their writing and
+photographs together. **Site details**, reached from the Every page card, brings shared
+contact and brand details together. Use the page's **Save** button, then **View saved page**
+where offered to open the website in another tab. The editing page does not provide an
+unsaved preview.
 
 Lists such as **Posts**, **FAQ**, **Artwork** and **Testimonials** hold individual entries. You may manage records available to your account, not every record belonging to another user. If an expected item is missing, ask the webmaster to check it rather than creating a duplicate.
 

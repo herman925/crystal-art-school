@@ -1,5 +1,11 @@
 # Editability register — Crystal Art School
 
+**2026-10-31 Route B source integration (untested, undeployed):** The existing 42 allowlisted
+settings from PR #201 are composed into Home (24), About (6), Blog (1), Free Videos (4) and
+Site details (7). Each combined page saves all of its fields together through the existing
+guard. No additional field or capability is granted. The older fixed-group routes remain
+available but are hidden from the submenu. [Source scope](ROUTE-B-SOURCE-2026-10-31.md).
+
 **2026-10-31 lesson source correction (untested, undeployed):** Written Design Direction
 §1.4.9/§8.1 retains the lesson description and its own cover. The historical rows below that
 cancel `lesson_description` or select the course blurb for the wrapped description are

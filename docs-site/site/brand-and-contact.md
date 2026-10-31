@@ -1,6 +1,10 @@
 # Logo, signature and contact details
 
-Start from **Content hub → Every page** and choose the approved logo/signature or contact link. These open only the settings available to your content account, not the full Appearance menu. Check the preview and press **Publish** when ready. The account routes still need final checks and handover.
+> **Draft — the combined editing page awaits installation, checks and account handover.**
+
+Start from **Content hub → Every page → Edit Site details**. Contact details, social links,
+the logo and both signature images are on one editing page. Change the intended fields and
+press **Save Site details**. This saves all fields on the page together.
 
 ## Logo and signature
 
@@ -16,7 +20,10 @@ They are separate on purpose — the header logo is small and wide, the signatur
 different shape. Swapping one does not swap the others.
 
 The hero signature mark appears on the banner of **every page that has one**, so changing
-it changes six pages at once. That is worth knowing before you try a new version.
+it changes several pages at once. That is worth knowing before you try a new version.
+
+Use **Choose image** or **Replace image** for the intended slot. **Use shipped default**
+restores the original picture when you save; it does not delete an uploaded picture.
 
 ## Contact and social links
 
@@ -28,5 +35,5 @@ out what to display from the address, so you do not type your handle separately.
 These four values feed the footer of every page, the FAQ page, the About page and the
 homepage strip. One change updates all of them.
 
-If you leave a social link empty, that icon disappears from the site rather than linking
-nowhere.
+Clearing a value can leave its icon or button visible with an empty destination. It does not
+reliably hide the link. Ask the webmaster if you want a contact channel removed.

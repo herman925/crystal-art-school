@@ -12,13 +12,14 @@ Your content account is deliberately limited. It lets you maintain approved cont
 
 ## The header and footer
 
-Use the **Every page** card in Content hub for the approved brand and contact controls. You do not need a page-design tool to change those fields.
+Once the combined editing page has been installed and handed over, use **Every page → Edit
+Site details** in Content hub for the approved brand and contact controls.
 
 | What | How it is managed |
 |---|---|
 | Menu labels, destinations and order | Request a change from the webmaster |
-| Logo and signature images | Approved brand links in Content hub |
-| Contact email and social links | Approved contact links in Content hub |
+| Logo and signature images | Edit Site details in Content hub |
+| Contact email and social links | Edit Site details in Content hub |
 | Footer layout and column arrangement | Managed by the webmaster |
 | Copyright year | Updates automatically |
 

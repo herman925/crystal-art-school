@@ -1,7 +1,7 @@
 <?php
 /**
- * #150 option 1: one content hub card per public page. Links only: it changes no editor, adds no role,
- * and writes nothing to the database. Administrators get manage_cas_content at runtime.
+ * #150: one content hub card per public page, linking to fixed page forms and native content lists.
+ * The hub itself adds no role and writes nothing. Administrators get manage_cas_content at runtime.
  *
  * Source of truth for what is editable: docs/EDITABILITY-REGISTER.md. Only fields she can edit today are listed.
  */
@@ -119,20 +119,14 @@ function cas_content_hub_cards() {
 			'name'  => 'Home',
 			'view'  => $home,
 			'items' => array(
-				$customize( 'Homepage banner: three slides, each with a title, a description and two photos', 'cas_hero', $home ),
-				$customize( 'Free videos card: its photo and hover text', 'cas_page_home_free_videos', $home ),
-				$customize( 'About Crystal card: its photo', 'cas_page_home_about', $home ),
-				$customize( 'Shop all courses introduction', 'cas_page_home_courses', $home ),
-				$customize( 'Course overview: two opening paragraphs and two principles', 'cas_page_home_course_overview', $home ),
+				$item( 'Edit Home: banner, page text and photographs', admin_url( 'admin.php?page=cas-content-home-page' ), CAS_CONTENT_HUB_CAP ),
 				cas_content_hub_list_item( 'Course overview questions', 'cas_overview_qa' ),
-				$customize( 'Art gallery card: its hover line', 'cas_page_home_gallery', $home ),
 				cas_content_hub_list_item( 'Art gallery card picture: the first artwork in the Artwork list', 'cas_artwork' ),
-				$customize( 'Blog and tools: the TOOLS background photo', 'cas_page_home_blog', $home ),
 				cas_content_hub_list_item( 'Blog posts shown here: the six newest with a picture', 'post' ),
 				cas_content_hub_list_item( 'Student comments shown here: which three, their member and text', 'cas_testimonial' ),
 				cas_content_hub_list_item( 'Course rail: the courses shown here', 'courses' ),
 			),
-			'muted' => 'Layout and the order of sections: ask Herman.',
+			'muted' => 'Layout and the order of sections: ask the webmaster.',
 		),
 		array(
 			'name'  => 'Courses',
@@ -142,9 +136,9 @@ function cas_content_hub_cards() {
 				cas_content_hub_list_item( 'Course titles, covers, prices, levels, categories and order', 'courses' ),
 				cas_content_hub_list_item( 'Each course page: description, what you will learn, who it is for, what comes with it, and the syllabus', 'courses' ),
 				cas_content_hub_list_item( 'Course photo strip: five photos per course', 'courses' ),
-				cas_content_hub_list_item( 'Lessons: titles, videos and one-line subtitles', 'lesson' ),
+				cas_content_hub_list_item( 'Lessons: titles, videos and descriptions', 'lesson' ),
 			),
-			'muted' => 'Course page layout, and currency, checkout and payments: ask Herman.',
+			'muted' => 'Course page layout, and currency, checkout and payments: ask the webmaster.',
 		),
 		array(
 			'name'  => 'Gallery',
@@ -152,7 +146,7 @@ function cas_content_hub_cards() {
 			'items' => array(
 				cas_content_hub_list_item( 'Artworks: image, name and description; Sale details: price, Etsy link, stock, medium, Size and optional Type; Page Attributes: Order', 'cas_artwork' ),
 			),
-			'muted' => 'Grid layout: ask Herman.',
+			'muted' => 'Grid layout: ask the webmaster.',
 		),
 		array(
 			'name'  => 'Showcase',
@@ -160,38 +154,36 @@ function cas_content_hub_cards() {
 			'items' => array(
 				cas_content_hub_list_item( 'Student work: photo, title, student credit, medium and order', 'cas_showcase' ),
 			),
-			'muted' => 'Wall layout and filters: ask Herman.',
+			'muted' => 'Wall layout and filters: ask the webmaster.',
 		),
 		array(
 			'name'  => 'Blog',
 			'view'  => cas_content_hub_page_url( 'blog' ),
 			'items' => array(
-				$customize( 'Introduction paragraph under the blog heading', 'cas_page_blog', cas_content_hub_page_or_home( 'blog', $home ) ),
+				$item( 'Introduction paragraph under the blog heading', admin_url( 'admin.php?page=cas-content-blog' ), CAS_CONTENT_HUB_CAP ),
 				cas_content_hub_list_item( 'Posts: title, text, pictures, topic and date', 'post' ),
 				$item( 'Topics (categories)', admin_url( 'edit-tags.php?taxonomy=category' ), 'manage_categories' ),
 			),
-			'muted' => 'Article layout and colours: ask Herman.',
+			'muted' => 'Article layout and colours: ask the webmaster.',
 		),
 		array(
 			'name'  => 'About',
 			'view'  => cas_content_hub_page_url( 'about' ),
 			'items' => array(
-				$customize( 'Opening paragraph, quotation and the three essays', 'cas_page_about', cas_content_hub_page_or_home( 'about', $home ) ),
-				$customize( 'Portrait photograph', 'cas_page_about', cas_content_hub_page_or_home( 'about', $home ) ),
+				$item( 'Edit About: opening paragraph, quotation, essays and portrait', admin_url( 'admin.php?page=cas-content-about-page' ), CAS_CONTENT_HUB_CAP ),
 				cas_content_hub_list_item( 'Carousel photos: live drawing, exhibitions and Artful Living', 'cas_about_photo' ),
-				$customize( 'Contact email and social handles shown on the page', 'cas_contact', cas_content_hub_page_or_home( 'about', $home ) ),
+				$item( 'Shared contact details and social links', admin_url( 'admin.php?page=cas-content-site-details' ), CAS_CONTENT_HUB_CAP ),
 			),
-			'muted' => 'Layout and the honours table: ask Herman.',
+			'muted' => 'Layout and the honours table: ask the webmaster.',
 		),
 		array(
 			'name'  => 'Free videos',
 			'view'  => cas_content_hub_page_url( 'free-videos' ),
 			'items' => array(
-				$customize( 'Opening line and the three section introductions', 'cas_page_free_videos', cas_content_hub_page_or_home( 'free-videos', $home ) ),
-				$customize( 'Courses link inside the demos introduction', 'cas_page_free_videos', cas_content_hub_page_or_home( 'free-videos', $home ) ),
+				$item( 'Opening line and the three section introductions', admin_url( 'admin.php?page=cas-content-free-videos' ), CAS_CONTENT_HUB_CAP ),
 				cas_content_hub_list_item( 'Films: title, cover, blurb, section, video link and order', 'cas_free_video' ),
 			),
-			'muted' => 'Section layout: ask Herman.',
+			'muted' => 'Section layout: ask the webmaster.',
 		),
 		array(
 			'name'  => 'FAQ',
@@ -199,17 +191,16 @@ function cas_content_hub_cards() {
 			'items' => array(
 				cas_content_hub_list_item( 'Questions, answers and their order', 'cas_faq' ),
 			),
-			'muted' => 'Page layout: ask Herman.',
+			'muted' => 'Page layout: ask the webmaster.',
 		),
 		array(
 			'name'  => 'Every page',
 			'view'  => null,
 			'items' => array(
-				$customize( 'Logo, hero signature and footer signature', 'cas_brand', $home ),
-				$customize( 'Contact email and social links (buttons and footer)', 'cas_contact', $home ),
+				$item( 'Edit Site details: contact, social links, logo and signatures', admin_url( 'admin.php?page=cas-content-site-details' ), CAS_CONTENT_HUB_CAP ),
 				$item( 'Top menu labels and order (Appearance > Menus)', admin_url( 'nav-menus.php' ), 'edit_theme_options' ),
 			),
-			'muted' => 'Footer layout and colours: ask Herman.',
+			'muted' => 'Footer layout and colours: ask the webmaster.',
 		),
 	);
 

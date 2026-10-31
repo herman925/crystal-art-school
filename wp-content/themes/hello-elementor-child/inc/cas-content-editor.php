@@ -1,6 +1,6 @@
 <?php
 /**
- * Loader for the cas_content role modules (issue #150, Route A).
+ * Loader for the cas_content role modules and fixed page editors (issue #150, Routes A/B).
  *
  * Each module is optional: a file that does not exist yet is skipped, so later pieces plug
  * in here without a change to functions.php. Load order is the list order.
@@ -10,6 +10,15 @@ function cas_content_editor_load() {
 	$modules = array(
 		'cas-content-role',
 		'cas-customizer-allowlist',
+		'cas-content-about',
+		'cas-content-blog',
+		'cas-content-free-videos',
+		'cas-content-home',
+		'cas-content-contact',
+		'cas-content-media',
+		'cas-content-hero',
+		'cas-content-images',
+		'cas-content-prose',
 		'cas-price-gate',
 		'cas-content-builder',
 		'cas-sales',
