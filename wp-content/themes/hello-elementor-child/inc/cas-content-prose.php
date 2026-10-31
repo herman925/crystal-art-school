@@ -49,10 +49,10 @@ function cas_content_prose_config( $group ) {
 		),
 		'about-page' => array(
 			'title' => 'About', 'slug' => 'cas-content-about-page', 'groups' => array( 'about', 'about-image' ),
-			'description' => 'Edit the opening paragraph, quotation, essays and portrait together. Photograph strips use the separate list below. Contact details are shared through Site details.',
+			'description' => 'Edit the opening paragraph, quotation, essays and portrait together. Photograph strips use the separate list below. Contact details, logos and signatures are edited separately through Site-Wide Edit.',
 		),
 		'site-details' => array(
-			'title' => 'Site details', 'slug' => 'cas-content-site-details', 'groups' => array( 'contact', 'brand-images' ),
+			'title' => 'Site-Wide Edit', 'slug' => 'cas-content-site-details', 'groups' => array( 'contact', 'brand-images' ),
 			'description' => 'Edit the shared contact details, social links, logo and signatures together. Each change affects all pages that use it.',
 		),
 	);

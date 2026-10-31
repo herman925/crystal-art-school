@@ -159,7 +159,7 @@ function cas_home_course_card( $course_id, $index ) {
 	$title   = get_the_title( $course_id );
 	$href    = get_permalink( $course_id );
 	$tag     = $facts['medium'] ? reset( $facts['medium'] ) : '';
-	$lessons = (int) tutor_utils()->get_lesson_count_by_course( $course_id );
+	$lessons = cas_course_lesson_count( $course_id );
 	$level   = (string) $facts['difficulty'];
 	$level   = $level ? ucwords( str_replace( [ '-', '_' ], ' ', $level ) ) : '';
 

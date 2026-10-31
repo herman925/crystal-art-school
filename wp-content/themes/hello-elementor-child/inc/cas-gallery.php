@@ -207,30 +207,9 @@ function cas_render_artwork_meta_box( $post ) {
 	$price  = get_post_meta( $post->ID, CAS_ARTWORK_META_PRICE, true );
 	$etsy   = get_post_meta( $post->ID, CAS_ARTWORK_META_ETSY, true );
 	$stock  = get_post_meta( $post->ID, CAS_ARTWORK_META_STOCK, true );
-	$medium = get_post_meta( $post->ID, CAS_ARTWORK_META_MEDIUM, true );
-	$type   = get_post_meta( $post->ID, CAS_ARTWORK_META_TYPE, true );
 	$size   = get_post_meta( $post->ID, CAS_ARTWORK_META_SIZE, true );
 	$stock  = ( 'sold' === $stock ) ? 'sold' : 'available';
 	?>
-	<p>
-		<label for="cas-artwork-medium"><strong>Medium</strong></label><br>
-		<input type="text" id="cas-artwork-medium" name="cas_artwork_medium" class="widefat"
-			list="cas-artwork-media" value="<?php echo esc_attr( $medium ); ?>">
-		<datalist id="cas-artwork-media">
-			<?php foreach ( cas_artwork_media_in_use( $post->ID ) as $option ) : ?>
-				<option value="<?php echo esc_attr( $option ); ?>"></option>
-			<?php endforeach; ?>
-		</datalist>
-		<span class="description">
-			Used to build the Gallery&rsquo;s medium filter. Pick an existing value where
-			possible so the same medium does not become two separate buttons.
-		</span>
-	</p>
-	<p>
-		<label for="cas-artwork-type"><strong>Type</strong></label><br>
-		<input type="text" id="cas-artwork-type" name="cas_artwork_type" class="widefat" value="<?php echo esc_attr( $type ); ?>">
-		<span class="description">Optional; leave blank when the type is not known.</span>
-	</p>
 	<p>
 		<label for="cas-artwork-size"><strong>Size</strong></label><br>
 		<input type="text" id="cas-artwork-size" name="cas_artwork_size" class="widefat" value="<?php echo esc_attr( $size ); ?>">
@@ -263,38 +242,6 @@ function cas_render_artwork_meta_box( $post ) {
 	<?php
 }
 
-/**
- * Existing medium values are suggestions only. The field remains free text because
- * no controlled taxonomy was agreed; this list simply prevents accidental spelling
- * variants when Crystal adds another artwork.
- */
-function cas_artwork_media_in_use( $exclude_id = 0 ) {
-	$found = array();
-	$posts = get_posts(
-		array(
-			'post_type'      => CAS_ARTWORK_POST_TYPE,
-			'post_status'    => 'any',
-			'posts_per_page' => -1,
-			'fields'         => 'ids',
-		)
-	);
-
-	foreach ( $posts as $post_id ) {
-		if ( (int) $exclude_id === (int) $post_id ) {
-			continue;
-		}
-
-		$medium = trim( (string) get_post_meta( $post_id, CAS_ARTWORK_META_MEDIUM, true ) );
-		if ( '' !== $medium && ! in_array( $medium, $found, true ) ) {
-			$found[] = $medium;
-		}
-	}
-
-	natcasesort( $found );
-
-	return array_values( $found );
-}
-
 function cas_save_artwork_details( $post_id ) {
 	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 		return;
@@ -312,16 +259,11 @@ function cas_save_artwork_details( $post_id ) {
 	$price  = isset( $_POST['cas_artwork_price'] ) ? wp_unslash( $_POST['cas_artwork_price'] ) : '';
 	$etsy   = isset( $_POST['cas_artwork_etsy_url'] ) ? wp_unslash( $_POST['cas_artwork_etsy_url'] ) : '';
 	$stock  = isset( $_POST['cas_artwork_stock'] ) ? wp_unslash( $_POST['cas_artwork_stock'] ) : 'available';
-	$medium = isset( $_POST['cas_artwork_medium'] ) ? wp_unslash( $_POST['cas_artwork_medium'] ) : '';
 
 	// The registered sanitize_callback runs on the way in, so these land clean.
 	update_post_meta( $post_id, CAS_ARTWORK_META_PRICE, $price );
 	update_post_meta( $post_id, CAS_ARTWORK_META_ETSY, $etsy );
 	update_post_meta( $post_id, CAS_ARTWORK_META_STOCK, $stock );
-	update_post_meta( $post_id, CAS_ARTWORK_META_MEDIUM, $medium );
-	if ( isset( $_POST['cas_artwork_type'] ) && is_string( $_POST['cas_artwork_type'] ) ) {
-		update_post_meta( $post_id, CAS_ARTWORK_META_TYPE, wp_unslash( $_POST['cas_artwork_type'] ) );
-	}
 	if ( isset( $_POST['cas_artwork_size'] ) && is_string( $_POST['cas_artwork_size'] ) ) {
 		update_post_meta( $post_id, CAS_ARTWORK_META_SIZE, wp_unslash( $_POST['cas_artwork_size'] ) );
 	}
@@ -355,7 +297,7 @@ function cas_artwork_admin_column( $column, $post_id ) {
 	} elseif ( 'cas_stock' === $column ) {
 		echo ( 'sold' === get_post_meta( $post_id, CAS_ARTWORK_META_STOCK, true ) ) ? 'Sold' : 'Available';
 	} elseif ( 'cas_medium' === $column ) {
-		$medium = get_post_meta( $post_id, CAS_ARTWORK_META_MEDIUM, true );
+		$medium = cas_content_term_text( $post_id, 'cas_artwork_medium', CAS_ARTWORK_META_MEDIUM );
 		echo ( '' === $medium ) ? '&mdash;' : esc_html( $medium );
 	}
 }
@@ -395,8 +337,8 @@ function cas_render_gallery() {
 		$price = get_post_meta( $post->ID, CAS_ARTWORK_META_PRICE, true );
 		$items[] = array(
 			'html'   => $card,
-			'medium' => trim( (string) get_post_meta( $post->ID, CAS_ARTWORK_META_MEDIUM, true ) ),
-			'type'   => trim( (string) get_post_meta( $post->ID, CAS_ARTWORK_META_TYPE, true ) ),
+			'medium' => trim( (string) cas_content_term_text( $post->ID, 'cas_artwork_medium', CAS_ARTWORK_META_MEDIUM ) ),
+			'type'   => trim( (string) cas_content_term_text( $post->ID, 'cas_artwork_type', CAS_ARTWORK_META_TYPE ) ),
 			'price'  => is_numeric( $price ) ? (float) $price : null,
 			'date'   => (int) get_post_time( 'U', true, $post ),
 		);
@@ -472,12 +414,8 @@ function cas_gallery_filter_rail( array $items ) {
 	$prices = array();
 
 	foreach ( $items as $item ) {
-		if ( '' !== $item['medium'] && ! in_array( $item['medium'], $media, true ) ) {
-			$media[] = $item['medium'];
-		}
-		if ( '' !== $item['type'] && ! in_array( $item['type'], $types, true ) ) {
-			$types[] = $item['type'];
-		}
+		$media = array_unique( array_merge( $media, cas_content_term_parts( $item['medium'] ) ) );
+		$types = array_unique( array_merge( $types, cas_content_term_parts( $item['type'] ) ) );
 		if ( null !== $item['price'] ) {
 			$prices[] = $item['price'];
 		}
@@ -609,8 +547,8 @@ function cas_artwork_card( $post, $index ) {
 	$price  = get_post_meta( $post->ID, CAS_ARTWORK_META_PRICE, true );
 	$etsy   = get_post_meta( $post->ID, CAS_ARTWORK_META_ETSY, true );
 	$sold   = ( 'sold' === get_post_meta( $post->ID, CAS_ARTWORK_META_STOCK, true ) );
-	$medium = trim( (string) get_post_meta( $post->ID, CAS_ARTWORK_META_MEDIUM, true ) );
-	$type   = trim( (string) get_post_meta( $post->ID, CAS_ARTWORK_META_TYPE, true ) );
+	$medium = trim( (string) cas_content_term_text( $post->ID, 'cas_artwork_medium', CAS_ARTWORK_META_MEDIUM ) );
+	$type   = trim( (string) cas_content_term_text( $post->ID, 'cas_artwork_type', CAS_ARTWORK_META_TYPE ) );
 	$size   = trim( (string) get_post_meta( $post->ID, CAS_ARTWORK_META_SIZE, true ) );
 	$date   = (int) get_post_time( 'U', true, $post );
 

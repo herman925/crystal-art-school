@@ -11,6 +11,7 @@ function cas_content_editor_load() {
 		'cas-content-role',
 		'cas-customizer-allowlist',
 		'cas-content-ui',
+		'cas-content-management',
 		'cas-content-about',
 		'cas-content-blog',
 		'cas-content-free-videos',

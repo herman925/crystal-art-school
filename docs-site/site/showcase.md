@@ -8,7 +8,7 @@ board on the Student showcase page.
 | **Title** | The name of the piece. Can be left empty |
 | **Featured image** | The photograph. Required |
 | **Registered Student** | Select an existing student account in the **Credit** box. Choose **No Student Credit** to omit the name |
-| **Medium** | In the **Credit** box on the right, e.g. Watercolour |
+| **Student Work Media** | Tags in the sidebar, e.g. Watercolour, Ink. Separate media with commas |
 | **Page attributes → Order** | Position on the wall, lowest first |
 
 ## The photograph is the piece
@@ -28,7 +28,10 @@ Upload the picture manually through **Featured Image**, then choose its student 
 
 Obtain permission before publishing a credit or photograph; having an account is not permission to publish their details. Choose **No Student Credit** if you are unsure. Existing text credits are preserved until you replace them with a student selection or choose no credit.
 
-The clearly labelled **Demo Student** and **Demo — Showcase Layout Sample** are preview content added at the owner’s request. The sample graphic is not real student work. Replace or remove the demo before launch.
+The ten pieces prefixed **Demo —** use the prototype photographs and the registered **Demo Student** credit. They are demonstration content added at the owner’s request, rather than student submissions. Replace or remove the demo entries before launch.
+
+Manage the reusable media from **Content Hub → Showcase → More Editing Tasks → Manage Media**.
+This opens the same WordPress add/edit screen as Blog categories.
 
 ## Medium builds the filter buttons
 

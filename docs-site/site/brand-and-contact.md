@@ -2,9 +2,9 @@
 
 > **Draft — use these editing instructions after account handover.**
 
-Start from **Content hub → Every page → Edit Site details**. Contact details, social links,
+Start from **Content hub → Site-Wide Edit**. Contact details, social links,
 the logo and both signature images are on one editing page. Change the intended fields and
-press **Save Site details**. This saves all fields on the page together.
+press **Save Site-Wide Edit**. This saves all fields on the page together.
 
 ## Logo and signature
 

@@ -42,7 +42,7 @@ function cas_content_about_controls( $values, $input_name = 'cas_about_fields' )
 		$value = $values[ $key ] ?? $field['default'];
 		$inline = 'inline' === $field['type'];
 		echo '<h2><label for="' . esc_attr( $key ) . '">' . esc_html( cas_admin_title( $field['label'] ) ) . '</label></h2>';
-		echo '<p>' . esc_html( $inline ? 'One paragraph, with emphasis or links. Headings and lists belong in the essays below.' : 'Use paragraphs and emphasis. Cross-headings use the Cross-heading format; the section heading above this essay stays fixed.' ) . '</p>';
+		echo '<p>' . esc_html( $inline ? 'One paragraph, with emphasis or links. Headings and lists belong in the essays below.' : 'Use Text for paragraphs and Header for H3 headings. The section heading above this essay stays fixed.' ) . '</p>';
 		wp_editor( $value, $key, array(
 			'textarea_name' => $input_name . '[' . $key . ']',
 			'textarea_rows' => $inline ? 6 : 10,
@@ -53,7 +53,7 @@ function cas_content_about_controls( $values, $input_name = 'cas_about_fields' )
 				'forced_root_block' => $inline ? false : 'p',
 				'toolbar1'          => $inline ? 'bold italic link unlink undo redo' : 'styleselect bold italic bullist numlist link unlink undo redo',
 				'toolbar2'          => '',
-				'style_formats'     => wp_json_encode( array( array( 'title' => 'Paragraph', 'block' => 'p' ), array( 'title' => 'Cross-heading', 'block' => 'h3', 'classes' => 'bio-sub' ) ) ),
+				'style_formats'     => wp_json_encode( array( array( 'title' => 'Text', 'block' => 'p' ), array( 'title' => 'Header', 'block' => 'h3', 'classes' => 'bio-sub' ) ) ),
 			),
 		) );
 	}

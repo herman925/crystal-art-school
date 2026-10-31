@@ -44,7 +44,7 @@ class PrivateAuthorContract(unittest.TestCase):
         self.assertIn("(int) $data['post_author'] !== get_current_user_id()", SOURCE)
         self.assertIn("(int) $old->ID !== (int) $course->ID", SOURCE)
 
-    def test_admin_enrolled_path_keeps_existing_mapping(self):
+    def test_enrolment_requires_current_reference_and_existing_mapping(self):
         body = SOURCE.split("function cas_private_can_download")[1].split("/** The file to send")[0]
         self.assertIn("current_user_can( 'manage_options' )", body)
         self.assertIn("cas_private_author_can_download( $attachment_id )", body)

@@ -41,8 +41,8 @@ class SharedContactContract(unittest.TestCase):
         self.assertIn("Empty fields stay empty; they do not restore defaults", shared)
         self.assertIn("existing renderer still prints its links", shared)
         self.assertEqual(loader.count("'cas-content-contact'"), 1)
-        self.assertEqual(hub.count("admin.php?page=cas-content-site-details"), 2)
-        self.assertIn("'name'  => 'Every page'", hub)
+        self.assertEqual(hub.count("admin.php?page=cas-content-site-details"), 1)
+        self.assertIn("'name'  => 'Site-Wide Edit'", hub)
         self.assertNotIn("admin.php?page=cas-content-brand-images", hub)
 
 

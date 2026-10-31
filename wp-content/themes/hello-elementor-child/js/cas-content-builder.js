@@ -8,7 +8,7 @@
     button.disabled = true;
     message.textContent = 'Creating your course draft…';
     try {
-      const response = await fetch(form.action, { method: 'POST', body: new FormData(form), credentials: 'same-origin' });
+      const response = await fetch(form.getAttribute('action'), { method: 'POST', body: new FormData(form), credentials: 'same-origin' });
       const result = await response.json();
       if (!response.ok || result.status_code !== 201 || typeof result.data !== 'string') {
         throw new Error(result.message || result.data?.message || 'The course draft could not be created. Please contact Herman.');

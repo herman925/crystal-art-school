@@ -12,14 +12,13 @@ Your content account is deliberately limited. It lets you maintain approved cont
 
 ## The header and footer
 
-After account handover, use **Every page → Edit
-Site details** in Content hub for the approved brand and contact controls.
+After account handover, use **Site-Wide Edit** in Content hub for the approved brand and contact controls.
 
 | What | How it is managed |
 |---|---|
 | Menu labels, destinations and order | Request a change from the webmaster |
-| Logo and signature images | Edit Site details in Content hub |
-| Contact email and social links | Edit Site details in Content hub |
+| Logo and signature images | Site-Wide Edit in Content hub |
+| Contact email and social links | Site-Wide Edit in Content hub |
 | Footer layout and column arrangement | Managed by the webmaster |
 | Copyright year | Updates automatically |
 

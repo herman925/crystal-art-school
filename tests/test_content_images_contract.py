@@ -62,7 +62,7 @@ class FixedImagesContract(unittest.TestCase):
         self.assertLess(loader.index("'cas-content-media'"), loader.index("'cas-content-hero'"))
         self.assertEqual(hub.count("'admin.php?page=cas-content-home-page'"), 1)
         self.assertEqual(hub.count("'admin.php?page=cas-content-about-page'"), 1)
-        self.assertEqual(hub.count("admin.php?page=cas-content-site-details"), 2)
+        self.assertEqual(hub.count("admin.php?page=cas-content-site-details"), 1)
         self.assertIn("current_user_can( CAS_CONTENT_CAP )", MODULE)
         self.assertIn("current_user_can( 'upload_files' )", MODULE)
 

@@ -7,7 +7,7 @@ This guide explains the content tasks available to your limited editing account 
 ## Start from Content hub
 
 **Content hub** groups editing by website page. Home and About each bring their writing and
-photographs together. **Site details**, reached from the Every page card, brings shared
+photographs together. **Site-Wide Edit**, reached from its own card, brings shared
 contact and brand details together. Use the page's **Save** button, then **View saved page**
 where offered to open the website in another tab. The editing page does not provide an
 unsaved preview.

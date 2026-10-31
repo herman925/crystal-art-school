@@ -40,8 +40,8 @@ def main() -> None:
     )
     require(
         source,
-        "if ( $materials || $attachments_markup ) :",
-        "materials section must render for attachments even without text materials",
+        "if ( $attachments_markup ) :",
+        "the real attachment shelf must remain available, without an extra prototype-placeholder materials section",
     )
     require(
         source,

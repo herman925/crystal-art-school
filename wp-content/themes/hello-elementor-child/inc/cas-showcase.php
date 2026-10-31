@@ -16,10 +16,8 @@ defined( 'ABSPATH' ) || exit;
  * Locked here: the page title and eyebrow, both section headings, and the
  * pinned-to-cork layout itself.
  *
- * The prototype's ten sample rows carried invented student names, titles and media,
- * and its own comment says so ("Replace all ten rows together; do not ship these
- * names"). None of them are reproduced. A wall with nothing published prints the
- * empty state, the way the Gallery does — it does not fill itself with samples.
+ * Sample content is imported explicitly when requested and labelled Demo. A wall
+ * with nothing published prints the empty state; it never creates samples itself.
  */
 
 const CAS_SHOWCASE_POST_TYPE    = 'cas_showcase';
@@ -159,7 +157,6 @@ function cas_render_showcase_meta_box( $post ) {
 	$student = (int) get_post_meta( $post->ID, CAS_SHOWCASE_META_USER, true );
 	$legacy = ! metadata_exists( 'post', $post->ID, CAS_SHOWCASE_META_USER ) ? (string) get_post_meta( $post->ID, CAS_SHOWCASE_META_STUDENT, true ) : '';
 	$students = cas_showcase_students();
-	$medium  = get_post_meta( $post->ID, CAS_SHOWCASE_META_MEDIUM, true );
 	?>
 	<p>
 		<label for="cas-showcase-student"><strong>Registered Student</strong></label><br>
@@ -172,22 +169,6 @@ function cas_render_showcase_meta_box( $post ) {
 			<?php foreach ( $students as $user ) : ?><option value="<?php echo esc_attr( (string) $user->ID ); ?>" <?php selected( $student, (int) $user->ID ); ?>><?php echo esc_html( $user->display_name . ' (#' . $user->ID . ')' ); ?></option><?php endforeach; ?>
 		</select>
 		<span class="description">Choose a registered student. Their current display name appears under the picture. Upload the picture manually using Featured Image.</span>
-	</p>
-	<p>
-		<label for="cas-showcase-medium"><strong>Medium</strong></label><br>
-		<input type="text" id="cas-showcase-medium" name="cas_showcase_medium" class="widefat"
-			list="cas-showcase-media" placeholder="Watercolour"
-			value="<?php echo esc_attr( $medium ); ?>">
-		<datalist id="cas-showcase-media">
-			<?php foreach ( cas_showcase_media_in_use() as $option ) : ?>
-				<option value="<?php echo esc_attr( $option ); ?>"></option>
-			<?php endforeach; ?>
-		</datalist>
-		<span class="description">
-			The filter buttons above the wall are built from these. Two pieces share a
-			button when they share a medium, so pick from the list where you can. The
-			row of buttons appears once two different media are in use.
-		</span>
 	</p>
 	<p class="description">
 		The <strong>featured image</strong> is the picture on the wall, and a piece
@@ -217,23 +198,6 @@ function cas_showcase_title_note( $post ) {
 }
 add_action( 'edit_form_after_title', 'cas_showcase_title_note' );
 
-/**
- * The media already in use, for the datalist. It is the only guard against
- * "Watercolour" and "Water colour" becoming two buttons for the same thing — the
- * filter folds case and punctuation, but a different spelling still splits the row.
- */
-function cas_showcase_media_in_use() {
-	$found = array();
-	foreach ( cas_showcase_pieces() as $piece ) {
-		if ( '' !== $piece['medium'] && ! in_array( $piece['medium'], $found, true ) ) {
-			$found[] = $piece['medium'];
-		}
-	}
-	sort( $found );
-
-	return $found;
-}
-
 function cas_save_showcase_credit( $post_id ) {
 	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 		return;
@@ -257,12 +221,6 @@ function cas_save_showcase_credit( $post_id ) {
 		return;
 	}
 	if ( ! $legacy ) { update_post_meta( $post_id, CAS_SHOWCASE_META_USER, (int) $input ); }
-
-	update_post_meta(
-		$post_id,
-		CAS_SHOWCASE_META_MEDIUM,
-		isset( $_POST['cas_showcase_medium'] ) ? wp_unslash( $_POST['cas_showcase_medium'] ) : ''
-	);
 }
 add_action( 'save_post_' . CAS_SHOWCASE_POST_TYPE, 'cas_save_showcase_credit' );
 
@@ -290,7 +248,7 @@ function cas_showcase_admin_column( $column, $post_id ) {
 		$student = cas_showcase_student_name( $post_id );
 		echo ( '' === $student ) ? '&mdash;' : esc_html( $student );
 	} elseif ( 'cas_medium' === $column ) {
-		$medium = get_post_meta( $post_id, CAS_SHOWCASE_META_MEDIUM, true );
+		$medium = cas_content_term_text( $post_id, 'cas_showcase_medium', CAS_SHOWCASE_META_MEDIUM );
 		echo ( '' === $medium ) ? '&mdash;' : esc_html( $medium );
 	}
 }
@@ -340,7 +298,7 @@ function cas_showcase_pieces() {
 			'thumb'   => (int) $thumb_id,
 			'title'   => get_the_title( $post ),
 			'student' => cas_showcase_student_name( $post->ID ),
-			'medium'  => (string) get_post_meta( $post->ID, CAS_SHOWCASE_META_MEDIUM, true ),
+			'medium'  => (string) cas_content_term_text( $post->ID, 'cas_showcase_medium', CAS_SHOWCASE_META_MEDIUM ),
 		);
 	}
 
@@ -431,12 +389,9 @@ function cas_render_showcase() {
 function cas_showcase_filter_rail( $pieces ) {
 	$media = array();
 	foreach ( $pieces as $piece ) {
-		if ( '' === $piece['medium'] ) {
-			continue;
-		}
-		$key = sanitize_title( $piece['medium'] );
-		if ( '' !== $key && ! isset( $media[ $key ] ) ) {
-			$media[ $key ] = $piece['medium'];
+		foreach ( cas_content_term_parts( $piece['medium'] ) as $label ) {
+			$key = sanitize_title( $label );
+			if ( '' !== $key && ! isset( $media[ $key ] ) ) { $media[ $key ] = $label; }
 		}
 	}
 
@@ -558,7 +513,7 @@ function cas_showcase_tile( $piece, $index, $pair_lead ) {
 		data-name="<?php echo esc_attr( $piece['student'] ); ?>"
 		data-index="<?php echo esc_attr( (string) ( $index + 1 ) ); ?>"
 		<?php if ( '' !== $piece['medium'] ) : ?>
-		data-med="<?php echo esc_attr( sanitize_title( $piece['medium'] ) ); ?>"
+		data-med="<?php echo esc_attr( implode( ' ', array_map( 'sanitize_title', cas_content_term_parts( $piece['medium'] ) ) ) ); ?>"
 		data-med-label="<?php echo esc_attr( $piece['medium'] ); ?>"
 		<?php endif; ?>><span class="pol-photo"><?php
 			echo wp_get_attachment_image( $piece['thumb'], 'medium_large', false, $img_attr ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_get_attachment_image() escapes its own attributes.

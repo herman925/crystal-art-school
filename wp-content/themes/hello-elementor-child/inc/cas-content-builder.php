@@ -67,7 +67,7 @@ add_action( 'admin_notices', function () {
 	echo '<p><button type="submit" class="button button-primary">' . esc_html__( 'Add course', 'hello-elementor-child' ) . '</button> ';
 	echo esc_html__( 'Create a draft in the normal Tutor builder, edit its content, then use Course prices → Set first price before publishing.', 'hello-elementor-child' ) . '</p>';
 	echo '<p role="status" class="cas-builder-feedback"></p></form>';
-	wp_enqueue_script( 'cas-content-builder', get_stylesheet_directory_uri() . '/js/cas-content-builder.js', array(), '1', true );
+	wp_enqueue_script( 'cas-content-builder', get_stylesheet_directory_uri() . '/js/cas-content-builder.js', array(), '2', true );
 }, 30 );
 
 /** Track fresh IDs within this creation request; an old ID passed to the Tutor action is never fresh. */
