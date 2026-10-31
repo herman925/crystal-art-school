@@ -10,6 +10,7 @@ function cas_content_editor_load() {
 	$modules = array(
 		'cas-content-role',
 		'cas-customizer-allowlist',
+		'cas-content-ui',
 		'cas-content-about',
 		'cas-content-blog',
 		'cas-content-free-videos',

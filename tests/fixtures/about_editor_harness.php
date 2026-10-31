@@ -82,6 +82,7 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 	}
 	function cas_hero_default( $slide, $part ) { return in_array( $part, array( 'large', 'small' ), true ) ? 'https://example.invalid/theme-' . $slide . '-' . $part . '.jpg' : 'Synthetic slide ' . $slide . ' ' . $part; }
 	function get_stylesheet_directory_uri() { return 'https://example.invalid/theme'; }
+	function get_stylesheet_directory() { return dirname( __DIR__, 2 ) . '/wp-content/themes/hello-elementor-child'; }
 	function cas_home_about_default_image() { return get_stylesheet_directory_uri() . '/img/A3.jpeg'; }
 	function cas_home_free_videos_photo_default() { return 'https://example.invalid/public-image.jpg'; }
 	function cas_brand_assets() {
@@ -472,6 +473,23 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 			about_expect( str_contains( $markup, 'aria-label="' . $choose . ' for Synthetic image field"' ) && str_contains( $markup, '>' . $choose . '</button>' ) && str_contains( $markup, 'aria-label="' . $clear . ' for Synthetic image field"' ) && str_contains( $markup, '>' . $clear . '</button>' ), 'Initial visible and accessible image action names disagree' ); ++$cases;
 		}
 	}
+	require dirname( __DIR__, 2 ) . '/wp-content/themes/hello-elementor-child/inc/cas-content-ui.php';
+	about_reset();
+	foreach ( array( array( null, false ), array( 'cas-content-hub', true ), array( 'cas-content-about-page', true ), array( 'cas-content-about-page-extra', false ), array( array( 'cas-content-hub' ), false ), array( 'cas-course-prices', false ) ) as $case ) {
+		$_GET = $case[0] === null ? array() : array( 'page' => $case[0] );
+		about_expect( cas_content_ui_screen() === $case[1], 'Workspace styles escaped their exact page boundary' ); ++$cases;
+	}
+	$_GET = array( 'page' => 'cas-content-hub' ); $GLOBALS['about_cap'] = false;
+	about_expect( ! cas_content_ui_screen(), 'Workspace theme ignored the content capability' ); ++$cases;
+	$GLOBALS['about_cap'] = true;
+	$native_settings = array( 'content_css' => 'https://example.invalid/native.css', 'body_class' => 'native-editor', 'spellcheck' => true );
+	$_GET = array( 'page' => 'unrelated-screen' );
+	about_expect( cas_content_ui_tinymce( $native_settings, 'cas_about_intro' ) === $native_settings, 'Native editor styles changed outside content screens' ); ++$cases;
+	$_GET = array( 'page' => 'cas-content-about-page' );
+	about_expect( cas_content_ui_tinymce( $native_settings, 'content' ) === $native_settings, 'The main post editor was restyled' ); ++$cases;
+	$themed = cas_content_ui_tinymce( $native_settings, 'cas_about_intro' );
+	about_expect( $themed['spellcheck'] === true && $themed['body_class'] === 'native-editor cas-writing-surface' && str_starts_with( $themed['content_css'], $native_settings['content_css'] . ',' ) && str_contains( $themed['content_css'], '/cas-content-writing.css?ver=' ), 'Workspace writing styles discarded native settings' ); ++$cases;
+	$_GET = array();
 	about_reset();
 	about_error( cas_content_prose_save( 'unapproved', 'theme_mods_hello-elementor-child', '', array() ), 'prose_denied' );
 	about_expect( 0 === $wpdb->writes, 'Unapproved group wrote' ); ++$cases;

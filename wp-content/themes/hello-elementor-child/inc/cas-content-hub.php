@@ -132,8 +132,8 @@ function cas_content_hub_cards() {
 			'name'  => 'Courses',
 			'view'  => $courses,
 			'items' => array(
-				$customize( 'Introduction paragraph under the banner', 'cas_page_courses', $courses ),
 				cas_content_hub_list_item( 'Course titles, covers, prices, levels, categories and order', 'courses' ),
+				$customize( 'Introduction paragraph under the banner', 'cas_page_courses', $courses ),
 				cas_content_hub_list_item( 'Each course page: description, what you will learn, who it is for, what comes with it, and the syllabus', 'courses' ),
 				cas_content_hub_list_item( 'Course photo strip: five photos per course', 'courses' ),
 				cas_content_hub_list_item( 'Lessons: titles, videos and descriptions', 'lesson' ),
@@ -230,41 +230,56 @@ function cas_content_hub_render() {
 		wp_die( esc_html__( 'Sorry, you are not allowed to access this page.', 'hello-elementor-child' ), 403 );
 	}
 
-	echo '<div class="wrap cas-content-hub"><h1>' . esc_html__( 'Content hub', 'hello-elementor-child' ) . '</h1>';
-	echo '<p>' . esc_html__( 'One card per page. Each line opens the exact place where that thing is changed.', 'hello-elementor-child' ) . '</p>';
+	$presentation = array(
+		'Home' => array( 'Banner, introductions and photographs for your front page.', 'Edit Home' ),
+		'Courses' => array( 'Course content, lessons and course photographs.', 'Manage courses' ),
+		'Gallery' => array( 'Your paintings, sale details and external Etsy links.', 'Manage artwork' ),
+		'Showcase' => array( 'Student work, public credits and photographs.', 'Manage student work' ),
+		'Blog' => array( 'Your journal introduction, articles and resources.', 'Edit introduction' ),
+		'About' => array( 'Your story, quotation, essays and portrait.', 'Edit About' ),
+		'Free videos' => array( 'Page introductions and your public teaching films.', 'Edit introductions' ),
+		'FAQ' => array( 'The questions and answers your visitors read.', 'Manage questions' ),
+		'Every page' => array( 'Shared contact details, social links, logo and signatures.', 'Edit Site details' ),
+	);
+	echo '<div class="wrap cas-content-ui cas-content-hub"><header class="cas-editor-header"><h1>' . esc_html__( 'Content hub', 'hello-elementor-child' ) . '</h1>';
+	echo '<p>' . esc_html__( 'Choose a page to update its words, photographs and content.', 'hello-elementor-child' ) . '</p></header><div class="cas-hub-grid">';
 
 	foreach ( cas_content_hub_cards() as $card ) {
-		echo '<div class="cas-hub-card"><h2>' . esc_html( $card['name'] ) . '</h2>';
-
-		if ( null === $card['view'] ) {
-			// No public page behind this card (the site-wide settings), so there is nothing to view.
-		} elseif ( $card['view'] ) {
-			echo '<p><a class="button" href="' . esc_url( $card['view'] ) . '">' . esc_html__( 'View page', 'hello-elementor-child' ) . '</a></p>';
-		} else {
-			echo '<p class="description">' . esc_html__( 'This page is not set up yet.', 'hello-elementor-child' ) . '</p>';
-		}
-
 		$visible = array_filter(
 			$card['items'],
 			static function ( $line ) {
 				return current_user_can( $line['cap'] );
 			}
 		);
-
-		if ( $visible ) {
-			echo '<ul>';
-			foreach ( $visible as $line ) {
-				echo '<li><a href="' . esc_url( $line['url'] ) . '">' . esc_html( $line['text'] ) . '</a></li>';
-			}
-			echo '</ul>';
+		$unique = array();
+		foreach ( $visible as $line ) {
+			if ( ! isset( $unique[ $line['url'] ] ) ) { $unique[ $line['url'] ] = $line; }
+		}
+		$primary = array_shift( $unique );
+		$copy = $presentation[ $card['name'] ];
+		echo '<section class="cas-hub-card cas-leather"><h2>' . esc_html( $card['name'] ) . '</h2><p class="cas-hub-description">' . esc_html( $copy[0] ) . '</p>';
+		if ( $primary ) {
+			echo '<a class="button button-primary cas-hub-primary" href="' . esc_url( $primary['url'] ) . '">' . esc_html( $copy[1] ) . '<span aria-hidden="true"> &rarr;</span></a>';
+		} else {
+			echo '<p>No editing controls are available for this account.</p>';
+		}
+		if ( $card['view'] ) {
+			echo '<a class="cas-hub-preview" href="' . esc_url( $card['view'] ) . '" target="_blank" rel="noopener" aria-label="' . esc_attr( 'View ' . $card['name'] . ' (opens in a new tab)' ) . '">View page <span aria-hidden="true">&nearr;</span></a>';
+		} elseif ( null !== $card['view'] ) {
+			echo '<p class="description">This page is not set up yet.</p>';
+		}
+		if ( $unique ) {
+			echo '<details class="cas-hub-more"><summary>More editing tasks</summary><ul>';
+			foreach ( $unique as $line ) { echo '<li><a href="' . esc_url( $line['url'] ) . '">' . esc_html( $line['text'] ) . '</a></li>'; }
+			echo '</ul></details>';
 		}
 
 		if ( ! empty( $card['muted'] ) ) {
 			echo '<p class="description">' . esc_html( $card['muted'] ) . '</p>';
 		}
 
-		echo '</div>';
+		echo '</section>';
 	}
 
-	echo '</div>';
+	echo '</div></div>';
 }

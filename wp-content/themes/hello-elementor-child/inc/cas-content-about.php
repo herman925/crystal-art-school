@@ -45,7 +45,7 @@ function cas_content_about_controls( $values, $input_name = 'cas_about_fields' )
 		echo '<p>' . esc_html( $inline ? 'One paragraph, with emphasis or links. Headings and lists belong in the essays below.' : 'Use paragraphs and emphasis. Cross-headings use the Cross-heading format; the section heading above this essay stays fixed.' ) . '</p>';
 		wp_editor( $value, $key, array(
 			'textarea_name' => $input_name . '[' . $key . ']',
-			'textarea_rows' => $inline ? 3 : 10,
+			'textarea_rows' => $inline ? 6 : 10,
 			'media_buttons' => false,
 			'quicktags'     => false,
 			'wpautop'       => ! $inline,

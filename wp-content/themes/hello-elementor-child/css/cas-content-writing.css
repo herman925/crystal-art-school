@@ -1,0 +1,9 @@
+/* Only loaded inside the ten approved content-editor iframes. */
+html { height: 100%; background: #d0a877; }
+body.cas-writing-surface { margin: 0; padding: 22px 26px; min-height: 100%; box-sizing: border-box; color: var(--cas-leather-ink); font: 400 16px/1.75 var(--cas-body); }
+body.cas-writing-surface p { margin: 0 0 1em; }
+body.cas-writing-surface a { color: #3d1410; text-underline-offset: 3px; }
+body.cas-writing-surface .bio-sub { margin: 1.5em 0 .6em; color: var(--cas-leather-ink); font: 500 19px/1.4 var(--cas-label); }
+body.cas-writing-surface :first-child { margin-top: 0; }
+body.cas-writing-surface strong { font-weight: 600; }
+@media (max-width: 620px) { body.cas-writing-surface { padding: 18px; } }

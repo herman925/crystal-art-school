@@ -32,9 +32,9 @@ function cas_content_page_clean( $groups, $input ) {
 function cas_content_page_controls( $groups, $values ) {
 	foreach ( $groups as $group ) {
 		$config = cas_content_prose_config( $group );
-		echo '<fieldset><legend><strong>' . esc_html( $config['title'] ) . '</strong></legend><p>' . esc_html( $config['empty'] ) . '</p>';
+		echo '<fieldset class="cas-editor-section"><legend>' . esc_html( $config['title'] ) . '</legend><p class="cas-section-help">' . esc_html( $config['empty'] ) . '</p>';
 		call_user_func( $config['controls'], $values, 'cas_page_fields' );
-		echo '</fieldset><hr>';
+		echo '</fieldset>';
 	}
 }
 
@@ -287,7 +287,7 @@ function cas_content_prose_page( $group ) {
 		$row    = cas_content_prose_row( $group, $option );
 	}
 	$blocked = is_wp_error( $row ) || ( is_wp_error( $result ) && ( $config['input_error'] !== $result->get_error_code() || ! is_string( $submitted_snapshot ) || ! hash_equals( cas_content_prose_snapshot( $group, $option, $row['mods'] ), $submitted_snapshot ) ) );
-	echo '<div class="wrap"><h1>' . esc_html( $config['title'] ) . '</h1><p>' . esc_html( $config['description'] ) . '</p>';
+	echo '<div class="wrap cas-content-ui cas-content-editor"><header class="cas-editor-header"><h1>' . esc_html( $config['title'] ) . '</h1><p>' . esc_html( $config['description'] ) . '</p></header>';
 	echo '<p><a href="' . esc_url( admin_url( 'admin.php?page=' . CAS_CONTENT_HUB_SLUG ) ) . '">Back to Content hub</a></p>';
 	echo '<p><strong>' . esc_html( $config['empty'] ) . '</strong> Saving changes the values used on the site. Cached public pages may take time to refresh.</p>';
 	if ( is_wp_error( $result ) || is_wp_error( $row ) ) {
@@ -314,8 +314,12 @@ function cas_content_prose_page( $group ) {
 			$values[ $key ] = wp_kses_post( wp_unslash( $posted[ $key ] ) );
 		}
 	}
+	echo '<div class="cas-editor-fields">';
 	call_user_func( $config['controls'], $values );
-	submit_button( 'Save ' . $config['title'], 'primary', 'submit', true, $blocked ? array( 'disabled' => 'disabled' ) : array() );
+	echo '</div>';
+	echo '<div class="cas-editor-actions"><p>Save all changes on this page.</p>';
+	submit_button( 'Save ' . $config['title'], 'primary', 'submit', false, $blocked ? array( 'disabled' => 'disabled' ) : array() );
+	echo '</div>';
 	echo '</form>';
 	cas_content_prose_related( $group, $url );
 	echo '</div>';

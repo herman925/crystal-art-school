@@ -1,0 +1,30 @@
+/* Existing About leather tokens, kept local to the admin workspace and editor iframe. */
+.cas-content-ui, .cas-writing-surface {
+  --cas-paper: #f3ede1;
+  --cas-ink: #474138;
+  --cas-muted: #6f6757;
+  --cas-copper: #7e4c27;
+  --cas-marine: #598493;
+  --cas-marine-ink: #0b1418;
+  --cas-leather: #d0a877;
+  --cas-leather-ink: #2b1d10;
+  --cas-body: 'Archivo', system-ui, sans-serif;
+  --cas-display: 'Bodoni Moda', Georgia, serif;
+  --cas-script: 'Arizonia', Georgia, cursive;
+  --cas-label: 'Oswald', system-ui, sans-serif;
+  --leather-pores: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Cfilter id='lp'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.5 0.55' numOctaves='1' seed='13' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.10 0 0 0 0 0.06 0 0 0 0 0.03 0 0 0 0.62 0'/%3E%3C/filter%3E%3Crect width='150' height='150' filter='url(%23lp)'/%3E%3C/svg%3E");
+  --leather-shine: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='150'%3E%3Cfilter id='ls'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.5 0.55' numOctaves='1' seed='13' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 0.91 0 0 0 0 0.74 0 0 0 0.52 0'/%3E%3C/filter%3E%3Crect width='150' height='150' filter='url(%23ls)'/%3E%3C/svg%3E");
+  --leather-hide: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='520' height='520'%3E%3Cfilter id='lh'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.012 0.015' numOctaves='4' seed='41' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.21 0 0 0 0 0.13 0 0 0 0 0.06 0 0 0 0.34 0'/%3E%3C/filter%3E%3Crect width='520' height='520' filter='url(%23lh)'/%3E%3C/svg%3E");
+}
+.cas-content-ui .cas-leather,
+.cas-content-ui textarea:not(.wp-editor-area),
+.cas-writing-surface {
+  color: var(--cas-leather-ink);
+  background-color: var(--cas-leather);
+  background-image:
+    radial-gradient(115% 78% at 18% -4%, rgba(255,238,206,.30), rgba(255,238,206,0) 56%),
+    linear-gradient(163deg, rgba(255,241,214,.10) 0%, rgba(48,29,15,0) 38%, rgba(44,26,13,.17) 100%),
+    var(--leather-pores), var(--leather-shine), var(--leather-hide);
+  background-position: 0 0, 0 0, 1px 1px, 0 0, 0 0;
+  background-size: 100% 100%, 100% 100%, 150px 150px, 150px 150px, 520px 520px;
+}

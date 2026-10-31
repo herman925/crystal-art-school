@@ -164,3 +164,24 @@ acceptance-score increment is claimed by these new checks.
 Full course/five-photo/material authoring, production ownership handover, enrolled learning,
 provider payments, real-reader guide logout, human AT/devices and the other #211 launch gates
 remain open. **Last saved acceptance coverage stays 63/110; this release is not launch approval.**
+
+## Content workspace visual follow-up — 2026-10-31
+
+The owner requested page cards and writing surfaces using the main site's About leather
+treatment. The hub now has nine responsive leather cards, one primary action per card and
+capability-filtered secondary tasks in native disclosures. Duplicate links are consolidated
+without removing distinct destinations. The workspace reuses the About grain, inset stitch,
+Arizonia headings, Bodoni/Archivo/Oswald type and marine/copper colours on a paper canvas.
+The ten fixed rich-text editors and plain textareas use the leather writing surface. Desktop
+Save controls sit beside the form; on smaller screens they remain in normal flow to avoid
+covering text. Native toolbar, field names, nonces, snapshots and save guards are preserved.
+
+Assets and iframe styling are gated to the exact content-page allowlist and content capability;
+ordinary posts, money screens, other WordPress admin pages and the public site are unaffected.
+205 synthetic PHP cases, 46 source contracts and the existing hub contract passed. Native
+Playwright checks passed at 1440×1000 and 390×844 for cards/actions, disclosure/navigation,
+writing textures, save/reload and overflow, with no JavaScript exceptions. The Browser plugin
+was unavailable; the existing isolated WordPress fixture and Playwright were reused. The live
+About reference and final captures were compared for material, stitch/radius, typography,
+palette, spacing and responsive behaviour. A paper workspace and native toolbar are intentional
+admin adaptations. Private references/captures remain at `~/cas-evidence/cms-studio-theme-20261031/`.
