@@ -10,9 +10,9 @@
 | **Price** | Under Sale details |
 | **Etsy URL** | Under Sale details |
 | **Stock status** | Under Sale details |
-| **Medium** | Under Sale details |
+| **Artwork Media** | In the sidebar; separate multiple media with commas |
 | **Size** | Under Sale details |
-| **Type** | Optional; under Sale details |
+| **Artwork Types** | Optional tags in the sidebar; separate values with commas |
 | **Page attributes → Order** | Breaks ties between paintings with the same publication date; also controls the homepage card order |
 
 **The Gallery ordering update and the Size and Type fields are live and independently checked.**
@@ -23,6 +23,10 @@ real Type values exist. Leave unknown Types empty rather than making them up.
 The Gallery's **Newest** and **Oldest** choices sort by publication date, newest first or
 oldest first respectively. For paintings with the same publication date, lower Order numbers
 come first.
+
+Manage reusable media and types from **Content Hub → Gallery → More Editing Tasks**.
+These open the same WordPress add/edit screens as Blog categories. The artwork list
+also has **Newest First** and **Oldest First** buttons for publication-date sorting.
 
 ## The Etsy link is what makes it buyable
 

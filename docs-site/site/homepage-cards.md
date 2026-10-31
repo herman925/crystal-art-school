@@ -37,7 +37,7 @@ If a photograph changes, tell the webmaster if its written description for scree
 
 ## Shared contact links
 
-The social and email buttons come from **Content hub → Every page → Edit Site details**.
+The social and email buttons come from **Content hub → Site-Wide Edit**.
 Change the shared value once.
 
 ## Courses and artwork

@@ -136,7 +136,7 @@
       var val = btn.getAttribute('data-val');
       var shown = 0;
       tiles.forEach(function (t) {
-        var show = (val === 'all' || t.getAttribute('data-med') === val);
+        var show = (val === 'all' || (t.getAttribute('data-med') || '').split(' ').indexOf(val) >= 0);
         t.style.display = show ? '' : 'none';
         if (show) { shown++; }
       });

@@ -43,10 +43,10 @@
 		function matches( cell ) {
 			var price;
 
-			if ( state.medium.length && state.medium.indexOf( cell.getAttribute( 'data-medium' ) ) < 0 ) {
+			if ( state.medium.length && !state.medium.some( function ( value ) { return ( cell.getAttribute( 'data-medium' ) || '' ).split( /,\s*/ ).indexOf( value ) >= 0; } ) ) {
 				return false;
 			}
-			if ( state.type.length && state.type.indexOf( cell.getAttribute( 'data-type' ) ) < 0 ) {
+			if ( state.type.length && !state.type.some( function ( value ) { return ( cell.getAttribute( 'data-type' ) || '' ).split( /,\s*/ ).indexOf( value ) >= 0; } ) ) {
 				return false;
 			}
 

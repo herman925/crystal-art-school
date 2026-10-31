@@ -530,7 +530,7 @@ function cas_blog_render_list( $posts ) {
 				?>
 				<div class="bf-frame">
 					<span class="bf-quote is-open" aria-hidden="true"></span>
-					<h2><?php echo esc_html( $title ); ?></h2>
+					<h2><?php echo str_replace( array( "—", "–" ), array( '<span class="cas-title-dash">—</span>', '<span class="cas-title-dash">–</span>' ), esc_html( $title ) ); ?></h2>
 					<span class="bf-quote is-close" aria-hidden="true"></span>
 				</div>
 				<span class="bf-reads"><?php echo esc_html( cas_blog_reading_minutes( $post ) ); ?> min read</span>
@@ -1031,6 +1031,11 @@ function cas_blog_styles() {
    specificity and both of these set display in a class rule, so both have to say
    it again here. */
 .blog-card[hidden], .blog-feature[hidden] { display: none; }
+
+.cas-root .blog-card:hover, .cas-root .blog-card:focus-visible { color: var(--ink); }
+.cas-root[data-theme="D"] .blog-card:hover, .cas-root[data-theme="D"] .blog-card:focus-visible { color: #f4d2a5; }
+.cas-root .blog-card:is(:hover, :focus-visible) h3 { color: inherit; }
+.blog-feature .cas-title-dash { font-family: Georgia, serif; font-weight: 700; font-size: .85em; }
 
 /* A featured image is optional in WordPress, and a post without one renders no
    .bf-img — which left the body in the first column of a 1.1fr .9fr grid beside

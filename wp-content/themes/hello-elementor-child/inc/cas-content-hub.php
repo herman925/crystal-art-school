@@ -159,6 +159,8 @@ function cas_content_hub_cards() {
 			'view'  => cas_content_hub_page_url( 'gallery' ),
 			'items' => array(
 				cas_content_hub_list_item( 'Artworks: image, name and description; Sale details: price, Etsy link, stock, medium, Size and optional Type; Page Attributes: Order', 'cas_artwork' ),
+				$item( 'Manage Media', admin_url( 'edit-tags.php?taxonomy=cas_artwork_medium&post_type=cas_artwork' ), 'manage_categories' ),
+				$item( 'Manage Artwork Types', admin_url( 'edit-tags.php?taxonomy=cas_artwork_type&post_type=cas_artwork' ), 'manage_categories' ),
 			),
 			'muted' => 'Grid layout: ask the webmaster.',
 		),
@@ -167,6 +169,7 @@ function cas_content_hub_cards() {
 			'view'  => cas_content_hub_page_url( 'showcase' ),
 			'items' => array(
 				cas_content_hub_list_item( 'Student work: photo, title, student credit, medium and order', 'cas_showcase' ),
+				$item( 'Manage Media', admin_url( 'edit-tags.php?taxonomy=cas_showcase_medium&post_type=cas_showcase' ), 'manage_categories' ),
 			),
 			'muted' => 'Wall layout and filters: ask the webmaster.',
 		),
@@ -186,7 +189,6 @@ function cas_content_hub_cards() {
 			'items' => array(
 				$item( 'Edit About: opening paragraph, quotation, essays and portrait', admin_url( 'admin.php?page=cas-content-about-page' ), CAS_CONTENT_HUB_CAP ),
 				cas_content_hub_list_item( 'Carousel photos: live drawing, exhibitions and Artful Living', 'cas_about_photo' ),
-				$item( 'Shared contact details and social links', admin_url( 'admin.php?page=cas-content-site-details' ), CAS_CONTENT_HUB_CAP ),
 			),
 			'muted' => 'Layout and the honours table: ask the webmaster.',
 		),
@@ -194,8 +196,8 @@ function cas_content_hub_cards() {
 			'name'  => 'Free videos',
 			'view'  => cas_content_hub_page_url( 'free-videos' ),
 			'items' => array(
-				$item( 'Opening line and the three section introductions', admin_url( 'admin.php?page=cas-content-free-videos' ), CAS_CONTENT_HUB_CAP ),
 				cas_content_hub_list_item( 'Films: title, cover, blurb, section, video link and order', 'cas_free_video' ),
+				$item( 'Opening line and the three section introductions', admin_url( 'admin.php?page=cas-content-free-videos' ), CAS_CONTENT_HUB_CAP ),
 			),
 			'muted' => 'Section layout: ask the webmaster.',
 		),
@@ -208,10 +210,10 @@ function cas_content_hub_cards() {
 			'muted' => 'Page layout: ask the webmaster.',
 		),
 		array(
-			'name'  => 'Every page',
+			'name'  => 'Site-Wide Edit',
 			'view'  => null,
 			'items' => array(
-				$item( 'Edit Site details: contact, social links, logo and signatures', admin_url( 'admin.php?page=cas-content-site-details' ), CAS_CONTENT_HUB_CAP ),
+				$item( 'Site-Wide Edit: contact, social links, logo and signatures', admin_url( 'admin.php?page=cas-content-site-details' ), CAS_CONTENT_HUB_CAP ),
 				$item( 'Top menu labels and order (Appearance > Menus)', admin_url( 'nav-menus.php' ), 'edit_theme_options' ),
 			),
 			'muted' => 'Footer layout and colours: ask the webmaster.',
@@ -251,9 +253,9 @@ function cas_content_hub_render() {
 		'Showcase' => array( 'Student work, public credits and photographs.', 'Manage student work' ),
 		'Blog' => array( 'Manage your articles, topics and resources.', 'Manage Posts' ),
 		'About' => array( 'Your story, quotation, essays and portrait.', 'Edit About' ),
-		'Free videos' => array( 'Page introductions and your public teaching films.', 'Edit introductions' ),
+		'Free videos' => array( 'Page introductions and your public teaching films.', 'Manage Films' ),
 		'FAQ' => array( 'The questions and answers your visitors read.', 'Manage questions' ),
-		'Every page' => array( 'Shared contact details, social links, logo and signatures.', 'Edit Site details' ),
+		'Site-Wide Edit' => array( 'Shared contact details, social links, logo and signatures.', 'Site-Wide Edit' ),
 	);
 	echo '<div class="wrap cas-content-ui cas-content-hub"><header class="cas-editor-header"><h1>' . esc_html__( 'Content Hub', 'hello-elementor-child' ) . '</h1>';
 	echo '<p>' . esc_html__( 'Choose a page to update its words, photographs and content.', 'hello-elementor-child' ) . '</p></header><div class="cas-hub-grid">';
