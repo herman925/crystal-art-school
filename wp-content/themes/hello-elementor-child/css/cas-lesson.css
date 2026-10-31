@@ -12,8 +12,8 @@
    .curr-card .unit-row .now, which outranks a plain [hidden] rule. */
 .curr-card .unit-row .now[hidden], .unit-row .now[hidden] { display: none; }
 
-/* The course description with its cover wrapped into it. The cover floats left, per the
-   client's Word mock-up and the COURSES 3rd Layer board. With no cover the text runs full
+/* The lesson description with its own cover wrapped into it (Design Direction §8.1).
+   The cover floats left. With no cover the text runs full
    width; nothing stands in for it. */
 .course-desc { margin-bottom: 22px; }
 .course-desc h1 { font-family: var(--font-marker); font-weight: 700; font-size: clamp(26px, 2.8vw, 38px); line-height: 1.14; color: var(--ink); margin: 0 0 16px; }

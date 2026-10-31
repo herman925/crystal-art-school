@@ -5,9 +5,19 @@ Start from **Content hub → Courses** and open the relevant course's lesson con
 Each lesson has three things you control:
 
 - **Title** — shows in the syllabus
-- **Content** — the one-line description under the title in the syllabus. Keep it short;
-  this is a subtitle, not an article
+- **Content** — the description for this lesson. The syllabus also shows a plain-text
+  version, so keep it focused on what this lesson teaches
 - **Video** — the film for that lesson
+
+## Lesson descriptions — awaiting website checks
+
+The prepared correction uses each lesson's own description and cover beneath the video.
+The description appears once. Without a lesson cover, the text uses the full width;
+without lesson text, the description is left out. The course introduction and course
+photographs do not fill these gaps.
+
+This correction has not been tested or published. The lesson cover controls and the
+complete editing process still need final checks before handover.
 
 ## About the videos
 

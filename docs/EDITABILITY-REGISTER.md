@@ -1,5 +1,14 @@
 # Editability register — Crystal Art School
 
+**2026-10-31 lesson source correction (untested, undeployed):** Written Design Direction
+§1.4.9/§8.1 retains the lesson description and its own cover. The historical rows below that
+cancel `lesson_description` or select the course blurb for the wrapped description are
+superseded. The existing lesson content supplies both the syllabus's plain-text description
+and the lesson page's formatted description; it is rendered once on the lesson page. The
+existing lesson featured image supplies the wrapped cover, with no course-photo fallback.
+No new field or capability is introduced. Native editing/cover controls remain unverified.
+See [the takeover checkpoint](HANDOFF.md#takeover-source-checkpoint--2026-10-31).
+
 Written 2026-08-23. Revised the same day after the Showcase / Blog / Free Videos build,
 and again after the homepage, account and archive build.
 One row per field: what the direction document decided, what the shipped theme actually

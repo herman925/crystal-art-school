@@ -1,5 +1,43 @@
 # Handoff — Crystal Art School WordPress build
 
+## Takeover source checkpoint — 2026-10-31
+
+The [dated handoff #211](https://github.com/herman925/crystal-art-school/issues/211),
+[whole-site map #105](https://github.com/herman925/crystal-art-school/issues/105) and
+[payment map #104](https://github.com/herman925/crystal-art-school/issues/104) supersede
+conflicting historical state below. Closing #211 completed the handoff record, not the website.
+The new assignment resumes source implementation only. All tests, deployments, runtime and
+account operations remain suspended; incident holds and preserved evidence remain in force.
+
+Last reported acceptance coverage remains **63/110**. It is not build completion; no build-only
+percentage has been calculated.
+
+| Classification | Current evidence and next action |
+|---|---|
+| Partial delivery, existing code | Route B is undelivered, but open PR #201 at `45996731a30c640b41ada90c9ecc62e260a4e92c` contains all 42 previously allowlisted fields. Its hub still opens separate Home banner/text/images and About text/portrait editors; page-level unification remains an integration task. Reuse those field groups without duplicating or merging the PR. PR #203 guide and #204 log runbook remain separate. |
+| Source correction prepared, untested | `takeover/lesson-description-20261031`, based on main `2e8bc45225011af9f40c360b962e1b6cbc089aa3`: lesson description uses current lesson content once, with its own cover and no course text/photo fallback. Lesson guide source corrected; nothing deployed or published. |
+| Published, source reconciliation pending | The 22-page guide Sign out overlay is already published. Original checkout retains modified navigation config and untracked release helpers. Preserve them; reconcile the source separately without a full guide build/publication. |
+| Built, outstanding verification | Native authoring/media/five-photo workflows, enrolled progress/completion, recovery, provider checkout/webhook/receipt and final guide-reader behaviour. Keep the detailed pending list in #211; do not classify each as missing code. |
+| Client/owner/access blocked | Approved copy/prices/materials/Etsy destinations, adviser legal/VAT/consent, settlement evidence, deferred inbox proof, human/device checks, ownership handover and explicit launch approval. Keep incident-held operations stopped. |
+
+The lesson correction follows the written Design Direction §1.4.9 and §8.1, which expressly
+require `lesson_description` and the lesson cover. The prototype's course-description comment
+and the August register's cancelled-field/course-blurb entries conflict with those revisions.
+Use the existing lesson `post_content` and featured image, without adding a field. Remove the
+second rendering of lesson content under the lesson heading. Preserve sanitization, layout,
+Tutor access and completion handling. Native cover editing remains unverified.
+
+The written design was read in place at
+`/home/herman925/workspace/SafeMode/Crystal Education Project/01 - Meeting Notes/20260803/20260804_Design_Direction.md`
+(§1.4.9 lines 198–220; §8.1 lines 818–837). The older scratch candidate and its evidence
+were read only, not reused or changed. This checkpoint records source work, not acceptance.
+
+Wayfinder publication: the GitHub connector rejected the attempted #105 status update with
+`403 Resource not accessible by integration`. The remote map was not updated; this local
+checkpoint is the pending update. No alternative credential or access route was attempted.
+
+---
+
 Written 2026-08-23; current-state update 2026-08-30. This is the "read this first" document for anyone picking the build up.
 `CLAUDE.md` in the project root is still the authoritative decision log; this file is the
 current-state snapshot that log does not give you.

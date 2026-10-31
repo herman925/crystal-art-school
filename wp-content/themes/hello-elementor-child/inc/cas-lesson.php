@@ -278,7 +278,6 @@ function cas_lesson_outline( $course_id ) {
 			$items[] = array(
 				'id'       => (int) $lesson->ID,
 				'title'    => get_the_title( $lesson ),
-				'sub'      => trim( wp_strip_all_tags( (string) $lesson->post_content ) ),
 				'topic'    => (int) $ti,
 				'topic_t'  => get_the_title( $topic ),
 				'thumb'    => (int) get_post_thumbnail_id( $lesson->ID ),
@@ -453,8 +452,8 @@ function cas_render_lesson() {
 	$level   = (string) get_post_meta( $course_id, '_tutor_course_level', true );
 	$level   = $level ? ucfirst( str_replace( '-', ' ', $level ) ) : '';
 	$runtime = cas_lesson_total_runtime( array_sum( array_column( $items, 'seconds' ) ) );
-	$blurb   = trim( (string) get_post_field( 'post_content', $course_id ) );
-	$photos  = cas_course_photos( $course_id );
+	// Design Direction §1.4.9/§8.1 requires the lesson's description, despite the prototype's course-level copy.
+	$lesson_body = trim( (string) get_post_field( 'post_content', $lesson_id ) );
 	$thumb   = $current ? $current['thumb'] : 0;
 	$is_tall = false;
 
@@ -534,25 +533,25 @@ function cas_render_lesson() {
 				<?php endif; ?>
 
 				<div class="unit-panel">
-					<?php if ( '' !== $blurb ) : ?>
+					<?php if ( '' !== $lesson_body ) : ?>
 						<div class="course-desc" id="course-desc">
 							<h1><?php echo esc_html( $title ); ?></h1>
 							<div class="cd-body">
 								<?php
-								if ( $photos ) {
+								if ( $thumb ) {
 									echo wp_get_attachment_image( // phpcs:ignore WordPress.Security.EscapeOutput -- escapes its own attributes.
-										$photos[0],
+											$thumb,
 										'medium_large',
 										false,
 										array(
 											'class'    => 'cd-cover',
-											'alt'      => $title,
+											'alt'      => $current ? $current['title'] : '',
 											'sizes'    => '(max-width: 620px) 94vw, 320px',
 											'decoding' => 'async',
 										)
 									);
 								}
-								echo wpautop( wp_kses_post( $blurb ) ); // phpcs:ignore WordPress.Security.EscapeOutput
+									echo wpautop( wp_kses_post( $lesson_body ) ); // phpcs:ignore WordPress.Security.EscapeOutput
 								?>
 							</div>
 						</div>
@@ -564,9 +563,6 @@ function cas_render_lesson() {
 								<div style="font-family:var(--font-cond);font-weight:600;font-size:12.5px;letter-spacing:var(--tracking-label);text-transform:uppercase;color:var(--coral);margin-bottom:8px;"><?php echo esc_html( sprintf( 'Phase %d · %s', $current['topic'] + 1, $current['topic_t'] ) ); ?></div>
 							<?php endif; ?>
 							<h2><?php echo esc_html( $current['title'] ); ?></h2>
-							<?php if ( '' !== $current['sub'] ) : ?>
-								<p><?php echo esc_html( $current['sub'] ); ?></p>
-							<?php endif; ?>
 						</article>
 					<?php endif; ?>
 
