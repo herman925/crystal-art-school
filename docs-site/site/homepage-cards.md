@@ -44,7 +44,7 @@ Change the shared value once.
 
 The course row uses published courses and their saved order. Edit the underlying course rather than trying to arrange another copy here. See [Courses](/courses).
 
-Choose **Home → Gallery Image → Choose Artwork**. Select one published artwork in the scrollable picture grid, then use **Save Gallery Image**. **Cancel** keeps the existing choice. This saves separately, without saving unfinished Home text.
+Open **Home → Gallery Image**, then press **Choose Artwork**. Select one published artwork in the scrollable picture grid and use **Save Gallery Image**. **Cancel** keeps the existing choice. This saves separately, without saving unfinished Home text.
 
 The card follows the selected artwork’s Featured Image. If that artwork is withdrawn or loses its public picture, Home falls back to another published artwork. Before a selection is saved, the existing artwork order supplies the picture. The hover line is saved with the other Home text.
 
@@ -63,3 +63,9 @@ Featured-course panels and the course overview are not permission to redesign th
 ## Student Comment Limit
 
 In **Edit Home → Student Comment Limit**, choose a number from **1 to 12**, then use **Save Home**. The default is **3**. Published comments appear in their saved Order, lowest first. Extra comments remain stored and are hidden from Home; this setting does not delete them.
+
+## Reposition Card Pictures
+
+Image buttons sit to the right of each preview and the size recommendation is below it. **Reposition** opens a crop preview matching the Home card: the About picture uses its twin-arch mask; Free Videos and TOOLS use their own square card shapes. Drag or adjust the controls, choose **Use This Crop**, then **Save Home**. Cancel does not alter the pending crop.
+
+The prototype’s brushes-and-palette photograph is the TOOLS starting image. **Clear Slot** still removes the optional TOOLS photograph when saved. Repositioning does not alter or delete the original upload. The artwork chooser opens only when you press **Choose Artwork**; following the Gallery Image section link does not open a popup.

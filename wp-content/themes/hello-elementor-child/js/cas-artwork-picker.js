@@ -45,5 +45,4 @@
       if (blocked) open.disabled = true;
     }
   });
-  if (location.hash === '#home-gallery-image' && !open.disabled) open.click();
 })();

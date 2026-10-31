@@ -4,9 +4,9 @@ defined( 'ABSPATH' ) || exit;
 
 function cas_content_home_images_fields() {
 	return array(
-		'cas_home_about_image' => array( 'label' => 'About Crystal photograph', 'default' => cas_home_about_default_image(), 'restore' => true, 'description' => 'Recommended 840 x 840px (square). Any size works — the image is cropped to a square slot, so keep the subject near the centre.' ),
-		'cas_home_free_videos_photo' => array( 'label' => 'Free videos card photograph', 'default' => cas_home_free_videos_photo_default(), 'restore' => true, 'description' => 'Recommended 750 x 750px (square). The photograph crops to fill the card; a darker or quieter photograph keeps the overlaid title readable.' ),
-		'cas_home_tools_photo' => array( 'label' => 'TOOLS card background photograph', 'default' => '', 'restore' => false, 'description' => 'Optional. Recommended about 400 x 400px. The photograph crops to its square. With no photograph the card stays a plain dark square.' ),
+		'cas_home_about_image' => array( 'label' => 'About Crystal photograph', 'frame' => 'arch', 'default' => cas_home_about_default_image(), 'restore' => true, 'description' => 'Recommended 840 x 840px (square). Any size works — the image is cropped to a square slot, so keep the subject near the centre.' ),
+		'cas_home_free_videos_photo' => array( 'label' => 'Free videos card photograph', 'frame' => 'promo', 'default' => cas_home_free_videos_photo_default(), 'restore' => true, 'description' => 'Recommended 750 x 750px (square). The photograph crops to fill the card; a darker or quieter photograph keeps the overlaid title readable.' ),
+		'cas_home_tools_photo' => array( 'label' => 'TOOLS card background photograph', 'frame' => 'square', 'default' => cas_home_tools_photo_default(), 'restore' => false, 'description' => 'Optional. Recommended about 400 x 400px. The photograph crops to its square. With no photograph the card stays a plain dark square.' ),
 	);
 }
 
@@ -62,7 +62,7 @@ function cas_content_images_controls( $values, $fields, $input_name ) {
 		if ( ! is_string( $value ) ) {
 			wp_die( 'The image URLs need an administrator check.', '', array( 'response' => 409 ) );
 		}
-		echo '<h2><label for="' . esc_attr( $key ) . '">' . esc_html( cas_admin_title( $field['label'] ) ) . '</label></h2><p class="description">' . esc_html( $field['description'] ) . '</p>';
+		echo '<h2><label for="' . esc_attr( $key ) . '">' . esc_html( cas_admin_title( $field['label'] ) ) . '</label></h2>';
 		echo '<p>' . esc_html( $field['restore'] ? 'Clearing this field stores an empty URL and uses the existing shipped default; it does not remove the image from the public layout.' : 'Clearing this optional field leaves the plain dark TOOLS card, without a photograph.' ) . '</p>';
 		cas_content_image_slot( $key, $input_name . '[' . $key . ']', $value, $field, $can_media );
 	}

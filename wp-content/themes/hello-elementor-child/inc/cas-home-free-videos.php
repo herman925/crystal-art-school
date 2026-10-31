@@ -31,6 +31,7 @@
  */
 
 defined( 'ABSPATH' ) || exit;
+require_once __DIR__ . '/cas-image-frame.php';
 
 /**
  * The blurb is quoted verbatim from 3.3 of the direction document, which specifies it as
@@ -97,7 +98,10 @@ function cas_home_free_videos_text() {
  */
 function cas_home_free_videos_img() {
 	$url = cas_home_free_videos_photo();
+	return cas_image_frame_html( cas_home_free_videos_img_render( cas_image_frame_url( $url ) ), $url );
+}
 
+function cas_home_free_videos_img_render( $url ) {
 	if ( ! $url ) {
 		return '';
 	}

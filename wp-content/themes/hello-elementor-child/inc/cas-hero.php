@@ -15,6 +15,7 @@
  */
 
 defined( 'ABSPATH' ) || exit;
+require_once __DIR__ . '/cas-image-frame.php';
 
 const CAS_HERO_SLIDES = 3;
 
@@ -109,6 +110,9 @@ function cas_hero_img( $url, $sizes, $attrs = [] ) {
 		return '';
 	}
 
+	$frame_style = cas_image_frame_style( $url );
+	if ( $frame_style ) { $attrs['style'] = ( $attrs['style'] ?? '' ) . ';' . $frame_style; }
+	$url = cas_image_frame_url( $url );
 	$theme_dir = trailingslashit( get_stylesheet_directory() ) . 'img/';
 	$theme_uri = trailingslashit( get_stylesheet_directory_uri() ) . 'img/';
 	$path      = preg_replace( '/[?#].*$/', '', $url );

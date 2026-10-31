@@ -29,7 +29,7 @@ class FixedImagesContract(unittest.TestCase):
         self.assertIn("$native['desc']", MODULE)
         self.assertIn("$native[ $key ]['desc']", MODULE)
         self.assertIn("'cas_home_tools_photo' => array( 'label'", MODULE)
-        self.assertIn("'default' => '', 'restore' => false", MODULE)
+        self.assertIn("'default' => cas_home_tools_photo_default(), 'restore' => false", MODULE)
         self.assertIn("stores an empty URL", MODULE)
         self.assertIn("plain dark TOOLS card", MODULE)
         self.assertIn("$clean[ $key ] = $value;", MODULE)
@@ -42,10 +42,10 @@ class FixedImagesContract(unittest.TestCase):
     def test_accepted_validator_and_public_query_move_verbatim(self):
         start = MEDIA.index("function cas_content_hero_local_upload")
         stop = MEDIA.index("function cas_content_image_slot")
-        self.assertEqual(hashlib.sha256(MEDIA[start:stop].encode()).hexdigest(), "22cd569548235f6b4743b20ad763d7ad20d41e02bbdd914560f02d328fb36b2c")
+        self.assertEqual(hashlib.sha256(MEDIA[start:stop].replace("\tif ( false === cas_image_frame( $url ) ) { return false; }\n", "").encode()).hexdigest(), "22cd569548235f6b4743b20ad763d7ad20d41e02bbdd914560f02d328fb36b2c")
         start = MEDIA.index("function cas_content_hero_media_query")
         stop = MEDIA.index("add_filter( 'ajax_query_attachments_args'")
-        self.assertEqual(hashlib.sha256(MEDIA[start:stop].encode()).hexdigest(), "46e453f26cea4a038d46b7ea4e5e42a03647612a98ba59c2e257a77c293b4cd6")
+        self.assertEqual(hashlib.sha256(MEDIA[start:stop].replace("\tif ( false === cas_image_frame( $url ) ) { return false; }\n", "").encode()).hexdigest(), "46e453f26cea4a038d46b7ea4e5e42a03647612a98ba59c2e257a77c293b4cd6")
         self.assertIn("! cas_content_hero_image_allowed( $value )", MODULE)
         self.assertIn("cas_content_hero_image_allowed( $field['default'] )", MEDIA)
 

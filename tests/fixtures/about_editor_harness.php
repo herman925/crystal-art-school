@@ -88,6 +88,7 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 	function cas_hero_default( $slide, $part ) { return in_array( $part, array( 'large', 'small' ), true ) ? 'https://example.invalid/theme-' . $slide . '-' . $part . '.jpg' : 'Synthetic slide ' . $slide . ' ' . $part; }
 	function get_stylesheet_directory_uri() { return 'https://example.invalid/theme'; }
 	function get_stylesheet_directory() { return dirname( __DIR__, 2 ) . '/wp-content/themes/hello-elementor-child'; }
+	function cas_home_tools_photo_default() { return get_stylesheet_directory_uri() . '/img/A6.jpeg'; }
 	function cas_home_about_default_image() { return get_stylesheet_directory_uri() . '/img/A3.jpeg'; }
 	function cas_home_free_videos_photo_default() { return 'https://example.invalid/public-image.jpg'; }
 	function cas_brand_assets() {
@@ -176,6 +177,7 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 	require dirname( __DIR__, 2 ) . '/wp-content/themes/hello-elementor-child/inc/cas-content-free-videos.php';
 	require dirname( __DIR__, 2 ) . '/wp-content/themes/hello-elementor-child/inc/cas-content-home.php';
 	require dirname( __DIR__, 2 ) . '/wp-content/themes/hello-elementor-child/inc/cas-content-contact.php';
+	require_once dirname( __DIR__, 2 ) . '/wp-content/themes/hello-elementor-child/inc/cas-image-frame.php';
 	require dirname( __DIR__, 2 ) . '/wp-content/themes/hello-elementor-child/inc/cas-content-media.php';
 	require dirname( __DIR__, 2 ) . '/wp-content/themes/hello-elementor-child/inc/cas-content-hero.php';
 	require dirname( __DIR__, 2 ) . '/wp-content/themes/hello-elementor-child/inc/cas-content-images.php';
@@ -531,5 +533,15 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 	about_expect( cas_admin_title( 'wordpress FAQ and youtube links' ) === 'WordPress FAQ and YouTube Links', 'UI casing changed brands/acronyms' ); ++$cases;
 	about_expect( cas_admin_title( 'introduction under the banner' ) === 'Introduction under the Banner', 'UI preposition casing changed' ); ++$cases;
 	about_expect( cas_admin_title( 'Save About' ) === 'Save About', 'About page action lost its proper name' ); ++$cases;
+	foreach ( array( '#cas-crop=-1,50,1', '#cas-crop=101,50,1', '#cas-crop=50,101,1', '#cas-crop=50,50,0.5', '#cas-crop=50,50,3.01', '#cas-crop=50,50,1;scale:9', '#cas-crop=50,50', '#cas-crop=50,50,NaN' ) as $suffix ) {
+		about_expect( false === cas_image_frame( 'https://example.invalid/public-image.jpg' . $suffix ), 'Unsafe framing metadata accepted' );
+		about_expect( ! cas_content_hero_image_allowed( 'https://example.invalid/public-image.jpg' . $suffix ), 'Unsafe framing entered save cleaner' ); ++$cases;
+	}
+	$url = 'https://example.invalid/public-image.jpg#cas-crop=25.50,100.00,1.40';
+	about_expect( cas_content_hero_image_allowed( $url ) && cas_image_frame_url( $url ) === 'https://example.invalid/public-image.jpg', 'Valid crop lost the approved image binding' ); ++$cases;
+	about_expect( cas_image_frame_style( $url ) === 'object-position:25.5% 100%;scale:1.4;transform-origin:25.5% 100%;', 'Public crop geometry disagrees with saved values' ); ++$cases;
+	list( $before, $fields, $config ) = prose_fixture( 'home-page' );
+	$input = $before; $input['cas_home_about_image'] = $url;
+	about_expect( prose_submit( 'home-page', $before, $input, $fields ) === 'saved', 'Crop did not persist through the existing combined guard' ); ++$cases;
 	fwrite( STDOUT, json_encode( array( 'synthetic_cases' => $cases, 'native_runtime_proof' => false ), JSON_THROW_ON_ERROR ) . PHP_EOL );
 }

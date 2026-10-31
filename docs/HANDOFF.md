@@ -15,6 +15,11 @@ remain excluded. The old held review stack was not bootstrapped or changed.
 Last reported acceptance coverage remains **63/110**. It is not build completion; no build-only
 percentage has been calculated.
 
+**Home image editing follow-up — 2026-11-01:** the owner requested an explicit-only gallery
+chooser, the prototype TOOLS photograph, slide tabs, responsive image panes, aligned image
+buttons/recommendations and crop/reposition controls. See [Home image editing](HOME-IMAGE-EDITING-2026-11-01.md)
+for implementation and release evidence. Existing takeover/incident boundaries remain in force.
+
 **Current owner follow-up — 2026-10-31:** the requested Home artwork picker, editable
 student-comment display limit, registered-student Showcase credits, generic inner editors,
 sticky section links, Blog-first management action and backend label casing are implemented.

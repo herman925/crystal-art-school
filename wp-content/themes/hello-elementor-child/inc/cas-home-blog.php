@@ -40,21 +40,10 @@ defined( 'ABSPATH' ) || exit;
 /** Most recent posts shown in the rail: three pages of two. */
 const CAS_HOME_BLOG_MAX = 6;
 
-/**
- * The photograph behind the TOOLS card.
- *
- * Optional, and deliberately without a fallback. `.tools-btn` already paints
- * itself `#1f1c18` under a gradient, so with no photograph the card is a dark
- * square carrying the wrench and the word TOOLS — which is exactly what §3.7
- * asks the card to show. Nothing is invented to fill the slot.
- *
- * @return string Uploaded URL, or '' when none is set.
- */
+/** Prototype TOOLS photograph; an explicitly cleared value still hides it. */
+function cas_home_tools_photo_default() { return get_stylesheet_directory_uri() . '/img/A6.jpeg'; }
 function cas_home_blog_tools_photo() {
-	// A Customizer "Remove image" stores '', and get_theme_mod() returns the
-	// stored empty string in preference to a default — so the empty case is
-	// handled here rather than by relying on a default. Same trap as T1.
-	return trim( (string) get_theme_mod( 'cas_home_tools_photo', '' ) );
+	return trim( (string) get_theme_mod( 'cas_home_tools_photo', cas_home_tools_photo_default() ) );
 }
 
 /**
@@ -84,7 +73,7 @@ add_action(
 		$wp_customize->add_setting(
 			'cas_home_tools_photo',
 			array(
-				'default'           => '',
+				'default'           => cas_home_tools_photo_default(),
 				'sanitize_callback' => 'esc_url_raw',
 				'transport'         => 'refresh',
 			)
@@ -217,31 +206,9 @@ function cas_render_home_blog() {
 				</div>
 				<a class="tools-btn" href="<?php echo esc_url( $tools_href ); ?>" aria-label="Filter the journal by Tools">
 					<?php
-					if ( $photo ) :
-						$id = attachment_url_to_postid( $photo );
-
-						if ( $id ) {
-							// The card is 184px square, so `medium` is the right rung and
-							// WordPress builds the srcset from the whole ladder.
-							echo wp_get_attachment_image(
-								$id,
-								'medium',
-								false,
-								array(
-									// Decorative: the word TOOLS is printed over it.
-									'alt'      => '',
-									'class'    => 'tb-photo',
-									'sizes'    => '184px',
-									'loading'  => 'lazy',
-									'decoding' => 'async',
-								)
-							); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- core markup.
-						} else {
-							?>
-							<img src="<?php echo esc_url( $photo ); ?>" alt="" class="tb-photo" sizes="184px" loading="lazy" decoding="async">
-							<?php
-						}
-					endif;
+					if ( $photo ) {
+						echo cas_hero_img( $photo, '184px', array( 'class' => 'tb-photo', 'loading' => 'lazy', 'decoding' => 'async' ) ); // Escaped by the shared image renderer.
+					}
 					?>
 					<div class="tb-in">
 						<svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="var(--band-eyebrow)" stroke-width="1.6" style="margin:0 auto 8px" aria-hidden="true"><path d="M14.7 6.3a4 4 0 0 0-5.2 5.2L3 18v3h3l6.5-6.5a4 4 0 0 0 5.2-5.2l-2.6 2.6-2.1-.5-.5-2.1z"></path></svg>
