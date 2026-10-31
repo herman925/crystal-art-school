@@ -1,6 +1,6 @@
 # Route B unified editing — source candidate, 2026-10-31
 
-**Source and scoped native fixed-editor checks passed; release preparation in progress.**
+**Merged and deployed on 2026-10-31. Source and scoped native fixed-editor checks passed.**
 The source checkpoint originally deferred all testing. The owner
 subsequently requested testing, and the bounded checks below were executed on 2026-10-31.
 
@@ -133,9 +133,34 @@ enrolled learning/completion, provider payments, real-reader PHP logout, human a
 technology and launch/account decisions retain their separate outstanding gates. No weighted
 acceptance-score increment is claimed by these new checks.
 
-For native testing, include combined text/image saves, all-or-nothing validation, stale and
-foreign inputs/nonces/snapshots, concurrent saves/cache readback, restricted-role routes and
-native upload/pick/replace/default/clear, editor persistence and mobile/accessibility behaviour.
-Carry forward the remaining #211 learner/payment/guide/human checks and incident holds.
-Actual merge/deployment/publication/account handover remain separate gates. Choose the source
-integration path deliberately; do not blindly merge both this candidate and the older PRs.
+## Production release receipt — 2026-10-31
+
+- Release commit **`4116b5f3c8b15ff916f2b5aff7c204970186eb96`** was pushed to main by an ordinary
+  fast-forward after the GitHub connector rejected PR creation with 403. No branch protection,
+  permission or repository setting was changed; the denied PR creation was not retried.
+- **14 theme files and 86 guide files were installed and read back by SHA256.** All 22 guide
+  HTML paths match the pre-release inventory. Seven authentication/server-file hashes and
+  retained old assets are unchanged. Thirteen unchanged runtime dependency files also match
+  the reviewed repository source. Native PHP 8.3.36 syntax checks passed for all 12 deployed
+  PHP files before installation. Hostinger disables PHP `exec`; syntax checks used the normal
+  SSH shell instead, without changing that restriction.
+- Preimages, metadata and a conditional owned-file rollback receipt were preserved privately
+  at `/home/u202887698/backups/cas-overhaul-20261031T084505Z/` on the server. The staged release
+  and verification/rollback helper remain at `/home/u202887698/deploy-cas-overhaul-20261031T084505Z/`.
+  Those private files are not public repository artifacts.
+- Public smoke: Home returned **200**, its main/heading and noindex were present; served editor
+  JavaScript and lesson CSS exactly matched the release hashes. Known preview lesson **53**
+  returned **200**, rendered the custom lesson template with exactly one H1, and used no
+  authenticated cookies or completion POST. This proves one preview, not both preview flags.
+- Signed-out guide root, editing and About pages all returned **302 to the existing login**.
+  This is protected-page denial evidence, not real-reader PHP logout/session verification.
+- Real account roles, ownership, course prices/orders, signup, live payments, indexing and
+  incident-held operations were not changed by the release. The restricted production role
+  remains unassigned. No production account login, purchase, refund or account cleanup ran.
+- The original PR #201/#203/#204 branches and evidence remain preserved; this release already
+  incorporates the fixed-field implementation with the native corrections. Do not merge an
+  older candidate blindly over the released versions. The log/core operational work remains held.
+
+Full course/five-photo/material authoring, production ownership handover, enrolled learning,
+provider payments, real-reader guide logout, human AT/devices and the other #211 launch gates
+remain open. **Last saved acceptance coverage stays 63/110; this release is not launch approval.**

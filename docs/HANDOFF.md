@@ -9,7 +9,7 @@ conflicting historical state below. Closing #211 completed the handoff record, n
 The new assignment initially resumed source implementation only. The owner subsequently
 requested testing and then explicitly requested round review and deployment. Source/synthetic
 checks and a new independent local WordPress fixed-editor review passed as detailed below.
-Release preparation is authorised; real account/payment/launch and incident-held operations
+The reviewed file release is deployed; real account/payment/launch and incident-held operations
 remain excluded. The old held review stack was not bootstrapped or changed.
 
 Last reported acceptance coverage remains **63/110**. It is not build completion; no build-only
@@ -17,7 +17,7 @@ percentage has been calculated.
 
 | Classification | Current evidence and next action |
 |---|---|
-| Native fixed-editor review passed; release preparing | `takeover/client-editing-20261031` composes the existing PR #201 controls into five page editors covering the same 42 fields. Fresh native browser/SQL/cache/media checks passed, including upload and rich-text saves; two real native defects were fixed. 195 PHP cases, 46 source contracts and now 14 mocked JS cases passed. This is not full course-authoring, production ownership or client handover acceptance. [Full scope and results](ROUTE-B-SOURCE-2026-10-31.md). Original PR #201 at `45996731a30c640b41ada90c9ecc62e260a4e92c`, guide #203 and log runbook #204 remain untouched/open. |
+| Merged/deployed; native fixed-editor checks passed | Main release `4116b5f3c8b15ff916f2b5aff7c204970186eb96` installs the five page editors covering the same 42 fields. Fresh native save/media/capability checks passed; About TinyMCE and upload-selection defects were fixed. 195 PHP cases, 46 source contracts and 14 mocked JS cases passed. 14 theme and 86 guide files were hash-verified; 22-page inventory/auth preserved. This is not full course-authoring, production ownership or client handover acceptance. [Full receipt](ROUTE-B-SOURCE-2026-10-31.md#production-release-receipt--2026-10-31). Original PR #201 at `45996731a30c640b41ada90c9ecc62e260a4e92c`, guide #203 and log runbook #204 remain preserved/open. |
 | Source correction, controlled render checks passed | Lesson content renders once with its own cover. Testing found and fixed a missing H1 when lesson text was empty; four fragment-render cases and the existing lesson access/material source contracts now pass. This is not an enrolled native lesson/UI pass. Nothing deployed or published. |
 | Published fix, source reconciled | The 22-page guide Sign out overlay is already published. Local commit `0f32f88` records its exact navigation config source; see [source reconciliation](../docs-site/SIGNOUT-SOURCE-20261031.md). Original checkout's modified config, helpers and private evidence remain untouched. No rebuild or publication. |
 | Built, outstanding verification | Native authoring/media/five-photo workflows, enrolled progress/completion, recovery, provider checkout/webhook/receipt and final guide-reader behaviour. Keep the detailed pending list in #211; do not classify each as missing code. |

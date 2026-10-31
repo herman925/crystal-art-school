@@ -7,7 +7,7 @@ endpoint, and `noIcon: true` preserves its intended appearance.
 At reconciliation commit `0f32f88`, `site/.vitepress/config.mjs` was byte-identical to the preserved local source
 identified in [handoff #211](https://github.com/herman925/crystal-art-school/issues/211):
 SHA256 `ab9655fc1cfd032ef7d0a3f71f360c1337a0822f804558d2db65f10dcef61040`.
-Only the Sign out navigation entry and its explanation differ from main.
+At that checkpoint only the Sign out navigation entry and its explanation differed from its base.
 
 The later content-editor release also excludes unpublished `*-draft.md` pages from builds
 and removes their navigation group. It retains this exact Sign out navigation behaviour.
