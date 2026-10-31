@@ -1,0 +1,15 @@
+.cas-gallery-choice { margin: 24px 0; padding: 16px; background: #fff; border: 1px solid #c3c4c7; scroll-margin-top: 60px; }
+.cas-gallery-current { display: flex; gap: 16px; align-items: center; }
+.cas-gallery-current img { width: 90px; height: 90px; object-fit: contain; background: #f0f0f1; }
+.cas-gallery-choice dialog { box-sizing: border-box; width: min(850px,calc(100vw - 32px)); max-height: calc(100dvh - 48px); overflow: auto; padding: 20px; border: 1px solid #8c8f94; border-radius: 4px; }
+.cas-gallery-choice dialog::backdrop { background: rgb(0 0 0 / .5); }
+.cas-gallery-choice dialog h2 { margin-top: 0; }
+.cas-artwork-grid { display: grid; grid-template-columns: repeat(auto-fit,minmax(130px,1fr)); gap: 12px; max-height: min(440px,52dvh); overflow-y: auto; scrollbar-gutter: stable; padding: 4px; }
+.cas-artwork-option { position: relative; display: flex; flex-direction: column; gap: 8px; padding: 10px; border: 2px solid #dcdcde; border-radius: 3px; cursor: pointer; }
+.cas-artwork-option:has(input:checked) { border-color: #2271b1; background: #f0f6fc; box-shadow: 0 0 0 1px #2271b1; }
+.cas-artwork-option:focus-within { outline: 2px solid #1d2327; outline-offset: 2px; }
+.cas-artwork-option input { position: absolute; top: 14px; right: 10px; margin: 0; }
+.cas-artwork-option img { width: 100%; height: auto; aspect-ratio: 4/3; object-fit: contain; background: #f0f0f1; }
+.cas-artwork-option span { overflow-wrap: anywhere; }
+.cas-gallery-footer { display: flex; justify-content: flex-end; gap: 10px; padding-top: 12px; }
+@media(max-width:600px) { .cas-gallery-choice { scroll-margin-top: 190px; } .cas-artwork-grid { grid-template-columns: repeat(2,minmax(0,1fr)); } }

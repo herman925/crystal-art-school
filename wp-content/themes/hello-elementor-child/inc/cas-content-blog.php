@@ -28,7 +28,7 @@ function cas_content_blog_controls( $values, $input_name = 'cas_blog_fields' ) {
 		if ( ! is_string( $value ) ) {
 			wp_die( 'The Blog introduction needs an administrator check.', '', array( 'response' => 409 ) );
 		}
-		echo '<h2><label for="' . esc_attr( $key ) . '">' . esc_html( $field['label'] ) . '</label></h2>';
+		echo '<h2><label for="' . esc_attr( $key ) . '">' . esc_html( cas_admin_title( $field['label'] ) ) . '</label></h2>';
 		echo '<p>Leave this box empty to show no introduction. Article content, the heading and the page layout are unchanged.</p>';
 		wp_editor( wp_kses_post( $value ), $key, array(
 			'textarea_name' => $input_name . '[' . $key . ']',

@@ -41,7 +41,7 @@ function cas_content_home_controls( $values, $input_name = 'cas_home_fields' ) {
 		if ( ! is_string( $value ) ) {
 			wp_die( 'The Home text needs an administrator check.', '', array( 'response' => 409 ) );
 		}
-		echo '<h2><label for="' . esc_attr( $key ) . '">' . esc_html( $field['label'] ) . '</label></h2>';
+		echo '<h2><label for="' . esc_attr( $key ) . '">' . esc_html( cas_admin_title( $field['label'] ) ) . '</label></h2>';
 		$name = $input_name . '[' . $key . ']';
 		if ( 'text' === $field['type'] ) {
 			echo '<input type="text" class="large-text" id="' . esc_attr( $key ) . '" name="' . esc_attr( $name ) . '" value="' . esc_attr( $value ) . '">';

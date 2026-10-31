@@ -44,11 +44,13 @@ Change the shared value once.
 
 The course row uses published courses and their saved order. Edit the underlying course rather than trying to arrange another copy here. See [Courses](/courses).
 
-The gallery card uses the first published artwork in its list. Its photograph and saved order affect the homepage too. The gallery hover line is a separate approved setting and can be cleared.
+Choose **Home → Gallery Image → Choose Artwork**. Select one published artwork in the scrollable picture grid, then use **Save Gallery Image**. **Cancel** keeps the existing choice. This saves separately, without saving unfinished Home text.
+
+The card follows the selected artwork’s Featured Image. If that artwork is withdrawn or loses its public picture, Home falls back to another published artwork. Before a selection is saved, the existing artwork order supplies the picture. The hover line is saved with the other Home text.
 
 ## Blog and tools
 
-The article row uses the newest published articles with a Featured image. An article without a picture may not appear there.
+The article row uses the **six newest published articles with a Featured Image**. An article without a picture is skipped. If none qualify, the entire row is hidden. Manage these through **Content Hub → Blog → Manage Posts**; there is no separate Home post selector.
 
 The TOOLS square links to articles filed under Tools. Assign an existing category in the article editor. If the topic is unavailable, request it from the webmaster rather than opening category-management settings.
 
@@ -57,3 +59,7 @@ The TOOLS square links to articles filed under Tools. Assign an existing categor
 A section that depends on published content can be absent when nothing suitable has been published. Check the relevant course, artwork or article and its picture first; do not change unrelated settings to make it appear.
 
 Featured-course panels and the course overview are not permission to redesign the page. If an expected panel or editing link is missing, send the page and intended change to the webmaster. Do not assume an old list of unfinished items still describes the current site.
+
+## Student Comment Limit
+
+In **Edit Home → Student Comment Limit**, choose a number from **1 to 12**, then use **Save Home**. The default is **3**. Published comments appear in their saved Order, lowest first. Extra comments remain stored and are hidden from Home; this setting does not delete them.

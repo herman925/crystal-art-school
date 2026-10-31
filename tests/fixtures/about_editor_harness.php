@@ -18,6 +18,11 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 	function add_filter( ...$args ) {}
 	function do_action( ...$args ) {}
 	function current_user_can( $cap ) { return 'upload_files' === $cap ? $GLOBALS['hero_upload'] : ( $GLOBALS['about_cap'] && 'manage_cas_content' === $cap ); }
+	function add_shortcode( ...$args ) {}
+	function get_post( $id ) { return $GLOBALS['gallery_posts'][ (int) $id ] ?? null; }
+	function get_post_thumbnail_id( $id ) { return $GLOBALS['gallery_thumbs'][ (int) $id ] ?? 0; }
+	function get_theme_mod( $key, $default = false ) { return $GLOBALS['gallery_mods'][ $key ] ?? $default; }
+	class WP_Query { public $posts; public function __construct( $args ) { $this->posts = array_keys( $GLOBALS['gallery_posts'] ); } }
 	function get_current_user_id() { return $GLOBALS['about_actor']; }
 	function wp_verify_nonce( $nonce, $action ) { return $GLOBALS['about_nonce'] && 'fixture-only' === $nonce && $GLOBALS['about_action'] === $action; }
 	function wp_unslash( $value ) { return stripslashes( $value ); }
@@ -56,7 +61,7 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 	}
 	function cas_blog_intro_default() { return 'Blog shipped wording'; }
 	function cas_fv_intro_default( $key ) { return 'Free Videos shipped ' . $key; }
-	define( 'CAS_HOME_GALLERY_SUB_DEFAULT', 'Synthetic gallery wording' );
+	require dirname( __DIR__, 2 ) . '/wp-content/themes/hello-elementor-child/inc/cas-home-gallery.php';
 	function cas_home_free_videos_text_default() { return 'Synthetic free-video card wording'; }
 	function cas_home_courses_lede_default() { return 'Synthetic course rail wording'; }
 	function cas_overview_lede_1_default() { return 'Synthetic overview paragraph one'; }
@@ -174,6 +179,9 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 	require dirname( __DIR__, 2 ) . '/wp-content/themes/hello-elementor-child/inc/cas-content-media.php';
 	require dirname( __DIR__, 2 ) . '/wp-content/themes/hello-elementor-child/inc/cas-content-hero.php';
 	require dirname( __DIR__, 2 ) . '/wp-content/themes/hello-elementor-child/inc/cas-content-images.php';
+	require dirname( __DIR__, 2 ) . '/wp-content/themes/hello-elementor-child/inc/cas-content-hub.php';
+	require dirname( __DIR__, 2 ) . '/wp-content/themes/hello-elementor-child/inc/cas-content-display.php';
+	require dirname( __DIR__, 2 ) . '/wp-content/themes/hello-elementor-child/inc/cas-content-artwork-picker.php';
 	require dirname( __DIR__, 2 ) . '/wp-content/themes/hello-elementor-child/inc/cas-content-prose.php';
 	$cases = 0;
 	$before = about_reset();
@@ -261,7 +269,7 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 			if ( str_starts_with( $key, 'cas_social_' ) ) {
 				$mods[ $key ] = 'cas_social_email' === $key ? 'fixture@example.invalid' : 'https://example.invalid/original';
 			} else {
-				$mods[ $key ] = ( isset( $field['type'] ) && 'image' === $field['type'] ) || array_key_exists( 'restore', $field ) ? 'https://example.invalid/public-image.jpg' : 'Original';
+				$mods[ $key ] = 'cas_home_testimonial_limit' === $key ? '3' : ( ( isset( $field['type'] ) && 'image' === $field['type'] ) || array_key_exists( 'restore', $field ) ? 'https://example.invalid/public-image.jpg' : 'Original' );
 			}
 		}
 		$GLOBALS['wpdb']->row['option_value'] = serialize( $mods );
@@ -400,7 +408,7 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 	}
 	// Deferred combined-page regressions: no native WordPress/database/browser acceptance.
 	$combined_fields = array();
-	foreach ( array( 'home-page' => 24, 'about-page' => 6, 'site-details' => 7 ) as $group => $count ) {
+	foreach ( array( 'home-page' => 25, 'about-page' => 6, 'site-details' => 7 ) as $group => $count ) {
 		list( $before, $fields, $config ) = prose_fixture( $group );
 		about_expect( count( $fields ) === $count, 'Combined page changed its existing field boundary' ); ++$cases;
 		$combined_fields = array_merge( $combined_fields, array_keys( $fields ) );
@@ -457,7 +465,7 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 		$config = cas_content_prose_config( $group );
 		$combined_fields = array_merge( $combined_fields, array_keys( call_user_func( $config['fields'] ) ) );
 	}
-	about_expect( count( $combined_fields ) === 42 && count( array_unique( $combined_fields ) ) === 42, 'Five editing pages lost or duplicated existing fields' ); ++$cases;
+	about_expect( count( $combined_fields ) === 43 && count( array_unique( $combined_fields ) ) === 43, 'Five editing pages lost or duplicated existing fields' ); ++$cases;
 	$all_fields = array();
 	foreach ( array( 'about', 'blog', 'free-videos', 'home', 'contact', 'hero', 'home-images', 'about-image', 'brand-images' ) as $group ) {
 		$config = cas_content_prose_config( $group );
@@ -469,7 +477,7 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 		foreach ( array( '', 'https://example.invalid/public-image.jpg' ) as $value ) {
 			$field = array( 'label' => 'Synthetic image field', 'default' => 'https://example.invalid/public-image.jpg', 'restore' => $restore );
 			ob_start(); cas_content_image_slot( 'synthetic_image', 'synthetic[image]', $value, $field, true ); $markup = ob_get_clean();
-			$choose = $value ? 'Replace image' : 'Choose image'; $clear = $restore ? 'Use shipped default' : 'Clear slot';
+			$choose = $value ? 'Replace Image' : 'Choose Image'; $clear = $restore ? 'Use Shipped Default' : 'Clear Slot';
 			about_expect( str_contains( $markup, 'aria-label="' . $choose . ' for Synthetic image field"' ) && str_contains( $markup, '>' . $choose . '</button>' ) && str_contains( $markup, 'aria-label="' . $clear . ' for Synthetic image field"' ) && str_contains( $markup, '>' . $clear . '</button>' ), 'Initial visible and accessible image action names disagree' ); ++$cases;
 		}
 	}
@@ -488,10 +496,40 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 	$_GET = array( 'page' => 'cas-content-about-page' );
 	about_expect( cas_content_ui_tinymce( $native_settings, 'content' ) === $native_settings, 'The main post editor was restyled' ); ++$cases;
 	$themed = cas_content_ui_tinymce( $native_settings, 'cas_about_intro' );
-	about_expect( $themed['spellcheck'] === true && $themed['body_class'] === 'native-editor cas-writing-surface' && str_starts_with( $themed['content_css'], $native_settings['content_css'] . ',' ) && str_contains( $themed['content_css'], '/cas-content-writing.css?ver=' ), 'Workspace writing styles discarded native settings' ); ++$cases;
+	about_expect( $themed === $native_settings, 'Inner editor did not retain native WordPress appearance' ); ++$cases;
 	$_GET = array();
 	about_reset();
 	about_error( cas_content_prose_save( 'unapproved', 'theme_mods_hello-elementor-child', '', array() ), 'prose_denied' );
 	about_expect( 0 === $wpdb->writes, 'Unapproved group wrote' ); ++$cases;
+	$before = about_reset();
+	$GLOBALS['gallery_posts'] = array(); $GLOBALS['gallery_thumbs'] = array(); $GLOBALS['gallery_mods'] = array();
+	foreach ( array( 801 => array( 'cas_artwork', 'publish', '', 101 ), 802 => array( 'cas_artwork', 'publish', '', 108 ), 803 => array( 'cas_artwork', 'draft', '', 101 ), 804 => array( 'post', 'publish', '', 101 ), 805 => array( 'cas_artwork', 'publish', '', 102 ), 806 => array( 'cas_artwork', 'publish', '', 0 ), 807 => array( 'cas_artwork', 'publish', '', 103 ), 808 => array( 'cas_artwork', 'publish', '', 104 ), 809 => array( 'cas_artwork', 'publish', 'password', 101 ) ) as $id => $args ) {
+		$GLOBALS['gallery_posts'][ $id ] = (object) array( 'post_type' => $args[0], 'post_status' => $args[1], 'post_password' => $args[2] );
+		$GLOBALS['gallery_thumbs'][ $id ] = $args[3];
+	}
+	about_expect( cas_home_gallery_artwork_id() === 801, 'Initial selection did not preserve original order' ); ++$cases;
+	$GLOBALS['gallery_mods'][CAS_HOME_GALLERY_ARTWORK] = '802';
+	about_expect( cas_home_gallery_thumb_id() === 108, 'Selected artwork did not supply Home image' ); ++$cases;
+	$GLOBALS['gallery_thumbs'][802] = 101;
+	about_expect( cas_home_gallery_thumb_id() === 101, 'Replacing artwork image did not update Home' ); ++$cases;
+	$GLOBALS['gallery_posts'][802]->post_status = 'draft';
+	about_expect( cas_home_gallery_artwork_id() === 801, 'Withdrawn artwork remained on Home' ); ++$cases;
+	$GLOBALS['about_action'] = 'cas_content_home-gallery_save';
+	foreach ( array( '802', '803', '804', '805', '806', '807', '808', '809', '0', '801x', array( '801' ) ) as $bad ) {
+		about_error( cas_content_prose_save( 'home-gallery', 'theme_mods_hello-elementor-child', cas_content_prose_snapshot( 'home-gallery', 'theme_mods_hello-elementor-child', $before ), array( CAS_HOME_GALLERY_ARTWORK => $bad ) ), 'home-gallery_input' );
+		about_expect( $wpdb->writes === 0, 'Invalid gallery choice wrote' ); ++$cases;
+	}
+	about_expect( cas_content_prose_save( 'home-gallery', 'theme_mods_hello-elementor-child', cas_content_prose_snapshot( 'home-gallery', 'theme_mods_hello-elementor-child', $before ), array( CAS_HOME_GALLERY_ARTWORK => '801' ) ) === 'saved', 'Gallery choice did not save' );
+	about_expect( unserialize( $wpdb->row['option_value'] )['unrelated'] === $before['unrelated'], 'Gallery choice changed unrelated values' ); ++$cases;
+	foreach ( array( '', '0', '13', '-1', '1.5', '3x', array(), 3 ) as $bad ) {
+		about_error( cas_content_display_clean( array( 'cas_home_testimonial_limit' => $bad ) ), 'home-display_input' ); ++$cases;
+	}
+	foreach ( array( '1', '3', '12' ) as $valid ) {
+		about_expect( cas_content_display_clean( array( 'cas_home_testimonial_limit' => $valid ) ) === array( 'cas_home_testimonial_limit' => $valid ), 'Valid comment limit refused' ); ++$cases;
+	}
+	about_expect( cas_admin_title( 'edit home and the art gallery' ) === 'Edit Home and the Art Gallery', 'UI casing changed minor words' ); ++$cases;
+	about_expect( cas_admin_title( 'wordpress FAQ and youtube links' ) === 'WordPress FAQ and YouTube Links', 'UI casing changed brands/acronyms' ); ++$cases;
+	about_expect( cas_admin_title( 'introduction under the banner' ) === 'Introduction under the Banner', 'UI preposition casing changed' ); ++$cases;
+	about_expect( cas_admin_title( 'Save About' ) === 'Save About', 'About page action lost its proper name' ); ++$cases;
 	fwrite( STDOUT, json_encode( array( 'synthetic_cases' => $cases, 'native_runtime_proof' => false ), JSON_THROW_ON_ERROR ) . PHP_EOL );
 }

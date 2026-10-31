@@ -24,6 +24,7 @@ defined( 'ABSPATH' ) || exit;
 
 const CAS_SHOWCASE_POST_TYPE    = 'cas_showcase';
 const CAS_SHOWCASE_META_STUDENT = '_cas_showcase_student';
+const CAS_SHOWCASE_META_USER = '_cas_showcase_user_id';
 const CAS_SHOWCASE_META_MEDIUM  = '_cas_showcase_medium';
 
 /* Five tiles to a row is the layout the chapter tells us to keep. The prototype
@@ -94,6 +95,7 @@ function cas_register_showcase_meta() {
 		return current_user_can( 'edit_posts' );
 	};
 
+	register_post_meta( CAS_SHOWCASE_POST_TYPE, CAS_SHOWCASE_META_USER, array( 'type' => 'integer', 'single' => true, 'show_in_rest' => false, 'sanitize_callback' => 'absint', 'auth_callback' => $can_edit ) );
 	foreach ( array( CAS_SHOWCASE_META_STUDENT, CAS_SHOWCASE_META_MEDIUM ) as $key ) {
 		register_post_meta(
 			CAS_SHOWCASE_POST_TYPE,
@@ -137,17 +139,39 @@ function cas_add_showcase_meta_box() {
 }
 add_action( 'add_meta_boxes', 'cas_add_showcase_meta_box' );
 
+/** Select public user columns only; do not instantiate users or read unrelated metadata. */
+function cas_showcase_students() {
+	return get_users( array( 'role__in' => array( 'subscriber', 'tutor_student' ), 'role__not_in' => array( 'administrator', 'editor', 'author', 'contributor', 'tutor_instructor' ), 'orderby' => 'display_name', 'fields' => array( 'ID', 'display_name' ), 'number' => -1 ) );
+}
+function cas_showcase_student_name( $post_id ) {
+	if ( ! metadata_exists( 'post', $post_id, CAS_SHOWCASE_META_USER ) ) {
+		return (string) get_post_meta( $post_id, CAS_SHOWCASE_META_STUDENT, true );
+	}
+	$id = (int) get_post_meta( $post_id, CAS_SHOWCASE_META_USER, true );
+	if ( ! $id ) { return ''; }
+	$users = get_users( array( 'include' => array( $id ), 'fields' => array( 'ID', 'display_name' ), 'number' => 1 ) );
+	return $users ? (string) $users[0]->display_name : '';
+}
+
 function cas_render_showcase_meta_box( $post ) {
 	wp_nonce_field( 'cas_save_showcase_credit', 'cas_showcase_nonce' );
 
-	$student = get_post_meta( $post->ID, CAS_SHOWCASE_META_STUDENT, true );
+	$student = (int) get_post_meta( $post->ID, CAS_SHOWCASE_META_USER, true );
+	$legacy = ! metadata_exists( 'post', $post->ID, CAS_SHOWCASE_META_USER ) ? (string) get_post_meta( $post->ID, CAS_SHOWCASE_META_STUDENT, true ) : '';
+	$students = cas_showcase_students();
 	$medium  = get_post_meta( $post->ID, CAS_SHOWCASE_META_MEDIUM, true );
 	?>
 	<p>
-		<label for="cas-showcase-student"><strong>Student name</strong></label><br>
-		<input type="text" id="cas-showcase-student" name="cas_showcase_student" class="widefat"
-			value="<?php echo esc_attr( $student ); ?>">
-		<span class="description">Shown under the picture and in the large view. Leave it empty and the piece appears without a name.</span>
+		<label for="cas-showcase-student"><strong>Registered Student</strong></label><br>
+		<select id="cas-showcase-student" name="cas_showcase_user_id" class="widefat">
+			<option value="0" <?php selected( ! $student && ! $legacy ); ?>>No Student Credit</option>
+			<?php if ( $legacy ) : ?><option value="legacy" selected>Keep Existing Credit: <?php echo esc_html( $legacy ); ?></option><?php endif; ?>
+			<?php if ( $student && ! in_array( $student, array_map( static function ( $user ) { return (int) $user->ID; }, $students ), true ) ) : ?>
+			<option value="<?php echo esc_attr( (string) $student ); ?>" selected>Existing Credit: <?php echo esc_html( cas_showcase_student_name( $post->ID ) ?: 'Account Unavailable' ); ?></option>
+			<?php endif; ?>
+			<?php foreach ( $students as $user ) : ?><option value="<?php echo esc_attr( (string) $user->ID ); ?>" <?php selected( $student, (int) $user->ID ); ?>><?php echo esc_html( $user->display_name . ' (#' . $user->ID . ')' ); ?></option><?php endforeach; ?>
+		</select>
+		<span class="description">Choose a registered student. Their current display name appears under the picture. Upload the picture manually using Featured Image.</span>
 	</p>
 	<p>
 		<label for="cas-showcase-medium"><strong>Medium</strong></label><br>
@@ -224,12 +248,16 @@ function cas_save_showcase_credit( $post_id ) {
 		return;
 	}
 
-	// The registered sanitize_callback runs on the way in, so these land clean.
-	update_post_meta(
-		$post_id,
-		CAS_SHOWCASE_META_STUDENT,
-		isset( $_POST['cas_showcase_student'] ) ? wp_unslash( $_POST['cas_showcase_student'] ) : ''
-	);
+	$input = $_POST['cas_showcase_user_id'] ?? null;
+	$previous = (int) get_post_meta( $post_id, CAS_SHOWCASE_META_USER, true );
+	$legacy = 'legacy' === $input && ! metadata_exists( 'post', $post_id, CAS_SHOWCASE_META_USER ) && '' !== (string) get_post_meta( $post_id, CAS_SHOWCASE_META_STUDENT, true );
+	$valid = is_string( $input ) && preg_match( '/^(?:0|[1-9][0-9]*)$/D', $input ) && ( '0' === $input || ( $previous > 0 && $previous === (int) $input ) || in_array( (int) $input, array_map( static function ( $user ) { return (int) $user->ID; }, cas_showcase_students() ), true ) );
+	if ( ! $legacy && ! $valid ) {
+		add_filter( 'redirect_post_location', static function ( $location ) { return add_query_arg( 'cas_credit_error', '1', $location ); } );
+		return;
+	}
+	if ( ! $legacy ) { update_post_meta( $post_id, CAS_SHOWCASE_META_USER, (int) $input ); }
+
 	update_post_meta(
 		$post_id,
 		CAS_SHOWCASE_META_MEDIUM,
@@ -259,7 +287,7 @@ function cas_showcase_admin_column( $column, $post_id ) {
 	if ( 'cas_photo' === $column ) {
 		echo has_post_thumbnail( $post_id ) ? 'Set' : 'Missing &mdash; not shown on the wall';
 	} elseif ( 'cas_student' === $column ) {
-		$student = get_post_meta( $post_id, CAS_SHOWCASE_META_STUDENT, true );
+		$student = cas_showcase_student_name( $post_id );
 		echo ( '' === $student ) ? '&mdash;' : esc_html( $student );
 	} elseif ( 'cas_medium' === $column ) {
 		$medium = get_post_meta( $post_id, CAS_SHOWCASE_META_MEDIUM, true );
@@ -311,7 +339,7 @@ function cas_showcase_pieces() {
 			'id'      => $post->ID,
 			'thumb'   => (int) $thumb_id,
 			'title'   => get_the_title( $post ),
-			'student' => (string) get_post_meta( $post->ID, CAS_SHOWCASE_META_STUDENT, true ),
+			'student' => cas_showcase_student_name( $post->ID ),
 			'medium'  => (string) get_post_meta( $post->ID, CAS_SHOWCASE_META_MEDIUM, true ),
 		);
 	}
@@ -674,3 +702,9 @@ function cas_showcase_css( $uri ) {
 }
 CSS;
 }
+
+add_action( 'admin_notices', function () {
+	if ( '1' === ( $_GET['cas_credit_error'] ?? '' ) && get_current_screen() && CAS_SHOWCASE_POST_TYPE === get_current_screen()->post_type ) {
+		echo '<div class="notice notice-error"><p>Student credit and medium were not saved. Choose a registered student from the list. Other post changes may have been saved.</p></div>';
+	}
+} );

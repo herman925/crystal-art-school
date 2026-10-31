@@ -15,18 +15,18 @@ remain excluded. The old held review stack was not bootstrapped or changed.
 Last reported acceptance coverage remains **63/110**. It is not build completion; no build-only
 percentage has been calculated.
 
-**Visual follow-up deployed:** `89598e3efbfcd69bc4f88f59d7db488aa10fe6bf` themes the content
-hub and fixed editors using the About page's leather, stitch, fonts and palette. Nine cards
-have primary actions and expandable secondary tasks; writing surfaces are leather, with
-responsive Save controls. Scoped native visual/save checks, 205 PHP cases and 46 contracts
-passed. Eight presentation files and their served CSS hashes were verified. Existing data,
-permissions, guide auth, real roles and financial settings are unchanged by this follow-up.
+**Current owner follow-up — 2026-10-31:** the requested Home artwork picker, editable
+student-comment display limit, registered-student Showcase credits, generic inner editors,
+sticky section links, Blog-first management action and backend label casing are implemented.
+The hub keeps its leather card design; course introduction width now follows the container.
+See [CMS controls follow-up](CMS-CONTROLS-2026-10-31.md) for release status and demo inventory.
+The earlier `89598e3` inner-editor skin is intentionally superseded by this owner direction.
 
 | Classification | Current evidence and next action |
 |---|---|
 | Merged/deployed; native fixed-editor checks passed | Main release `4116b5f3c8b15ff916f2b5aff7c204970186eb96` installs the five page editors covering the same 42 fields. Fresh native save/media/capability checks passed; About TinyMCE and upload-selection defects were fixed. 195 PHP cases, 46 source contracts and 14 mocked JS cases passed. 14 theme and 86 guide files were hash-verified; 22-page inventory/auth preserved. This is not full course-authoring, production ownership or client handover acceptance. [Full receipt](ROUTE-B-SOURCE-2026-10-31.md#production-release-receipt--2026-10-31). Original PR #201 at `45996731a30c640b41ada90c9ecc62e260a4e92c`, guide #203 and log runbook #204 remain preserved/open. |
-| Source correction, controlled render checks passed | Lesson content renders once with its own cover. Testing found and fixed a missing H1 when lesson text was empty; four fragment-render cases and the existing lesson access/material source contracts now pass. This is not an enrolled native lesson/UI pass. Nothing deployed or published. |
-| Published fix, source reconciled | The 22-page guide Sign out overlay is already published. Local commit `0f32f88` records its exact navigation config source; see [source reconciliation](../docs-site/SIGNOUT-SOURCE-20261031.md). Original checkout's modified config, helpers and private evidence remain untouched. No rebuild or publication. |
+| Source correction, controlled render checks passed | Lesson content renders once with its own cover. Testing found and fixed a missing H1 when lesson text was empty; four fragment-render cases and the existing lesson access/material source contracts now pass. This is not an enrolled native lesson/UI pass. Deployed in release `4116b5f`; enrolled learner and cover-authoring checks remain open. |
+| Published fix, source reconciled | The 22-page guide Sign out overlay is already published. Local commit `0f32f88` records its exact navigation config source; see [source reconciliation](../docs-site/SIGNOUT-SOURCE-20261031.md). Original checkout's modified config, helpers and private evidence remain untouched. The subsequent scoped guide release preserved authentication and its 22-page inventory. |
 | Built, outstanding verification | Native authoring/media/five-photo workflows, enrolled progress/completion, recovery, provider checkout/webhook/receipt and final guide-reader behaviour. Keep the detailed pending list in #211; do not classify each as missing code. |
 | Client/owner/access blocked | Approved copy/prices/materials/Etsy destinations, adviser legal/VAT/consent, settlement evidence, deferred inbox proof, human/device checks, ownership handover and explicit launch approval. Keep incident-held operations stopped. |
 

@@ -36,7 +36,7 @@ function cas_content_free_videos_controls( $values, $input_name = 'cas_fv_fields
 		if ( ! is_string( $value ) ) {
 			wp_die( 'The Free Videos introductions need an administrator check.', '', array( 'response' => 409 ) );
 		}
-		echo '<h2><label for="' . esc_attr( $key ) . '">' . esc_html( $field['label'] ) . '</label></h2>';
+		echo '<h2><label for="' . esc_attr( $key ) . '">' . esc_html( cas_admin_title( $field['label'] ) ) . '</label></h2>';
 		wp_editor( wp_kses_post( $value ), $key, array(
 			'textarea_name' => $input_name . '[' . $key . ']',
 			'textarea_rows' => 4,

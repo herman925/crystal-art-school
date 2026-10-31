@@ -1,6 +1,6 @@
 # Student comments on the homepage
 
-**Testimonials** in the dashboard menu. Three appear on the homepage.
+**Testimonials** in the dashboard menu. By default, up to three appear on the homepage. **Content Hub → Home → Edit Home → Student Comment Limit** lets you set a display limit from **1 to 12**. Use **Save Home** to apply it; extra comments remain saved.
 
 Each entry has two parts:
 
@@ -11,7 +11,7 @@ You do not type the student's name or upload their picture. Both are read from t
 student's own account, so if they change their display name or photo it updates here
 automatically, and it can never disagree with what they see elsewhere on the site.
 
-**Page attributes → Order** controls which three show, lowest numbers first.
+**Page attributes → Order** controls which comments show, up to your display limit, lowest numbers first.
 
 If nothing is published, the section disappears from the homepage rather than showing an
 empty space.

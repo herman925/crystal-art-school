@@ -7,7 +7,7 @@ board on the Student showcase page.
 |---|---|
 | **Title** | The name of the piece. Can be left empty |
 | **Featured image** | The photograph. Required |
-| **Student name** | In the **Credit** box on the right. Can be left empty |
+| **Registered Student** | Select an existing student account in the **Credit** box. Choose **No Student Credit** to omit the name |
 | **Medium** | In the **Credit** box on the right, e.g. Watercolour |
 | **Page attributes → Order** | Position on the wall, lowest first |
 
@@ -22,12 +22,13 @@ wall" when this happens, so you can spot it without opening every entry.
 Each photograph is cropped to a square. Shoot the painting square-on and crop close to its
 edges before uploading.
 
-## Use the student's username
+## Choose a Registered Student
 
-Use the student's agreed public username, not their legal name. Obtain permission before publishing a credit or photograph; having an account is not permission to publish their details.
+Upload the picture manually through **Featured Image**, then choose its student from **Registered Student**. The options come from student accounts registered on this website, not a typed name. Account IDs distinguish duplicate display names. The current account display name supplies the public credit; changing it updates the credit on uncached pages.
 
-If you are not sure what a student is happy to have published, leave the box empty. The
-piece still goes on the wall, just without a credit.
+Obtain permission before publishing a credit or photograph; having an account is not permission to publish their details. Choose **No Student Credit** if you are unsure. Existing text credits are preserved until you replace them with a student selection or choose no credit.
+
+The clearly labelled **Demo Student** and **Demo — Showcase Layout Sample** are preview content added at the owner’s request. The sample graphic is not real student work. Replace or remove the demo before launch.
 
 ## Medium builds the filter buttons
 
@@ -54,5 +55,5 @@ There is no drag-and-drop here. The number in that box is what decides it.
 
 ## While the wall is empty
 
-The page says "No student work is published yet." That is what visitors see now. Everything
+The page says "No student work is published yet." That is what visitors see when no pieces qualify. Everything
 else on the page — the heading and the closing invitation — is already there and waiting.

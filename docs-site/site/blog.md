@@ -1,6 +1,6 @@
 # Blog articles
 
-**Posts → Add New.** This is the freest part of the site — it is meant to be written in,
+**Content Hub → Blog → Manage Posts → Add New.** This is the freest part of the site — it is meant to be written in,
 not configured.
 
 ## The blocks you can use
@@ -86,3 +86,9 @@ Update, and the amber panel disappears from the article. Nothing else to undo.
 
 The **Posts** list has a **Dev note** column that reads "Showing on the article" whenever one
 is live, so a note cannot go out unnoticed.
+
+## Demo Posts
+
+Six posts beginning **Demo —** are labelled layout samples. They show four topic filters: **Watercolour**, **Oil Painting**, **Diary** and **Tools**. These are Categories, not WordPress Tags. Their labelled graphics are not teacher or student artwork. Replace or remove these samples before launch.
+
+The Blog card’s main action opens Post Management. **More Editing Tasks → Introduction Paragraph under the Blog Heading** opens the separate introduction editor. Inner editing forms use the standard WordPress appearance.

@@ -49,7 +49,7 @@ function cas_content_hero_controls( $values, $input_name = 'cas_hero_fields' ) {
 		if ( ! is_string( $value ) ) {
 			wp_die( 'The carousel fields need an administrator check.', '', array( 'response' => 409 ) );
 		}
-		echo '<h2><label for="' . esc_attr( $key ) . '">' . esc_html( $field['label'] ) . '</label></h2>';
+		echo '<h2><label for="' . esc_attr( $key ) . '">' . esc_html( cas_admin_title( $field['label'] ) ) . '</label></h2>';
 		if ( $field['description'] ) {
 			echo '<p class="description">' . esc_html( $field['description'] ) . '</p>';
 		}

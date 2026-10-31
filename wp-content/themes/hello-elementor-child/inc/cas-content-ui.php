@@ -21,25 +21,18 @@ function cas_content_ui_stylesheet( $name ) {
 
 add_action( 'admin_enqueue_scripts', function () {
 	if ( ! cas_content_ui_screen() ) { return; }
+	if ( ( $_GET['page'] ?? '' ) !== 'cas-content-hub' ) {
+		wp_enqueue_style( 'cas-content-editor-nav', cas_content_ui_stylesheet( 'cas-content-editor-nav' ), array(), null );
+		return;
+	}
 	wp_enqueue_style( 'cas-content-fonts', cas_content_ui_fonts(), array(), null );
 	wp_enqueue_style( 'cas-content-materials', cas_content_ui_stylesheet( 'cas-content-materials' ), array(), null );
 	wp_enqueue_style( 'cas-content-ui', cas_content_ui_stylesheet( 'cas-content-ui' ), array( 'cas-content-materials', 'cas-content-fonts' ), null );
 } );
 
 add_filter( 'admin_body_class', function ( $classes ) {
-	return cas_content_ui_screen() ? $classes . ' cas-content-screen' : $classes;
+	return cas_content_ui_screen() && ( $_GET['page'] ?? '' ) === 'cas-content-hub' ? $classes . ' cas-content-screen' : $classes;
 } );
 
-function cas_content_ui_tinymce( $settings, $editor_id ) {
-	if ( ! cas_content_ui_screen() || ! in_array( $editor_id, array(
-		'cas_about_intro', 'cas_about_quote', 'cas_about_journey_body', 'cas_about_community_body', 'cas_about_instructor_body',
-		'cas_blog_intro', 'cas_fv_lead', 'cas_fv_intro_demos', 'cas_fv_intro_quick', 'cas_fv_intro_shorts',
-	), true ) ) { return $settings; }
-	$settings['body_class'] = trim( ( $settings['body_class'] ?? '' ) . ' cas-writing-surface' );
-	$settings['content_css'] = implode( ',', array_filter( array(
-		$settings['content_css'] ?? '', cas_content_ui_fonts(),
-		cas_content_ui_stylesheet( 'cas-content-materials' ), cas_content_ui_stylesheet( 'cas-content-writing' ),
-	) ) );
-	return $settings;
-}
-add_filter( 'tiny_mce_before_init', 'cas_content_ui_tinymce', 20, 2 );
+/** Inner editors intentionally keep the native WordPress appearance. */
+function cas_content_ui_tinymce( $settings, $editor_id ) { return $settings; }

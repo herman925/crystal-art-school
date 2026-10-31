@@ -170,7 +170,7 @@ add_action(
 			'Who said it',
 			function ( $post ) {
 				$selected = (int) get_post_meta( $post->ID, '_cas_user_id', true );
-				$users    = get_users( [ 'orderby' => 'display_name', 'number' => 500 ] );
+				$users    = get_users( [ 'orderby' => 'display_name', 'number' => 500, 'fields' => [ 'ID', 'display_name', 'user_email' ] ] );
 
 				wp_nonce_field( 'cas_testimonial_user', 'cas_testimonial_nonce' );
 				echo '<p>The name and profile picture shown on the card come from this account.</p>';
@@ -214,12 +214,17 @@ add_action(
 	}
 );
 
+function cas_home_testimonial_limit() {
+	$value = get_theme_mod( 'cas_home_testimonial_limit', '3' );
+	return is_scalar( $value ) && preg_match( '/^(?:[1-9]|1[0-2])$/D', (string) $value ) ? (int) $value : 3;
+}
+
 function cas_testimonial_items() {
 	$posts = get_posts(
 		[
 			'post_type'   => 'cas_testimonial',
 			'post_status' => 'publish',
-			'numberposts' => -1,
+			'numberposts' => cas_home_testimonial_limit(),
 			'orderby'     => [ 'menu_order' => 'ASC', 'date' => 'DESC' ],
 		]
 	);

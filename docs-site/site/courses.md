@@ -79,3 +79,9 @@ You decided this on 28 August 2026, replacing the earlier three-level plan.
 A draft is not a published course. For a new paid course, save the content as a draft, set and confirm its first price through **Course prices**, reload the same saved course, and publish only when the content, price and launch timing are agreed. A saved price does not publish the course.
 
 For an already published course, use the same confirmed price process for money changes; do not use the ordinary content-save button to change its price. Follow the draft Course prices guide (available after handover) after final review and handover, and ask the webmaster if the current course status is unclear.
+
+## Lesson Videos and Bunny
+
+Editing a course in WordPress does **not** upload a video file to Bunny. For a new film or replacement, ask the webmaster to upload it to the existing Bunny Stream library and attach its approved reference to the lesson. WordPress controls the lesson title, description and course position; the hosted film plays through the site’s protected lesson player.
+
+A direct WordPress-to-Bunny upload tool has been researched but is not implemented. Do not upload the film as an ordinary public Media attachment or paste a private hosting credential into a lesson field.

@@ -32,7 +32,7 @@ function cas_content_page_clean( $groups, $input ) {
 function cas_content_page_controls( $groups, $values ) {
 	foreach ( $groups as $group ) {
 		$config = cas_content_prose_config( $group );
-		echo '<fieldset class="cas-editor-section"><legend>' . esc_html( $config['title'] ) . '</legend><p class="cas-section-help">' . esc_html( $config['empty'] ) . '</p>';
+		echo '<fieldset class="cas-editor-section" id="cas-section-' . esc_attr( $group ) . '"><legend>' . esc_html( cas_admin_title( $config['title'] ) ) . '</legend><p class="cas-section-help">' . esc_html( $config['empty'] ) . '</p>';
 		call_user_func( $config['controls'], $values, 'cas_page_fields' );
 		echo '</fieldset>';
 	}
@@ -44,7 +44,7 @@ function cas_content_prose_config( $group ) {
 	}
 	$combined = array(
 		'home-page' => array(
-			'title' => 'Home', 'slug' => 'cas-content-home-page', 'groups' => array( 'hero', 'home', 'home-images' ),
+			'title' => 'Home', 'slug' => 'cas-content-home-page', 'groups' => array( 'hero', 'home', 'home-images', 'home-display' ),
 			'description' => 'Edit the three-slide banner, page text and photographs together. Repeating content such as courses, questions and artwork uses the lists below.',
 		),
 		'about-page' => array(
@@ -67,6 +67,17 @@ function cas_content_prose_config( $group ) {
 			'input' => 'cas_page_fields', 'snapshot' => 'cas_page_snapshot', 'nonce' => 'cas_content_' . $group . '_save',
 			'error' => 'page', 'input_error' => 'cas_page_input',
 			'empty' => 'Save applies all fields on this page together. Each section explains what happens when a field is cleared.',
+		);
+	}
+	if ( 'home-gallery' === $group || 'home-display' === $group ) {
+		$gallery = 'home-gallery' === $group;
+		return array(
+			'title' => $gallery ? 'Gallery Image' : 'Student Comment Limit',
+			'fields' => $gallery ? 'cas_content_gallery_fields' : 'cas_content_display_fields',
+			'clean' => $gallery ? 'cas_content_gallery_clean' : 'cas_content_display_clean',
+			'controls' => $gallery ? '' : 'cas_content_display_controls',
+			'nonce' => 'cas_content_' . $group . '_save', 'error' => $group, 'input_error' => $group . '_input',
+			'empty' => 'Keep extra comments in the list; only the selected number is displayed on Home.',
 		);
 	}
 	$pages = array(
@@ -155,7 +166,7 @@ function cas_content_prose_menu() {
 	$visible = array( 'home-page', 'about-page', 'blog', 'free-videos', 'site-details' );
 	foreach ( array_merge( $visible, array( 'about', 'home', 'contact', 'hero', 'home-images', 'about-image', 'brand-images' ) ) as $group ) {
 		$page = cas_content_prose_config( $group );
-		add_submenu_page( CAS_CONTENT_HUB_SLUG, $page['title'], $page['title'], CAS_CONTENT_CAP, $page['slug'], $page['callback'] );
+		add_submenu_page( CAS_CONTENT_HUB_SLUG, cas_admin_title( $page['title'] ), cas_admin_title( $page['title'] ), CAS_CONTENT_CAP, $page['slug'], $page['callback'] );
 		// Keep old bookmarked forms callable with their original guards, without cluttering the menu.
 		if ( ! in_array( $group, $visible, true ) ) {
 			remove_submenu_page( CAS_CONTENT_HUB_SLUG, $page['slug'] );
@@ -287,8 +298,8 @@ function cas_content_prose_page( $group ) {
 		$row    = cas_content_prose_row( $group, $option );
 	}
 	$blocked = is_wp_error( $row ) || ( is_wp_error( $result ) && ( $config['input_error'] !== $result->get_error_code() || ! is_string( $submitted_snapshot ) || ! hash_equals( cas_content_prose_snapshot( $group, $option, $row['mods'] ), $submitted_snapshot ) ) );
-	echo '<div class="wrap cas-content-ui cas-content-editor"><header class="cas-editor-header"><h1>' . esc_html( $config['title'] ) . '</h1><p>' . esc_html( $config['description'] ) . '</p></header>';
-	echo '<p><a href="' . esc_url( admin_url( 'admin.php?page=' . CAS_CONTENT_HUB_SLUG ) ) . '">Back to Content hub</a></p>';
+	echo '<div class="wrap cas-content-ui cas-content-editor"><header class="cas-editor-header"><h1>' . esc_html( cas_admin_title( $config['title'] ) ) . '</h1><p>' . esc_html( $config['description'] ) . '</p></header>';
+	echo '<p><a href="' . esc_url( admin_url( 'admin.php?page=' . CAS_CONTENT_HUB_SLUG ) ) . '">Back to Content Hub</a></p>';
 	echo '<p><strong>' . esc_html( $config['empty'] ) . '</strong> Saving changes the values used on the site. Cached public pages may take time to refresh.</p>';
 	if ( is_wp_error( $result ) || is_wp_error( $row ) ) {
 		$error = is_wp_error( $result ) ? $result : $row;
@@ -304,6 +315,7 @@ function cas_content_prose_page( $group ) {
 	if ( $blocked ) {
 		echo '<p>Copy any unsaved text before <a href="' . esc_url( $url ) . '">reloading the latest saved version</a>. Saving is stopped on this form.</p>';
 	}
+	if ( $group === 'home-page' && function_exists( 'cas_content_gallery_picker' ) ) { cas_content_gallery_picker(); }
 	echo '<form method="post" action="' . esc_url( $url ) . '">';
 	wp_nonce_field( $config['nonce'] );
 	$snapshot = $blocked ? '' : cas_content_prose_snapshot( $group, $option, $row['mods'] );
@@ -314,12 +326,18 @@ function cas_content_prose_page( $group ) {
 			$values[ $key ] = wp_kses_post( wp_unslash( $posted[ $key ] ) );
 		}
 	}
-	echo '<div class="cas-editor-fields">';
+	echo '<div class="cas-editor-fields" id="cas-section-' . esc_attr( $group ) . '">';
 	call_user_func( $config['controls'], $values );
 	echo '</div>';
-	echo '<div class="cas-editor-actions"><p>Save all changes on this page.</p>';
-	submit_button( 'Save ' . $config['title'], 'primary', 'submit', false, $blocked ? array( 'disabled' => 'disabled' ) : array() );
-	echo '</div>';
+	echo '<aside class="cas-editor-rail"><nav class="cas-editor-toc" aria-label="Page Sections"><h2>On This Page</h2><ul>';
+	if ( $group === 'home-page' ) { echo '<li><a href="#home-gallery-image">Gallery Image</a></li>'; }
+	foreach ( $config['groups'] ?? array( $group ) as $section ) {
+		$section_config = cas_content_prose_config( $section );
+		echo '<li><a href="#cas-section-' . esc_attr( $section ) . '">' . esc_html( cas_admin_title( $section_config['title'] ) ) . '</a></li>';
+	}
+	echo '</ul></nav><div class="cas-editor-actions"><p>Save the fields in this form.</p>';
+	submit_button( cas_admin_title( 'Save ' . $config['title'] ), 'primary', 'submit', false, $blocked ? array( 'disabled' => 'disabled' ) : array() );
+	echo '</div></aside>';
 	echo '</form>';
 	cas_content_prose_related( $group, $url );
 	echo '</div>';
@@ -335,7 +353,7 @@ function cas_content_prose_related( $group, $url ) {
 		if ( $card['name'] !== $cards[ $group ] ) {
 			continue;
 		}
-		echo '<h2>Related content</h2><p>Save your changes before opening another editor.</p>';
+		echo '<h2>Related Content</h2><p>Save your changes before opening another editor.</p>';
 		if ( $card['view'] ) {
 			echo '<p><a class="button" href="' . esc_url( $card['view'] ) . '" target="_blank" rel="noopener">View saved page (opens a new tab)</a></p>';
 		}
@@ -345,7 +363,7 @@ function cas_content_prose_related( $group, $url ) {
 		if ( $links ) {
 			echo '<ul>';
 			foreach ( $links as $link ) {
-				echo '<li><a href="' . esc_url( $link['url'] ) . '">' . esc_html( $link['text'] ) . '</a></li>';
+				echo '<li><a href="' . esc_url( $link['url'] ) . '">' . esc_html( cas_admin_title( $link['text'] ) ) . '</a></li>';
 			}
 			echo '</ul>';
 		}

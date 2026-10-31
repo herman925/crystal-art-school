@@ -62,7 +62,7 @@ function cas_content_images_controls( $values, $fields, $input_name ) {
 		if ( ! is_string( $value ) ) {
 			wp_die( 'The image URLs need an administrator check.', '', array( 'response' => 409 ) );
 		}
-		echo '<h2><label for="' . esc_attr( $key ) . '">' . esc_html( $field['label'] ) . '</label></h2><p class="description">' . esc_html( $field['description'] ) . '</p>';
+		echo '<h2><label for="' . esc_attr( $key ) . '">' . esc_html( cas_admin_title( $field['label'] ) ) . '</label></h2><p class="description">' . esc_html( $field['description'] ) . '</p>';
 		echo '<p>' . esc_html( $field['restore'] ? 'Clearing this field stores an empty URL and uses the existing shipped default; it does not remove the image from the public layout.' : 'Clearing this optional field leaves the plain dark TOOLS card, without a photograph.' ) . '</p>';
 		cas_content_image_slot( $key, $input_name . '[' . $key . ']', $value, $field, $can_media );
 	}

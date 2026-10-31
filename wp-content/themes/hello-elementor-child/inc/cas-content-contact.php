@@ -41,7 +41,7 @@ function cas_content_contact_controls( $values, $input_name = 'cas_contact_field
 		if ( ! is_string( $value ) ) {
 			wp_die( 'The shared contact values need an administrator check.', '', array( 'response' => 409 ) );
 		}
-		echo '<h2><label for="' . esc_attr( $key ) . '">' . esc_html( $field['label'] ) . '</label></h2>';
+		echo '<h2><label for="' . esc_attr( $key ) . '">' . esc_html( cas_admin_title( $field['label'] ) ) . '</label></h2>';
 		echo '<input type="' . esc_attr( $field['type'] ) . '" class="large-text" id="' . esc_attr( $key ) . '" name="' . esc_attr( $input_name . '[' . $key . ']' ) . '" value="' . esc_attr( $value ) . '">';
 	}
 }

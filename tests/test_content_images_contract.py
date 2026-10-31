@@ -68,10 +68,10 @@ class FixedImagesContract(unittest.TestCase):
 
     def test_action_names_contain_visible_text_and_field_context(self):
         script = (INC.parent / "js/cas-content-hero.js").read_text()
-        for text in ("$choose_text = $value ? 'Replace image' : 'Choose image';", "$clear_text = ! empty( $field['restore'] ) ? 'Use shipped default' : 'Clear slot';", "$choose_text . ' for ' . $field['label']", "$clear_text . ' for ' . $field['label']", "esc_html( $choose_text )", "esc_html( $clear_text )", "data-cas-label="):
+        for text in ("$choose_text = $value ? 'Replace Image' : 'Choose Image';", "$clear_text = ! empty( $field['restore'] ) ? 'Use Shipped Default' : 'Clear Slot';", "$choose_text . ' for ' . $field['label']", "$clear_text . ' for ' . $field['label']", "esc_html( $choose_text )", "esc_html( $clear_text )", "data-cas-label="):
             self.assertIn(text, MEDIA)
-        self.assertIn(".text( 'Replace image' ).attr( 'aria-label', 'Replace image for ' + slot.data( 'casLabel' ) )", script)
-        self.assertIn(".text( 'Choose image' ).attr( 'aria-label', 'Choose image for ' + slot.data( 'casLabel' ) )", script)
+        self.assertIn(".text( 'Replace Image' ).attr( 'aria-label', 'Replace Image for ' + slot.data( 'casLabel' ) )", script)
+        self.assertIn(".text( 'Choose Image' ).attr( 'aria-label', 'Choose Image for ' + slot.data( 'casLabel' ) )", script)
         self.assertNotIn("esc_attr( 'Clear ' . $field['label'] )", MEDIA)
 
 

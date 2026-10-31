@@ -41,7 +41,7 @@ function cas_content_about_controls( $values, $input_name = 'cas_about_fields' )
 	foreach ( cas_content_about_fields() as $key => $field ) {
 		$value = $values[ $key ] ?? $field['default'];
 		$inline = 'inline' === $field['type'];
-		echo '<h2><label for="' . esc_attr( $key ) . '">' . esc_html( html_entity_decode( $field['label'], ENT_QUOTES | ENT_HTML5, 'UTF-8' ) ) . '</label></h2>';
+		echo '<h2><label for="' . esc_attr( $key ) . '">' . esc_html( cas_admin_title( $field['label'] ) ) . '</label></h2>';
 		echo '<p>' . esc_html( $inline ? 'One paragraph, with emphasis or links. Headings and lists belong in the essays below.' : 'Use paragraphs and emphasis. Cross-headings use the Cross-heading format; the section heading above this essay stays fixed.' ) . '</p>';
 		wp_editor( $value, $key, array(
 			'textarea_name' => $input_name . '[' . $key . ']',

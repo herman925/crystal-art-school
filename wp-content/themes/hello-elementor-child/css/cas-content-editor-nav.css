@@ -1,0 +1,27 @@
+/* Generic WordPress editing layout: no site fonts, paper, or leather skin. */
+.cas-content-editor { max-width: 1600px; }
+.cas-content-editor > form { display: grid; grid-template-columns: minmax(0,1fr) 240px; align-items: start; gap: 28px; }
+.cas-editor-fields { min-width: 0; }
+.cas-editor-section { min-width: 0; margin: 24px 0 36px; padding: 14px 0 0; border: 0; border-top: 1px solid #c3c4c7; scroll-margin-top: 60px; }
+.cas-editor-section > legend { padding-right: 12px; font-size: 17px; font-weight: 600; }
+.cas-editor-rail { position: sticky; top: 50px; }
+.cas-editor-toc, .cas-editor-actions { background: #fff; border: 1px solid #c3c4c7; padding: 16px; margin: 0 0 16px; }
+.cas-editor-toc h2 { font-size: 14px; margin: 0 0 12px; }
+.cas-editor-toc ul { margin: 0; }
+.cas-editor-toc li { margin-bottom: 9px; }
+.cas-editor-toc a { text-underline-offset: 3px; }
+.cas-editor-actions > p { margin-top: 0; }
+.cas-editor-fields .wp-editor-wrap { max-width: 100%; }
+.cas-editor-section, .cas-editor-fields { scroll-margin-top: 60px; }
+@media(max-width:900px) {
+ .cas-content-editor > form { display: flex; flex-direction: column; gap: 18px; }
+ .cas-editor-rail { position: sticky; top: 46px; order: -1; width: 100%; z-index: 20; background: #f0f0f1; }
+ .cas-editor-toc { margin: 0; padding: 10px 12px; }
+ .cas-editor-toc h2 { margin: 0 0 5px; }
+ .cas-editor-toc ul { display: flex; gap: 12px; overflow-x: auto; }
+ .cas-editor-toc li { flex: none; margin: 0; }
+ .cas-editor-actions { margin-top: 8px; padding: 10px 12px; display: flex; align-items: center; gap: 14px; }
+ .cas-editor-actions > p { margin: 0; }
+ .cas-editor-fields { width: 100%; }
+ .cas-editor-section, .cas-editor-fields { scroll-margin-top: 190px; }
+}

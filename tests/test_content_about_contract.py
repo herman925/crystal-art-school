@@ -73,9 +73,10 @@ class AboutFormContract(unittest.TestCase):
         self.assertIn("cas_content_prose_page( 'about' )", MODULE)
         self.assertIn("array( 'cas-content-about', 'cas-content-blog', 'cas-content-free-videos', 'cas-content-home', 'cas-content-contact', 'cas-content-hero', 'cas-content-home-images', 'cas-content-about-image', 'cas-content-brand-images', 'cas-content-home-page', 'cas-content-about-page', 'cas-content-site-details' )", SHARED)
 
-    def test_only_twelve_closed_server_selected_groups(self):
+    def test_closed_server_selected_groups(self):
         config = SHARED.split("function cas_content_prose_config(", 1)[1].split("function cas_content_prose_allowed_pages", 1)[0]
         self.assertEqual(re.findall(r"^\t\t'([^']+)' => array", config, re.MULTILINE), ["home-page", "about-page", "site-details", "about", "blog", "free-videos", "home", "contact", "hero", "home-images", "about-image", "brand-images"])
+        self.assertIn("'home-gallery' === $group || 'home-display' === $group", config)
         self.assertNotIn("$_POST['group']", SHARED)
         self.assertNotIn("apply_filters(", SHARED)
         self.assertIn("$config = cas_content_prose_config( $group );", SHARED)

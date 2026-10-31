@@ -14,16 +14,12 @@ defined( 'ABSPATH' ) || exit;
  * and no new CSS is needed. One class is deliberately omitted — see the note on
  * .shop-gallery in cas_render_home_gallery().
  *
- * Editability, under Herman's Rule (2026-08-23):
- *   - The picture is Crystal's. It is the first piece in her own Gallery
- *     curation, read from the existing Artwork post type. No second image slot
- *     is registered: a promo card for the gallery that shows something other
- *     than the gallery is a parallel store to keep in step by hand.
- *   - The hover line is body copy, so it is a Customizer field.
- *   - The `ART GALLERY` title, the asterisk, the link and its destination are
- *     structure and stay in code.
+ * Owner direction, 2026-10-31: choose the card's picture from published Artwork
+ * in Content Hub → Home → Gallery Image. The original ordering remains the
+ * fallback until a selection is saved. The title and destination stay fixed.
  */
 
+const CAS_HOME_GALLERY_ARTWORK = 'cas_home_gallery_artwork';
 const CAS_HOME_GALLERY_SUB = 'cas_home_gallery_sub';
 
 /* The line the chapter confirms, quoted exactly. It is the shipped default, not
@@ -53,7 +49,7 @@ add_action(
 				'title'       => 'Home — art gallery card',
 				'panel'       => 'cas_pages',
 				'priority'    => 16,
-				'description' => 'The picture on this card is the first piece in Dashboard &rarr; Artwork, in the order set there. Change that order and the card follows. The card is hidden while no artwork is published.',
+				'description' => 'Choose the picture from published Artwork in Content Hub → Home → Gallery Image. Until a choice is saved, the existing gallery order supplies the picture.',
 			)
 		);
 
@@ -156,39 +152,33 @@ function cas_render_home_gallery() {
 	return ob_get_clean();
 }
 
-/**
- * The featured image of the first published piece in the client's own Gallery
- * curation. Home sorts by menu_order ascending, then publication date descending;
- * the Gallery page sorts independently by publication date, so its lead may differ.
- *
- * The meta query is what makes "first" mean "first piece that has a picture". An
- * artwork saved without a featured image is skipped here exactly as it is
- * skipped on the Gallery page, rather than emptying this card.
- */
+/** Only already-public gallery pictures can be featured on Home. */
+function cas_home_gallery_image( $artwork_id ) {
+	$post = get_post( $artwork_id );
+	if ( ! $post || 'cas_artwork' !== $post->post_type || 'publish' !== $post->post_status || $post->post_password ) { return 0; }
+	$thumb = (int) get_post_thumbnail_id( $artwork_id );
+	if ( ! $thumb || ! wp_attachment_is_image( $thumb ) || ! in_array( get_post_status( $thumb ), array( 'inherit', 'publish' ), true ) || ( function_exists( 'cas_private_is' ) && cas_private_is( $thumb ) ) ) { return 0; }
+	return $thumb;
+}
+
+function cas_home_gallery_artworks( $orderby = array( 'menu_order' => 'ASC', 'date' => 'DESC' ) ) {
+	$query = new WP_Query( array(
+		'post_type' => 'cas_artwork', 'post_status' => 'publish', 'post_password' => '',
+		'posts_per_page' => -1, 'orderby' => $orderby, 'fields' => 'ids', 'no_found_rows' => true,
+		'meta_query' => array( array( 'key' => '_thumbnail_id', 'compare' => 'EXISTS' ) ),
+	) );
+	return array_values( array_filter( $query->posts, 'cas_home_gallery_image' ) );
+}
+
+function cas_home_gallery_artwork_id() {
+	$chosen = (int) get_theme_mod( CAS_HOME_GALLERY_ARTWORK, 0 );
+	if ( $chosen && cas_home_gallery_image( $chosen ) ) { return $chosen; }
+	// Preserve the previously shown artwork until a choice is saved, or if it is withdrawn.
+	$artworks = cas_home_gallery_artworks();
+	return $artworks ? (int) $artworks[0] : 0;
+}
+
 function cas_home_gallery_thumb_id() {
-	$query = new WP_Query(
-		array(
-			'post_type'      => 'cas_artwork',
-			'post_status'    => 'publish',
-			'posts_per_page' => 1,
-			'orderby'        => array(
-				'menu_order' => 'ASC',
-				'date'       => 'DESC',
-			),
-			'meta_query'     => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- one EXISTS test, one row.
-				array(
-					'key'     => '_thumbnail_id',
-					'compare' => 'EXISTS',
-				),
-			),
-			'fields'         => 'ids',
-			'no_found_rows'  => true,
-		)
-	);
-
-	if ( empty( $query->posts ) ) {
-		return 0;
-	}
-
-	return (int) get_post_thumbnail_id( $query->posts[0] );
+	$id = cas_home_gallery_artwork_id();
+	return $id ? cas_home_gallery_image( $id ) : 0;
 }

@@ -61,8 +61,8 @@ function cas_content_image_slot( $key, $name, $value, $field, $can_media ) {
 	$fallback = ! empty( $field['restore'] ) && cas_content_hero_image_allowed( $field['default'] ) ? $field['default'] : '';
 	$preview = '' === $value ? $fallback : $value;
 	$allowed = cas_content_hero_image_allowed( $preview );
-	$choose_text = $value ? 'Replace image' : 'Choose image';
-	$clear_text = ! empty( $field['restore'] ) ? 'Use shipped default' : 'Clear slot';
+	$choose_text = $value ? 'Replace Image' : 'Choose Image';
+	$clear_text = ! empty( $field['restore'] ) ? 'Use Shipped Default' : 'Clear Slot';
 	echo '<div class="cas-hero-image-slot" data-cas-label="' . esc_attr( $field['label'] ) . '" data-cas-fallback="' . esc_attr( $fallback ) . '"><input type="hidden" id="' . esc_attr( $key ) . '" name="' . esc_attr( $name ) . '" value="' . esc_attr( $value ) . '"><div class="cas-hero-image-preview">';
 	if ( $preview && $allowed ) {
 		echo '<img src="' . esc_url( $preview ) . '" alt="" style="max-width:240px;height:auto;display:block">';

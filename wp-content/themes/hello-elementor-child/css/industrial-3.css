@@ -1525,3 +1525,6 @@ body .mc-btn.primary, body .ck-btn.primary {
   .cert-highlight .cert-frame { flex: 0 0 auto; max-width: 300px; margin-inline: auto; width: 100%; }
   .cert-highlight figcaption { text-align: center; max-width: none; }
 }
+
+/* Course introduction follows the same container edge as the signature above. */
+.post-type-archive-courses .page-lead-wrap .page-lead { max-width: none; width: 100%; }

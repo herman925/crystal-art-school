@@ -10,6 +10,20 @@ defined( 'ABSPATH' ) || exit;
 
 const CAS_CONTENT_HUB_CAP = 'manage_cas_content';
 
+/** Title case for project-owned UI labels; sentences and user content are not passed here. */
+function cas_admin_title( $text ) {
+	$minor = array( 'a', 'an', 'and', 'as', 'at', 'by', 'for', 'from', 'in', 'of', 'on', 'or', 'the', 'to', 'with', 'under', 'over', 'after', 'before', 'between', 'through', 'into', 'onto', 'within', 'without', 'against', 'around', 'near', 'off', 'out', 'per', 'until', 'upon', 'via' );
+	$brands = array( 'youtube' => 'YouTube', 'wordpress' => 'WordPress', 'etsy' => 'Etsy', 'bunny' => 'Bunny' );
+	$index = 0;
+	return preg_replace_callback( '/[A-Za-z]+(?:[-\x27][A-Za-z]+)*/', static function ( $m ) use ( $minor, $brands, &$index ) {
+		$word = $m[0]; $lower = strtolower( $word ); $first = $index++ === 0;
+		if ( ! $first && in_array( $lower, $minor, true ) ) { return $lower; }
+		if ( isset( $brands[ $lower ] ) ) { return $brands[ $lower ]; }
+		if ( strlen( $word ) > 1 && ctype_upper( $word ) ) { return $word; }
+		return ucwords( $lower, '-' );
+	}, html_entity_decode( $text, ENT_QUOTES | ENT_HTML5, 'UTF-8' ) );
+}
+
 /**
  * Administrators get the hub capability at runtime. Nothing is written to the roles in the database,
  * so a Tutor update that re-runs its role installer cannot remove it, and nothing needs undoing.
@@ -121,9 +135,9 @@ function cas_content_hub_cards() {
 			'items' => array(
 				$item( 'Edit Home: banner, page text and photographs', admin_url( 'admin.php?page=cas-content-home-page' ), CAS_CONTENT_HUB_CAP ),
 				cas_content_hub_list_item( 'Course overview questions', 'cas_overview_qa' ),
-				cas_content_hub_list_item( 'Art gallery card picture: the first artwork in the Artwork list', 'cas_artwork' ),
+				$item( 'Choose the Homepage Gallery Image', admin_url( 'admin.php?page=cas-content-home-page#home-gallery-image' ), CAS_CONTENT_HUB_CAP ),
 				cas_content_hub_list_item( 'Blog posts shown here: the six newest with a picture', 'post' ),
-				cas_content_hub_list_item( 'Student comments shown here: which three, their member and text', 'cas_testimonial' ),
+				cas_content_hub_list_item( 'Student Comments: Order, Member and Text (Display Limit in Edit Home)', 'cas_testimonial' ),
 				cas_content_hub_list_item( 'Course rail: the courses shown here', 'courses' ),
 			),
 			'muted' => 'Layout and the order of sections: ask the webmaster.',
@@ -160,8 +174,8 @@ function cas_content_hub_cards() {
 			'name'  => 'Blog',
 			'view'  => cas_content_hub_page_url( 'blog' ),
 			'items' => array(
-				$item( 'Introduction paragraph under the blog heading', admin_url( 'admin.php?page=cas-content-blog' ), CAS_CONTENT_HUB_CAP ),
 				cas_content_hub_list_item( 'Posts: title, text, pictures, topic and date', 'post' ),
+				$item( 'Introduction paragraph under the blog heading', admin_url( 'admin.php?page=cas-content-blog' ), CAS_CONTENT_HUB_CAP ),
 				$item( 'Topics (categories)', admin_url( 'edit-tags.php?taxonomy=category' ), 'manage_categories' ),
 			),
 			'muted' => 'Article layout and colours: ask the webmaster.',
@@ -214,8 +228,8 @@ function cas_content_hub_cards() {
 
 function cas_content_hub_menu() {
 	add_menu_page(
-		__( 'Content hub', 'hello-elementor-child' ),
-		__( 'Content hub', 'hello-elementor-child' ),
+		__( 'Content Hub', 'hello-elementor-child' ),
+		__( 'Content Hub', 'hello-elementor-child' ),
 		CAS_CONTENT_HUB_CAP,
 		'cas-content-hub',
 		'cas_content_hub_render',
@@ -235,13 +249,13 @@ function cas_content_hub_render() {
 		'Courses' => array( 'Course content, lessons and course photographs.', 'Manage courses' ),
 		'Gallery' => array( 'Your paintings, sale details and external Etsy links.', 'Manage artwork' ),
 		'Showcase' => array( 'Student work, public credits and photographs.', 'Manage student work' ),
-		'Blog' => array( 'Your journal introduction, articles and resources.', 'Edit introduction' ),
+		'Blog' => array( 'Manage your articles, topics and resources.', 'Manage Posts' ),
 		'About' => array( 'Your story, quotation, essays and portrait.', 'Edit About' ),
 		'Free videos' => array( 'Page introductions and your public teaching films.', 'Edit introductions' ),
 		'FAQ' => array( 'The questions and answers your visitors read.', 'Manage questions' ),
 		'Every page' => array( 'Shared contact details, social links, logo and signatures.', 'Edit Site details' ),
 	);
-	echo '<div class="wrap cas-content-ui cas-content-hub"><header class="cas-editor-header"><h1>' . esc_html__( 'Content hub', 'hello-elementor-child' ) . '</h1>';
+	echo '<div class="wrap cas-content-ui cas-content-hub"><header class="cas-editor-header"><h1>' . esc_html__( 'Content Hub', 'hello-elementor-child' ) . '</h1>';
 	echo '<p>' . esc_html__( 'Choose a page to update its words, photographs and content.', 'hello-elementor-child' ) . '</p></header><div class="cas-hub-grid">';
 
 	foreach ( cas_content_hub_cards() as $card ) {
@@ -257,9 +271,9 @@ function cas_content_hub_render() {
 		}
 		$primary = array_shift( $unique );
 		$copy = $presentation[ $card['name'] ];
-		echo '<section class="cas-hub-card cas-leather"><h2>' . esc_html( $card['name'] ) . '</h2><p class="cas-hub-description">' . esc_html( $copy[0] ) . '</p>';
+		echo '<section class="cas-hub-card cas-leather"><h2>' . esc_html( cas_admin_title( $card['name'] ) ) . '</h2><p class="cas-hub-description">' . esc_html( $copy[0] ) . '</p>';
 		if ( $primary ) {
-			echo '<a class="button button-primary cas-hub-primary" href="' . esc_url( $primary['url'] ) . '">' . esc_html( $copy[1] ) . '<span aria-hidden="true"> &rarr;</span></a>';
+			echo '<a class="button button-primary cas-hub-primary" href="' . esc_url( $primary['url'] ) . '">' . esc_html( cas_admin_title( $copy[1] ) ) . '<span aria-hidden="true"> &rarr;</span></a>';
 		} else {
 			echo '<p>No editing controls are available for this account.</p>';
 		}
@@ -269,8 +283,8 @@ function cas_content_hub_render() {
 			echo '<p class="description">This page is not set up yet.</p>';
 		}
 		if ( $unique ) {
-			echo '<details class="cas-hub-more"><summary>More editing tasks</summary><ul>';
-			foreach ( $unique as $line ) { echo '<li><a href="' . esc_url( $line['url'] ) . '">' . esc_html( $line['text'] ) . '</a></li>'; }
+			echo '<details class="cas-hub-more"><summary>More Editing Tasks</summary><ul>';
+			foreach ( $unique as $line ) { echo '<li><a href="' . esc_url( $line['url'] ) . '">' . esc_html( cas_admin_title( $line['text'] ) ) . '</a></li>'; }
 			echo '</ul></details>';
 		}
 
@@ -283,3 +297,35 @@ function cas_content_hub_render() {
 
 	echo '</div></div>';
 }
+
+// Apply the same casing to labels owned by this theme, without rewriting WordPress or Tutor translations.
+add_filter( 'register_post_type_args', function ( $args, $type ) {
+	if ( str_starts_with( $type, 'cas_' ) && isset( $args['labels'] ) ) {
+		foreach ( $args['labels'] as $key => $label ) { if ( is_string( $label ) ) { $args['labels'][ $key ] = cas_admin_title( $label ); } }
+	}
+	return $args;
+}, 20, 2 );
+add_action( 'add_meta_boxes', function () {
+	global $wp_meta_boxes;
+	foreach ( $wp_meta_boxes ?? array() as $screen => $contexts ) {
+		foreach ( $contexts as $context => $priorities ) {
+			foreach ( $priorities as $priority => $boxes ) {
+				foreach ( $boxes as $id => $box ) {
+					if ( str_starts_with( (string) $id, 'cas' ) && is_array( $box ) && is_string( $box['title'] ) ) { $wp_meta_boxes[ $screen ][ $context ][ $priority ][ $id ]['title'] = cas_admin_title( $box['title'] ); }
+				}
+			}
+		}
+	}
+}, 100 );
+
+add_action( 'admin_menu', function () {
+	global $menu, $submenu;
+	foreach ( $menu ?? array() as $key => $item ) {
+		if ( isset( $item[2] ) && ( str_starts_with( $item[2], 'cas-' ) || str_starts_with( $item[2], 'edit.php?post_type=cas_' ) ) ) { $menu[ $key ][0] = cas_admin_title( $item[0] ); }
+	}
+	foreach ( $submenu ?? array() as $parent => $items ) {
+		foreach ( $items as $key => $item ) {
+			if ( str_starts_with( $parent, 'cas-' ) || ( isset( $item[2] ) && str_starts_with( $item[2], 'cas-' ) ) ) { $submenu[ $parent ][ $key ][0] = cas_admin_title( $item[0] ); }
+		}
+	}
+}, 1001 );

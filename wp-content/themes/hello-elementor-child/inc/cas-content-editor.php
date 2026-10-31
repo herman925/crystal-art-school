@@ -19,6 +19,8 @@ function cas_content_editor_load() {
 		'cas-content-media',
 		'cas-content-hero',
 		'cas-content-images',
+		'cas-content-artwork-picker',
+		'cas-content-display',
 		'cas-content-prose',
 		'cas-price-gate',
 		'cas-content-builder',
