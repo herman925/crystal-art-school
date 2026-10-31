@@ -28,6 +28,11 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 	function sanitize_email( $value ) { $GLOBALS['prose_sanitizers'][] = 'sanitize_email'; return $value; }
 	function esc_attr( $value ) { return htmlspecialchars( $value, ENT_QUOTES, 'UTF-8' ); }
 	function esc_html( $value ) { return htmlspecialchars( $value, ENT_QUOTES, 'UTF-8' ); }
+	function esc_textarea( $value ) { return htmlspecialchars( $value, ENT_QUOTES, 'UTF-8' ); }
+	function wp_editor( $value, $id, $settings ) {
+		// Check actual field binding only; this is not native TinyMCE/editor UI proof.
+		echo '<textarea id="' . esc_attr( $id ) . '" name="' . esc_attr( $settings['textarea_name'] ) . '">' . esc_textarea( $value ) . '</textarea>';
+	}
 	function esc_url( $value ) { return $value; }
 	function wp_hash( $value ) { return hash_hmac( 'sha256', $value, 'synthetic-fixture-only' ); }
 	function get_option( $name ) {
@@ -83,7 +88,7 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 	function cas_about_fields() {
 		$fields = array();
 		foreach ( array( 'cas_about_intro', 'cas_about_quote', 'cas_about_journey_body', 'cas_about_community_body', 'cas_about_instructor_body' ) as $key ) {
-			$fields[ $key ] = array( 'type' => in_array( $key, array( 'cas_about_intro', 'cas_about_quote' ), true ) ? 'inline' : 'block', 'default' => 'Shipped wording' );
+			$fields[ $key ] = array( 'label' => $key, 'type' => in_array( $key, array( 'cas_about_intro', 'cas_about_quote' ), true ) ? 'inline' : 'block', 'default' => 'Shipped wording' );
 		}
 		$fields['cas_about_portrait'] = array( 'label' => 'Synthetic portrait', 'type' => 'image', 'desc' => 'Recommended 1168 x 1400px.', 'default' => '/img/ProfilePic.jpg' );
 		return $fields;
@@ -392,6 +397,12 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) {
 		list( $before, $fields, $config ) = prose_fixture( $group );
 		about_expect( count( $fields ) === $count, 'Combined page changed its existing field boundary' ); ++$cases;
 		$combined_fields = array_merge( $combined_fields, array_keys( $fields ) );
+		ob_start(); call_user_func( $config['controls'], $before ); $markup = ob_get_clean();
+		about_expect( substr_count( $markup, 'name="cas_page_fields[' ) === $count, 'Combined controls did not bind every field to the page payload' ); ++$cases;
+		foreach ( array_keys( $fields ) as $field_key ) {
+			about_expect( substr_count( $markup, 'name="cas_page_fields[' . $field_key . ']"' ) === 1, 'Combined control omitted or duplicated a field name' );
+		}
+		about_expect( ! str_contains( $markup, '<form' ), 'A combined section nested another form' ); ++$cases;
 		$key = array_key_first( $fields );
 		$image_key = 'home-page' === $group ? 'cas_hero_1_large' : ( 'about-page' === $group ? 'cas_about_portrait' : 'cas_logo' );
 		$proposed = $before; $proposed[ $key ] = 'site-details' === $group ? 'https://example.invalid/changed' : 'Changed text'; $proposed[ $image_key ] = '';

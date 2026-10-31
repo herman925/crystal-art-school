@@ -533,14 +533,14 @@ function cas_render_lesson() {
 				<?php endif; ?>
 
 				<div class="unit-panel">
+					<h1><?php echo esc_html( $title ); ?></h1>
 					<?php if ( '' !== $lesson_body ) : ?>
 						<div class="course-desc" id="course-desc">
-							<h1><?php echo esc_html( $title ); ?></h1>
 							<div class="cd-body">
 								<?php
 								if ( $thumb ) {
 									echo wp_get_attachment_image( // phpcs:ignore WordPress.Security.EscapeOutput -- escapes its own attributes.
-											$thumb,
+										$thumb,
 										'medium_large',
 										false,
 										array(

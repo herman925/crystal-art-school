@@ -16,7 +16,7 @@
    The cover floats left. With no cover the text runs full
    width; nothing stands in for it. */
 .course-desc { margin-bottom: 22px; }
-.course-desc h1 { font-family: var(--font-marker); font-weight: 700; font-size: clamp(26px, 2.8vw, 38px); line-height: 1.14; color: var(--ink); margin: 0 0 16px; }
+.unit-panel > h1, .course-desc h1 { font-family: var(--font-marker); font-weight: 700; font-size: clamp(26px, 2.8vw, 38px); line-height: 1.14; color: var(--ink); margin: 0 0 16px; }
 .course-desc .cd-body::after { content: ""; display: block; clear: both; }
 /* height:auto is load-bearing: real width/height attributes are presentational hints, and
    without it the cover keeps its intrinsic height at 320px wide. */

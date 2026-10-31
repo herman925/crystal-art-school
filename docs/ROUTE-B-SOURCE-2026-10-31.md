@@ -1,7 +1,8 @@
 # Route B unified editing — source candidate, 2026-10-31
 
-**Untested, not installed, not merged or deployed.** The owner authorised source work and
-deferred all testing to a later combined pass. No application, build, lint or test was run.
+**Scoped local checks passed; native WordPress workflows remain untested. Not installed,
+merged or deployed.** The source checkpoint originally deferred all testing. The owner
+subsequently requested testing, and the bounded checks below were executed on 2026-10-31.
 
 This candidate is on `takeover/client-editing-20261031`, based on main
 `2e8bc45225011af9f40c360b962e1b6cbc089aa3`. It includes the lesson correction and the source
@@ -35,10 +36,52 @@ capability is added. Related content lists reuse the hub's capability-filtered l
 public-page link shows saved content, not an unsaved preview.
 
 Nine existing client chapters now describe these routes and Save buttons, explicitly as
-drafts awaiting installation, checks and handover. No guide build or publication occurred.
-The existing regression sources were extended/adjusted for later execution; no result is claimed.
+drafts awaiting installation, checks and handover. A local guide build and the browser checks
+below completed after testing resumed. No guide publication occurred.
 
-When testing resumes, include combined text/image saves, all-or-nothing validation, stale and
+## Executed local checks — 2026-10-31
+
+- Host PHP **8.3.6**, Python **3.12.3**, Node **22.23.2**; these are not a claim of production
+  PHP 8.3.36 parity. PHP syntax checks passed for all 13 changed PHP files; both changed
+  JavaScript/configuration files passed Node syntax checks.
+- **46 Python source-contract tests passed**, plus the standalone hub, lesson and lesson
+  material/access source contracts. These establish source expectations, not native access.
+- **195 in-memory PHP cases passed**: this includes the existing save guards, combined
+  all-or-nothing text/image saves, stale/concurrent/foreign-field/nonce/snapshot cases and
+  rendered combined field bindings. The editor stub does not prove native TinyMCE.
+- **9 mocked media JavaScript cases passed.** No actual upload/picker/browser acceptance.
+- **4 lesson-fragment render tests passed after a real fix**. The first run found that an
+  empty lesson description removed the page's only H1. The heading now renders independently
+  of description content, with its existing styles. The description still uses lesson text
+  once and the lesson's own cover, with no course-text/photo fallback. Native KSES/Tutor and
+  the whole enrolled lesson screen are not covered by this controlled fragment test.
+- VitePress **1.6.4** built successfully using existing dependencies, with output outside
+  the repository. Ten guide pages rendered with expected titles/headings and no blank/error
+  overlay or page-width overflow. Sidebar navigation and local search were exercised; the
+  tested search returned 16 results. Desktop 1440×900 and mobile 390×844 screenshots were
+  retained. Browser plugin was unavailable; existing Playwright 1.61.1 and installed Google
+  Chrome ran headlessly with a fresh, owned browser context, without account credentials.
+- Clicking local Sign out generated a **same-tab document navigation**, not fetch/XHR.
+  The static test server has no PHP logout endpoint and returned the expected 404. This
+  proves navigation only, not session destruction or live protected-page denial.
+- A local `/favicon.ico` 404 was the only pre-logout console error; it was attributed by
+  console URL and retained, not called a clean console pass. No app JavaScript errors or
+  warnings were observed before logout. Earlier browser attempts failed on a missing
+  bundled browser, a zero-width heading-anchor assertion, and favicon attribution; those
+  failures and original artifacts remain retained.
+
+Private logs, screenshots, build output and failed attempts are retained under
+`~/cas-evidence/takeover-tests-20261101-r1/` (run on 2026-10-31; the directory name is an
+identifier, not the test date). They are not GitHub attachments. Guide build launch r1
+failed on an incorrect dependency-link path; corrected r2 built successfully. No historical
+incident evidence, account, progress marker, provider or production state was changed.
+
+The only running WordPress environment is the old review stack, with older mounted source
+and held incident state. It was inspected for container/mount identity only, without
+bootstrapping WordPress or changing its files/database. A designated approved staging target
+or a separately chosen fresh local instance is required for the remaining native checks.
+
+For native testing, include combined text/image saves, all-or-nothing validation, stale and
 foreign inputs/nonces/snapshots, concurrent saves/cache readback, restricted-role routes and
 native upload/pick/replace/default/clear, editor persistence and mobile/accessibility behaviour.
 Carry forward the remaining #211 learner/payment/guide/human checks and incident holds.
