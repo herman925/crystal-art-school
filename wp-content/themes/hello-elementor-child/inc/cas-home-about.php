@@ -26,6 +26,7 @@
  */
 
 defined( 'ABSPATH' ) || exit;
+require_once __DIR__ . '/cas-image-frame.php';
 
 /**
  * The photograph shipped with the theme: img/A3.jpeg, the file Crystal supplied in
@@ -63,9 +64,13 @@ function cas_home_about_image_url() {
  * else would crop it in a way nobody asked for.
  */
 function cas_home_about_img() {
+	$url = cas_home_about_image_url();
+	return cas_image_frame_html( cas_home_about_img_render( cas_image_frame_url( $url ) ), $url );
+}
+
+function cas_home_about_img_render( $url ) {
 	$alt   = 'Crystal — founder portrait in the twin-arch mask';
 	$sizes = '(max-width: 600px) 358px, (max-width: 1000px) 420px, 373px';
-	$url   = cas_home_about_image_url();
 
 	if ( cas_home_about_default_image() === $url ) {
 		$dir = get_stylesheet_directory() . '/img/';

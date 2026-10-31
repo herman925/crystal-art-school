@@ -50,10 +50,11 @@
 				}
 				slot.find( 'input[type=hidden]' ).val( image.url );
 				slot.find( '.cas-hero-image-preview' ).empty().append(
-					$( '<img>', { src: image.url, alt: '' } ).css( { maxWidth: '240px', height: 'auto', display: 'block' } )
+					$( '<img>', { src: image.url, alt: '' } )
 				);
 				slot.find( '.cas-hero-image-choose' ).text( 'Replace Image' ).attr( 'aria-label', 'Replace Image for ' + slot.data( 'casLabel' ) );
 				slot.find( '.cas-hero-media-error' ).prop( 'hidden', true );
+				if ( window.casRefreshImageFrame ) { window.casRefreshImageFrame( slot[0] ); }
 			} );
 			slot.data( 'casHeroFrame', frame );
 		}
@@ -67,10 +68,11 @@
 		slot.find( '.cas-hero-image-preview' ).empty();
 		if ( fallback ) {
 			slot.find( '.cas-hero-image-preview' ).append(
-				$( '<img>', { src: fallback, alt: '' } ).css( { maxWidth: '240px', height: 'auto', display: 'block' } )
+				$( '<img>', { src: fallback, alt: '' } )
 			);
 		}
 		slot.find( '.cas-hero-image-choose' ).text( 'Choose Image' ).attr( 'aria-label', 'Choose Image for ' + slot.data( 'casLabel' ) );
 		slot.find( '.cas-hero-media-error' ).prop( 'hidden', true );
+		if ( window.casRefreshImageFrame ) { window.casRefreshImageFrame( slot[0] ); }
 	} );
 } )( jQuery );

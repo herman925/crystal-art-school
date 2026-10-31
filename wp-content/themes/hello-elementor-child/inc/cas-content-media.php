@@ -1,6 +1,7 @@
 <?php
 
 defined( 'ABSPATH' ) || exit;
+require_once __DIR__ . '/cas-image-frame.php';
 
 function cas_content_hero_local_upload( $url ) {
 	$parts = wp_parse_url( $url );
@@ -31,6 +32,7 @@ function cas_content_hero_local_upload( $url ) {
 }
 
 function cas_content_hero_image_allowed( $url ) {
+	if ( false === cas_image_frame( $url ) ) { return false; }
 	if ( '' === $url ) {
 		return true;
 	}
@@ -63,12 +65,17 @@ function cas_content_image_slot( $key, $name, $value, $field, $can_media ) {
 	$allowed = cas_content_hero_image_allowed( $preview );
 	$choose_text = $value ? 'Replace Image' : 'Choose Image';
 	$clear_text = ! empty( $field['restore'] ) ? 'Use Shipped Default' : 'Clear Slot';
-	echo '<div class="cas-hero-image-slot" data-cas-label="' . esc_attr( $field['label'] ) . '" data-cas-fallback="' . esc_attr( $fallback ) . '"><input type="hidden" id="' . esc_attr( $key ) . '" name="' . esc_attr( $name ) . '" value="' . esc_attr( $value ) . '"><div class="cas-hero-image-preview">';
+	$shape = $field['frame'] ?? '';
+	$position = $key === 'cas_home_about_image' && cas_image_frame_url( $preview ) === cas_home_about_default_image() ? '100' : '50';
+	echo '<div class="cas-hero-image-slot" data-cas-label="' . esc_attr( $field['label'] ) . '" data-cas-fallback="' . esc_attr( $fallback ) . '" data-frame-shape="' . esc_attr( $shape ) . '" data-frame-y="' . esc_attr( $position ) . '"><input type="hidden" id="' . esc_attr( $key ) . '" name="' . esc_attr( $name ) . '" value="' . esc_attr( $value ) . '"><div class="cas-image-edit-row"><div class="cas-hero-image-preview">';
 	if ( $preview && $allowed ) {
-		echo '<img src="' . esc_url( $preview ) . '" alt="" style="max-width:240px;height:auto;display:block">';
+		echo '<img src="' . esc_url( cas_image_frame_url( $preview ) ) . '" alt="" style="' . esc_attr( 'object-position:50% ' . $position . '%;' . cas_image_frame_style( $preview ) ) . '">';
 	}
-	echo '</div><button type="button" class="button cas-hero-image-choose" aria-label="' . esc_attr( $choose_text . ' for ' . $field['label'] ) . '"' . ( $can_media ? '' : ' disabled' ) . '>' . esc_html( $choose_text ) . '</button> ';
-	echo '<button type="button" class="button-link cas-hero-image-clear" aria-label="' . esc_attr( $clear_text . ' for ' . $field['label'] ) . '">' . esc_html( $clear_text ) . '</button><p class="description cas-hero-media-error" role="alert"' . ( $allowed ? ' hidden' : '' ) . '>Choose a known public original image from Media; private files and unresolved local uploads are not allowed.</p></div>';
+	echo '</div><div class="cas-image-actions"><button type="button" class="button cas-hero-image-choose" aria-label="' . esc_attr( $choose_text . ' for ' . $field['label'] ) . '"' . ( $can_media ? '' : ' disabled' ) . '>' . esc_html( $choose_text ) . '</button>';
+	if ( $shape ) { echo '<button type="button" class="button cas-image-reposition" aria-label="' . esc_attr( 'Reposition for ' . $field['label'] ) . '"' . ( $preview && $allowed ? '' : ' disabled' ) . '>Reposition</button>'; }
+	echo '<button type="button" class="button cas-hero-image-clear" aria-label="' . esc_attr( $clear_text . ' for ' . $field['label'] ) . '">' . esc_html( $clear_text ) . '</button></div></div>';
+	if ( ! empty( $field['description'] ) ) { echo '<p class="description cas-image-recommendation">' . esc_html( $field['description'] ) . '</p>'; }
+	echo '<p class="description cas-hero-media-error" role="alert"' . ( $allowed ? ' hidden' : '' ) . '>Choose a known public original image from Media; private files and unresolved local uploads are not allowed.</p></div>';
 }
 
 function cas_content_hero_enqueue() {
@@ -80,6 +87,8 @@ function cas_content_hero_enqueue() {
 	if ( $can_media ) {
 		wp_enqueue_media();
 	}
+	wp_enqueue_style( 'cas-content-images', get_stylesheet_directory_uri() . '/css/cas-content-images.css', array(), filemtime( get_stylesheet_directory() . '/css/cas-content-images.css' ) );
+	wp_enqueue_script( 'cas-image-frame-editor', get_stylesheet_directory_uri() . '/js/cas-image-frame-editor.js', array(), filemtime( get_stylesheet_directory() . '/js/cas-image-frame-editor.js' ), true );
 	wp_enqueue_script( 'cas-content-hero', get_stylesheet_directory_uri() . '/js/cas-content-hero.js', array( 'jquery' ), filemtime( get_stylesheet_directory() . '/js/cas-content-hero.js' ), true );
 	wp_localize_script( 'cas-content-hero', 'casHeroMedia', array( 'allowed' => $can_media, 'nonce' => wp_create_nonce( 'cas_hero_media' ), 'privateQuery' => CAS_PRIVATE_QUERY_VAR ) );
 }

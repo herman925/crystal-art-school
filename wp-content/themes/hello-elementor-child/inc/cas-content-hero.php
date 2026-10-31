@@ -12,6 +12,7 @@ function cas_content_hero_fields() {
 				'default' => cas_hero_default( $slide, $part ),
 				'type' => $native[ $part ]['type'],
 				'description' => $native[ $part ]['desc'],
+				'frame' => in_array( $part, array( 'large', 'small' ), true ) ? $part : '',
 			);
 		}
 	}
@@ -44,22 +45,30 @@ function cas_content_hero_controls( $values, $input_name = 'cas_hero_fields' ) {
 	}
 	$can_media = current_user_can( 'upload_files' );
 	echo '<p>The three slides, image slots, View courses button and layout are fixed. Titles keep line breaks; descriptions display as plain text. Images crop to their existing slots.</p>';
-	foreach ( cas_content_hero_fields() as $key => $field ) {
-		$value = array_key_exists( $key, $values ) ? $values[ $key ] : $field['default'];
-		if ( ! is_string( $value ) ) {
-			wp_die( 'The carousel fields need an administrator check.', '', array( 'response' => 409 ) );
-		}
-		echo '<h2><label for="' . esc_attr( $key ) . '">' . esc_html( cas_admin_title( $field['label'] ) ) . '</label></h2>';
-		if ( $field['description'] ) {
-			echo '<p class="description">' . esc_html( $field['description'] ) . '</p>';
-		}
-		$name = $input_name . '[' . $key . ']';
-		if ( 'image' !== $field['type'] ) {
-			echo '<textarea class="large-text" rows="3" id="' . esc_attr( $key ) . '" name="' . esc_attr( $name ) . '">' . esc_textarea( $value ) . '</textarea>';
-			continue;
-		}
-		cas_content_image_slot( $key, $name, $value, $field, $can_media );
+	$fields = cas_content_hero_fields();
+	echo '<div class="cas-slide-tabs" role="tablist" aria-label="Carousel Slides">';
+	foreach ( array( 1, 2, 3 ) as $slide ) {
+		echo '<button type="button" role="tab" id="cas-slide-tab-' . $slide . '" aria-controls="cas-slide-panel-' . $slide . '" aria-selected="' . ( 1 === $slide ? 'true' : 'false' ) . '" tabindex="' . ( 1 === $slide ? '0' : '-1' ) . '">Slide ' . $slide . '</button>';
 	}
+	echo '</div>';
+	foreach ( array( 1, 2, 3 ) as $slide ) {
+		echo '<div class="cas-slide-panel" role="tabpanel" id="cas-slide-panel-' . $slide . '" aria-labelledby="cas-slide-tab-' . $slide . '">';
+		foreach ( array( 'title', 'subtitle', 'large', 'small' ) as $part ) {
+			$key = 'cas_hero_' . $slide . '_' . $part; $field = $fields[ $key ];
+			$value = array_key_exists( $key, $values ) ? $values[ $key ] : $field['default'];
+			if ( ! is_string( $value ) ) { wp_die( 'The carousel fields need an administrator check.', '', array( 'response' => 409 ) ); }
+			echo '<div class="cas-slide-field cas-slide-' . esc_attr( $part ) . '"><h2><label for="' . esc_attr( $key ) . '">' . esc_html( cas_admin_title( $field['label'] ) ) . '</label></h2>';
+			$name = $input_name . '[' . $key . ']';
+			if ( 'image' === $field['type'] ) { cas_content_image_slot( $key, $name, $value, $field, $can_media ); }
+			else {
+				echo '<textarea class="large-text" rows="3" id="' . esc_attr( $key ) . '" name="' . esc_attr( $name ) . '">' . esc_textarea( $value ) . '</textarea>';
+				if ( $field['description'] ) { echo '<p class="description">' . esc_html( $field['description'] ) . '</p>'; }
+			}
+			echo '</div>';
+		}
+		echo '</div>';
+	}
+
 	if ( ! $can_media ) {
 		echo '<p>Your current media permission does not allow choosing or uploading images. Existing text and clearing slots remain available.</p>';
 	}
