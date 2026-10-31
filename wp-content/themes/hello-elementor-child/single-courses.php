@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) || exit;
 
 get_header();
 ?>
-<main id="content" class="site-main cas-single-course">
+<main id="content" class="site-main cas-single-course" tabindex="-1">
 	<?php
 	while ( have_posts() ) {
 		the_post();

@@ -7,7 +7,16 @@ function add_filter( $name, $callback, ...$args ) { add_action( $name, $callback
 function add_shortcode( ...$args ) {}
 class WP_Error { public function __construct( ...$args ) {} }
 function is_wp_error( $value ) { return $value instanceof WP_Error; }
-function wp_unslash( $value ) { return stripslashes( $value ); }
+function wp_unslash( $value ) { return is_array( $value ) ? array_map( 'wp_unslash', $value ) : ( is_string( $value ) ? stripslashes( $value ) : $value ); }
+function sanitize_textarea_field( $value ) { return trim( strip_tags( $value ) ); }
+function sanitize_text_field( $value ) { return trim( strip_tags( $value ) ); }
+function esc_html( $value ) { return htmlspecialchars( (string) $value, ENT_QUOTES, 'UTF-8' ); }
+function esc_attr( $value ) { return esc_html( $value ); }
+function esc_url( $value ) { return esc_attr( $value ); }
+function wp_strip_all_tags( $value ) { return strip_tags( $value ); }
+$fixture_meta = array();
+function get_post_meta( $id, $key, $single = true ) { global $fixture_meta; return $fixture_meta[ $id ][ $key ] ?? ''; }
+function get_post_field( $key, $id ) { return 'Lesson description'; }
 $allowed = true;
 $nonce = true;
 $writes = array();
@@ -47,3 +56,38 @@ foreach ( array( 'permission', 'nonce', 'post_type' ) as $case ) {
     check( array() === $writes, 'Native save must check ' . $case );
 }
 echo "PASS: native course-photo validation, partial saves, removals and authorization\n";
+
+$allowed = true; $nonce = true;
+foreach ( array( 0, -1, 101, '1.5', true, array( 2 ) ) as $value ) {
+    check( is_wp_error( cas_course_lesson_values( array( '_cas_lesson_span' => $value ) ) ), 'Invalid combined-lesson counts must be rejected.' );
+}
+check( array( '_cas_lesson_span' => 2 ) === cas_course_lesson_values( array( '_cas_lesson_span' => '2' ) ), 'Native numeric strings must preserve combined lessons.' );
+check( array() === cas_course_lesson_values( array() ), 'Missing lesson details must remain untouched.' );
+check( array( '_cas_lesson_focus' => '' ) === cas_course_lesson_values( array( '_cas_lesson_focus' => '' ) ), 'A detail field can be cleared.' );
+$save_lesson = $hooks['save_post_lesson'][0];
+$_POST = array( 'action' => 'tutor_save_lesson', 'topic_id' => '200', '_cas_lesson_span' => '2', '_cas_lesson_focus' => 'A new focus.' );
+$writes = array(); $save_lesson( 201, (object) array( 'post_parent' => 200 ) );
+check( array( '_cas_lesson_span' => 2, '_cas_lesson_focus' => 'A new focus.' ) === $writes, 'Native lesson save must store just the supplied supplemental fields.' );
+foreach ( array( 'permission', 'nonce', 'parent' ) as $case ) {
+    $writes = array(); $allowed = 'permission' !== $case; $nonce = 'nonce' !== $case;
+    $save_lesson( 201, (object) array( 'post_parent' => 'parent' === $case ? 999 : 200 ) );
+    check( array() === $writes, 'Lesson supplemental save must check ' . $case );
+}
+$allowed = true; $nonce = true; $_POST = array();
+$items = array();
+for ( $i = 0; $i < 13; ++$i ) {
+    $id = 201 + $i;
+    $items[] = array( 'id' => $id, 'topic' => $i < 5 ? 0 : 1, 'topic_t' => $i < 5 ? 'Perspective' : 'Watercolour', 'open' => false, 'done' => false, 'title' => 'Lesson ' . $id, 'seconds' => 60, 'thumb' => 0, 'url' => 'https://example.com/lesson/' . $id );
+}
+$fixture_meta[202]['_cas_lesson_span'] = 2;
+$fixture_meta[202]['_cas_lesson_focus'] = '<img src=x onerror=alert(1)>';
+function cas_lesson_clock( $seconds ) { return '1:00'; }
+$html = cas_render_course_syllabus( array( 'items' => $items ) );
+check( 2 === substr_count( $html, 'class="syl-phase-btn"' ), 'Both real phases must render.' );
+check( str_contains( $html, '6 lessons' ) && str_contains( $html, '8 lessons' ) && str_contains( $html, '>2 &amp; 3<' ), 'Numbered lessons must count 14 across 13 films, including 2 & 3.' );
+check( 1 === substr_count( $html, 'class="syl-more"' ) && str_contains( $html, 'class="syl-detail"' ), 'Only lessons with supplied details get a disclosure control.' );
+check( ! str_contains( $html, '<img src=x' ) && str_contains( $html, '&lt;img src=x' ), 'Public detail text must be escaped.' );
+check( ! str_contains( $html, '<a class="syl-row"' ), 'Paid lesson rows must not link for a locked visitor.' );
+$flat = cas_render_course_syllabus( array( 'items' => array( $items[0] ) ) );
+check( ! str_contains( $flat, 'syl-phase-btn' ) && ! str_contains( $flat, ' hidden' ), 'A single unmodularised course must have the prototype flat syllabus.' );
+echo "PASS: lesson authoring guards, combined numbering, phase totals, detail disclosures, escaping and flat syllabuses\n";

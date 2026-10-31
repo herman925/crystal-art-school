@@ -29,8 +29,9 @@ function cas_course_runtime( $course_id ) {
 		return '';
 	}
 
-	$h = (int) ( $d['durationHours'] ?? 0 );
-	$m = (int) ( $d['durationMinutes'] ?? 0 );
+	$minutes = (int) round( ( (int) ( $d['durationHours'] ?? 0 ) * 3600 + (int) ( $d['durationMinutes'] ?? 0 ) * 60 + (int) ( $d['durationSeconds'] ?? 0 ) ) / 60 );
+	$h = intdiv( $minutes, 60 );
+	$m = $minutes % 60;
 
 	if ( $h && $m ) {
 		return $h . 'h ' . $m . 'm';
@@ -181,7 +182,7 @@ function cas_course_card( $course_id, $index ) {
 	$media = array_keys( $f['medium'] );
 	$tag   = $f['medium'] ? reset( $f['medium'] ) : '';
 
-	$lessons = (int) tutor_utils()->get_lesson_count_by_course( $course_id );
+	$lessons = cas_course_lesson_count( $course_id );
 	$runtime = cas_course_runtime( $course_id );
 
 	$meta = array_filter(
