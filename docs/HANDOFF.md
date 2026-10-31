@@ -1,5 +1,31 @@
 # Handoff — Crystal Art School WordPress build
 
+## Desktop prototype audit and release — 2026-11-01
+
+Owner explicitly requested audit, fixes and deployment against the published prototype,
+with mobile/tablet adaptation deferred to a second pass. The desktop candidate was merged
+with newer main `e07be48` before publication; the other course/CMS/private-file work was
+preserved. See [desktop audit and remaining gaps](DESKTOP-PROTOTYPE-PARITY-2026-11-01.md).
+
+Twenty-one scoped theme files are deployed with exact preimage checks, complete backups,
+remote lint and hash readback. A separate backed-up CSS follow-up fixes immediate keyboard
+focus when opening the Courses drawer. Public A/light and D/dark pages were inspected at
+1440×1000 and 1920×1000, including all five published course records, public lesson preview,
+archives, recovery form and expected 404. Home hero/image geometry now matches the reference
+at both widths. Existing public controls were exercised; reduced motion keeps content visible.
+
+The independent local fixture's six studio panels were observed in both modes, including
+its actual enrolled 0/1 state. Production studio/enrolled lesson/progress, populated basket,
+checkout details and receipt/success remain unverified. Testimonial motion and a multi-heading
+post TOC need eligible content. Prototype Home card scenes contain a reference indexing bug;
+this pass copies the working effects without inventing the dormant choreography. Raw failed
+assertions, incomplete fixture ledgers and original evidence remain private and intact.
+
+No guide release, account/role switch, signup/indexing/payment activation, provider operation,
+held runtime execution or fixture deletion was part of this release. The previous **63/110
+acceptance coverage remains unchanged**; this is not a blanket 1:1 or launch sign-off. The
+older all-110-file drift checkpoint below predates this separate 21-file desktop release.
+
 ## Current source and drift checkpoint — 2026-11-01
 
 The deployed CMS/course follow-ups are reconciled with main's later interaction-colour

@@ -6,42 +6,44 @@ needs work there. Approved WordPress-editable content and settled product change
 exceptions, not permission for template geometry, effects, colours or typography to drift.
 
 Reference: the current published GitHub Pages prototype, with source checked against the
-repository HTML/CSS/JS. Baseline source head: `5cf1ea5`. Evidence is recorded privately at
+repository HTML/CSS/JS. Initial working source head: `5cf1ea5`; newer already-deployed course/CMS work was
+reconciled from main `e07be48` before publication. The merge preserves that work and
+deployment scope contains only this audit’s 21 theme files. Browser baselines describe
+the actual observed deployment, not an assumption that its whole tree was the old head. Evidence is recorded privately at
 `~/cas-evidence/desktop-parity-audit-20261101/`. Animation comparisons use ordinary Chromium
 UA and explicitly neutralise the prototype's headless/webdriver motion gate; reduced motion
 will be checked separately. This is browser evidence, not human/device acceptance.
 
-## Working findings ledger
+## Delivered findings
 
-| ID | Family | Finding | State |
+“Public observed” means Chromium on the deployed site, A/light and D/dark. “Local only”
+means the separate owned fixture; it does not certify a production account or purchase.
+All rows below are implementation delivery, not additions to the acceptance score.
+
+| ID | Surface | Correction | Verification boundary |
 |---|---|---|---|
-| D01 | Shared header | Prototype Courses disclosure/category drawer absent in WordPress | Confirmed missing implementation; source fix in progress |
-| D02 | Home | Desktop hero/section inner width 1392 instead of prototype 1168 at viewport 1440 | Confirmed geometry mismatch |
-| D03 | Home | Hero misses prototype's first-section 32px top spacing | Confirmed geometry mismatch |
-| D04 | Home motion | Working prototype title/testimonial entrances absent; generic rises differ | Source fix added; dormant prototype card scenes are a separate reference bug |
-| D05 | Home gallery | Promo remains 300px square; prototype uses first course card × 0.66 (363px in baseline) | Confirmed missing implementation |
-| D07 | Shared typography | Hello heading line-height 1.2 overrides prototype inherited 1.6 (release sign 60px vs 72px; footer -4.8px) | Desktop heading normalisation added |
-| D06 | Catalogue navigation | Category deep-link application absent from course-filter script | Confirmed source gap; bind drawer to native catalogue controls |
-
-| D08 | Login | Tutor ID/placeholder styles override the prototype field palette, type size and row spacing | Source adapter corrected; native handlers/nonces preserved |
-| D09 | Shared controls | Parent button line-height and radius alter filter pills and Polaroid captions/corners | Desktop baseline corrected |
-| D10 | FAQ | Extra contact section, different heading gap and missing final section padding | Removed template duplication; kept maintained answers and shared email values |
-| D11 | Lesson | Prototype's known teacher fact omitted from metadata strip | Restored fixed brand attribution without a new field |
-| D12 | Header cart | Shopping-cart icon points at payment instead of the native basket | Corrected through existing Tutor cart URL resolver |
-
-| D13 | Basket | Empty native basket loses the prototype's two-column empty state/order summary | Desktop empty-state override added; native populated renderer and all pricing remain intact |
-| D14 | Basket | Populated native basket typography/layout differ from the prototype; old review had left this out of scope | Desktop presentation adapter added; populated native state remains unverified |
-
-| D15 | Signed-in header | Real session suppresses login but has no prototype logout/member chip | Native session-backed desktop chrome added; no fake localStorage auth |
-| D16 | Dashboard rail | Missing prototype icons/course count; extra rail heading/arrows | Presentation restored; Profile remains the approved Discord replacement |
-| D17 | Dashboard cards | Images lack fixed cover/resume frames; headings inherit body font | Restored prototype containers/type; real course metadata retained |
-| D18 | Empty dashboard | Missing onboarding panel structure; fake universal preview/material promises must not ship | Matching component structure added with truthful existing-feature guidance |
-
-| D19 | Testimonials | Backend explanation about member records appears inside public quote cards | Removed developer-facing sentence; quotes/member data untouched |
-
-| D20 | Showcase | Resting desktop wall uses fixed hash pinning while the reference re-pins each visit | Restored reference jitter ranges/pair/pin choices in browser; SSR/mobile fallback retained |
-
-| D21 | Dashboard empty recommendations | Header/empty message disappear when the reader owns the available catalogue | Restored explicit reference empty state without fabricating recommendations |
+| D01 | Header | Courses disclosure restored with native category links | Public observed; keyboard follow-up D22 |
+| D02 | Home | Inner desktop width restored from 1392px to 1168px at 1440 | Public/reference geometry matches at both desktop widths |
+| D03 | Home | First-section 32px top spacing restored | Public/reference hero position matches |
+| D04 | Home motion | Working title/testimonial entrances ported; non-reference generic rises removed | Titles observed; testimonial scene remains source-only while no quotes are published |
+| D05 | Home Gallery card | Height follows first course card × 0.66 instead of fixed square | Public rendered; same reference sizing rule |
+| D06 | Catalogue | Drawer category query applies to existing filter controls | Public Watercolour deep link and Clear observed |
+| D07 | Typography | Desktop Hello heading line-height leak removed | Public heading/footer values match reference |
+| D08 | Login | Native Tutor field palette/type/spacing corrected | Public field/focus rendering; no credentials submitted |
+| D09 | Controls | Parent button line-height/radius leak removed | Public controls/dialogs observed; previous site-wide colour repair retained |
+| D10 | FAQ | Duplicate contact section removed; reference heading gap and padding restored | Public accordion open/animated close observed |
+| D11 | Lesson | Known teacher attribution restored | Public preview observed; enrolled production state unverified |
+| D12 | Header cart | Icon uses native basket resolver | Resolved basket response observed; plain query permalink is valid |
+| D13 | Empty basket | Reference two-column empty state and zero summary restored | Public both modes; Continue disabled |
+| D14 | Populated basket | Presentation adapter added around native renderer | Built; native populated production state unverified |
+| D15 | Signed-in header | Native-session logout/member chip restored | Local only; no production session opened |
+| D16 | Dashboard rail | Icons/course count restored; extra rail furniture removed | Six panels, both modes, local only |
+| D17 | Dashboard cards | Cover/resume frames, headings, native metadata and recommendation styling restored | Local observed enrolled fixture, 0/1 complete |
+| D18 | Empty studio | Onboarding structure restored with truthful course guidance | Built; initial empty local shell and later enrolled state are separately recorded |
+| D19 | Testimonials | Member-record implementation explanation removed from public quote markup | Source checked; no quotes currently available for production browser acceptance |
+| D20 | Showcase | Per-visit desktop pinning/jitter ranges match prototype | Public pinning, scroll response, filters and dialog observed |
+| D21 | Recommendations | Explicit empty heading/message retained when catalogue already owned | Local observed; no recommendations fabricated |
+| D22 | Header keyboard | Opening visibility is immediate before arrow-key focus | Browser candidate and subsequent live A/D checks; closing/fade timings preserved |
 
 ## Exceptions and boundaries
 
@@ -62,7 +64,7 @@ will be checked separately. This is browser evidence, not human/device acceptanc
 - Archives/search/404 have no dedicated prototype page; compare their shared design system and
   label the missing page-specific visual reference.
 
-This is an evolving audit ledger, not a declaration of 1:1 acceptance. Last saved weighted
+This is a delivered desktop audit/fix record, not a declaration that every protected state is 1:1. Last saved weighted
 acceptance coverage stays **63/110**. No new percentage is inferred from this audit.
 
 ## Reference animation finding
@@ -88,3 +90,129 @@ native free-enrolment attempt returned an unconfirmed readback, not proof of no 
 later browser observation found no recommendation rows; the subsequent bounded read records
 the actual owned fixture rows/enrolment/course list. No enrolment retry or cleanup was used
 to force an expected result.
+
+## Current source reconciliation
+
+While the audit ran, main acquired course/template/CMS follow-ups and restricted-file fixes.
+The audit candidate was committed independently and merged with `e07be48`; the only shared
+JavaScript change (multi-medium Showcase matching) merged cleanly and was retained alongside
+the new desktop pinning. No other worker's files were reset or replaced. The deployment
+manifest excludes their unrelated files, including private-file/builder follow-ups.
+
+The native free-enrolment verification returned an unconfirmed cached readback, but later
+fresh observation found enrolment 61, lesson 60 and course 58 in the independent fixture:
+reader 3 is enrolled at 0/1 complete. The later six-panel browser pass therefore observed
+that state. It is not relabelled as an empty-studio run. No assignment/enrolment retry,
+provider call, cleanup or progress/completion action was used to force the result.
+
+## Desktop route coverage
+
+Production and the published reference were inspected at **1440×1000 and 1920×1000**,
+in both A/light and D/dark. Baseline: 60 paired captures at 1440, plus 16 additional
+public captures and separate lesson/essay/dashboard/checkout-reference observations.
+Final: 136 page captures and 28 supplemental captures. Four final essay captures used
+an incorrect assumed permalink and returned 404; they are retained as failed route
+selection, **not passes**. The real existing post was then checked at its observed
+`/website-test-post-placeholder/` permalink in all four desktop/mode combinations.
+The lesson's correct reference query is `?c=clouds-beginner&u=1`; supplementary captures
+replace the earlier incorrectly named query parameters. Raw originals remain intact.
+
+| Family | Observed production surface | Result / limit |
+|---|---|---|
+| Shared header/footer | All inspected public routes | Wood/palette/type/controls reviewed; desktop drawer and mode toggle exercised |
+| Home | `/` | Hero/image/section geometry matches reference; content-fed rails legitimately differ |
+| Catalogue | `/courses/` and Watercolour deep link | Public rendering, filtering and Clear observed; full-width introduction is the later owner direction |
+| Course detail | Beginner, Intermediate, Urban Sketching, Little House, published Demo studio | Public source/reference comparison; earlier course/CMS work retained; no purchase action |
+| Lesson | Beginner first public preview | Public page and teacher metadata reviewed; private/enrolled/completion states not certified |
+| Gallery | `/gallery/`, 12 artworks | Layout, prices, filter/sort controls and quick-view reviewed; native artwork content differs |
+| Showcase | `/showcase/`, 10 labelled samples | Board, two media on first sample, filters, scroll physics and lightbox observed |
+| Blog | `/blog/`, native topic chips and posts | Featured/grid layout and topic switching observed; sample authoring/content retained |
+| Post | Demo Tools article and existing placeholder post | Shared article/byline/related components reviewed; short supplied content has no multi-section TOC |
+| About | `/about/`, Terms/privacy anchors | Photo-carousel navigation and certificate lightbox observed; legal/content authoring boundaries retained |
+| Free Videos | `/free-videos/` | Rails/cards/player dialog open/close observed; player iframe clears on close; no new upload/provider operation |
+| FAQ | `/faq/` | Reference furniture and maintained answers; accordion exercised through animation completion |
+| Login | `/login/` | Native fields/focus and closed-signup direction reviewed; no real sign-in/reset request |
+| Recovery | Core lost-password URL → Tutor recovery page | Request form renders; token/expired/reused/delivery outcomes remain unverified |
+| Registration | `/student-registration/` | Closed registration state reviewed; reference signup form deliberately not enabled |
+| Dashboard gate | `/dashboard/` signed out | Login gate observed; this is not a production six-panel studio pass |
+| Basket | `/cart/` and native page-ID URL | Empty summary observed; populated native state remains unverified |
+| Checkout | `/checkout/` signed out/empty | Actual gate/redirect observed; prototype Details stage captured separately using prototype-only sample data |
+| Archives | Existing category, tag, author, October 2026, search and no-result search | Shared design components render; no dedicated prototype page exists for exact page-level comparison |
+| Not found | Deliberately nonexistent route | Styled page with expected HTTP 404 in both modes/widths |
+
+The existing six-panel studio was also checked in both modes on the separate local
+WordPress fixture, including native input styles, real-session member chrome and the
+observed 0/1 enrolled course. It lacks Tutor Pro fidelity and is not production acceptance.
+
+## Verification and failures retained
+
+The target flow is public page → existing navigation/filter/disclosure/dialog control →
+correct rendered state, preserving native account/commerce handlers. Browser plugin was
+not available; the already installed Playwright/Chrome setup was reused without installing
+dependencies. Screenshots, DOM geometry, status/identity and uncaught-page-error observations
+are private. No uncaught page errors were recorded in the final page and supplemental
+captures. The final console observation did record `favicon.ico` 404 and cart-count AJAX 503 responses.
+The latter returns `success:false, known:false`, matching the existing server guard when a
+native guest cart is unavailable. The header hides the unknown badge rather than displaying
+an invented zero. This is not a clean-console claim or a populated-cart pass; no hosting,
+commerce setting or provider configuration was changed. The direct actionless AJAX GET
+returned the normal 400/`0`, so the 503 observations are not labelled a general server outage.
+A comprehensive network/console or multi-browser audit is not claimed.
+
+Interaction evidence covers mode switching; Courses hover, arrow navigation and Escape;
+Home previous/next, single active/inert slides, pause and six-second autoplay; category
+filter/Clear; Gallery dialog/focus return/ascending prices; Showcase medium matching,
+lightbox and scroll response; Blog topics; About photo dots/certificate dialog; Free Videos
+dialog cleanup; FAQ open/close; empty basket/disabled Continue; login focus. Reduced-motion
+Home keeps content visible and disables autoplay. No form, profile, password, progress,
+completion, order or payment was submitted in production.
+
+Several first interaction assertions were wrong: the native basket uses a valid page-ID
+permalink, the hero height is fractional (489.265625px), a single-medium catalogue has no
+redundant medium group, the article wrapper is `.article`, and FAQ closing takes 280ms.
+Those original failures were kept, corrected narrowly, and re-observed. The menu focus
+failure was real: transitioning visibility could reject the first focus call. Its CSS
+opening transition was fixed and separately verified. A screenshot's apparently missing
+course-footer image was lazy loading; a later direct observation found no broken images
+on that course. It did not justify replacing the client's image or changing source.
+
+Source checks: the Home/login/checkout/catalogue/lesson contracts, lesson-material guard,
+course-introduction behaviour, four lesson renderer cases, eight cart-count cases, content
+contracts (45 pass / 4 skipped), PHP/JS syntax and whitespace checks passed. The new empty-cart
+fixture passes four synthetic cases (empty/nonempty/unknown/count mismatch), rendering the
+vendor template once; **native populated checkout acceptance remains false**. Earlier
+unittest discovery of script-only checks ran zero tests; their direct script executions,
+not that zero-test discovery, supply the contract evidence.
+
+## Release record
+
+The candidate `5553192` was merged with main `e07be48` in `774443d` before the release.
+All **21 scoped runtime files** matched their expected server preimages. Remote CLI lint
+passed all 10 PHP files without bootstrapping WordPress; every preimage was backed up before
+the first replacement. All 21 deployed bytes were read back successfully. D22 then changed
+only `css/cas-nav.css`, with its own exact preimage/backup/readback receipt. Its opening
+visibility is immediate; the visual opacity/transform transition remains 200ms.
+
+Private server backup: `~/backups/desktop-parity-20261101/`. Deployment inputs/receipts:
+`~/deploy-cas-desktop-parity-20261101/`, including `keyboard-followup/` for D22. Local originals:
+`remote-preflight-merged.*`, `remote-apply-merged.*`, `keyboard-followup.*`, `postimages.json`,
+`keyboard-followup/hashes.json`. Do not publish raw logs or reuse a completed apply helper.
+No guide build, guide authentication change, database/content migration, broad upload,
+provider execution, production account operation or held-runtime execution formed this release.
+
+## Remaining work and decisions
+
+| Classification | Item | Smallest next step |
+|---|---|---|
+| Deferred by owner | Mobile/tablet adaptation and prototype defects there | Separate responsive pass after desktop review |
+| Built but unverified | Populated basket, checkout details, order receipt/success, enrolled lesson/progress/completion and production studio | One separately bounded native journey using an approved account/payment fixture |
+| Built but content-blocked | Testimonial entrance, multi-heading post TOC, missing course photographs/materials | Review once actual eligible content is supplied; do not invent filler |
+| Owner/content cleanup | Published placeholder post and clearly labelled demo records | Decide what to retain/replace before launch; this audit did not remove them |
+| Reference defect | Dormant Home card animation scenes | Decide whether to repair the prototype and port that new behaviour later |
+| Not an approved visual exception yet | Checkout discount/hosted gateway field differences historically marked “owner to confirm”; remaining finish/restart lesson scenes | Inspect the real gated state and record the exact decision; do not infer acceptance from old receipts |
+| Existing operational gates | Recovery outcomes, human AT, client devices, email delivery, legal/prices, safe retention/core repair, role handover and launch switches | Keep their original Wayfinder children open; this visual release does not close them |
+
+WordPress-owned copy, photos, item order/count, prices, media and topic values are allowed
+to differ. Absent membership/Discord/guest login/Wishlist and closed signup follow later
+product decisions. No invented Etsy fallback/listing or legal consent text is added merely
+to imitate sample content. These exceptions do not excuse structural/design drift.
