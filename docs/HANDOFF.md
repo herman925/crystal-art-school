@@ -26,10 +26,12 @@ root-cause fix or permission to resume the held stack. Keep the preflight checks
 open. Restricted-editor/file-access workflow execution has not started in this phase;
 the owner requested discussion first.
 
-GitHub #150 and #200 correction drafts are prepared. The issue-update API returned
-`403 Resource not accessible by integration`; remote issue changes remain pending a
-writable authorised connection. #150's unified-editor-undelivered wording is superseded
-by the delivered forms, while restricted-role acceptance/handover remain open. #200's
+GitHub #150/#200 corrections and the matching #105 map checkpoint are published, with the
+bounded resource/source correction recorded in #135. The connector's issue-update API
+still returned `403 Resource not accessible by integration`; the owner then explicitly
+authorised the existing GitHub CLI connection, and every saved change was read back.
+#150's unified-editor-undelivered wording is superseded by the delivered forms, while
+restricted-role acceptance/handover remain open. #200's
 historical repair package targets 7.1.3; the current installation reports **7.1.4**, so its
 current file inventory/checksums must be rechecked before choosing any repair. No old core
 payload was applied. Existing launch, owner-role, payment and incident boundaries remain.
