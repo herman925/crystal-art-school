@@ -1,7 +1,8 @@
 /* The single-course page uses the same full-width container and type as course.dc.html. */
-#content.site-main.cas-single-course { max-width: none; width: 100%; }
+#content.site-main.cas-single-course { max-width: none; width: 100%; padding: 0; }
 .cas-course-page.container { max-width: var(--site-max); width: 100%; }
 .cas-course-page .crumbs { padding-top: 6px; }
+.cas-course-page .section-title { line-height: 1.6; }
 .cas-course-page #co-title { font-size: clamp(39px, 4.9vw, 65px); margin: 6px 0 12px; }
 .cas-course-page #co-blurb { font-size: 16.5px; }
 .cas-course-page #co-blurb p { margin: 0 0 12px; }
@@ -20,13 +21,16 @@
 .cas-course-page .syl-preview { color: var(--marine); }
 .cas-course-page .syl-spans { color: var(--muted); }
 .cas-course-page .course-purchased { font-size: 16px; }
-.cas-course-page .syl-more:hover,
-.cas-course-page .syl-more:focus { background: transparent; color: var(--marine); }
-.cas-course-page .syl-phase-btn { text-align: start; }
+.cas-course-page .syl-more:focus { background: transparent; color: var(--muted); }
+.cas-course-page .syl-more:hover { background: transparent; color: var(--coral-ink); }
+.cas-course-page .course-buy button.btn { line-height: normal; }
+.cas-course-page .syl-phase-btn { text-align: start; white-space: normal; font: 13.3333px Arial, sans-serif; line-height: normal; }
+.cas-course-page .syl-more { white-space: normal; line-height: normal; }
 .cas-course-page .syl-phase-btn:hover,
 .cas-course-page .syl-phase-btn:focus { background: rgba(20,17,13,.5); color: #f4e7cf; }
 [data-theme="A"] .cas-course-page .syl-phase-btn:hover,
 [data-theme="A"] .cas-course-page .syl-phase-btn:focus { background: color-mix(in srgb, var(--ink) 7%, var(--surface)); color: var(--ink); }
 .cas-course-page .course-teacher h3 { margin: 0 0 6px; }
 .cas-course-page .course-teacher p { margin: 0; font-size: 14px; color: var(--muted); }
+.cas-course-page .course-teacher a { font-weight: 700; }
 .cas-course-page .co-highlight .tutor-video-player { width: 100%; height: 100%; }

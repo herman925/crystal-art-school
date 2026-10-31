@@ -397,7 +397,6 @@ function cas_render_course_single() {
 	$reg     = (float) ( $price->regular_price ?? 0 );
 	$sale    = (float) ( $price->sale_price ?? 0 );
 	$is_sale = $sale > 0 && $sale < $reg;
-	$sym     = cas_course_currency();
 
 	$tag = cas_course_media_label( $id );
 
@@ -497,9 +496,9 @@ function cas_render_course_single() {
 						<?php if ( $enrolled ) : ?>
 							<span class="course-purchased">Purchased &#10003;</span>
 						<?php elseif ( $is_sale ) : ?>
-							<s class="was"><?php echo esc_html( $sym . $reg ); ?></s> <b class="now"><?php echo esc_html( $sym . $sale ); ?></b>
+							<s class="was"><?php echo esc_html( cas_course_price( $reg ) ); ?></s><b class="now"><?php echo esc_html( cas_course_price( $sale ) ); ?></b>
 						<?php else : ?>
-							<b class="now"><?php echo esc_html( $sym . $reg ); ?></b>
+							<?php echo esc_html( cas_course_price( $reg ) ); ?>
 						<?php endif; ?>
 					</div>
 					<?php if ( $enrolled && $resume ) : ?>

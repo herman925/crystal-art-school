@@ -91,3 +91,13 @@ check( ! str_contains( $html, '<a class="syl-row"' ), 'Paid lesson rows must not
 $flat = cas_render_course_syllabus( array( 'items' => array( $items[0] ) ) );
 check( ! str_contains( $flat, 'syl-phase-btn' ) && ! str_contains( $flat, ' hidden' ), 'A single unmodularised course must have the prototype flat syllabus.' );
 echo "PASS: lesson authoring guards, combined numbering, phase totals, detail disclosures, escaping and flat syllabuses\n";
+
+$fixture_outline = array( 'items' => array( array( 'seconds' => 9300 ), array( 'seconds' => 35 ) ) );
+function cas_lesson_outline( $id ) { global $fixture_outline; return $fixture_outline; }
+require __DIR__ . '/../wp-content/themes/hello-elementor-child/inc/cas-courses.php';
+check( 9335 === cas_course_total_seconds( 34 ) && '2h 36m' === cas_course_runtime( 34 ), 'Course runtime must sum film seconds and round the displayed minutes.' );
+$fixture_outline = array( 'items' => array( array( 'seconds' => 3595 ) ) );
+check( '1h' === cas_course_runtime( 34 ), 'Rounded minutes must carry into hours.' );
+$fixture_outline = array( 'items' => array() );
+check( '' === cas_course_runtime( 34 ), 'A course with no timed films must not invent a duration.' );
+echo "PASS: runtime derives from actual films, rounds seconds, carries hours and handles empty courses\n";

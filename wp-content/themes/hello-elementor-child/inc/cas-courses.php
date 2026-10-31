@@ -19,17 +19,16 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Human runtime from Tutor's duration array, matching the prototype's format:
- * "2h 35m", "2h", "35m".
+ * Human runtime from the lesson films, rounded like the prototype.
  */
 function cas_course_runtime( $course_id ) {
-	$d = tutor_utils()->get_course_duration( $course_id, true );
+	$seconds = cas_course_total_seconds( $course_id );
 
-	if ( ! $d ) {
+	if ( ! $seconds ) {
 		return '';
 	}
 
-	$minutes = (int) round( ( (int) ( $d['durationHours'] ?? 0 ) * 3600 + (int) ( $d['durationMinutes'] ?? 0 ) * 60 + (int) ( $d['durationSeconds'] ?? 0 ) ) / 60 );
+	$minutes = (int) round( $seconds / 60 );
 	$h = intdiv( $minutes, 60 );
 	$m = $minutes % 60;
 
@@ -47,20 +46,11 @@ function cas_course_runtime( $course_id ) {
 /**
  * Total runtime in seconds.
  *
- * Tutor's `durationSeconds` is the seconds *component* of an h/m/s triple, not a total,
- * so the three parts have to be recombined before anything can be compared against a
- * length band.
+ * Tutor's saved course duration can omit seconds. The visible lesson rows carry
+ * the actual film runtimes, so the course fact and duration filter use their sum.
  */
 function cas_course_total_seconds( $course_id ) {
-	$d = tutor_utils()->get_course_duration( $course_id, true );
-
-	if ( ! $d ) {
-		return 0;
-	}
-
-	return (int) ( $d['durationHours'] ?? 0 ) * 3600
-		+ (int) ( $d['durationMinutes'] ?? 0 ) * 60
-		+ (int) ( $d['durationSeconds'] ?? 0 );
+	return array_sum( array_column( cas_lesson_outline( $course_id )['items'], 'seconds' ) );
 }
 
 /**
