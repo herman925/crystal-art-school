@@ -67,7 +67,11 @@ export default defineConfig({
     ],
     docFooter: { prev: false, next: false },
     footer: { message: 'Internal — please do not share this address.' },
-    nav: [{ text: 'Sign out', link: '/logout.php' }]
+    // target MUST stay: VitePress's click handler passes any <a target> straight to the
+    // browser, and that is the only supported way to get a real document navigation out of
+    // the SPA. Without it, /logout.php is fetched and swapped in as a page instead of being
+    // navigated to, so clicking Sign out never leaves the guide. _self keeps it in this tab.
+    nav: [{ text: 'Sign out', link: '/logout.php', target: '_self', noIcon: true }]
   },
   vite: { build: { chunkSizeWarningLimit: 2000 } }
 })
