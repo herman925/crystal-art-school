@@ -7,15 +7,15 @@ Use only the approved controls available in your content account. This is not an
 Start from **Content hub**. Its page cards open the approved settings and lists.
 
 Home brings its banner, text and photographs onto one editing page. About brings its writing
-and portrait together. Site details brings contact, social links and brand images together.
-Use **Save Home**, **Save About** or **Save Site details** to save all fields on that page.
+and portrait together. Site-Wide Edit brings contact, social links and brand images together.
+Use **Save Home**, **Save About** or **Save Site-Wide Edit** to save all fields on that page.
 Blog and Free videos have their own introduction pages. Repeating entries, such as artwork,
 articles and photograph strips, keep their separate content lists.
 
 | What | Where to start |
 |---|---|
-| Logo and signature images | Content hub → Every page → Edit Site details |
-| Contact email and social links | Content hub → Every page → Edit Site details |
+| Logo and signature images | Content hub → Site-Wide Edit |
+| Contact email and social links | Content hub → Site-Wide Edit |
 | Menu labels, links and order | Request a change from the webmaster |
 | Homepage banner words and images | Content hub → Home → Edit Home |
 | Homepage free-video card, About photograph and course introduction | Content hub → Home → Edit Home |

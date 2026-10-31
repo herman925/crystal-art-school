@@ -9,6 +9,19 @@
 
 	var strip = document.getElementById( 'co-thumbs' );
 	var cover = document.getElementById( 'co-cover' );
+	var syllabus = document.getElementById( 'co-syllabus' );
+	if ( syllabus ) {
+		syllabus.addEventListener( 'click', function ( ev ) {
+			var button = ev.target.closest( '.syl-phase-btn, .syl-more' );
+			if ( ! button ) { return; }
+			var body = document.getElementById( button.getAttribute( 'aria-controls' ) );
+			if ( ! body ) { return; }
+			var expanded = button.getAttribute( 'aria-expanded' ) === 'true';
+			button.setAttribute( 'aria-expanded', expanded ? 'false' : 'true' );
+			body.hidden = expanded;
+			if ( typeof window.CasAnnounce === 'function' ) { window.CasAnnounce( button.textContent.trim() + ( expanded ? ' collapsed.' : ' expanded.' ) ); }
+		} );
+	}
 
 	if ( ! strip || ! cover ) {
 		return;
@@ -47,5 +60,6 @@
 			other.classList.toggle( 'is-active', on );
 			other.setAttribute( 'aria-pressed', on ? 'true' : 'false' );
 		} );
+		if ( typeof window.CasAnnounce === 'function' ) { window.CasAnnounce( ( btn.getAttribute( 'aria-label' ) || 'Photograph' ).replace( /^Show /, 'Showing ' ) + '.' ); }
 	} );
 } )();

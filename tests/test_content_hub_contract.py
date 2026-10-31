@@ -7,7 +7,7 @@ THEME = Path(__file__).parents[1] / "wp-content/themes/hello-elementor-child"
 HUB = THEME / "inc/cas-content-hub.php"
 FUNCTIONS = THEME / "functions.php"
 
-CARDS = ("Home", "Courses", "Gallery", "Showcase", "Blog", "About", "Free videos", "FAQ", "Every page")
+CARDS = ("Home", "Courses", "Gallery", "Showcase", "Blog", "About", "Free videos", "FAQ", "Site-Wide Edit")
 # Customizer section ids the hub deep-links to. Each must be registered by the theme (checked below).
 SECTIONS = (
     "cas_hero", "cas_page_home_free_videos", "cas_page_home_about", "cas_page_home_courses",

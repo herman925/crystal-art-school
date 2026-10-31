@@ -1,0 +1,13 @@
+.cas-content-back { margin: 12px 0; }
+.cas-artwork-sort .button { margin-left: 6px; }
+body.post-type-cas_artwork .editor-post-featured-image__preview-image,
+body.post-type-cas_artwork #postimagediv img { width: 100%; height: auto; max-height: 420px; aspect-ratio: auto; object-fit: contain; }
+@media (min-width: 1100px) {
+ body.post-type-cas_artwork .interface-interface-skeleton__sidebar,
+ body.post-type-cas_artwork .interface-complementary-area.editor-sidebar { min-width: 420px; }
+ body.post-type-cas_artwork .interface-interface-skeleton__sidebar { max-width: 40vw; }
+}
+@media (min-width: 1440px) {
+ body.post-type-cas_artwork .interface-interface-skeleton__sidebar,
+ body.post-type-cas_artwork .interface-complementary-area.editor-sidebar { min-width: 480px; }
+}
