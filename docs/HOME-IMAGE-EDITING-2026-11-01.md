@@ -57,9 +57,22 @@ on the production PHP runtime, plus **31 changed guide files**. The guide retain
 assets were preserved. The one TOOLS setting was restored to A6 through its guarded write
 and verified readback; unrelated values/autoload were unchanged.
 
-Live public check: Home HTTP 200, TOOLS uses A6 with responsive derivatives, all seven served
-CSS/JS/JPEG asset hashes match the release, and the guide still redirects signed-out readers
-to login. Production administrator login was not used. Scoped editing checks were local;
+The first live check found A6 present but its responsive ladder absent: the CLI import saved
+an HTTP URL while the HTTPS renderer compared theme URLs byte-for-byte. The renderer now
+recognises the same owned theme asset across HTTP/HTTPS, preserving its canonical served
+URL and responsive ladder. The failed original check is preserved privately. Follow-up
+publication is verified: one follow-up PHP file passed production lint and hash readback.
+The HTTP-alias renderer passed a native check under HTTPS context, and the owned TOOLS
+setting was normalised to HTTPS with a separate exact preimage and conditional write.
+Live Home shows the requested photo and responsive ladder; its screenshot was inspected.
+Four served CSS/JS hashes match. All three served JPEG sizes decode at 192×220, 384×441
+and 624×716, and guide login protection remains in place.
+
+A second wire assertion expected JPEG response bytes to equal the origin file. The served
+JPEG encoding differs (progressive JFIF at origin versus baseline Exif in the response),
+while origin file hashes, decoded dimensions and visible photo are correct. That failure
+and response bytes are preserved; it is not reported as a successful byte comparison.
+The final image checks establish delivery/decoding/appearance, not identical wire bytes. Production administrator login was not used. Scoped editing checks were local;
 full production/client authoring acceptance remains pending.
 
 Private artifacts: `~/cas-evidence/home-image-editing-20261101/` and the new frame-render
@@ -69,3 +82,7 @@ preimages, raw logs, credentials or session state to GitHub.
 The GitHub #105 connector's existing write denial remains; HANDOFF.md and this file hold
 the pending local Wayfinder update. Full course/payment, enrolled-progress, guide-reader,
 human/device checks and incident-held work remain as recorded in the dated handoff.
+
+The implementation is recorded in commit `13be7c6` plus its HTTP/HTTPS follow-up. Own test
+containers were stopped, preserving volumes and original evidence. No unrelated WIP was
+cleaned, stashed, reset or overwritten.

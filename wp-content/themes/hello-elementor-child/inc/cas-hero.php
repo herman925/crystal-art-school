@@ -118,8 +118,11 @@ function cas_hero_img( $url, $sizes, $attrs = [] ) {
 	$path      = preg_replace( '/[?#].*$/', '', $url );
 	$rel       = '';
 
-	if ( 0 === strpos( $path, $theme_uri ) ) {
-		$rel = ltrim( substr( $path, strlen( $theme_uri ) ), '/' );
+	// CLI imports may save HTTP URLs; both schemes identify the same checked-in asset.
+	$asset_path = preg_replace( '~^https?:~', '', $path );
+	$asset_root = preg_replace( '~^https?:~', '', $theme_uri );
+	if ( 0 === strpos( $asset_path, $asset_root ) ) {
+		$rel = ltrim( substr( $asset_path, strlen( $asset_root ) ), '/' );
 	}
 
 	if ( $rel && false === strpos( $rel, '..' ) && is_readable( $theme_dir . $rel ) ) {
