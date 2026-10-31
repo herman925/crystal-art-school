@@ -1,5 +1,39 @@
 # Handoff — Crystal Art School WordPress build
 
+## Current source and drift checkpoint — 2026-11-01
+
+The deployed CMS/course follow-ups are reconciled with main's later interaction-colour
+and HTTP/HTTPS image fixes in merge `b9de262`. All **110 theme PHP/JS/CSS files** match
+that combined source byte-for-byte after two backed-up, CRLF-to-LF-only normalisations.
+The separate desktop-parity worktree's uncommitted edits remain untouched and are not
+silently included in this checkpoint.
+
+The four course templates passed 24 production-facing comparisons: both themes at
+1440×1000, 888×745 and 390×844. Prototype-only purchase simulation and obsolete tier
+marketing were excluded. Five native gallery controls, subtitle/media-label controls,
+and combined-lesson/detail fields passed administrator save/reload checks. Both original
+preview films advance during playback; the original Intermediate film is now hosted with
+the existing video provider. Existing course descriptions/prices/gallery IDs, 22 lesson
+identities/media/access flags, enrolment records and the 13 pre-migration Beginner lesson
+URLs were preserved. Temporary QA records and owned browser sessions were removed.
+
+The three existing local Review containers again had kernel `memory.swap.max=max`
+despite Docker declaring no extra swap. The identical approved memory/total-memory+swap
+values were reapplied through Docker. Kernel limits are now zero; CPU/RAM budgets,
+container/image identities, PIDs and restart counts are unchanged. Previously swapped
+pages remain. No service was restarted or held data drained, and this is not a permanent
+root-cause fix or permission to resume the held stack. Keep the preflight checks and #135
+open. Restricted-editor/file-access workflow execution has not started in this phase;
+the owner requested discussion first.
+
+GitHub #150 and #200 correction drafts are prepared. The issue-update API returned
+`403 Resource not accessible by integration`; remote issue changes remain pending a
+writable authorised connection. #150's unified-editor-undelivered wording is superseded
+by the delivered forms, while restricted-role acceptance/handover remain open. #200's
+historical repair package targets 7.1.3; the current installation reports **7.1.4**, so its
+current file inventory/checksums must be rechecked before choosing any repair. No old core
+payload was applied. Existing launch, owner-role, payment and incident boundaries remain.
+
 ## Webpage review follow-up — 2026-11-01
 
 The 18 open reviewer threads from 31 October were implemented and deployed from
