@@ -5,6 +5,7 @@ export default defineConfig({
   description: 'How to update the Crystal Art School website.',
   lang: 'en',
   cleanUrls: true,
+  srcExclude: ['**/*-draft.md'],
   base: '/',
   head: [['meta', { name: 'robots', content: 'noindex, nofollow' }]],
   themeConfig: {
@@ -43,17 +44,6 @@ export default defineConfig({
           { text: 'Student work', link: '/showcase' },
           { text: 'Free videos', link: '/free-videos' },
           { text: 'Blog articles', link: '/blog' }
-        ]
-      },
-      {
-        text: 'Money and access — draft',
-        items: [
-          { text: 'Start with the safety checklist', link: '/money-guide-draft' },
-          { text: 'Course prices — draft', link: '/course-prices-draft' },
-          { text: 'Coupons — draft', link: '/coupons-draft' },
-          { text: 'Sales and exports — draft', link: '/sales-draft' },
-          { text: 'Course access — draft', link: '/course-access-draft' },
-          { text: 'Troubleshooting — draft', link: '/money-help-draft' }
         ]
       },
       {

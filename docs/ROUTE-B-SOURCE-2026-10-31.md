@@ -76,10 +76,10 @@ identifier, not the test date). They are not GitHub attachments. Guide build lau
 failed on an incorrect dependency-link path; corrected r2 built successfully. No historical
 incident evidence, account, progress marker, provider or production state was changed.
 
-The only running WordPress environment is the old review stack, with older mounted source
+Before the round review, the only running WordPress environment was the old review stack, with older mounted source
 and held incident state. It was inspected for container/mount identity only, without
 bootstrapping WordPress or changing its files/database. A designated approved staging target
-or a separately chosen fresh local instance is required for the remaining native checks.
+or a separately chosen fresh local instance was required for the native checks completed below.
 
 ## Native review and release preparation — 2026-10-31
 
@@ -117,6 +117,16 @@ The guide release preserves the current 22-page inventory and published navigati
 the six unpublished drafts from pages/chunks/search, and replaces their links with handover
 references. All 18 changed document bodies were reviewed; other document text is unchanged.
 Authentication, reader configuration and server files are excluded and hash-guarded.
+
+The normal guide configuration now excludes `*-draft.md` sources and their sidebar group.
+The final exclusion check includes all six draft source files and requires exactly the same
+22 published HTML paths with no draft routes/content in generated chunks or search. Draft
+source files remain in the repository. The full `deploy.sh` is still not used because its
+authentication/user-rewrite and replacement behaviour is outside this release.
+
+GitHub's connector rejected creation of a new PR with HTTP 403. The repository's normal Git
+transport can push the reviewed branch; release integration uses an ordinary fast-forward
+of main, subject to GitHub branch protection, without retrying the denied PR-creation action.
 
 Native full course/five-photo/material authoring, production record ownership, Tutor Pro,
 enrolled learning/completion, provider payments, real-reader PHP logout, human assistive
