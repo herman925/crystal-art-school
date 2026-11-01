@@ -36,3 +36,17 @@
 @media (max-width:640px){.mc-foot{flex-direction:column;align-items:stretch;}.mc-acts{justify-content:stretch;}.mc-btn{flex:1;justify-content:center;}}
 @media (prefers-reduced-motion: reduce) { .mc-drawer, .mc-drawer.open, .mc-backdrop, .mc-backdrop.open { transition: none; } }
 .mc-notice { margin: 0; color: var(--muted); font-size: 15px; }
+
+/* A full basket must remain scrollable within the currently visible screen. */
+.mc-drawer {
+  top: var(--cas-drawer-top, 0px);
+  max-height: calc(100vh - var(--cas-drawer-top, 0px));
+  max-height: calc(100dvh - var(--cas-drawer-top, 0px));
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+@media (pointer: coarse) {
+  .mc-close { width: 44px; height: 44px; flex: none; }
+  .mc-rm, .mc-btn { min-width: 44px; min-height: 44px; }
+}

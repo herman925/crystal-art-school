@@ -144,7 +144,7 @@
 .fv-modal.open { display: flex; }
 .fvm-backdrop { position: absolute; inset: 0; background: rgba(15,12,9,.78); backdrop-filter: blur(4px); }
 .fvm-panel { position: relative; z-index: 1; width: min(880px, 100%); background: #181410; border-radius: 16px; overflow: hidden; box-shadow: 0 40px 90px rgba(0,0,0,.6); }
-.fvm-close { position: absolute; top: 10px; right: 10px; z-index: 3; width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(243,237,225,.3); background: rgba(24,20,16,.6); color: #f3ede1; cursor: pointer; font-size: 14px; }
+.fvm-close { position: absolute; top: 10px; right: 10px; z-index: 6; width: 36px; height: 36px; border-radius: 50%; border: 1px solid rgba(243,237,225,.3); background: rgba(24,20,16,.6); color: #f3ede1; cursor: pointer; font-size: 14px; }
 .fvm-stage { position: relative; aspect-ratio: 16 / 9; background: #000; }
 /* 1.4.12: a 9:16 film keeps the same stage height and is pillarboxed — flat dark
    fill either side — so the modal does not change size between a landscape and a
@@ -168,3 +168,10 @@
 .fvm-body { padding: 14px 18px 18px; background: #181410; border-top: 1px solid rgba(243,237,225,.08); }
 .fvm-body h3 { margin: 0 0 4px; font-family: var(--font-marker); font-weight: 600; font-size: 19px; color: #f3ede1; }
 .fvm-body p { margin: 0; font-size: 13.5px; color: rgba(243,237,225,.65); }
+
+/* The embedded player's z-index must not cover the close control. */
+.fvm-panel { max-height: calc(100vh - 44px); max-height: calc(100dvh - 44px); overflow-y: auto; }
+@media (pointer: coarse) { .fvm-close { width: 44px; height: 44px; } }
+@media (orientation: landscape) and (max-height: 600px) {
+  .fvm-stage { aspect-ratio: auto; height: clamp(120px, calc(100vh - 180px), 360px); height: clamp(120px, calc(100dvh - 180px), 360px); }
+}

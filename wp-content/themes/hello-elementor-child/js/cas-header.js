@@ -8,12 +8,20 @@
 	var sheet = document.querySelector( '.nav-sheet' );
 	var burger = document.querySelector( '.nav-burger' );
 
+	function fitSheet() {
+		if ( ! sheet || ! sheet.classList.contains( 'open' ) ) { return; }
+		var viewport = window.visualViewport;
+		var bottom = viewport ? viewport.height + viewport.offsetTop : window.innerHeight;
+		sheet.style.maxHeight = Math.max( 0, bottom - sheet.getBoundingClientRect().top ) + 'px';
+	}
+
 	function setSheet( open ) {
 		if ( ! sheet || ! burger ) { return; }
 		sheet.classList.toggle( 'open', open );
 		sheet.inert = ! open;
 		sheet.setAttribute( 'aria-hidden', open ? 'false' : 'true' );
 		burger.setAttribute( 'aria-expanded', open ? 'true' : 'false' );
+		if ( open ) { fitSheet(); }
 	}
 
 	function currentTheme() {
@@ -63,8 +71,10 @@
 		}
 	} );
 	window.addEventListener( 'resize', function () {
-		if ( window.matchMedia( '(min-width: 1081px)' ).matches ) { setSheet( false ); }
+		if ( window.matchMedia( '(min-width: 1081px)' ).matches ) { setSheet( false ); } else { fitSheet(); }
 	} );
+
+	if ( window.visualViewport ) { window.visualViewport.addEventListener( 'resize', fitSheet ); }
 
 	// Desktop disclosure: hover, explicit caret, Escape, outside click and keyboard focus.
 	document.querySelectorAll( '.nav-drop' ).forEach( function ( drop ) {
