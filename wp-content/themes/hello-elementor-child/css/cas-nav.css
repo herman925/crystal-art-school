@@ -57,10 +57,18 @@
    !important — an inline non-important value beats it — so raising specificity is
    enough and no !important is warranted. Selector verified in the browser before
    being written here. */
-body.cas-root .elementor-shortcode > footer.site-footer,
+body.cas-root footer.site-footer,
 body.cas-root .elementor-shortcode > nav.site-nav {
   max-width: none;
   width: 100%;
+}
+
+/* Hello adds a mobile inset even when the prototype footer owns its inner gutter. */
+body.cas-root footer.site-footer { padding-inline: 0; }
+
+/* The relative themed body already starts below WordPress's mobile toolbar space. */
+@media (max-width: 600px) {
+  body.cas-root.admin-bar #wpadminbar { top: calc(-1 * var(--wp-admin--admin-bar--height, 46px)); }
 }
 
 /* Carousel pause control.
