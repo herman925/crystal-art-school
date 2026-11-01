@@ -125,30 +125,30 @@
 .tutor-checkout-page .cas-refund-consent input[type="checkbox"] { flex: none; width: 20px; height: 20px; margin: 2px 0 0; accent-color: var(--coral); }
 /* Keyboard focus uses the shared prototype ring. */
 
-/* Keep the native responsive view for the deferred mobile pass. */
-.cas-basket-empty-desktop { display: none; }
-@media (min-width: 861px) {
-  .cas-basket-empty-desktop { display: block; }
-  .cas-basket-empty-legacy { display: none; }
+/* Keep native rendering/hooks, but use the designed empty state at every width. */
+.cas-basket-empty-desktop { display: block; }
+.cas-basket-empty-legacy { display: none; }
 
-}
-
-/* Desktop native basket: reuse the prototype grid/materials without changing quantities,
+/* Native basket: reuse the prototype grid/materials without changing quantities,
    totals, tax calculation, removal hooks or the native checkout destination. */
-@media (min-width: 861px) {
- .cas-account-body:has(.cas-basket-empty-desktop) { padding-bottom: 0; }
+ body.cas-account-cart .cas-account-body { padding-bottom: 0; }
+ .cas-account-body .tutor-cart-page { padding: 0; }
  .cas-account-body .tutor-cart-page .tutor-container { max-width: none; width: auto; margin: 0; padding: 0; }
  .cas-account-body .tutor-cart-page .tutor-container > .tutor-row { display: grid; grid-template-columns: 1.6fr 1fr; gap: 28px; align-items: start; margin: 0; padding-bottom: 70px; }
- .cas-account-body .tutor-cart-page .tutor-container > .tutor-row > [class*="tutor-col-"] { width: auto; max-width: none; padding: 0; flex: none; }
+ .cas-account-body .tutor-cart-page .tutor-container > .tutor-row > [class*="tutor-col-"] { width: auto; max-width: none; margin: 0; padding: 0; flex: none; }
  .cas-account-body .tutor-cart-page .tutor-col-lg-8 > h3 { display: none; }
+ .cas-account-body .tutor-cart-page .tutor-cart-course-list { border: 0; padding: 0; display: block; }
  .cas-account-body .tutor-cart-page .tutor-cart-course-item { display: grid; grid-template-columns: 78px 1fr auto; gap: 16px; align-items: center; background: var(--surface); border-radius: var(--radius-card); padding: 14px; box-shadow: var(--shadow-sm); margin-bottom: 14px; border: 0; }
- .cas-account-body .tutor-cart-page .tutor-cart-course-thumb { width: 78px; height: 78px; flex: none; margin: 0; }
+ .cas-account-body .tutor-cart-page .tutor-cart-course-thumb { width: 78px; height: 78px; flex: none; margin: 0; border-radius: var(--r-sharp); overflow: hidden; background: var(--wall); }
  .cas-account-body .tutor-cart-page .tutor-cart-course-thumb img { width: 100%; height: 100%; object-fit: cover; border-radius: var(--r-sharp); }
+ .cas-account-body .tutor-cart-page .tutor-cart-course-title { min-width: 0; }
  .cas-account-body .tutor-cart-page .tutor-cart-course-title h5 { font-family: var(--font-marker); font-size: 16px !important; font-weight: 600 !important; line-height: 1.6; margin: 0 0 3px; color: var(--ink); }
- .cas-account-body .tutor-cart-page .tutor-cart-course-info, .cas-account-body .tutor-cart-page .tutor-cart-course-info li { font-family: var(--font-cond); font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); }
- .cas-account-body .tutor-cart-page .tutor-cart-course-price-wrapper { display: flex; flex-direction: column; align-items: flex-end; gap: 8px; }
+ .cas-account-body .tutor-cart-page .tutor-cart-course-info { margin: 0; flex-wrap: wrap; gap: 12px; }
+ .cas-account-body .tutor-cart-page .tutor-cart-course-info li::before { display: none; }
+ .cas-account-body .tutor-cart-page .tutor-cart-course-info, .cas-account-body .tutor-cart-page .tutor-cart-course-info li { font-family: var(--font-cond); font-size: 12.5px; line-height: 1.6; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); }
+ .cas-account-body .tutor-cart-page .tutor-cart-course-price-wrapper { display: flex; flex-direction: column; align-items: flex-end; width: auto; margin: 0; gap: 8px; }
  .cas-account-body .tutor-cart-page .tutor-cart-course-price { font-family: var(--font-cond); font-weight: 600; font-size: 16px; color: var(--coral-ink); }
- .cas-account-body .tutor-cart-page .tutor-cart-remove-button { font-family: var(--font-cond); font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); background: none; border: 0; padding: 0; }
+ .cas-account-body .tutor-cart-page .tutor-cart-remove-button { font-family: var(--font-cond); font-size: 12.5px; font-weight: 400; line-height: normal; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); background: none; border: 0; border-radius: 0; padding: 1px 6px; transition: none; }
  .cas-account-body .tutor-cart-page .tutor-cart-remove-button:hover { color: var(--coral-ink); }
  .cas-account-body .tutor-cart-page .tutor-container > .tutor-row > .tutor-col-lg-4 { position: sticky; top: 88px; background: var(--surface); border-radius: var(--radius-card); padding: 24px 26px; box-shadow: var(--shadow-sm); }
  .cas-account-body .tutor-cart-page .tutor-container > .tutor-row > .tutor-col-lg-4 > h3 { font-family: var(--font-cond); font-size: 13px !important; font-weight: 600 !important; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--coral-ink); margin: 0 0 16px !important; }
@@ -157,5 +157,9 @@
  .cas-account-body .tutor-cart-page .tutor-cart-summery-bottom > .tutor-cart-summery-item { align-items: baseline; margin-top: 12px !important; padding-top: 14px; border-top: 1px solid var(--line); }
  .cas-account-body .tutor-cart-page .tutor-cart-summery-bottom > .tutor-cart-summery-item > div:first-child { font-family: var(--font-cond); font-size: 13px; letter-spacing: var(--tracking-label); text-transform: uppercase; }
  .cas-account-body .tutor-cart-page .tutor-cart-summery-bottom > .tutor-cart-summery-item > div:last-child { font-family: var(--font-marker); font-size: 26px; font-weight: 600; color: var(--marine); }
- .cas-account-body .tutor-cart-page [data-cy="tutor-native-checkout-button"] { margin-top: 18px; border-radius: var(--radius-pill); font-family: var(--font-cond); font-weight: 500; font-size: 14px; letter-spacing: var(--tracking-label); text-transform: uppercase; padding: 14px 28px; background-color: var(--marine); background-image: linear-gradient(118deg, rgba(226,242,247,.30), transparent 42%), repeating-linear-gradient(95deg, rgba(0,0,0,.10) 0 1px, transparent 1px 3px), var(--marine-metal); color: var(--marine-ink-metal); -webkit-text-fill-color: var(--marine-ink-metal); }
+ .cas-account-body .tutor-cart-page [data-cy="tutor-native-checkout-button"] { margin-top: 18px; border: 0; border-radius: var(--radius-pill); font-family: var(--font-cond); font-weight: 500; font-size: 14px; line-height: normal; letter-spacing: var(--tracking-label); text-transform: uppercase; padding: 14px 28px; background-color: var(--marine); background-image: linear-gradient(118deg, rgba(226,242,247,.30), transparent 42%), repeating-linear-gradient(95deg, rgba(0,0,0,.10) 0 1px, transparent 1px 3px), var(--marine-metal); color: var(--marine-ink-metal); -webkit-text-fill-color: var(--marine-ink-metal); box-shadow: var(--shadow-sm), inset 0 1px 0 rgba(226,242,247,.38), inset 0 -1px 0 rgba(10,35,45,.4); transition: transform .18s var(--ease-pop), box-shadow .18s, background .18s, color .18s; }
+ .cas-account-body .tutor-cart-page [data-cy="tutor-native-checkout-button"]:hover { filter: brightness(1.07); transform: translateY(-2px); }
+@media (max-width: 880px) {
+ .cas-account-body .tutor-cart-page .tutor-container > .tutor-row { grid-template-columns: 1fr; }
+ .cas-account-body .tutor-cart-page .tutor-container > .tutor-row > .tutor-col-lg-4 { position: static; }
 }

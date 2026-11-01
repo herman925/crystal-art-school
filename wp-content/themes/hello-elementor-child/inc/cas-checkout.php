@@ -65,10 +65,11 @@ add_filter(
 	3
 );
 
-// Cart labels change only on the cart page; checkout/order processing is untouched.
+// Keep cart labels after Tutor's removal refresh as well as on the page.
 add_filter( 'gettext', function ( $translation, $text, $domain ) {
-	if ( 'tutor' !== $domain || 'cart' !== cas_account_current_key() ) { return $translation; }
-	$labels = array( 'Summary:' => 'Order summary', 'Subtotal:' => 'Subtotal', 'Grand total' => 'Total', 'Proceed to checkout' => 'Continue to details' );
+	$refresh = wp_doing_ajax() && isset( $_POST['action'] ) && is_string( $_POST['action'] ) && 'tutor_delete_course_from_cart' === wp_unslash( $_POST['action'] );
+	if ( 'tutor' !== $domain || ( 'cart' !== cas_account_current_key() && ! $refresh ) ) { return $translation; }
+	$labels = array( 'Summary:' => 'Order summary', 'Subtotal:' => 'Subtotal', 'Grand total' => 'Total', 'Proceed to checkout' => 'Continue to details →' );
 	return $labels[ $text ] ?? $translation;
 }, 10, 3 );
 
