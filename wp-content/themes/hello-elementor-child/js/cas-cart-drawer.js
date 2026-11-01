@@ -126,7 +126,7 @@
 				action: config.removeAction, _tutor_nonce: config.removeNonce, course_id: button.dataset.courseId
 			} ) );
 			if ( response.status_code !== 200 ) { throw new Error( 'Course removal failed' ); }
-			document.dispatchEvent( new CustomEvent( 'tutorRemoveCartEvent', { detail: { cart_count: response.data && response.data.cart_count } } ) );
+			document.dispatchEvent( new CustomEvent( 'tutorRemoveCartEvent', { detail: { cart_count: response.data && response.data.cart_count, course_id: Number( button.dataset.courseId ) } } ) );
 			// Tutor's cart page owns its own renderer and must not retain the removed row.
 			if ( document.querySelector( '.tutor-cart-course-item' ) ) { window.location.reload(); }
 		} catch ( error ) {

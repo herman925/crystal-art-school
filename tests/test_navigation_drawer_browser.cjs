@@ -41,6 +41,13 @@ const server = http.createServer(async (req, res) => {
           prices: {'1': {regular_price: 20, sale_price: 12.5}}}, [path.join(theme, 'inc/cas-cart-count.php')]));
         reply(res, result.response.status, result.response); return;
       }
+      if (post.action === 'tutor_add_course_to_cart') {
+        assert.equal(post._tutor_nonce, 'native-nonce'); assert.equal(post.course_id, '1'); assert(member);
+        if (state.failAdd) {reply(res, 400, {message:'Synthetic add failure'}); return;}
+        state.count = 1;
+        if (state.holdAdd) await new Promise(resolve => state.pendingAdd = resolve);
+        reply(res, 200, {data:{cart_count:1}}); return;
+      }
       if (post.action === 'tutor_delete_course_from_cart') {
         assert.equal(post._tutor_nonce, 'native-nonce'); assert.equal(post.course_id, '1');
         assert(member || guest); assert(!('user_id' in post) && !('cart_id' in post));
@@ -54,7 +61,7 @@ const server = http.createServer(async (req, res) => {
     const styles = ['industrial-1', 'industrial-2', 'industrial-3', 'cas-nav', 'cas-cart-drawer'].map(n => `<link rel="stylesheet" href="/theme/css/${n}.css">`).join('');
     const config = {cartUrl: '/cart/', loginUrl: '/login/', requiresLogin: !member && !guest, removeAction: 'tutor_delete_course_from_cart', removeNonce: 'native-nonce'};
     res.writeHead(200, {'content-type': 'text/html; charset=utf-8', 'set-cookie': [`member=${+member}; Path=/; SameSite=Lax`, `guest=${+guest}; Path=/; SameSite=Lax`]});
-    res.end(`<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Navigation parity fixture</title>${styles}</head><body class="cas-root" data-theme="${url.searchParams.get('theme') || 'D'}">${header}<main id="content" class="container" style="min-height:1000px;padding-top:70px"><h1>Navigation parity fixture</h1><button id="outside">Outside navigation</button></main><script>window.casCartCount={ajaxUrl:'/ajax',nonce:'valid'};${url.searchParams.has('noDrawer') ? '' : 'window.casCartDrawer=' + JSON.stringify(config) + ';'}</script><script src="/theme/js/cas-site-extras.js"></script><script src="/theme/js/cas-header.js"></script><script src="/theme/js/cas-cart-drawer.js"></script></body></html>`);
+    res.end(`<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Navigation parity fixture</title>${styles}</head><body class="cas-root" data-theme="${url.searchParams.get('theme') || 'D'}">${header}<main id="content" class="container" style="min-height:1000px;padding-top:70px"><h1>Navigation parity fixture</h1><button id="outside">Outside navigation</button><button id="add-course" type="button" data-cas-add-to-cart data-course-id="1">Add course <span aria-hidden="true">→</span></button></main><script>window.casCartCount={ajaxUrl:'/ajax',nonce:'valid'};window.casCourses={ajaxUrl:'/ajax',nonce:'native-nonce',action:'tutor_add_course_to_cart'};${url.searchParams.has('noDrawer') ? '' : 'window.casCartDrawer=' + JSON.stringify(config) + ';'}</script><script src="/theme/js/cas-site-extras.js"></script><script src="/theme/js/cas-header.js"></script><script src="/theme/js/cas-cart-drawer.js"></script><script src="/theme/js/cas-courses.js"></script></body></html>`);
   } catch (error) {console.error(error.stack); reply(res, 500, {error: 'Synthetic fixture failed'});}
 });
 async function waitFor(page, predicate) { await page.waitForFunction(predicate); }
@@ -173,6 +180,28 @@ async function waitFor(page, predicate) { await page.waitForFunction(predicate);
     await page.waitForTimeout(150); assert.equal(await page.locator('.mc-drawer').getAttribute('aria-hidden'), 'true');
     assert.equal(await page.locator('.cart-btn').evaluate(e => e === document.activeElement), true);
     await page.goto(base + '/?member=1&noDrawer=1'); await page.locator('.cart-btn').click(); assert.equal(new URL(page.url()).pathname, '/cart/');
+    // A filtered catalogue must allow re-adding after removal, including a retry or late add response.
+    state.count = 0; await page.goto(base + '/?member=1');
+    const add = page.locator('#add-course'), original = await add.innerHTML();
+    state.failAdd = true; await add.click(); await page.waitForFunction(() => document.querySelector('#add-course').textContent === 'Try again');
+    state.failAdd = false; await add.click(); await page.waitForFunction(() => document.querySelector('#add-course').textContent === 'Added');
+    for (const detail of [{course_id:2}, {}, {course_id:'1'}]) {
+      await page.evaluate(detail => document.dispatchEvent(new CustomEvent('tutorRemoveCartEvent',{detail})), detail);
+      assert(await add.isDisabled());
+    }
+    await page.locator('.cart-btn').click(); await page.locator('.mc-line').waitFor();
+    await page.locator('.mc-rm').click(); await page.locator('.mc-empty').waitFor();
+    await page.keyboard.press('Escape'); assert.equal(await add.innerHTML(), original); assert.equal(await add.isDisabled(), false);
+    await add.click(); await page.waitForFunction(() => document.querySelector('#add-course').textContent === 'Added');
+    await page.locator('.cart-btn').click(); await page.locator('.mc-line').waitFor();
+    await page.locator('.mc-rm').click(); await page.locator('.mc-empty').waitFor(); await page.keyboard.press('Escape');
+    assert.equal(await add.innerHTML(), original); assert.equal(state.count, 0);
+    state.holdAdd = true; await add.click();
+    while (!state.pendingAdd) await new Promise(resolve => setTimeout(resolve,10));
+    await page.locator('.cart-btn').click(); await page.locator('.mc-line').waitFor();
+    await page.locator('.mc-rm').click(); await page.locator('.mc-empty').waitFor(); await page.keyboard.press('Escape');
+    state.holdAdd = false; state.pendingAdd(); state.pendingAdd = null; await page.waitForTimeout(100);
+    assert.equal(await add.innerHTML(), original); assert.equal(await add.isDisabled(), false); assert.equal(state.count, 0);
     await context.close();
     const animated = await browser.newContext({viewport: {width: 390, height: 844}, reducedMotion: 'no-preference'});
     const motionPage = await animated.newPage(); state.count = 0;
@@ -188,10 +217,10 @@ async function waitFor(page, predicate) { await page.waitForFunction(predicate);
     assert.equal(await motionPage.locator('.cart-btn').evaluate(e => e === document.activeElement), true);
     await animated.close();
     assert.deepEqual(errors, []); assert(state.removals > 0);
-    console.log(JSON.stringify({status: 'PASS',syntheticBrowserCases: results.length, nativeTutorIntegration: 'not executed; native API contract inspected separately', failuresAndStaleResponseChecked: true, normalAndReducedMotionChecked: true, removals: state.removals, pageErrors: errors}, null, 2));
+    console.log(JSON.stringify({status: 'PASS',syntheticBrowserCases: results.length, nativeTutorIntegration: 'not executed; native API contract inspected separately', failuresAndStaleResponseChecked: true, courseReaddAndLateAddChecked:true, normalAndReducedMotionChecked: true, removals: state.removals, pageErrors: errors}, null, 2));
     if (evidence) fs.writeFileSync(path.join(evidence, 'browser-results.json'), JSON.stringify({results, calls, pageErrors: errors}, null, 2));
   } catch (error) {
     if (evidence) {const pages = browser.contexts().flatMap(c => c.pages()); const last = pages.at(-1); if (last) {await last.screenshot({path: path.join(evidence, 'failure.png')}); fs.writeFileSync(path.join(evidence, 'failure-dom.txt'), await last.locator('body').innerHTML());}}
     throw error;
-  } finally {if (state.pending) state.pending();await browser.close(); await new Promise(resolve => server.close(resolve));}
+  } finally {if (state.pending) state.pending();if (state.pendingAdd) state.pendingAdd();await browser.close(); await new Promise(resolve => server.close(resolve));}
 })().catch(error => {console.error(error.stack); server.close(); process.exitCode = 1;});

@@ -23,3 +23,7 @@ Short-screen cases additionally use actual coarse-pointer/touch emulation at 320
 844×390 and 568×320 in both themes. They verify reachable 44px header targets, scrolling
 to the final menu link, viewport-bounded basket actions, a synthetic WordPress toolbar,
 touch dismissal and a fresh drawer scroll position when reopened (38 cases in total).
+
+The same fixture also exercises native-shaped catalogue add → drawer removal → re-add,
+a failed-add retry, unrelated/unknown removal events and a delayed add response after
+removal. Original button markup must return without stale success/failure/timer updates.
