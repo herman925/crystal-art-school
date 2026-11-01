@@ -1,0 +1,11 @@
+<?php
+define('WP_CLI',true);require '/scratch/site/wp-load.php';wp_set_current_user(1);$f=json_decode(file_get_contents('/scratch/config.json'),true);foreach(get_posts(['post_type'=>['courses','topics','lesson'],'post_status'=>'any','numberposts'=>-1]) as $p)wp_delete_post($p->ID,true);$owner=$f['users']['floweditor'];$other=$f['users']['flowother'];
+$course=wp_insert_post(['post_type'=>'courses','post_status'=>'draft','post_title'=>'Cloud painting course','post_author'=>$owner]);update_post_meta($course,'_tutor_course_price_type','paid');update_post_meta($course,'tutor_course_price','25');
+$topic=wp_insert_post(['post_type'=>'topics','post_status'=>'publish','post_title'=>'Cloud studies','post_parent'=>$course,'post_author'=>$owner]);
+$lesson=wp_insert_post(['post_type'=>'lesson','post_status'=>'publish','post_title'=>'Soft cloud edges','post_parent'=>$topic,'post_author'=>$owner,'post_content'=>'Original lesson words.']);$guid='00000000-0000-4000-8000-000000000001';
+update_post_meta($lesson,'_video',['source'=>'embedded','source_embedded'=>'<iframe src="https://iframe.mediadelivery.net/embed/123456/'.$guid.'?autoplay=false"></iframe>','runtime'=>['hours'=>0,'minutes'=>1,'seconds'=>30]]);
+$foreigncourse=wp_insert_post(['post_type'=>'courses','post_status'=>'draft','post_title'=>'Other teacher course','post_author'=>$other]);$foreigntopic=wp_insert_post(['post_type'=>'topics','post_status'=>'publish','post_title'=>'Other topic','post_parent'=>$foreigncourse,'post_author'=>$other]);$foreignlesson=wp_insert_post(['post_type'=>'lesson','post_status'=>'publish','post_title'=>'Other teacher lesson','post_parent'=>$foreigntopic,'post_author'=>$other]);
+file_put_contents('/scratch/provider.json',json_encode([$guid=>['guid'=>$guid,'videoLibraryId'=>123456,'status'=>4,'length'=>90,'availableResolutions'=>'720p','outputCodecs'=>'x264','encodeProgress'=>100]]));
+$catalog=CAS_Bunny_Uploader::import_references([['lesson'=>$lesson,'fingerprint'=>hash('sha256',wp_json_encode(CAS_Bunny_Uploader::raw($lesson)))]]);
+file_put_contents('/scratch/site/fixture-player.html','<!doctype html><title>Local video preview</title><p>Local preview fixture</p>');
+$f+=compact('course','topic','lesson','foreigncourse','foreigntopic','foreignlesson','guid','catalog');file_put_contents('/scratch/fixture.json',json_encode($f));echo json_encode($f);
