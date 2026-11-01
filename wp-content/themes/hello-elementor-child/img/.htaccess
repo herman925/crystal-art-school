@@ -1,0 +1,6 @@
+# Keep the owner-supplied cork texture unchanged through image-optimizing proxies.
+<IfModule mod_headers.c>
+    <Files "corkboard-1920.jpg">
+        Header set Cache-Control "public, max-age=604800, no-transform"
+    </Files>
+</IfModule>

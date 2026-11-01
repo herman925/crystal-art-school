@@ -606,7 +606,7 @@ add_action(
  * enlarged .fopt, which is section 11's 「所有 Filter Pills 的字體加大」.
  */
 function cas_showcase_css( $uri ) {
-	$cork = esc_url( $uri . '/img/corkboard-1920.jpg' );
+	$cork = esc_url( $uri . '/img/corkboard-1920.jpg?ver=original-cc1d7f2e' );
 
 	return <<<CSS
 /* "instant photo" wall (client-approved concept) —
