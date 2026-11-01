@@ -83,7 +83,7 @@ do_action( 'tutor_before_login_form' );
 		do_action( 'login_form' );
 		apply_filters( 'login_form_middle', '', '' );
 	?>
-	<div class="tutor-flex tutor-justify-between tutor-items-center tutor-mt-9 cas-login-options">
+	<div class="tutor-d-flex tutor-justify-between tutor-align-center tutor-mt-9 cas-login-options">
 		<div class="tutor-input-field tutor-w-auto">
 			<div class="tutor-input-wrapper">
 				<input id="tutor-login-agmnt-1" type="checkbox" class="tutor-checkbox tutor-checkbox-md" name="rememberme" value="forever" />
