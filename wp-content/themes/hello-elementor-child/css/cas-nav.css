@@ -57,11 +57,14 @@
    !important — an inline non-important value beats it — so raising specificity is
    enough and no !important is warranted. Selector verified in the browser before
    being written here. */
-body.cas-root .elementor-shortcode > footer.site-footer,
+body.cas-root footer.site-footer,
 body.cas-root .elementor-shortcode > nav.site-nav {
   max-width: none;
   width: 100%;
 }
+
+/* Hello adds a mobile inset even when the prototype footer owns its inner gutter. */
+body.cas-root footer.site-footer { padding-inline: 0; }
 
 /* Carousel pause control.
    These rules lived in an inline <style> block in the prototype's index.html rather
