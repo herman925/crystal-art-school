@@ -2,11 +2,17 @@
 
 **Course content and course prices use separate workflows.** Use the course editor for titles, images, descriptions and lessons. Set or change paid-course prices only through the confirmed Course prices workflow (available after handover), not the ordinary course-save button. Those money instructions remain a draft pending final review and handover.
 
+Start from **Content hub → Manage Courses**. In the course list, click the course title
+to open Tutor's builder. Use **Add course** on the hub for a new draft. Only courses
+assigned to your account can be edited.
+
 | Field | Where it shows |
 |---|---|
 | **Title** | Course card and course page |
-| **Featured image** | The catalogue card cover. On the course page it is used only as a fallback when the **Large image** slot is empty |
-| **Course photographs** | Five independent slots on the course page: **Large image** and **Small image 1**–**Small image 4** |
+| **Course Card Cover** | The catalogue card cover. It is also the course page fallback if Gallery Photo 1 is empty |
+| **Gallery Photos 1–5** | The five course-page photographs. Photo 1 appears first; clicking a thumbnail changes the large photograph |
+| **Course Subtitle** | The optional line under the course highlights video |
+| **Course Media Label** | The medium shown with the course title, such as Sketching & Watercolour |
 | **Regular price / Sale price** | Both; change only through the confirmed Course prices workflow (available after handover). A sale price crosses out the regular one |
 | **Difficulty level** | The small chips under the title |
 | **Category** | The tag above the title |
@@ -34,7 +40,8 @@ Use **Course prices** and its separate review/confirmation step for paid-course 
 The agreed course currency is GBP (£). **Currency and cart settings are managed by the webmaster**, not through your content-editing controls. Do not change them in Tutor Settings; ask the webmaster if anything appears wrong.
 
 The lesson count and total runtime under each course are worked out from the lessons
-themselves. You cannot type them, and they correct themselves when you add a lesson.
+themselves. Use the lesson count-per-film field when one film covers more than one numbered
+lesson; use the actual film duration for the runtime. Do not type totals into course descriptions.
 
 ## Order of the courses
 
@@ -46,10 +53,18 @@ published courses.
 
 ## The five course photographs
 
-The **Course photographs** panel on a course has five independent slots: **Large image** and
-**Small image 1** to **Small image 4**. They are separate from the **Featured image**, which is
-the catalogue card cover; the course page falls back to the featured image only when the
-Large image slot is left empty.
+Open the course in Tutor's builder. The **Basics** tab has **Gallery Photo 1
+(Initially Shown)** and **Gallery Photos 2–5** below the description. For each slot,
+choose or upload the original photograph, then save the course and reload it to check the
+selection. WordPress generates the smaller image sizes.
+
+These five photographs are separate from **Course Card Cover**. If Photo 1 is empty,
+the course page can use the cover and lesson photographs as fallbacks. Fill all five slots
+when you want the complete intended gallery.
+
+The thumbnails change the large photograph when clicked; the gallery does not advance
+automatically. Clearing a slot removes its selection without deleting the image from Media.
+Paid lesson references and downloads are separate from these public photographs.
 
 On the homepage card, one of the four small images is picked at random each time the page is
 loaded, so the card keeps changing slightly without you doing anything.
@@ -79,6 +94,26 @@ You decided this on 28 August 2026, replacing the earlier three-level plan.
 A draft is not a published course. For a new paid course, save the content as a draft, set and confirm its first price through **Course prices**, reload the same saved course, and publish only when the content, price and launch timing are agreed. A saved price does not publish the course.
 
 For an already published course, use the same confirmed price process for money changes; do not use the ordinary content-save button to change its price. Follow the draft Course prices guide (available after handover) after final review and handover, and ask the webmaster if the current course status is unclear.
+
+## Downloadable notes and reference photographs
+
+Use **Additional → Attachments → Upload Attachment** in the course builder. Upload the
+file in the Media window, choose **Select**, then save the course with **Update**. Reopen
+the course to check its saved file list. Public course-gallery photographs and paid
+attachments have separate purposes; upload separate copies when the same picture is
+needed in both places. An image already used by public content cannot be made a paid
+attachment.
+
+For a replacement, remove the old item from the attachment list, add the replacement,
+and save. Simply uploading another file adds it; it does not remove the previous one.
+Give versions distinct names so you can identify the intended replacement.
+
+Removing an attachment and saving revokes that course student's old download link.
+A shared file stays available only if another current course attachment gives that
+student access. Removing a selection is different from deleting the file permanently
+from Media. Do not permanently delete a file still used by another course or page.
+
+Check the saved result with the webmaster before handing the course to students.
 
 ## Lesson Videos and Bunny
 

@@ -229,9 +229,13 @@
 .dash-stat .k { font-family: var(--font-cond); font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; opacity: .8; margin-top: 5px; }
 
 .dash-layout { display: grid; grid-template-columns: 230px minmax(0,1fr); gap: 30px; align-items: start; margin-top: 26px; }
-@media (max-width: 880px) { .dash-layout { grid-template-columns: 1fr; } }
+@media (max-width: 880px) { .dash-layout { grid-template-columns: minmax(0, 1fr); } }
 .dash-rail { position: sticky; top: 88px; display: flex; flex-direction: column; gap: 4px; background: var(--surface); border: 1px solid var(--line); border-radius: 14px; padding: 12px; box-shadow: var(--shadow-sm); }
-@media (max-width: 880px) { .dash-rail { position: static; flex-direction: row; overflow-x: auto; } }
+@media (max-width: 880px) {
+  .dash-rail { position: static; flex-direction: row; overflow-x: auto; }
+  .dash-rail-head, .dash-rail-foot { flex-shrink: 0; }
+  .dash-rail .dash-tab { flex: none; width: auto; }
+}
 .dash-tab { display: flex; align-items: center; gap: 11px; width: 100%; text-align: left; border: 0; background: transparent; color: var(--ink); font-family: var(--font-cond); font-weight: 500; font-size: 14px; padding: 11px 13px; border-radius: 9px; cursor: pointer; white-space: nowrap; transition: background .15s, color .15s; }
 .dash-tab .ti { width: 18px; height: 18px; flex: none; opacity: .8; }
 .dash-tab:hover { background: color-mix(in srgb, var(--ink) 7%, transparent); }

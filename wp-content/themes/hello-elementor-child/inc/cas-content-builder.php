@@ -14,6 +14,13 @@ function cas_builder_owns_course( $id ) {
 		&& current_user_can( 'edit_post', $post->ID );
 }
 
+/** The limited role uses the own-course list; its edit links must open the supported Tutor builder. */
+add_filter( 'get_edit_post_link', static function ( $link, $id, $context ) {
+	if ( ! cas_builder_owns_course( $id ) ) { return $link; }
+	$url = admin_url( 'admin.php?page=create-course&course_id=' . (int) $id );
+	return 'display' === $context ? esc_url( $url ) : $url;
+}, 10, 3 );
+
 function cas_builder_nonce_valid() {
 	return function_exists( 'tutor' ) && isset( $_POST[ tutor()->nonce ] ) && is_string( $_POST[ tutor()->nonce ] )
 		&& wp_verify_nonce( wp_unslash( $_POST[ tutor()->nonce ] ), tutor()->nonce_action );

@@ -25,7 +25,7 @@ def main() -> None:
     )
     require(
         source,
-        "$files   = $may_files ? array_merge( $course_files, $attach['files'] ) : array();",
+        "$files   = $may_files ? array_values( array_column( array_merge( $course_files, $attach['files'] ), null, 'id' ) ) : array();",
         "the materials block must be built only when $may_files is true",
     )
     require(

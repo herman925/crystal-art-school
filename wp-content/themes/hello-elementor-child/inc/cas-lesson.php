@@ -446,7 +446,7 @@ function cas_render_lesson() {
 			$attach[ $group ] = array_values( array_filter( $attach[ $group ], $can_file ) );
 		}
 	}
-	$files   = $may_files ? array_merge( $course_files, $attach['files'] ) : array();
+	$files   = $may_files ? array_values( array_column( array_merge( $course_files, $attach['files'] ), null, 'id' ) ) : array();
 	$cats    = wp_get_post_terms( $course_id, 'course-category', array( 'fields' => 'names' ) );
 	$tag     = ( ! is_wp_error( $cats ) && $cats ) ? $cats[0] : '';
 	$level   = (string) get_post_meta( $course_id, '_tutor_course_level', true );

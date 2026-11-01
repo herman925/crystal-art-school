@@ -163,6 +163,50 @@ class FollowupTests(unittest.TestCase):
         self.assertTrue((folder / "photo.png").is_file())
         self.assertTrue((folder / "photo-150.png").is_file())
 
+    def test_private_file_display_uses_the_real_extension(self) -> None:
+        for aid, filename, icon in [(17, "notes.pdf", "document"), (18, "reference.JPG", "image")]:
+            self.site.attachment(aid, [filename])
+            original = {"id": aid, "title": "Course file", "ext": False, "name": "Course file.",
+                        "url": f"http://example.test/?cas_private_file={aid}", "icon": "default"}
+            display = self.site.run({"action": "display", "display": original, "user": {}})["display"]
+            self.assertEqual(display["ext"], filename.rsplit(".", 1)[1].lower())
+            self.assertEqual(display["name"], "Course file." + display["ext"])
+            self.assertEqual(display["icon"], icon)
+            self.assertEqual(display["url"], original["url"])
+
+    def test_public_file_display_is_unchanged(self) -> None:
+        self.site.attachment(19, ["public.pdf"], private=False)
+        display = {"id": 19, "title": "Public", "ext": "pdf", "name": "Public.pdf", "icon": "custom"}
+        result = self.site.run({"action": "display", "display": display, "user": {}})["display"]
+        self.assertEqual(result, display)
+
+    def test_deleting_private_attachment_can_clear_stale_cover_references(self) -> None:
+        self.site.attachment(23, ["reference.png"])
+        result = self.site.run({"action": "guard", "filter": "delete_post_metadata", "post_id": 0,
+                                "key": "_thumbnail_id", "value": 23, "user": {"admin": True}})
+        self.assertEqual(result["status"], 200)
+
+    def test_assigning_private_photo_as_public_cover_is_denied_even_for_admin(self) -> None:
+        self.site.attachment(24, ["reference.png"])
+        result = self.site.run({"action": "guard", "filter": "update_post_metadata", "post_id": 1,
+                                "key": "_thumbnail_id", "value": 24, "user": {"admin": True}})
+        self.assertEqual(result["status"], 403)
+
+    def test_public_image_references_protect_meta_inline_and_theme_uses(self) -> None:
+        self.site.attachment(25, ["public.png"], private=False)
+        for evidence in [{"public_meta": True}, {"contents": ['<img class="wp-image-25" src="sized.png">']},
+                         {"contents": ['<img src="https://example.test/uploads/public.png">']},
+                         {"mods": {"hero": "https://example.test/uploads/public.png?frame=1"}}]:
+            with self.subTest(evidence=evidence):
+                result = self.site.run(dict(action="public_use", id=25, user={}, **evidence))
+                self.assertTrue(result["public_use"])
+
+    def test_unused_image_and_public_pdf_are_not_image_conflicts(self) -> None:
+        self.site.attachment(26, ["new.png"], private=False)
+        self.site.attachment(27, ["notes.pdf"], private=False)
+        self.assertFalse(self.site.run({"action": "public_use", "id": 26, "user": {}})["public_use"])
+        self.assertFalse(self.site.run({"action": "public_use", "id": 27, "public_meta": True, "user": {}})["public_use"])
+
     # Audit lines: one per serve, denial or miss, with the id and the outcome only.
 
     def test_audit_line_for_a_denied_request(self) -> None:

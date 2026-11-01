@@ -21,6 +21,8 @@ const CAS_PRIVATE_META_ORIGIN  = '_cas_private_origin';  // attachment meta: ori
 const CAS_PRIVATE_QUERY_VAR    = 'cas_private_file';
 const CAS_PRIVATE_META_REFS    = '_cas_private_author_refs'; // protected source/course/list binding, never a growing grant.
 
+const CAS_PRIVATE_PUBLIC_IMAGE_KEYS = array( '_thumbnail_id', '_cas_course_photo_large', '_cas_course_photo_1', '_cas_course_photo_2', '_cas_course_photo_3', '_cas_course_photo_4' );
+
 /** Actual limited role plus its explicit capability, not instructor or attachment ownership. */
 function cas_private_is_content_user() {
 	return function_exists( 'cas_content_is_user' ) && cas_content_is_user( get_current_user_id() );
@@ -213,10 +215,58 @@ foreach ( array( 'before_delete_post', 'delete_attachment' ) as $hook ) {
 	add_action( $hook, static function ( $post_id ) { cas_private_deleting_post( $post_id, true ); }, 0 );
 }
 
+/** A picture already used by public content must not be moved into paid-file storage. */
+function cas_private_public_image_use( $id ) {
+	if ( ! wp_attachment_is_image( $id ) ) { return false; }
+	global $wpdb;
+	$keys = CAS_PRIVATE_PUBLIC_IMAGE_KEYS;
+	$placeholders = implode( ',', array_fill( 0, count( $keys ), '%s' ) );
+	if ( $wpdb->get_var( $wpdb->prepare( "SELECT p.ID FROM {$wpdb->posts} p INNER JOIN {$wpdb->postmeta} m ON m.post_id=p.ID WHERE p.post_status<>'trash' AND m.meta_key IN ($placeholders) AND m.meta_value=%s LIMIT 1", array_merge( $keys, array( (string) $id ) ) ) ) ) { return true; }
+	$url = preg_replace( '#^https?:#i', '', (string) wp_get_attachment_url( $id ) );
+	if ( ! $url ) { return false; }
+	foreach ( (array) $wpdb->get_col( "SELECT post_content FROM {$wpdb->posts} WHERE post_status<>'trash' AND post_type IN ('post','page','courses','cas_artwork','cas_showcase','cas_about_photo','cas_faq','cas_free_video','cas_testimonial','cas_overview_qa') AND post_content<>''" ) as $content ) {
+		if ( preg_match( '/\\bwp-image-' . (int) $id . '\\b/', $content ) || false !== strpos( $content, $url ) ) { return true; }
+	}
+	$used = false;
+	$mods = (array) get_theme_mods();
+	array_walk_recursive( $mods, static function ( $value ) use ( $url, &$used ) {
+		if ( is_string( $value ) && false !== strpos( $value, $url ) ) { $used = true; }
+	} );
+	return $used;
+}
+
+/** Give Tutor a visible validation error before it changes the course or material list. */
+function cas_private_validate_course_materials( $error, $params ) {
+	if ( is_wp_error( $error ) ) { return $error; }
+	if ( ! empty( $params['thumbnail_id'] ) && is_scalar( $params['thumbnail_id'] ) && cas_private_is( (int) $params['thumbnail_id'] ) ) {
+		return new WP_Error( 'cas_private_cover', 'Course Card Cover must be a public image. Upload a separate copy of the private reference photo.' );
+	}
+	$photos = function_exists( 'cas_course_builder_photo_ids' ) ? cas_course_builder_photo_ids( $params ) : array();
+	if ( is_wp_error( $photos ) ) { return $photos; }
+	$photos[] = (int) ( $params['thumbnail_id'] ?? 0 );
+	foreach ( (array) ( $params['tutor_attachments'] ?? array() ) as $id ) {
+		if ( is_scalar( $id ) && ctype_digit( (string) $id ) && ( in_array( (int) $id, $photos, true ) || cas_private_public_image_use( (int) $id ) ) ) {
+			return new WP_Error( 'cas_private_public_image', 'This image is already used by public content. Upload a separate copy for course materials.' );
+		}
+	}
+	return $error;
+}
+add_filter( 'tutor_is_error_before_course_update', 'cas_private_validate_course_materials', 20, 2 );
+
 /** Stop guessed private IDs and security-meta/path rewrites before WordPress mutates anything. */
 function cas_private_guard_metadata( $check, $post_id, $key, $value ) {
-	if ( cas_private_internal_write() || current_user_can( 'manage_options' ) || ( defined( 'WP_CLI' ) && WP_CLI ) ) { return $check; }
 	$deleting = in_array( current_filter(), array( 'delete_post_metadata', 'delete_post_metadata_by_mid' ), true );
+	if ( ! $deleting && ! cas_private_internal_write() && '_tutor_attachments' === $key && is_array( $value ) ) {
+		foreach ( $value as $id ) {
+			if ( is_scalar( $id ) && ctype_digit( (string) $id ) && cas_private_public_image_use( (int) $id ) ) {
+				wp_die( 'This image is already used by public content. Upload a separate copy for course materials.', '', array( 'response' => 403 ) );
+			}
+		}
+	}
+	if ( ! $deleting && ! cas_private_internal_write() && in_array( $key, CAS_PRIVATE_PUBLIC_IMAGE_KEYS, true ) && is_scalar( $value ) && cas_private_is( (int) $value ) ) {
+		wp_die( 'Use a public image for this cover. Upload a separate copy of the private reference photo.', '', array( 'response' => 403 ) );
+	}
+	if ( cas_private_internal_write() || current_user_can( 'manage_options' ) || ( defined( 'WP_CLI' ) && WP_CLI ) ) { return $check; }
 	if ( $deleting && cas_private_deleting_post( $post_id ) ) { return $check; }
 	if ( in_array( $key, array( CAS_PRIVATE_META_REFS, CAS_PRIVATE_META_COURSES, CAS_PRIVATE_META_FLAG, CAS_PRIVATE_META_ORIGIN ), true ) ) {
 		wp_die( 'Private file permissions can only be changed by the authorised file workflow.', '', array( 'response' => 403 ) );
@@ -399,7 +449,7 @@ function cas_private_sweep() {
  * current reference. An attachment that is already private is not moved again.
  */
 function cas_private_secure_attachment( $attachment_id, $course_ids ) {
-	if ( $attachment_id <= 0 || 'attachment' !== get_post_type( $attachment_id ) ) {
+	if ( $attachment_id <= 0 || 'attachment' !== get_post_type( $attachment_id ) || cas_private_public_image_use( $attachment_id ) ) {
 		return false;
 	}
 
@@ -541,6 +591,19 @@ add_filter(
 	10,
 	3
 );
+
+/** Tutor derives extensions from URLs; protected URLs have no filename, so use stored file metadata. */
+function cas_private_tutor_attachment_data( $data ) {
+	$id = (int) ( $data['id'] ?? $data['post_id'] ?? 0 );
+	if ( ! $id || ! cas_private_is( $id ) ) { return $data; }
+	$ext = strtolower( pathinfo( get_attached_file( $id ), PATHINFO_EXTENSION ) );
+	if ( '' === $ext ) { return $data; }
+	$data['ext'] = $ext;
+	$data['name'] = $data['title'] . '.' . $ext;
+	$data['icon'] = wp_ext2type( $ext ) ?: 'default';
+	return $data;
+}
+add_filter( 'tutor/posts/attachments', 'cas_private_tutor_attachment_data' );
 
 /* No srcset: it would list the public uploads addresses of the sizes. The plain src above is used. */
 add_filter(

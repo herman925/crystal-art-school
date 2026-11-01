@@ -1,3 +1,10 @@
+> Current owner policy, 2026-11-01: the historical statement below about preserving
+> student access after detach is superseded. The owner explicitly requires removal or
+> replacement to revoke the former course student's saved link. Main `e07be48` enforces
+> current course/lesson references for students as well as the existing protected author
+> references. Shared files require another current entitled course reference. This does
+> not authorize a legacy-file migration or a real-account role switch.
+
 # Private-author files — separate source candidate / Review handoff
 
 Original preparation: 2026-10-23. Qualified preservation: 2026-10-24. **Source/document preservation only; no fixture, test, runtime, browser, production, migration, provenance stamp or owner-switch action was executed in this preservation task.** Actual independent Review owns execution and acceptance. Historical price #180 `917a8d7196435246d23278b157c0deb50389730a` and builder #181 `c9aaa8609ef78eb29349851fb05cf3025d5bb4a7` are old component inputs, not the current combined release.

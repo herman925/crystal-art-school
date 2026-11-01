@@ -1,5 +1,53 @@
 # Handoff — Crystal Art School WordPress build
 
+## Native workflow checks — 2026-11-01
+
+The owner requested course-file workflow completion, restricted-editor checks/handover
+preparation, and the learner journey. These checks used fresh task-owned synthetic sites;
+the incident-held Review stack was not reused, restarted, or changed. The final fixture
+used cached WordPress 7.1.3, Tutor free/Pro 4.1.3, Elementor 4.3.5/Pro 4.3.2 and the actual
+audit MU-plugin, with external networking disabled, read-only source/toolchain and bounded
+scratch/resources/time. Production currently reports WordPress 7.1.4; #200 remains separate.
+
+- Native Tutor course and lesson attachment upload/picker/save/reload, replacement and
+  removal were exercised. A current lesson reference preserves shared access; removing
+  the last reference revokes PDF, image and generated-size links with empty 403 responses.
+  Large-image originals and generated copies were absent from public uploads after saving.
+- Fixed Tutor's extension/name/icon metadata for protected URLs. Public image reuse as
+  paid material now fails before saving, including same-save cover/gallery collisions;
+  direct metadata/secure-file paths also preserve public images. Native Gallery reuse
+  reproduced a public 404 before the fix and a validation error/public 200 after it.
+- The restricted own-course list now opens Tutor's supported builder rather than the old
+  WordPress editor. Hub → list → course title exposed all five gallery controls. Existing
+  administrator routing and capabilities are unchanged.
+- Eight content types passed native title/body draft/publish/edit/reload and safe-trash
+  requests. Thirty-two native private-file/current-graph/metadata/provenance/ownership/
+  capability/deletion/isolation cases passed. Actual Elementor template editing and its
+  valid-nonce creation API denied the restricted account; the administrator control worked.
+- A separately authenticated student completed a native zero-total coupon checkout,
+  creating a completed/paid £0 order and enrolment. The gated lesson's local three-second
+  player advanced, private downloads succeeded, progress survived reload at 100%, and
+  Purchases showed the order. A different account saw no order or invoice details and
+  received 403 for files. Enrolment mail was captured locally, not delivered externally.
+- Shared course/lesson downloads now appear once. The phone-width dashboard grid can
+  shrink to its viewport so its purchases table scrolls inside its card. No card charge,
+  production student purchase, live hosted-lesson test or real-email delivery is claimed.
+
+Read-only production inventory found only the two demo private attachments 374/375, with
+no recorded public leftovers. The four real courses and 22 real lessons already belong to
+Crystal. A private exact-preimage handover plan covers 39 other real-content records and
+62 related public images, native Tutor profile markers, and the administrator-count alert
+adjustment from two to one when the owner role changes. No real role, ownership or legacy
+file assignments have changed. The developer stays administrator. The owner explicitly
+keeps all 18 published demo/test records available for review; they are excluded from this
+handover plan. #150 and #92 retain their real handover/content/payment acceptance gates.
+
+The Courses and Lessons guide source now matches current labels and attachment/removal
+behavior. Static guide publication must preserve its existing authentication and sign-out
+handlers; the standalone deploy script is not a narrow content-only rollout.
+
+The dated checkpoints below are retained history where this newer evidence supersedes them.
+
 ## Current source and drift checkpoint — 2026-11-01
 
 The deployed CMS/course follow-ups are reconciled with main's later interaction-colour
