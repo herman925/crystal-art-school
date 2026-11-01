@@ -49,6 +49,11 @@ function cas_certificate_image( $id ) {
 	return $attachment && wp_attachment_is_image( $attachment ) && ! cas_private_is( $attachment ) ? $attachment : 0;
 }
 
+function cas_certificate_can_show( $id ) {
+	$post = get_post( $id );
+	return $post && 'publish' === $post->post_status && '' === $post->post_password && cas_certificate_image( $id );
+}
+
 add_filter( 'manage_' . CAS_CERTIFICATE_TYPE . '_posts_columns', static function ( $columns ) {
 	$columns['certificate_year'] = 'Year';
 	$columns['certificate_order'] = 'Order';
@@ -61,14 +66,14 @@ add_action( 'manage_' . CAS_CERTIFICATE_TYPE . '_posts_custom_column', static fu
 	if ( 'certificate_order' === $column ) { echo (int) get_post( $id )->menu_order; }
 	if ( 'certificate_pin' !== $column || ! current_user_can( CAS_CONTENT_CAP ) || ! current_user_can( 'edit_post', $id ) ) { return; }
 	$pinned = (int) get_option( CAS_CERTIFICATE_PIN ) === (int) $id;
-	if ( ! $pinned && ( 'publish' !== get_post_status( $id ) || ! cas_certificate_image( $id ) ) ) {
+	if ( ! $pinned && ! cas_certificate_can_show( $id ) ) {
 		echo 'Publish with a scan to pin';
 		return;
 	}
 	// Core wraps the list table in posts-filter: associate an external form instead of nesting forms.
 	$GLOBALS['cas_certificate_pin_forms'][ $id ] = $pinned;
 	echo '<button type="submit" class="button" form="cas-certificate-pin-' . (int) $id . '" aria-label="' . esc_attr( ( $pinned ? 'Unpin: ' : 'Pin to top: ' ) . get_the_title( $id ) ) . '">' . ( $pinned ? 'Unpin' : 'Pin to top' ) . '</button>';
-	if ( $pinned ) { echo '<p><strong>' . ( 'publish' === get_post_status( $id ) && cas_certificate_image( $id ) ? 'Pinned to top' : 'Pinned choice; not currently shown' ) . '</strong></p>'; }
+	if ( $pinned ) { echo '<p><strong>' . ( cas_certificate_can_show( $id ) ? 'Pinned to top' : 'Pinned choice; not currently shown' ) . '</strong></p>'; }
 }, 10, 2 );
 
 add_action( 'admin_footer-edit.php', static function () {
@@ -90,7 +95,7 @@ add_action( 'admin_post_cas_certificate_pin', static function () {
 	check_admin_referer( 'cas_certificate_pin_' . $id );
 	if ( ! in_array( $operation, array( 'pin', 'unpin' ), true ) ) { wp_die( 'Invalid action.', '', array( 'response' => 400 ) ); }
 	if ( 'pin' === $operation ) {
-		if ( 'publish' !== get_post_status( $id ) || ! cas_certificate_image( $id ) ) {
+		if ( ! cas_certificate_can_show( $id ) ) {
 			wp_die( 'Publish the certificate with a public scan before pinning it.', '', array( 'response' => 400 ) );
 		}
 		// One option stores one ID: pinning another certificate replaces the old choice.
@@ -110,7 +115,7 @@ add_action( 'pre_get_posts', static function ( $query ) {
 
 /** The ready flag prevents clearing every entry from resurrecting the old hardcoded list. */
 function cas_about_certificates_render() {
-	$posts = get_posts( array( 'post_type' => CAS_CERTIFICATE_TYPE, 'post_status' => 'publish', 'numberposts' => -1, 'orderby' => array( 'menu_order' => 'ASC', 'ID' => 'ASC' ) ) );
+	$posts = get_posts( array( 'post_type' => CAS_CERTIFICATE_TYPE, 'post_status' => 'publish', 'has_password' => false, 'numberposts' => -1, 'orderby' => array( 'menu_order' => 'ASC', 'ID' => 'ASC' ) ) );
 	if ( ! $posts ) { echo '<p>No certificates are published yet.</p>'; return; }
 	$pinned = (int) get_option( CAS_CERTIFICATE_PIN );
 	foreach ( $posts as $key => $post ) {

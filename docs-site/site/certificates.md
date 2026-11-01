@@ -27,6 +27,8 @@ on About, with its own scan and caption.
 
 An entry without a scan can still show its table wording. Its scan cannot be opened or
 pinned until an image is saved. A draft stays off the public page.
+Use **Public** visibility for entries you want on About. Other visibility choices hide
+the entry from About; they do not make an uploaded scan private.
 
 Upload only the version you want visitors to see. Cover signatures or personal details
 before uploading when needed. The existing masked scan is already preserved; selecting

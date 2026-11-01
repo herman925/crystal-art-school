@@ -39,6 +39,9 @@ try {
 	cert_check( str_contains( substr( $html, strpos( $html, '<figure' ), 180 ), 'data-certificate-id="' . $mine . '"' ), 'Pin did not lead the public order' );
 	update_post_meta( $mine, '_cas_certificate_caption', '' );
 	cert_check( str_contains( cert_markup(), '<figcaption>Synthetic policy certificate</figcaption>' ), 'Blank caption lost its accessible title' );
+	wp_update_post( array( 'ID' => $mine, 'post_password' => 'synthetic-only' ) );
+	cert_check( ! cas_certificate_can_show( $mine ) && ! str_contains( cert_markup(), 'data-certificate-id="' . $mine . '"' ), 'Password-protected certificate exposed on About or allowed to pin' );
+	wp_update_post( array( 'ID' => $mine, 'post_password' => '' ) );
 	wp_update_post( array( 'ID' => $mine, 'post_status' => 'draft' ) );
 	$html = cert_markup();
 	cert_check( ! str_contains( $html, 'data-certificate-id="' . $mine . '"' ) && ! str_contains( $html, ' data-highlight' ), 'Draft certificate remained public/pinned' );
