@@ -3,4 +3,7 @@
     <Files "corkboard-1920.jpg">
         Header set Cache-Control "public, max-age=604800, no-transform"
     </Files>
+    <Files "corkboard-repeat.svg">
+        Header set Cache-Control "public, max-age=604800, no-transform"
+    </Files>
 </IfModule>
