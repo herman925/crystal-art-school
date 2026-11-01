@@ -46,6 +46,12 @@ The Courses and Lessons guide source now matches current labels and attachment/r
 behavior. Static guide publication must preserve its existing authentication and sign-out
 handlers; the standalone deploy script is not a narrow content-only rollout.
 
+The workflow changes were merged with the later responsive/basket release `fc0f226`.
+The merged tree retained the native zero-total checkout/enrolment, private download,
+lesson playback/completion and purchase records. Fresh phone-width checks kept the
+338px purchases panel inside a 390px viewport with six naturally sized, scrollable tabs;
+guest preview access did not unlock paid files.
+
 The dated checkpoints below are retained history where this newer evidence supersedes them.
 
 ## Desktop prototype audit and release — 2026-11-01
