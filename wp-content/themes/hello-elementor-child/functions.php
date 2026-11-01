@@ -273,6 +273,20 @@ require_once get_stylesheet_directory() . '/inc/cas-editable.php';
 require_once get_stylesheet_directory() . '/inc/cas-about.php';
 
 require_once get_stylesheet_directory() . '/inc/cas-gallery.php';
+
+/* The two catalogue rails share a mobile drawer; the controls themselves stay native. */
+add_action( 'wp_enqueue_scripts', function () {
+	$post = get_post();
+	$shortcode = $post && ( has_shortcode( (string) $post->post_content, 'cas_courses' ) || has_shortcode( (string) $post->post_content, 'cas_gallery' ) );
+	if ( ! is_post_type_archive( 'courses' ) && ! is_tax( 'course-category' ) && ! is_page( array( 'courses', 'gallery' ) ) && ! $shortcode ) {
+		return;
+	}
+	$dir = get_stylesheet_directory();
+	$uri = get_stylesheet_directory_uri();
+	wp_enqueue_style( 'cas-mobile-filters', $uri . '/css/cas-mobile-filters.css', array( 'cas-industrial-3' ), filemtime( $dir . '/css/cas-mobile-filters.css' ) );
+	wp_enqueue_script( 'cas-mobile-filters', $uri . '/js/cas-mobile-filters.js', array( 'cas-site-extras' ), filemtime( $dir . '/js/cas-mobile-filters.js' ), true );
+}, 28 );
+
 require_once get_stylesheet_directory() . '/inc/cas-blog.php';
 
 /*

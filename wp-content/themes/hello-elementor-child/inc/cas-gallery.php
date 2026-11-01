@@ -783,5 +783,11 @@ button.active-tag { margin: 0; border: 0; line-height: 1.25; font-weight: 500; -
 .store-grid > .art-card, .art-modal .am-body { min-width: 0; }
 .art-title, .art-sub, .art-size, .art-modal .am-title, .art-modal .am-sub, .art-modal .am-desc, .art-modal .am-spec dd { overflow-wrap: anywhere; }
 .art-modal .am-sub[hidden], .art-modal .am-spec[hidden] { display: none; }
+/* Keep dismissal available while the phone detail panel scrolls. */
+@media (max-width: 1024px) {
+  .art-modal .am-close { position: fixed; top: max(12px, env(safe-area-inset-top)); right: max(12px, env(safe-area-inset-right)); }
+  body.admin-bar .art-modal .am-close { top: calc(var(--wp-admin--admin-bar--height, 32px) + 12px); }
+}
+
 CSS;
 }

@@ -36,3 +36,10 @@
 .cas-course-page .course-teacher p { margin: 0; font-size: 14px; color: var(--muted); }
 .cas-course-page .course-teacher a { font-weight: 700; }
 .cas-course-page .co-highlight .tutor-video-player { width: 100%; height: 100%; }
+
+@media (pointer: coarse) {
+  .cas-course-page .co-thumb { min-width: 44px; min-height: 44px; }
+}
+@media (max-width: 380px) and (pointer: coarse) {
+  .cas-course-page .co-thumb { aspect-ratio: auto; height: 44px; }
+}

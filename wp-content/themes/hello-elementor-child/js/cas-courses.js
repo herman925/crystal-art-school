@@ -6,6 +6,19 @@
 		return;
 	}
 
+	var labels = new WeakMap();
+	document.addEventListener( 'tutorRemoveCartEvent', function ( event ) {
+		var id = event.detail && event.detail.course_id;
+		if ( ! Number.isSafeInteger( id ) || id < 1 ) { return; }
+		document.querySelectorAll( '[data-cas-add-to-cart]' ).forEach( function ( button ) {
+			if ( Number( button.getAttribute( 'data-course-id' ) ) !== id || ! labels.has( button ) ) { return; }
+			button.innerHTML = labels.get( button ).label;
+			button.classList.remove( 'is-added' );
+			button.disabled = false;
+			labels.delete( button );
+		} );
+	} );
+
 	document.addEventListener( 'click', function ( ev ) {
 		var btn = ev.target.closest( '[data-cas-add-to-cart]' );
 
@@ -14,7 +27,10 @@
 		}
 
 		var id = btn.getAttribute( 'data-course-id' );
-		var label = btn.innerHTML;
+		var saved = labels.get( btn );
+		var label = saved ? saved.label : btn.innerHTML;
+		var attempt = { label: label };
+		labels.set( btn, attempt );
 
 		btn.disabled = true;
 
@@ -46,6 +62,7 @@
 				} );
 			} )
 			.then( function ( res ) {
+				if ( labels.get( btn ) !== attempt ) { return; }
 				if ( res && res.ok ) {
 					btn.innerHTML = res.already ? 'In cart' : 'Added';
 					btn.classList.add( 'is-added' );
@@ -56,6 +73,7 @@
 				}
 			} )
 			.catch( function () {
+				if ( labels.get( btn ) !== attempt ) { return; }
 				btn.innerHTML = 'Try again';
 				btn.disabled = false;
 			} );
@@ -63,6 +81,7 @@
 		/* Restore the original label if the visitor lingers, so a card that failed does
 		   not sit there reading "Try again" forever. */
 		window.setTimeout( function () {
+			if ( labels.get( btn ) !== attempt ) { return; }
 			if ( ! btn.classList.contains( 'is-added' ) ) {
 				btn.innerHTML = label;
 				btn.disabled = false;

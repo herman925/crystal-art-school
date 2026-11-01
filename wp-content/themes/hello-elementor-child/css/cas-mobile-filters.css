@@ -1,0 +1,116 @@
+/* Progressive enhancement: without the script, the original filter rails remain in place. */
+.cas-filter-drawer[hidden],
+.cas-filter-backdrop[hidden],
+.cas-filter-handle[hidden] {
+  display: none !important;
+}
+.cas-filter-handle {
+  display: none;
+}
+.cas-filter-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 1300;
+  background: rgba(20, 17, 13, 0.56);
+  backdrop-filter: blur(2px);
+}
+.cas-filter-drawer {
+  position: fixed;
+  inset: auto 0 0;
+  z-index: 1301;
+  width: 100%;
+  max-height: min(88vh, 820px);
+  max-height: min(88dvh, 820px);
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  overflow: hidden;
+  background: var(--surface);
+  color: var(--ink);
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 -12px 40px rgba(20, 17, 13, 0.4);
+}
+.cas-filter-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--line);
+}
+.cas-filter-head h2 {
+  margin: 0;
+  font-family: var(--font-display-serif);
+  font-size: 22px;
+  color: var(--ink);
+}
+.cas-filter-close {
+  flex: none;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--ink);
+}
+.cas-filter-close:hover {
+  background: var(--ink);
+  color: var(--cream);
+}
+.cas-filter-body {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: 16px;
+}
+.cas-filter-body .filter-col {
+  position: static !important;
+  width: 100%;
+  min-width: 0;
+  transform: none !important;
+  opacity: 1 !important;
+}
+.cas-filter-body .filter-panel {
+  position: static;
+}
+.cas-filter-body button,
+.cas-filter-body input[type="range"] {
+  min-height: 44px;
+}
+.cas-filter-body button {
+  max-width: 100%;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+.cas-filter-foot {
+  padding: 14px 16px max(14px, env(safe-area-inset-bottom));
+  border-top: 1px solid var(--line);
+}
+.cas-filter-foot button {
+  width: 100%;
+  min-height: 44px;
+}
+@media (max-width: 880px) {
+  .catalog-layout.cas-filter-enabled,
+  .store-layout.cas-filter-enabled {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .cas-filter-handle {
+    display: inline-flex;
+    position: fixed;
+    right: 16px;
+    bottom: max(16px, env(safe-area-inset-bottom));
+    z-index: 90;
+    min-height: 48px;
+    box-shadow: var(--shadow);
+  }
+  .cas-filter-results {
+    scroll-margin-top: 110px;
+  }
+}
+
+/* Existing navigation and artwork/basket dialogs take priority over the floating handle. */
+body:has(.nav-sheet.open, .mc-drawer.open, .art-modal.open) .cas-filter-handle {
+  visibility: hidden;
+}
