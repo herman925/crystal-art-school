@@ -7,7 +7,7 @@ const theme = path.join(__dirname, '../wp-content/themes/hello-elementor-child')
 const header = fs.readFileSync(path.join(theme, 'js/cas-header.js'), 'utf8');
 const courses = fs.readFileSync(path.join(theme, 'js/cas-courses.js'), 'utf8');
 
-function environment(configured = true) {
+function environment(configured = true, requiresLogin = false) {
   const listeners = {document: {}, window: {}};
   const requests = [];
   const events = [];
@@ -26,7 +26,7 @@ function environment(configured = true) {
     setTimeout() {},
     casCourses: {action: 'tutor_add_course_to_cart', ajaxUrl: '/ajax', nonce: 'native-nonce'},
   };
-  if (configured) window.casCartCount = {ajaxUrl: '/ajax', nonce: 'count-nonce'};
+  if (configured) window.casCartCount = {ajaxUrl: '/ajax', nonce: 'count-nonce', requiresLogin};
   const context = vm.createContext({
     document, window, casCourses: window.casCourses, URLSearchParams,
     CustomEvent: class { constructor(type, options = {}) { this.type = type; this.detail = options.detail; } },
@@ -56,6 +56,16 @@ function unknown(env) {
 }
 
 (async () => {
+  // wp_localize_script serialises the PHP login requirement as "1" / "".
+  for (const requirement of [true, '1']) {
+    const guest = environment(true, requirement);
+    guest.emit('pageshow'); guest.emit('focus'); guest.cartEvent('tutorAddToCartEvent', 999);
+    assert.equal(guest.requests.length, 0);
+    assert.equal(guest.badge.hidden, true); assert.equal(guest.badge.textContent, '');
+    assert.equal(guest.button.label, 'Shopping cart, log in to view your basket');
+  }
+  const allowed = environment(true, ''); assert.equal(allowed.requests.length, 1);
+  await respond(allowed.requests[0], 0); assert.equal(allowed.button.label, 'Shopping cart, 0 items');
   const e = environment();
   unknown(e);
   assert.equal(e.requests.length, 1);

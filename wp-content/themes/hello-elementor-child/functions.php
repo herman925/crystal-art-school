@@ -161,18 +161,21 @@ add_action(
 		$dir = get_stylesheet_directory();
 		$uri = get_stylesheet_directory_uri();
 
+		$requires_login = ! is_user_logged_in() && ( ! function_exists( 'tutor_is_guest_checkout_enabled' ) || ! tutor_is_guest_checkout_enabled() );
+
 		wp_enqueue_style( 'cas-nav', $uri . '/css/cas-nav.css', [ 'cas-industrial-3' ], filemtime( $dir . '/css/cas-nav.css' ) );
 		wp_enqueue_script( 'cas-header', $uri . '/js/cas-header.js', [], filemtime( $dir . '/js/cas-header.js' ), true );
 		wp_localize_script( 'cas-header', 'casCartCount', [
-			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
-			'nonce'   => wp_create_nonce( 'cas_cart_count' ),
+			'ajaxUrl'       => admin_url( 'admin-ajax.php' ),
+			'nonce'         => wp_create_nonce( 'cas_cart_count' ),
+			'requiresLogin' => $requires_login,
 		] );
 		wp_enqueue_style( 'cas-cart-drawer', $uri . '/css/cas-cart-drawer.css', [ 'cas-industrial-3' ], filemtime( $dir . '/css/cas-cart-drawer.css' ) );
 		wp_enqueue_script( 'cas-cart-drawer', $uri . '/js/cas-cart-drawer.js', [ 'cas-header', 'cas-site-extras' ], filemtime( $dir . '/js/cas-cart-drawer.js' ), true );
 		wp_localize_script( 'cas-cart-drawer', 'casCartDrawer', [
 			'cartUrl'       => cas_account_cart_url(),
 			'loginUrl'      => cas_account_login_url(),
-			'requiresLogin' => ! is_user_logged_in() && ( ! function_exists( 'tutor_is_guest_checkout_enabled' ) || ! tutor_is_guest_checkout_enabled() ),
+			'requiresLogin' => $requires_login,
 			'removeAction'  => 'tutor_delete_course_from_cart',
 			'removeNonce'   => function_exists( 'tutor' ) ? wp_create_nonce( tutor()->nonce_action ) : '',
 		] );
