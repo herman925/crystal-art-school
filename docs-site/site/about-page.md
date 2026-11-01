@@ -5,6 +5,28 @@ one editing page. **About photos** holds the three photograph strips.
 
 ## Your words and your portrait
 
+<figure class="guide-walkthrough" aria-labelledby="about-save-visual">
+  <figcaption id="about-save-visual">Edit your biography and portrait</figcaption>
+  <p class="guide-walkthrough-note">A simplified illustration. Use the controls in the website editor.</p>
+  <ol role="list">
+    <li>
+      <strong>1. Change the intended fields</strong>
+      <span class="guide-control">Opening paragraph · Portrait photograph</span>
+      <p>Keep the writing and picture you want to publish.</p>
+    </li>
+    <li>
+      <strong>2. Save them together</strong>
+      <span class="guide-control guide-control-primary">Save About</span>
+      <p>The button saves the writing and portrait on this page.</p>
+    </li>
+    <li>
+      <strong>3. Read the saved page</strong>
+      <span class="guide-control">View saved page ↗</span>
+      <p>Check the wording and the portrait crop on the website.</p>
+    </li>
+  </ol>
+</figure>
+
 Edit the intended fields and press **Save About**. This saves the writing and portrait
 together. **View saved page** opens the website in another tab after saving; it does not
 show unsaved changes.
@@ -41,6 +63,28 @@ It is cropped to a tall rectangle, so anything you upload fits. A photograph com
 with you off to one side, loses the sides when it crops.
 
 ## The three photograph strips
+
+<figure class="guide-walkthrough" aria-labelledby="about-strips-visual">
+  <figcaption id="about-strips-visual">Add photographs to the right strip</figcaption>
+  <p class="guide-walkthrough-note">A simplified illustration. Use the controls in the website editor.</p>
+  <ol role="list">
+    <li>
+      <strong>1. Choose the strip</strong>
+      <span class="guide-control">Which set</span>
+      <p>Choose Live drawing, Exhibition or Artful Living.</p>
+    </li>
+    <li>
+      <strong>2. Choose the picture and position</strong>
+      <span class="guide-control">Featured image · Order</span>
+      <p>Use a descriptive Title; lower Order numbers appear first.</p>
+    </li>
+    <li>
+      <strong>3. Publish the intended set</strong>
+      <span class="guide-control guide-control-primary">Publish / Update</span>
+      <p>The first published photo replaces that strip’s default set. Prepare the whole set together.</p>
+    </li>
+  </ol>
+</figure>
 
 **About photos** in the dashboard menu. One entry per photograph.
 

@@ -17,6 +17,28 @@ is two clicks instead of hunting for a layout block.
 
 ## The topic label
 
+<figure class="guide-walkthrough" aria-labelledby="article-visual">
+  <figcaption id="article-visual">Give an article its picture and topic</figcaption>
+  <p class="guide-walkthrough-note">A simplified illustration. Use the controls in the website editor.</p>
+  <ol role="list">
+    <li>
+      <strong>1. Write the article</strong>
+      <span class="guide-control">Title · Paragraph / Heading blocks</span>
+      <p>Heading blocks create a guide layout; plain paragraphs create an essay layout.</p>
+    </li>
+    <li>
+      <strong>2. Set its card details</strong>
+      <span class="guide-control">Featured image · Category</span>
+      <p>Use a suitable wide picture and an existing Category. Tags do not supply the topic label.</p>
+    </li>
+    <li>
+      <strong>3. Publish and check</strong>
+      <span class="guide-control guide-control-primary">Publish / Update</span>
+      <p>Check the article and its card. Home automatically uses the six newest articles that have a Featured image.</p>
+    </li>
+  </ol>
+</figure>
+
 Every article carries a topic — the ribbon down the side of the featured card, the small
 label on each card in the list, and the row of filter buttons above them.
 

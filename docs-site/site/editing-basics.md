@@ -10,6 +10,28 @@ tab; it does not show work you have not saved.
 
 ## Entries with a publication status
 
+<figure class="guide-walkthrough" aria-labelledby="publication-visual">
+  <figcaption id="publication-visual">Draft → publish → update</figcaption>
+  <p class="guide-walkthrough-note">A simplified illustration. Use the controls in the website editor.</p>
+  <ol role="list">
+    <li>
+      <strong>1. Keep unfinished work private</strong>
+      <span class="guide-control">Save draft</span>
+      <p>A new draft is not on the public website.</p>
+    </li>
+    <li>
+      <strong>2. Make a ready entry public</strong>
+      <span class="guide-control guide-control-primary">Publish</span>
+      <p>Check its words, photographs and details first.</p>
+    </li>
+    <li>
+      <strong>3. Change a public entry</strong>
+      <span class="guide-control">Update</span>
+      <p>An update changes the published entry. Check the saved public page.</p>
+    </li>
+  </ol>
+</figure>
+
 Articles, artwork, free films, student work and questions have their own entries.
 
 - **Save draft** keeps unfinished work off the public website.

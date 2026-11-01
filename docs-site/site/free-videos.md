@@ -5,6 +5,28 @@ presents public films; it is separate from paid course lessons.
 
 ## Add or edit a film
 
+<figure class="guide-walkthrough" aria-labelledby="free-film-visual">
+  <figcaption id="free-film-visual">Prepare a public film entry</figcaption>
+  <p class="guide-walkthrough-note">A simplified illustration. Use the controls in the website editor.</p>
+  <ol role="list">
+    <li>
+      <strong>1. Name it and choose its row</strong>
+      <span class="guide-control">Title · Section</span>
+      <p>Choose the intended demo, tips or Shorts row.</p>
+    </li>
+    <li>
+      <strong>2. Add the film and cover</strong>
+      <span class="guide-control">Video link · Featured image</span>
+      <p>Use an approved playable link and a suitable cover. This field does not upload a new film.</p>
+    </li>
+    <li>
+      <strong>3. Publish and try the player</strong>
+      <span class="guide-control guide-control-primary">Publish / Update</span>
+      <p>Check the card, row and playback on the public Free Videos page.</p>
+    </li>
+  </ol>
+</figure>
+
 Choose the film list and add an entry, or open an entry available to your account.
 
 | Field | What it changes |

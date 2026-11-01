@@ -25,6 +25,28 @@ restores the original picture when you save; it does not delete an uploaded pict
 
 ## Contact and social links
 
+<figure class="guide-walkthrough" aria-labelledby="shared-contact-visual">
+  <figcaption id="shared-contact-visual">One contact change appears in several places</figcaption>
+  <p class="guide-walkthrough-note">A simplified illustration. Use the controls in the website editor.</p>
+  <ol role="list">
+    <li>
+      <strong>1. Edit the intended contact</strong>
+      <span class="guide-control">Instagram URL · Facebook URL · YouTube URL · Contact email</span>
+      <p>Use the full social web address or the intended contact email.</p>
+    </li>
+    <li>
+      <strong>2. Save the page</strong>
+      <span class="guide-control guide-control-primary">Save Site-Wide Edit</span>
+      <p>This saves the shared contact and image fields together.</p>
+    </li>
+    <li>
+      <strong>3. Check the public links</strong>
+      <span class="guide-control">Footer · About · FAQ · Home</span>
+      <p>Follow the changed link. Clearing a value does not reliably remove its icon or button.</p>
+    </li>
+  </ol>
+</figure>
+
 Four settings: **Instagram URL**, **Facebook URL**, **YouTube URL**, **Contact email**.
 
 Paste the full web address for the social links, starting with https://. The site works

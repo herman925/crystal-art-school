@@ -2,6 +2,28 @@
 
 **Open Content Hub → Coupons → Add coupon.**
 
+<figure class="guide-walkthrough" aria-labelledby="coupon-visual">
+  <figcaption id="coupon-visual">Prepare the offer before sharing the code</figcaption>
+  <p class="guide-walkthrough-note">A simplified illustration. Use the controls in the website editor.</p>
+  <ol role="list">
+    <li>
+      <strong>1. Name the code</strong>
+      <span class="guide-control">Title · Code</span>
+      <p>Choose a distinct code that students can recognise and enter.</p>
+    </li>
+    <li>
+      <strong>2. Check the discount and limits</strong>
+      <span class="guide-control">Percentage / Fixed amount</span>
+      <p>20 means 20% or £20 depending on this choice. Check dates and use limits; codes cover all courses.</p>
+    </li>
+    <li>
+      <strong>3. Save and check the list</strong>
+      <span class="guide-control guide-control-primary">Save coupon</span>
+      <p>Save once. Check the fresh list before sharing; a 100% code needs its separate free-course confirmation.</p>
+    </li>
+  </ol>
+</figure>
+
 1. Enter a recognisable title and a distinct code: 3–40 letters, numbers, dashes or underscores.
 2. Choose **Percentage** or **Fixed amount**, then enter the discount.
 3. Set the start date and optional expiry.

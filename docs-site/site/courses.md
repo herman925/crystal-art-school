@@ -53,6 +53,28 @@ published courses.
 
 ## The five course photographs
 
+<figure class="guide-walkthrough" aria-labelledby="course-photos-visual">
+  <figcaption id="course-photos-visual">Course cover and gallery: three different jobs</figcaption>
+  <p class="guide-walkthrough-note">A simplified map of the photograph fields in Basics. These are public pictures, separate from paid files.</p>
+  <ol role="list">
+    <li>
+      <strong>1. Catalogue card</strong>
+      <span class="guide-control">Course Card Cover</span>
+      <p>This is the course’s card cover. It is separate from the five gallery slots.</p>
+    </li>
+    <li>
+      <strong>2. First large photograph</strong>
+      <span class="guide-control">Gallery Photo 1 (Initially Shown)</span>
+      <p>This is the photograph the course page opens with.</p>
+    </li>
+    <li>
+      <strong>3. Other gallery photographs</strong>
+      <span class="guide-control">Gallery Photos 2–5</span>
+      <p>Visitors click a thumbnail to change the large picture. Save the course and check all five.</p>
+    </li>
+  </ol>
+</figure>
+
 Open the course in Tutor's builder. The **Basics** tab has **Gallery Photo 1
 (Initially Shown)** and **Gallery Photos 2–5** below the description. For each slot,
 choose or upload the original photograph, then save the course and reload it to check the
@@ -96,6 +118,28 @@ A draft is not a published course. For a new paid course, save the content as a 
 For an already published course, use the same confirmed price process for money changes; do not use the ordinary content-save button to change its price. Follow [Course Prices](/course-prices) after account handover, and ask the site administrator if the current course status is unclear.
 
 ## Downloadable notes and reference photographs
+
+<figure class="guide-walkthrough" aria-labelledby="course-files-visual">
+  <figcaption id="course-files-visual">Replace a course attachment</figcaption>
+  <p class="guide-walkthrough-note">A simplified illustration. Use the controls in the website editor.</p>
+  <ol role="list">
+    <li>
+      <strong>1. Remove the old selection</strong>
+      <span class="guide-control">Additional → Attachments</span>
+      <p>Remove the old item from this course’s attachment list. Keep files still used elsewhere.</p>
+    </li>
+    <li>
+      <strong>2. Choose the replacement</strong>
+      <span class="guide-control">Upload Attachment → Select</span>
+      <p>Choose or upload the intended paid file. Uploading alone does not save the selection.</p>
+    </li>
+    <li>
+      <strong>3. Save and reopen the course</strong>
+      <span class="guide-control guide-control-primary">Update</span>
+      <p>Check the saved file list. The removed item’s link stops working unless another current reference grants access.</p>
+    </li>
+  </ol>
+</figure>
 
 Use **Additional → Attachments → Upload Attachment** in the course builder. Upload the
 file in the Media window, choose **Select**, then save the course with **Update**. Reopen

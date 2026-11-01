@@ -10,6 +10,28 @@ A completed order is not proof that money reached the bank or that an email was 
 
 ## Change a pending order
 
+<figure class="guide-walkthrough" aria-labelledby="sales-review-visual">
+  <figcaption id="sales-review-visual">Review the consequence before changing an order</figcaption>
+  <p class="guide-walkthrough-note">A simplified illustration. Use the controls in the website editor.</p>
+  <ol role="list">
+    <li>
+      <strong>1. Find the exact order</strong>
+      <span class="guide-control">Student login · Course · Order status</span>
+      <p>Check Payment status separately. This workflow changes pending orders only.</p>
+    </li>
+    <li>
+      <strong>2. Read the proposed action</strong>
+      <span class="guide-control">Mark completed / Mark cancelled</span>
+      <p>Completed gives access without collecting money. Cancelled is not a refund.</p>
+    </li>
+    <li>
+      <strong>3. Confirm the reviewed change</strong>
+      <span class="guide-control guide-control-primary">Confirm change</span>
+      <p>Confirm once and check the fresh list. Stop if the result is unclear.</p>
+    </li>
+  </ol>
+</figure>
+
 Only pending orders offer the supported completed/cancelled changes.
 
 1. Choose the intended change on the exact order.

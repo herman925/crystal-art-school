@@ -24,6 +24,28 @@ edges before uploading.
 
 ## Choose a Registered Student
 
+<figure class="guide-walkthrough" aria-labelledby="showcase-credit-visual">
+  <figcaption id="showcase-credit-visual">Check the picture and permission before publishing</figcaption>
+  <p class="guide-walkthrough-note">A simplified illustration. Use the controls in the website editor.</p>
+  <ol role="list">
+    <li>
+      <strong>1. Add the artwork photograph</strong>
+      <span class="guide-control">Featured image</span>
+      <p>A piece without a photograph is not shown on the wall.</p>
+    </li>
+    <li>
+      <strong>2. Choose the public credit</strong>
+      <span class="guide-control">Registered Student / No Student Credit</span>
+      <p>Get permission for the picture and credit. Use No Student Credit when the name or permission is unclear.</p>
+    </li>
+    <li>
+      <strong>3. Publish and check the wall</strong>
+      <span class="guide-control guide-control-primary">Publish / Update</span>
+      <p>Check the square crop and the public student credit on the Showcase page.</p>
+    </li>
+  </ol>
+</figure>
+
 Upload the picture manually through **Featured Image**, then choose its student from **Registered Student**. The options come from student accounts registered on this website, not a typed name. Account IDs distinguish duplicate display names. The current account display name supplies the public credit; changing it updates the credit on uncached pages.
 
 Obtain permission before publishing a credit or photograph; having an account is not permission to publish their details. Choose **No Student Credit** if you are unsure. Existing text credits are preserved until you replace them with a student selection or choose no credit.

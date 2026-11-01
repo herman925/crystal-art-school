@@ -23,6 +23,28 @@ Reopen the saved lesson and check its words, film and file list before directing
 
 ## Exercise files
 
+<figure class="guide-walkthrough" aria-labelledby="lesson-files-visual">
+  <figcaption id="lesson-files-visual">Add notes or reference photos to a lesson</figcaption>
+  <p class="guide-walkthrough-note">A simplified illustration. Use the controls in the website editor.</p>
+  <ol role="list">
+    <li>
+      <strong>1. Open the exact lesson</strong>
+      <span class="guide-control">Curriculum → lesson’s pencil</span>
+      <p>Check the lesson title before editing.</p>
+    </li>
+    <li>
+      <strong>2. Choose the file</strong>
+      <span class="guide-control">Exercise Files → Upload Attachment</span>
+      <p>Choose or upload it, then select it in the Media window.</p>
+    </li>
+    <li>
+      <strong>3. Save that lesson</strong>
+      <span class="guide-control guide-control-primary">Update</span>
+      <p>Use the lesson’s own button. Reopen it to check the file stayed; save separate course changes separately.</p>
+    </li>
+  </ol>
+</figure>
+
 In the lesson editor, use **Exercise Files → Upload Attachment** for notes or reference
 photographs. Choose or upload the file in Media, select it, and save the lesson with its
 own **Update** button. Images appear in the student's reference-photo panel; documents

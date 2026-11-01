@@ -27,7 +27,7 @@ something close to that shape gives the best result.
 <figure class="guide-walkthrough" aria-labelledby="home-save-visual">
   <figcaption id="home-save-visual">Choose → save → check</figcaption>
   <p class="guide-walkthrough-note">A simplified illustration. Use these controls on the Edit Home page.</p>
-  <ol>
+  <ol role="list">
     <li>
       <strong>1. Choose the photograph</strong>
       <span class="guide-control">Choose Image / Replace Image</span>
@@ -58,6 +58,28 @@ it does not delete the photograph from the media library. Keep the first slide's
 in, because it is the page's main heading.
 
 ## Reposition a Picture
+
+<figure class="guide-walkthrough" aria-labelledby="home-crop-visual">
+  <figcaption id="home-crop-visual">A crop needs the page’s save button too</figcaption>
+  <p class="guide-walkthrough-note">A simplified illustration. Use the controls in the website editor.</p>
+  <ol role="list">
+    <li>
+      <strong>1. Open the picture’s crop preview</strong>
+      <span class="guide-control">Reposition</span>
+      <p>Move the picture or adjust Horizontal, Vertical and Zoom.</p>
+    </li>
+    <li>
+      <strong>2. Keep the proposed framing</strong>
+      <span class="guide-control">Use This Crop</span>
+      <p>This stages the crop. It has not yet saved the Home page.</p>
+    </li>
+    <li>
+      <strong>3. Publish the framing</strong>
+      <span class="guide-control guide-control-primary">Save Home</span>
+      <p>Save Home, then check the saved page at wide and narrow widths.</p>
+    </li>
+  </ol>
+</figure>
 
 Use **Reposition** beside a picture to open its crop preview. The preview uses that Home slot’s aspect ratio and corner shape. Drag the picture, or use **Horizontal**, **Vertical** and **Zoom**. **Use This Crop** stages the framing; **Cancel** leaves it unchanged. Then use **Save Home** to publish the staged crop with the rest of the form.
 
