@@ -1072,7 +1072,7 @@ function cas_account_dashboard_recommendations( $enrolled_ids ) {
 		$facts = cas_course_facets( $post->ID );
 		$rows[] = array(
 			'medium' => $facts['medium'] ? reset( $facts['medium'] ) : '',
-			'price' => cas_course_price( $facts['price'] ),
+			'price' => cas_course_price( $facts['now'] ),
 			'id'    => (int) $post->ID,
 			'title' => get_the_title( $post->ID ),
 			'url'   => $url,
@@ -1251,11 +1251,11 @@ function cas_account_dashboard_body() {
 			</section>
 
 			<section class="dash-panel" id="panel-progress" data-panel="progress" role="tabpanel" aria-labelledby="tab-progress" tabindex="0" hidden>
-				<div class="dash-panel-head"><div><span class="eyebrow">The long view</span><h2><span class="ast cas-desktop-star" aria-hidden="true">&#10022;</span>Progress</h2></div></div>
-				<div class="dash-card progress-summary"><div class="prog-row"><strong>Overall progress</strong><strong><?php echo esc_html( (string) $progress['percent'] ); ?>%</strong></div><div class="pbar prog" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="<?php echo esc_attr( (string) $progress['percent'] ); ?>"><i class="pfill" style="width:<?php echo esc_attr( (string) $progress['percent'] ); ?>%"></i></div><p><?php echo esc_html( (string) $progress['done'] ); ?> of <?php echo esc_html( (string) $progress['total'] ); ?> lessons completed.</p></div>
+				<div class="dash-panel-head"><div><span class="eyebrow">The long view</span><h2><span class="ast cas-desktop-star" aria-hidden="true">&#10022;</span>Your progress</h2></div></div>
+				<div class="dash-card progress-summary"><div class="prog-row"><span>Overall completion</span><strong><?php echo esc_html( (string) $progress['percent'] ); ?>%</strong></div><div class="pbar prog" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="<?php echo esc_attr( (string) $progress['percent'] ); ?>"><i class="pfill" style="width:<?php echo esc_attr( (string) $progress['percent'] ); ?>%"></i></div></div>
 				<?php if ( ! empty( $courses ) ) : ?>
-					<div class="dash-card prog-list">
-						<?php foreach ( $courses as $course ) : ?><div class="prog-course"><div class="prog-row"><a href="<?php echo esc_url( $course['url'] ); ?>"><?php echo esc_html( $course['title'] ); ?></a><strong><?php echo esc_html( (string) $course['percent'] ); ?>%</strong></div><div class="pbar prog" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="<?php echo esc_attr( (string) $course['percent'] ); ?>"><i class="pfill" style="width:<?php echo esc_attr( (string) $course['percent'] ); ?>%"></i></div></div><?php endforeach; ?>
+					<div class="prog-list">
+						<?php foreach ( $courses as $course ) : ?><div class="dash-card prog-course"><div class="prog-row"><a href="<?php echo esc_url( $course['url'] ); ?>"><?php echo esc_html( $course['title'] ); ?></a><strong><?php echo esc_html( (string) $course['percent'] ); ?>%</strong></div><div class="pbar prog" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="<?php echo esc_attr( (string) $course['percent'] ); ?>"><i class="pfill" style="width:<?php echo esc_attr( (string) $course['percent'] ); ?>%"></i></div></div><?php endforeach; ?>
 					</div>
 				<?php else : ?><p class="hand-note">Progress appears here as you finish lessons.</p><?php endif; ?>
 			</section>
@@ -2078,9 +2078,10 @@ function cas_account_css() {
    as anything written here and whose load order against this inline block is not
    guaranteed. That is what the !important is for, and it is the only one in the file. */
 body.cas-account-page .site-main { max-width: none !important; width: 100%; }
-/* only the two pages that carry a full-bleed banner lose the side padding. The auth
+/* Banner and studio pages lose the parent side padding. The auth
    card pages keep it: .auth-wrap has no horizontal padding of its own, so on a phone
    the card would otherwise sit flush against both screen edges. */
+body.cas-account-dashboard .site-main,
 body.cas-account-cart .site-main,
 body.cas-account-checkout .site-main { padding-inline: 0 !important; }
 body.cas-account-page .site-main > .page-header { display: none; }
@@ -2090,7 +2091,8 @@ body.cas-account-page .page-content a { text-decoration: none; }
 
 .cas-account-shell { padding-top: 40px; }
 .cas-account-body { padding-bottom: 80px; }
-.cas-account-dash { padding-top: 26px; padding-bottom: 8px; }
+.cas-account-dash { padding-top: 26px; padding-bottom: 0; }
+.cas-account-dash + .cas-account-dash { padding-top: 0; }
 /* NOTE, not a bug: `.page-hero .container` reserves 272px on the right for Logo2, and
    DD 1.4.5 excludes these pages from Logo2, so that gutter stays empty above 700px.
    The prototype's own Checkout.dc.html renders exactly the same way. Left alone
@@ -2406,8 +2408,9 @@ body.cas-account-page .tutor-dashboard-isolated-page-wrapper .tutor-card {
   grid-template-columns: 1fr auto;
 }
 .cas-studio-dashboard .dash-recommendation .mc-body .eyebrow { grid-column: 1 / -1; }
-.cas-studio-dashboard .progress-summary p { color: var(--muted); margin: 14px 0 0; }
-.cas-studio-dashboard .prog-list { display: grid; gap: 22px; margin-top: 18px; }
+.cas-studio-dashboard .prog-list { margin-top: 16px; }
+.cas-studio-dashboard .prog-course { margin-top: 0; margin-bottom: 12px; }
+.cas-studio-dashboard .prog-row strong { color: var(--ink); }
 .cas-studio-dashboard .prog-course a { color: var(--ink); font-weight: 600; }
 /* Profile (#125): Tutor's own form, without the public-page cover photo (a student has no
    public page) and without the "Account" heading the panel already says. */
@@ -2419,10 +2422,9 @@ body.cas-account-page .tutor-dashboard-isolated-page-wrapper .tutor-card {
 .cas-studio-dashboard .dash-table .ord-status { margin-top: 4px; }
 .cas-studio-dashboard .dash-table td a { color: var(--coral-ink); font-weight: 600; }
 .cas-studio-dashboard .dash-card .mycourse-grid { margin-top: 0; }
+.cas-studio-dashboard .pbar.prog { margin-top: 0; }
 .cas-studio-dashboard .pbar .pfill { display: block; }
 
- .cas-dashboard-icon, .cas-desktop-count, .cas-desktop-star, .cas-desktop-onboard, .cas-desktop-onboard-link { display: none; }
-@media (min-width: 861px) {
  .cas-studio-dashboard .dash-rail-head, .cas-studio-dashboard .dash-tab > .arr, .cas-studio-dashboard .dash-panel-head .eyebrow, .cas-studio-dashboard .dash-subhead .eyebrow, .cas-studio-dashboard .mc-body > .eyebrow { display: none; }
  .cas-studio-dashboard .cas-dashboard-icon { display: block; }
  .cas-studio-dashboard .cas-desktop-count, .cas-studio-dashboard .cas-desktop-star { display: inline-block; }
@@ -2432,9 +2434,16 @@ body.cas-account-page .tutor-dashboard-isolated-page-wrapper .tutor-card {
  .cas-studio-dashboard .dash-subhead h3::before { content: '✦'; color: var(--marine); font-size: .7em; }
  .cas-studio-dashboard .cas-desktop-onboard { display: grid; }
  .cas-studio-dashboard .cas-desktop-onboard-link { display: inline-flex; }
-}
+ .cas-studio-dashboard .dash-rail-foot { display: none; }
 
-@media (min-width: 1081px) { .cas-studio-dashboard .dash-rail-foot { display: none; } }
+/* Native security actions use the reference ghost button palette. */
+body.cas-root .cas-studio-dashboard #panel-settings .tutor-btn-secondary {
+  background: transparent; color: var(--ink); -webkit-text-fill-color: var(--ink);
+  border: 1px solid var(--ink); box-shadow: none;
+}
+body.cas-root .cas-studio-dashboard #panel-settings .tutor-btn-secondary:hover {
+  background: var(--ink); color: var(--cream); -webkit-text-fill-color: var(--cream);
+}
 @media (min-width: 861px) {
  body.cas-root .cas-studio-dashboard input.tutor-form-control,
  body.cas-root .cas-studio-dashboard input.tutor-input,
