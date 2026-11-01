@@ -64,7 +64,7 @@ a.unit-row { text-decoration: none; color: inherit; }
 /* The bundled download sits above the per-item list. */
 .materials-card .res-all { display: flex; align-items: center; gap: 12px; padding: 2px 10px 12px; }
 /* The list packs the card's width in as many columns as fit. */
-.materials-card .res-list { max-width: none; grid-template-columns: repeat(auto-fill, minmax(330px, 1fr)); }
+.materials-card .res-list { max-width: none; grid-template-columns: repeat(auto-fill, minmax(min(330px, 100%), 1fr)); }
 .materials-card .ch { font-size: 21px; font-family: var(--font-marker); font-weight: 600;
   letter-spacing: normal; text-transform: none; color: var(--ink); padding: 4px 10px 14px; }
 .materials-card .res-all-note { font-family: var(--font-cond); font-size: 12.5px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: var(--muted); }
@@ -73,7 +73,7 @@ a.unit-row { text-decoration: none; color: inherit; }
    the download under each. `auto-fit`, so a lesson with one photograph shows it at the
    full width of the card. */
 .ref-card .ref-grid { display: grid; gap: 16px; padding: 0 10px 16px;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+  grid-template-columns: repeat(auto-fit, minmax(min(240px, 100%), 1fr)); }
 .ref-card figure { margin: 0; }
 .ref-card .ref-shot { display: block; width: 100%; height: auto; border-radius: var(--radius-card);
   background: rgba(20,17,13,.35); }
@@ -108,3 +108,8 @@ a.unit-row { text-decoration: none; color: inherit; }
   .lesson-meta-row { font-size: 12.5px; gap: 6px 12px; }
   .page-hero .crumbs { font-size: 12.5px; }
 }
+
+/* Download grids must shrink to the phone rather than widening the whole lesson. */
+.materials-card .res-all { flex-wrap: wrap; }
+.materials-card .res-body { overflow-wrap: anywhere; }
+@media (max-width: 1024px) { .lesson-cols { grid-template-columns: minmax(0, 1fr); } }
