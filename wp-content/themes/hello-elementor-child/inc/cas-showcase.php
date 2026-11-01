@@ -606,7 +606,7 @@ add_action(
  * enlarged .fopt, which is section 11's 「所有 Filter Pills 的字體加大」.
  */
 function cas_showcase_css( $uri ) {
-	$cork = esc_url( $uri . '/img/corkboard.jpg' );
+	$cork = esc_url( $uri . '/img/corkboard-1920.jpg' );
 
 	return <<<CSS
 /* "instant photo" wall (client-approved concept) —
@@ -626,8 +626,10 @@ function cas_showcase_css( $uri ) {
   background-image:
     radial-gradient(120% 90% at 50% 0%, rgba(255,244,222,.16), transparent 60%),
     url("{$cork}");
-  background-size: cover;
-  background-position: center;
+  /* Scale to width, never to the height of a growing wall. */
+  background-size: 100% 100%, max(100%, 960px) auto;
+  background-repeat: no-repeat, repeat-y;
+  background-position: center, center top;
   border-radius: 5px;
   box-shadow: 0 0 0 2px rgba(84,56,22,.6), inset 0 3px 22px rgba(60,40,16,.35), inset 0 -2px 12px rgba(60,40,16,.2); }
 .pol-row { display:flex; flex-wrap:wrap; justify-content:center; align-items:flex-start; gap: 28px 14px; }
