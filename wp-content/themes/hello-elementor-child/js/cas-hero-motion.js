@@ -102,7 +102,7 @@
 	}, { passive: true } );
 } )();
 
-/* Desktop Home parity. Mobile adaptation remains a separate pass. */
+/* Active reference Home choreography; gallery sizing remains desktop-only. */
 (function () {
   'use strict';
   var desktop = window.matchMedia('(min-width: 861px)');
@@ -120,8 +120,8 @@
   if (document.fonts) document.fonts.ready.then(sizeGallery);
 
   var g = window.gsap;
-  if (!g || !desktop.matches || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-  // The reference removes these generic rises before its own desktop Home choreography.
+  if (!g || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  // The reference removes generic rises before its Home choreography at every width.
   document.querySelectorAll('#content .reveal-up').forEach(function (el) { el.classList.remove('reveal-up'); });
   var scenes = [];
   function scene(trigger, elements, play) {
