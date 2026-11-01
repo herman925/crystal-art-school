@@ -137,5 +137,5 @@ function cas_about_certificates_render() {
 		echo '</div></div><figcaption>' . nl2br( esc_html( $caption ) ) . '</figcaption></figure>';
 	}
 	echo '</div></div>';
-	if ( $has_demo ) { echo '<p style="margin:14px 0 0;font-size:13px;line-height:1.6;color:var(--muted);max-width:70ch;">Rows marked Demo are layout samples, not awards. The exhibition poster is identified as a poster, not an award. The samples remain published for review.</p>'; }
+	if ( $has_demo ) { echo '<p style="margin:14px 0 0;font-size:13px;line-height:1.6;color:var(--muted);max-width:70ch;">Rows marked Demo are layout samples, not awards. They remain published for review.</p>'; }
 }
