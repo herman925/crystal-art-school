@@ -75,6 +75,15 @@
 			if ( request === sequence ) { list.removeAttribute( 'aria-busy' ); }
 		}
 	}
+	function fitDrawer() {
+		if ( ! open ) { return; }
+		var toolbar = document.getElementById( 'wpadminbar' );
+		var top = toolbar ? Math.max( 0, toolbar.getBoundingClientRect().bottom ) : 0;
+		drawer.style.setProperty( '--cas-drawer-top', Math.min( top, window.innerHeight ) + 'px' );
+	}
+	window.addEventListener( 'resize', fitDrawer );
+	if ( window.visualViewport ) { window.visualViewport.addEventListener( 'resize', fitDrawer ); }
+
 	function close() {
 		if ( ! open ) { return; }
 		open = false; ++sequence;
@@ -89,6 +98,7 @@
 		event.preventDefault();
 		if ( open ) { return; }
 		opener = button; open = true;
+		fitDrawer(); drawer.scrollTop = 0;
 		overflow = document.body.style.overflow; document.body.style.overflow = 'hidden';
 		drawer.classList.add( 'open' ); backdrop.classList.add( 'open' );
 		window.CasA11y.setHidden( drawer, false ); closeButton.focus();
