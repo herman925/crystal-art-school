@@ -2,10 +2,10 @@
 /**
  * Lesson page.
  *
- * Mirrors the prototype's lesson.dc.html structure so the existing CSS applies, but every
- * value comes from Tutor. The prototype is a single page that swaps lessons in script; in
- * WordPress each lesson is its own address, so the phase list becomes links and progress is
- * Tutor's own, kept server-side.
+ * Mirrors the prototype's lesson.dc.html structure so the existing CSS applies. Course
+ * values come from Tutor; the fixed teaching quote is owner-approved. The prototype swaps
+ * lessons in script; in WordPress each lesson is its own address. The phase list becomes
+ * links and progress is Tutor's own, kept server-side.
  *
  * HOW IT IS WIRED. Tutor's `learning-area/index.php` is the stock learning area: a dark
  * navy app shell that is not the agreed design. Forking that 226-line file would freeze a
@@ -23,11 +23,9 @@
  * checks and its `tutor_lesson_completed_*` hooks all run.
  *
  * WHAT THE PROTOTYPE HAS THAT THIS DOES NOT, and why:
- *   - the teach-card quote, the "Share your skies" band and the finish card's
+ *   - the "Share your skies" band and the finish card's
  *     heading and blurb are the prototype's own demo copy. Nothing in Tutor holds them and
  *     none of it is Crystal's supplied wording, so none of it is invented here.
- *   - "Restart course" and "Watch again" reset browser storage in the prototype. Tutor's
- *     progress is on the server; its retake feature is off on this install.
  *   - The course films card and multi-part lessons need data Tutor does not hold.
  *   - Portrait lessons are pillarboxed in the prototype from a measurement taken at import.
  *     Tutor stores no orientation, so every film is shown in the 16:9 stage.
@@ -35,6 +33,8 @@
  */
 
 defined( 'ABSPATH' ) || exit;
+
+require_once __DIR__ . '/cas-lesson-restart.php';
 
 /** View-only author decision; capability mapping uses the separate helper's explicit checked user ID. */
 function cas_lesson_author_course( $lesson_id ) {
@@ -641,6 +641,12 @@ function cas_render_lesson() {
 							<span class="pc-count"><span id="done-count"><?php echo esc_html( $done_n ); ?></span> of <span id="lx-total"><?php echo esc_html( $total_n ); ?></span></span>
 						</div>
 						<div class="pbar" id="pbar" role="progressbar" aria-label="Course progress" aria-valuemin="0" aria-valuemax="100" aria-valuenow="<?php echo esc_attr( $percent ); ?>" aria-valuetext="<?php echo esc_attr( sprintf( '%d of %d %s complete', $done_n, $total_n, 1 === $total_n ? 'lesson' : 'lessons' ) ); ?>"><div class="pfill" id="pfill" style="width:<?php echo esc_attr( $percent ); ?>%;"></div></div>
+						<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+							<input type="hidden" name="action" value="cas_restart_course">
+							<input type="hidden" name="course_id" value="<?php echo esc_attr( $course_id ); ?>">
+							<?php wp_nonce_field( 'cas_restart_course_' . $course_id, '_cas_restart_nonce', false ); ?>
+							<button class="pc-reset" id="reset-btn" type="submit" title="Clear your completion for this course and return to lesson 1">restart course</button>
+						</form>
 					</div>
 				<?php endif; ?>
 
@@ -683,6 +689,12 @@ function cas_render_lesson() {
 							</<?php echo $tag_el; // phpcs:ignore WordPress.Security.EscapeOutput ?>>
 						<?php endforeach; ?>
 					</div>
+				</div>
+				<div class="teach-card">
+					<img src="<?php echo esc_url( get_stylesheet_directory_uri() . '/img/ProfilePic-96.jpg' ); ?>"
+						srcset="<?php echo esc_attr( get_stylesheet_directory_uri() . '/img/ProfilePic-96.jpg 96w, ' . get_stylesheet_directory_uri() . '/img/ProfilePic-160.jpg 160w, ' . get_stylesheet_directory_uri() . '/img/ProfilePic-384.jpg 384w' ); ?>"
+						sizes="54px" width="96" height="96" alt="Crystal Lau" loading="lazy" decoding="async">
+					<div class="tq">"Take it slowly. The paint dries at its own speed, and so do we." — Crystal</div>
 				</div>
 			</aside>
 		</div>
