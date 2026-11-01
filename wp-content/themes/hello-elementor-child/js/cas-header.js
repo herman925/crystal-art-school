@@ -117,6 +117,8 @@
 				if ( button ) {
 					button.setAttribute( 'aria-label', known
 						? 'Shopping cart, ' + count + ( count === 1 ? ' item' : ' items' )
+						: window.casCartCount && window.casCartCount.requiresLogin
+						? 'Shopping cart, log in to view your basket'
 						: 'Shopping cart, item count unavailable' );
 				}
 			} );
@@ -125,7 +127,7 @@
 		function refreshCart() {
 			var request = ++sequence;
 			renderCart( null );
-			if ( ! window.casCartCount || ! document.querySelector( '.cart-badge' ) ) {
+			if ( ! window.casCartCount || window.casCartCount.requiresLogin || ! document.querySelector( '.cart-badge' ) ) {
 				return;
 			}
 			var data = new URLSearchParams();
