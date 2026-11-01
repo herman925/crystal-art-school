@@ -4,7 +4,7 @@
 
 - The **title** is the question.
 - The **body** is the answer. Bold, links and lists all work.
-- **Page attributes → Order** sets the position. Lower numbers come first.
+- **Order** sets the position. Lower numbers come first.
 
 Manage the entries available to your account. The FAQ page shows published entries. If an expected question is missing, ask the site administrator to check access rather than creating a duplicate.
 

@@ -4,12 +4,18 @@ The public `site/` source is Crystal's task guide. Administrator Markdown is mai
 outside this public repository. Do not add it to `site/admin/`; the build refuses that layout.
 
 ```sh
-DOCS_ADMIN_SOURCE=/path/to/private-admin-source npm run build
+DOCS_ADMIN_SOURCE=/path/to/private-admin-source DOCS_SCREENSHOT_SOURCE=/path/to/private-screenshots npm run build
 ```
 
 The private source contains `index.md`, `handover.md`, `payments-and-access.md`,
 `release-and-recovery.md`, `launch-checks.md`, `content-map.md` and `launch-call-agenda.md`.
 Keep its private backup with the deployment records, outside the webroot.
+
+`DOCS_SCREENSHOT_SOURCE` contains the original PNG captures from the actual WordPress
+backend. Keep these outside the public repository too. Only regular PNG files are copied
+into each private audience build; the capture manifest and browser login state are never
+published. Captures show the real controls without changing their labels or contents.
+Recheck screenshots when the backend changes, and keep a private backup outside the webroot.
 
 Two separate builds are produced under `site/.vitepress/dist/`:
 

@@ -11,7 +11,7 @@ You do not type the student's name or upload their picture. Both are read from t
 student's own account, so if they change their display name or photo it updates here
 automatically, and it can never disagree with what they see elsewhere on the site.
 
-**Page attributes → Order** controls which comments show, up to your display limit, lowest numbers first.
+**Order** controls which comments show, up to your display limit, lowest numbers first.
 
 If nothing is published, the section disappears from the homepage rather than showing an
 empty space.

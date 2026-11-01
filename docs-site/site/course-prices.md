@@ -20,33 +20,12 @@ ordinary course-content save.
 5. Choose **Save the new prices** once. Look for **The price is saved**, then check the fresh list.
 6. Reload an already-open course builder before its next content save.
 
-For example, changing £60/£45 to £68/£52 means Current regular **60**, Current sale **45**,
-New regular **68**, New sale **52**. These are example amounts only.
-
-<figure class="guide-walkthrough" aria-labelledby="price-review-visual">
-  <figcaption id="price-review-visual">Copy each price into the matching confirmation box</figcaption>
-  <p class="guide-walkthrough-note">Illustration only: these are example amounts, not a proposed price change. Open this screen with Review change.</p>
-  <div class="guide-comparison">
-    <section aria-label="Example price review">
-      <strong>1. Read the Now / New table</strong>
-      <table>
-        <thead><tr><th>Price</th><th>Now</th><th>New</th></tr></thead>
-        <tbody><tr><th>Regular</th><td>£60</td><td>£68</td></tr><tr><th>Sale</th><td>£45</td><td>£52</td></tr></tbody>
-      </table>
-      <p>Check the course title too. With no sale, leave the matching sale box empty.</p>
-    </section>
-    <section aria-label="Example price confirmation">
-      <strong>2. Fill the four matching boxes</strong>
-      <dl class="guide-fields">
-        <div><dt>Current regular</dt><dd>60</dd></div>
-        <div><dt>Current sale</dt><dd>45</dd></div>
-        <div><dt>New regular</dt><dd>68</dd></div>
-        <div><dt>New sale</dt><dd>52</dd></div>
-      </dl>
-      <span class="guide-control guide-control-primary">Save the new prices</span>
-      <p>Save once, then check the fresh list and reload an already-open course builder.</p>
-    </section>
+<figure class="guide-screenshot" aria-labelledby="price-review-visual">
+  <figcaption id="price-review-visual">Course Prices: the actual review and confirmation screen</figcaption>
+  <div class="guide-screenshot-images">
+    <a href="/guide-screenshots/price-review.png" target="_blank" rel="noopener" style="--screenshot-width:536px" aria-label="Open full-size screenshot: Course Prices: actual Now/New review table and four confirmation boxes; unchanged amounts shown (new tab)"><img src="/guide-screenshots/price-review.png" width="536" height="352" alt="Course Prices: actual Now/New review table and four confirmation boxes; unchanged amounts shown" loading="lazy"></a>
   </div>
+  <p>The existing demo course is shown with unchanged amounts. The confirmation boxes are empty and no new price was saved. For a real change, copy the current and agreed new amounts from your own Now / New table. Select a screenshot to open it full size.</p>
 </figure>
 
 ## New paid course

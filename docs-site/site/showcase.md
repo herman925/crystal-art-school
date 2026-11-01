@@ -9,7 +9,7 @@ board on the Student showcase page.
 | **Featured image** | The photograph. Required |
 | **Registered Student** | Select an existing student account in the **Credit** box. Choose **No Student Credit** to omit the name |
 | **Student Work Media** | Tags in the sidebar, e.g. Watercolour, Ink. Separate media with commas |
-| **Page attributes → Order** | Position on the wall, lowest first |
+| **Order** | Position on the wall, lowest first |
 
 ## The photograph is the piece
 
@@ -24,26 +24,14 @@ edges before uploading.
 
 ## Choose a Registered Student
 
-<figure class="guide-walkthrough" aria-labelledby="showcase-credit-visual">
-  <figcaption id="showcase-credit-visual">Check the picture and permission before publishing</figcaption>
-  <p class="guide-walkthrough-note">A simplified illustration. Use the controls in the website editor.</p>
-  <ol role="list">
-    <li>
-      <strong>1. Add the artwork photograph</strong>
-      <span class="guide-control">Featured image</span>
-      <p>A piece without a photograph is not shown on the wall.</p>
-    </li>
-    <li>
-      <strong>2. Choose the public credit</strong>
-      <span class="guide-control">Registered Student / No Student Credit</span>
-      <p>Get permission for the picture and credit. Use No Student Credit when the name or permission is unclear.</p>
-    </li>
-    <li>
-      <strong>3. Publish and check the wall</strong>
-      <span class="guide-control guide-control-primary">Publish / Update</span>
-      <p>Check the square crop and the public student credit on the Showcase page.</p>
-    </li>
-  </ol>
+<figure class="guide-screenshot" aria-labelledby="showcase-credit-visual">
+  <figcaption id="showcase-credit-visual">Student Work: the actual picture and credit controls</figcaption>
+  <div class="guide-screenshot-images">
+    <a href="/guide-screenshots/showcase-picture.png" target="_blank" rel="noopener" style="--screenshot-width:280px" aria-label="Open full-size screenshot: Student Work: Featured image (new tab)"><img src="/guide-screenshots/showcase-picture.png" width="280" height="396" alt="Student Work: Featured image" loading="lazy"></a>
+    <a href="/guide-screenshots/showcase-credit.png" target="_blank" rel="noopener" style="--screenshot-width:280px" aria-label="Open full-size screenshot: Student Work: Registered Student credit selector (new tab)"><img src="/guide-screenshots/showcase-credit.png" width="280" height="294" alt="Student Work: Registered Student credit selector" loading="lazy"></a>
+    <a href="/guide-screenshots/showcase-publication.png" target="_blank" rel="noopener" style="--screenshot-width:280px" aria-label="Open full-size screenshot: WordPress: actual publication status and Update controls (new tab)"><img src="/guide-screenshots/showcase-publication.png" width="280" height="219" alt="WordPress: actual publication status and Update controls" loading="lazy"></a>
+  </div>
+  <p>The existing Demo Student example is shown. Get permission before publishing the picture or credit; use No Student Credit when the name or permission is unclear. Select a screenshot to open it full size.</p>
 </figure>
 
 Upload the picture manually through **Featured Image**, then choose its student from **Registered Student**. The options come from student accounts registered on this website, not a typed name. Account IDs distinguish duplicate display names. The current account display name supplies the public credit; changing it updates the credit on uncached pages.
@@ -73,7 +61,7 @@ is nothing to filter, so it stays hidden.
 
 ## Order on the wall
 
-**Page attributes → Order**, lowest first. Pieces with no number fall in after the rest,
+**Order**, lowest first. Pieces with no number fall in after the rest,
 newest first.
 
 There is no drag-and-drop here. The number in that box is what decides it.

@@ -2,26 +2,12 @@
 
 **Open Content Hub → Coupons → Add coupon.**
 
-<figure class="guide-walkthrough" aria-labelledby="coupon-visual">
-  <figcaption id="coupon-visual">Prepare the offer before sharing the code</figcaption>
-  <p class="guide-walkthrough-note">A simplified illustration. Use the controls in the website editor.</p>
-  <ol role="list">
-    <li>
-      <strong>1. Name the code</strong>
-      <span class="guide-control">Title · Code</span>
-      <p>Choose a distinct code that students can recognise and enter.</p>
-    </li>
-    <li>
-      <strong>2. Check the discount and limits</strong>
-      <span class="guide-control">Percentage / Fixed amount</span>
-      <p>20 means 20% or £20 depending on this choice. Check dates and use limits; codes cover all courses.</p>
-    </li>
-    <li>
-      <strong>3. Save and check the list</strong>
-      <span class="guide-control guide-control-primary">Save coupon</span>
-      <p>Save once. Check the fresh list before sharing; a 100% code needs its separate free-course confirmation.</p>
-    </li>
-  </ol>
+<figure class="guide-screenshot" aria-labelledby="coupon-visual">
+  <figcaption id="coupon-visual">The actual new-coupon form</figcaption>
+  <div class="guide-screenshot-images">
+    <a href="/guide-screenshots/coupon-form.png" target="_blank" rel="noopener" style="--screenshot-width:810px" aria-label="Open full-size screenshot: Coupons: actual new coupon fields and Save coupon button (new tab)"><img src="/guide-screenshots/coupon-form.png" width="810" height="678" alt="Coupons: actual new coupon fields and Save coupon button" loading="lazy"></a>
+  </div>
+  <p>Check the code, discount type, dates and use limits before Save coupon. A 100% code has its own free-course confirmation. Select a screenshot to open it full size.</p>
 </figure>
 
 1. Enter a recognisable title and a distinct code: 3–40 letters, numbers, dashes or underscores.
@@ -40,7 +26,7 @@ to one course or one person.
 **A 100% percentage code makes the course free.** Tick its separate confirmation only
 when that is intended. A large fixed discount can also remove the amount due on a cheaper course.
 
-Dates use YYYY-MM-DD. Ask the site administrator to check an exact time-zone/cut-off promise before advertising it.
+Use the date picker for Starts and Expires. The displayed date format follows your browser; check the intended day and month. Ask the site administrator to check an exact time-zone/cut-off promise before advertising it.
 
 ## End or change an offer
 

@@ -5,26 +5,14 @@ one editing page. **About photos** holds the three photograph strips.
 
 ## Your words and your portrait
 
-<figure class="guide-walkthrough" aria-labelledby="about-save-visual">
-  <figcaption id="about-save-visual">Edit your biography and portrait</figcaption>
-  <p class="guide-walkthrough-note">A simplified illustration. Use the controls in the website editor.</p>
-  <ol role="list">
-    <li>
-      <strong>1. Change the intended fields</strong>
-      <span class="guide-control">Opening paragraph · Portrait photograph</span>
-      <p>Keep the writing and picture you want to publish.</p>
-    </li>
-    <li>
-      <strong>2. Save them together</strong>
-      <span class="guide-control guide-control-primary">Save About</span>
-      <p>The button saves the writing and portrait on this page.</p>
-    </li>
-    <li>
-      <strong>3. Read the saved page</strong>
-      <span class="guide-control">View saved page ↗</span>
-      <p>Check the wording and the portrait crop on the website.</p>
-    </li>
-  </ol>
+<figure class="guide-screenshot" aria-labelledby="about-save-visual">
+  <figcaption id="about-save-visual">About: the actual writing, portrait and save controls</figcaption>
+  <div class="guide-screenshot-images">
+    <a href="/guide-screenshots/about-writing.png" target="_blank" rel="noopener" style="--screenshot-width:810px" aria-label="Open full-size screenshot: About: actual opening-paragraph editor (new tab)"><img src="/guide-screenshots/about-writing.png" width="810" height="200" alt="About: actual opening-paragraph editor" loading="lazy"></a>
+    <a href="/guide-screenshots/about-portrait.png" target="_blank" rel="noopener" style="--screenshot-width:970px" aria-label="Open full-size screenshot: About: portrait selection and default controls (new tab)"><img src="/guide-screenshots/about-portrait.png" width="970" height="439" alt="About: portrait selection and default controls" loading="lazy"></a>
+    <a href="/guide-screenshots/about-save.png" target="_blank" rel="noopener" style="--screenshot-width:240px" aria-label="Open full-size screenshot: About: Save About button (new tab)"><img src="/guide-screenshots/about-save.png" width="240" height="107" alt="About: Save About button" loading="lazy"></a>
+  </div>
+  <p>Save About saves these fields together. Check the saved page afterwards. Select a screenshot to open it full size.</p>
 </figure>
 
 Edit the intended fields and press **Save About**. This saves the writing and portrait
@@ -64,26 +52,15 @@ with you off to one side, loses the sides when it crops.
 
 ## The three photograph strips
 
-<figure class="guide-walkthrough" aria-labelledby="about-strips-visual">
-  <figcaption id="about-strips-visual">Add photographs to the right strip</figcaption>
-  <p class="guide-walkthrough-note">A simplified illustration. Use the controls in the website editor.</p>
-  <ol role="list">
-    <li>
-      <strong>1. Choose the strip</strong>
-      <span class="guide-control">Which set</span>
-      <p>Choose Live drawing, Exhibition or Artful Living.</p>
-    </li>
-    <li>
-      <strong>2. Choose the picture and position</strong>
-      <span class="guide-control">Featured image · Order</span>
-      <p>Use a descriptive Title; lower Order numbers appear first.</p>
-    </li>
-    <li>
-      <strong>3. Publish the intended set</strong>
-      <span class="guide-control guide-control-primary">Publish / Update</span>
-      <p>The first published photo replaces that strip’s default set. Prepare the whole set together.</p>
-    </li>
-  </ol>
+<figure class="guide-screenshot" aria-labelledby="about-strips-visual">
+  <figcaption id="about-strips-visual">About Photos: the actual sidebar controls</figcaption>
+  <div class="guide-screenshot-images">
+    <a href="/guide-screenshots/about-photo-set.png" target="_blank" rel="noopener" style="--screenshot-width:280px" aria-label="Open full-size screenshot: About Photos: actual Which Set selector (new tab)"><img src="/guide-screenshots/about-photo-set.png" width="280" height="255" alt="About Photos: actual Which Set selector" loading="lazy"></a>
+    <a href="/guide-screenshots/about-photo-order.png" target="_blank" rel="noopener" style="--screenshot-width:280px" aria-label="Open full-size screenshot: About Photos: actual Order control (new tab)"><img src="/guide-screenshots/about-photo-order.png" width="280" height="131" alt="About Photos: actual Order control" loading="lazy"></a>
+    <a href="/guide-screenshots/about-photo-picture.png" target="_blank" rel="noopener" style="--screenshot-width:280px" aria-label="Open full-size screenshot: About Photos: actual Featured image control (new tab)"><img src="/guide-screenshots/about-photo-picture.png" width="280" height="409" alt="About Photos: actual Featured image control" loading="lazy"></a>
+    <a href="/guide-screenshots/about-photo-publication.png" target="_blank" rel="noopener" style="--screenshot-width:280px" aria-label="Open full-size screenshot: WordPress: actual publication status and Update controls (new tab)"><img src="/guide-screenshots/about-photo-publication.png" width="280" height="218" alt="WordPress: actual publication status and Update controls" loading="lazy"></a>
+  </div>
+  <p>Choose Which Set, set the Order and Featured image, then publish or update the entry. The first published photo replaces that strip’s default set. Select a screenshot to open it full size.</p>
 </figure>
 
 **About photos** in the dashboard menu. One entry per photograph.
@@ -93,7 +70,7 @@ with you off to one side, loses the sides when it crops.
 | **Title** | Describes the photograph for screen readers. Nobody sees it on the page |
 | **Featured image** | The photograph. Required |
 | **Which set** | On the right. Live drawing, Exhibition, or Artful Living |
-| **Page attributes → Order** | Position in its strip, lowest first |
+| **Order** | Position in its strip, lowest first |
 
 Each strip is filled independently. Until you publish the **first** photograph in a set, that
 strip keeps showing the pictures that are on the site today. Publish one, and the whole strip

@@ -63,6 +63,7 @@ main() {
   fi
 
   : "${DOCS_ADMIN_SOURCE:?Set DOCS_ADMIN_SOURCE to the private administrator Markdown directory}"
+  : "${DOCS_SCREENSHOT_SOURCE:?Set DOCS_SCREENSHOT_SOURCE to the private backend screenshot directory}"
   cp -r "$HERE/site" "$HERE/package.json" "$HERE/package-lock.json" "$HERE/build.mjs" "$BUILD/"
   ( cd "$BUILD" && npm ci --silent && npm run build --silent )
 

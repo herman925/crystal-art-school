@@ -8,19 +8,11 @@
 .dark{--vp-c-bg:#1c1715;--vp-c-bg-alt:#231d1a;--vp-c-bg-soft:#231d1a}
 .vp-doc table{display:block;width:100%;overflow-x:auto}
 .vp-doc h2{margin-top:2.4rem;padding-top:1.4rem}
-.vp-doc .guide-walkthrough{margin:1.5rem 0;padding:1.25rem;border:1px solid var(--vp-c-divider);border-radius:12px;background:var(--vp-c-bg-soft)}
-.guide-walkthrough figcaption{font-size:1.1rem;font-weight:700;color:var(--vp-c-text-1)}
-.vp-doc .guide-walkthrough-note{margin:.35rem 0 1rem;font-size:.875rem;color:var(--vp-c-text-2)}
-.vp-doc .guide-walkthrough ol{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.75rem;margin:0;padding:0;list-style:none}
-.vp-doc .guide-walkthrough li,.guide-comparison section{margin:0;padding:.9rem;border:1px solid var(--vp-c-divider);border-radius:8px;background:var(--vp-c-bg);min-width:0}
-.guide-walkthrough li strong,.guide-comparison strong{display:block;font-size:.9rem;line-height:1.5}
-.guide-walkthrough .guide-control{display:block;margin:.8rem 0;padding:.45rem .6rem;border:1px solid var(--vp-c-divider);border-radius:5px;font-size:.8rem;line-height:1.5;text-align:center;font-weight:600;overflow-wrap:anywhere}
-.guide-walkthrough .guide-control-primary{color:var(--vp-c-bg);background:var(--vp-c-brand-1);border-color:var(--vp-c-brand-1)}
-.vp-doc .guide-walkthrough li p,.vp-doc .guide-comparison p{margin:0;font-size:.85rem;line-height:1.65;color:var(--vp-c-text-2)}
-.guide-comparison{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.75rem}
-.vp-doc .guide-comparison table{margin:.8rem 0;font-size:.85rem}
-.vp-doc .guide-comparison th,.vp-doc .guide-comparison td{padding:.4rem .5rem}
-.guide-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.6rem;margin:.8rem 0}
-.guide-fields dt{font-size:.75rem;line-height:1.5;color:var(--vp-c-text-2)}
-.guide-fields dd{margin:.2rem 0 0;padding:.25rem .5rem;border:1px solid var(--vp-c-divider);border-radius:4px;font-size:.9rem}
-@media(max-width:640px){.vp-doc .guide-walkthrough ol,.guide-comparison{grid-template-columns:1fr}}
+/* Original backend screenshots keep their captured colours in either guide theme. */
+.vp-doc .guide-screenshot{margin:1.5rem 0;padding:1rem;border:1px solid var(--vp-c-divider);border-radius:10px;background:var(--vp-c-bg-soft)}
+.guide-screenshot figcaption{margin-bottom:1rem;font-weight:700;color:var(--vp-c-text-1)}
+.guide-screenshot-images{display:flex;flex-wrap:wrap;align-items:flex-start;gap:1rem}
+.guide-screenshot-images a{display:block;width:var(--screenshot-width);max-width:100%;flex:0 1 auto}
+.guide-screenshot-images img{display:block;max-width:100%;height:auto;border:1px solid var(--vp-c-divider)}
+.guide-screenshot-images a:focus-visible{outline:3px solid var(--vp-c-brand-1);outline-offset:4px}
+.vp-doc .guide-screenshot p{margin:1rem 0 0;font-size:.875rem;line-height:1.7;color:var(--vp-c-text-2)}

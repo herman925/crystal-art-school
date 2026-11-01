@@ -7,13 +7,13 @@
 | **Title** | The painting's name |
 | **Featured image** | The photograph |
 | **Content** | The description shown when a visitor opens it |
-| **Price** | Under Sale details |
-| **Etsy URL** | Under Sale details |
-| **Stock status** | Under Sale details |
+| **Price (£)** | Under Sale details |
+| **Etsy listing link** | Under Sale details |
+| **Availability** | Under Sale details |
 | **Artwork Media** | In the sidebar; separate multiple media with commas |
 | **Size** | Under Sale details |
 | **Artwork Types** | Optional tags in the sidebar; separate values with commas |
-| **Page attributes → Order** | Breaks ties between paintings with the same publication date; also controls the homepage card order |
+| **Order** | Breaks ties between paintings with the same publication date; also controls the homepage card order |
 
 Type is optional,
 not a publishing requirement; the Type filter appears only when at least two distinct
@@ -29,26 +29,13 @@ also has **Newest First** and **Oldest First** buttons for publication-date sort
 
 ## The Etsy link is what makes it buyable
 
-<figure class="guide-walkthrough" aria-labelledby="artwork-sale-visual">
-  <figcaption id="artwork-sale-visual">Display a painting or link it to Etsy</figcaption>
-  <p class="guide-walkthrough-note">A simplified illustration. Use the controls in the website editor.</p>
-  <ol role="list">
-    <li>
-      <strong>1. Prepare the painting</strong>
-      <span class="guide-control">Title · Featured image · Sale details</span>
-      <p>Use the agreed description, price and artwork details.</p>
-    </li>
-    <li>
-      <strong>2. Choose whether it is for sale</strong>
-      <span class="guide-control">Etsy URL</span>
-      <p>A painting’s exact Etsy listing gives it a Buy button. An empty Etsy URL means display only.</p>
-    </li>
-    <li>
-      <strong>3. Publish and follow the link</strong>
-      <span class="guide-control guide-control-primary">Publish / Update</span>
-      <p>Check the saved Gallery card. If there is a Buy button, check that it opens the intended painting on Etsy.</p>
-    </li>
-  </ol>
+<figure class="guide-screenshot" aria-labelledby="artwork-sale-visual">
+  <figcaption id="artwork-sale-visual">Artwork: the actual sale-details and save controls</figcaption>
+  <div class="guide-screenshot-images">
+    <a href="/guide-screenshots/artwork-sale.png" target="_blank" rel="noopener" style="--screenshot-width:480px" aria-label="Open full-size screenshot: Artwork: actual Price (£), Etsy listing link and Availability fields (new tab)"><img src="/guide-screenshots/artwork-sale.png" width="480" height="437" alt="Artwork: actual Price (£), Etsy listing link and Availability fields" loading="lazy"></a>
+    <a href="/guide-screenshots/artwork-save.png" target="_blank" rel="noopener" style="--screenshot-width:183px" aria-label="Open full-size screenshot: WordPress: actual Save control for this entry (new tab)"><img src="/guide-screenshots/artwork-save.png" width="183" height="32" alt="WordPress: actual Save control for this entry" loading="lazy"></a>
+  </div>
+  <p>Use the painting’s exact Etsy listing when it is for sale. Save a published entry with Save; publish a new entry when it is ready. Select a screenshot to open it full size.</p>
 </figure>
 
 Selling happens on Etsy, not on this site. The **Buy** button links straight to that
@@ -78,26 +65,12 @@ upload to fit, so a photo with a lot of table around it loses the painting.
 
 ## The homepage gallery card
 
-<figure class="guide-walkthrough" aria-labelledby="home-artwork-visual">
-  <figcaption id="home-artwork-visual">Home’s Gallery picture saves separately</figcaption>
-  <p class="guide-walkthrough-note">A simplified illustration. Use the controls in the website editor.</p>
-  <ol role="list">
-    <li>
-      <strong>1. Open the Home picker</strong>
-      <span class="guide-control">Edit Home → Gallery Image → Choose Artwork</span>
-      <p>Choose the intended published painting.</p>
-    </li>
-    <li>
-      <strong>2. Save this selection</strong>
-      <span class="guide-control guide-control-primary">Save Gallery Image</span>
-      <p>This has its own save button, separate from Save Home.</p>
-    </li>
-    <li>
-      <strong>3. Check the Home card</strong>
-      <span class="guide-control">Home → Gallery card</span>
-      <p>The card uses the chosen painting’s Featured Image. Check the picture after saving.</p>
-    </li>
-  </ol>
+<figure class="guide-screenshot" aria-labelledby="home-artwork-visual">
+  <figcaption id="home-artwork-visual">Home: the actual artwork picker</figcaption>
+  <div class="guide-screenshot-images">
+    <a href="/guide-screenshots/home-gallery-picker.png" target="_blank" rel="noopener" style="--screenshot-width:850px" aria-label="Open full-size screenshot: Home: actual artwork picker with its separate Save Gallery Image button (new tab)"><img src="/guide-screenshots/home-gallery-picker.png" width="850" height="624" alt="Home: actual artwork picker with its separate Save Gallery Image button" loading="lazy"></a>
+  </div>
+  <p>Save Gallery Image saves this choice separately from the rest of the Home form. Select a screenshot to open it full size.</p>
 </figure>
 
 Choose its picture through **Content Hub → Home → Edit Home → Gallery Image → Choose Artwork**.

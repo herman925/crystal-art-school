@@ -17,26 +17,14 @@ is two clicks instead of hunting for a layout block.
 
 ## The topic label
 
-<figure class="guide-walkthrough" aria-labelledby="article-visual">
-  <figcaption id="article-visual">Give an article its picture and topic</figcaption>
-  <p class="guide-walkthrough-note">A simplified illustration. Use the controls in the website editor.</p>
-  <ol role="list">
-    <li>
-      <strong>1. Write the article</strong>
-      <span class="guide-control">Title · Paragraph / Heading blocks</span>
-      <p>Heading blocks create a guide layout; plain paragraphs create an essay layout.</p>
-    </li>
-    <li>
-      <strong>2. Set its card details</strong>
-      <span class="guide-control">Featured image · Category</span>
-      <p>Use a suitable wide picture and an existing Category. Tags do not supply the topic label.</p>
-    </li>
-    <li>
-      <strong>3. Publish and check</strong>
-      <span class="guide-control guide-control-primary">Publish / Update</span>
-      <p>Check the article and its card. Home automatically uses the six newest articles that have a Featured image.</p>
-    </li>
-  </ol>
+<figure class="guide-screenshot" aria-labelledby="article-visual">
+  <figcaption id="article-visual">Blog: the actual picture, category and save controls</figcaption>
+  <div class="guide-screenshot-images">
+    <a href="/guide-screenshots/blog-picture.png" target="_blank" rel="noopener" style="--screenshot-width:248px" aria-label="Open full-size screenshot: Blog: actual Featured image preview (new tab)"><img src="/guide-screenshots/blog-picture.png" width="248" height="125" alt="Blog: actual Featured image preview" loading="lazy"></a>
+    <a href="/guide-screenshots/blog-category.png" target="_blank" rel="noopener" style="--screenshot-width:254px" aria-label="Open full-size screenshot: Blog: existing Category choices (new tab)"><img src="/guide-screenshots/blog-category.png" width="254" height="123" alt="Blog: existing Category choices" loading="lazy"></a>
+    <a href="/guide-screenshots/blog-save.png" target="_blank" rel="noopener" style="--screenshot-width:223px" aria-label="Open full-size screenshot: WordPress article editor: actual Save button in the top toolbar (new tab)"><img src="/guide-screenshots/blog-save.png" width="223" height="32" alt="WordPress article editor: actual Save button in the top toolbar" loading="lazy"></a>
+  </div>
+  <p>Use Featured image and an existing Category for the article’s card. Save a published article with Save; publish a new article when ready. Select a screenshot to open it full size.</p>
 </figure>
 
 Every article carries a topic — the ribbon down the side of the featured card, the small
@@ -95,7 +83,7 @@ Beside that row is a dark **TOOLS** square. It leads to your articles filed unde
 
 Open **Content Hub → Blog → More Editing Tasks → Introduction Paragraph under the Blog Heading**.
 Change the paragraph and save. Clearing it removes that paragraph. Articles keep their own
-separate Update/Publish controls.
+separate Save/Publish controls.
 ## Demo Posts
 
 Six posts beginning **Demo —** are labelled layout samples. They show four topic filters: **Watercolour**, **Oil Painting**, **Diary** and **Tools**. These are Categories, not WordPress Tags. Their labelled graphics are not teacher or student artwork. They remain published for review by agreement; do not replace or withdraw them until that is agreed.

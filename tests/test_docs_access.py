@@ -114,4 +114,19 @@ class GuideAccess(unittest.TestCase):
                 self.assertNotIn('/admin/handover', text, str(path))
                 self.assertNotIn('Herman', text, str(path))
 
+    def test_backend_screenshots_are_private_and_original_bytes(self):
+        screenshot = BUILD / 'crystal/guide-screenshots/home-slide.png'
+        self.assertTrue(screenshot.is_file())
+        self.assertFalse((BUILD / 'crystal/guide-screenshots/manifest.json').exists())
+        path = '/guide-screenshots/home-slide.png'
+        self.assertEqual(fetch(client(), path)[0], 302)
+        op = login('crystal')
+        status, content, headers = fetch(op, path)
+        self.assertEqual(status, 200)
+        self.assertEqual(content, screenshot.read_bytes())
+        self.assertIn('image/png', headers.get('Content-Type', ''))
+        self.assertIn('no-store', headers.get('Cache-Control', ''))
+        fetch(op, '/logout.php')
+        self.assertEqual(fetch(op, path)[0], 302)
+
 if __name__ == '__main__': unittest.main(verbosity=2)

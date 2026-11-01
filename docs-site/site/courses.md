@@ -53,32 +53,21 @@ published courses.
 
 ## The five course photographs
 
-<figure class="guide-walkthrough" aria-labelledby="course-photos-visual">
-  <figcaption id="course-photos-visual">Course cover and gallery: three different jobs</figcaption>
-  <p class="guide-walkthrough-note">A simplified map of the photograph fields in Basics. These are public pictures, separate from paid files.</p>
-  <ol role="list">
-    <li>
-      <strong>1. Catalogue card</strong>
-      <span class="guide-control">Course Card Cover</span>
-      <p>This is the course’s card cover. It is separate from the five gallery slots.</p>
-    </li>
-    <li>
-      <strong>2. First large photograph</strong>
-      <span class="guide-control">Gallery Photo 1 (Initially Shown)</span>
-      <p>This is the photograph the course page opens with.</p>
-    </li>
-    <li>
-      <strong>3. Other gallery photographs</strong>
-      <span class="guide-control">Gallery Photos 2–5</span>
-      <p>Visitors click a thumbnail to change the large picture. Save the course and check all five.</p>
-    </li>
-  </ol>
+<figure class="guide-screenshot" aria-labelledby="course-photos-visual">
+  <figcaption id="course-photos-visual">Tutor Basics: the actual cover and gallery fields</figcaption>
+  <div class="guide-screenshot-images">
+    <a href="/guide-screenshots/course-cover.png" target="_blank" rel="noopener" style="--screenshot-width:305px" aria-label="Open full-size screenshot: Tutor Basics: actual Course Card Cover field (new tab)"><img src="/guide-screenshots/course-cover.png" width="305" height="196" alt="Tutor Basics: actual Course Card Cover field" loading="lazy"></a>
+    <a href="/guide-screenshots/course-gallery-1.png" target="_blank" rel="noopener" style="--screenshot-width:636px" aria-label="Open full-size screenshot: Tutor Basics: the actual cover and gallery fields (new tab)"><img src="/guide-screenshots/course-gallery-1.png" width="636" height="196" alt="Tutor Basics: the actual cover and gallery fields" loading="lazy"></a>
+    <a href="/guide-screenshots/course-gallery-2.png" target="_blank" rel="noopener" style="--screenshot-width:636px" aria-label="Open full-size screenshot: Tutor Basics: the actual cover and gallery fields (new tab)"><img src="/guide-screenshots/course-gallery-2.png" width="636" height="196" alt="Tutor Basics: the actual cover and gallery fields" loading="lazy"></a>
+  </div>
+  <p>Course Card Cover is separate from the course-page photographs. Gallery Photos 1 and 2 are shown here; Photos 3–5 have matching fields below them. A selected image offers Replace Image and Remove; an empty slot offers Choose or Upload Picture. Select a screenshot to open it full size.</p>
 </figure>
 
 Open the course in Tutor's builder. The **Basics** tab has **Gallery Photo 1
 (Initially Shown)** and **Gallery Photos 2–5** below the description. For each slot,
 choose or upload the original photograph, then save the course and reload it to check the
-selection. WordPress generates the smaller image sizes.
+selection. A selected photograph offers **Replace Image** and **Remove**; an empty slot offers **Choose or Upload Picture**.
+WordPress generates the smaller image sizes.
 
 These five photographs are separate from **Course Card Cover**. If Photo 1 is empty,
 the course page can use the cover and lesson photographs as fallbacks. Fill all five slots
@@ -119,26 +108,13 @@ For an already published course, use the same confirmed price process for money 
 
 ## Downloadable notes and reference photographs
 
-<figure class="guide-walkthrough" aria-labelledby="course-files-visual">
-  <figcaption id="course-files-visual">Replace a course attachment</figcaption>
-  <p class="guide-walkthrough-note">A simplified illustration. Use the controls in the website editor.</p>
-  <ol role="list">
-    <li>
-      <strong>1. Remove the old selection</strong>
-      <span class="guide-control">Additional → Attachments</span>
-      <p>Remove the old item from this course’s attachment list. Keep files still used elsewhere.</p>
-    </li>
-    <li>
-      <strong>2. Choose the replacement</strong>
-      <span class="guide-control">Upload Attachment → Select</span>
-      <p>Choose or upload the intended paid file. Uploading alone does not save the selection.</p>
-    </li>
-    <li>
-      <strong>3. Save and reopen the course</strong>
-      <span class="guide-control guide-control-primary">Update</span>
-      <p>Check the saved file list. The removed item’s link stops working unless another current reference grants access.</p>
-    </li>
-  </ol>
+<figure class="guide-screenshot" aria-labelledby="course-files-visual">
+  <figcaption id="course-files-visual">Tutor Additional: the actual attachment controls</figcaption>
+  <div class="guide-screenshot-images">
+    <a href="/guide-screenshots/course-attachments.png" target="_blank" rel="noopener" style="--screenshot-width:305px" aria-label="Open full-size screenshot: Tutor Additional: actual Attachments list and Upload Attachment control; existing demo course shown (new tab)"><img src="/guide-screenshots/course-attachments.png" width="305" height="168" alt="Tutor Additional: actual Attachments list and Upload Attachment control; existing demo course shown" loading="lazy"></a>
+    <a href="/guide-screenshots/course-update.png" target="_blank" rel="noopener" style="--screenshot-width:122px" aria-label="Open full-size screenshot: Tutor: course Update control (new tab)"><img src="/guide-screenshots/course-update.png" width="122" height="40" alt="Tutor: course Update control" loading="lazy"></a>
+  </div>
+  <p>The existing demo course is shown. Remove an old selection when replacing it, choose the new file, then save the course with Update. Select a screenshot to open it full size.</p>
 </figure>
 
 Use **Additional → Attachments → Upload Attachment** in the course builder. Upload the

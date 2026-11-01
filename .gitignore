@@ -67,3 +67,4 @@ docs-site/.htpasswd
 
 # Administrator guide source belongs in a private external directory.
 /docs-site/site/admin/
+/docs-site/site/public/guide-screenshots/

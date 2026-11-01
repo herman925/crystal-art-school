@@ -10,26 +10,12 @@ A completed order is not proof that money reached the bank or that an email was 
 
 ## Change a pending order
 
-<figure class="guide-walkthrough" aria-labelledby="sales-review-visual">
-  <figcaption id="sales-review-visual">Review the consequence before changing an order</figcaption>
-  <p class="guide-walkthrough-note">A simplified illustration. Use the controls in the website editor.</p>
-  <ol role="list">
-    <li>
-      <strong>1. Find the exact order</strong>
-      <span class="guide-control">Student login · Course · Order status</span>
-      <p>Check Payment status separately. This workflow changes pending orders only.</p>
-    </li>
-    <li>
-      <strong>2. Read the proposed action</strong>
-      <span class="guide-control">Mark completed / Mark cancelled</span>
-      <p>Completed gives access without collecting money. Cancelled is not a refund.</p>
-    </li>
-    <li>
-      <strong>3. Confirm the reviewed change</strong>
-      <span class="guide-control guide-control-primary">Confirm change</span>
-      <p>Confirm once and check the fresh list. Stop if the result is unclear.</p>
-    </li>
-  </ol>
+<figure class="guide-screenshot" aria-labelledby="sales-review-visual">
+  <figcaption id="sales-review-visual">Sales: the actual order search and filters</figcaption>
+  <div class="guide-screenshot-images">
+    <a href="/guide-screenshots/sales-controls.png" target="_blank" rel="noopener" style="--screenshot-width:810px" aria-label="Open full-size screenshot: Sales: actual search filters; customer and order rows excluded (new tab)"><img src="/guide-screenshots/sales-controls.png" width="810" height="81" alt="Sales: actual search filters; customer and order rows excluded" loading="lazy"></a>
+  </div>
+  <p>Find the exact order first. Student and order rows are excluded from this screenshot; eligible pending orders offer their own review and confirmation controls. Select a screenshot to open it full size.</p>
 </figure>
 
 Only pending orders offer the supported completed/cancelled changes.

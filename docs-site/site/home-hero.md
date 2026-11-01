@@ -5,7 +5,7 @@ are on the same editing page. Use the **Slide 1**, **Slide 2** and **Slide 3** t
 
 The banner is a carousel of **three slides**. Each slide has four fields you control:
 
-- **Main title**
+- **Title** for the selected slide
 - **Description**
 - **Large image**
 - **Small image**
@@ -24,26 +24,14 @@ something close to that shape gives the best result.
 
 ## Save and view
 
-<figure class="guide-walkthrough" aria-labelledby="home-save-visual">
-  <figcaption id="home-save-visual">Choose → save → check</figcaption>
-  <p class="guide-walkthrough-note">A simplified illustration. Use these controls on the Edit Home page.</p>
-  <ol role="list">
-    <li>
-      <strong>1. Choose the photograph</strong>
-      <span class="guide-control">Choose Image / Replace Image</span>
-      <p>The selected picture appears in its slot. It is still unsaved.</p>
-    </li>
-    <li>
-      <strong>2. Save your changes</strong>
-      <span class="guide-control guide-control-primary">Save Home</span>
-      <p>This saves all three slides and the other Home fields together.</p>
-    </li>
-    <li>
-      <strong>3. Check the result</strong>
-      <span class="guide-control">View saved page ↗</span>
-      <p>A new tab shows the saved page. Check it at wide and narrow widths.</p>
-    </li>
-  </ol>
+<figure class="guide-screenshot" aria-labelledby="home-save-visual">
+  <figcaption id="home-save-visual">Home: the actual slide editor and save controls</figcaption>
+  <div class="guide-screenshot-images">
+    <a href="/guide-screenshots/home-slide.png" target="_blank" rel="noopener" style="--screenshot-width:970px" aria-label="Open full-size screenshot: Home: slide tabs, title, description and image controls (new tab)"><img src="/guide-screenshots/home-slide.png" width="970" height="820" alt="Home: slide tabs, title, description and image controls" loading="lazy"></a>
+    <a href="/guide-screenshots/home-save.png" target="_blank" rel="noopener" style="--screenshot-width:240px" aria-label="Open full-size screenshot: Home: Save Home button and section navigation (new tab)"><img src="/guide-screenshots/home-save.png" width="240" height="340" alt="Home: Save Home button and section navigation" loading="lazy"></a>
+    <a href="/guide-screenshots/home-view.png" target="_blank" rel="noopener" style="--screenshot-width:239px" aria-label="Open full-size screenshot: Home: View saved page link (new tab)"><img src="/guide-screenshots/home-view.png" width="239" height="41" alt="Home: View saved page link" loading="lazy"></a>
+  </div>
+  <p>Choose the intended slide, change its fields, then use Save Home. View saved page opens the saved website. Select a screenshot to open it full size.</p>
 </figure>
 
 Choose or replace each intended image, then press **Save Home**. Choosing an image alone
@@ -59,26 +47,12 @@ in, because it is the page's main heading.
 
 ## Reposition a Picture
 
-<figure class="guide-walkthrough" aria-labelledby="home-crop-visual">
-  <figcaption id="home-crop-visual">A crop needs the page’s save button too</figcaption>
-  <p class="guide-walkthrough-note">A simplified illustration. Use the controls in the website editor.</p>
-  <ol role="list">
-    <li>
-      <strong>1. Open the picture’s crop preview</strong>
-      <span class="guide-control">Reposition</span>
-      <p>Move the picture or adjust Horizontal, Vertical and Zoom.</p>
-    </li>
-    <li>
-      <strong>2. Keep the proposed framing</strong>
-      <span class="guide-control">Use This Crop</span>
-      <p>This stages the crop. It has not yet saved the Home page.</p>
-    </li>
-    <li>
-      <strong>3. Publish the framing</strong>
-      <span class="guide-control guide-control-primary">Save Home</span>
-      <p>Save Home, then check the saved page at wide and narrow widths.</p>
-    </li>
-  </ol>
+<figure class="guide-screenshot" aria-labelledby="home-crop-visual">
+  <figcaption id="home-crop-visual">Home: the actual crop preview</figcaption>
+  <div class="guide-screenshot-images">
+    <a href="/guide-screenshots/home-crop.png" target="_blank" rel="noopener" style="--screenshot-width:680px" aria-label="Open full-size screenshot: Home: crop preview and Use This Crop control (new tab)"><img src="/guide-screenshots/home-crop.png" width="680" height="634" alt="Home: crop preview and Use This Crop control" loading="lazy"></a>
+  </div>
+  <p>Use This Crop stages the framing. Save Home still needs to be pressed afterwards. Select a screenshot to open it full size.</p>
 </figure>
 
 Use **Reposition** beside a picture to open its crop preview. The preview uses that Home slot’s aspect ratio and corner shape. Drag the picture, or use **Horizontal**, **Vertical** and **Zoom**. **Use This Crop** stages the framing; **Cancel** leaves it unchanged. Then use **Save Home** to publish the staged crop with the rest of the form.

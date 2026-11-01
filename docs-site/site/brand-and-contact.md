@@ -25,26 +25,13 @@ restores the original picture when you save; it does not delete an uploaded pict
 
 ## Contact and social links
 
-<figure class="guide-walkthrough" aria-labelledby="shared-contact-visual">
-  <figcaption id="shared-contact-visual">One contact change appears in several places</figcaption>
-  <p class="guide-walkthrough-note">A simplified illustration. Use the controls in the website editor.</p>
-  <ol role="list">
-    <li>
-      <strong>1. Edit the intended contact</strong>
-      <span class="guide-control">Instagram URL · Facebook URL · YouTube URL · Contact email</span>
-      <p>Use the full social web address or the intended contact email.</p>
-    </li>
-    <li>
-      <strong>2. Save the page</strong>
-      <span class="guide-control guide-control-primary">Save Site-Wide Edit</span>
-      <p>This saves the shared contact and image fields together.</p>
-    </li>
-    <li>
-      <strong>3. Check the public links</strong>
-      <span class="guide-control">Footer · About · FAQ · Home</span>
-      <p>Follow the changed link. Clearing a value does not reliably remove its icon or button.</p>
-    </li>
-  </ol>
+<figure class="guide-screenshot" aria-labelledby="shared-contact-visual">
+  <figcaption id="shared-contact-visual">Site-Wide Edit: the actual contact and save controls</figcaption>
+  <div class="guide-screenshot-images">
+    <a href="/guide-screenshots/contact-fields.png" target="_blank" rel="noopener" style="--screenshot-width:970px" aria-label="Open full-size screenshot: Site-Wide Edit: contact email and social links (new tab)"><img src="/guide-screenshots/contact-fields.png" width="970" height="472" alt="Site-Wide Edit: contact email and social links" loading="lazy"></a>
+    <a href="/guide-screenshots/contact-save.png" target="_blank" rel="noopener" style="--screenshot-width:240px" aria-label="Open full-size screenshot: Site-Wide Edit: actual Save Site-Wide Edit control (new tab)"><img src="/guide-screenshots/contact-save.png" width="240" height="107" alt="Site-Wide Edit: actual Save Site-Wide Edit control" loading="lazy"></a>
+  </div>
+  <p>Save Site-Wide Edit saves the shared fields together. Check the changed links on the public website. Select a screenshot to open it full size.</p>
 </figure>
 
 Four settings: **Instagram URL**, **Facebook URL**, **YouTube URL**, **Contact email**.

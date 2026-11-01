@@ -5,26 +5,13 @@ presents public films; it is separate from paid course lessons.
 
 ## Add or edit a film
 
-<figure class="guide-walkthrough" aria-labelledby="free-film-visual">
-  <figcaption id="free-film-visual">Prepare a public film entry</figcaption>
-  <p class="guide-walkthrough-note">A simplified illustration. Use the controls in the website editor.</p>
-  <ol role="list">
-    <li>
-      <strong>1. Name it and choose its row</strong>
-      <span class="guide-control">Title · Section</span>
-      <p>Choose the intended demo, tips or Shorts row.</p>
-    </li>
-    <li>
-      <strong>2. Add the film and cover</strong>
-      <span class="guide-control">Video link · Featured image</span>
-      <p>Use an approved playable link and a suitable cover. This field does not upload a new film.</p>
-    </li>
-    <li>
-      <strong>3. Publish and try the player</strong>
-      <span class="guide-control guide-control-primary">Publish / Update</span>
-      <p>Check the card, row and playback on the public Free Videos page.</p>
-    </li>
-  </ol>
+<figure class="guide-screenshot" aria-labelledby="free-film-visual">
+  <figcaption id="free-film-visual">Free Videos: the actual film fields and save control</figcaption>
+  <div class="guide-screenshot-images">
+    <a href="/guide-screenshots/free-video.png" target="_blank" rel="noopener" style="--screenshot-width:280px" aria-label="Open full-size screenshot: Free Videos: Section and Video link controls (new tab)"><img src="/guide-screenshots/free-video.png" width="280" height="577" alt="Free Videos: Section and Video link controls" loading="lazy"></a>
+    <a href="/guide-screenshots/free-video-save.png" target="_blank" rel="noopener" style="--screenshot-width:183px" aria-label="Open full-size screenshot: WordPress: actual Save control for this entry (new tab)"><img src="/guide-screenshots/free-video-save.png" width="183" height="32" alt="WordPress: actual Save control for this entry" loading="lazy"></a>
+  </div>
+  <p>Choose the Section and Video Link, then save the entry. This field does not upload a new film; check playback after saving or publishing. Select a screenshot to open it full size.</p>
 </figure>
 
 Choose the film list and add an entry, or open an entry available to your account.
@@ -36,7 +23,7 @@ Choose the film list and add an entry, or open an entry available to your accoun
 | **Content** | The short description under the title |
 | **Section** | Which row the film belongs to |
 | **Video link** | The film to play |
-| **Page attributes → Order** | Position in its row, lowest first |
+| **Order** | Position in its row, lowest first |
 
 If a film is not available to your account, ask the site administrator to check access rather than making a duplicate.
 

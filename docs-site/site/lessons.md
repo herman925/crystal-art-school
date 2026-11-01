@@ -1,6 +1,6 @@
 # Lessons
 
-Start from **Content hub → Manage Courses**, click the course title, and open **Curriculum**. Use the pencil beside a lesson to edit it. Work only on courses assigned to your content account. Save that lesson with its own **Update** button.
+Start from **Content hub → Manage Courses**, click the course title, and open **Curriculum**. Use the pencil beside a lesson to edit it. Work only on courses assigned to your content account. Save that lesson with its own **Update** button, which appears after you change a field.
 
 Each lesson has these content controls:
 
@@ -23,26 +23,13 @@ Reopen the saved lesson and check its words, film and file list before directing
 
 ## Exercise files
 
-<figure class="guide-walkthrough" aria-labelledby="lesson-files-visual">
-  <figcaption id="lesson-files-visual">Add notes or reference photos to a lesson</figcaption>
-  <p class="guide-walkthrough-note">A simplified illustration. Use the controls in the website editor.</p>
-  <ol role="list">
-    <li>
-      <strong>1. Open the exact lesson</strong>
-      <span class="guide-control">Curriculum → lesson’s pencil</span>
-      <p>Check the lesson title before editing.</p>
-    </li>
-    <li>
-      <strong>2. Choose the file</strong>
-      <span class="guide-control">Exercise Files → Upload Attachment</span>
-      <p>Choose or upload it, then select it in the Media window.</p>
-    </li>
-    <li>
-      <strong>3. Save that lesson</strong>
-      <span class="guide-control guide-control-primary">Update</span>
-      <p>Use the lesson’s own button. Reopen it to check the file stayed; save separate course changes separately.</p>
-    </li>
-  </ol>
+<figure class="guide-screenshot" aria-labelledby="lesson-files-visual">
+  <figcaption id="lesson-files-visual">The lesson’s actual file and save controls</figcaption>
+  <div class="guide-screenshot-images">
+    <a href="/guide-screenshots/lesson-files.png" target="_blank" rel="noopener" style="--screenshot-width:305px" aria-label="Open full-size screenshot: Tutor lesson editor: actual Exercise Files and Upload Attachment controls (new tab)"><img src="/guide-screenshots/lesson-files.png" width="305" height="214" alt="Tutor lesson editor: actual Exercise Files and Upload Attachment controls" loading="lazy"></a>
+    <a href="/guide-screenshots/lesson-update.png" target="_blank" rel="noopener" style="--screenshot-width:230px" aria-label="Open full-size screenshot: Tutor lesson editor: actual Update button shown after an unsaved edit; no changes submitted (new tab)"><img src="/guide-screenshots/lesson-update.png" width="230" height="35" alt="Tutor lesson editor: actual Update button shown after an unsaved edit; no changes submitted" loading="lazy"></a>
+  </div>
+  <p>The existing demo lesson is shown. Upload or select the intended file, then use this lesson’s Update button. Save separate course changes separately. Select a screenshot to open it full size.</p>
 </figure>
 
 In the lesson editor, use **Exercise Files → Upload Attachment** for notes or reference

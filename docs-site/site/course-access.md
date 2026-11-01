@@ -3,26 +3,12 @@
 **Open Content Hub → Course Access.** Use this only for an agreed one-off correction.
 It does not charge money, create/change an order or issue a refund.
 
-<figure class="guide-walkthrough" aria-labelledby="access-visual">
-  <figcaption id="access-visual">An access correction has its own confirmation</figcaption>
-  <p class="guide-walkthrough-note">A simplified illustration. Use the controls in the website editor.</p>
-  <ol role="list">
-    <li>
-      <strong>1. Choose the student and course</strong>
-      <span class="guide-control">Login or email · Published course</span>
-      <p>Use the existing student’s account and check the exact course.</p>
-    </li>
-    <li>
-      <strong>2. Review the intended action</strong>
-      <span class="guide-control">Add access / Remove access → Review change</span>
-      <p>Read the student, course, current access and warning before continuing.</p>
-    </li>
-    <li>
-      <strong>3. Confirm once</strong>
-      <span class="guide-control">Confirm give access / Confirm remove access</span>
-      <p>Check the saved result. Giving access records no payment; removing access is not a refund.</p>
-    </li>
-  </ol>
+<figure class="guide-screenshot" aria-labelledby="access-visual">
+  <figcaption id="access-visual">The actual Course Access form</figcaption>
+  <div class="guide-screenshot-images">
+    <a href="/guide-screenshots/access-form.png" target="_blank" rel="noopener" style="--screenshot-width:810px" aria-label="Open full-size screenshot: Course Access: actual student, course, action and Review change form (new tab)"><img src="/guide-screenshots/access-form.png" width="810" height="251" alt="Course Access: actual student, course, action and Review change form" loading="lazy"></a>
+  </div>
+  <p>Choose the existing student, exact course and Add access or Remove access, then Review change. Review the next screen before confirming. Select a screenshot to open it full size.</p>
 </figure>
 
 1. Enter the existing student's login or email.
