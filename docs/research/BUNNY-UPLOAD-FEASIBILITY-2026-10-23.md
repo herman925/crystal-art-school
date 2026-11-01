@@ -2,6 +2,8 @@
 
 Date: 2026-10-23. **Source-only recommendation; no uploader implementation, security acceptance, provider-test approval or launch promise.**
 
+**Follow-up planning, 2026-11-02:** the owner now wants a client-friendly in-editor upload journey. See [the current client upload plan](BUNNY-CLIENT-UPLOAD-PLAN-2026-11-02.md) for vendor comparison and staged delivery. This older feasibility ticket remains research-only; no uploader is implied by its closed status.
+
 ## Recommendation
 
 **Keep operator upload in Bunny plus the existing manual URL/ID/embed workflow at launch.** WordPress-led upload is technically feasible using a custom authenticated control plane and Bunny's resumable TUS transport, but the available evidence does not establish a safe, turnkey Tutor uploader. Treat a self-service uploader as a separately specified and tested feature, not a few upload-button settings. The missing production key does not prevent offline design/mock work; neither does offline work authorise a provider test. [I149] [B-TUS] [B-WP]
