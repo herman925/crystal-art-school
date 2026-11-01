@@ -44,8 +44,23 @@ namespace {
 	function tutor_utils() {
 		return new class {
 			public function is_monetize_by_tutor() { return $GLOBALS['input']['native'] ?? true; }
+			public function get_raw_course_price( $id ) {
+				if ( ( $GLOBALS['input']['mode'] ?? '' ) === 'price_db_error' ) { $GLOBALS['wpdb']->last_error = 'synthetic price error'; }
+				return (object) ( $GLOBALS['input']['prices'][ $id ] ?? array( 'regular_price' => 20, 'sale_price' => 0 ) );
+			}
 		};
 	}
+	function get_post( $id ) {
+		if ( ( $GLOBALS['input']['mode'] ?? '' ) === 'missing_course' ) { return null; }
+		return (object) array_merge( array( 'post_type' => 'courses', 'post_status' => 'publish', 'post_password' => '' ), $GLOBALS['input']['post_fields'] ?? array() );
+	}
+	function get_the_title( $id ) { return $GLOBALS['input']['titles'][ $id ] ?? 'Course ' . $id; }
+	function get_tutor_course_thumbnail_src( $size, $id ) { return 'https://example.test/cover-' . $id . '.jpg'; }
+	function cas_course_price( $amount ) { return '$' . number_format( $amount, 2 ); }
+	function cas_page_url( $slug ) { return 'https://example.test/' . $slug . '/'; }
+	function esc_html( $text ) { return htmlspecialchars( $text, ENT_QUOTES ); }
+	function esc_attr( $text ) { return esc_html( $text ); }
+	function esc_url( $text ) { return esc_html( $text ); }
 	function tutor_is_guest_checkout_enabled() { return $GLOBALS['input']['guest_enabled'] ?? false; }
 	if ( empty( $input['missing_factory'] ) ) {
 		function tutor_get_cart_object() {

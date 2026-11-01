@@ -134,6 +134,6 @@ body.cas-root {
 }
 @media (max-width: 860px) { .nav-caret-btn, .nav-mega { display: none; } }
 
-/* The current pass adds desktop member chrome; retain the existing mobile rail logout. */
+/* Mobile keeps the avatar and exposes logout in the menu. */
 .cas-desktop-member { display: none; }
 @media (min-width: 1081px) { .nav-auth .cas-desktop-member { display: inline-flex; } }

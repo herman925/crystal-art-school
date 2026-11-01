@@ -5,6 +5,16 @@
 	'use strict';
 
 	var body = document.body;
+	var sheet = document.querySelector( '.nav-sheet' );
+	var burger = document.querySelector( '.nav-burger' );
+
+	function setSheet( open ) {
+		if ( ! sheet || ! burger ) { return; }
+		sheet.classList.toggle( 'open', open );
+		sheet.inert = ! open;
+		sheet.setAttribute( 'aria-hidden', open ? 'false' : 'true' );
+		burger.setAttribute( 'aria-expanded', open ? 'true' : 'false' );
+	}
 
 	function currentTheme() {
 		return body.getAttribute( 'data-theme' ) === 'A' ? 'A' : 'D';
@@ -37,13 +47,23 @@
 			return;
 		}
 
-		var burger = ev.target.closest( '.nav-burger' );
-
-		if ( burger ) {
-			var open = 'true' === burger.getAttribute( 'aria-expanded' );
-			burger.setAttribute( 'aria-expanded', open ? 'false' : 'true' );
-			document.querySelector( '.nav-sheet' ).classList.toggle( 'open', ! open );
+		if ( ev.target.closest( '.nav-burger' ) ) {
+			setSheet( burger.getAttribute( 'aria-expanded' ) !== 'true' );
+			return;
 		}
+		if ( sheet && sheet.classList.contains( 'open' )
+			&& ( ! sheet.contains( ev.target ) || ev.target.closest( 'a[href]' ) ) ) { setSheet( false ); }
+	} );
+
+	document.addEventListener( 'keydown', function ( event ) {
+		if ( event.key === 'Escape' && sheet && sheet.classList.contains( 'open' ) ) {
+			event.preventDefault();
+			setSheet( false );
+			burger.focus();
+		}
+	} );
+	window.addEventListener( 'resize', function () {
+		if ( window.matchMedia( '(min-width: 1081px)' ).matches ) { setSheet( false ); }
 	} );
 
 	// Desktop disclosure: hover, explicit caret, Escape, outside click and keyboard focus.
