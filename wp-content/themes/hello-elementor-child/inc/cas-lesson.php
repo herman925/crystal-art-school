@@ -510,9 +510,9 @@ function cas_render_lesson() {
 						}
 						?>
 						<?php if ( $film['src'] ) : ?>
-							<iframe class="gdrive-frame" id="gdrive-frame" title="Lesson video player" src="<?php echo esc_url( $film['src'] ); ?>" allow="autoplay; fullscreen" loading="lazy"></iframe>
+							<iframe class="gdrive-frame" id="gdrive-frame" title="Lesson video player" data-cas-media-src="<?php echo esc_url( $film['src'] ); ?>" allow="autoplay; fullscreen" loading="lazy"></iframe>
 						<?php elseif ( $film['native'] ) : ?>
-							<div class="cas-lesson-native"><?php echo $film['native']; // phpcs:ignore WordPress.Security.EscapeOutput -- Tutor's own player markup. ?></div>
+							<div class="cas-lesson-native"><?php echo cas_privacy_video_html( $film['native'] ); // phpcs:ignore WordPress.Security.EscapeOutput -- Tutor's own player markup. ?></div>
 						<?php endif; ?>
 						<div class="stage-missing" id="stage-missing">Video coming soon</div>
 						<span class="unit-flag" id="unit-flag"><?php echo esc_html( sprintf( 'Lesson %d — %s', $position + 1, $current ? $current['title'] : '' ) ); ?></span>

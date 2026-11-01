@@ -353,3 +353,5 @@ add_filter(
 );
 
 require_once get_stylesheet_directory() . '/inc/cas-customizer-map.php';
+
+require_once get_stylesheet_directory() . '/inc/cas-privacy.php';

@@ -451,15 +451,9 @@
    DELIBERATELY NOT PORTED from the prototype's js/site-extras.js
    ------------------------------------------------------------------------------
 
-   window.casOpenPrivacy — the cookie bar and the "privacy choices & data rights"
-   modal. Its copy is invented placeholder legal text: it tells the reader "You're in
-   the UK", offers UK GDPR export / rectify / erase buttons that store nothing and send
-   nothing, and answers each one with a written promise ("we'll email a copy of your
-   data within 30 days", "your data will be deleted within 30 days"). That is the same
-   fabricated wording already withheld from About #terms — see HANDOFF §6.5. Shipping a
-   consent banner that records a choice in localStorage and acts on it nowhere is worse
-   than having none. If a cookie notice is wanted, the copy has to come from Crystal or
-   her adviser and the toggles have to gate something real.
+   The prototype's fake privacy / data-rights workflows remain withheld. The real
+   browser video controls are implemented separately in cas-privacy.js; those
+   controls do not provide policy wording or automatic export/deletion promises.
 
    window.casApplyAuthNav — rewrites the header from a fake `cas-user` localStorage
    object and links to Login.dc.html / Signup.dc.html / Dashboard.dc.html. WordPress has

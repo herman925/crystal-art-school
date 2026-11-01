@@ -212,6 +212,7 @@ function cas_content_hub_cards() {
 			'view'  => null,
 			'items' => array(
 				$item( 'Site-Wide Edit: contact, social links, logo and signatures', admin_url( 'admin.php?page=cas-content-site-details' ), CAS_CONTENT_HUB_CAP ),
+				$item( 'Privacy & Showcase settings', admin_url( 'admin.php?page=cas-privacy-settings' ), CAS_CONTENT_HUB_CAP ),
 				$item( 'Top menu labels and order (Appearance > Menus)', admin_url( 'nav-menus.php' ), 'edit_theme_options' ),
 			),
 			'muted' => 'Footer layout and colours: ask the webmaster.',

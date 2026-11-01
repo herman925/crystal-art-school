@@ -1,0 +1,169 @@
+.cas-cookie-banner[hidden],
+.cas-privacy-modal[hidden],
+[data-cas-media-blocked] {
+  display: none !important;
+}
+.cas-root .cas-privacy-link {
+  background: none;
+  border: 0;
+  color: inherit;
+  font: inherit;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 8px;
+}
+.cas-cookie-banner {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  padding: 16px max(20px, calc((100vw - 1160px) / 2));
+  padding-bottom: max(16px, env(safe-area-inset-bottom));
+  background: var(--surface);
+  color: var(--ink);
+  border-top: 1px solid var(--line);
+  box-shadow: 0 -5px 24px #0003;
+}
+.cas-cookie-banner p {
+  margin: 0 0 10px;
+  font-size: 14px;
+}
+.cas-privacy-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.cas-root .cas-privacy-actions .btn {
+  min-height: 44px;
+  white-space: normal;
+}
+.cas-privacy-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: #0009;
+  color: var(--ink);
+}
+.cas-privacy-panel {
+  position: relative;
+  width: min(100%, 660px);
+  max-height: calc(100dvh - 40px);
+  overflow: auto;
+  overscroll-behavior: contain;
+  background: var(--surface);
+  padding: 28px;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+}
+.cas-privacy-panel h2 {
+  padding-right: 44px;
+}
+.cas-privacy-panel p {
+  font-size: 14px;
+  line-height: 1.65;
+}
+.cas-privacy-panel a {
+  text-decoration: underline;
+}
+.cas-privacy-close {
+  position: absolute;
+  right: 12px;
+  top: 12px;
+  min-width: 44px;
+  min-height: 44px;
+}
+.cas-privacy-choice {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  font-weight: 600;
+  line-height: 1.5;
+}
+.cas-root .cas-privacy-choice input {
+  appearance: auto;
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  accent-color: var(--marine);
+}
+.cas-privacy-card {
+  margin-top: 24px;
+}
+.cas-privacy-card p {
+  line-height: 1.65;
+}
+.cas-privacy-card form > [role="status"] {
+  display: inline-block;
+  margin: 8px;
+}
+.stage,
+.co-highlight,
+.fvm-stage {
+  isolation: isolate;
+}
+.cas-media-choice {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: center;
+  gap: 10px;
+  overflow: auto;
+  padding: 20px;
+  text-align: center;
+  color: var(--ink);
+  background: var(--surface);
+}
+.cas-media-choice p {
+  flex-basis: 100%;
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+}
+.cas-media-choice .btn {
+  min-height: 44px;
+  white-space: normal;
+}
+@media (max-width: 880px) {
+  .cas-filter-handle {
+    bottom: calc(
+      max(16px, env(safe-area-inset-bottom)) + var(--cas-cookie-height, 0px)
+    ) !important;
+  }
+  .cas-privacy-panel {
+    padding: 20px;
+  }
+  .cas-cookie-banner {
+    padding-left: 16px;
+    padding-right: 16px;
+  }
+  .cas-cookie-banner .cas-privacy-actions .btn {
+    flex: 1 1 130px;
+  }
+}
+@media (max-width: 480px) {
+  .cas-privacy-modal {
+    padding: 12px;
+  }
+  .cas-privacy-panel {
+    max-height: calc(100dvh - 24px);
+  }
+  .cas-media-choice {
+    padding: 10px;
+    gap: 6px;
+  }
+  .cas-media-choice p {
+    font-size: 12px;
+  }
+  .cas-root .cas-media-choice .btn {
+    padding: 8px 10px;
+    font-size: 12px;
+  }
+}
