@@ -1,5 +1,5 @@
 <?php
-/** Desktop empty-basket parity. Populated baskets retain Tutor's unmodified renderer. */
+/** Responsive basket presentation; Tutor owns items, amounts and all cart handlers. */
 defined( 'ABSPATH' ) || exit;
 
 $cas_native_cart = tutor()->path . 'templates/ecommerce/cart.php';
@@ -8,6 +8,13 @@ require $cas_native_cart;
 $cas_native_markup = ob_get_clean();
 // Tutor has already resolved its authoritative list/count while rendering once.
 if ( ! isset( $course_list, $total_count ) || ! is_array( $course_list ) || count( $course_list ) || (int) $total_count !== 0 ) {
+	// Keep the native checkout action and add only the prototype's navigation link.
+	$cas_native_markup = preg_replace_callback(
+		'~<a\b[^>]*\bdata-cy="tutor-native-checkout-button"[^>]*>.*?</a>~s',
+		static function ( $match ) { return $match[0] . '<a class="btn ghost full" href="' . esc_url( cas_page_url( 'courses' ) ) . '" style="margin-top:10px;">Keep browsing</a>'; },
+		$cas_native_markup,
+		1
+	);
 	echo $cas_native_markup; // Native trusted template output.
 	return;
 }
