@@ -623,7 +623,7 @@ function cas_render_course_single() {
 
 		<?php
 		$fv_page = cas_page_url( 'free-videos' );
-		$fv_cover = get_stylesheet_directory_uri() . '/img/cover3.jpg';
+		$fv_cover = cas_course_free_video_cover();
 		?>
 		<?php if ( $fv_page && $fv_cover ) : ?>
 			<section class="section">
