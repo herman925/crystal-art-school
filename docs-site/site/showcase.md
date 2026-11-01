@@ -7,7 +7,7 @@ board on the Student showcase page.
 |---|---|
 | **Title** | The name of the piece. Can be left empty |
 | **Featured image** | The photograph. Required |
-| **Registered Student** | Select an existing student account in the **Credit** box. Choose **No Student Credit** to omit the name |
+| **Registered Student** | Select an existing student account in the **Credit** box. Keep the student linked; select **Hide public name credit** to omit their name |
 | **Student Work Media** | Tags in the sidebar, e.g. Watercolour, Ink. Separate media with commas |
 | **Order** | Position on the wall, lowest first |
 
@@ -31,12 +31,18 @@ edges before uploading.
     <a href="/guide-screenshots/showcase-credit.png" target="_blank" rel="noopener" style="--screenshot-width:280px" aria-label="Open full-size screenshot: Student Work: Registered Student credit selector (new tab)"><img src="/guide-screenshots/showcase-credit.png" width="280" height="294" alt="Student Work: Registered Student credit selector" loading="lazy"></a>
     <a href="/guide-screenshots/showcase-publication.png" target="_blank" rel="noopener" style="--screenshot-width:280px" aria-label="Open full-size screenshot: WordPress: actual publication status and Update controls (new tab)"><img src="/guide-screenshots/showcase-publication.png" width="280" height="219" alt="WordPress: actual publication status and Update controls" loading="lazy"></a>
   </div>
-  <p>The existing Demo Student example is shown. Get permission before publishing the picture or credit; use No Student Credit when the name or permission is unclear. Select a screenshot to open it full size.</p>
+  <p>The existing Demo Student example is shown. Get permission before publishing the picture or credit; hide the public name credit only when the picture itself may be published. Select a screenshot to open it full size.</p>
 </figure>
 
 Upload the picture manually through **Featured Image**, then choose its student from **Registered Student**. The options come from student accounts registered on this website, not a typed name. Account IDs distinguish duplicate display names. The current account display name supplies the public credit; changing it updates the credit on uncached pages.
 
-Obtain permission before publishing a credit or photograph; having an account is not permission to publish their details. Choose **No Student Credit** if you are unsure. Existing text credits are preserved until you replace them with a student selection or choose no credit.
+Obtain permission before publishing a credit or photograph; having an account is not permission to publish their details. If permission is unclear, keep the piece as a draft. **Hide public name credit** omits the public name while retaining the student link. A piece without a linked student, or whose student’s Showcase preference is OFF, is excluded from the wall. Existing text credits are retained internally until a registered student is linked.
+
+Students can save their own ON/OFF choice under **My Studio → Settings → Student Showcase**. Switching OFF excludes their linked work from future Showcase visits, including pictures with hidden name credits. Already downloaded copies and direct media URLs may remain; review image removal separately.
+
+Under **Content Hub → Site-Wide Edit → Privacy & Showcase settings**, the site default starts ON and can be changed to OFF. It applies only to students without a saved choice, including existing accounts. It never overrides a saved student choice. The default is a sharing preference, **not consent**; get appropriate permission for every photograph and credit and have the policy reviewed by an adviser. The settings page also lists excluded work for review.
+
+Visitors can use **Privacy choices** in the footer (or **Manage browser privacy** in Studio settings) to enable or disable external video players. Players start OFF until enabled for that browser. The browser remembers the choice for six months when storage is available. These controls do not create a data export/deletion request or approve legal wording; requests go through Crystal’s contact link.
 
 The ten pieces prefixed **Demo —** use the prototype photographs and the registered **Demo Student** credit. They are demonstration content added at the owner’s request, rather than student submissions. They remain published for review by agreement; their launch treatment will be agreed separately.
 

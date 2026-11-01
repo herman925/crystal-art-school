@@ -799,7 +799,7 @@ add_action(
 		wp_enqueue_script(
 			'cas-free-videos',
 			$uri . '/js/cas-free-videos.js',
-			array(),
+			array( 'cas-privacy' ),
 			filemtime( $dir . '/js/cas-free-videos.js' ),
 			true
 		);

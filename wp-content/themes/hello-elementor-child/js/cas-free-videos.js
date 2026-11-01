@@ -77,7 +77,7 @@
 		stage.classList.toggle('is-vertical', card.getAttribute('data-vertical') === '1');
 
 		var want = embed || 'about:blank';
-		if (frame.getAttribute('src') !== want) { frame.setAttribute('src', want); }
+		window.CasPrivacy.loadFrame(frame, want);
 		/* The frame's accessible name was the constant "Video player" for every film
 		   on the page. An embedded player is a tab stop, and its name is the only
 		   thing a screen reader has to tell one film from another. */
@@ -116,7 +116,7 @@
 	function closeV() {
 		if (!isOpen()) { return; }
 		stage.classList.remove('has-video');
-		frame.setAttribute('src', 'about:blank');
+		window.CasPrivacy.loadFrame(frame, 'about:blank');
 		modal.classList.remove('open');
 		modal.setAttribute('aria-hidden', 'true');
 		modal.setAttribute('inert', '');

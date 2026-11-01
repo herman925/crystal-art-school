@@ -525,9 +525,9 @@ function cas_render_course_single() {
 				<div id="co-highlight" class="co-highlight<?php echo $film['src'] || $film['native'] ? ' has-video' : ''; ?>">
 					<?php if ( ! empty( $video['poster'] ) ) { echo wp_get_attachment_image( (int) $video['poster'], 'large', false, array( 'class' => 'co-hl-poster', 'alt' => '', 'loading' => 'lazy', 'sizes' => '(max-width: 900px) 92vw, 914px' ) ); } ?>
 					<?php if ( $film['src'] ) : ?>
-						<iframe class="gdrive-frame" src="<?php echo esc_url( $film['src'] ); ?>" title="Course preview" allow="autoplay; fullscreen" allowfullscreen loading="lazy"></iframe>
+						<iframe class="gdrive-frame" data-cas-media-src="<?php echo esc_url( $film['src'] ); ?>" title="Course preview" allow="autoplay; fullscreen" allowfullscreen loading="lazy"></iframe>
 					<?php elseif ( $film['native'] ) : ?>
-						<?php echo $film['native']; // phpcs:ignore WordPress.Security.EscapeOutput -- Tutor's native video renderer. ?>
+						<?php echo cas_privacy_video_html( $film['native'] ); // phpcs:ignore WordPress.Security.EscapeOutput -- Tutor's native video renderer. ?>
 					<?php else : ?>
 						<div class="co-highlight-empty">Course highlights video &mdash; to be supplied</div>
 					<?php endif; ?>
