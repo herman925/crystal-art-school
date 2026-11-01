@@ -12,6 +12,17 @@ The target remains **Content Hub → own course → lesson → Upload video → 
 
 This is a plan, not a delivered feature. Preserve the current manual operator workflow until the integration passes the stated checks.
 
+## Hostinger deployment and credential boundary
+
+**Owner choice, 2026-11-02: keep the initial integration on Hostinger. No separate broker, Cloudflare Worker or additional platform is selected for the first release.** This selects the design; it does not mean the upload key has been provisioned or the uploader delivered.
+
+- **API code:** a focused WordPress plugin on the existing Hostinger site. Its proposed same-origin REST namespace is `/wp-json/cas-video/v1/`; the address can be public while every operation requires authentication, a valid WordPress REST nonce, the appropriate content capability and current course/lesson/job authority.
+- **Secrets:** a private configuration file outside `public_html`, loaded only by server-side PHP through the WordPress bootstrap. Verify the actual hosting path, PHP readability and restrictive filesystem permissions before provisioning. Do not copy the entire local `.env` onto the website or place secrets in a theme, upload directory, JavaScript, markup, browser storage, ordinary settings response, logs or public backups.
+- **Minimum provider credential:** provision the Stream library API key (`BUNNY_LIBRARY_KEY`) only for the intended library. The account-wide `BUNNY_API` key is unnecessary for this upload flow and stays out of the website. A library key is still powerful within its library; it is not an upload-only permanent key. Keep the existing playback-signing secret separate from upload credentials. [Bunny Stream authentication](https://bunny.net/docs/stream/authentication)
+- **Browser handoff:** WordPress creates an authorised upload job/video and returns only the selected video ID, configured library ID and expiring upload signature. The file travels directly from the browser to Bunny. WordPress reads processing status server-side and uses the verified native lesson save to attach the stable reference. The permanent key never goes to Crystal's browser. [Bunny direct TUS flow](https://bunny.net/docs/stream/tus-resumable-uploads)
+- **Residual risk:** outside-webroot storage protects against direct HTTP downloads; it does not isolate a secret from a complete compromise of PHP/WordPress or another process with the same filesystem authority. Updates, least privilege, logging, backups and scoped credentials reduce risk but cannot eliminate it. The exact live configuration and uploader-specific controls still need verification.
+- **Handover:** the detailed risk explanation and optional future isolation/migration discussion belong in the existing administrator-only guide. The developer has chosen the initial Hostinger approach; client acknowledgement and any future migration scope/price must be discussed and recorded at briefing rather than assumed already agreed.
+
 ## Proposed client journey
 
 This section defines the target to qualify or build. It is not a walkthrough of controls already installed.
