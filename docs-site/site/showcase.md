@@ -28,10 +28,10 @@ Upload the picture manually through **Featured Image**, then choose its student 
 
 Obtain permission before publishing a credit or photograph; having an account is not permission to publish their details. Choose **No Student Credit** if you are unsure. Existing text credits are preserved until you replace them with a student selection or choose no credit.
 
-The ten pieces prefixed **Demo —** use the prototype photographs and the registered **Demo Student** credit. They are demonstration content added at the owner’s request, rather than student submissions. Replace or remove the demo entries before launch.
+The ten pieces prefixed **Demo —** use the prototype photographs and the registered **Demo Student** credit. They are demonstration content added at the owner’s request, rather than student submissions. They remain published for review by agreement; their launch treatment will be agreed separately.
 
-Manage the reusable media from **Content Hub → Showcase → More Editing Tasks → Manage Media**.
-This opens the same WordPress add/edit screen as Blog categories.
+Reuse the sidebar’s existing medium suggestions. Ask Herman if a label needs renaming
+across several entries.
 
 ## Medium builds the filter buttons
 

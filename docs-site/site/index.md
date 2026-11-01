@@ -1,30 +1,39 @@
-# Your site guide
+# Crystal's website guide
 
-This guide explains the content tasks available to your limited editing account on **crystalau.com**, what each change affects and when to ask the webmaster. It is not permission to use every dashboard screen.
+Use this guide when you want to change something on your website. Start with the task
+below; each page tells you where to click, how to save and what to check afterwards.
 
-> **Role and money instructions remain drafts until their final checks and account handover. Nothing here authorises opening registration, payments or a new service.**
+::: info While we prepare your account
+These are the agreed editing workflows. Your account handover is still being completed.
+Start from **Content Hub**, even if you currently see extra administrator menus.
+:::
 
-## Start from Content hub
+## What would you like to do?
 
-**Content hub** groups editing by website page. Home and About each bring their writing and
-photographs together. **Site-Wide Edit**, reached from its own card, brings shared
-contact and brand details together. Use the page's **Save** button, then **View saved page**
-where offered to open the website in another tab. The editing page does not provide an
-unsaved preview.
+| Your task | Open this guide |
+|---|---|
+| Change the homepage banner | [Homepage banner](/home-hero) |
+| Change Home's other pictures or words | [Homepage cards](/homepage-cards) |
+| Update your biography or About photographs | [About page](/about-page) |
+| Edit a course or its five photographs | [Courses](/courses) |
+| Edit a lesson or add notes and reference photos | [Lessons and files](/lessons) |
+| Add a painting and its Etsy link | [Gallery](/gallery) |
+| Publish a student's work or comment | [Student work](/showcase) · [Student comments](/testimonials) |
+| Write an article or add a free film | [Blog](/blog) · [Free videos](/free-videos) |
+| Change an agreed course price | [Course prices](/course-prices) |
+| Find an order or help a student | [Prices, orders and access](/money-guide) |
 
-Lists such as **Posts**, **FAQ**, **Artwork** and **Testimonials** hold individual entries. You may manage records available to your account, not every record belonging to another user. If an expected item is missing, ask the webmaster to check it rather than creating a duplicate.
+## The routine for most changes
 
-Navigation menus, site-wide settings, payment configuration and other users' accounts remain with the webmaster. Course prices, orders and course access use separate confirmed workflows; do not try to change prices through an ordinary content save.
+1. Sign in at [the website editor](https://crystalau.com/wp-admin/).
+2. Open **Content Hub** and choose the relevant page or list.
+3. Make the change, then use that editor's **Save**, **Update** or **Publish** button.
+4. Open the saved website page and check it on a wide and a narrow screen.
 
-## Where to start
+Choosing a picture is not the same as saving the page. A lesson and its course also have
+separate save buttons. [Saving and publishing](/editing-basics) explains the difference.
 
-1. [Logging in](/logging-in) — sign-in and the limited account.
-2. [What you can edit](/what-you-can-edit) — the editing map and managed settings.
-3. Money and access (available after handover) — the safety checklist and draft instructions.
-4. Choose the public page or content task you want to update.
+## If you get stuck
 
-## If something looks wrong after a save
-
-Do not assume every change is reversible or that an error means nothing happened. Preserve any unsaved text, note the page and exact message, and contact the webmaster before making another change.
-
-Blog posts may offer earlier saved versions, but that is not a promise to undo deleted files, payments, published prices or access changes. For an uncertain money result, stop and follow the dedicated troubleshooting instructions.
+Keep your unsaved words, note the page and exact message, and [send them to Herman](/help).
+If something you expect to edit is missing, ask him to check access before creating another copy.

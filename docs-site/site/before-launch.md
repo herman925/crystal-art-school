@@ -1,29 +1,31 @@
-# Before launch: what we need from you
+# What to prepare before launch
 
-Thank you for everything you have already done. This page lists what we still need from you before students can buy courses. The list is in the order that blocks launch first. You do not need to do it all at once, and you can ask us about any item.
+Send these to Herman as they become ready. You do not need to finish everything at once.
 
-| # | What we need | Why it matters | How to send it | Status |
-|---|---|---|---|---|
-| 1 | Your Hong Kong business registration, and the identity check that Stripe asks for before it can take card payments. <!-- #114 --> | Students cannot pay until Stripe is fully set up and checked. | Send the registration certificate to the webmaster by email. Stripe may also send you a request; please answer it yourself. | To do |
-| 2 | In your Stripe dashboard, check whether you can add a bank account in pounds (GBP). <!-- #108 --> | Currency conversion may add charges. The payment provider must confirm the terms for your account. | Tell the webmaster what you see on the Bank accounts and currencies page. | To do |
-| 3 | Your tax adviser's written answers on UK VAT, and on the no-refund checkout wording (see the notes below). <!-- #110, #111 --> | We cannot show the right price or the checkout wording until we have them in writing. | Send the adviser's written answers to the webmaster by email. Please remove any personal or account details first. | Waiting |
-| 4 | The title and price of each course. <!-- #89 --> | Confirm the approved name and amount for every course before launch. | Send them to the webmaster in one list. | To do |
-| 5 | Your purchase terms, privacy policy and member terms. <!-- #90 --> | Buyers need to see these before they pay. | Send your wording, or your adviser's, to the webmaster. | To do |
-| 6 | The course notes and reference photos for each course. <!-- #58 --> | Enrolled students will find them on the course's lessons. | Send the files to the webmaster by email or with a shared folder link. | To do |
-| 7 | Any remaining artwork details and individual Etsy listing links. Optional before launch. <!-- #96 --> | The Gallery is populated. A painting without an Etsy URL remains on display without a Buy button. | Send missing details and the matching listing links to the webmaster; do not invent an unknown Type. | Check remaining details |
-| 8 | Which address your current website is on, and whether it should redirect to the new site or stay as it is. <!-- #95 --> | Visitors who use the old address should not get lost. | Tell the webmaster the address, and your choice. | To do |
-| 9 | The date you would like the site to open to students. <!-- #116 --> | It sets the order of the last checks. | Tell the webmaster the date you have in mind. | To do |
+## Your course content
 
-**Notes for item 3.** Please ask your adviser to answer these in writing:
+- Confirm the title and price of each course in one list.
+- Supply the notes and reference photographs, labelled with the course/lesson they belong to.
+- Review the course pages and tell Herman anything that should change.
 
-1. Does UK VAT apply to course sales, at what rate, and to which buyers?
-2. For UK and EU buyers, is this checkbox enough to remove the 14-day right to cancel for digital content? The checkbox says: "I want access to this course now. I understand that I lose my 14-day right to cancel once access starts, and that purchases are not refundable."
-3. Must the purchase terms say the same thing, and what must they say?
-4. Does anything change for buyers in Hong Kong or elsewhere?
+## Business and payment information
 
-> **Already decided, so you do not need to decide these now**
->
-> - At launch, students pay by card only. PayPal can come later.
-> - All prices are in pounds.
-> - Receipt emails must be checked before payments open; an order result alone does not prove delivery.
-> - Email confirmation for new students must be checked before registration opens.
+- Complete the business/identity checks requested by Stripe on your own screen.
+- Check with Stripe whether your account can receive payouts in GBP, and report what it says.
+- Obtain your adviser's written answers on the applicable tax treatment and purchase/cancellation wording.
+- Provide the agreed purchase terms, privacy policy and member terms.
+
+Arrange a suitable way to share documents with Herman. Do not send login details or card information.
+Herman handles the technical setup and verifies payment and email behaviour before opening the site.
+
+## Other decisions
+
+- Any missing painting details and individual Etsy listing links. Artwork can remain display-only without an Etsy link.
+- The address of your old website and whether it should redirect.
+- Your preferred opening date.
+
+The current demo course, posts and showcase entries remain published for review by agreement.
+They are examples, not finished client content; their launch treatment will be agreed separately.
+
+The launch plan remains card payments in GBP. Registration, receipt delivery and the buying
+journey still need their final opening checks. Reviewing this guide does not open them.

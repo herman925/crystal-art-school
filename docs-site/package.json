@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "vitepress dev site",
-    "build": "vitepress build site"
+    "build": "node build.mjs"
   },
   "devDependencies": {
     "vitepress": "^1.6.3"

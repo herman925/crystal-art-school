@@ -1,7 +1,5 @@
 # Logo, signature and contact details
 
-> **Draft — use these editing instructions after account handover.**
-
 Start from **Content hub → Site-Wide Edit**. Contact details, social links,
 the logo and both signature images are on one editing page. Change the intended fields and
 press **Save Site-Wide Edit**. This saves all fields on the page together.
@@ -36,4 +34,4 @@ These four values feed the footer of every page, the FAQ page, the About page an
 homepage strip. One change updates all of them.
 
 Clearing a value can leave its icon or button visible with an empty destination. It does not
-reliably hide the link. Ask the webmaster if you want a contact channel removed.
+reliably hide the link. Ask Herman if you want a contact channel removed.

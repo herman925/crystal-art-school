@@ -25,11 +25,24 @@ function docs_boot(): void {
         ]);
         session_name('cas_docs');
         session_start();
+        if (($_SESSION['cas_guide_audience_version'] ?? null) !== 1) {
+            header('Clear-Site-Data: "cache"');
+            $_SESSION['cas_guide_audience_version'] = 1;
+        }
     }
 }
 
+function docs_reader(): ?string {
+    $user = $_SESSION[DOCS_SESSION] ?? null;
+    return is_string($user) && isset(docs_users()[$user]) ? $user : null;
+}
+
 function docs_is_signed_in(): bool {
-    return !empty($_SESSION[DOCS_SESSION]);
+    return docs_reader() !== null;
+}
+
+function docs_is_admin(): bool {
+    return docs_reader() === 'herman';
 }
 
 function docs_sign_in(string $user, string $password): bool {

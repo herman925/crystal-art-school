@@ -1,67 +1,76 @@
 import { defineConfig } from 'vitepress'
 
+const admin = process.env.DOCS_AUDIENCE === 'admin'
+
 export default defineConfig({
   title: 'Crystal Art School',
-  description: 'How to update the Crystal Art School website.',
+  description: 'Crystal’s guide to updating her website.',
   lang: 'en',
   cleanUrls: true,
-  srcExclude: ['**/*-draft.md'],
+  srcExclude: admin ? [] : ['admin/**'],
   base: '/',
   head: [['meta', { name: 'robots', content: 'noindex, nofollow' }]],
   themeConfig: {
-    siteTitle: 'Site guide',
+    siteTitle: admin ? 'Site guide · Herman' : 'Crystal’s site guide',
     outline: { level: [2, 3], label: 'On this page' },
     search: { provider: 'local' },
     sidebar: [
-      {
-        text: 'Before launch',
-        items: [
-          { text: 'Before launch: what we need from you', link: '/before-launch' },
-          { text: 'Launch call agenda', link: '/launch-call-agenda' }
-        ]
-      },
-      {
-        text: 'Start here',
-        items: [
-          { text: 'Your site guide', link: '/' },
-          { text: 'Logging in', link: '/logging-in' },
-          { text: 'What you can edit', link: '/what-you-can-edit' }
-        ]
-      },
-      {
-        text: 'Editing the site',
-        items: [
-          { text: 'Logo, signature and contact', link: '/brand-and-contact' },
-          { text: 'The menu across the top', link: '/menu' },
-          { text: 'The homepage banner', link: '/home-hero' },
-          { text: 'The rest of the homepage', link: '/homepage-cards' },
-          { text: 'The About page', link: '/about-page' },
-          { text: 'Questions and answers', link: '/faq' },
-          { text: 'Student comments', link: '/testimonials' },
-          { text: 'Courses', link: '/courses' },
-          { text: 'Lessons', link: '/lessons' },
-          { text: 'The gallery', link: '/gallery' },
-          { text: 'Student work', link: '/showcase' },
-          { text: 'Free videos', link: '/free-videos' },
-          { text: 'Blog articles', link: '/blog' }
-        ]
-      },
-      {
-        text: 'Pages that look after themselves',
-        items: [
-          { text: 'Topic, date and search pages', link: '/archives' },
-          { text: 'Signing in, baskets and the dashboard', link: '/accounts' }
-        ]
-      },
-      { text: 'Limits', items: [{ text: 'What is fixed, and why', link: '/limits' }] }
+      { text: 'Start here', items: [
+        { text: 'Choose your task', link: '/' },
+        { text: 'Signing in and out', link: '/logging-in' },
+        { text: 'Saving and publishing', link: '/editing-basics' },
+        { text: 'Find the right editor', link: '/what-you-can-edit' }
+      ] },
+      { text: 'Website pages', items: [
+        { text: 'Homepage banner', link: '/home-hero' },
+        { text: 'Homepage cards', link: '/homepage-cards' },
+        { text: 'About page', link: '/about-page' },
+        { text: 'Logo, signature and contact', link: '/brand-and-contact' },
+        { text: 'Gallery and Etsy links', link: '/gallery' },
+        { text: 'Student work', link: '/showcase' },
+        { text: 'Student comments', link: '/testimonials' },
+        { text: 'Questions and answers', link: '/faq' },
+        { text: 'Free videos', link: '/free-videos' },
+        { text: 'Blog articles', link: '/blog' }
+      ] },
+      { text: 'Courses and lessons', items: [
+        { text: 'Course content and photographs', link: '/courses' },
+        { text: 'Lessons, notes and reference photos', link: '/lessons' }
+      ] },
+      { text: 'Prices and student help', items: [
+        { text: 'Choose the right tool', link: '/money-guide' },
+        { text: 'Course prices', link: '/course-prices' },
+        { text: 'Coupons', link: '/coupons' },
+        { text: 'Sales and orders', link: '/sales' },
+        { text: 'Course access', link: '/course-access' },
+        { text: 'Money and access warnings', link: '/money-help' },
+        { text: 'What students see', link: '/accounts' }
+      ] },
+      { text: 'Help and preparation', items: [
+        { text: 'If something is not working', link: '/help' },
+        { text: 'What stays with Herman', link: '/limits' },
+        { text: 'Request a menu change', link: '/menu' },
+        { text: 'Pages that fill themselves', link: '/archives' },
+        { text: 'What to prepare before launch', link: '/before-launch' }
+      ] },
+      ...(admin ? [{ text: 'Administrator · Herman only', items: [
+        { text: 'Administrator operating notes', link: '/admin/' },
+        { text: 'Account handover', link: '/admin/handover' },
+        { text: 'Payments, refunds and disputes', link: '/admin/payments-and-access' },
+        { text: 'Release and recovery', link: '/admin/release-and-recovery' },
+        { text: 'Launch checks', link: '/admin/launch-checks' },
+        { text: 'Content map', link: '/admin/content-map' },
+        { text: 'Launch call agenda', link: '/admin/launch-call-agenda' }
+      ] }] : [])
     ],
     docFooter: { prev: false, next: false },
-    footer: { message: 'Internal — please do not share this address.' },
-    // target MUST stay: VitePress's click handler passes any <a target> straight to the
-    // browser, and that is the only supported way to get a real document navigation out of
-    // the SPA. Without it, /logout.php is fetched and swapped in as a page instead of being
-    // navigated to, so clicking Sign out never leaves the guide. _self keeps it in this tab.
-    nav: [{ text: 'Sign out', link: '/logout.php', target: '_self', noIcon: true }]
+    footer: { message: 'Private working guide — please do not share the login.' },
+    nav: [
+      ...(admin ? [{ text: 'Administrator', link: '/admin/' }] : []),
+      { text: 'Open website editor', link: 'https://crystalau.com/wp-admin/', target: '_blank' },
+      // Full navigation is required: the SPA must not fetch logout as a content page.
+      { text: 'Sign out', link: '/logout.php', target: '_self', noIcon: true }
+    ]
   },
   vite: { build: { chunkSizeWarningLimit: 2000 } }
 })

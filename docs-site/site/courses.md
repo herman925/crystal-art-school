@@ -1,6 +1,6 @@
 # Courses
 
-**Course content and course prices use separate workflows.** Use the course editor for titles, images, descriptions and lessons. Set or change paid-course prices only through the confirmed Course prices workflow (available after handover), not the ordinary course-save button. Those money instructions remain a draft pending final review and handover.
+**Course content and course prices use separate workflows.** Use the course editor for titles, images, descriptions and lessons. Set or change paid-course prices only through the confirmed Course prices workflow (available after handover), not the ordinary course-save button. Use [Course Prices](/course-prices) after account handover.
 
 Start from **Content hub → Manage Courses**. In the course list, click the course title
 to open Tutor's builder. Use **Add course** on the hub for a new draft. Only courses
@@ -35,9 +35,9 @@ the site does that.
 
 ## Prices
 
-Use **Course prices** and its separate review/confirmation step for paid-course amounts; follow the draft instructions (available after handover) only after final review and handover. Enter numbers without a currency symbol, and leave Sale empty when no sale is intended.
+Use **Course prices** and its separate review/confirmation step for paid-course amounts; follow [Course Prices](/course-prices) after handover. Enter numbers without a currency symbol, and leave Sale empty when no sale is intended.
 
-The agreed course currency is GBP (£). **Currency and cart settings are managed by the webmaster**, not through your content-editing controls. Do not change them in Tutor Settings; ask the webmaster if anything appears wrong.
+The agreed course currency is GBP (£). **Currency and cart settings are managed by Herman**, not through your content-editing controls. Do not change them in Tutor Settings; ask Herman if anything appears wrong.
 
 The lesson count and total runtime under each course are worked out from the lessons
 themselves. Use the lesson count-per-film field when one film covers more than one numbered
@@ -45,8 +45,9 @@ lesson; use the actual film duration for the runtime. Do not type totals into co
 
 ## Order of the courses
 
-**Page attributes → Order** on each course, lowest first. Courses with no number fall back
-to newest first.
+The saved course Order is lowest first; date breaks ties. Ask Herman if you need to change
+it and cannot find an Order control in the course list. The native Tutor content builder
+does not show WordPress’s Page attributes panel.
 
 The same order decides the row of courses on the homepage, which shows the first ten
 published courses.
@@ -69,14 +70,14 @@ Paid lesson references and downloads are separate from these public photographs.
 On the homepage card, one of the four small images is picked at random each time the page is
 loaded, so the card keeps changing slightly without you doing anything.
 
-If a course is missing its photographs, fill the intended slots and check the cards before publishing or advertising it. Ask the webmaster if the pictures or editing controls you expect are unavailable.
+If a course is missing its photographs, fill the intended slots and check the cards before publishing or advertising it. Ask Herman if the pictures or editing controls you expect are unavailable.
 
 ## The filters look after themselves
 
 The Courses page has a column of filter and sort controls down the left. There is nothing to
 set up: every button is built from the courses that are actually published.
 
-A group of filters appears only when there are useful choices to offer. For example, if every published course has the same medium, a medium filter may be omitted. Choose from the available categories; request a new category from the webmaster rather than using category-management settings.
+A group of filters appears only when there are useful choices to offer. For example, if every published course has the same medium, a medium filter may be omitted. Choose from the available categories; request a new category from Herman rather than using category-management settings.
 
 The same goes for difficulty, length, price and the sale filter. Fill in a course properly
 and it becomes findable; leave a field empty and the filter for it stays away.
@@ -87,13 +88,13 @@ There are no membership levels. Someone who has paid for a course can watch that
 video lessons and download its materials. Someone who has not can still read every public
 page — the homepage, About, the gallery, the blog and the free videos.
 
-You decided this on 28 August 2026, replacing the earlier three-level plan.
+
 
 ## Draft and published
 
 A draft is not a published course. For a new paid course, save the content as a draft, set and confirm its first price through **Course prices**, reload the same saved course, and publish only when the content, price and launch timing are agreed. A saved price does not publish the course.
 
-For an already published course, use the same confirmed price process for money changes; do not use the ordinary content-save button to change its price. Follow the draft Course prices guide (available after handover) after final review and handover, and ask the webmaster if the current course status is unclear.
+For an already published course, use the same confirmed price process for money changes; do not use the ordinary content-save button to change its price. Follow the draft Course prices guide (available after handover) after final review and handover, and ask Herman if the current course status is unclear.
 
 ## Downloadable notes and reference photographs
 
@@ -113,10 +114,10 @@ A shared file stays available only if another current course attachment gives th
 student access. Removing a selection is different from deleting the file permanently
 from Media. Do not permanently delete a file still used by another course or page.
 
-Check the saved result with the webmaster before handing the course to students.
+Check the saved result with Herman before handing the course to students.
 
 ## Lesson Videos and Bunny
 
-Editing a course in WordPress does **not** upload a video file to Bunny. For a new film or replacement, ask the webmaster to upload it to the existing Bunny Stream library and attach its approved reference to the lesson. WordPress controls the lesson title, description and course position; the hosted film plays through the site’s protected lesson player.
+Editing a course in WordPress does **not** upload a video file to Bunny. For a new film or replacement, ask Herman to upload it to the existing Bunny Stream library and attach its approved reference to the lesson. WordPress controls the lesson title, description and course position; the hosted film plays through the site’s protected lesson player.
 
 A direct WordPress-to-Bunny upload tool has been researched but is not implemented. Do not upload the film as an ordinary public Media attachment or paste a private hosting credential into a lesson field.

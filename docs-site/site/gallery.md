@@ -15,8 +15,7 @@
 | **Artwork Types** | Optional tags in the sidebar; separate values with commas |
 | **Page attributes → Order** | Breaks ties between paintings with the same publication date; also controls the homepage card order |
 
-**The Gallery ordering update and the Size and Type fields are live and independently checked.**
-Reload any artwork form left open before the update before editing. Type is optional,
+Type is optional,
 not a publishing requirement; the Type filter appears only when at least two distinct
 real Type values exist. Leave unknown Types empty rather than making them up.
 
@@ -24,8 +23,8 @@ The Gallery's **Newest** and **Oldest** choices sort by publication date, newest
 oldest first respectively. For paintings with the same publication date, lower Order numbers
 come first.
 
-Manage reusable media and types from **Content Hub → Gallery → More Editing Tasks**.
-These open the same WordPress add/edit screens as Blog categories. The artwork list
+Reuse the sidebar’s existing media/type suggestions to keep spellings consistent. Ask Herman
+if a label needs renaming across many entries. The artwork list
 also has **Newest First** and **Oldest First** buttons for publication-date sorting.
 
 ## The Etsy link is what makes it buyable
@@ -41,14 +40,14 @@ painting with no link is a painting on display, not for sale.
 
 Until artwork is published, visitors see the page's introduction and its empty-gallery message. Check the current list instead of assuming photographs alone are enough to publish a painting.
 
-For every painting you want shown, four things are needed before it can go up:
+Check these before publishing a painting:
 
 1. Its name.
-2. Its price, and whether it is on offer.
+2. The agreed price and offer details, if it is for sale.
 3. The medium, such as watercolour or oil. Type is optional and is not required to publish.
 4. Its Etsy address, or a decision that it is on display rather than for sale.
 
-Send those and the paintings can go up together.
+Fill in the agreed details, publish the intended entry, then check its public card and Etsy link.
 
 ## Photographs
 
@@ -57,9 +56,11 @@ upload to fit, so a photo with a lot of table around it loses the painting.
 
 ## The homepage gallery card
 
-The small **Art Gallery** card on the homepage uses the published painting with a photograph
-and the lowest Order number. If Order numbers match, the more recently published painting
-comes first. Change that painting's Order or photograph, and the card follows. The Gallery
-page sorts independently by publication date, so it may lead with a different painting.
+Choose its picture through **Content Hub → Home → Edit Home → Gallery Image → Choose Artwork**.
+Select a published artwork and use **Save Gallery Image**. This saves separately from the
+rest of the Home form. The card follows that artwork's Featured Image; if it is withdrawn
+or loses its public picture, Home falls back to another published artwork.
 
+Before a selection is saved, artwork Order supplies the picture. The Gallery page's own
+Newest/Oldest sorting still uses publication dates.
 Until one painting is published, that card does not appear on the homepage at all.

@@ -1,7 +1,5 @@
 # The homepage banner
 
-> **Draft — use these editing instructions after account handover.**
-
 Open **Content hub → Home → Edit Home**. The homepage banner, page text and photographs
 are on the same editing page. Use the **Slide 1**, **Slide 2** and **Slide 3** tabs to switch between slides. All three are saved by **Save Home**, including slides hidden by the current tab. Large and small image panes sit side by side when space allows and stack on a narrow screen.
 

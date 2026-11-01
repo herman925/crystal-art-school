@@ -68,6 +68,13 @@ class DeployScriptTests(unittest.TestCase):
         self.assertNotIn("cygpath", text)
         self.assertNotIn("/c/Users", text)
 
+    def test_normal_release_never_rebuilds_reader_credentials(self) -> None:
+        text = DEPLOY.read_text()
+        self.assertNotIn("sync_users", text)
+        self.assertNotIn("password_hash", text)
+        self.assertIn("install-release.py", text)
+        self.assertIn("preserved on server", text)
+
     @unittest.skipUnless(os.environ.get("DEPLOY_DRY_RUN_TEST"), "set DEPLOY_DRY_RUN_TEST=1 to run the full dry-run build")
     def test_dry_run_builds_and_lists_uploads(self) -> None:
         env = dict(os.environ, TMPDIR=str(self.tmp))

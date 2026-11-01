@@ -11,7 +11,8 @@ require __DIR__ . '/auth.php';
 
 docs_boot();
 
-const DOCS_ROOT = __DIR__ . '/_private';
+// Editions are built separately: Crystal's assets/search contain no administrator material.
+$docs_root = __DIR__ . '/_private/' . (docs_is_admin() ? 'admin' : 'crystal');
 
 $types = [
     'html' => 'text/html; charset=utf-8',
@@ -41,7 +42,14 @@ if (!docs_is_signed_in()) {
 
 /* Resolve inside the build directory and confirm the result is still inside it, so a
    path of ../../.env cannot escape. */
-$candidate = DOCS_ROOT . $path;
+if (str_contains($path, "\0")) { http_response_code(400); exit("Bad request\n"); }
+if (!docs_is_admin() && preg_match('#^/+admin(?:/|$|\.html)#i', $path)) {
+    http_response_code(403);
+    header('Content-Type: text/plain; charset=utf-8');
+    header('Cache-Control: private, no-store');
+    exit("This section is available to Herman's guide account only.\n");
+}
+$candidate = $docs_root . $path;
 
 if (is_dir($candidate)) {
     $candidate = rtrim($candidate, '/') . '/index.html';
@@ -50,9 +58,14 @@ if (is_dir($candidate)) {
 }
 
 $real = realpath($candidate);
-$base = realpath(DOCS_ROOT);
+$base = realpath($docs_root);
+if ($base === false) {
+    http_response_code(404);
+    header('Content-Type: text/plain; charset=utf-8');
+    exit("Not found\n");
+}
 
-if ($real === false || $base === false || !str_starts_with($real, $base . DIRECTORY_SEPARATOR)) {
+if ($real === false || !str_starts_with($real, $base . DIRECTORY_SEPARATOR)) {
     http_response_code(404);
     $real = $base . DIRECTORY_SEPARATOR . '404.html';
 
@@ -69,12 +82,9 @@ header('X-Robots-Tag: noindex, nofollow');
 header('X-Content-Type-Options: nosniff');
 header('Referrer-Policy: no-referrer');
 
-/* Hashed asset filenames may be cached; pages must not be, or signing out would still
-   leave the last page readable from the browser's cache. */
-if ($ext === 'html') {
-    header('Cache-Control: private, no-store');
-} else {
-    header('Cache-Control: private, max-age=604800');
-}
+// Recheck the account for every resource, including admin chunks and search data.
+header('Cache-Control: private, no-store, max-age=0, must-revalidate');
+header('Pragma: no-cache');
+header('Vary: Cookie');
 
 readfile($real);

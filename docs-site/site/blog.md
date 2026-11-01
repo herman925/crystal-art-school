@@ -20,7 +20,7 @@ is two clicks instead of hunting for a layout block.
 Every article carries a topic — the ribbon down the side of the featured card, the small
 label on each card in the list, and the row of filter buttons above them.
 
-Choose an existing **Category** in the article editor. Request a new topic from the webmaster; the limited content account does not provide category-management screens.
+Choose an existing **Category** in the article editor. Request a new topic from Herman; the limited content account does not provide category-management screens.
 
 Two cautions:
 
@@ -59,8 +59,7 @@ something wide, or something where the middle band carries the picture.
 Worked out from the length of the article. You cannot type it, and it corrects itself when
 you edit.
 
-It does not yet count Chinese correctly — a Chinese article reads "1 min" whatever its
-length. The webmaster knows.
+The estimate includes Chinese and other CJK characters as well as words separated by spaces.
 
 ## Articles on the homepage
 
@@ -72,23 +71,11 @@ Beside that row is a dark **TOOLS** square. It leads to your articles filed unde
 
 ## The introduction on the blog page
 
-The prepared Blog editing page awaits installation, checks and handover. Once available,
-use the Blog card in **Content hub** and choose its introduction link. Save the introduction
-with its **Save** button. Empty it and the paragraph disappears. The related links open the
-separate article list; the saved-page link opens the public Blog in another tab.
-
-## Your three existing articles
-
-The supplied articles may carry a note listing proposed corrections, such as brand spellings or changes to wording. Check those changes before publishing. Clear the note only if you approve them; otherwise ask the webmaster to resolve the wording first. Do not publish an article while an unresolved editing note is visible.
-
-The note is a box on the right of the editor called **Developer's note**. Clear it and press
-Update, and the amber panel disappears from the article. Nothing else to undo.
-
-The **Posts** list has a **Dev note** column that reads "Showing on the article" whenever one
-is live, so a note cannot go out unnoticed.
-
+Open **Content Hub → Blog → More Editing Tasks → Introduction Paragraph under the Blog Heading**.
+Change the paragraph and save. Clearing it removes that paragraph. Articles keep their own
+separate Update/Publish controls.
 ## Demo Posts
 
-Six posts beginning **Demo —** are labelled layout samples. They show four topic filters: **Watercolour**, **Oil Painting**, **Diary** and **Tools**. These are Categories, not WordPress Tags. Their labelled graphics are not teacher or student artwork. Replace or remove these samples before launch.
+Six posts beginning **Demo —** are labelled layout samples. They show four topic filters: **Watercolour**, **Oil Painting**, **Diary** and **Tools**. These are Categories, not WordPress Tags. Their labelled graphics are not teacher or student artwork. They remain published for review by agreement; do not replace or withdraw them until that is agreed.
 
 The Blog card’s main action opens Post Management. **More Editing Tasks → Introduction Paragraph under the Blog Heading** opens the separate introduction editor. Inner editing forms use the standard WordPress appearance.

@@ -1,37 +1,32 @@
-# Logging in
+# Signing in and out
 
-> **Draft — the limited-account navigation still needs final checks and handover.**
+## Edit the website
 
-## The address
+1. Open [crystalau.com/wp-admin](https://crystalau.com/wp-admin/).
+2. Use your website username and password.
+3. Open **Content Hub**. It groups editing tasks by website page.
 
-Go to **crystalau.com/wp-admin** and sign in with the username and password supplied separately by the webmaster. Do not put a password in this guide, an email screenshot or a shared note.
+Your editing account is intended for your content, courses and the agreed price/order tools.
+Design, plugins, payment-provider settings and other people's accounts stay with Herman.
+If you still see extra administrator menus while handover is being prepared, use Content Hub.
 
-If you lose it, use **Lost your password?** on the sign-in screen. The reset link goes to your own email. If it does not arrive, check the spam folder and contact the webmaster; do not use someone else's account.
+If a course or entry is missing, ask Herman to check its ownership. Do not create a duplicate
+to get around an access message.
 
-## Your content account
+## Lost website password
 
-At handover, your content account will be a **limited content-editing account, not an administrator account**. It is intended to open **Content hub** after sign-in. That page groups the available tasks by website page and links to the approved editing controls.
+Use **Lost your password?** on the website's sign-in page. Check your email and spam folder.
+If no message arrives, tell Herman rather than using someone else's login.
 
-| Area | What you use it for |
-|---|---|
-| **Content hub** | Start here for page text, photographs, courses and the money tools |
-| **Posts** | Your blog articles |
-| **Media** | Photographs and other approved files |
-| Content lists such as **Artwork**, **FAQ** and **Testimonials** | Entries assigned to your account |
-| Your profile | Your own public display name and account details |
+## This guide has its own login
 
-Only records and controls available to your account can be changed. If a course or entry is missing or access is refused, ask the webmaster to check ownership and access. Do not duplicate it, borrow an administrator login or try another settings page.
+The guide at **docs.crystalau.com** is a separate site. Its username and password are the
+ones supplied for the guide, not necessarily your WordPress login. Ask Herman if you lose
+the guide password; the website password-reset form does not reset it.
 
-## Settings reached through the hub
+## Sign out
 
-The hub's page links open only the approved text, image, brand and contact settings. They are not permission to redesign the site or use all Appearance settings. Navigation menus, payment configuration, currency, cart settings and site administration remain with the webmaster.
+- In the website editor, open your name at the top and choose **Log Out**.
+- In this guide, use **Sign out** in the top navigation.
 
-Course prices have their own review and confirmation process. Sales and Course access are separate tools, not administrator shortcuts. Read the draft money guides and wait for their final handover before use.
-
-## Signing out
-
-Use your name at the top of the dashboard and choose **Log Out**. Always sign out on a shared computer.
-
-## Emails
-
-A requested password reset is not complete until you receive and use the link. Likewise, an order result is not proof that a receipt was delivered. If an expected message does not arrive, contact the webmaster rather than repeating a purchase or money action.
+Sign out of both when you use a shared computer. Do not send passwords in a screenshot or message.

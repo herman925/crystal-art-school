@@ -15,7 +15,6 @@ set -euo pipefail
 
 HERE="$(cd "$(dirname "$0")" && pwd)"
 ROOT="$(dirname "$HERE")"
-ENV_FILE="$ROOT/.secrets/.env"
 KEY="$ROOT/.secrets/hostinger_ed25519"
 REMOTE="u202887698@82.29.185.202"
 PORT=65002
@@ -38,43 +37,7 @@ check_host_fingerprint() {  # $1 = known_hosts file, $2 = expected fingerprint
   fi
 }
 
-# ---------------------------------------------------------------------------
-# Logins, rebuilt from .env every time so the two can never drift apart.
-#
-# The plain passwords go over the SSH pipe to be hashed on the server and are never
-# written to a file on either side. .env is CRLF, and Python's default write_text would
-# put the carriage return back - hence newline="\n" and the per-line trim in PHP. A hash
-# of "password\r" fails to verify and looks exactly like a wrong password.
-# ---------------------------------------------------------------------------
-sync_users() {
-  local staged
-  staged="$(python3 -c '
-import pathlib, re, sys
-env = pathlib.Path(sys.argv[1]).read_text(encoding="utf-8")
-rows = []
-for user, key in (("herman", "DOCS_AUTH_HERMAN_PASSWORD"), ("crystal", "DOCS_AUTH_CRYSTAL_PASSWORD")):
-    m = re.search(rf"^{key}=(.*)$", env, re.M)
-    if not m:
-        sys.exit(f"{key} missing from .env")
-    rows.append(user + "\t" + m.group(1).strip())
-sys.stdout.write("\n".join(rows))
-' "$ENV_FILE")"
-
-  local hashes
-  hashes="$(printf '%s' "$staged" | "${SSH[@]}" 'php -r "
-    \$out = [];
-    foreach (explode(PHP_EOL, stream_get_contents(STDIN)) as \$line) {
-        \$line = trim(\$line);
-        if (\$line === \"\") { continue; }
-        [\$u, \$p] = explode(\"\t\", \$line, 2);
-        \$out[] = sprintf(\"    %s => %s,\", var_export(\$u, true), var_export(password_hash(\$p, PASSWORD_BCRYPT, [\"cost\" => 12]), true));
-    }
-    echo implode(PHP_EOL, \$out);
-  "')"
-
-  printf '<?php\n/**\n * Readers of the site guide. Hashes only; the plain passwords live in\n * .secrets/.env, and deploy.sh rebuilds this file from them on every publish.\n */\n\nreturn [\n%s\n];\n' "$hashes" > "$HERE/server/users.php"
-  echo "logins rebuilt from .env"
-}
+# Reader credentials are provisioned separately. An ordinary guide release never rewrites users.php.
 
 main() {
   local dry_run=0
@@ -96,29 +59,37 @@ main() {
   if [ "$dry_run" = 0 ]; then
     scan_host_key "$known"
     check_host_fingerprint "$known" "$HOST_FINGERPRINT"
-    sync_users
+    "${SSH[@]}" "test -s $DOC/users.php" || { echo "FAILED: existing guide readers are missing; nothing published" >&2; exit 1; }
   fi
 
-  cp -r "$HERE/site" "$HERE/package.json" "$HERE/package-lock.json" "$BUILD/"
-  ( cd "$BUILD" && npm ci --silent && npx vitepress build site )
+  : "${DOCS_ADMIN_SOURCE:?Set DOCS_ADMIN_SOURCE to the private administrator Markdown directory}"
+  cp -r "$HERE/site" "$HERE/package.json" "$HERE/package-lock.json" "$HERE/build.mjs" "$BUILD/"
+  ( cd "$BUILD" && npm ci --silent && npm run build --silent )
 
   rm -rf "$stage" && mkdir -p "$stage/_private"
   cp -r "$BUILD/site/.vitepress/dist/." "$stage/_private/"
   printf 'Require all denied\n' > "$stage/_private/.htaccess"
-  cp "$HERE/server/"*.php "$stage/"
+  for handler in auth.php gate.php login.php logout.php; do cp "$HERE/server/$handler" "$stage/"; done
   cp "$HERE/server/htaccess.tpl" "$stage/.htaccess" && rm -f "$stage/htaccess.tpl"
 
   if [ "$dry_run" = 1 ]; then
     echo "dry run: nothing sent. Would upload to $REMOTE:$DOC :"
     ( cd "$stage" && find . -type f | sort | sed 's|^\./|  |' )
-    echo "users.php: rebuilt from .env on a real publish (needs SSH, so skipped here)"
+    echo "users.php: preserved on server; never included in the upload"
     echo "would then unpack in $DOC and check https://docs.crystalau.com/faq returns 302"
     return 0
   fi
 
+  local release_id remote_stage backup
+  release_id="$(date -u +%Y%m%dT%H%M%SZ)-$$"
+  remote_stage="/home/u202887698/guide-stage-$release_id"
+  backup="/home/u202887698/backups/guide-$release_id"
+  "${SSH[@]}" "mkdir -m 700 '$remote_stage'"
+  "${SCP[@]}" "$HERE/install-release.py" "$REMOTE:$remote_stage/install-release.py"
+  "${SSH[@]}" "python3 '$remote_stage/install-release.py' snapshot --target '$DOC'" > "$BUILD/expected.json"
   tar -czf "$BUILD/site.tgz" -C "$stage" .
-  "${SCP[@]}" "$BUILD/site.tgz" "$REMOTE:$DOC/"
-  "${SSH[@]}" "cd $DOC && rm -rf _private && tar xzf site.tgz && rm -f site.tgz && chmod 600 users.php"
+  "${SCP[@]}" "$BUILD/site.tgz" "$BUILD/expected.json" "$REMOTE:$remote_stage/"
+  "${SSH[@]}" "python3 '$remote_stage/install-release.py' install --target '$DOC' --archive '$remote_stage/site.tgz' --expected '$remote_stage/expected.json' --backup '$backup'"
 
   # An exit code is not a result: confirm the door is shut and a real login opens it.
   local out

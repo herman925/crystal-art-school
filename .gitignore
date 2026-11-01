@@ -64,3 +64,6 @@ docs-site/site/.vitepress/cache/
 # Login backstop: bcrypt hashes, never committed
 docs-site/server/users.php
 docs-site/.htpasswd
+
+# Administrator guide source belongs in a private external directory.
+/docs-site/site/admin/

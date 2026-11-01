@@ -2,9 +2,10 @@
 require __DIR__ . '/auth.php';
 docs_boot();
 
+header('Cache-Control: no-store');
 $error = '';
 $next  = $_GET['next'] ?? $_POST['next'] ?? '/';
-if (!preg_match('#^/[A-Za-z0-9._/-]*$#', $next)) {
+if (!is_string($next) || !preg_match('#^/(?!/)[A-Za-z0-9._/-]*$#', $next)) {
     $next = '/';
 }
 

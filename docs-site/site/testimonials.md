@@ -19,5 +19,5 @@ empty space.
 ## One thing to check first
 
 These cards publish a real student's name and profile picture on your public homepage. Make
-sure the student has agreed. The webmaster is separately sorting out the wording in the member
+sure the student has agreed. Herman is separately sorting out the wording in the member
 terms that covers this.

@@ -1,59 +1,34 @@
-# What you can edit
+# Find the right editor
 
-> **Draft — use these editing instructions after account handover. Money instructions also await final checks and handover.**
+Start from **Content Hub**. Choose the page you want to change, then its editing link.
 
-Use only the approved controls available in your content account. This is not an administrator account, and records belonging to another user may not be editable. If a control or expected record is missing, ask the webmaster; do not use an administrator login, create a duplicate or try another settings route. See [what is fixed](/limits).
-
-Start from **Content hub**. Its page cards open the approved settings and lists.
-
-Home brings its banner, text and photographs onto one editing page. About brings its writing
-and portrait together. Site-Wide Edit brings contact, social links and brand images together.
-Use **Save Home**, **Save About** or **Save Site-Wide Edit** to save all fields on that page.
-Blog and Free videos have their own introduction pages. Repeating entries, such as artwork,
-articles and photograph strips, keep their separate content lists.
-
-| What | Where to start |
+| What you want to change | Where to start |
 |---|---|
-| Logo and signature images | Content hub → Site-Wide Edit |
-| Contact email and social links | Content hub → Site-Wide Edit |
-| Menu labels, links and order | Request a change from the webmaster |
-| Homepage banner words and images | Content hub → Home → Edit Home |
-| Homepage free-video card, About photograph and course introduction | Content hub → Home → Edit Home |
-| Homepage gallery hover line and TOOLS photograph | Content hub → Home → Edit Home |
-| Course overview paragraphs and principles | Content hub → Home → Edit Home |
-| Course overview questions | The separate questions list on the Home card or editing page |
-| About text and portrait | Content hub → About → Edit About |
-| About photograph strips | About photos, reached through Content hub → About |
-| Blog introduction | Content hub → Blog → introduction |
-| Free-video introduction and films | Content hub → Free videos |
-| Student comments | Testimonials |
-| Questions and answers | FAQ |
-| Paintings, artwork prices and Etsy links | Artwork |
-| Student showcase pieces | Student work |
-| Blog articles and their pictures | Posts |
-| An article's topic | Choose an existing category in the article editor; request a new topic from the webmaster |
-| Course content | The course editor — see [Courses](/courses) |
-| Paid-course regular and sale prices | The confirmed Course prices workflow (available after handover) |
-| Lessons | Open the relevant course's lesson controls through Content hub |
-| Order lookup and supported pending-order corrections | Content hub → Sales, after money-guide handover |
-| Agreed manual course-access corrections | Content hub → Course access, after money-guide handover |
-| Your public display name | Your own profile |
-| Article page size, currency, cart and payment settings | Managed by the webmaster |
+| Homepage banner, card pictures and introductory words | **Home → Edit Home** |
+| Home's Gallery card picture | **Edit Home → Gallery Image** |
+| Biography and portrait | **About → Edit About** |
+| Photograph strips on About | **About → About Photos** |
+| Logo, signatures, contact email and social links | **Site-Wide Edit** |
+| Blog introduction or articles | **Blog** |
+| Free-video introductions or films | **Free Videos** |
+| A painting and its sale details | **Gallery → Artwork** |
+| Student showcase entries | **Showcase → Student Work** |
+| Questions and answers | **FAQ** |
+| Student comments | **Testimonials** |
+| Course words, photographs and curriculum | **Manage Courses → course title** |
+| A lesson and its files | **course → Curriculum → lesson's pencil** |
+| Agreed course prices | **Course Prices** |
+| Coupons, orders or a student's course access | **Coupons**, **Sales** or **Course Access** |
 
-## Shared information
+The names in your account may be title-cased, such as **Content Hub** and **Site-Wide Edit**.
 
-Changing an image uses **Choose image** or **Replace image**. Finish by saving the page;
-choosing a photograph alone does not save it. Clearing a slot never deletes the photograph
-from the media library. The control explains whether clearing restores the original picture
-or leaves the slot empty.
+## Things that update themselves
 
-If saving reports that someone else changed the content, copy your unsaved work, reload and
-compare before editing again. If saving cannot be confirmed, ask the webmaster to check the
-saved version before trying again. Save before opening a related content list. Where offered,
-**View saved page** opens the public page in another tab; it does not show unsaved changes.
+The Home course row, article row, archive pages and filters use your published content.
+You do not need to maintain another copy. [Homepage cards](/homepage-cards) explains the rules.
 
-The contact settings feed several pages and the footer. Change the shared setting once rather than trying to maintain separate copies.
+## Ask Herman for these
 
-Some About fields restore their original text or picture if emptied. If you want one genuinely removed, ask the webmaster. The approved homepage card descriptions can be cleared where the relevant page explains that behaviour.
-
-Published courses, artwork and articles supply parts of the homepage automatically. See [the rest of the homepage](/homepage-cards). A missing section may mean the necessary content has not been published, not that you need access to a design tool.
+Menu changes, page layout, new services, payment-provider setup, refunds, other users'
+accounts and technical repairs are not content-editing tasks. [What stays with Herman](/limits)
+lists the boundary. If a needed editor is missing, ask him to check access.
