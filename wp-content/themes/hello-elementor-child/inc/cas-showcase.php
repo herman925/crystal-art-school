@@ -650,7 +650,7 @@ function cas_showcase_css( $uri ) {
 @media (max-width: 700px) {
   .pol-wall { gap: 26px; padding: 36px 20px 34px; }
   .pol-row { flex-direction: column; align-items: center; gap: 26px; }
-  .pol-tile { width: min(76vw, 300px); padding: 12px 12px 54px; margin: var(--mt, 0) 0 0; }
+  .pol-tile { width: min(100%, 300px); padding: 12px 12px 54px; margin: var(--mt, 0) 0 0; }
   .pol-photo { width: 100%; height: auto; aspect-ratio: 1 / 1; }
   .pol-cap em { font-size: 16px; }
   .pol-tile::before { border-radius: 1px; width: 88px; height: 26px; top: -14px; margin-left: -44px; transform: rotate(-2deg); background: linear-gradient(180deg, rgba(226,209,172,.88), rgba(206,186,146,.82)); box-shadow: 0 2px 5px rgba(0,0,0,.25); border-left: 1px dashed rgba(120,100,70,.35); border-right: 1px dashed rgba(120,100,70,.35); }

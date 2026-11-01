@@ -1,7 +1,7 @@
 /* Nav rules the prototype injected from js/site-nav.js as <style id="cas-nav-style">.
    Moved into a real stylesheet: injecting them from script cost a reflow on every
    page and put them outside the cascade the rest of the design lives in.
-   Desktop disclosure geometry follows the same prototype; mobile adaptation is deferred. */
+   Desktop disclosure geometry follows the same prototype. */
 
 .mode-toggle {
   display: inline-grid;
@@ -145,3 +145,20 @@ body.cas-root {
 /* Mobile keeps the avatar and exposes logout in the menu. */
 .cas-desktop-member { display: none; }
 @media (min-width: 1081px) { .nav-auth .cas-desktop-member { display: inline-flex; } }
+
+/* Keep the last menu link reachable on short phones and landscape screens. */
+@media (max-width: 1080px) {
+  .nav-sheet { overflow-y: auto; overscroll-behavior: contain; }
+}
+
+/* Four touch controls need their space; let the phone logo use the remaining track. */
+@media (max-width: 560px) and (pointer: coarse) {
+  .nav-top .inner { grid-template-columns: minmax(0, 1fr) auto; column-gap: 8px; }
+  .nav-brand { position: static; min-width: 0; min-height: 44px; }
+  .nav-brand img { max-width: 100%; }
+  .nav-auth { grid-column: 2; }
+}
+
+@media (max-width: 1080px) and (pointer: coarse) {
+  .nav-auth .nav-user { min-width: 44px; min-height: 44px; justify-content: center; }
+}

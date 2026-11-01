@@ -127,6 +127,36 @@ async function waitFor(page, predicate) { await page.waitForFunction(predicate);
       assert.equal(await page.evaluate(() => document.documentElement.scrollWidth > innerWidth), false);
       results.push({width, mode, persona: persona.name, passed: true}); console.log('PASS', width, mode, persona.name);await context.close();
     }
+    // Coarse-pointer menus and basket actions stay reachable in short viewports.
+    for (const [width, height] of [[320, 480], [844, 390], [568, 320]]) for (const mode of ['A', 'D']) {
+      const mobile = await browser.newContext({viewport: {width, height}, reducedMotion: 'reduce', isMobile: true, hasTouch: true});
+      const p = await mobile.newPage(); p.setDefaultTimeout(6000); p.on('pageerror', e => errors.push(e.message));
+      await p.goto(base + '/?member=1&theme=' + mode); state.count = 1;
+      for (const selector of ['.nav-brand','.nav-user','.mode-toggle','.cart-btn','.nav-burger']) {
+        const target = await p.locator(selector).boundingBox(); assert(target.width >= 44 && target.height >= 44, selector + ' must remain a touch target');
+      }
+      await p.locator('.nav-burger').tap();
+      const sheet = p.locator('.nav-sheet');
+      assert((await sheet.boundingBox()).y + (await sheet.boundingBox()).height <= height + 1);
+      await sheet.locator('a').last().scrollIntoViewIfNeeded();
+      assert(await sheet.locator('a').last().evaluate(e => {const r=e.getBoundingClientRect();return r.top>=0&&r.bottom<=innerHeight}));
+      await p.keyboard.press('Escape');
+      // A synthetic toolbar exercises the native administrator overlay offset without real account changes.
+      await p.evaluate(() => {const bar=document.createElement('div');bar.id='wpadminbar';bar.style.cssText='position:fixed;top:0;left:0;width:100%;height:46px;z-index:99999';document.body.appendChild(bar);document.body.style.paddingTop='46px'});
+      await p.locator('.cart-btn').tap(); await p.locator('.mc-line').waitFor();
+      const box = await p.locator('.mc-drawer').boundingBox();
+      assert.equal(box.y, 46); assert(box.y + box.height <= height + 1);
+      await p.locator('.mc-drawer').evaluate(e => e.scrollTop=e.scrollHeight);
+      const action = p.locator('.mc-footwrap [data-keep]');
+      await action.scrollIntoViewIfNeeded();
+      assert(await action.evaluate(e => {const r=e.getBoundingClientRect();return r.top>=46&&r.bottom<=innerHeight}));
+      await action.tap(); assert.equal(await p.locator('.mc-drawer').getAttribute('aria-hidden'), 'true');
+      await p.locator('.cart-btn').tap(); await p.locator('.mc-line').waitFor();
+      assert.equal(await p.locator('.mc-drawer').evaluate(e => e.scrollTop), 0);
+      await p.locator('.mc-close').tap(); assert.equal(await p.locator('.mc-drawer').getAttribute('aria-hidden'), 'true');
+      results.push({width, height, mode, persona:'touch-member-toolbar', passed:true});
+      console.log('PASS short touch viewport', width, height, mode); await mobile.close();
+    }
     const context = await browser.newContext({viewport: {width: 390, height: 844}, reducedMotion: 'reduce'});
     const page = await context.newPage(); page.setDefaultTimeout(6000); page.on('pageerror', e => errors.push(e.message));
     await page.goto(base + '/?member=1'); state.count = 1; state.failRead = true;
