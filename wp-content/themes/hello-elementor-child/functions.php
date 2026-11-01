@@ -169,6 +169,15 @@ add_action(
 			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 			'nonce'   => wp_create_nonce( 'cas_cart_count' ),
 		] );
+		wp_enqueue_style( 'cas-cart-drawer', $uri . '/css/cas-cart-drawer.css', [ 'cas-industrial-3' ], filemtime( $dir . '/css/cas-cart-drawer.css' ) );
+		wp_enqueue_script( 'cas-cart-drawer', $uri . '/js/cas-cart-drawer.js', [ 'cas-header', 'cas-site-extras' ], filemtime( $dir . '/js/cas-cart-drawer.js' ), true );
+		wp_localize_script( 'cas-cart-drawer', 'casCartDrawer', [
+			'cartUrl'       => cas_account_cart_url(),
+			'loginUrl'      => cas_account_login_url(),
+			'requiresLogin' => ! is_user_logged_in() && ( ! function_exists( 'tutor_is_guest_checkout_enabled' ) || ! tutor_is_guest_checkout_enabled() ),
+			'removeAction'  => 'tutor_delete_course_from_cart',
+			'removeNonce'   => function_exists( 'tutor' ) ? wp_create_nonce( tutor()->nonce_action ) : '',
+		] );
 	},
 	21
 );

@@ -130,18 +130,26 @@ function cas_render_header() {
 					<?php else : ?>
 						<?php $member = wp_get_current_user(); $first_name = explode( ' ', trim( $member->display_name ) )[0]; $studio = function_exists( 'cas_account_dashboard_url' ) ? cas_account_dashboard_url() : home_url( '/' ); ?>
 						<a class="btn ghost cas-desktop-member" href="<?php echo esc_url( wp_logout_url( home_url( '/' ) ) ); ?>">Log out</a>
-						<a class="nav-user cas-desktop-member" href="<?php echo esc_url( $studio ); ?>" style="text-decoration:none;"><img src="<?php echo esc_url( get_avatar_url( $member->ID, array( 'size' => 64 ) ) ); ?>" alt=""><span class="nm"><?php echo esc_html( $first_name ); ?></span></a>
+						<a class="nav-user" href="<?php echo esc_url( $studio ); ?>" aria-label="My studio" style="text-decoration:none;"><img src="<?php echo esc_url( get_avatar_url( $member->ID, array( 'size' => 64 ) ) ); ?>" alt=""><span class="nm"><?php echo esc_html( $first_name ); ?></span></a>
 					<?php endif; ?>
 					<button class="mode-toggle" type="button" aria-pressed="true" aria-label="Dark mode" title="Light / dark mode">
 						<?php
 						echo cas_header_icon( 'sun' ) . cas_header_icon( 'moon' ); // phpcs:ignore WordPress.Security.EscapeOutput
 						?>
 					</button>
-					<button class="nav-burger" type="button" aria-label="Menu" aria-expanded="false">☰</button>
+					<button class="nav-burger" type="button" aria-label="Menu" aria-expanded="false" aria-controls="cas-mobile-nav">☰</button>
 				</div>
 			</div>
 		</div>
-		<div class="nav-sheet"><?php echo strip_tags( $sheet, '<a>' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></div>
+		<div class="nav-sheet" id="cas-mobile-nav" aria-hidden="true" inert>
+			<?php echo strip_tags( $sheet, '<a>' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+			<?php if ( is_user_logged_in() ) : ?>
+				<a href="<?php echo esc_url( $studio ); ?>">My studio</a>
+				<a href="<?php echo esc_url( wp_logout_url( home_url( '/' ) ) ); ?>">Log out</a>
+			<?php else : ?>
+				<a href="<?php echo esc_url( function_exists( 'cas_account_login_url' ) ? cas_account_login_url() : wp_login_url() ); ?>"><?php echo get_option( 'users_can_register' ) ? 'Log in / Sign up' : 'Log in'; ?></a>
+			<?php endif; ?>
+		</div>
 	</nav>
 	<?php
 
