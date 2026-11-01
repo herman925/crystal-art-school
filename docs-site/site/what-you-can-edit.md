@@ -8,6 +8,7 @@ Start from **Content Hub**. Choose the page you want to change, then its editing
 | Home's Gallery card picture | **Edit Home → Gallery Image** |
 | Biography and portrait | **About → Edit About** |
 | Photograph strips on About | **About → About Photos** |
+| Your certificates, captions, order and pinned highlight | **About → Certificates** |
 | Logo, signatures, contact email and social links | **Site-Wide Edit** |
 | Blog introduction or articles | **Blog** |
 | Free-video introductions or films | **Free Videos** |

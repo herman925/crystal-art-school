@@ -25,6 +25,7 @@ export default defineConfig({
         { text: 'Homepage banner', link: '/home-hero' },
         { text: 'Homepage cards', link: '/homepage-cards' },
         { text: 'About page', link: '/about-page' },
+        { text: 'Your certificates and honours', link: '/certificates' },
         { text: 'Logo, signature and contact', link: '/brand-and-contact' },
         { text: 'Gallery and Etsy links', link: '/gallery' },
         { text: 'Student work', link: '/showcase' },

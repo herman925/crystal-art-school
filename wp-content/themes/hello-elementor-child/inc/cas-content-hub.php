@@ -186,8 +186,9 @@ function cas_content_hub_cards() {
 			'items' => array(
 				$item( 'Edit About: opening paragraph, quotation, essays and portrait', admin_url( 'admin.php?page=cas-content-about-page' ), CAS_CONTENT_HUB_CAP ),
 				cas_content_hub_list_item( 'Carousel photos: live drawing, exhibitions and Artful Living', 'cas_about_photo' ),
+				cas_content_hub_list_item( 'Certificates: scans, honour wording, captions, order and pinned highlight', 'cas_certificate' ),
 			),
-			'muted' => 'Layout and the honours table: ask the webmaster.',
+			'muted' => 'Page layout: ask the webmaster.',
 		),
 		array(
 			'name'  => 'Free videos',

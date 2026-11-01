@@ -15,6 +15,7 @@ Start from **Content Hub**, even if you currently see extra administrator menus.
 | Change the homepage banner | [Homepage banner](/home-hero) |
 | Change Home's other pictures or words | [Homepage cards](/homepage-cards) |
 | Update your biography or About photographs | [About page](/about-page) |
+| Add a certificate or choose its highlighted position | [Certificates and honours](/certificates) |
 | Edit a course or its five photographs | [Courses](/courses) |
 | Edit a lesson or add notes and reference photos | [Lessons and files](/lessons) |
 | Add a painting and its Etsy link | [Gallery](/gallery) |

@@ -9,6 +9,7 @@
 function cas_content_editor_load() {
 	$modules = array(
 		'cas-content-role',
+		'cas-certificates',
 		'cas-customizer-allowlist',
 		'cas-content-ui',
 		'cas-content-management',

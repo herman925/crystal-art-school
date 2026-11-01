@@ -1,5 +1,14 @@
 # Editability register — Crystal Art School
 
+**2026-11-01 certificate decision (#233):** The owner explicitly wants Crystal to upload
+and replace her About certificate scans, edit their year/wording/captions, reorder them,
+and choose a single pinned highlight. This supersedes the default-closed certificate
+recommendations and U1(c)/U2 discussion below. The implementation uses the native
+Certificates list under Content Hub → About; own-record authority remains in the content
+role, and no administrator capability or real-account role change is part of this work.
+The existing masked scan and the source wording are preserved on import. The two fixed
+credential-summary cards are outside this certificate-editor scope.
+
 **2026-11-01 delivery clarification:** The dated source-only paragraphs below are historical.
 The five unified editing forms and original 42 settings are now merged/deployed; the later
 owner-approved Home artwork choice and testimonial limit bring that fixed-editor scope to

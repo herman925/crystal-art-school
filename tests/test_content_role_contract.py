@@ -48,7 +48,7 @@ class ContentRoleContract(unittest.TestCase):
 
     def test_allowlist_names_the_approved_content_types(self):
         allow = block("const CAS_CONTENT_POST_TYPES")
-        for slug in ["post", "attachment", "cas_artwork", "cas_showcase", "cas_free_video", "cas_about_photo",
+        for slug in ["post", "attachment", "cas_artwork", "cas_showcase", "cas_free_video", "cas_about_photo", "cas_certificate",
                      "cas_faq", "cas_testimonial", "cas_overview_qa"]:
             self.assertIn(f"'{slug}'", allow)
 

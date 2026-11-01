@@ -78,13 +78,13 @@ switches to yours — so add a set in one go rather than one at a time.
 
 There are three strips and they cannot be added to or renamed. What goes in them is yours.
 
-## Still fixed
+## Certificates and honours
 
-**The awards and certificates.** Every row of that table, the scans and their captions are
-not editable from the dashboard. Two reasons: they are public claims about your credentials,
-and one of the scans is deliberately blurred to hide personal details. An open editing box
-there is an easy way to publish something unchecked, or to replace the blurred scan with the
-original by accident. Send changes to the site administrator.
+Use **Content Hub → About → Certificates** to add or replace a scan, edit its year,
+wording and caption, set its Order, and choose **Pin to top** for the large highlight.
+Follow [Your certificates and honours](/certificates) for the steps.
+
+## Still fixed
 
 **Section headings, the greeting and the buttons.** Part of the design.
 

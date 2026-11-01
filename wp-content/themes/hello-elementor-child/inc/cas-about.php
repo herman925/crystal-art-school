@@ -16,11 +16,11 @@
  *           them — they are AboutMe.docx word for word. And every photograph: the
  *           portrait in the same panel, the three carousel sets as an About photos post
  *           type, because a set of photographs grows and a fixed slot cannot.
- *   CLOSED  the honours table, its captions and the two credential cards beside it. Those
- *           are claims about her that an earlier build INVENTED and that had to be removed,
- *           and the published 2016 scan is deliberately pixelated. An upload field over
- *           that mount is an upload field over the mask. Opening them needs a decision
- *           that says so in writing, not an inference from this one.
+ *   OPEN    certificate scans, honour wording, captions, order and the pinned highlight,
+ *           through Certificates. The owner's 2026-11-01 instruction explicitly opens
+ *           these controls and supersedes the earlier default-closed interpretation.
+ *           Existing published scans, including the masked copy, are preserved on import.
+ *   CLOSED  the two fixed credential-summary cards beside the honours section.
  *
  * Section headings, eyebrows, card titles, button labels and the order of the page stay in
  * code either way. Every editable photograph lands in a fixed-ratio frame filled with object-fit:
@@ -535,7 +535,7 @@ INSTRUCTOR_HTML,
 		'cas_about_highlights_lead' => [
 			'label'   => 'A glimpse into the journey &mdash; opening line',
 			'type'    => 'inline',
-			'desc'    => 'The sentence under that heading, above the two cards. The honours table below it is fixed.',
+			'desc'    => 'The sentence under that heading, above the two cards. The honours table below is managed in Certificates.',
 			'default' => 'To give you complete confidence in learning with me, here is a glimpse into my journey as an artist and educator.',
 		],
 		'cas_about_philosophy_body' => [
@@ -673,7 +673,7 @@ add_action(
 				'title'       => 'About',
 				'panel'       => 'cas_pages',
 				'priority'    => 40,
-				'description' => 'Your own words and your portrait. The section headings, the buttons and the order of the page are part of its design and are not edited here. The three photo carousels are edited under <strong>Dashboard &rarr; About photos</strong>. The honours and certificates are fixed &mdash; ask Herman to change anything there. <strong>Leaving a box empty puts the wording it shipped with back</strong>, so an empty box is never how you delete a paragraph.',
+				'description' => 'Your own words and your portrait. The section headings, the buttons and the order of the page are part of its design and are not edited here. The three photo carousels are edited under <strong>Dashboard &rarr; About photos</strong>. Manage honour wording, scans, captions, order and the highlighted scan under <strong>Certificates</strong>. <strong>Leaving a box empty puts the wording it shipped with back</strong>, so an empty box is never how you delete a paragraph.',
 			]
 		);
 
@@ -961,6 +961,7 @@ function cas_render_about() {
 			   more exposed half for being indexable text rather than pixels. The unmasked
 			   original is in her assets folder, which is never committed. */
 			?>
+			<?php if ( get_option( CAS_CERTIFICATE_READY ) ) { cas_about_certificates_render(); } else { /* Legacy fallback until the existing rows are imported. */ ?>
 			<div class="cert-highlight" id="cert-highlight" hidden></div>
 			<div class="cert-split">
 				<div class="cert-list" id="cert-list" role="group" aria-label="International honours and certificates"></div>
@@ -1031,6 +1032,7 @@ function cas_render_about() {
 			</div><!-- /.cert-split -->
 			<?php /* inline, not a class: a new class with no rule behind it is dead CSS. */ ?>
 			<p style="margin:14px 0 0;font-size:13px;line-height:1.6;color:var(--muted);max-width:70ch;">Four of the dated rows are Crystal&rsquo;s honours. The <strong>2016 exhibition poster</strong> is the printed poster for the show listed above it &mdash; it is not an award. The rows marked <strong>Demo</strong> are layout scaffolding &mdash; they show the table scrolling past its five visible rows and how a landscape, portrait or square scan fits the same mount. They are not awards and will be removed before launch.</p>
+			<?php } ?>
 		</div><!-- /.card -->
 	</section>
 

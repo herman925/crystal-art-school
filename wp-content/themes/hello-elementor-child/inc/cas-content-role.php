@@ -22,6 +22,7 @@ const CAS_CONTENT_POST_TYPES = array(
 	'cas_showcase',
 	'cas_free_video',
 	'cas_about_photo',
+	'cas_certificate',
 	'cas_faq',
 	'cas_testimonial',
 	'cas_overview_qa',
