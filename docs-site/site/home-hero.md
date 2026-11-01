@@ -24,6 +24,28 @@ something close to that shape gives the best result.
 
 ## Save and view
 
+<figure class="guide-walkthrough" aria-labelledby="home-save-visual">
+  <figcaption id="home-save-visual">Choose → save → check</figcaption>
+  <p class="guide-walkthrough-note">A simplified illustration. Use these controls on the Edit Home page.</p>
+  <ol>
+    <li>
+      <strong>1. Choose the photograph</strong>
+      <span class="guide-control">Choose Image / Replace Image</span>
+      <p>The selected picture appears in its slot. It is still unsaved.</p>
+    </li>
+    <li>
+      <strong>2. Save your changes</strong>
+      <span class="guide-control guide-control-primary">Save Home</span>
+      <p>This saves all three slides and the other Home fields together.</p>
+    </li>
+    <li>
+      <strong>3. Check the result</strong>
+      <span class="guide-control">View saved page ↗</span>
+      <p>A new tab shows the saved page. Check it at wide and narrow widths.</p>
+    </li>
+  </ol>
+</figure>
+
 Choose or replace each intended image, then press **Save Home**. Choosing an image alone
 does not save it. This button also saves the other fields on the Home editing page.
 
