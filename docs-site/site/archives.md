@@ -11,8 +11,8 @@ one is to change the articles.
 | What decides it | Where |
 |---|---|
 | Which articles appear, and their titles, pictures and topics | **Posts** |
-| Which topic an article is filed under | Choose an existing Category in the article editor; request a new topic from Herman |
-| How many articles fit on one page before it splits in two | Ask Herman; this is not a content-account setting |
+| Which topic an article is filed under | Choose an existing Category in the article editor; request a new topic from the site administrator |
+| How many articles fit on one page before it splits in two | Ask the site administrator; this is not a content-account setting |
 
 The headings, the Newer and Older buttons and the "nothing here yet" wording are part of the
 design.
@@ -21,7 +21,7 @@ design.
 
 The author page reached from an article's byline uses the public display name on your account.
 
-Open your own profile from your name in the dashboard and find **Display name publicly as**. Choose the name you want readers to see. This changes your byline across articles; it does not provide access to other people's accounts. If the control is unavailable, ask Herman.
+Open your own profile from your name in the dashboard and find **Display name publicly as**. Choose the name you want readers to see. This changes your byline across articles; it does not provide access to other people's accounts. If the control is unavailable, ask the site administrator.
 
 ## Three gaps worth knowing about
 
@@ -30,6 +30,6 @@ by hand, but nothing on the page invites it. Adding one is a design change rathe
 correction, so say if you would like it.
 
 **Search finds ordinary pages too**, not only articles. Searching "log" returns the Log in
-page alongside any matching articles. Herman is aware.
+page alongside any matching articles. The site administrator is aware.
 
-**A page-not-found message** means a visitor followed an unavailable or mistyped address. Send the broken link to Herman; do not delete another page to try to repair it.
+**A page-not-found message** means a visitor followed an unavailable or mistyped address. Send the broken link to the site administrator; do not delete another page to try to repair it.

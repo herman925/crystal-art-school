@@ -1,6 +1,6 @@
 # Prices, orders and student access
 
-Use these tools after Herman completes your account handover. They are separate because
+Use these tools after the site administrator completes your account handover. They are separate because
 they change different things.
 
 | Your task | Use | Important difference |
@@ -17,8 +17,8 @@ they change different things.
 3. Read the review screen before confirming.
 4. Confirm once, then check the fresh saved result.
 
-If the result is unclear, stop and [ask Herman](/money-help). A second change can make
+If the result is unclear, stop and [ask the site administrator](/money-help). A second change can make
 an uncertain result harder to resolve.
 
-Payment-provider settings, tax setup, refunds and bank disputes stay with Herman. These
+Payment-provider settings, tax setup, refunds and bank disputes stay with the site administrator. These
 instructions do not open payments or registration, and example amounts are not approved prices.

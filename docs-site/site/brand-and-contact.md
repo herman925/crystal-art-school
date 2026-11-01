@@ -34,4 +34,4 @@ These four values feed the footer of every page, the FAQ page, the About page an
 homepage strip. One change updates all of them.
 
 Clearing a value can leave its icon or button visible with an empty destination. It does not
-reliably hide the link. Ask Herman if you want a contact channel removed.
+reliably hide the link. Ask the site administrator if you want a contact channel removed.

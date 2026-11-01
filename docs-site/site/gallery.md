@@ -23,7 +23,7 @@ The Gallery's **Newest** and **Oldest** choices sort by publication date, newest
 oldest first respectively. For paintings with the same publication date, lower Order numbers
 come first.
 
-Reuse the sidebar’s existing media/type suggestions to keep spellings consistent. Ask Herman
+Reuse the sidebar’s existing media/type suggestions to keep spellings consistent. Ask the site administrator
 if a label needs renaming across many entries. The artwork list
 also has **Newest First** and **Oldest First** buttons for publication-date sorting.
 

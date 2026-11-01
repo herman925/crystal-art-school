@@ -30,7 +30,7 @@ Obtain permission before publishing a credit or photograph; having an account is
 
 The ten pieces prefixed **Demo —** use the prototype photographs and the registered **Demo Student** credit. They are demonstration content added at the owner’s request, rather than student submissions. They remain published for review by agreement; their launch treatment will be agreed separately.
 
-Reuse the sidebar’s existing medium suggestions. Ask Herman if a label needs renaming
+Reuse the sidebar’s existing medium suggestions. Ask the site administrator if a label needs renaming
 across several entries.
 
 ## Medium builds the filter buttons

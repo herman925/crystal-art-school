@@ -31,7 +31,7 @@ a photograph from the media library.
 
 Keep the Free videos description short. It appears when a visitor points at the card and remains visible on a phone. Clearing that approved description leaves the card's fixed title.
 
-If a photograph changes, tell Herman if its written description for screen-reader users also needs updating.
+If a photograph changes, tell the site administrator if its written description for screen-reader users also needs updating.
 
 ## Shared contact links
 
@@ -50,13 +50,13 @@ The card follows the selected artwork’s Featured Image. If that artwork is wit
 
 The article row uses the **six newest published articles with a Featured Image**. An article without a picture is skipped. If none qualify, the entire row is hidden. Manage these through **Content Hub → Blog → Manage Posts**; there is no separate Home post selector.
 
-The TOOLS square links to articles filed under Tools. Assign an existing category in the article editor. If the topic is unavailable, request it from Herman rather than opening category-management settings.
+The TOOLS square links to articles filed under Tools. Assign an existing category in the article editor. If the topic is unavailable, request it from the site administrator rather than opening category-management settings.
 
 ## If something is missing
 
 A section that depends on published content can be absent when nothing suitable has been published. Check the relevant course, artwork or article and its picture first; do not change unrelated settings to make it appear.
 
-If an expected panel or editing link is missing, send Herman the page and intended change.
+If an expected panel or editing link is missing, send the site administrator the page and intended change.
 
 ## Student Comment Limit
 

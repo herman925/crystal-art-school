@@ -18,7 +18,7 @@ to one course or one person.
 **A 100% percentage code makes the course free.** Tick its separate confirmation only
 when that is intended. A large fixed discount can also remove the amount due on a cheaper course.
 
-Dates use YYYY-MM-DD. Ask Herman to check an exact time-zone/cut-off promise before advertising it.
+Dates use YYYY-MM-DD. Ask the site administrator to check an exact time-zone/cut-off promise before advertising it.
 
 ## End or change an offer
 
@@ -27,4 +27,4 @@ deactivate it if it must stop being offered. This does not refund past orders or
 access already granted.
 
 If the save result is unclear, check the list before doing anything else. Do not submit
-again or create a replacement code until Herman has checked the first result.
+again or create a replacement code until the site administrator has checked the first result.

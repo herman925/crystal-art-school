@@ -1,12 +1,12 @@
 # What to prepare before launch
 
-Send these to Herman as they become ready. You do not need to finish everything at once.
+Send these to the site administrator as they become ready. You do not need to finish everything at once.
 
 ## Your course content
 
 - Confirm the title and price of each course in one list.
 - Supply the notes and reference photographs, labelled with the course/lesson they belong to.
-- Review the course pages and tell Herman anything that should change.
+- Review the course pages and tell the site administrator anything that should change.
 
 ## Business and payment information
 
@@ -15,8 +15,8 @@ Send these to Herman as they become ready. You do not need to finish everything 
 - Obtain your adviser's written answers on the applicable tax treatment and purchase/cancellation wording.
 - Provide the agreed purchase terms, privacy policy and member terms.
 
-Arrange a suitable way to share documents with Herman. Do not send login details or card information.
-Herman handles the technical setup and verifies payment and email behaviour before opening the site.
+Arrange a suitable way to share documents with the site administrator. Do not send login details or card information.
+The site administrator handles the technical setup and verifies payment and email behaviour before opening the site.
 
 ## Other decisions
 

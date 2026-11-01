@@ -48,7 +48,7 @@ export default defineConfig({
       ] },
       { text: 'Help and preparation', items: [
         { text: 'If something is not working', link: '/help' },
-        { text: 'What stays with Herman', link: '/limits' },
+        { text: 'What stays with the site administrator', link: '/limits' },
         { text: 'Request a menu change', link: '/menu' },
         { text: 'Pages that fill themselves', link: '/archives' },
         { text: 'What to prepare before launch', link: '/before-launch' }

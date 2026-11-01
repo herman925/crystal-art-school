@@ -15,10 +15,10 @@ selected course's active enrolments; it keeps the student account and cancelled 
 Do not use it just to make an order or payment label look right.
 
 Staff accounts are not valid targets. If access has changed since review, start with a
-fresh review. If the result is unclear, [ask Herman](/money-help) before another attempt.
+fresh review. If the result is unclear, [ask the site administrator](/money-help) before another attempt.
 
 ## Refund or bank-dispute request
 
-Send Herman the order number and the student's report. He handles the payment and checks
+Send the site administrator the order number and the student's report. The site administrator handles the payment and checks
 access separately. Do not remove access automatically, refund in a payment dashboard or
 borrow an administrator login. Another valid purchase/grant may still give access.

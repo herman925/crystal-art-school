@@ -1,4 +1,4 @@
-# What stays with Herman
+# What stays with the site administrator
 
 Your editing tools let you maintain content while keeping the site's structure consistent.
 You do not need access to every WordPress menu to do that work.
@@ -12,7 +12,7 @@ You do not need access to every WordPress menu to do that work.
 - Other users' accounts, plugins, technical repairs and backups.
 - Awards/certificate scans and wording that needs checking before publication.
 
-Tell Herman what visitors should see and on which page. He can check the change across
+Tell the site administrator what visitors should see and on which page. They can check the change across
 phone and desktop layouts.
 
 ## The tools that are yours

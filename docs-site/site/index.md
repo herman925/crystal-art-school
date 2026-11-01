@@ -35,5 +35,5 @@ separate save buttons. [Saving and publishing](/editing-basics) explains the dif
 
 ## If you get stuck
 
-Keep your unsaved words, note the page and exact message, and [send them to Herman](/help).
-If something you expect to edit is missing, ask him to check access before creating another copy.
+Keep your unsaved words, note the page and exact message, and [send them to the site administrator](/help).
+If something you expect to edit is missing, ask the site administrator to check access before creating another copy.

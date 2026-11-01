@@ -1,7 +1,7 @@
 # What students see
 
 This page helps you recognise a student's journey. The login, basket, checkout and dashboard
-layouts are maintained by Herman.
+layouts are maintained by the site administrator.
 
 ## Buying and learning
 
@@ -22,7 +22,7 @@ access correction. A completed order, a recorded payment and course access are s
 states; a 100% coupon can produce a completed order with £0 due.
 
 A saved order is not proof that a receipt email reached the student. If payment, access or
-email delivery is unclear, collect the order number and [ask Herman](/help).
+email delivery is unclear, collect the order number and [ask the site administrator](/help).
 
-Registration, live payments and email opening checks stay with Herman. Keep the account
+Registration, live payments and email opening checks stay with the site administrator. Keep the account
 pages in place; they are not ordinary content pages to rename or delete.

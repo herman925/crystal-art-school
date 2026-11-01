@@ -31,18 +31,18 @@ New regular **68**, New sale **52**. These are example amounts only.
 4. Reload the saved course in Tutor, check it, and publish separately when ready.
 
 Setting a price does not publish the course. If the price saved but publishing is refused,
-keep the draft and ask Herman; do not set the first price again.
+keep the draft and ask the site administrator; do not set the first price again.
 
 ## Entering amounts
 
 - Use numbers such as **60** or **60.50**, without £ signs or commas.
 - Regular must be above zero. Sale must be lower than Regular.
 - For no sale, leave Sale empty. Do not enter 0, a dash or the word “none”. A displayed dash means leave that confirmation box empty.
-- Prices use GBP. Ask Herman if a different currency appears.
+- Prices use GBP. Ask the site administrator if a different currency appears.
 
 Confirmations expire after ten minutes. If the current price changed, or a confirmation
 expired/was already used, check a fresh list before preparing another review.
 
 A successful published-price change takes effect now; it does not schedule a sale end or
 rewrite old orders. Check a fresh basket afterwards. If saving or restoration is unclear,
-[stop and ask Herman](/money-help) rather than typing the old amount back.
+[stop and ask the site administrator](/money-help) rather than typing the old amount back.

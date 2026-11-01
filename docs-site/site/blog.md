@@ -20,7 +20,7 @@ is two clicks instead of hunting for a layout block.
 Every article carries a topic — the ribbon down the side of the featured card, the small
 label on each card in the list, and the row of filter buttons above them.
 
-Choose an existing **Category** in the article editor. Request a new topic from Herman; the limited content account does not provide category-management screens.
+Choose an existing **Category** in the article editor. Request a new topic from the site administrator; the limited content account does not provide category-management screens.
 
 Two cautions:
 

@@ -37,4 +37,4 @@ Avoid **Delete permanently** when the same upload is used elsewhere.
 ## A save did not give a clear result
 
 Do not press Save repeatedly. Open the saved page or a fresh list to check what happened.
-Keep any unsaved words before reloading. If the result is still unclear, [ask Herman](/help).
+Keep any unsaved words before reloading. If the result is still unclear, [ask the site administrator](/help).

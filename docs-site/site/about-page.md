@@ -22,7 +22,7 @@ Each box already contains what is on the site now, so you can read it and change
 want rather than starting from a blank page.
 
 Use **Text** for paragraphs and **Header** for section headings in the format menu.
-A blank line separates paragraphs. Keep unfamiliar existing formatting and ask Herman if
+A blank line separates paragraphs. Keep unfamiliar existing formatting and ask the site administrator if
 you are unsure how to change it.
 
 ## One thing that will surprise you
@@ -33,7 +33,7 @@ also restores the original picture when saved. It does not delete an uploaded ph
 
 This was built to stop a blank space appearing on a live page, but it does mean "delete
 this" is not something these boxes can do. If you want a paragraph gone rather than
-replaced, ask Herman.
+replaced, ask the site administrator.
 
 ## The portrait
 
@@ -63,8 +63,8 @@ There are three strips and they cannot be added to or renamed. What goes in them
 not editable from the dashboard. Two reasons: they are public claims about your credentials,
 and one of the scans is deliberately blurred to hide personal details. An open editing box
 there is an easy way to publish something unchecked, or to replace the blurred scan with the
-original by accident. Send changes to Herman.
+original by accident. Send changes to the site administrator.
 
 **Section headings, the greeting and the buttons.** Part of the design.
 
-**The teaching-philosophy writing and welcome cards near the bottom** are not available in the current editing controls. Send the proposed wording to Herman for a reviewed change.
+**The teaching-philosophy writing and welcome cards near the bottom** are not available in the current editing controls. Send the proposed wording to the site administrator for a reviewed change.

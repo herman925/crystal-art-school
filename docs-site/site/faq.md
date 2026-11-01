@@ -6,7 +6,7 @@
 - The **body** is the answer. Bold, links and lists all work.
 - **Page attributes → Order** sets the position. Lower numbers come first.
 
-Manage the entries available to your account. The FAQ page shows published entries. If an expected question is missing, ask Herman to check access rather than creating a duplicate.
+Manage the entries available to your account. The FAQ page shows published entries. If an expected question is missing, ask the site administrator to check access rather than creating a duplicate.
 
 ## Answers that are not yours to guess
 
@@ -20,7 +20,7 @@ Six subjects need a definite, checked answer rather than a reasonable-sounding o
 - what happens when a payment fails
 
 Whatever is typed into an FAQ entry becomes the site's promise about these, and a student
-can hold you to it. Confirm the wording with Herman before publishing changes to those six.
+can hold you to it. Confirm the wording with the site administrator before publishing changes to those six.
 
-Use the currently agreed wording. If a policy needs changing, ask Herman to check it
+Use the currently agreed wording. If a policy needs changing, ask the site administrator to check it
 before publishing a new promise.

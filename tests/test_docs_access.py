@@ -112,5 +112,6 @@ class GuideAccess(unittest.TestCase):
                 self.assertNotIn('CAS_AUDIT_EXPECTED_ADMINS', text, str(path))
                 self.assertNotIn('Administrator operating notes', text, str(path))
                 self.assertNotIn('/admin/handover', text, str(path))
+                self.assertNotIn('Herman', text, str(path))
 
 if __name__ == '__main__': unittest.main(verbosity=2)

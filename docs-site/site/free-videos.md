@@ -16,7 +16,7 @@ Choose the film list and add an entry, or open an entry available to your accoun
 | **Video link** | The film to play |
 | **Page attributes → Order** | Position in its row, lowest first |
 
-If a film is not available to your account, ask Herman to check access rather than making a duplicate.
+If a film is not available to your account, ask the site administrator to check access rather than making a duplicate.
 
 ## The three rows
 
@@ -26,17 +26,17 @@ If a film is not available to your account, ask Herman to check access rather th
 | Quick inspiration & bite-sized tips | Wide | Short tips |
 | Shorts | Tall | Phone-shaped clips |
 
-Choose the section from the available list. The row shapes and headings are fixed; request a change from Herman if needed.
+Choose the section from the available list. The row shapes and headings are fixed; request a change from the site administrator if needed.
 
 The featured film near the top is drawn from the step-by-step demos. Check the published page after changing order or publication dates.
 
 ## The video link
 
-Use a suitable YouTube page, Shorts or youtu.be address, or the video link/reference supplied by Herman for a film already hosted for this site. Do not paste a password or a private account-management link.
+Use a suitable YouTube page, Shorts or youtu.be address, or the video link/reference supplied by the site administrator for a film already hosted for this site. Do not paste a password or a private account-management link.
 
-This box does not upload a new film. For a new video file or a replacement, ask Herman to arrange hosting first, then update the approved film reference. Do not assume an upload tool has been added to the site.
+This box does not upload a new film. For a new video file or a replacement, ask the site administrator to arrange hosting first, then update the approved film reference. Do not assume an upload tool has been added to the site.
 
-If the link is empty or cannot be played, check the card and player before directing visitors to it. Ask Herman if the intended film does not open; do not try unrelated account settings.
+If the link is empty or cannot be played, check the card and player before directing visitors to it. Ask the site administrator if the intended film does not open; do not try unrelated account settings.
 
 ## Cover photographs
 
@@ -50,7 +50,7 @@ The introduction link opens the opening line and the three row introductions tog
 Use its **Save** button to save all four fields. Clearing one removes that paragraph.
 Related links open the film list and the saved public page; save before opening another editor.
 
-If an introduction contains a course link, leave its destination unchanged unless an agreed change is being made. Ask Herman to change a destination you cannot edit safely.
+If an introduction contains a course link, leave its destination unchanged unless an agreed change is being made. Ask the site administrator to change a destination you cannot edit safely.
 
 ## Check what is published
 

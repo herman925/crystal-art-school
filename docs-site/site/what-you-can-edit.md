@@ -27,8 +27,8 @@ The names in your account may be title-cased, such as **Content Hub** and **Site
 The Home course row, article row, archive pages and filters use your published content.
 You do not need to maintain another copy. [Homepage cards](/homepage-cards) explains the rules.
 
-## Ask Herman for these
+## Ask the site administrator for these
 
 Menu changes, page layout, new services, payment-provider setup, refunds, other users'
-accounts and technical repairs are not content-editing tasks. [What stays with Herman](/limits)
-lists the boundary. If a needed editor is missing, ask him to check access.
+accounts and technical repairs are not content-editing tasks. [What stays with the site administrator](/limits)
+lists the boundary. If a needed editor is missing, ask the site administrator to check access.

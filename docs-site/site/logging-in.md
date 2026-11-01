@@ -7,21 +7,21 @@
 3. Open **Content Hub**. It groups editing tasks by website page.
 
 Your editing account is intended for your content, courses and the agreed price/order tools.
-Design, plugins, payment-provider settings and other people's accounts stay with Herman.
+Design, plugins, payment-provider settings and other people's accounts stay with the site administrator.
 If you still see extra administrator menus while handover is being prepared, use Content Hub.
 
-If a course or entry is missing, ask Herman to check its ownership. Do not create a duplicate
+If a course or entry is missing, ask the site administrator to check its ownership. Do not create a duplicate
 to get around an access message.
 
 ## Lost website password
 
 Use **Lost your password?** on the website's sign-in page. Check your email and spam folder.
-If no message arrives, tell Herman rather than using someone else's login.
+If no message arrives, tell the site administrator rather than using someone else's login.
 
 ## This guide has its own login
 
 The guide at **docs.crystalau.com** is a separate site. Its username and password are the
-ones supplied for the guide, not necessarily your WordPress login. Ask Herman if you lose
+ones supplied for the guide, not necessarily your WordPress login. Ask the site administrator if you lose
 the guide password; the website password-reset form does not reset it.
 
 ## Sign out
