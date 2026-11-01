@@ -55,10 +55,11 @@ def main() -> None:
     require(lesson, "<?php if ( $files ) : ?>\n\t\t\t\t<div class=\"curr-card materials-card\" id=\"materials-card\">", "the materials card must be hidden when there are no files")
     forbid(lesson, "still to be supplied", "owner-facing placeholder copy must not reach a student")
 
-    # Nothing from the prototype's demo copy is invented.
+    # The owner approved only this teaching quote on 2026-11-01; other demo copy stays excluded.
     code = re.sub(r"/\*.*?\*/", "", lesson, flags=re.S)  # the docblocks explain what was left out
     require(code, "'Taught by'    => 'Crystal Lau'", "the fixed known teacher fact must match the prototype")
-    for demo in ("Take it slowly", "Share your skies", "You painted the whole sky"):
+    require(code, '"Take it slowly. The paint dries at its own speed, and so do we." — Crystal', "the approved fixed teaching quote must match the prototype")
+    for demo in ("Share your skies", "You painted the whole sky"):
         forbid(code, demo, "demo copy must not be shipped: " + demo)
 
     # Tour: empty override, plus the new-student flag.
