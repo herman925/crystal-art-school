@@ -1,5 +1,16 @@
 # Editability register — Crystal Art School
 
+**2026-11-01 delivery clarification:** The dated source-only paragraphs below are historical.
+The five unified editing forms and original 42 settings are now merged/deployed; the later
+owner-approved Home artwork choice and testimonial limit bring that fixed-editor scope to
+44. See [CMS follow-up](CMS-CONTROLS-2026-10-31.md) and [current handoff](HANDOFF.md).
+The lesson-owned description/cover rendering is also deployed. Current main records native
+administrator checks for the later course-gallery/lesson-detail controls; restricted-role
+workflows and full client handover remain open. This does not recalculate the historical
+284-row register or imply that every field/workflow has client acceptance.
+The [desktop parity release](DESKTOP-PROTOTYPE-PARITY-2026-11-01.md) changes presentation,
+not authoring authority or the approved content/design boundary.
+
 **2026-10-31 Route B source integration (untested, undeployed):** The existing 42 allowlisted
 settings from PR #201 are composed into Home (24), About (6), Blog (1), Free Videos (4) and
 Site details (7). Each combined page saves all of its fields together through the existing

@@ -1533,3 +1533,5 @@ body .mc-btn.primary, body .ck-btn.primary {
 
 /* Course introduction follows the same container edge as the signature above. */
 .post-type-archive-courses .page-lead-wrap .page-lead { max-width: none; width: 100%; }
+
+@media (min-width: 861px) { .cas-faq-main { padding-top: 26px; } .cas-faq-followup { padding-bottom: 70px; } }

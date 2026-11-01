@@ -88,3 +88,10 @@
    of its own metadata. Same lift, same 104px, applied wherever the facts are
    permanently shown. Belongs at css/industrial-2.css:259-262. */
 @media (hover: none) { .rel-title { bottom: 104px; } }
+/* The reference keeps this signature-to-hero gap at every viewport width. */
+.pg-section.cas-home-hero { padding-top: 32px; }
+@media (min-width: 861px) {
+  body.home .pg-wrap { max-width: 1216px; }
+  body.home .gallery-tile.cas-gallery-sized { aspect-ratio: auto; }
+  body.home .gallery-tile .gt-veil { background: linear-gradient(180deg, rgba(28,22,16,.18) 0%, rgba(28,22,16,.34) 55%, rgba(28,22,16,.66) 100%); text-shadow: 0 2px 12px rgba(0,0,0,.6); }
+}

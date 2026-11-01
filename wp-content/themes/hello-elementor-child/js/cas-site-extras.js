@@ -466,10 +466,11 @@
    real sessions and Tutor has a real dashboard; this would put a fake logged-in chip
    over a real logged-out site.
 
-   The mini-cart drawer, .cart-badge counting and the Apprentice / Fellow tier picker —
+   The prototype's cart persistence and the Apprentice / Fellow tier picker —
    a localStorage cart under key `cas-cart`, priced by multiplying by 1.8. Tutor LMS
-   native eCommerce owns the cart, and js/cas-header.js already renders the badge.
-   Reviving this would give the site two carts that do not know about each other.
+   native eCommerce owns the cart. cas-header.js renders its badge and
+   cas-cart-drawer.js presents its current contents using the prototype's drawer.
+   Restoring the prototype's storage would create two unrelated carts.
    (It also means nothing on the WordPress side emits [data-add-to-cart][data-tiered],
    which is confirmed: that attribute pair appears nowhere in inc/.)
 
@@ -484,8 +485,8 @@
 
    watchTheme() / syncTheme() / stamp() — kept the cart drawer and cookie bar on the
    same [data-theme] as .cas-root, because the prototype appended them to <body>,
-   outside the themed wrapper. Here .cas-root IS <body>, and neither of those two
-   elements is ported, so there is nothing left outside the themed subtree to stamp.
+   outside the themed wrapper. Here .cas-root IS <body>, so the native cart drawer
+   inherits the active theme without a separate observer or attribute writes.
 
    curTheme() — js/cas-header.js already reads and writes the theme, on the body.
    ------------------------------------------------------------------------------ */

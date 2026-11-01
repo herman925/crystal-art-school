@@ -32,7 +32,7 @@ function cas_checkout_is_step() {
 add_action(
 	'wp_enqueue_scripts',
 	function () {
-		if ( 'checkout' !== cas_account_current_key() ) {
+		if ( ! in_array( cas_account_current_key(), array( 'cart', 'checkout' ), true ) ) {
 			return;
 		}
 
@@ -64,6 +64,13 @@ add_filter(
 	10,
 	3
 );
+
+// Cart labels change only on the cart page; checkout/order processing is untouched.
+add_filter( 'gettext', function ( $translation, $text, $domain ) {
+	if ( 'tutor' !== $domain || 'cart' !== cas_account_current_key() ) { return $translation; }
+	$labels = array( 'Summary:' => 'Order summary', 'Subtotal:' => 'Subtotal', 'Grand total' => 'Total', 'Proceed to checkout' => 'Continue to details' );
+	return $labels[ $text ] ?? $translation;
+}, 10, 3 );
 
 /**
  * The prototype's button says "Place order" at every price. Tutor says "Pay Now", or

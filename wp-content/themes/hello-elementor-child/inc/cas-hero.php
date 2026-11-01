@@ -247,7 +247,7 @@ function cas_render_hero() {
 
 	ob_start();
 	?>
-	<div class="pg-wrap">
+	<section class="pg-section cas-home-hero"><div class="pg-wrap">
 		<div class="logo2 is-center"><img src="<?php echo esc_url( cas_brand_image( 'cas_logo2' ) ); ?>" alt="" aria-hidden="true"></div>
 		<header class="hero hero--compact" id="hero" aria-roledescription="carousel" aria-label="Studio highlights">
 			<div class="hero__panel" aria-hidden="true"></div>
@@ -297,8 +297,8 @@ function cas_render_hero() {
 							'decoding'     => 'async',
 						];
 						?>
-						<figure class="hero__img hero__img--large"><?php echo cas_hero_img( cas_hero_value( $i, 'large' ), '(max-width: 860px) calc(70vw - 22px), (max-width: 1440px) calc(41.7vw - 20px), 580px', $large_attrs ); // phpcs:ignore WordPress.Security.EscapeOutput ?></figure>
-						<figure class="hero__img hero__img--small"><?php echo cas_hero_img( cas_hero_value( $i, 'small' ), '(max-width: 860px) calc(38vw - 12px), (max-width: 1440px) calc(24vw - 12px), 334px', $small_attrs ); // phpcs:ignore WordPress.Security.EscapeOutput ?></figure>
+						<figure class="hero__img hero__img--large"><?php echo cas_hero_img( cas_hero_value( $i, 'large' ), '(max-width: 860px) calc(70vw - 22px), (max-width: 1216px) calc(41.7vw - 20px), 487px', $large_attrs ); // phpcs:ignore WordPress.Security.EscapeOutput ?></figure>
+						<figure class="hero__img hero__img--small"><?php echo cas_hero_img( cas_hero_value( $i, 'small' ), '(max-width: 860px) calc(38vw - 12px), (max-width: 1216px) calc(24vw - 12px), 280px', $small_attrs ); // phpcs:ignore WordPress.Security.EscapeOutput ?></figure>
 					</div>
 				</article>
 			<?php endforeach; ?>
@@ -312,7 +312,7 @@ function cas_render_hero() {
 				<div class="hero__counter"><span class="hero__counter-current">01</span> <span class="hero__counter-total">/ 0<?php echo esc_html( CAS_HERO_SLIDES ); ?></span></div>
 			</nav>
 		</header>
-	</div>
+	</div></section>
 	<?php
 
 	return ob_get_clean();

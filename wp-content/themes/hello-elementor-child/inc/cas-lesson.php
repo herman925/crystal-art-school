@@ -23,7 +23,7 @@
  * checks and its `tutor_lesson_completed_*` hooks all run.
  *
  * WHAT THE PROTOTYPE HAS THAT THIS DOES NOT, and why:
- *   - "Taught by", the teach-card quote, the "Share your skies" band and the finish card's
+ *   - the teach-card quote, the "Share your skies" band and the finish card's
  *     heading and blurb are the prototype's own demo copy. Nothing in Tutor holds them and
  *     none of it is Crystal's supplied wording, so none of it is invented here.
  *   - "Restart course" and "Watch again" reset browser storage in the prototype. Tutor's
@@ -468,6 +468,7 @@ function cas_render_lesson() {
 			'Level'        => $level,
 			'Lessons'      => $items ? (string) count( $items ) : '',
 			'Running time' => $runtime ? '~' . $runtime : '',
+			'Taught by'    => 'Crystal Lau',
 		)
 	);
 

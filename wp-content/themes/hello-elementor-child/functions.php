@@ -22,6 +22,8 @@ add_action(
 @import url({$parent_reset}) layer(cas-parent-reset);
 @layer cas-parent-reset {
   a, a:hover, a:active { color: inherit; }
+  h1, h2, h3, h4, h5, h6, label { line-height: inherit; }
+  button, [type="button"], [type="submit"] { line-height: normal; border-radius: revert-layer; }
   button, [type="button"], [type="submit"] { color: inherit; border-color: currentColor; }
   button:hover, button:focus, [type="button"]:hover, [type="button"]:focus,
   [type="submit"]:hover, [type="submit"]:focus {
@@ -164,6 +166,15 @@ add_action(
 		wp_localize_script( 'cas-header', 'casCartCount', [
 			'ajaxUrl' => admin_url( 'admin-ajax.php' ),
 			'nonce'   => wp_create_nonce( 'cas_cart_count' ),
+		] );
+		wp_enqueue_style( 'cas-cart-drawer', $uri . '/css/cas-cart-drawer.css', [ 'cas-industrial-3' ], filemtime( $dir . '/css/cas-cart-drawer.css' ) );
+		wp_enqueue_script( 'cas-cart-drawer', $uri . '/js/cas-cart-drawer.js', [ 'cas-header', 'cas-site-extras' ], filemtime( $dir . '/js/cas-cart-drawer.js' ), true );
+		wp_localize_script( 'cas-cart-drawer', 'casCartDrawer', [
+			'cartUrl'       => cas_account_cart_url(),
+			'loginUrl'      => cas_account_login_url(),
+			'requiresLogin' => ! is_user_logged_in() && ( ! function_exists( 'tutor_is_guest_checkout_enabled' ) || ! tutor_is_guest_checkout_enabled() ),
+			'removeAction'  => 'tutor_delete_course_from_cart',
+			'removeNonce'   => function_exists( 'tutor' ) ? wp_create_nonce( tutor()->nonce_action ) : '',
 		] );
 	},
 	21

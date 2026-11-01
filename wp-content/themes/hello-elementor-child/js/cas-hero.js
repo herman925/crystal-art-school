@@ -37,7 +37,7 @@
 		}
 	}
 
-	function show( next ) {
+	function show( next, spoken ) {
 		index = ( next + slides.length ) % slides.length;
 
 		slides.forEach( function ( slide, k ) {
@@ -47,6 +47,10 @@
 
 		if ( counter ) {
 			counter.textContent = ( '0' + ( index + 1 ) ).slice( -2 );
+		}
+		if ( spoken && window.CasAnnounce ) {
+			var title = slides[index].querySelector( '.hero__title' );
+			window.CasAnnounce( 'Slide ' + ( index + 1 ) + ' of ' + slides.length + '. ' + ( title ? title.innerText.replace( /\s+/g, ' ' ).trim() : '' ) );
 		}
 	}
 
@@ -73,7 +77,7 @@
 		var arrow = ev.target.closest( '[data-hero]' );
 
 		if ( arrow ) {
-			show( index + ( 'next' === arrow.getAttribute( 'data-hero' ) ? 1 : -1 ) );
+			show( index + ( 'next' === arrow.getAttribute( 'data-hero' ) ? 1 : -1 ), true );
 			start();
 
 			return;
@@ -82,6 +86,7 @@
 		if ( ev.target.closest( '[data-hero-pause]' ) ) {
 			paused = ! paused;
 			pauseBtn.setAttribute( 'aria-pressed', paused ? 'true' : 'false' );
+			pauseBtn.setAttribute( 'aria-label', paused ? 'Resume the studio highlights carousel' : 'Pause the studio highlights carousel' );
 			paused ? stop() : start();
 		}
 	} );

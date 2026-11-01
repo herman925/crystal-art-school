@@ -23,6 +23,25 @@
   var tiles = Array.prototype.slice.call(grid.querySelectorAll('.pol-tile'));
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  // Desktop reference re-pins the wall on each visit; SSR remains the no-JS/mobile fallback.
+  if (window.matchMedia('(min-width: 861px)').matches && tiles.length) {
+    var layoutRandom = function (a, b) { return a + Math.random() * (b - a); };
+    var layoutLead = tiles.length >= 5 ? 1 + Math.floor(Math.random() * 3) : -1;
+    var layoutPins = ['#4d6625', '#a13d2d', '#2f4c6b', '#c9992e'];
+    tiles.forEach(function (tile, index) {
+      var lead = index === layoutLead, mate = layoutLead >= 0 && index === layoutLead + 1;
+      var rotation = lead ? layoutRandom(-7,-4) : mate ? layoutRandom(4,7) : layoutRandom(-3.5,3.5);
+      tile.classList.toggle('pol-nopin', mate);
+      tile.style.setProperty('--rot', rotation.toFixed(2) + 'deg');
+      tile.style.setProperty('--mx', (mate ? -26 : lead ? layoutRandom(-8,-2) : layoutRandom(-14,0)).toFixed(0) + 'px');
+      tile.style.setProperty('--mt', layoutRandom(-10,22).toFixed(0) + 'px');
+      tile.style.setProperty('--z', mate ? 0 : 1 + Math.floor(Math.random() * 9));
+      tile.style.setProperty('--pinx', lead ? '94%' : mate ? '6%' : layoutRandom(25,75).toFixed(0) + '%');
+      tile.style.setProperty('--pin', layoutPins[Math.floor(Math.random() * layoutPins.length)]);
+    });
+  }
+
+
   /* ------------------------------------------------------------------
      Scroll-driven physics — the wall is STILL at rest. Scrolling shakes it:
      · scroll down = a moment of lost gravity: prints float up and flip a little,

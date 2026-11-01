@@ -83,7 +83,7 @@ do_action( 'tutor_before_login_form' );
 		do_action( 'login_form' );
 		apply_filters( 'login_form_middle', '', '' );
 	?>
-	<div class="tutor-flex tutor-justify-between tutor-items-center tutor-mt-9">
+	<div class="tutor-flex tutor-justify-between tutor-items-center tutor-mt-9 cas-login-options">
 		<div class="tutor-input-field tutor-w-auto">
 			<div class="tutor-input-wrapper">
 				<input id="tutor-login-agmnt-1" type="checkbox" class="tutor-checkbox tutor-checkbox-md" name="rememberme" value="forever" />
@@ -92,13 +92,13 @@ do_action( 'tutor_before_login_form' );
 				</label>
 			</div>
 		</div>
-		<a href="<?php echo esc_url( $lost_pass ); ?>" class="tutor-btn tutor-btn-link-gray tutor-btn-small">
+		<a href="<?php echo esc_url( $lost_pass ); ?>" class="tutor-btn tutor-btn-link-gray tutor-btn-small cas-login-forgot">
 			<?php esc_html_e( 'Forgot password?', 'hello-elementor-child' ); ?>
 		</a>
 	</div>
 
 	<?php do_action( 'tutor_login_form_end' ); ?>
-	<button type="submit" class="tutor-btn tutor-btn-primary tutor-btn-block tutor-mt-10">
+	<button type="submit" class="tutor-btn tutor-btn-primary tutor-btn-block tutor-mt-10 btn primary big full">
 		<?php esc_html_e( 'Log in', 'hello-elementor-child' ); ?> <span aria-hidden="true">&#8594;</span>
 	</button>
 

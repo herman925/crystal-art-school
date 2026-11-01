@@ -218,6 +218,7 @@
 
 	if ( clear ) {
 		clear.addEventListener( 'click', function () {
+			sel = {};
 			groups.forEach( function ( group ) {
 				sel[ group.getAttribute( 'data-group' ) ] = 'all';
 				press( group, group.querySelector( '.fopt' ) );
@@ -267,6 +268,32 @@
 				}
 			} );
 		} );
+	}
+
+	// The desktop category drawer links into these existing native filter controls.
+	var requested = new URLSearchParams( window.location.search ).get( 'cat' );
+	if ( requested ) {
+		var wanted = requested.toLowerCase();
+		var requestedGroup = '';
+		var requestedValue = '';
+		if ( wanted === 'beginners' || wanted === 'beginner' ) { requestedGroup = 'difficulty'; requestedValue = 'beginner'; }
+		else {
+			[ [ 'medium', 'data-media' ], [ 'theme', 'data-theme' ] ].some( function ( pair ) {
+				return cells.some( function ( cell ) {
+					var value = ( cell.getAttribute( pair[1] ) || '' ).split( '|' ).find( function ( term ) { return term.toLowerCase() === wanted; } );
+					if ( value ) { requestedGroup = pair[0]; requestedValue = value; return true; }
+					return false;
+				} );
+			} );
+		}
+		if ( requestedGroup ) {
+			sel[ requestedGroup ] = requestedValue;
+			groups.forEach( function ( group ) {
+				if ( group.getAttribute( 'data-group' ) !== requestedGroup ) { return; }
+				var option = Array.prototype.find.call( group.querySelectorAll( '.fopt' ), function ( opt ) { return opt.getAttribute( 'data-val' ) === requestedValue; } );
+				if ( option ) { press( group, option ); }
+			} );
+		}
 	}
 
 	apply();

@@ -101,3 +101,62 @@
 		}
 	}, { passive: true } );
 } )();
+
+/* Active reference Home choreography; gallery sizing remains desktop-only. */
+(function () {
+  'use strict';
+  var desktop = window.matchMedia('(min-width: 861px)');
+  var gallery = document.querySelector('.shop-layout .gallery-tile');
+  var card = document.querySelector('.shop-rail .course-card');
+  function sizeGallery() {
+    if (!gallery || !card) return;
+    gallery.classList.toggle('cas-gallery-sized', desktop.matches);
+    if (desktop.matches) gallery.style.height = Math.round(card.offsetHeight * .66) + 'px';
+    else gallery.style.removeProperty('height');
+  }
+  sizeGallery();
+  window.addEventListener('resize', sizeGallery);
+  if (gallery && card && window.ResizeObserver) new ResizeObserver(sizeGallery).observe(card);
+  if (document.fonts) document.fonts.ready.then(sizeGallery);
+
+  var g = window.gsap;
+  if (!g || window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  // The reference removes generic rises before its Home choreography at every width.
+  document.querySelectorAll('#content .reveal-up').forEach(function (el) { el.classList.remove('reveal-up'); });
+  var scenes = [];
+  function scene(trigger, elements, play) {
+    if (!trigger || !elements.length) return;
+    g.set(elements, {opacity: 0});
+    scenes.push({trigger: trigger, play: play, done: false});
+  }
+  document.querySelectorAll('#content .section-title').forEach(function (title) {
+    var left = title.classList.contains('is-left');
+    scene(title, [title], function () {
+      g.fromTo(title, {opacity: 0, y: -26, rotateZ: left ? -5 : 4, scale: .9, transformOrigin: left ? 'left top' : 'center top'},
+        {opacity: 1, y: 0, rotateZ: 0, scale: 1, duration: .9, ease: 'elastic.out(1, .65)'});
+    });
+  });
+  var quotes = Array.prototype.slice.call(document.querySelectorAll('.testi-card'));
+  scene(document.querySelector('.testi-grid'), quotes, function () {
+    g.fromTo(quotes, {opacity: 0, y: 56, scale: .92}, {opacity: 1, y: 0, scale: 1, duration: .7, ease: 'back.out(1.4)', stagger: .12});
+  });
+  var firstPass = true;
+  function drive() {
+    var vh = window.innerHeight || document.documentElement.clientHeight;
+    var staged = 0;
+    scenes.forEach(function (item) {
+      if (item.done) return;
+      var rect = item.trigger.getBoundingClientRect();
+      if (rect.top < vh * .86 && rect.bottom > 30) {
+        item.done = true;
+        if (firstPass) g.delayedCall(staged++ * .45, item.play);
+        else item.play();
+      }
+    });
+    firstPass = false;
+  }
+  setTimeout(drive, 260);
+  window.addEventListener('scroll', drive, {passive: true});
+  window.addEventListener('resize', drive);
+  document.addEventListener('focusin', drive);
+})();

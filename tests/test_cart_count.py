@@ -42,6 +42,50 @@ class CartCountTests(unittest.TestCase):
             self.assertEqual(result["response"]["status"], 400)
             self.assertEqual(result["calls"], [])
 
+    def test_drawer_uses_native_items_prices_and_escapes_titles(self):
+        result = self.request(
+            post={"action": "cas_cart_count", "nonce": "valid", "view": "drawer"},
+            prices={"1": {"regular_price": 20, "sale_price": 12.5},
+                    "2": {"regular_price": 30, "sale_price": 0}},
+            titles={"1": '<img src=x onerror="alert(1)"> & study'},
+        )
+        data = result["response"]["data"]
+        self.assertTrue(data["known"])
+        self.assertEqual(data["count"], 2)
+        self.assertEqual(data["html"].count('class="mc-line"'), 2)
+        self.assertIn('<s>$20.00</s> <b class="now">$12.50</b>', data["html"])
+        self.assertIn('Subtotal<b>$42.50</b>', data["html"])
+        self.assertIn('&lt;img src=x onerror=&quot;alert(1)&quot;&gt; &amp; study', data["html"])
+        self.assertNotIn('<img src=x', data["html"])
+        self.assertIn('data-course-id="1"', data["html"])
+        self.assertNotIn('mc-qty', data["html"])
+        self.assertEqual(result["calls"], ["factory", "read:7"])
+
+    def test_drawer_empty_and_unavailable_are_distinct(self):
+        post = {"action": "cas_cart_count", "nonce": "valid", "view": "drawer"}
+        empty = self.request(counts={}, post=post)["response"]
+        self.assertEqual(empty["data"]["count"], 0)
+        self.assertIn('Your basket is empty.', empty["data"]["html"])
+        self.assertNotIn('Subtotal', empty["data"]["html"])
+        for fields in ({"post_status": "private"}, {"post_type": "post"}, {"post_password": "secret"}):
+            with self.subTest(fields=fields):
+                self.assertEqual(self.request(post=post, post_fields=fields)["response"],
+                                 {"status": 503, "success": False, "data": {"known": False}})
+        for mode in ("missing_course", "price_db_error", "throw", "db_error"):
+            self.assertEqual(self.request(post=post, mode=mode)["response"]["status"], 503)
+        for price in ({}, {"regular_price": -1}, {"regular_price": "NaN"},
+                      {"regular_price": 10, "sale_price": -5}, {"regular_price": "1e999"}):
+            self.assertEqual(self.request(post=post, prices={"1": price})["response"]["status"], 503)
+
+    def test_drawer_view_is_allowlisted_and_requires_the_same_actor_nonce(self):
+        for value in (["drawer"], "other"):
+            result = self.request(post={"action": "cas_cart_count", "nonce": "valid", "view": value})
+            self.assertEqual(result["response"]["status"], 400)
+            self.assertEqual(result["calls"], [])
+        invalid = self.request(post={"action": "cas_cart_count", "nonce": "valid", "view": "drawer"}, nonce_uid=8)
+        self.assertEqual(invalid["response"]["status"], 403)
+        self.assertEqual(invalid["calls"], [])
+
     def test_nonce_missing_bad_array_and_wrong_identity(self):
         for nonce in (None, "bad", ["valid"]):
             result = self.request(post={"action": "cas_cart_count", "nonce": nonce})

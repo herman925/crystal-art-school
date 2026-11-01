@@ -5,6 +5,16 @@
 	'use strict';
 
 	var body = document.body;
+	var sheet = document.querySelector( '.nav-sheet' );
+	var burger = document.querySelector( '.nav-burger' );
+
+	function setSheet( open ) {
+		if ( ! sheet || ! burger ) { return; }
+		sheet.classList.toggle( 'open', open );
+		sheet.inert = ! open;
+		sheet.setAttribute( 'aria-hidden', open ? 'false' : 'true' );
+		burger.setAttribute( 'aria-expanded', open ? 'true' : 'false' );
+	}
 
 	function currentTheme() {
 		return body.getAttribute( 'data-theme' ) === 'A' ? 'A' : 'D';
@@ -30,18 +40,58 @@
 		var toggle = ev.target.closest( '.mode-toggle' );
 
 		if ( toggle ) {
-			applyTheme( 'D' === currentTheme() ? 'A' : 'D' );
+			var nextTheme = 'D' === currentTheme() ? 'A' : 'D';
+			applyTheme( nextTheme );
+			if ( window.CasAnnounce ) { window.CasAnnounce( nextTheme === 'D' ? 'Dark mode on.' : 'Light mode on.' ); }
 
 			return;
 		}
 
-		var burger = ev.target.closest( '.nav-burger' );
-
-		if ( burger ) {
-			var open = 'true' === burger.getAttribute( 'aria-expanded' );
-			burger.setAttribute( 'aria-expanded', open ? 'false' : 'true' );
-			document.querySelector( '.nav-sheet' ).classList.toggle( 'open', ! open );
+		if ( ev.target.closest( '.nav-burger' ) ) {
+			setSheet( burger.getAttribute( 'aria-expanded' ) !== 'true' );
+			return;
 		}
+		if ( sheet && sheet.classList.contains( 'open' )
+			&& ( ! sheet.contains( ev.target ) || ev.target.closest( 'a[href]' ) ) ) { setSheet( false ); }
+	} );
+
+	document.addEventListener( 'keydown', function ( event ) {
+		if ( event.key === 'Escape' && sheet && sheet.classList.contains( 'open' ) ) {
+			event.preventDefault();
+			setSheet( false );
+			burger.focus();
+		}
+	} );
+	window.addEventListener( 'resize', function () {
+		if ( window.matchMedia( '(min-width: 1081px)' ).matches ) { setSheet( false ); }
+	} );
+
+	// Desktop disclosure: hover, explicit caret, Escape, outside click and keyboard focus.
+	document.querySelectorAll( '.nav-drop' ).forEach( function ( drop ) {
+		var caret = drop.querySelector( '.nav-caret-btn' );
+		if ( ! caret ) { return; }
+		function setOpen( open ) {
+			open = open && window.matchMedia( '(min-width: 861px)' ).matches;
+			drop.classList.toggle( 'open', open );
+			caret.setAttribute( 'aria-expanded', open ? 'true' : 'false' );
+		}
+		var hoverCloseTimer = null;
+		drop.addEventListener( 'mouseenter', function () { clearTimeout( hoverCloseTimer ); setOpen( true ); } );
+		drop.addEventListener( 'mouseleave', function () { hoverCloseTimer = setTimeout( function () { if ( ! drop.contains( document.activeElement ) ) { setOpen( false ); } }, 320 ); } );
+		caret.addEventListener( 'click', function () { setOpen( caret.getAttribute( 'aria-expanded' ) !== 'true' ); } );
+		drop.addEventListener( 'focusout', function ( event ) { if ( ! drop.contains( event.relatedTarget ) ) { setOpen( false ); } } );
+		drop.addEventListener( 'keydown', function ( event ) {
+			if ( event.key === 'Escape' ) { setOpen( false ); caret.focus(); return; }
+			if ( event.key === 'ArrowDown' || event.key === 'ArrowUp' ) {
+				var items = Array.prototype.slice.call( drop.querySelectorAll( '.mega-cat' ) );
+				if ( ! items.length ) { return; }
+				event.preventDefault(); setOpen( true );
+				var index = items.indexOf( event.target );
+				items[ index < 0 ? ( event.key === 'ArrowDown' ? 0 : items.length - 1 ) : ( index + ( event.key === 'ArrowDown' ? 1 : items.length - 1 ) ) % items.length ].focus();
+			}
+		} );
+		document.addEventListener( 'click', function ( event ) { if ( ! drop.contains( event.target ) ) { setOpen( false ); } } );
+		window.addEventListener( 'resize', function () { if ( ! window.matchMedia( '(min-width: 861px)' ).matches ) { setOpen( false ); } } );
 	} );
 
 	( function () {

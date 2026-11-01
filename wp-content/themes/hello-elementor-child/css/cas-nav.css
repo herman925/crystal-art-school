@@ -1,7 +1,7 @@
 /* Nav rules the prototype injected from js/site-nav.js as <style id="cas-nav-style">.
    Moved into a real stylesheet: injecting them from script cost a reflow on every
    page and put them outside the cascade the rest of the design lives in.
-   The mega-drawer rules are omitted along with the drawer itself. */
+   Desktop disclosure geometry follows the same prototype; mobile adaptation is deferred. */
 
 .mode-toggle {
   display: inline-grid;
@@ -57,10 +57,18 @@
    !important — an inline non-important value beats it — so raising specificity is
    enough and no !important is warranted. Selector verified in the browser before
    being written here. */
-body.cas-root .elementor-shortcode > footer.site-footer,
+body.cas-root footer.site-footer,
 body.cas-root .elementor-shortcode > nav.site-nav {
   max-width: none;
   width: 100%;
+}
+
+/* Hello adds a mobile inset even when the prototype footer owns its inner gutter. */
+body.cas-root footer.site-footer { padding-inline: 0; }
+
+/* The relative themed body already starts below WordPress's mobile toolbar space. */
+@media (max-width: 600px) {
+  body.cas-root.admin-bar #wpadminbar { top: calc(-1 * var(--wp-admin--admin-bar--height, 46px)); }
 }
 
 /* Carousel pause control.
@@ -111,3 +119,29 @@ body.cas-root {
   overflow-x: clip;
   overflow-y: visible;
 }
+
+/* Desktop Courses disclosure — prototype js/site-nav.js, with CMS-backed links. */
+@media (min-width: 861px) {
+ .nav-drop { position: relative; display: inline-flex; align-items: center; gap: 6px; }
+ .nav-drop > .nav-trigger { display: inline-flex; align-items: center; cursor: pointer; }
+ .nav-caret-btn { position: relative; display: inline-grid; place-items: center; width: 14px; height: 14px; padding: 0; border: 0; background: none; color: inherit; cursor: pointer; flex: none; }
+ .nav-caret-btn::after { content: ''; position: absolute; left: 50%; top: 50%; width: 44px; height: 44px; transform: translate(-50%,-50%); }
+ .nav-caret { width: 8px; height: 8px; opacity: .6; transition: transform .25s ease; }
+ .nav-caret-btn:hover .nav-caret { opacity: 1; }
+ .nav-drop.open .nav-caret { transform: rotate(180deg); }
+ .nav-mega { position: absolute; top: calc(100% + 10px); left: -8px; width: max-content; min-width: 248px; background: #26221e; border: 1px solid rgba(237,225,208,.14); border-radius: 14px; box-shadow: 0 26px 64px rgba(0,0,0,.55); padding: 8px; opacity: 0; visibility: hidden; transform: translateY(-8px); transition: opacity .2s ease, transform .2s ease, visibility .2s; z-index: 300; }
+ /* Visibility must be immediate on opening so the first arrow key can focus a link. */
+ .nav-drop.open .nav-mega { opacity: 1; visibility: visible; transform: translateY(0); transition: opacity .2s ease, transform .2s ease; }
+ .nav-mega::before { content: ''; position: absolute; top: -12px; left: 0; right: 0; height: 12px; }
+ .mega-eyebrow { display: block; white-space: nowrap; font-family: var(--font-cond); font-size: 12px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: #cf9457; padding: 8px 12px; }
+ .mega-eyebrow em { font-style: normal; opacity: .8; }
+ .mega-cats { display: flex; flex-direction: column; gap: 7px; padding: 2px 8px 12px; }
+ .nav-links a.mega-cat, .mega-cat { display: flex; align-items: center; justify-content: space-between; gap: 12px; font-family: var(--font-cond); font-weight: 600; font-size: 14px; letter-spacing: var(--tracking-label); text-transform: uppercase; color: #ede1d0; padding: 9px 16px; border-radius: 999px; border: 1px solid rgba(237,225,208,.28); transition: background .16s ease, border-color .16s ease; }
+ .mega-cat:hover { background: rgba(237,225,208,.10); border-color: rgba(237,225,208,.5); }
+ .mega-cat.is-all { background: rgba(237,225,208,.08); border-color: rgba(237,225,208,.44); }
+}
+@media (max-width: 860px) { .nav-caret-btn, .nav-mega { display: none; } }
+
+/* Mobile keeps the avatar and exposes logout in the menu. */
+.cas-desktop-member { display: none; }
+@media (min-width: 1081px) { .nav-auth .cas-desktop-member { display: inline-flex; } }

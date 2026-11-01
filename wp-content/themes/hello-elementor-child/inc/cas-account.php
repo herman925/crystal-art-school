@@ -1069,7 +1069,10 @@ function cas_account_dashboard_recommendations( $enrolled_ids ) {
 			continue;
 		}
 
+		$facts = cas_course_facets( $post->ID );
 		$rows[] = array(
+			'medium' => $facts['medium'] ? reset( $facts['medium'] ) : '',
+			'price' => cas_course_price( $facts['price'] ),
 			'id'    => (int) $post->ID,
 			'title' => get_the_title( $post->ID ),
 			'url'   => $url,
@@ -1118,13 +1121,26 @@ function cas_account_dashboard_courses_url() {
  *
  * @return string
  */
-function cas_account_dashboard_empty_state() {
-	return '<div class="dash-card dash-empty">'
-		. '<div class="eyebrow">Your studio</div>'
-		. '<h3>Your bench is ready.</h3>'
-		. '<p>Explore the course catalogue when you are ready to begin.</p>'
-		. '<a class="btn primary" href="' . esc_url( cas_account_dashboard_courses_url() ) . '">Explore courses <span class="arr" aria-hidden="true">&#8594;</span></a>'
-		. '</div>';
+function cas_account_dashboard_empty_state( $suggestion = array() ) {
+	$catalogue = esc_url( cas_account_dashboard_courses_url() );
+	$free = esc_url( cas_page_url( 'free-videos' ) );
+	$image = ! empty( $suggestion['image'] ) ? '<img src="' . esc_url( $suggestion['image'] ) . '" alt="" loading="lazy" decoding="async">' : '';
+	return '<div class="dash-card resume-card dash-empty"><div class="dash-onboard" style="width:100%;">'
+		. '<div class="ob-hero">' . $image . '<div><h3 style="font-family:var(--font-marker);font-weight:600;font-size:20px;margin:0 0 6px;">Your bench is ready.</h3><p style="margin:0;font-size:14px;color:var(--muted);max-width:52ch;">Explore the course catalogue when you are ready to begin.</p></div></div>'
+		. '<div class="ob-steps cas-desktop-onboard"><div class="ob-step"><div class="n">1</div><h4>Watch the free videos</h4><p>Explore the free videos before choosing a course.</p></div><div class="ob-step"><div class="n">2</div><h4>Pick your first course</h4><p>Filter the catalogue by medium and level.</p></div><div class="ob-step"><div class="n">3</div><h4>Paint along</h4><p>Follow the lessons in your studio.</p></div></div>'
+		. '<div style="display:flex;gap:12px;flex-wrap:wrap;"><a class="btn primary cas-desktop-onboard-link" href="' . $free . '">Watch the free videos <span class="arr" aria-hidden="true">&#8594;</span></a><a class="btn ghost" href="' . $catalogue . '">Browse the catalogue</a></div></div></div>';
+}
+
+function cas_dashboard_tab_icon( $key ) {
+	$paths = array(
+		'overview' => '<rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect>',
+		'courses' => '<path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>',
+		'progress' => '<path d="M3 3v18h18"></path><path d="M7 14l4-4 3 3 5-6"></path>',
+		'purchases' => '<path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"></path><path d="M3 6h18"></path><path d="M16 10a4 4 0 0 1-8 0"></path>',
+		'account' => '<circle cx="12" cy="8" r="4"></circle><path d="M4 21v-2a8 8 0 0 1 16 0v2"></path>',
+		'settings' => '<circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09A1.65 1.65 0 0 0 15 4.6a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>',
+	);
+	return '<svg class="ti cas-dashboard-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' . ( $paths[ $key ] ?? '' ) . '</svg>';
 }
 
 /**
@@ -1182,7 +1198,7 @@ function cas_account_dashboard_body() {
 					aria-selected="<?php echo $first ? 'true' : 'false'; ?>"
 					tabindex="<?php echo $first ? '0' : '-1'; ?>"
 				>
-					<span><?php echo esc_html( $label ); ?></span><span class="arr" aria-hidden="true">&#8594;</span>
+					<?php echo cas_dashboard_tab_icon( $key ); // Trusted static SVG paths. ?><span><?php echo esc_html( $label ); ?></span><?php if ( 'courses' === $key ) : ?><span class="badge cas-desktop-count"><?php echo (int) count( $courses ); ?></span><?php endif; ?><span class="arr" aria-hidden="true">&#8594;</span>
 				</button>
 				<?php $first = false; ?>
 			<?php endforeach; ?>
@@ -1192,39 +1208,42 @@ function cas_account_dashboard_body() {
 		</nav>
 		<div class="dash-main" id="dash-main">
 			<section class="dash-panel active" id="panel-overview" data-panel="overview" role="tabpanel" aria-labelledby="tab-overview" tabindex="0">
-				<div class="dash-panel-head"><div><span class="eyebrow">Overview</span><h2>Continue learning</h2></div></div>
+				<div class="dash-panel-head"><div><span class="eyebrow">Overview</span><h2><span class="ast cas-desktop-star" aria-hidden="true">&#10022;</span>Continue learning</h2></div></div>
 				<?php if ( ! empty( $courses ) ) : ?>
 					<?php $resume = $courses[0]; ?>
 					<article class="resume-card dash-card">
-						<?php if ( $resume['image'] ) : ?><img src="<?php echo esc_url( $resume['image'] ); ?>" alt="" loading="lazy" decoding="async" width="480" height="270"><?php endif; ?>
-						<div class="resume-body"><span class="eyebrow">Pick up where you left off</span><h3><?php echo esc_html( $resume['title'] ); ?></h3><div class="prog-row"><span><?php echo esc_html( (string) $resume['done'] ); ?> / <?php echo esc_html( (string) $resume['total'] ); ?> lessons</span><strong><?php echo esc_html( (string) $resume['percent'] ); ?>%</strong></div><div class="pbar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="<?php echo esc_attr( (string) $resume['percent'] ); ?>"><span class="pfill" style="width:<?php echo esc_attr( (string) $resume['percent'] ); ?>%"></span></div><a class="btn primary" href="<?php echo esc_url( $resume['next_url'] ); ?>">Continue <span class="arr" aria-hidden="true">&#8594;</span></a></div>
+						<?php if ( $resume['image'] ) : ?><div class="resume-thumb"><img src="<?php echo esc_url( $resume['image'] ); ?>" alt="" loading="lazy" decoding="async" width="480" height="270"></div><?php endif; ?>
+						<div class="resume-body"><span class="eyebrow">Pick up where you left off</span><h3><?php echo esc_html( $resume['title'] ); ?></h3><div class="prog-row"><span><?php echo esc_html( (string) $resume['done'] ); ?> / <?php echo esc_html( (string) $resume['total'] ); ?> lessons</span><strong><?php echo esc_html( (string) $resume['percent'] ); ?>%</strong></div><div class="pbar prog" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="<?php echo esc_attr( (string) $resume['percent'] ); ?>"><i class="pfill" style="width:<?php echo esc_attr( (string) $resume['percent'] ); ?>%"></i></div></div><a class="btn primary" href="<?php echo esc_url( $resume['next_url'] ); ?>">Continue <span class="arr" aria-hidden="true">&#8594;</span></a>
 					</article>
 				<?php else : ?>
-					<?php echo cas_account_dashboard_empty_state(); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+					<?php echo cas_account_dashboard_empty_state( $recommendations[0] ?? array() ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 				<?php endif; ?>
 				<?php if ( ! empty( $recommendations ) ) : ?>
 					<div class="dash-subhead"><span class="eyebrow">From the catalogue</span><h3>Recommended next</h3></div>
 					<div class="mycourse-grid dash-recommendations">
 						<?php foreach ( $recommendations as $recommendation ) : ?>
-							<a class="mc-course dash-recommendation" href="<?php echo esc_url( $recommendation['url'] ); ?>">
-								<?php if ( $recommendation['image'] ) : ?><img src="<?php echo esc_url( $recommendation['image'] ); ?>" alt="" loading="lazy" decoding="async" width="480" height="270"><?php endif; ?>
-								<span class="mc-body"><span class="eyebrow">Course</span><strong><?php echo esc_html( $recommendation['title'] ); ?></strong><span class="arr" aria-hidden="true">&#8594;</span></span>
-							</a>
+							<article class="mc-course dash-recommendation">
+								<div class="cov"><?php if ( $recommendation['image'] ) : ?><img src="<?php echo esc_url( $recommendation['image'] ); ?>" alt="" loading="lazy" decoding="async" width="480" height="270"><?php endif; ?></div>
+								<div class="body"><div class="meta"><?php echo esc_html( $recommendation['medium'] . ( $recommendation['medium'] ? ' · ' : '' ) . $recommendation['price'] ); ?></div><h3><?php echo esc_html( $recommendation['title'] ); ?></h3><a class="btn ghost" href="<?php echo esc_url( $recommendation['url'] ); ?>">View course <span class="arr" aria-hidden="true">&#8594;</span></a></div>
+							</article>
 						<?php endforeach; ?>
 					</div>
+				<?php else : ?>
+					<div class="dash-subhead"><h3>Recommended next</h3></div>
+					<div class="dash-card"><p style="margin:0;font-size:14.5px;color:var(--muted);"><?php echo esc_html( (int) wp_count_posts( 'courses' )->publish > 0 ? 'You own every course in the catalogue.' : 'No courses are published yet.' ); ?></p></div>
 				<?php endif; ?>
 			</section>
 
 			<section class="dash-panel" id="panel-courses" data-panel="courses" role="tabpanel" aria-labelledby="tab-courses" tabindex="0" hidden>
-				<div class="dash-panel-head"><div><span class="eyebrow">Studio shelf</span><h2>My courses</h2></div><span class="badge"><?php echo esc_html( (string) count( $courses ) ); ?></span></div>
+				<div class="dash-panel-head"><div><span class="eyebrow">Studio shelf</span><h2><span class="ast cas-desktop-star" aria-hidden="true">&#10022;</span>My courses</h2></div><span class="badge"><?php echo esc_html( (string) count( $courses ) ); ?></span></div>
 				<?php if ( empty( $courses ) ) : ?>
-					<?php echo cas_account_dashboard_empty_state(); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+					<?php echo cas_account_dashboard_empty_state( $recommendations[0] ?? array() ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 				<?php else : ?>
 					<div class="mycourse-grid">
 						<?php foreach ( $courses as $course ) : ?>
-							<article class="mc-course dash-card">
-								<?php if ( $course['image'] ) : ?><a href="<?php echo esc_url( $course['url'] ); ?>"><img src="<?php echo esc_url( $course['image'] ); ?>" alt="" loading="lazy" decoding="async" width="480" height="270"></a><?php endif; ?>
-								<div class="mc-body"><span class="eyebrow">Course</span><h3><?php echo esc_html( $course['title'] ); ?></h3><div class="prog-row"><span><?php echo esc_html( (string) $course['done'] ); ?> / <?php echo esc_html( (string) $course['total'] ); ?> lessons</span><strong><?php echo esc_html( (string) $course['percent'] ); ?>%</strong></div><div class="pbar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="<?php echo esc_attr( (string) $course['percent'] ); ?>"><span class="pfill" style="width:<?php echo esc_attr( (string) $course['percent'] ); ?>%"></span></div><a class="btn small" href="<?php echo esc_url( $course['percent'] >= 100 ? $course['url'] : $course['next_url'] ); ?>"><?php echo $course['percent'] >= 100 ? 'Review' : 'Continue'; ?> <span class="arr" aria-hidden="true">&#8594;</span></a></div>
+							<article class="mc-course">
+								<?php if ( $course['image'] ) : ?><a class="cov" href="<?php echo esc_url( $course['url'] ); ?>"><img src="<?php echo esc_url( $course['image'] ); ?>" alt="" loading="lazy" decoding="async" width="480" height="270"></a><?php endif; ?>
+								<div class="mc-body body"><span class="eyebrow">Course</span><h3><?php echo esc_html( $course['title'] ); ?></h3><div class="prog-row"><span><?php echo esc_html( (string) $course['done'] ); ?> / <?php echo esc_html( (string) $course['total'] ); ?> lessons</span><strong><?php echo esc_html( (string) $course['percent'] ); ?>%</strong></div><div class="pbar prog" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="<?php echo esc_attr( (string) $course['percent'] ); ?>"><i class="pfill" style="width:<?php echo esc_attr( (string) $course['percent'] ); ?>%"></i></div><a class="btn small" href="<?php echo esc_url( $course['percent'] >= 100 ? $course['url'] : $course['next_url'] ); ?>"><?php echo $course['percent'] >= 100 ? 'Review' : 'Continue'; ?> <span class="arr" aria-hidden="true">&#8594;</span></a></div>
 							</article>
 						<?php endforeach; ?>
 					</div>
@@ -1232,28 +1251,28 @@ function cas_account_dashboard_body() {
 			</section>
 
 			<section class="dash-panel" id="panel-progress" data-panel="progress" role="tabpanel" aria-labelledby="tab-progress" tabindex="0" hidden>
-				<div class="dash-panel-head"><div><span class="eyebrow">The long view</span><h2>Progress</h2></div></div>
-				<div class="dash-card progress-summary"><div class="prog-row"><strong>Overall progress</strong><strong><?php echo esc_html( (string) $progress['percent'] ); ?>%</strong></div><div class="pbar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="<?php echo esc_attr( (string) $progress['percent'] ); ?>"><span class="pfill" style="width:<?php echo esc_attr( (string) $progress['percent'] ); ?>%"></span></div><p><?php echo esc_html( (string) $progress['done'] ); ?> of <?php echo esc_html( (string) $progress['total'] ); ?> lessons completed.</p></div>
+				<div class="dash-panel-head"><div><span class="eyebrow">The long view</span><h2><span class="ast cas-desktop-star" aria-hidden="true">&#10022;</span>Progress</h2></div></div>
+				<div class="dash-card progress-summary"><div class="prog-row"><strong>Overall progress</strong><strong><?php echo esc_html( (string) $progress['percent'] ); ?>%</strong></div><div class="pbar prog" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="<?php echo esc_attr( (string) $progress['percent'] ); ?>"><i class="pfill" style="width:<?php echo esc_attr( (string) $progress['percent'] ); ?>%"></i></div><p><?php echo esc_html( (string) $progress['done'] ); ?> of <?php echo esc_html( (string) $progress['total'] ); ?> lessons completed.</p></div>
 				<?php if ( ! empty( $courses ) ) : ?>
 					<div class="dash-card prog-list">
-						<?php foreach ( $courses as $course ) : ?><div class="prog-course"><div class="prog-row"><a href="<?php echo esc_url( $course['url'] ); ?>"><?php echo esc_html( $course['title'] ); ?></a><strong><?php echo esc_html( (string) $course['percent'] ); ?>%</strong></div><div class="pbar" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="<?php echo esc_attr( (string) $course['percent'] ); ?>"><span class="pfill" style="width:<?php echo esc_attr( (string) $course['percent'] ); ?>%"></span></div></div><?php endforeach; ?>
+						<?php foreach ( $courses as $course ) : ?><div class="prog-course"><div class="prog-row"><a href="<?php echo esc_url( $course['url'] ); ?>"><?php echo esc_html( $course['title'] ); ?></a><strong><?php echo esc_html( (string) $course['percent'] ); ?>%</strong></div><div class="pbar prog" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="<?php echo esc_attr( (string) $course['percent'] ); ?>"><i class="pfill" style="width:<?php echo esc_attr( (string) $course['percent'] ); ?>%"></i></div></div><?php endforeach; ?>
 					</div>
 				<?php else : ?><p class="hand-note">Progress appears here as you finish lessons.</p><?php endif; ?>
 			</section>
 
 			<section class="dash-panel" id="panel-purchases" data-panel="purchases" role="tabpanel" aria-labelledby="tab-purchases" tabindex="0" hidden>
-				<div class="dash-panel-head"><div><span class="eyebrow">Your records</span><h2>Purchases</h2></div></div>
+				<div class="dash-panel-head"><div><span class="eyebrow">Your records</span><h2><span class="ast cas-desktop-star" aria-hidden="true">&#10022;</span>Purchases</h2></div></div>
 				<div class="dash-card" style="padding:6px 4px;"><?php echo $purchases_html; // phpcs:ignore WordPress.Security.EscapeOutput ?></div>
 			</section>
 
 			<section class="dash-panel" id="panel-account" data-panel="account" role="tabpanel" aria-labelledby="tab-account" tabindex="0" hidden>
-				<div class="dash-panel-head"><div><span class="eyebrow">Your details</span><h2>Profile</h2></div></div>
+				<div class="dash-panel-head"><div><span class="eyebrow">Your details</span><h2><span class="ast cas-desktop-star" aria-hidden="true">&#10022;</span>Profile</h2></div></div>
 				<div class="dash-card tutor-panel-host" x-data="tutorSettings()"><?php echo $profile_html; // phpcs:ignore WordPress.Security.EscapeOutput ?></div>
 				<div style="margin-top:16px;"><button class="btn primary" type="submit" form="cas-dashboard-profile-form">Save changes</button></div>
 			</section>
 
 			<section class="dash-panel" id="panel-settings" data-panel="settings" role="tabpanel" aria-labelledby="tab-settings" tabindex="0" hidden>
-				<div class="dash-panel-head"><div><span class="eyebrow">Studio preferences</span><h2>Settings</h2></div></div>
+				<div class="dash-panel-head"><div><span class="eyebrow">Studio preferences</span><h2><span class="ast cas-desktop-star" aria-hidden="true">&#10022;</span>Settings</h2></div></div>
 				<?php echo $settings_html; // phpcs:ignore WordPress.Security.EscapeOutput ?>
 				<div class="dash-card tutor-panel-host" style="margin-top:16px;" x-data="tutorSettings()"><?php echo $security_html; // phpcs:ignore WordPress.Security.EscapeOutput ?></div>
 			</section>
@@ -2170,6 +2189,22 @@ body.tutor-screen-frontend-dashboard .tutor-card {
   color: var(--ink);
 }
 
+/* Desktop login follows the prototype's co-field geometry, including empty inputs.
+   Tutor's ID/placeholder selectors and important border otherwise defeat the palette. */
+@media (min-width: 861px) {
+  body.cas-root #tutor-login-form .co-field input.tutor-form-control {
+    background: var(--cream); font-size: 14.5px; line-height: normal; display: inline-block;
+    border-color: var(--line) !important;
+  }
+  body.cas-root #tutor-login-form .co-field input.tutor-form-control:placeholder-shown:not(:focus) { background: var(--cream); }
+  body.cas-root #tutor-login-form .co-field input.tutor-form-control:focus { border-color: transparent !important; }
+  body.cas-root #tutor-login-form .co-field { margin: 0 0 14px !important; }
+  body.cas-root #tutor-login-form .cas-login-options { margin: 2px 0 16px !important; gap: 8px; flex-wrap: wrap; }
+  body.cas-root #tutor-login-form .cas-login-options .tutor-label { font-size: 13px; font-weight: 500; line-height: 1.6; color: var(--muted); }
+  body.cas-root #tutor-login-form .cas-login-forgot { padding: 0; border: 0; font-family: var(--font-body); font-size: 13px; font-weight: 600; letter-spacing: normal; line-height: 1.6; color: var(--coral-ink); }
+  body.cas-root #tutor-login-form button[type="submit"] { line-height: normal; margin-top: 0 !important; }
+}
+
 /* Tutor's own login card — the fallback a logged-out visitor meets on /dashboard/.
    It keeps Tutor's heading and its form; only the surface is ours. */
 body.cas-account-page .tutor-login-wrap,
@@ -2385,6 +2420,38 @@ body.cas-account-page .tutor-dashboard-isolated-page-wrapper .tutor-card {
 .cas-studio-dashboard .dash-table td a { color: var(--coral-ink); font-weight: 600; }
 .cas-studio-dashboard .dash-card .mycourse-grid { margin-top: 0; }
 .cas-studio-dashboard .pbar .pfill { display: block; }
+
+ .cas-dashboard-icon, .cas-desktop-count, .cas-desktop-star, .cas-desktop-onboard, .cas-desktop-onboard-link { display: none; }
+@media (min-width: 861px) {
+ .cas-studio-dashboard .dash-rail-head, .cas-studio-dashboard .dash-tab > .arr, .cas-studio-dashboard .dash-panel-head .eyebrow, .cas-studio-dashboard .dash-subhead .eyebrow, .cas-studio-dashboard .mc-body > .eyebrow { display: none; }
+ .cas-studio-dashboard .cas-dashboard-icon { display: block; }
+ .cas-studio-dashboard .cas-desktop-count, .cas-studio-dashboard .cas-desktop-star { display: inline-block; }
+ .cas-studio-dashboard .dash-panel-head { align-items: baseline; gap: 14px; margin-bottom: 16px; }
+ .cas-studio-dashboard .dash-subhead { margin: 26px 0 16px; }
+ .cas-studio-dashboard .dash-subhead h3 { display: flex; align-items: center; gap: .5em; font-family: var(--font-display-serif); font-weight: 600; font-size: 22px; letter-spacing: var(--tracking-display); text-transform: uppercase; color: var(--ink); margin: 0; }
+ .cas-studio-dashboard .dash-subhead h3::before { content: '✦'; color: var(--marine); font-size: .7em; }
+ .cas-studio-dashboard .cas-desktop-onboard { display: grid; }
+ .cas-studio-dashboard .cas-desktop-onboard-link { display: inline-flex; }
+}
+
+@media (min-width: 1081px) { .cas-studio-dashboard .dash-rail-foot { display: none; } }
+@media (min-width: 861px) {
+ body.cas-root .cas-studio-dashboard input.tutor-form-control,
+ body.cas-root .cas-studio-dashboard input.tutor-input,
+ body.cas-root .cas-studio-dashboard textarea.tutor-form-control,
+ body.cas-root .cas-studio-dashboard textarea.tutor-input,
+ body.cas-root .cas-studio-dashboard select {
+   background: var(--cream); font-family: var(--font-body); font-size: 14.5px;
+   line-height: normal; color: var(--ink); border-color: var(--line) !important;
+   padding-top: 12px; padding-bottom: 12px; padding-left: 14px; border-radius: var(--r-sharp);
+ }
+ body.cas-root .cas-studio-dashboard input.tutor-form-control:placeholder-shown:not(:focus),
+ body.cas-root .cas-studio-dashboard input.tutor-input:placeholder-shown:not(:focus),
+ body.cas-root .cas-studio-dashboard textarea.tutor-form-control:placeholder-shown:not(:focus) { background: var(--cream); }
+ body.cas-root .cas-studio-dashboard input.tutor-form-control:focus,
+ body.cas-root .cas-studio-dashboard input.tutor-input:focus,
+ body.cas-root .cas-studio-dashboard textarea.tutor-form-control:focus { border-color: transparent !important; }
+}
 
 @media (max-width: 880px) {
   body.cas-account-page .tutor-dashboard-layout,
