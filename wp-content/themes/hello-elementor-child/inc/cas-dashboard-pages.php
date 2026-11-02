@@ -225,7 +225,7 @@ function cas_dashboard_settings_html( $user_id ) {
 	</form>
 	<?php
 
-	return (string) ob_get_clean();
+	return (string) ob_get_clean() . cas_showcase_preference_html( $user_id );
 }
 
 add_action(

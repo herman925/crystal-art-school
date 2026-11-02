@@ -112,6 +112,7 @@ function cas_render_footer_account_column() {
  * @return string
  */
 function cas_render_footer( $atts = array() ) {
+	do_action( 'cas_footer_rendered' );
 	$atts        = shortcode_atts( array( 'variant' => 'default' ), $atts, 'cas_footer' );
 	$variant     = is_scalar( $atts['variant'] ) ? sanitize_key( $atts['variant'] ) : 'default';
 	$is_checkout = ( 'checkout' === $variant );
@@ -154,7 +155,7 @@ function cas_render_footer( $atts = array() ) {
 					</div>
 				<?php endif; ?>
 			</div>
-			<div class="footer-meta"><span>&copy; <?php echo esc_html( gmdate( 'Y' ) ); ?> Crystal&#39;s Art School</span></div>
+			<div class="footer-meta"><button type="button" class="cas-privacy-link" data-cas-privacy-open>Privacy choices</button><span>&copy; <?php echo esc_html( gmdate( 'Y' ) ); ?> Crystal&#39;s Art School</span></div>
 		</div>
 	</footer>
 	<?php

@@ -142,6 +142,7 @@ function cas_showcase_students() {
 	return get_users( array( 'role__in' => array( 'subscriber', 'tutor_student' ), 'role__not_in' => array( 'administrator', 'editor', 'author', 'contributor', 'tutor_instructor' ), 'orderby' => 'display_name', 'fields' => array( 'ID', 'display_name' ), 'number' => -1 ) );
 }
 function cas_showcase_student_name( $post_id ) {
+	if ( '1' === get_post_meta( $post_id, '_cas_showcase_hide_credit', true ) ) { return ''; }
 	if ( ! metadata_exists( 'post', $post_id, CAS_SHOWCASE_META_USER ) ) {
 		return (string) get_post_meta( $post_id, CAS_SHOWCASE_META_STUDENT, true );
 	}
@@ -161,16 +162,19 @@ function cas_render_showcase_meta_box( $post ) {
 	<p>
 		<label for="cas-showcase-student"><strong>Registered Student</strong></label><br>
 		<select id="cas-showcase-student" name="cas_showcase_user_id" class="widefat">
-			<option value="0" <?php selected( ! $student && ! $legacy ); ?>>No Student Credit</option>
+			<option value="0" <?php selected( ! $student && ! $legacy ); ?>>Select student (required for the wall)</option>
 			<?php if ( $legacy ) : ?><option value="legacy" selected>Keep Existing Credit: <?php echo esc_html( $legacy ); ?></option><?php endif; ?>
 			<?php if ( $student && ! in_array( $student, array_map( static function ( $user ) { return (int) $user->ID; }, $students ), true ) ) : ?>
 			<option value="<?php echo esc_attr( (string) $student ); ?>" selected>Existing Credit: <?php echo esc_html( cas_showcase_student_name( $post->ID ) ?: 'Account Unavailable' ); ?></option>
 			<?php endif; ?>
 			<?php foreach ( $students as $user ) : ?><option value="<?php echo esc_attr( (string) $user->ID ); ?>" <?php selected( $student, (int) $user->ID ); ?>><?php echo esc_html( $user->display_name . ' (#' . $user->ID . ')' ); ?></option><?php endforeach; ?>
 		</select>
-		<span class="description">Choose a registered student. Their current display name appears under the picture. Upload the picture manually using Featured Image.</span>
+		<span class="description">Choose a registered student. Keep this link even when hiding their public name. Their saved Showcase preference applies. Upload the picture manually using Featured Image.</span>
 	</p>
 	<p class="description">
+		<label><input type="checkbox" name="cas_showcase_hide_credit" value="1" <?php checked( get_post_meta( $post->ID, '_cas_showcase_hide_credit', true ), '1' ); ?>> Hide public name credit</label><br>
+		Obtain permission before publishing a picture or credit. A default-ON preference is not consent.<br>
+		<?php if ( ! cas_showcase_piece_visible( $post->ID ) ) : ?><strong>Excluded from the wall: link a student whose Showcase preference is ON.</strong><br><?php endif; ?>
 		The <strong>featured image</strong> is the picture on the wall, and a piece
 		without one is not shown. It is cropped to a square, so any photograph fits.
 	</p>
@@ -202,7 +206,7 @@ function cas_save_showcase_credit( $post_id ) {
 	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
 		return;
 	}
-	if ( ! isset( $_POST['cas_showcase_nonce'] ) ) {
+	if ( ! isset( $_POST['cas_showcase_nonce'] ) || ! is_string( $_POST['cas_showcase_nonce'] ) ) {
 		return;
 	}
 	if ( ! wp_verify_nonce( sanitize_key( wp_unslash( $_POST['cas_showcase_nonce'] ) ), 'cas_save_showcase_credit' ) ) {
@@ -221,6 +225,8 @@ function cas_save_showcase_credit( $post_id ) {
 		return;
 	}
 	if ( ! $legacy ) { update_post_meta( $post_id, CAS_SHOWCASE_META_USER, (int) $input ); }
+	update_post_meta( $post_id, '_cas_showcase_hide_credit', isset( $_POST['cas_showcase_hide_credit'] ) && '1' === $_POST['cas_showcase_hide_credit'] ? '1' : '0' );
+	cas_showcase_purge_page();
 }
 add_action( 'save_post_' . CAS_SHOWCASE_POST_TYPE, 'cas_save_showcase_credit' );
 
@@ -287,6 +293,7 @@ function cas_showcase_pieces() {
 
 	$pieces = array();
 	foreach ( $posts as $post ) {
+		if ( ! cas_showcase_piece_visible( $post->ID ) ) { continue; }
 		$thumb_id = get_post_thumbnail_id( $post );
 		if ( ! $thumb_id ) {
 			// The tile IS the photograph. An empty print pinned to the board reads as
