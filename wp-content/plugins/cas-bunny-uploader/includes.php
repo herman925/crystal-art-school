@@ -163,7 +163,7 @@ final class CAS_Bunny_Uploader {
    $target=$r['target']??'lesson';if(!in_array($target,array('lesson','course'),true))self::fail('target','Invalid video destination.');
    if(!self::course($course))self::fail('forbidden','You cannot open this video list.',403);
    $owned=get_posts(array('post_type'=>'courses','post_status'=>array('publish','draft','pending','private','future'),'author'=>current_user_can('manage_options')?'':get_current_user_id(),'fields'=>'ids','numberposts'=>-1));$owned=array_filter(array_map('absint',$owned),array(__CLASS__,'course'));if(!$owned)return array();$rows=$wpdb->get_results('SELECT * FROM '.self::table()." WHERE kind IN ('video','catalog') AND state='ready' AND target='".esc_sql($target)."' AND course_id IN (".implode(',',$owned).") ORDER BY created DESC LIMIT 200",ARRAY_A);$out=array();
-   foreach($rows as $row)if(self::course((int)$row['course_id'])){$v=self::view($row);$v['title']=self::data($row)['title']??get_the_title((int)$row['lesson_id']);$out[]=$v;}return $out;
+   foreach($rows as $row)if(self::course((int)$row['course_id'])){$v=self::view($row);$v['title']=html_entity_decode(self::data($row)['title']??get_the_title((int)$row['lesson_id']),ENT_QUOTES,'UTF-8');$out[]=$v;}return $out;
   }
   if('uploads'===$route){
    $ctx=self::row($r['context']);self::authority($ctx);if('context'!==$ctx['kind']||'editing'!==$ctx['state']||(int)$ctx['expires']<time())self::fail('expired','Reopen the lesson before uploading.',409);
@@ -199,8 +199,8 @@ final class CAS_Bunny_Uploader {
   if(!self::course($course))return;
   if(!self::enabled()){echo '<p class="notice notice-info">Lesson video uploads are awaiting private server configuration and provider verification. Existing videos are unchanged.</p>';return;}
   wp_enqueue_script('cas-bunny-tus',plugins_url('vendor/tus.min.js',__FILE__),array(),'4.3.1',true);
-  wp_enqueue_script('cas-bunny-editor',plugins_url('assets/editor.js',__FILE__),array('cas-bunny-tus','wp-element','tutor-course-builder'),'1.1.1',true);
-  wp_enqueue_style('cas-bunny-editor',plugins_url('assets/editor.css',__FILE__),array(),'1.1.1');
+  wp_enqueue_script('cas-bunny-editor',plugins_url('assets/editor.js',__FILE__),array('cas-bunny-tus','wp-element','tutor-course-builder'),'1.1.2',true);
+  wp_enqueue_style('cas-bunny-editor',plugins_url('assets/editor.css',__FILE__),array(),'1.1.2');
   wp_localize_script('cas-bunny-editor','casBunnyEditor',array('course'=>$course,'user'=>get_current_user_id(),'root'=>rest_url('cas-video/v1/'),'nonce'=>wp_create_nonce('wp_rest')));
  }
  static function visibility($data){
