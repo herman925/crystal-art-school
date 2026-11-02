@@ -6,12 +6,20 @@
 2. Use your website username and password.
 3. Open **Content Hub**. It groups editing tasks by website page.
 
-Your editing account is intended for your content, courses and the agreed price/order tools.
+Your editing account manages your assigned content, courses and agreed price/order/access tools.
 Design, plugins, payment-provider settings and other people's accounts stay with the site administrator.
-If you still see extra administrator menus while handover is being prepared, use Content Hub.
+You arrive in Content Hub after signing in. Only your assigned content appears in editing lists.
 
 If a course or entry is missing, ask the site administrator to check its ownership. Do not create a duplicate
 to get around an access message.
+
+<figure class="guide-screenshot" aria-labelledby="content-hub-live-visual">
+  <figcaption id="content-hub-live-visual">Your Content Hub</figcaption>
+  <div class="guide-screenshot-images">
+    <a href="/guide-screenshots/content-hub-restricted.png" target="_blank" rel="noopener" style="--screenshot-width:1280px" aria-label="Open full-size screenshot: Content Hub: actual assigned-content and support tools for the Content Editor account (new tab)"><img src="/guide-screenshots/content-hub-restricted.png" width="1280" height="1471" alt="Content Hub: actual assigned-content and support tools for the Content Editor account" loading="lazy"></a>
+  </div>
+  <p>This is the live editing account’s Content Hub. Assigned content and the agreed support tools are available here; administrator tools stay separate.</p>
+</figure>
 
 ## Lost website password
 

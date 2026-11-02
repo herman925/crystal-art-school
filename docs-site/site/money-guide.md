@@ -1,7 +1,6 @@
 # Prices, orders and student access
 
-Use these tools after the site administrator completes your account handover. They are separate because
-they change different things.
+These tools are available in your Content Hub. They are separate because they change different things.
 
 | Your task | Use | Important difference |
 |---|---|---|

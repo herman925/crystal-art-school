@@ -352,11 +352,21 @@ add_action( 'wp_ajax_tutor_update_course', function () {
 	}
 	cas_price_native_write_lock( $id );
 	$old = cas_price_current( $id );
+	if ( isset( $_POST['pricing'] ) && ! is_array( $_POST['pricing'] ) ) { wp_send_json( array( 'message' => 'Invalid native pricing fields.' ), 400 ); }
 	$type = isset( $_POST['pricing']['type'] ) ? $_POST['pricing']['type'] : ( $_POST['tutor_course_price_type'] ?? $old['type'] );
 	$regular = isset( $_POST['course_price'] ) ? cas_price_clean( wp_unslash( $_POST['course_price'] ) ) : $old['regular'];
 	$sale = isset( $_POST['course_sale_price'] ) ? cas_price_clean( wp_unslash( $_POST['course_sale_price'] ) ) : $old['sale'];
 	if ( null !== $sale && is_numeric( $sale ) && 0.0 === (float) $sale ) { $sale = ''; }
 	if ( get_post_meta( $id, CAS_PRICE_PENDING_META, true ) && '' === $old['regular'] && '0.00' === $regular ) { $regular = ''; }
+	// Tutor's client rejects a paid draft with no price, although publication is still gated here.
+	$pending_draft = get_post_meta( $id, CAS_PRICE_PENDING_META, true ) && 'paid' === $old['type'] && '' === $old['regular'] && '' === $old['sale']
+		&& in_array( get_post_status( $id ), array( 'draft', 'auto-draft' ), true ) && 'draft' === ( $_POST['post_status'] ?? '' );
+	if ( $pending_draft && in_array( $type, array( 'free', 'paid' ), true ) && '' === $regular && '' === $sale ) {
+		$_POST['pricing']['type'] = 'paid';
+		$_POST['course_price'] = '';
+		$_POST['course_sale_price'] = '';
+		$type = 'paid'; // Preserve the stored paid/unpriced state; this is not a free-course transition.
+	}
 	if ( $type !== $old['type'] || $regular !== $old['regular'] || $sale !== $old['sale'] ) {
 		wp_send_json( array( 'message' => 'Change prices only through Course prices and its confirmation step.' ), 409 );
 	}
@@ -527,3 +537,25 @@ function cas_price_menu() {
 }
 add_action( 'admin_menu', 'cas_price_menu', 20 );
 
+
+/** Keep prices in their dedicated confirmed workflow; allow preparation of an unpriced draft. */
+add_filter( 'tutor_course_details_response', static function ( $data ) {
+	$id = absint( $data['ID'] ?? 0 );
+	if ( cas_content_is_user( get_current_user_id() ) && cas_builder_owns_course( $id )
+		&& in_array( get_post_status( $id ), array( 'draft', 'auto-draft' ), true ) && get_post_meta( $id, CAS_PRICE_PENDING_META, true ) ) {
+		$price = cas_price_current( $id );
+		if ( 'paid' === $price['type'] && '' === $price['regular'] && '' === $price['sale'] ) {
+			$data['course_pricing']['type'] = 'free'; // Form-only placeholder; the native guard restores paid on draft save.
+		}
+	}
+	return $data;
+}, 100 );
+add_filter( 'tutor_localize_data', static function ( $data ) {
+	$id = isset( $_GET['course_id'] ) && is_scalar( $_GET['course_id'] ) ? absint( $_GET['course_id'] ) : 0;
+	if ( cas_content_is_user( get_current_user_id() ) && cas_builder_owns_course( $id ) ) {
+		if ( ! is_array( $data['visibility_control'] ?? null ) ) { $data['visibility_control'] = array(); }
+		if ( ! is_array( $data['visibility_control']['course_builder'] ?? null ) ) { $data['visibility_control']['course_builder'] = array(); }
+		$data['visibility_control']['course_builder']['basics_pricing_options_instructor'] = 'off';
+	}
+	return $data;
+}, 1001 );

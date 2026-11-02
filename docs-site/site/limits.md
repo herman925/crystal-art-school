@@ -17,7 +17,7 @@ phone and desktop layouts.
 ## The tools that are yours
 
 You can maintain assigned content and use the agreed [course-price, coupon, Sales and
-Course Access tools](/money-guide) after handover. Those tools do not open site administration.
+Course Access tools](/money-guide). Those tools do not open site administration.
 You can also manage [your certificates, their order and the pinned highlight](/certificates).
 
 Student photographs and credits still need the student's permission. Use **No Student Credit**

@@ -1,15 +1,18 @@
 <?php
 defined( 'ABSPATH' ) || exit;
 final class CAS_Bunny_Uploader {
- const VERSION = 1;
+ const VERSION = 2;
  private static $tx = null;
  private static $locks = array();
  static function boot() {
   add_action('init',array(__CLASS__,'install'));
   add_action('rest_api_init',array(__CLASS__,'routes'));
   add_action('tutor_course_builder_footer',array(__CLASS__,'editor'));
-  add_filter('tutor_localize_data',array(__CLASS__,'visibility'));
+  add_filter('tutor_localize_data',array(__CLASS__,'visibility'),1000);
   add_filter('tutor_lesson_details_response',array(__CLASS__,'details'),30,2);
+  add_filter('tutor_course_details_response',array(__CLASS__,'course_details'),30);
+  add_action('wp_ajax_tutor_update_course',array(__CLASS__,'course_start'),5);
+  add_action('tutor_after_prepare_update_post_meta',array(__CLASS__,'course_finish'),PHP_INT_MAX);
   add_filter('wp_insert_post_data',array(__CLASS__,'preserve_author'),100,4);
   add_action('wp_ajax_tutor_save_lesson',array(__CLASS__,'save_start'),5);
   add_action('tutor/lesson/created',array(__CLASS__,'save_finish'),100);
@@ -38,6 +41,7 @@ final class CAS_Bunny_Uploader {
   dbDelta("CREATE TABLE $t (
    id char(32) NOT NULL,
    kind varchar(12) NOT NULL,
+   target varchar(12) NOT NULL DEFAULT 'lesson',
    user_id bigint unsigned NOT NULL,
    course_id bigint unsigned NOT NULL,
    lesson_id bigint unsigned NOT NULL DEFAULT 0,
@@ -57,7 +61,7 @@ final class CAS_Bunny_Uploader {
    KEY course (course_id),
    KEY video (video_id)
   ) $charset;");
-  if($wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s',$wpdb->esc_like($t)))===$t)update_option('cas_bunny_schema',self::VERSION,false);
+  if($wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s',$wpdb->esc_like($t)))===$t&&$wpdb->get_var("SHOW COLUMNS FROM $t LIKE 'target'")==='target')update_option('cas_bunny_schema',self::VERSION,false);
  }
  static function error($code,$message,$status=400){return new WP_Error('cas_video_'.$code,$message,array('status'=>$status));}
  static function fail($code,$message,$status=400){throw new RuntimeException(wp_json_encode(array($code,$message,$status)));}
@@ -71,6 +75,8 @@ final class CAS_Bunny_Uploader {
  }
  static function lesson_course($id){global $wpdb;return (int)$wpdb->get_var($wpdb->prepare("SELECT c.ID FROM {$wpdb->posts} l JOIN {$wpdb->posts} t ON t.ID=l.post_parent AND t.post_type='topics' AND t.post_status<>'trash' JOIN {$wpdb->posts} c ON c.ID=t.post_parent AND c.post_type='courses' AND c.post_status<>'trash' WHERE l.ID=%d AND l.post_type='lesson' AND l.post_status<>'trash'",$id));}
  static function topic_course($id){$p=get_post((int)$id);return $p && 'topics'===$p->post_type && 'trash'!==$p->post_status?(int)$p->post_parent:0;}
+ static function target($row){return $row['target']??'lesson';}
+ static function object_id($row){return 'course'===self::target($row)?(int)$row['course_id']:(int)$row['lesson_id'];}
  static function authority($row,$creator=true){
   if(!$row || !self::course((int)$row['course_id']) || ($creator && (int)$row['user_id']!==get_current_user_id()))self::fail('forbidden','You cannot manage this video.',403);
   if($creator && (int)$row['lesson_id'] && !current_user_can('edit_post',(int)$row['lesson_id']))self::fail('forbidden','You cannot edit this lesson.',403);
@@ -98,12 +104,14 @@ final class CAS_Bunny_Uploader {
   return array('library'=>$m[1],'video'=>strtolower($m[2]));
  }
  static function insert($kind,$course,$lesson,$extra=array()){
-  global $wpdb;$id=bin2hex(random_bytes(16));$row=array_merge(array('id'=>$id,'kind'=>$kind,'user_id'=>get_current_user_id(),'course_id'=>$course,'lesson_id'=>$lesson,'state'=>'editing','data'=>'{}','created'=>time(),'expires'=>time()+DAY_IN_SECONDS),$extra);
+  global $wpdb;$id=bin2hex(random_bytes(16));$row=array_merge(array('id'=>$id,'kind'=>$kind,'target'=>'lesson','user_id'=>get_current_user_id(),'course_id'=>$course,'lesson_id'=>$lesson,'state'=>'editing','data'=>'{}','created'=>time(),'expires'=>time()+DAY_IN_SECONDS),$extra);
   if(false===$wpdb->insert(self::table(),$row))self::fail('store','The upload job could not be created.',503);return self::row($id);
  }
- static function context($course,$lesson){
-  if(!self::course($course)||($lesson && (self::lesson_course($lesson)!==$course||!current_user_can('edit_post',$lesson))))self::fail('forbidden','You cannot edit this lesson.',403);
-  return self::insert('context',$course,$lesson,array('data'=>wp_json_encode(array('initial_lesson'=>$lesson,'base'=>self::identity($lesson?self::raw($lesson):array())))));
+ static function context($course,$lesson,$target='lesson'){
+  if(!in_array($target,array('lesson','course'),true)||('course'===$target&&$lesson))self::fail('target','Invalid video destination.');
+  if(!self::course($course)||($lesson && (self::lesson_course($lesson)!==$course||!current_user_can('edit_post',$lesson))))self::fail('forbidden','You cannot edit this video destination.',403);
+  $object='course'===$target?$course:$lesson;
+  return self::insert('context',$course,$lesson,array('target'=>$target,'data'=>wp_json_encode(array('initial_lesson'=>$lesson,'base'=>self::identity($object?self::raw($object):array())))));
  }
  static function http($method,$video='',$body=null){
   $cfg=self::config();$url='https://video.bunnycdn.com/library/'.rawurlencode((string)$cfg['library_id']).'/videos'.($video?'/'.rawurlencode($video):'');
@@ -132,11 +140,11 @@ final class CAS_Bunny_Uploader {
  }
  static function view($row){
   global $wpdb;
-  $data=self::data($row);$out=array('id'=>$row['id'],'lesson'=>(int)$row['lesson_id'],'state'=>$row['state'],'revision'=>(int)$row['revision'],'selection'=>$row['selection'],'selected'=>$row['selected_id'],'duration'=>(int)($data['duration']??0),'progress'=>(int)($data['progress']??0),'expires'=>(int)$row['expires']);
+  $data=self::data($row);$out=array('id'=>$row['id'],'target'=>self::target($row),'lesson'=>(int)$row['lesson_id'],'state'=>$row['state'],'revision'=>(int)$row['revision'],'selection'=>$row['selection'],'selected'=>$row['selected_id'],'duration'=>(int)($data['duration']??0),'progress'=>(int)($data['progress']??0),'expires'=>(int)$row['expires']);
   if('ready'===$row['state'])$out['preview']=self::preview($row['video_id']);
   if('context'===$row['kind']){
-   $raw=(int)$row['lesson_id']?self::raw((int)$row['lesson_id']):array();$ref=self::reference($raw);$cfg=self::config();
-   $runtime=is_array($raw['runtime']??null)?$raw['runtime']:array();$pending=$wpdb->get_row($wpdb->prepare('SELECT * FROM '.self::table()." WHERE kind='video' AND user_id=%d AND course_id=%d AND lesson_id=%d AND state IN ('uploading','processing') AND expires>%d".((int)$row['lesson_id']?'':' AND context_id=%s')." ORDER BY created DESC LIMIT 1",...array_merge(array(get_current_user_id(),(int)$row['course_id'],(int)$row['lesson_id'],time()),(int)$row['lesson_id']?array():array($row['id']))),ARRAY_A);$out['pending']=$pending?self::view($pending):null;
+   $object=self::object_id($row);$raw=$object?self::raw($object):array();$ref=self::reference($raw);$cfg=self::config();
+   $runtime=is_array($raw['runtime']??null)?$raw['runtime']:array();$bound=(int)$row['lesson_id']||'course'===self::target($row);$pending=$wpdb->get_row($wpdb->prepare('SELECT * FROM '.self::table()." WHERE kind='video' AND user_id=%d AND course_id=%d AND lesson_id=%d AND target=%s AND state IN ('uploading','processing') AND expires>%d".($bound?'':' AND context_id=%s')." ORDER BY created DESC LIMIT 1",...array_merge(array(get_current_user_id(),(int)$row['course_id'],(int)$row['lesson_id'],self::target($row),time()),$bound?array():array($row['id']))),ARRAY_A);$out['pending']=$pending?self::view($pending):null;$choice=$row['selected_id']?self::row($row['selected_id']):null;$out['candidate']=$choice&&'use'===$row['selection']&&'ready'===$choice['state']&&self::target($choice)===self::target($row)&&self::course((int)$choice['course_id'])?self::view($choice):null;
    $out['current']=array('duration'=>(int)($runtime['hours']??0)*3600+(int)($runtime['minutes']??0)*60+(int)($runtime['seconds']??0),'has_video'=>self::identity($raw)!==self::identity(array()),'preview'=>$ref&&(string)$ref['library']===(string)$cfg['library_id']?self::preview($ref['video']):null);
   }
   return $out;
@@ -150,11 +158,12 @@ final class CAS_Bunny_Uploader {
  }
  static function api($route,$r){
   global $wpdb;$course=absint($r['course']);$id=$r['id'];
-  if('contexts'===$route)return self::view(self::context($course,absint($r['lesson'])));
+  if('contexts'===$route)return self::view(self::context($course,absint($r['lesson']),$r['target']??'lesson'));
   if('library'===$route){
+   $target=$r['target']??'lesson';if(!in_array($target,array('lesson','course'),true))self::fail('target','Invalid video destination.');
    if(!self::course($course))self::fail('forbidden','You cannot open this video list.',403);
-   $owned=get_posts(array('post_type'=>'courses','post_status'=>array('publish','draft','pending','private','future'),'author'=>current_user_can('manage_options')?'':get_current_user_id(),'fields'=>'ids','numberposts'=>-1));$owned=array_filter(array_map('absint',$owned),array(__CLASS__,'course'));if(!$owned)return array();$rows=$wpdb->get_results('SELECT * FROM '.self::table()." WHERE kind IN ('video','catalog') AND state='ready' AND course_id IN (".implode(',',$owned).") ORDER BY created DESC LIMIT 200",ARRAY_A);$out=array();
-   foreach($rows as $row)if(self::course((int)$row['course_id'])){$v=self::view($row);$v['title']=self::data($row)['title']??get_the_title((int)$row['lesson_id']);$out[]=$v;}return $out;
+   $owned=get_posts(array('post_type'=>'courses','post_status'=>array('publish','draft','pending','private','future'),'author'=>current_user_can('manage_options')?'':get_current_user_id(),'fields'=>'ids','numberposts'=>-1));$owned=array_filter(array_map('absint',$owned),array(__CLASS__,'course'));if(!$owned)return array();$rows=$wpdb->get_results('SELECT * FROM '.self::table()." WHERE kind IN ('video','catalog') AND state='ready' AND target='".esc_sql($target)."' AND course_id IN (".implode(',',$owned).") ORDER BY created DESC LIMIT 200",ARRAY_A);$out=array();
+   foreach($rows as $row)if(self::course((int)$row['course_id'])){$v=self::view($row);$v['title']=html_entity_decode(self::data($row)['title']??get_the_title((int)$row['lesson_id']),ENT_QUOTES,'UTF-8');$out[]=$v;}return $out;
   }
   if('uploads'===$route){
    $ctx=self::row($r['context']);self::authority($ctx);if('context'!==$ctx['kind']||'editing'!==$ctx['state']||(int)$ctx['expires']<time())self::fail('expired','Reopen the lesson before uploading.',409);
@@ -163,7 +172,7 @@ final class CAS_Bunny_Uploader {
    $key=hash('sha256',get_current_user_id().':'.$ctx['id'].':'.$request);$existing=$wpdb->get_var($wpdb->prepare('SELECT id FROM '.self::table().' WHERE request_key=%s',$key));if($existing)return self::view(self::row($existing));
    self::lock((int)$ctx['course_id']);$count=(int)$wpdb->get_var($wpdb->prepare('SELECT COUNT(*) FROM '.self::table()." WHERE kind='video' AND user_id=%d AND created>%d",get_current_user_id(),time()-DAY_IN_SECONDS));if($count>=20)self::fail('quota','The daily upload-job allowance has been reached. Ask the administrator.',429);
    $active=(int)$wpdb->get_var($wpdb->prepare('SELECT COUNT(*) FROM '.self::table()." WHERE kind='video' AND user_id=%d AND state IN ('creating','uploading','processing') AND expires>%d",get_current_user_id(),time()));if($active>=2)self::fail('active','Finish or cancel an existing upload first.',429);
-   $job=self::insert('video',(int)$ctx['course_id'],(int)$ctx['lesson_id'],array('context_id'=>$ctx['id'],'state'=>'creating','request_key'=>$key,'data'=>wp_json_encode(array('title'=>$title))));self::unlock();
+   $job=self::insert('video',(int)$ctx['course_id'],(int)$ctx['lesson_id'],array('target'=>self::target($ctx),'context_id'=>$ctx['id'],'state'=>'creating','request_key'=>$key,'data'=>wp_json_encode(array('title'=>$title))));self::unlock();
    try{$v=self::http('POST','',array('title'=>$title.' ['.substr($job['id'],0,8).']'));if((isset($v['videoLibraryId'])&&(string)$v['videoLibraryId']!==(string)self::config()['library_id'])||!preg_match('/^[a-f0-9]{8}(?:-[a-f0-9]{4}){3}-[a-f0-9]{12}$/i',$v['guid']??''))self::fail('provider','Bunny did not confirm a video ID.',503);self::update($job['id'],array('video_id'=>strtolower($v['guid'])));$wpdb->query($wpdb->prepare('UPDATE '.self::table()." SET state='uploading' WHERE id=%s AND state='creating'",$job['id']));}catch(Throwable $e){$wpdb->query($wpdb->prepare('UPDATE '.self::table()." SET state='unknown' WHERE id=%s AND state='creating'",$job['id']));throw $e;}
    return self::view(self::row($job['id']));
   }
@@ -172,14 +181,14 @@ final class CAS_Bunny_Uploader {
    if(str_ends_with($route,'/selection')){
     if('editing'!==$row['state']||(int)$row['expires']<time())self::fail('saved','Reopen the lesson before choosing another video.',409);
     $selection=$r['selection'];if(!in_array($selection,array('keep','use','remove'),true))self::fail('selection','Invalid video choice.');$chosen='';
-    if('use'===$selection){$job=self::row($r['video']);self::authority($job,false);if(!in_array($job['kind'],array('video','catalog'),true))self::fail('wrong_job','Invalid video choice.');$job=self::refresh($job);if('ready'!==$job['state'])self::fail('not_ready','The video is not ready yet.',409);$chosen=$job['id'];}
-    self::lock((int)$row['course_id']);$row=self::row($id);if('editing'!==$row['state']||(int)$row['expires']<time())self::fail('saved','Reopen the lesson.',409);self::update($id,array('selection'=>$selection,'selected_id'=>$chosen,'revision'=>(int)$row['revision']+1));return self::view(self::row($id));
+    if('use'===$selection){$job=self::row($r['video']);self::authority($job,false);if(self::target($job)!==self::target($row))self::fail('target','Choose a film approved for this destination.',403);if('course'===self::target($row)&&true!==$r->get_param('public_preview'))self::fail('public_preview','Confirm that this film is approved for the public course preview.',403);if(!in_array($job['kind'],array('video','catalog'),true))self::fail('wrong_job','Invalid video choice.');$job=self::refresh($job);if('ready'!==$job['state'])self::fail('not_ready','The video is not ready yet.',409);$chosen=$job['id'];}
+    self::lock((int)$row['course_id']);$row=self::row($id);if('editing'!==$row['state']||(int)$row['expires']<time())self::fail('saved','Reopen the lesson.',409);$data=self::data($row);$data['public_ack']='course'===self::target($row)&&'use'===$selection?$chosen:'';self::update($id,array('selection'=>$selection,'selected_id'=>$chosen,'revision'=>(int)$row['revision']+1,'data'=>wp_json_encode($data)));return self::view(self::row($id));
    }return self::view($row);
   }
   if('video'!==$row['kind'])self::fail('wrong_job','Invalid upload job.');
   if(str_ends_with($route,'/cancel')){self::lock((int)$row['course_id']);$ctx=self::row($row['context_id']);if(!$ctx||'editing'!==$ctx['state'])self::fail('saved','This video may already be saved. Reopen the lesson to check.',409);$changed=$wpdb->query($wpdb->prepare('UPDATE '.self::table()." SET state='cancelled' WHERE id=%s AND state IN ('creating','uploading','processing','failed','unknown')",$id));if(1!==$changed)self::fail('complete','The upload is complete or already cancelled. Keep or remove its lesson selection instead.',409);if($ctx['selected_id']===$id)self::update($ctx['id'],array('selected_id'=>'','selection'=>'keep','revision'=>(int)$ctx['revision']+1));return self::view(self::row($id));}
   if(str_ends_with($route,'/authorisation')){
-   $ctx=self::row($row['context_id']);$next=$r['context']?self::row($r['context']):null;if($next){self::authority($next);if('context'!==$next['kind']||'editing'!==$next['state']||(int)$next['course_id']!==(int)$row['course_id']||((int)$row['lesson_id'] && (int)$next['lesson_id']!==(int)$row['lesson_id']))self::fail('context','Resume this upload in its original lesson.',409);self::update($row['id'],array('context_id'=>$next['id']));$ctx=$next;}if(!$ctx||'editing'!==$ctx['state']||(int)$ctx['expires']<time()||!in_array($row['state'],array('uploading','processing'),true)||(int)$row['expires']<time()||!$row['video_id'])self::fail('expired','This upload cannot be resumed. Check its status.',409);
+   $ctx=self::row($row['context_id']);$next=$r['context']?self::row($r['context']):null;if($next){self::authority($next);if('context'!==$next['kind']||'editing'!==$next['state']||(int)$next['course_id']!==(int)$row['course_id']||self::target($next)!==self::target($row)||((int)$row['lesson_id'] && (int)$next['lesson_id']!==(int)$row['lesson_id']))self::fail('context','Resume this upload in its original lesson.',409);self::update($row['id'],array('context_id'=>$next['id']));$ctx=$next;}if(!$ctx||'editing'!==$ctx['state']||(int)$ctx['expires']<time()||!in_array($row['state'],array('uploading','processing'),true)||(int)$row['expires']<time()||!$row['video_id'])self::fail('expired','This upload cannot be resumed. Check its status.',409);
    $cfg=self::config();$expires=min((int)$row['expires'],time()+2*HOUR_IN_SECONDS);$endpoint='https://video.bunnycdn.com/tusupload';if('local'===wp_get_environment_type())$endpoint=apply_filters('cas_bunny_test_upload_endpoint',$endpoint,$row);
    return array('endpoint'=>$endpoint,'video'=>$row['video_id'],'library'=>(string)$cfg['library_id'],'expires'=>$expires,'signature'=>hash('sha256',$cfg['library_id'].$cfg['library_key'].$expires.$row['video_id']));
   }
@@ -190,16 +199,18 @@ final class CAS_Bunny_Uploader {
   if(!self::course($course))return;
   if(!self::enabled()){echo '<p class="notice notice-info">Lesson video uploads are awaiting private server configuration and provider verification. Existing videos are unchanged.</p>';return;}
   wp_enqueue_script('cas-bunny-tus',plugins_url('vendor/tus.min.js',__FILE__),array(),'4.3.1',true);
-  wp_enqueue_script('cas-bunny-editor',plugins_url('assets/editor.js',__FILE__),array('cas-bunny-tus','wp-element','tutor-course-builder'),'1.0.0',true);
-  wp_enqueue_style('cas-bunny-editor',plugins_url('assets/editor.css',__FILE__),array(),'1.0.0');
+  wp_enqueue_script('cas-bunny-editor',plugins_url('assets/editor.js',__FILE__),array('cas-bunny-tus','wp-element','tutor-course-builder'),'1.1.2',true);
+  wp_enqueue_style('cas-bunny-editor',plugins_url('assets/editor.css',__FILE__),array(),'1.1.2');
   wp_localize_script('cas-bunny-editor','casBunnyEditor',array('course'=>$course,'user'=>get_current_user_id(),'root'=>rest_url('cas-video/v1/'),'nonce'=>wp_create_nonce('wp_rest')));
  }
  static function visibility($data){
   $course=isset($_GET['course_id'])&&is_scalar($_GET['course_id'])?absint($_GET['course_id']):0;
-  if(self::enabled()&&self::course($course)&&!(current_user_can('manage_options')&&!empty($_GET['cas_bunny_advanced']))){
+  if(self::enabled()&&self::course($course)){
    $role=current_user_can('administrator')?'admin':'instructor';
-   $data['visibility_control']['course_builder']['curriculum_lesson_video_'.$role]='off';
-   $data['visibility_control']['course_builder']['curriculum_lesson_video_playback_time_'.$role]='off';
+   if(!is_array($data['visibility_control']??null))$data['visibility_control']=array();if(!is_array($data['visibility_control']['course_builder']??null))$data['visibility_control']['course_builder']=array();
+   $data['visibility_control']['course_builder']['basics_intro_video_'.$role]='off';
+   if(!(current_user_can('manage_options')&&!empty($_GET['cas_bunny_advanced']))){$data['visibility_control']['course_builder']['curriculum_lesson_video_'.$role]='off';
+   $data['visibility_control']['course_builder']['curriculum_lesson_video_playback_time_'.$role]='off';}
   }return $data;
  }
  static function details($data,$id){
@@ -207,73 +218,103 @@ final class CAS_Bunny_Uploader {
   try{$course=self::lesson_course((int)$id);if(self::course($course)){$ctx=self::context($course,(int)$id);$data['_cas_bunny_edit']=$ctx['id'].':0';}}catch(Throwable $e){$data['_cas_bunny_edit']='';}
   return $data;
  }
- static function save_start(){
+ static function course_details($data){
+  if(!self::enabled())return $data;
+  try{$course=absint($data['ID']??0);if(self::course($course)){$ctx=self::context($course,0,'course');$data['_cas_bunny_course_edit']=$ctx['id'].':0';}}catch(Throwable $e){$data['_cas_bunny_course_edit']='';}
+  return $data;
+ }
+ static function course_start(){self::begin('course');}
+ static function course_finish($id){if(self::$tx&&'course'===self::$tx['target'])self::save_finish($id);}
+ static function save_start(){self::begin('lesson');}
+ static function begin($target){
   if(!self::enabled())return;
   try{
-   if(!function_exists('cas_builder_nonce_valid')||!cas_builder_nonce_valid()||'POST'!==($_SERVER['REQUEST_METHOD']??''))self::fail('nonce','Reopen the lesson and try again.',403);
-   $topic=isset($_POST['topic_id'])&&is_scalar($_POST['topic_id'])?absint($_POST['topic_id']):0;$course=self::topic_course($topic);
-   $lesson=isset($_POST['lesson_id'])&&is_scalar($_POST['lesson_id'])?absint($_POST['lesson_id']):0;
-   if(!self::course($course)||($lesson&&self::lesson_course($lesson)!==$course)||($lesson&&!current_user_can('edit_post',$lesson)))self::fail('forbidden','You cannot save this lesson.',403);
-   $token=$_POST['_cas_bunny_edit']??'';if(!is_string($token))self::fail('context','Invalid editor session.');
+   if(!function_exists('cas_builder_nonce_valid')||!cas_builder_nonce_valid()||'POST'!==($_SERVER['REQUEST_METHOD']??''))self::fail('nonce','Reopen the editor and try again.',403);
+   $courseMode='course'===$target;
+   $topic=isset($_POST['topic_id'])&&is_scalar($_POST['topic_id'])?absint($_POST['topic_id']):0;
+   $course=$courseMode?(isset($_POST['course_id'])&&is_scalar($_POST['course_id'])?absint($_POST['course_id']):0):self::topic_course($topic);
+   $lesson=$courseMode?0:(isset($_POST['lesson_id'])&&is_scalar($_POST['lesson_id'])?absint($_POST['lesson_id']):0);$object=$courseMode?$course:$lesson;
+   if(!self::course($course)||($lesson&&self::lesson_course($lesson)!==$course)||($lesson&&!current_user_can('edit_post',$lesson)))self::fail('forbidden','You cannot save this video destination.',403);
+   $field=$courseMode?'_cas_bunny_course_edit':'_cas_bunny_edit';$token=$_POST[$field]??'';if(!is_string($token))self::fail('context','Invalid editor session.');
    $ctx=null;$revision=0;
-   if($token){if(!preg_match('/^([a-f0-9]{32}):([0-9]+)$/',$token,$m))self::fail('context','Reopen the lesson before saving.',409);$ctx=self::row($m[1]);$revision=(int)$m[2];self::authority($ctx);if('context'!==$ctx['kind']||(int)$ctx['course_id']!==$course||(int)('saved'===$ctx['state']?(self::data($ctx)['initial_lesson']??$ctx['lesson_id']):$ctx['lesson_id'])!==$lesson)self::fail('context','The video selection belongs to a different lesson.',409);}
-   if($lesson&&!$ctx)self::fail('context','Reopen the lesson to load the current video before saving.',409);
+   if($token){
+    if(!preg_match('/^([a-f0-9]{32}):([0-9]+)$/',$token,$m))self::fail('context','Reopen the editor before saving.',409);
+    $ctx=self::row($m[1]);$revision=(int)$m[2];self::authority($ctx);
+    if('context'!==$ctx['kind']||self::target($ctx)!==$target||(int)$ctx['course_id']!==$course||(int)('saved'===$ctx['state']?(self::data($ctx)['initial_lesson']??$ctx['lesson_id']):$ctx['lesson_id'])!==$lesson)self::fail('context','The video selection belongs to a different destination.',409);
+   }
+   if(!$courseMode&&$lesson&&!$ctx)self::fail('context','Reopen the lesson to load its current video before saving.',409);
    $posted=is_array($_POST['video']??null)?wp_unslash($_POST['video']):array();$payload=wp_unslash($_POST);unset($payload['_tutor_nonce'],$payload['_wpnonce']);$payload['video']=self::identity($posted);$fingerprint=hash('sha256',wp_json_encode($payload));
-   if($ctx&&'saved'===$ctx['state']){if((self::data($ctx)['payload']??'')===$fingerprint && (self::data($ctx)['saved_identity']??'')===self::identity(self::raw((int)$ctx['lesson_id'])))wp_send_json(array('status_code'=>200,'message'=>'This lesson was already saved.','data'=>(int)$ctx['lesson_id']));self::fail('used','This editor session was already saved. Reopen the lesson.',409);}
+   if($ctx&&'saved'===$ctx['state']){
+    $savedObject=$courseMode?$course:(int)$ctx['lesson_id'];
+    if((self::data($ctx)['payload']??'')===$fingerprint&&(self::data($ctx)['saved_identity']??'')===self::identity(self::raw($savedObject)))wp_send_json(array('status_code'=>200,'message'=>'This change was already saved.','data'=>$savedObject));
+    self::fail('used','This editor session was already saved. Reopen the editor.',409);
+   }
    $selected=null;
-   if($ctx&&'use'===$ctx['selection']){$selected=self::row($ctx['selected_id']);self::authority($selected,false);$selected=self::refresh($selected);if('ready'!==$selected['state'])self::fail('ready','Wait until the chosen video is ready before saving.',409);}
-   self::lock($course);global $wpdb;
-   $tables=array($wpdb->posts,$wpdb->postmeta,self::table());$formats=implode(',',array_fill(0,3,'%s'));
+   if($ctx&&'use'===$ctx['selection']&&0!==$revision){
+    $selected=self::row($ctx['selected_id']);self::authority($selected,false);
+    if(self::target($selected)!==$target)self::fail('target','Choose a film approved for this destination.',403);
+    $selected=self::refresh($selected);if('ready'!==$selected['state'])self::fail('ready','Wait until the chosen video is ready before saving.',409);
+   }
+   self::lock($course);global $wpdb;$tables=array($wpdb->posts,$wpdb->postmeta,self::table());$formats=implode(',',array_fill(0,3,'%s'));
    $engines=$wpdb->get_col($wpdb->prepare("SELECT ENGINE FROM information_schema.TABLES WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME IN ($formats)",$tables));
    if(count($engines)!==3||array_filter($engines,static function($engine){return 'INNODB'!==strtoupper($engine);}))self::fail('engine','Video saving needs transactional database tables. Contact the administrator.',503);
    if(false===$wpdb->query('START TRANSACTION'))self::fail('transaction','The save could not be started.',503);
-   self::$tx=array('course'=>$course,'lesson'=>$lesson,'context'=>$ctx?$ctx['id']:null,'selected'=>$selected?$selected['id']:null,'payload'=>$fingerprint,'initial_lesson'=>$lesson,'expected'=>null,'connection'=>self::connection(),'touched'=>array($lesson));
+   self::$tx=array('target'=>$target,'object'=>$object,'course'=>$course,'lesson'=>$lesson,'context'=>$ctx?$ctx['id']:null,'selected'=>$selected?$selected['id']:null,'payload'=>$fingerprint,'initial_lesson'=>$lesson,'expected'=>null,'connection'=>self::connection(),'touched'=>array($object));
    $wpdb->get_var($wpdb->prepare("SELECT ID FROM {$wpdb->posts} WHERE ID=%d FOR UPDATE",$course));
-   $wpdb->get_var($wpdb->prepare("SELECT ID FROM {$wpdb->posts} WHERE ID=%d FOR UPDATE",$topic));
-   if($lesson)$wpdb->get_var($wpdb->prepare("SELECT ID FROM {$wpdb->posts} WHERE ID=%d FOR UPDATE",$lesson));
-   if(!self::course($course)||self::topic_course($topic)!==$course||($lesson&&self::lesson_course($lesson)!==$course))self::fail('moved','The course or lesson changed. Reopen it.',409);
-   $raw=$lesson?self::raw($lesson):array();
-   if($ctx){$wpdb->get_var($wpdb->prepare('SELECT id FROM '.self::table().' WHERE id=%s FOR UPDATE',$ctx['id']));$ctx=self::row($ctx['id']);if(0===$revision&&(int)$ctx['revision']>0){$ctx['selection']='keep';$ctx['selected_id']='';$selected=null;self::$tx['selected']=null;}if('editing'!==$ctx['state']||(0!==$revision&&(int)$ctx['revision']!==$revision)||(int)$ctx['expires']<time())self::fail('stale','The selected video changed. Reopen the lesson.',409);if((self::data($ctx)['base']??'')!==self::identity($raw))self::fail('conflict','The lesson video changed in another editor. Reopen it to keep the latest version.',409);}
-   if($selected){$selected=self::row($selected['id']);if('ready'!==$selected['state'])self::fail('cancelled','The chosen upload is no longer available.',409);$cfg=self::config();$seconds=(int)(self::data($selected)['duration']??0);$posted=array('source'=>'embedded','source_embedded'=>'<iframe src="https://iframe.mediadelivery.net/embed/'.(int)$cfg['library_id'].'/'.$selected['video_id'].'?autoplay=false&amp;preload=false" loading="lazy" allow="accelerometer;gyroscope;encrypted-media;picture-in-picture" allowfullscreen></iframe>','runtime'=>array('hours'=>(int)floor($seconds/3600),'minutes'=>(int)floor($seconds%3600/60),'seconds'=>$seconds%60));}
-   elseif($ctx&&'remove'===$ctx['selection']){$posted=array();$_POST['video']=array('source'=>'-1');}
-   elseif(!current_user_can('manage_options')){if(self::identity($posted)!==self::identity($raw))self::fail('unapproved','Use the lesson video upload or approved-video picker for a new film.',403);$posted=$raw;}
+   if(!$courseMode){$wpdb->get_var($wpdb->prepare("SELECT ID FROM {$wpdb->posts} WHERE ID=%d FOR UPDATE",$topic));if($lesson)$wpdb->get_var($wpdb->prepare("SELECT ID FROM {$wpdb->posts} WHERE ID=%d FOR UPDATE",$lesson));}
+   if(!self::course($course)||(!$courseMode&&self::topic_course($topic)!==$course)||($lesson&&self::lesson_course($lesson)!==$course))self::fail('moved','The course or lesson changed. Reopen the editor.',409);
+   $raw=$object?self::raw($object):array();
+   if($ctx){
+    $wpdb->get_var($wpdb->prepare('SELECT id FROM '.self::table().' WHERE id=%s FOR UPDATE',$ctx['id']));$ctx=self::row($ctx['id']);
+    if(0===$revision&&(int)$ctx['revision']>0){$ctx['selection']='keep';$ctx['selected_id']='';$selected=null;self::$tx['selected']=null;self::update($ctx['id'],array('selection'=>'keep','selected_id'=>''));}
+    if('editing'!==$ctx['state']||(0!==$revision&&(int)$ctx['revision']!==$revision)||(int)$ctx['expires']<time())self::fail('stale','The video choice changed. Reopen the editor.',409);
+    if((self::data($ctx)['base']??'')!==self::identity($raw))self::fail('conflict','The saved video changed in another editor. Reopen it to keep the latest version.',409);
+   }
+   if($selected){
+    $selected=self::row($selected['id']);if('ready'!==$selected['state'])self::fail('cancelled','The chosen upload is no longer available.',409);
+    if($courseMode&&(self::data($ctx)['public_ack']??'')!==$selected['id'])self::fail('public_preview','Confirm this film is approved for the public course preview.',403);
+    $cfg=self::config();$seconds=(int)(self::data($selected)['duration']??0);
+    $posted=array('source'=>'embedded','source_embedded'=>'<iframe src="https://iframe.mediadelivery.net/embed/'.(int)$cfg['library_id'].'/'.$selected['video_id'].'?autoplay=false&amp;preload=false" loading="lazy" allow="accelerometer;gyroscope;encrypted-media;picture-in-picture" allowfullscreen></iframe>','runtime'=>array('hours'=>(int)floor($seconds/3600),'minutes'=>(int)floor($seconds%3600/60),'seconds'=>$seconds%60));
+   }elseif($ctx&&'remove'===$ctx['selection']){$posted=array();if($courseMode)unset($_POST['video']);else $_POST['video']=array('source'=>'-1');}
+   elseif($courseMode||!current_user_can('manage_options')){
+    if(self::identity($posted)!==self::identity($raw))self::fail('unapproved','Use the upload or approved-film picker for a new film.',403);$posted=$raw;
+   }
    if(!($ctx&&'remove'===$ctx['selection'])){
-    // Persist the stable embed, not a freshly generated playback signature.
     if(!empty($posted['source_embedded']))$posted['source_embedded']=preg_replace_callback('~https://(?:iframe|video)\.mediadelivery\.net/[^"\'\s<>]+~i',static function($m){return remove_query_arg(array('token','expires'),html_entity_decode($m[0],ENT_QUOTES,'UTF-8'));},$posted['source_embedded']);
-    $_POST['video']=wp_slash($posted);
+    if($courseMode&&!$posted)unset($_POST['video']);else $_POST['video']=$posted?wp_slash($posted):array('source'=>'-1');
    }
    self::$tx['expected']=self::identity($posted);
-  }catch(Throwable $e){self::rollback();$d=json_decode($e->getMessage(),true);wp_send_json(array('status_code'=>(int)($d[2]??503),'message'=>$d[1]??'The lesson save could not be verified. Reopen it before retrying.'),(int)($d[2]??503));}
+  }catch(Throwable $e){self::rollback();$d=json_decode($e->getMessage(),true);wp_send_json(array('status_code'=>(int)($d[2]??503),'message'=>$d[1]??'The save could not be verified. Reopen the editor before retrying.'),(int)($d[2]??503));}
  }
  static function guard_meta($check,$id,$key,$value=null,$previous=null){
-  if('_video'!==$key||'lesson'!==get_post_type($id)||!self::enabled())return $check;
+  if('_video'!==$key||!in_array(get_post_type($id),array('lesson','courses'),true)||!self::enabled())return $check;
   try{
-   $course=self::lesson_course((int)$id);if(!$course)self::fail('graph','The lesson has no valid owning course.',403);
-   if(self::$tx){if(self::connection()!==self::$tx['connection'])self::fail('uncertain','The database connection changed. Check the lesson before retrying.',503);if($course!==self::$tx['course']||(self::$tx['lesson']&&(int)$id!==self::$tx['lesson']))self::fail('target','The save targeted a different lesson.',409);self::$tx['lesson']=(int)$id;self::$tx['touched'][]=(int)$id;}
+   $type=get_post_type($id);$course='courses'===$type?(int)$id:self::lesson_course((int)$id);if(!$course)self::fail('graph','The lesson has no valid owning course.',403);
+   if(self::$tx){if(self::connection()!==self::$tx['connection'])self::fail('uncertain','The database connection changed. Check the lesson before retrying.',503);if($course!==self::$tx['course']||('course'===self::$tx['target']?'courses'!==$type||self::$tx['object']!==(int)$id:'lesson'!==$type||(self::$tx['lesson']&&(int)$id!==self::$tx['lesson'])))self::fail('target','The save targeted a different video destination.',409);self::$tx['object']=(int)$id;if('lesson'===self::$tx['target'])self::$tx['lesson']=(int)$id;self::$tx['touched'][]=(int)$id;}
    else{if(!((defined('WP_CLI')&&WP_CLI)||(current_user_can('manage_options')&&current_user_can('edit_post',$id))))self::fail('context','Use the native lesson editor to change its video.',403);self::lock($course);}
   }catch(Throwable $e){self::rollback();$d=json_decode($e->getMessage(),true);wp_die(esc_html($d[1]??'The video write was refused.'),'',array('response'=>(int)($d[2]??403)));}return $check;
  }
- static function preserve_author($data,$postarr,$raw,$update){if(self::$tx && $update && 'lesson'===($data['post_type']??'') && !empty($postarr['ID'])){$post=get_post((int)$postarr['ID']);if($post)$data['post_author']=$post->post_author;}return $data;}
+ static function preserve_author($data,$postarr,$raw,$update){if(self::$tx && $update && in_array($data['post_type']??'',array('lesson','courses'),true) && !empty($postarr['ID'])){$post=get_post((int)$postarr['ID']);if($post)$data['post_author']=$post->post_author;}return $data;}
  static function save_finish($id){
   if(!self::$tx)return;
   try{global $wpdb;$tx=self::$tx;$id=(int)$id;
-   if(!$tx['lesson']&&self::lesson_course($id)===$tx['course']){self::$tx['lesson']=$id;self::$tx['touched'][]=$id;$tx=self::$tx;}if($tx['lesson']!==$id||self::lesson_course($id)!==$tx['course']||self::identity(self::raw($id))!==$tx['expected'])self::fail('readback','The saved video could not be verified.',503);
-   if(self::connection()!==$tx['connection'])self::fail('uncertain','The database connection changed. Check the saved lesson before retrying.',503);if($tx['context']){self::update($tx['context'],array('state'=>'saved','lesson_id'=>$id,'data'=>wp_json_encode(array('initial_lesson'=>$tx['initial_lesson'],'payload'=>$tx['payload'],'saved_identity'=>$tx['expected']))));}
-   $wpdb->query($wpdb->prepare('UPDATE '.self::table()." SET lesson_id=%d WHERE context_id=%s AND kind='video' AND lesson_id=0",$id,$tx['context']??''));
-   if($tx['selected']){$job=self::row($tx['selected']);if(!$job||'ready'!==$job['state'])self::fail('cancelled','The chosen video changed before the save completed.',409);if(!(int)$job['lesson_id'])self::update($job['id'],array('lesson_id'=>$id));}
+   if('lesson'===$tx['target']&&!$tx['lesson']&&self::lesson_course($id)===$tx['course']){self::$tx['lesson']=$id;self::$tx['object']=$id;self::$tx['touched'][]=$id;$tx=self::$tx;}if($tx['object']!==$id||('lesson'===$tx['target']?self::lesson_course($id)!==$tx['course']:$id!==$tx['course'])||self::identity(self::raw($id))!==$tx['expected'])self::fail('readback','The saved video could not be verified.',503);
+   if(self::connection()!==$tx['connection'])self::fail('uncertain','The database connection changed. Check the saved lesson before retrying.',503);if($tx['context']){self::update($tx['context'],array('state'=>'saved','lesson_id'=>'lesson'===$tx['target']?$id:0,'data'=>wp_json_encode(array('initial_lesson'=>$tx['initial_lesson'],'payload'=>$tx['payload'],'saved_identity'=>$tx['expected']))));}
+   if('lesson'===$tx['target'])$wpdb->query($wpdb->prepare('UPDATE '.self::table()." SET lesson_id=%d WHERE context_id=%s AND kind='video' AND lesson_id=0 AND target='lesson'",$id,$tx['context']??''));
+   if($tx['selected']){$job=self::row($tx['selected']);if(!$job||'ready'!==$job['state'])self::fail('cancelled','The chosen video changed before the save completed.',409);if('lesson'===$tx['target']&&!(int)$job['lesson_id'])self::update($job['id'],array('lesson_id'=>$id));}
    if(self::connection()!==$tx['connection'])self::fail('uncertain','The database connection changed. Check the saved lesson before retrying.',503);if(false===$wpdb->query('COMMIT'))self::fail('commit','The save could not be confirmed.',503);self::$tx=null;self::unlock();
   }catch(Throwable $e){self::rollback();$d=json_decode($e->getMessage(),true);wp_send_json(array('status_code'=>503,'message'=>$d[1]??'The lesson save failed and was rolled back.'),503);}
  }
  static function connection(){global $wpdb;try{return $wpdb->dbh instanceof mysqli?(int)mysqli_thread_id($wpdb->dbh):0;}catch(Throwable $e){return 0;}}
  static function rollback(){if(self::$tx){global $wpdb;$uncertain=self::connection()!==self::$tx['connection'];$wpdb->query('ROLLBACK');if($uncertain&&self::$tx['context'])$wpdb->update(self::table(),array('state'=>'uncertain'),array('id'=>self::$tx['context']));foreach(self::$tx['touched'] as $id)if($id){clean_post_cache($id);wp_cache_delete($id,'post_meta');}self::$tx=null;}self::unlock();}
  static function shutdown(){self::rollback();self::unlock();}
- static function import_references($approved){
+ static function import_references($approved,$target='lesson'){
   if(!current_user_can('manage_options'))self::fail('forbidden','Administrator import required.',403);
-  global $wpdb;$cfg=self::config();$created=array();
-  foreach($approved as $item){$lesson=(int)($item['lesson']??0);$raw=self::raw($lesson);if(!hash_equals((string)($item['fingerprint']??''),hash('sha256',wp_json_encode($raw))))self::fail('preimage','The approved lesson video changed before catalogue import.',409);$ref=self::reference($raw);$course=self::lesson_course($lesson);if(!$ref||!$course||(string)$ref['library']!==(string)($cfg['library_id']??''))self::fail('library','The approved reference is outside this configured library.',409);
-   $old=$wpdb->get_var($wpdb->prepare('SELECT id FROM '.self::table()." WHERE video_id=%s AND course_id=%d AND kind='catalog'",$ref['video'],$course));if($old){$created[]=$old;continue;}
+  global $wpdb;$cfg=self::config();$created=array();if(!in_array($target,array('lesson','course'),true))self::fail('target','Invalid catalogue destination.');
+  foreach($approved as $item){$object=(int)($item['lesson']??$item['course']??0);$lesson='lesson'===$target?$object:0;$raw=self::raw($object);if(!hash_equals((string)($item['fingerprint']??''),hash('sha256',wp_json_encode($raw))))self::fail('preimage','The approved lesson video changed before catalogue import.',409);$ref=self::reference($raw);$course='course'===$target&&'courses'===get_post_type($object)?$object:self::lesson_course($lesson);if(!$ref||!$course||(string)$ref['library']!==(string)($cfg['library_id']??''))self::fail('library','The approved reference is outside this configured library.',409);
+   $old=$wpdb->get_var($wpdb->prepare('SELECT id FROM '.self::table()." WHERE video_id=%s AND course_id=%d AND kind='catalog' AND target=%s",$ref['video'],$course,$target));if($old){$created[]=$old;continue;}
    $runtime=$raw['runtime']??array();$duration=(int)($runtime['hours']??0)*3600+(int)($runtime['minutes']??0)*60+(int)($runtime['seconds']??0);
-   $row=self::insert('catalog',$course,$lesson,array('state'=>'ready','video_id'=>$ref['video'],'data'=>wp_json_encode(array('duration'=>$duration,'title'=>get_the_title($lesson)))));$created[]=$row['id'];
+   $row=self::insert('catalog',$course,$lesson,array('target'=>$target,'state'=>'ready','video_id'=>$ref['video'],'data'=>wp_json_encode(array('duration'=>$duration,'title'=>get_the_title($object)))));$created[]=$row['id'];
   }return $created;
  }
 

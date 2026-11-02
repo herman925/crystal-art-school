@@ -10,7 +10,7 @@
 defined( 'ABSPATH' ) || exit;
 
 const CAS_AUDIT_ALERT_TO        = 'hermanchan925@gmail.com';
-const CAS_AUDIT_EXPECTED_ADMINS = 2; // cas_owner, cas_dev
+const CAS_AUDIT_EXPECTED_ADMINS = 1; // cas_dev; Crystal uses the restricted content role.
 
 /* Every field of a log line goes through here: valid UTF-8, no control or line-separator characters
    (\p{Cc}, U+2028, U+2029, U+0085), and '\' and '|' escaped so a value cannot forge a column.
