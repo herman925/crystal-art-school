@@ -137,7 +137,6 @@ Reopen the saved course and check the intended file list before directing studen
 
 ## New or replacement lesson films
 
-Ask the site administrator to arrange a new film or replacement. Editing the course does
-not upload the film. You can still edit the lesson title, description and position.
+Open the exact lesson in **Curriculum** and use its **Lesson video → Upload video** control. The film goes to Bunny, and the lesson handles its video reference and duration for you. Wait for **Ready**, preview it, then save that lesson. Follow [Upload a lesson video](/lessons#upload-a-lesson-video) for upload, replacement and recovery steps.
 
-Keep paid films out of the public Media library. Never paste a hosting password into a lesson.
+Paid lesson films stay out of the ordinary WordPress Media library. You do not need a Bunny login or embed code. **Course Highlights Video** remains a separate public-preview workflow; ask the site administrator to arrange a new highlight.

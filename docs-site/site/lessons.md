@@ -43,12 +43,51 @@ second version alone does not remove the first. Removing the final course/lesson
 revokes that student's old download link. Use separate copies for public photographs and
 paid materials; do not permanently delete a shared file while another course uses it.
 
+## Upload a lesson video
+
+**You can upload the film here in WordPress. You do not need a Bunny login or any embed code.** Start from **Content hub → Manage Courses → course → Curriculum**, open the intended lesson, and find **Lesson video**. For a new lesson, enter its name first.
+
+1. Choose **Upload video** and select the original video file on your computer.
+2. Keep this tab open while **Uploading** shows the percentage. The file goes directly to Bunny; it is not added to the ordinary WordPress Media library.
+3. Wait through **Processing**. Bunny is preparing the film for playback; 100% transferred does not mean it is ready yet.
+4. When **Ready** appears, preview the film and check its duration. The duration is filled automatically.
+5. Use this lesson’s **Update** button, or **Save** for a new lesson. Reopen the lesson to check the saved film and duration.
+
+Uploading and previewing prepare a selection. **The lesson’s save is what puts that film into use.** Course changes have their own separate save control.
+
+<figure class="guide-screenshot" aria-labelledby="lesson-video-live-visual">
+  <figcaption id="lesson-video-live-visual">Tutor: the live lesson video controls</figcaption>
+  <div class="guide-screenshot-images">
+    <a href="/guide-screenshots/lesson-video-upload.png" target="_blank" rel="noopener" style="--screenshot-width:305px" aria-label="Open full-size screenshot: Tutor lesson editor: live Lesson video upload, duration, resume and remove controls (new tab)"><img src="/guide-screenshots/lesson-video-upload.png" width="305" height="403" alt="Tutor lesson editor: live Lesson video upload, duration, resume and remove controls" loading="lazy"></a>
+    <a href="/guide-screenshots/lesson-video-picker.png" target="_blank" rel="noopener" style="--screenshot-width:305px" aria-label="Open full-size screenshot: Tutor lesson editor: approved existing-film picker; no selection saved (new tab)"><img src="/guide-screenshots/lesson-video-picker.png" width="305" height="675" alt="Tutor lesson editor: approved existing-film picker; no selection saved" loading="lazy"></a>
+    <a href="/guide-screenshots/lesson-video-save.png" target="_blank" rel="noopener" style="--screenshot-width:74px" aria-label="Open full-size screenshot: Tutor lesson editor: actual Update button after an unsaved title edit; no changes submitted (new tab)"><img src="/guide-screenshots/lesson-video-save.png" width="74" height="35" alt="Tutor lesson editor: actual Update button after an unsaved title edit; no changes submitted" loading="lazy"></a>
+  </div>
+  <p>An existing lesson is shown. These are actual WordPress backend captures: the saved film, the approved picker and the lesson’s Update button. The Update button was shown after an unsaved title edit; no teaching-content changes were submitted. Select a screenshot to open it full size.</p>
+</figure>
+
+## Choose an existing film or replace one
+
+**Choose existing** opens the approved-film list. Select the intended title, preview it, then save the lesson. You can reuse an approved film without uploading it again.
+
+To replace a film, choose **Upload video** and follow the same steps. The currently saved film stays in use while the replacement uploads or processes. Once the new film is Ready, preview it and save the lesson. **Keep saved video** lets you abandon the proposed replacement.
+
+**Remove from lesson** stages removal from this lesson; save to apply it. It does not permanently delete the film from Bunny or remove it from other lessons. Ask the site administrator to deal with permanently deleting unused films.
+
+## If the upload stops
+
+Leave the saved lesson film in place. Choose **Resume upload**, then select the **same original file in the same browser**. The original filename, size and modification date must match. Resume is available only while the transfer’s authorisation/resource is still valid; it is not an indefinite backup.
+
+**Check status** asks Bunny for the current result. If you return after the film has processed, check its status, preview the Ready film and save the lesson. If you save a new lesson while its transfer is unfinished, reopen that same lesson to find the pending upload.
+
+**Cancel upload** stops this transfer and prevents it being attached by that job. The saved lesson film stays unchanged. Closing the tab does not keep uploading; you may need to resume when you return.
+
+If you see an expired-session message, reopen the lesson. If the result is unclear or the page asks for an administrator check, send the lesson name and the exact message to the site administrator before starting another upload. Do not submit the same film repeatedly.
+
 ## About the videos
 
-Course films are hosted separately from the site's photographs and text. Each lesson's approved video setting points to the intended film. Access checks and sharing restrictions must be maintained by the site administrator; do not assume that possessing a video address is permission to share it.
+Paid lesson films use Bunny through this WordPress control. The separate [Free Videos](/free-videos) page keeps its YouTube-link workflow. **Course Highlights Video** is a public preview and currently uses a separate administrator-arranged workflow; agree that preview before changing it.
 
-For a new film or replacement, ask the site administrator to arrange the upload and update
-the lesson’s approved film reference. Editing the lesson does not upload a film.
+Access checks and sharing restrictions are maintained by the site administrator. Keep paid films and their video addresses private; a video address is not permission to share the film.
 
 Students cannot leave comments, questions or notes under a lesson at the moment. That is switched off on purpose.
 
