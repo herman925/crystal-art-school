@@ -135,21 +135,30 @@ add_action( 'wp_footer', static function () {
 	}
 	?>
 	<noscript><p class="container">External video players stay off without JavaScript. Contact Crystal if you need help accessing a lesson.</p></noscript>
-	<aside class="cas-cookie-banner" id="cas-cookie-banner" aria-label="Cookies and privacy" hidden>
-		<p>We use browser storage for account, basket, security and display settings. External video players stay off until you enable them.</p>
-		<div class="cas-privacy-actions"><button type="button" class="btn" data-cas-privacy-reject>Keep videos off</button><button type="button" class="btn" data-cas-privacy-open>Choose settings</button><button type="button" class="btn primary" data-cas-privacy-allow>Allow video players</button></div>
+	<aside class="cas-cookie-banner ck-bar" id="cas-cookie-banner" aria-label="Cookies and privacy" hidden>
+		<div class="ck-in"><div class="ck-txt"><b><span class="ast" aria-hidden="true">✦</span> Cookies &amp; your privacy</b>
+			We use cookies and browser storage for site functions and saved settings. Optional external video players stay off until you choose.
+			<button type="button" class="cas-privacy-link" data-cas-privacy-open>Privacy choices &amp; data requests</button>
+		</div><div class="ck-acts"><button type="button" class="ck-btn ghost" data-cas-privacy-reject>Essential only</button><button type="button" class="ck-btn ghost" data-cas-privacy-open>Manage</button><button type="button" class="ck-btn primary" data-cas-privacy-allow>Accept all</button></div></div>
 	</aside>
-	<div class="cas-privacy-modal" id="cas-privacy-modal" role="dialog" aria-modal="true" aria-labelledby="cas-privacy-title" tabindex="-1" hidden inert>
-		<div class="cas-privacy-panel"><button type="button" class="cas-privacy-close btn" data-cas-privacy-close aria-label="Close privacy choices">×</button>
-		<h2 id="cas-privacy-title">Cookies &amp; privacy choices</h2>
-		<p>These settings apply to this browser, not every device or your Showcase account preference.</p>
-		<h3>Site functions &amp; saved settings</h3><p>Sign-in, basket and security use cookies or storage. Display choices such as your theme, and the privacy choice you save here, are stored on this browser. These controls do not switch off those site functions.</p>
-		<label class="cas-privacy-choice"><input type="checkbox" id="cas-privacy-media"> Allow external video players</label>
-		<p>Site fonts load from Google independently of this setting. Loading a video connects to Bunny or YouTube (or the video host named by the player). They receive your IP address and browser details and may use cookies or storage under their policies. Turning this off unloads players on this page and blocks future loads here; it cannot remove data already held by those services.</p>
-		<p>Your choice is remembered for six months if browser storage is available. You can change it at any time using Privacy choices.</p>
-		<p>For access, correction or deletion requests, <a href="mailto:<?php echo esc_attr( $social['email'] ); ?>">contact Crystal</a>. See <a href="<?php echo esc_url( cas_page_url( 'about' ) . '#terms' ); ?>">Terms &amp; privacy</a> for the site’s current published information.</p>
-		<div class="cas-privacy-actions"><button type="button" class="btn" data-cas-privacy-reject>Keep videos off</button><button type="button" class="btn primary" data-cas-privacy-save>Save choices</button></div>
-		<p id="cas-privacy-status" role="status"></p></div>
+	<div class="cas-privacy-modal ck-modal" id="cas-privacy-modal" role="dialog" aria-modal="true" aria-labelledby="cas-privacy-title" tabindex="-1" hidden inert>
+		<div class="ck-modal-bg" data-cas-privacy-close></div>
+		<div class="cas-privacy-panel ck-card"><button type="button" class="ck-x" data-cas-privacy-close aria-label="Close privacy choices">✕</button><div class="ck-card-in">
+		<h2 id="cas-privacy-title" class="ck-h"><span class="ast" aria-hidden="true">✦</span> Privacy choices</h2>
+		<p class="ck-sub">Manage cookies and browser storage here. These choices apply to this browser, separately from your account’s Showcase preference.</p>
+		<div class="ck-sect">Cookie preferences</div>
+		<div class="ck-row"><div><div class="l" id="cas-privacy-essential-label">Essential &amp; saved settings</div><div class="d">Sign-in, basket, security, your display settings and saved privacy choice. These site functions remain available.</div></div><input class="ck-tog locked" type="checkbox" role="switch" checked disabled aria-labelledby="cas-privacy-essential-label"></div>
+		<div class="ck-row"><div><label class="l" for="cas-privacy-media">External video players</label><div class="d" id="cas-privacy-media-description">Connect to Bunny or YouTube to watch videos. Players stay blocked until enabled.</div></div><input class="ck-tog" type="checkbox" role="switch" id="cas-privacy-media" aria-describedby="cas-privacy-media-description"></div>
+		<div class="ck-row"><div><div class="l" id="cas-privacy-analytics-label">Analytics</div><div class="d">Not configured in these controls. This panel does not enable analytics scripts.</div></div><input class="ck-tog locked" type="checkbox" role="switch" disabled aria-labelledby="cas-privacy-analytics-label"></div>
+		<div class="ck-row"><div><div class="l" id="cas-privacy-marketing-label">Marketing</div><div class="d">Not configured in these controls. This panel does not enable marketing scripts.</div></div><input class="ck-tog locked" type="checkbox" role="switch" disabled aria-labelledby="cas-privacy-marketing-label"></div>
+		<p class="ck-sub">Video hosts receive your IP address and browser details and may use cookies or storage. Turning video players off unloads them on this page and blocks future loads here; it cannot remove data already held by those services. Site fonts load from Google independently of this setting.</p>
+		<p class="ck-sub">Your choice is remembered for six months when browser storage is available. Change it at any time through Privacy choices.</p>
+		<div class="ck-sect">Your data requests</div>
+		<p class="ck-sub">Email Crystal to ask about access, correction or deletion of your personal data. These links open an email request for you to send.</p>
+		<div class="ck-dr"><?php foreach ( array( 'Request my data' => 'Personal data access request', 'Correct my data' => 'Personal data correction request', 'Request deletion' => 'Personal data deletion request' ) as $label => $subject ) : ?><a class="ck-btn ghost" href="<?php echo esc_url( 'mailto:' . $social['email'] . '?subject=' . rawurlencode( $subject ) ); ?>"><?php echo esc_html( $label ); ?></a><?php endforeach; ?></div>
+		<p class="ck-sub" style="margin-top:16px;"><a href="<?php echo esc_url( cas_page_url( 'about' ) . '#terms' ); ?>">Terms &amp; privacy</a></p>
+		<div class="ck-foot"><button type="button" class="ck-btn ghost" data-cas-privacy-close>Cancel</button><button type="button" class="ck-btn primary" data-cas-privacy-save>Save choices</button></div>
+		<p class="ck-note" id="cas-privacy-status" role="status"></p></div></div>
 	</div>
 	<?php
 }, 15 );
