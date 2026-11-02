@@ -1,6 +1,8 @@
 # Tutor lesson uploader implementation and acceptance
 
-Status: deployed and enabled on WordPress on 2026-11-02 following the owner’s explicit “please make it live” request. That authorisation superseded waiting for a separate test library: a bounded live check used one 3,151-byte, four-second synthetic clip and a temporary private draft, both removed after verification. Local evidence and observed live results are distinguished below. The separate real-account handover in #150 is unchanged.
+Status: deployed and enabled on WordPress on 2026-11-02 following the owner’s explicit “please make it live” request. That authorisation superseded waiting for a separate test library: a bounded live check used one 3,151-byte, four-second synthetic clip and a temporary private draft, both removed after verification. Local evidence and observed live results are distinguished below. The real-account handover was completed later under #150.
+
+**Current follow-up:** the restricted-account handover (#150) and public Highlights extension (#249) are now delivered. The latest playback policy and rejected Basic DRM/IP trials are recorded in [the November 3 protection checkpoint](BUNNY-PLAYBACK-PROTECTION-2026-11-03.md); it supersedes the earlier fallback/configuration observations below. Original November 2 test results remain historical evidence.
 
 ## Implemented design
 
@@ -29,7 +31,7 @@ Readiness uses the current **REST** status model: only Finished (4), positive du
 
 The native save uses a course mutex, InnoDB transaction, current parent/ownership checks, locked context revision and raw stored video identity. Token refresh does not produce a false conflict. Tutor's post, metadata and context commit together; an ordinary interrupted save rolls back. Duplicate video metadata, stale selection, moved lessons and unsupported records are refused. Existing lesson authorship is preserved. An unexpected database reconnection is an uncertain outcome requiring readback/reconciliation; this is not a claim of guaranteed rollback across a server/connection failover.
 
-The stored video remains Tutor's `embedded` source with a stable iframe reference and provider duration. Expiring playback tokens are generated on read, never committed to the lesson. Replacing/detaching a film does not delete it or alter other lessons. A pending transfer for a new lesson follows that lesson's first native save. Free Videos retain their YouTube workflow. Course highlights are a separate future integration, since they are public previews.
+The stored video remains Tutor's `embedded` source with a stable iframe reference and provider duration. Expiring playback tokens are generated on read, never committed to the lesson. Replacing/detaching a film does not delete it or alter other lessons. A pending transfer for a new lesson follows that lesson's first native save. Free Videos retain their YouTube workflow. Course highlights were separate at this lesson-only checkpoint; the approved public Highlights integration was subsequently delivered in #249.
 
 ## Local evidence
 
@@ -71,4 +73,4 @@ Historical #87 closure explicitly recorded the one-hour sharing limit and succes
 
 ## Handover and remaining checks
 
-The client guide is updated with the live upload/reuse/replacement/recovery workflow and actual backend captures. The protected developer edition documents the Hostinger boundary, bounded live check, CDN correction and copied-link/media-lifetime limits. Keep the real-account restriction/ownership handover and Crystal’s own usability trial in #150. A representative long client upload, real-network interruption/reload, provider capability reuse after Ready/cancel, cross-device codec checks and any signed-link/DRM policy changes remain follow-up qualification; do not mark these passed by the tiny clip or local mocks. The remaining playback/security decisions stay in #87.
+The client guide is updated with the live upload/reuse/replacement/recovery workflow and actual backend captures. The protected developer edition documents the Hostinger boundary, bounded live check, CDN correction and copied-link/media-lifetime limits. The real-account restriction/ownership handover is complete under #150; keep Crystal’s own remaining training/usability acceptance in #93. A representative long client upload, real-network interruption/reload, provider capability reuse after Ready/cancel, cross-device codec checks and any signed-link/DRM policy changes remain follow-up qualification; do not mark these passed by the tiny clip or local mocks. The remaining playback/security decisions stay in #87.
