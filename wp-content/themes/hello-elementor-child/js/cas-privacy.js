@@ -110,7 +110,12 @@
     });
   }
   function refresh() {
+    var wasHidden = banner.hidden;
     banner.hidden = !!choice;
+    if (wasHidden && !choice) {
+      banner.getBoundingClientRect();
+    }
+    banner.classList.toggle("show", !choice);
     bannerHeight();
     applyMedia();
     clearTimeout(expiryTimer);
@@ -172,23 +177,43 @@
         return previous;
       });
     dialog.hidden = false;
+    // Establish the prototype's initial pose before starting its entrance transition.
+    dialog.getBoundingClientRect();
+    dialog.classList.add("show");
     dialog.inert = false;
     document.body.style.overflow = "hidden";
-    dialog.querySelector("[data-cas-privacy-close]").focus();
+    dialog.querySelector("button[data-cas-privacy-close]").focus();
+    requestAnimationFrame(function () {
+      if (!dialog.hidden && !dialog.contains(document.activeElement)) {
+        dialog.querySelector("button[data-cas-privacy-close]").focus();
+      }
+    });
   }
   function closeDialog() {
     if (dialog.hidden) {
       return;
     }
     dialog.hidden = true;
+    dialog.classList.remove("show");
     dialog.inert = true;
     siblings.forEach(function (item) {
       item.node.inert = item.inert;
     });
     siblings = [];
     document.body.style.overflow = previousOverflow;
-    if (opener && opener.isConnected) {
-      opener.focus();
+    var target =
+      opener && opener.isConnected && opener.getClientRects().length
+        ? opener
+        : Array.from(document.querySelectorAll(".cas-privacy-link")).find(
+            function (node) {
+              return (
+                node.getClientRects().length > 0 &&
+                !node.closest("details:not([open])")
+              );
+            },
+          );
+    if (target) {
+      target.focus({ preventScroll: true });
     }
     opener = null;
   }
@@ -249,7 +274,7 @@
       if (!dialog.hidden) {
         event.stopImmediatePropagation();
         if (!dialog.contains(event.target)) {
-          dialog.querySelector("button").focus();
+          dialog.querySelector("button[data-cas-privacy-close]").focus();
         }
       }
     },

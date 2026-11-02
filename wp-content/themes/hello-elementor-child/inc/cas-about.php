@@ -1147,52 +1147,49 @@ function cas_render_about() {
 	</section>
 
 	<?php
-	/* The section and its #terms anchor stay: cas-footer.php links to about#terms from
-	   every page of the site, so removing the anchor would make a dead link site-wide.
-	   What it CARRIES is another matter — see the note above the accordion. */
+	/* Keep the shared #terms anchor. Explain implemented controls and reuse the approved
+	   checkout sentence; full policy wording remains adviser-owned under the legal-copy gate. */
 	?>
 	<section class="section" id="terms" style="padding-bottom:80px;">
 		<div class="section-head reveal-one" style="text-align:center;">
 			<div class="eyebrow" style="justify-content:center;"><span class="star">&#10022;</span> The small print</div>
 			<h2 class="section-title">Terms &amp; privacy</h2>
 		</div>
-		<?php
-		/* THREE PANELS ARE MISSING FROM THIS ACCORDION ON PURPOSE. The prototype carried
-		   four; only the first is here.
-
-		   Not published, and needing copy from Crystal or her adviser before they can be:
-
-		     1. "Using the course materials" — the licence for personal study, and the rule
-		        against re-uploading, re-selling or sharing outside the household.
-		     2. "Cookies" — which cookies are set, and the analytics opt-in.
-		     3. "Privacy choices & data rights" — the data-subject rights statement and the
-		        time limit on a deletion request.
-
-		   The prototype's own comment above this section said its legal copy was
-		   placeholder and NOT client-supplied, and it showed: it asserted UK GDPR rights, a
-		   UK cookie banner and a 30-day deletion deadline on behalf of a Hong Kong-based
-		   artist. That is Crystal making a data-protection commitment, with a deadline, that
-		   she has never seen. Being on the wrong side of a jurisdiction makes it likelier to
-		   be wrong than merely unverified.
-
-		   DO NOT write replacement wording here. Wording invented by a second author is no
-		   better than wording invented by the first. These panels come back when she or her
-		   adviser supplies the text, and not before.
-
-		   The one panel that survives says only that the terms are still being confirmed. It
-		   names no refund period, no access duration, no download limit, no device
-		   requirement and no payment-failure rule, and none may be added until she supplies
-		   official terms. */
-		?>
+		<?php $privacy_contact = cas_social(); ?>
 		<div class="acc-list">
 			<details class="acc-item">
 				<summary>Purchases &amp; refunds<span class="acc-ico" aria-hidden="true">+</span></summary>
 				<div class="acc-body">
-					<p>Courses are one-time purchases &mdash; no subscription. Pricing and the terms of access are being finalised and will be confirmed here before launch.</p>
-					<p>A refund policy will apply to course purchases. The exact terms are still being confirmed and will be published here before launch.</p>
+					<p>Courses are one-time purchases &mdash; no subscription. Current prices are shown on the course pages and at checkout.</p>
+					<p>At checkout, you are asked to accept this course-access and cancellation statement:</p>
+					<blockquote><?php echo esc_html( cas_checkout_refund_consent_text() ); ?></blockquote>
+					<p>For a question about an order, <a href="mailto:<?php echo esc_attr( $privacy_contact['email'] ); ?>">contact Crystal</a>.</p>
+				</div>
+			</details>
+			<details class="acc-item">
+				<summary>Student Showcase<span class="acc-ico" aria-hidden="true">+</span></summary>
+				<div class="acc-body">
+					<p>Choose whether Crystal may consider your artwork for the public Showcase under <a href="<?php echo esc_url( cas_page_url( 'dashboard' ) . '#panel-settings' ); ?>">My Studio &rarr; Settings &rarr; Student Showcase</a>. Until you save a choice, the site default applies. This preference is separate from permission to publish a particular picture or name credit.</p>
+					<p>Saving OFF excludes your linked work from future Showcase visits. Previously downloaded copies and direct image links may remain; contact Crystal to discuss image removal.</p>
+				</div>
+			</details>
+			<details class="acc-item">
+				<summary>Cookies &amp; browser privacy<span class="acc-ico" aria-hidden="true">+</span></summary>
+				<div class="acc-body">
+					<p>The site uses cookies or browser storage for sign-in, basket, security, display settings and your saved privacy choice. External video players stay off until you enable them.</p>
+					<p>Use <button type="button" class="cas-privacy-link" data-cas-privacy-open>Privacy choices</button> to manage external video players. Turning them off unloads the players and blocks future loads in this browser. Your choice is remembered for six months when browser storage is available.</p>
+					<p>Loading a video connects to its host, such as Bunny or YouTube. Site fonts load from Google independently of the video setting.</p>
+				</div>
+			</details>
+			<details class="acc-item">
+				<summary>Your account &amp; data requests<span class="acc-ico" aria-hidden="true">+</span></summary>
+				<div class="acc-body">
+					<p>Your account details, course access and purchase history are available in <a href="<?php echo esc_url( cas_page_url( 'dashboard' ) ); ?>">My Studio</a>.</p>
+					<p>For questions about your personal data, or to request access, correction or deletion, <a href="mailto:<?php echo esc_attr( $privacy_contact['email'] ); ?>">email Crystal</a>. The email links open a message for you to send.</p>
 				</div>
 			</details>
 		</div>
+		<p class="muted">These notes describe the current site controls and checkout statement. Full purchase, licence, privacy and member terms remain pending adviser review.</p>
 	</section>
 
 	</main>
