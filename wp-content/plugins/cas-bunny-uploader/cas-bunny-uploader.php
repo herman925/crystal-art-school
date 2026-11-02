@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Crystal Lesson Video Uploads
  * Description: Owned lesson uploads directly to Bunny Stream, with server-only credentials.
- * Version: 1.1.0
+ * Version: 1.1.1
  * Requires PHP: 8.0
  */
 defined( 'ABSPATH' ) || exit;

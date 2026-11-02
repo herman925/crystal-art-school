@@ -8,7 +8,7 @@ final class CAS_Bunny_Uploader {
   add_action('init',array(__CLASS__,'install'));
   add_action('rest_api_init',array(__CLASS__,'routes'));
   add_action('tutor_course_builder_footer',array(__CLASS__,'editor'));
-  add_filter('tutor_localize_data',array(__CLASS__,'visibility'));
+  add_filter('tutor_localize_data',array(__CLASS__,'visibility'),1000);
   add_filter('tutor_lesson_details_response',array(__CLASS__,'details'),30,2);
   add_filter('tutor_course_details_response',array(__CLASS__,'course_details'),30);
   add_action('wp_ajax_tutor_update_course',array(__CLASS__,'course_start'),5);
@@ -199,14 +199,15 @@ final class CAS_Bunny_Uploader {
   if(!self::course($course))return;
   if(!self::enabled()){echo '<p class="notice notice-info">Lesson video uploads are awaiting private server configuration and provider verification. Existing videos are unchanged.</p>';return;}
   wp_enqueue_script('cas-bunny-tus',plugins_url('vendor/tus.min.js',__FILE__),array(),'4.3.1',true);
-  wp_enqueue_script('cas-bunny-editor',plugins_url('assets/editor.js',__FILE__),array('cas-bunny-tus','wp-element','tutor-course-builder'),'1.1.0',true);
-  wp_enqueue_style('cas-bunny-editor',plugins_url('assets/editor.css',__FILE__),array(),'1.1.0');
+  wp_enqueue_script('cas-bunny-editor',plugins_url('assets/editor.js',__FILE__),array('cas-bunny-tus','wp-element','tutor-course-builder'),'1.1.1',true);
+  wp_enqueue_style('cas-bunny-editor',plugins_url('assets/editor.css',__FILE__),array(),'1.1.1');
   wp_localize_script('cas-bunny-editor','casBunnyEditor',array('course'=>$course,'user'=>get_current_user_id(),'root'=>rest_url('cas-video/v1/'),'nonce'=>wp_create_nonce('wp_rest')));
  }
  static function visibility($data){
   $course=isset($_GET['course_id'])&&is_scalar($_GET['course_id'])?absint($_GET['course_id']):0;
   if(self::enabled()&&self::course($course)){
    $role=current_user_can('administrator')?'admin':'instructor';
+   if(!is_array($data['visibility_control']??null))$data['visibility_control']=array();if(!is_array($data['visibility_control']['course_builder']??null))$data['visibility_control']['course_builder']=array();
    $data['visibility_control']['course_builder']['basics_intro_video_'.$role]='off';
    if(!(current_user_can('manage_options')&&!empty($_GET['cas_bunny_advanced']))){$data['visibility_control']['course_builder']['curriculum_lesson_video_'.$role]='off';
    $data['visibility_control']['course_builder']['curriculum_lesson_video_playback_time_'.$role]='off';}

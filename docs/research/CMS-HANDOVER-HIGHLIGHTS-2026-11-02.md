@@ -31,3 +31,9 @@ The Basic panel refreshes after save, supports replacement/removal/reuse, and co
 - Connected rollout, actual restricted-owner screenshots and final receipts are recorded in #249; no synthetic test is represented as a provider encoding or client long-upload pass.
 
 Keep long client-upload/network recovery, final client training/content/payment acceptance and the existing signed-link lifetime/DRM decisions separate. Do not reopen delivered lesson-upload #241 for this extension or claim a new protection change under #87.
+
+## New-course draft correction
+
+The actual restricted-owner workflow exposed Tutor's client-side paid-price requirement on a newly created unpriced draft. The client must be able to prepare draft content before using the separate confirmed first-price workflow. Pending own drafts therefore receive a form-only non-monetary type placeholder; on a draft save the native guard normalizes it back to the unchanged stored paid/unpriced state. No amount is established and the pending-price marker remains. Unconfirmed amount changes and publication are still refused. Eleven native AJAX checks and a real browser draft-save/publication-refusal case passed, alongside the fourteen existing price contracts. The opt-in older broad runtime harness was not enabled.
+
+Tutor Pro also overwrites early visibility data with its stored setting (an empty string when unset). Uploader visibility now runs after Pro, normalizes that empty setting, and hides the redundant native video controls. The restricted editor's native price controls are hidden because confirmed Course Prices remains the only intended price workflow. This is a content-authoring correction, not payment activation or a change to any real course amount.
