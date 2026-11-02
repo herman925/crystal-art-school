@@ -67,7 +67,7 @@ Uploading and previewing prepare a selection. **The lesson’s save is what puts
 
 ## Choose an existing film or replace one
 
-**Choose existing** opens the approved-film list. Select the intended title, preview it, then save the lesson. You can reuse an approved film without uploading it again.
+**Choose existing** opens the approved-film list. Select the intended title, wait for **Ready**, preview it, then save the lesson. You can reuse an approved film without uploading it again.
 
 To replace a film, choose **Upload video** and follow the same steps. The currently saved film stays in use while the replacement uploads or processes. Once the new film is Ready, preview it and save the lesson. **Keep saved video** lets you abandon the proposed replacement.
 
@@ -77,7 +77,7 @@ To replace a film, choose **Upload video** and follow the same steps. The curren
 
 Leave the saved lesson film in place. Choose **Resume upload**, then select the **same original file in the same browser**. The original filename, size and modification date must match. Resume is available only while the transfer’s authorisation/resource is still valid; it is not an indefinite backup.
 
-**Check status** asks Bunny for the current result. If you return after the film has processed, check its status, preview the Ready film and save the lesson. If you save a new lesson while its transfer is unfinished, reopen that same lesson to find the pending upload.
+**Check status** asks Bunny for the current result. If you return after the film has processed, check its status, preview the Ready film and save the lesson. If it was already Ready when you closed the editor, use **Choose existing** to find it instead of uploading it again. If you save a new lesson while its transfer is unfinished, reopen that same lesson to find the pending upload.
 
 **Cancel upload** stops this transfer and prevents it being attached by that job. The saved lesson film stays unchanged. Closing the tab does not keep uploading; you may need to resume when you return.
 
@@ -85,7 +85,7 @@ If you see an expired-session message, reopen the lesson. If the result is uncle
 
 ## About the videos
 
-Paid lesson films use Bunny through this WordPress control. The separate [Free Videos](/free-videos) page keeps its YouTube-link workflow. **Course Highlights Video** is a public preview and currently uses a separate administrator-arranged workflow; agree that preview before changing it.
+Paid lesson films use Bunny through this WordPress control. The separate [Free Videos](/free-videos) page keeps its YouTube-link workflow. **Course Highlights Video** is a separate [public preview in Basics](/courses#course-highlights-video-public-preview). Use a film approved for public viewing there.
 
 Access checks and sharing restrictions are maintained by the site administrator. Keep paid films and their video addresses private; a video address is not permission to share the film.
 

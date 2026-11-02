@@ -1,6 +1,6 @@
 # Courses
 
-**Course content and course prices use separate workflows.** Use the course editor for titles, images, descriptions and lessons. Set or change paid-course prices only through the confirmed Course prices workflow (available after handover), not the ordinary course-save button. Use [Course Prices](/course-prices) after account handover.
+**Course content and course prices use separate workflows.** Use the course editor for titles, images, descriptions and lessons. Set or change paid-course prices only through the confirmed Course prices workflow, not the ordinary course-save button. Use [Course Prices](/course-prices).
 
 Start from **Content hub → Manage Courses**. In the course list, click the course title
 to open Tutor's builder. Use **Add course** on the hub for a new draft. Only courses
@@ -13,7 +13,7 @@ assigned to your account can be edited.
 | **Gallery Photos 1–5** | The five course-page photographs. Photo 1 appears first; clicking a thumbnail changes the large photograph |
 | **Course Subtitle** | The optional line under the course highlights video |
 | **Course Media Label** | The medium shown with the course title, such as Sketching & Watercolour |
-| **Regular price / Sale price** | Both; change only through the confirmed Course prices workflow (available after handover). A sale price crosses out the regular one |
+| **Regular price / Sale price** | Both; change only through the confirmed Course prices workflow. A sale price crosses out the regular one |
 | **Difficulty level** | The small chips under the title |
 | **Category** | The tag above the title |
 | **Description** | The paragraph under the course title |
@@ -35,7 +35,7 @@ the site does that.
 
 ## Prices
 
-Use **Course prices** and its separate review/confirmation step for paid-course amounts; follow [Course Prices](/course-prices) after handover. Enter numbers without a currency symbol, and leave Sale empty when no sale is intended.
+Use **Course prices** and its separate review/confirmation step for paid-course amounts; follow [Course Prices](/course-prices). Enter numbers without a currency symbol, and leave Sale empty when no sale is intended.
 
 The agreed course currency is GBP (£). **Currency and cart settings are managed by the site administrator**, not through your content-editing controls. Do not change them in Tutor Settings; ask the site administrator if anything appears wrong.
 
@@ -104,7 +104,7 @@ page — the homepage, About, the gallery, the blog and the free videos.
 
 A draft is not a published course. For a new paid course, save the content as a draft, set and confirm its first price through **Course prices**, reload the same saved course, and publish only when the content, price and launch timing are agreed. A saved price does not publish the course.
 
-For an already published course, use the same confirmed price process for money changes; do not use the ordinary content-save button to change its price. Follow [Course Prices](/course-prices) after account handover, and ask the site administrator if the current course status is unclear.
+For an already published course, use the same confirmed price process for money changes; do not use the ordinary content-save button to change its price. Follow [Course Prices](/course-prices), and ask the site administrator if the current course status is unclear.
 
 ## Downloadable notes and reference photographs
 
@@ -135,8 +135,30 @@ from Media. Do not permanently delete a file still used by another course or pag
 
 Reopen the saved course and check the intended file list before directing students to it.
 
+## Course Highlights Video — public preview
+
+Open **Content Hub → Manage Courses → course → Basics**, then scroll to **Course Highlights Video**. This film is shown on the public course page when the course is published. Visitors can watch it without buying the course, so choose an introduction or taster prepared for public viewing.
+
+1. Tick **This film is approved for the public course preview**.
+2. Choose **Upload video** and select the original file, or use **Choose existing** for an approved public highlight. Paid lesson films are kept out of this picker.
+3. Wait through **Uploading → Processing → Ready**, then preview the film and check its duration.
+4. Save the course with **Update**, or **Save as Draft** for a draft. Reopen Basics to check the saved highlight. A draft stays a draft; uploading does not publish it.
+
+<figure class="guide-screenshot" aria-labelledby="course-highlights-live-visual">
+  <figcaption id="course-highlights-live-visual">Tutor Basics: the actual public highlight controls</figcaption>
+  <div class="guide-screenshot-images">
+    <a href="/guide-screenshots/course-highlights-upload.png" target="_blank" rel="noopener" style="--screenshot-width:636px" aria-label="Open full-size screenshot: Tutor Basics: actual public Course Highlights Video control, approval and saved preview (new tab)"><img src="/guide-screenshots/course-highlights-upload.png" width="636" height="639" alt="Tutor Basics: actual public Course Highlights Video control, approval and saved preview" loading="lazy"></a>
+    <a href="/guide-screenshots/course-highlights-picker.png" target="_blank" rel="noopener" style="--screenshot-width:636px" aria-label="Open full-size screenshot: Tutor Basics: actual approved public-highlight picker, separate from paid lesson films (new tab)"><img src="/guide-screenshots/course-highlights-picker.png" width="636" height="768" alt="Tutor Basics: actual approved public-highlight picker, separate from paid lesson films" loading="lazy"></a>
+  </div>
+  <p>The live Content Editor account is shown. Confirm public-preview use, choose or upload the film, wait for Ready, then save the course. The picker contains approved public highlights. No teaching-content edits were submitted for these captures. Select a screenshot to open it full size.</p>
+</figure>
+
+To replace it, upload the approved replacement, wait for Ready and save. The old highlight stays in use until that save. **Keep saved video** abandons the proposed replacement. **Remove from course**, followed by a course save, clears the highlight without deleting the remote film or changing paid lessons.
+
+The highlight duration is separate from total course runtime. Lesson films still use their own [lesson video control](/lessons#upload-a-lesson-video). Interrupted transfers use the same [Check status / Resume upload steps](/lessons#if-the-upload-stops), with the same original file and browser.
+
 ## New or replacement lesson films
 
 Open the exact lesson in **Curriculum** and use its **Lesson video → Upload video** control. The film goes to Bunny, and the lesson handles its video reference and duration for you. Wait for **Ready**, preview it, then save that lesson. Follow [Upload a lesson video](/lessons#upload-a-lesson-video) for upload, replacement and recovery steps.
 
-Paid lesson films stay out of the ordinary WordPress Media library. You do not need a Bunny login or embed code. **Course Highlights Video** remains a separate public-preview workflow; ask the site administrator to arrange a new highlight.
+Paid lesson films stay out of the ordinary WordPress Media library. You do not need a Bunny login or embed code. Use the separate **Course Highlights Video** control in Basics for a public preview.
