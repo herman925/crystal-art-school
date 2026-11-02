@@ -135,7 +135,7 @@ from Media. Do not permanently delete a file still used by another course or pag
 
 Reopen the saved course and check the intended file list before directing students to it.
 
-## Course Highlights Video — public preview
+## Course Highlights Video: public preview
 
 Open **Content Hub → Manage Courses → course → Basics**, then scroll to **Course Highlights Video**. This film is shown on the public course page when the course is published. Visitors can watch it without buying the course, so choose an introduction or taster prepared for public viewing.
 
