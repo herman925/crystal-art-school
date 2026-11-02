@@ -1,0 +1,12 @@
+/* The native registered field carries an opaque selection token; it is not a client editing control. */
+div:has(>input[name="_cas_bunny_edit"]){display:none}
+.cas-bunny-uploader{border:1px solid #c3c4c7;border-radius:8px;padding:16px;background:#fff;color:#202428;min-width:0}
+.cas-bunny-uploader h3{margin:0 0 8px;font-size:16px}
+.cas-bunny-uploader p{font-size:13px;line-height:1.55;margin:8px 0}
+.cas-bunny-uploader iframe{width:100%;aspect-ratio:16/9;border:0}
+.cas-bunny-actions{display:flex;flex-wrap:wrap;gap:8px}
+.cas-bunny-uploader button{border:1px solid #3858e9;border-radius:4px;padding:6px 10px;background:#fff;color:#2644d7;font:inherit;font-size:13px;cursor:pointer}
+.cas-bunny-uploader button:focus-visible{outline:3px solid #1d2327;outline-offset:2px}
+.cas-bunny-uploader button:disabled{opacity:.55;cursor:default}
+.cas-bunny-error{color:#b32d2e;font-weight:600}
+.cas-bunny-library{margin-top:12px;display:grid;gap:8px;max-height:260px;overflow:auto}

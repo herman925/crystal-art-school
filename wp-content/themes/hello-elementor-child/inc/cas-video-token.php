@@ -2,15 +2,14 @@
 /**
  * Signed video addresses.
  *
- * The films are protected by referer alone. A foreign page cannot embed the stream and a
- * stream address pasted into a browser is refused - but the video host allows its own
- * player origin, so anyone holding a video identifier can put the player on a page of
- * their own and it plays. Today that is contained only by where the identifiers appear:
- * on lesson pages, behind enrolment. An enrolled student can still read one out of the
- * page and pass it on.
+ * WordPress decides who may see the lesson player. Bunny embed authentication then
+ * requires a signature covering one video and an expiry. This rejects unsigned,
+ * expired or altered player requests when the library enforces token authentication.
  *
- * A signed address closes that. The signature covers one video and one moment; it stops
- * working when it expires, and an address with no signature is refused outright.
+ * A signed URL is a temporary bearer credential, not a WordPress session. Someone
+ * holding a still-valid URL may reuse it subject to Bunny's other restrictions.
+ * Player signing alone does not establish that direct HLS, MP4 or original files are
+ * protected; those routes and the library/CDN settings need separate verification.
  *
  * The key is a server secret and lives in wp-config.php as CAS_BUNNY_TOKEN_KEY. It is
  * never printed, never written to the repository and never reaches the browser - only
@@ -25,19 +24,17 @@ defined( 'ABSPATH' ) || exit;
 /**
  * How long a signed address stays valid.
  *
- * Long enough to open a lesson, read the page and press play on a slow connection;
- * short enough that a copied address is worthless by the time it is passed on. The
- * player keeps playing once it has started - the signature is checked when the player
- * is requested, not for every second of video.
+ * Allows time to open a lesson and start playback. A copied token remains valid
+ * throughout this window; expiry does not log a viewer out of WordPress or revoke
+ * an already-started stream. Review this duration against measured client playback.
  */
 const CAS_VIDEO_TOKEN_TTL = 3600;
 
 /**
  * The signing key, or an empty string when none is configured.
  *
- * An empty key means every address is left exactly as it was found. That is the safe
- * failure: the site keeps working on referer protection alone rather than serving
- * signatures that cannot be valid.
+ * An empty key leaves addresses unchanged. With Bunny token enforcement enabled,
+ * those unsigned addresses will be rejected; this is not an alternate access gate.
  *
  * @return string
  */
