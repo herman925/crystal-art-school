@@ -3,9 +3,8 @@
 Use this guide when you want to change something on your website. Start with the task
 below; each page tells you where to click, how to save and what to check afterwards.
 
-::: info While we prepare your account
-These are the agreed editing workflows. Your account handover is still being completed.
-Start from **Content Hub**, even if you currently see extra administrator menus.
+::: info Your editing account
+Sign in to reach **Content Hub**. Your account has the content, course and agreed price/order/access tools described here. Site administration and technical settings stay with the site administrator.
 :::
 
 ## What would you like to do?
@@ -17,6 +16,8 @@ Start from **Content Hub**, even if you currently see extra administrator menus.
 | Update your biography or About photographs | [About page](/about-page) |
 | Add a certificate or choose its highlighted position | [Certificates and honours](/certificates) |
 | Edit a course or its five photographs | [Courses](/courses) |
+| Upload or replace a public course highlight | [Course Highlights](/courses#course-highlights-video-public-preview) |
+| Upload or replace a lesson film | [Lesson videos](/lessons#upload-a-lesson-video) |
 | Edit a lesson or add notes and reference photos | [Lessons and files](/lessons) |
 | Add a painting and its Etsy link | [Gallery](/gallery) |
 | Publish a student's work or comment | [Student work](/showcase) · [Student comments](/testimonials) |
