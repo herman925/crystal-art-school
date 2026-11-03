@@ -1,0 +1,10 @@
+--- a/wp-content/plugins/tutor/ecommerce/BillingController.php
++++ b/wp-content/plugins/tutor/ecommerce/BillingController.php
+@@ -173 +173,3 @@
+-		$data = $this->get_allowed_fields( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
++		$billing_info = $this->get_billing_info();
++		// Country/state changes submit only those fields; preserve the rest of an existing profile.
++		$data = $this->get_allowed_fields( $_POST, ! $billing_info ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+@@ -186,2 +187,0 @@
+-
+-		$billing_info = $this->get_billing_info();
