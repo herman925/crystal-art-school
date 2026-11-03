@@ -1,0 +1,27 @@
+--- a/wp-content/plugins/tutor/ecommerce/HooksHandler.php
++++ b/wp-content/plugins/tutor/ecommerce/HooksHandler.php
+@@ -388,6 +388,15 @@
+ 			}
+ 
+ 			$has_enrollment             = EnrollmentModel::is_enrolled( $object_id, $student_id, false );
++			// Prefer this order's enrolment when an older cancelled record exists for the same student/course.
++			foreach ( $this->order_model->get_enrollment_ids( $order_id ) as $enrollment_id ) {
++				$linked = get_post( $enrollment_id );
++				if ( $linked && EnrollmentModel::POST_TYPE === $linked->post_type
++					&& (int) $linked->post_parent === (int) $object_id && (int) $linked->post_author === (int) $student_id ) {
++					$has_enrollment = (object) array( 'ID' => (int) $linked->ID, 'order_id' => $order_id );
++					break;
++				}
++			}
+ 			$active_enrollment_order_id = isset( $has_enrollment->order_id ) ? $has_enrollment->order_id : null;
+ 			if ( $has_enrollment && $order_id === $active_enrollment_order_id ) {
+ 				// Update enrollment status based on order status.
+@@ -444,7 +453,7 @@
+ 					}
+ 				}
+ 			} else {
+-				if ( $order->order_status === $this->order_model::ORDER_COMPLETED ) {
++				if ( $order->order_status === $this->order_model::ORDER_COMPLETED && $this->order_model::PAYMENT_REFUNDED !== $order->payment_status ) {
+ 					// Insert enrollment.
+ 					add_filter( 'tutor_enroll_data', fn( $enroll_data) => array_merge( $enroll_data, array( 'post_status' => 'completed' ) ) );
+ 
