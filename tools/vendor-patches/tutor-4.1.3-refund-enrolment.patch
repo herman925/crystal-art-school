@@ -1,0 +1,15 @@
+--- a/wp-content/plugins/tutor/ecommerce/HooksHandler.php
++++ b/wp-content/plugins/tutor/ecommerce/HooksHandler.php
+@@ -390,0 +391,9 @@
++			// Prefer this order's enrolment when an older cancelled record exists for the same student/course.
++			foreach ( $this->order_model->get_enrollment_ids( $order_id ) as $enrollment_id ) {
++				$linked = get_post( $enrollment_id );
++				if ( $linked && EnrollmentModel::POST_TYPE === $linked->post_type
++					&& (int) $linked->post_parent === (int) $object_id && (int) $linked->post_author === (int) $student_id ) {
++					$has_enrollment = (object) array( 'ID' => (int) $linked->ID, 'order_id' => $order_id );
++					break;
++				}
++			}
+@@ -447 +456 @@
+-				if ( $order->order_status === $this->order_model::ORDER_COMPLETED ) {
++				if ( $order->order_status === $this->order_model::ORDER_COMPLETED && $this->order_model::PAYMENT_REFUNDED !== $order->payment_status ) {
