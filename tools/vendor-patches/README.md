@@ -34,3 +34,25 @@ php tests/test_tutor_refund_enrolment.php /path/to/HooksHandler.php
 ```
 
 Run in an isolated, network-disabled environment with read-only inputs and bounded resources. The original source reproduces four failures; the patched source passes all fifteen checks. These tests establish the method behavior, not full provider or browser acceptance. The connected sandbox regression is tracked in [Payments: prevent refunded orders from rebinding course access](https://github.com/herman925/crystal-art-school/issues/254) and the [sandbox journey](https://github.com/herman925/crystal-art-school/issues/253).
+
+## Preserve existing billing fields on partial updates
+
+`tutor-4.1.3-billing-partial-update.patch` fixes the native country/state change request, which submits only those fields. The original controller filled every omitted required field with an empty string and overwrote the rest of the saved billing profile. The patch reads the profile once, preserves omitted fields during updates, and keeps existing required-field defaults for new inserts. Explicitly submitted empty values still clear their fields.
+
+Target: `wp-content/plugins/tutor/ecommerce/BillingController.php`, Tutor **4.1.3** only.
+
+- Original SHA-256: `adbb60c2a41c6eb84a3c46df662cc6b5927921728e557b1c709bca39d278284a`
+- Patched SHA-256: `66423779151dbe5c62cf6a0b55e5856cc33c2c4e40c4c2d40566b8989fe12abd`
+
+Apply the same exact-byte, private-backup, staged-lint and conditional-rollback requirements above. Upgrade review must account for both vendor patches.
+
+```sh
+php tests/test_tutor_billing_partial_update.php \
+  /path/to/ecommerce/BillingController.php \
+  /path/to/classes/BaseController.php \
+  /path/to/models/BillingModel.php
+```
+
+The test executes the actual controller with the real BaseController field handling and BillingModel field lists, using synthetic in-memory persistence. Original source reproduces five destructive update cases; patched source passes all ten checks, including new profiles, explicit clears and existing failure gates. Validation failure is injected; these tests do not claim that native email-validation rules are fixed.
+
+Connected checkout/profile retesting is tracked in [Payments: preserve billing details on country changes](https://github.com/herman925/crystal-art-school/issues/256).
