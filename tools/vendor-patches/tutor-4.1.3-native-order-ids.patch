@@ -1,0 +1,68 @@
+--- a/wp-content/plugins/tutor/classes/Course.php
++++ b/wp-content/plugins/tutor/classes/Course.php
+@@ -3122,0 +3123,5 @@
++		// Native order IDs are not WordPress post IDs; OrderModel owns native order deletion.
++		if ( 'tutor' === tutor_utils()->get_option( 'monetize_by' ) ) {
++			return;
++		}
++
+--- a/wp-content/plugins/tutor/models/EnrollmentModel.php
++++ b/wp-content/plugins/tutor/models/EnrollmentModel.php
+@@ -136 +136 @@
+-				} else {
++				} elseif ( 'tutor' !== $monetize_by ) {
+--- a/wp-content/plugins/tutor/classes/Utils.php
++++ b/wp-content/plugins/tutor/classes/Utils.php
+@@ -2550 +2550 @@
+-					} else {
++					} elseif ( 'tutor' !== $monetize_by ) {
+@@ -2598,0 +2599,20 @@
++
++		if ( Ecommerce::MONETIZE_BY === $this->get_option( 'monetize_by' ) ) {
++			$model = new \Tutor\Models\OrderModel();
++			$order = QueryHelper::get_row( 'tutor_orders', array( 'id' => absint( $order_id ) ), 'id' );
++			if ( ! $order ) {
++				return false;
++			}
++			$item_ids = array_map( static fn( $item ) => (int) ( $item->item_id ?? $item->id ), $model->get_order_items_by_id( $order->id ) );
++			$result = array();
++			foreach ( $model->get_enrollment_ids( $order->id ) as $id ) {
++				$enrolment = get_post( $id );
++				if ( $enrolment && EnrollmentModel::POST_TYPE === $enrolment->post_type
++					&& (int) $enrolment->post_author === (int) $order->user_id
++					&& in_array( (int) $enrolment->post_parent, $item_ids, true ) ) {
++					$result[] = array( 'course_id' => (string) $enrolment->post_parent, 'enrolled_id' => (string) $enrolment->ID, 'order_id' => (string) $order->id );
++				}
++			}
++			return $result ?: false;
++		}
++
+@@ -2803,0 +2824,3 @@
++		if ( Ecommerce::MONETIZE_BY === $monetize_by ) {
++			return (bool) QueryHelper::get_row( 'tutor_orders', array( 'id' => absint( $order_id ) ), 'id' );
++		}
+--- a/wp-content/plugins/tutor/classes/Earnings.php
++++ b/wp-content/plugins/tutor/classes/Earnings.php
+@@ -280 +280 @@
+-			array( 'order_id' => $order_id ),
++			$this->order_earning_conditions( $order_id ),
+@@ -310,0 +311,9 @@
++	private function order_earning_conditions( $order_id ) {
++		$where = array( 'order_id' => $order_id );
++		if ( Ecommerce::MONETIZE_BY === tutor_utils()->get_option( 'monetize_by' ) ) {
++			$where['process_by'] = self::PROCESS_BY_TUTOR;
++		}
++		return $where;
++	}
++
++
+@@ -319,0 +329 @@
++
+@@ -323,3 +333 @@
+-			array(
+-				'order_id' => $order_id,
+-			),
++			$this->order_earning_conditions( $order_id ),
+@@ -391 +399 @@
+-			array( 'order_id' => $order_id )
++			$this->order_earning_conditions( $order_id )
