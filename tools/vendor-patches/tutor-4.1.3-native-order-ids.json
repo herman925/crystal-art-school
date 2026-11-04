@@ -1,0 +1,18 @@
+{
+  "classes/Course.php": {
+    "before": "ff2420312a655fda5c853d4e8fa5e270ec8fed835f369117b2adba7544855467",
+    "after": "8fea417a3670ee47be0b153f0e04b5703f500e55ab6504df573e1a1387283517"
+  },
+  "models/EnrollmentModel.php": {
+    "before": "ea29c8fa2ba3e19827f958fef75c453dc242096b01df3ff6389d532bef71267c",
+    "after": "d42d5ba8466762e8b203e91c189c0f4d2119c40da25d79e5ffcabcb5abc8d83e"
+  },
+  "classes/Utils.php": {
+    "before": "b5fbf74b3747b742f5f75abb3ce9043ca566670aead26fa5908087f4cacf4cf9",
+    "after": "c6e88307ccc5670928dd8c993925a577caf8ed612b3f85f7022bbf50ae2af484"
+  },
+  "classes/Earnings.php": {
+    "before": "6342f01782f3b5bee41fe2ccc08b197a0611bde027bb3f6e87429c01adf7f06b",
+    "after": "717786db162a9766dbfc433a8fbe1b35789681af160fbfe7e190c3047b912901"
+  }
+}

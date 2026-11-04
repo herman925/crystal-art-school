@@ -56,3 +56,22 @@ php tests/test_tutor_billing_partial_update.php \
 The test executes the actual controller with the real BaseController field handling and BillingModel field lists, using synthetic in-memory persistence. Original source reproduces five destructive update cases; patched source passes all ten checks, including new profiles, explicit clears and existing failure gates. Validation failure is injected; these tests do not claim that native email-validation rules are fixed.
 
 Connected checkout/profile retesting is tracked in [Payments: preserve billing details on country changes](https://github.com/herman925/crystal-art-school/issues/256).
+
+## Keep native order IDs separate from WordPress and legacy order IDs
+
+`tutor-4.1.3-native-order-ids.patch` qualifies and fixes the site's **native Tutor commerce** mode:
+
+- WordPress content deletion no longer interprets that post's ID as a native order ID. The native OrderModel deletion path remains responsible for native orders.
+- Native enrolment creation/deletion keeps the enrolment's own order/product metadata but no longer writes/deletes compatibility fields on an unrelated WordPress post with the same numeric ID.
+- Native compatibility readers use the actual order, order items and linked enrolments, checking the enrolment type, student and purchased item. Their three-field return shape remains compatible.
+- Native earnings reads/existence/deletion use `process_by=tutor`, preserving legacy earnings that share an order ID.
+
+The exact four source preimages/postimages are in `tutor-4.1.3-native-order-ids.json`. The patch changes Course, EnrollmentModel, Utils and Earnings only. Existing WooCommerce/EDD branches are preserved; tests include legacy order APIs, HPOS reading and unmarked legacy earnings controls. Arbitrary backend migrations and complete WooCommerce/EDD application runtimes are not certified by these tests.
+
+```sh
+php tests/test_tutor_order_ids.php /path/to/tutor
+```
+
+The test extracts the actual changed methods plus native order lookup/deletion from read-only vendor inputs and supplies synthetic persistence/platform boundaries. Original source reproduces 16 failures out of 26 checks; fixed source passes all26. Test only in an isolated environment with no external network, no real credentials/data, read-only inputs and bounded resources.
+
+Stage/lint every file before replacing any, preserve originals privately, check exact current preimages, and verify all postimages. Preserve the two earlier refund/billing patches. This source change does not migrate or delete historical metadata, orders, enrolments or earnings. Upgrade review must account for all three version-pinned patches. See [Payments: qualify native order ID safety before launch](https://github.com/herman925/crystal-art-school/issues/258).
