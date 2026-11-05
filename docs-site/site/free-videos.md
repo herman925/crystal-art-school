@@ -1,6 +1,6 @@
 # Free videos
 
-Use **Content hub → Free videos** for the introduction editing page and film list. The page
+Use **Content Hub → Free videos** for the introduction editing page and film list. The page
 presents public films; it is separate from paid course lessons.
 
 ## Add or edit a film
@@ -27,6 +27,12 @@ Choose the film list and add an entry, or open an entry available to your accoun
 
 If a film is not available to your account, ask the site administrator to check access rather than making a duplicate.
 
+After entering the details, save a draft while unfinished. Publish a new entry when ready, or
+use the current editor's Save/Update control for an existing one. Reopen it and check the
+public Free Videos page: the cover, title, section, description and intended film should agree.
+Move the entry to Draft or Trash to withdraw it from the public list; that does not delete
+the film from YouTube.
+
 ## The three rows
 
 | Section | Picture shape | Typical use |
@@ -41,9 +47,9 @@ The featured film near the top is drawn from the step-by-step demos. Check the p
 
 ## The video link
 
-Use a suitable YouTube page, Shorts or youtu.be address, or the video link/reference supplied by the site administrator for a film already hosted for this site. Do not paste a password or a private account-management link.
+For a new free film, use its public YouTube page, Shorts or youtu.be address. Keep an existing hosted reference only when it is the approved film. Do not paste a channel-management address, password or private account link.
 
-This box does not upload a new film. For a new video file or a replacement, ask the site administrator to arrange hosting first, then update the approved film reference. Do not assume an upload tool has been added to the site.
+This box saves a link; it does not upload a video file. Publish the free film on the agreed YouTube channel first, then paste its viewing address here. Ask the site administrator if you need help with channel access. Paid [lesson films](/lessons#upload-a-lesson-video) and [public course highlights](/courses#course-highlights-video-public-preview) use their separate WordPress upload controls.
 
 If the link is empty or cannot be played, check the card and player before directing visitors to it. Ask the site administrator if the intended film does not open; do not try unrelated account settings.
 
@@ -60,6 +66,14 @@ Use its **Save** button to save all four fields. Clearing one removes that parag
 Related links open the film list and the saved public page; save before opening another editor.
 
 If an introduction contains a course link, leave its destination unchanged unless an agreed change is being made. Ask the site administrator to change a destination you cannot edit safely.
+
+<figure class="guide-screenshot" aria-labelledby="free-intro-current-visual">
+  <figcaption id="free-intro-current-visual">The separate Free Videos introduction editor</figcaption>
+  <div class="guide-screenshot-images">
+    <a href="/guide-screenshots/free-video-introductions.png" target="_blank" rel="noopener" style="--screenshot-width:1238px" aria-label="Open full-size screenshot: Free Videos: actual introduction fields and their shared Save control (new tab)"><img src="/guide-screenshots/free-video-introductions.png" width="1238" height="1012" alt="Free Videos: actual introduction fields and their shared Save control" loading="lazy"></a>
+  </div>
+  <p>The introduction fields share their save button. Video entries use their own publication/save controls. Select a screenshot to open it full size.</p>
+</figure>
 
 ## Check what is published
 

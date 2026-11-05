@@ -2,8 +2,7 @@
 
 WordPress makes some pages on its own. Click a topic on a blog card and you land on that
 topic's page; a visitor who searches gets a results page; there are also pages by month and
-by author. These used to look like a plain, unstyled website. They now match the rest of the
-site.
+by author. These pages follow the website’s article layout.
 
 **There is nothing to edit on them.** They are built from your articles, so the way to change
 one is to change the articles.

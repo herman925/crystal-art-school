@@ -2,9 +2,54 @@
 
 **Course content and course prices use separate workflows.** Use the course editor for titles, images, descriptions and lessons. Set or change paid-course prices only through the confirmed Course prices workflow, not the ordinary course-save button. Use [Course Prices](/course-prices).
 
-Start from **Content hub → Manage Courses**. In the course list, click the course title
+Start from **Content Hub → Manage Courses**. In the course list, click the course title
 to open Tutor's builder. Use **Add course** on the hub for a new draft. Only courses
 assigned to your account can be edited.
+
+<figure class="guide-screenshot" aria-labelledby="course-list-current-visual">
+  <figcaption id="course-list-current-visual">Find the course before looking for Curriculum</figcaption>
+  <div class="guide-screenshot-images">
+    <a href="/guide-screenshots/course-list.png" target="_blank" rel="noopener" style="--screenshot-width:1238px" aria-label="Open full-size screenshot: Courses: assigned courses and the title link that opens Tutor Basics (new tab)"><img src="/guide-screenshots/course-list.png" width="1238" height="575" alt="Courses: assigned courses and the title link that opens Tutor Basics" loading="lazy"></a>
+  </div>
+  <p>The course title opens the builder. The list itself does not contain the Curriculum tab. Select a screenshot to open it full size.</p>
+</figure>
+
+## Start a new course
+
+1. Use **Add course** on Content Hub and enter the title in **Basics**.
+2. Add the course words, cover and gallery photographs, then use **Save as Draft**.
+3. Open **Curriculum** to add the topics and lessons. Each topic groups part of the syllabus.
+4. Add any course-wide files in **Additional → Attachments**. Individual lessons have their own files.
+5. Set and confirm the first price through [Course Prices](/course-prices), then reload the course.
+6. Preview and check the intended content, files, price and public preview before publishing separately.
+
+Saving draft content before the first price is set does not make the course free or publish it.
+If an expected control is missing, keep the draft and send the course name and message to the site administrator.
+
+## Find Curriculum and edit a lesson
+
+Open the course title from **Manage Courses**, then choose **Curriculum** at the top of Tutor's
+builder. Use **Expand All** to see the lessons inside the topics. Point at the intended lesson
+to reveal its edit pencil; use the pencil to open that lesson.
+
+**Add Topic** creates a syllabus group. **+ Lesson** inside that topic starts a lesson in the
+right group. Name the lesson, add its details and film/files, then save it with its own button.
+Follow [Lessons](/lessons) for the complete video and file steps.
+
+Course and lesson saves are separate. On a published course, saving a lesson can change what
+students see before you make another course-level Update. Closing the course editor is not
+an undo for a lesson you already saved.
+
+<figure class="guide-screenshot" aria-labelledby="curriculum-current-visual">
+  <figcaption id="curriculum-current-visual">Inside Tutor: Basics and Curriculum</figcaption>
+  <div class="guide-screenshot-images">
+    <a href="/guide-screenshots/course-builder-basics.png" target="_blank" rel="noopener" style="--screenshot-width:1440px" aria-label="Open full-size screenshot: Tutor Basics: current title, Course Card Cover and separate gallery controls (new tab)"><img src="/guide-screenshots/course-builder-basics.png" width="1440" height="1100" alt="Tutor Basics: current title, Course Card Cover and separate gallery controls" loading="lazy"></a>
+    <a href="/guide-screenshots/course-curriculum.png" target="_blank" rel="noopener" style="--screenshot-width:1440px" aria-label="Open full-size screenshot: Tutor Curriculum: topics, lessons and visible edit pencil after pointing at a lesson (new tab)"><img src="/guide-screenshots/course-curriculum.png" width="1440" height="1100" alt="Tutor Curriculum: topics, lessons and visible edit pencil after pointing at a lesson" loading="lazy"></a>
+  </div>
+  <p>Choose Curriculum inside the course. Point at a lesson to reveal the edit pencil; course and lesson saves are separate. Select a screenshot to open it full size.</p>
+</figure>
+
+## What the course fields control
 
 | Field | Where it shows |
 |---|---|
@@ -13,7 +58,7 @@ assigned to your account can be edited.
 | **Gallery Photos 1–5** | The five course-page photographs. Photo 1 appears first; clicking a thumbnail changes the large photograph |
 | **Course Subtitle** | The optional line under the course highlights video |
 | **Course Media Label** | The medium shown with the course title, such as Sketching & Watercolour |
-| **Regular price / Sale price** | Both; change only through the confirmed Course prices workflow. A sale price crosses out the regular one |
+| **Regular price / Sale price** | Course cards and course page; use **Course Prices**. A sale price crosses out the regular one |
 | **Difficulty level** | The small chips under the title |
 | **Category** | The tag above the title |
 | **Description** | The paragraph under the course title |
@@ -35,7 +80,7 @@ the site does that.
 
 ## Prices
 
-Use **Course prices** and its separate review/confirmation step for paid-course amounts; follow [Course Prices](/course-prices). Enter numbers without a currency symbol, and leave Sale empty when no sale is intended.
+Use **Course Prices** and its separate review/confirmation step for paid-course amounts; follow [Course Prices](/course-prices). Enter numbers without a currency symbol, and leave Sale empty when no sale is intended.
 
 The agreed course currency is GBP (£). **Currency and cart settings are managed by the site administrator**, not through your content-editing controls. Do not change them in Tutor Settings; ask the site administrator if anything appears wrong.
 
@@ -56,7 +101,7 @@ published courses.
 <figure class="guide-screenshot" aria-labelledby="course-photos-visual">
   <figcaption id="course-photos-visual">Tutor Basics: the actual cover and gallery fields</figcaption>
   <div class="guide-screenshot-images">
-    <a href="/guide-screenshots/course-cover.png" target="_blank" rel="noopener" style="--screenshot-width:305px" aria-label="Open full-size screenshot: Tutor Basics: actual Course Card Cover field (new tab)"><img src="/guide-screenshots/course-cover.png" width="305" height="196" alt="Tutor Basics: actual Course Card Cover field" loading="lazy"></a>
+    <a href="/guide-screenshots/course-cover.png" target="_blank" rel="noopener" style="--screenshot-width:305px" aria-label="Open full-size screenshot: Tutor Basics: actual Course Card Cover field (new tab)"><img src="/guide-screenshots/course-cover.png" width="305" height="24" alt="Tutor Basics: actual Course Card Cover field" loading="lazy"></a>
     <a href="/guide-screenshots/course-gallery-1.png" target="_blank" rel="noopener" style="--screenshot-width:636px" aria-label="Open full-size screenshot: Tutor Basics: the actual cover and gallery fields (new tab)"><img src="/guide-screenshots/course-gallery-1.png" width="636" height="196" alt="Tutor Basics: the actual cover and gallery fields" loading="lazy"></a>
     <a href="/guide-screenshots/course-gallery-2.png" target="_blank" rel="noopener" style="--screenshot-width:636px" aria-label="Open full-size screenshot: Tutor Basics: the actual cover and gallery fields (new tab)"><img src="/guide-screenshots/course-gallery-2.png" width="636" height="196" alt="Tutor Basics: the actual cover and gallery fields" loading="lazy"></a>
   </div>
@@ -102,7 +147,7 @@ page — the homepage, About, the gallery, the blog and the free videos.
 
 ## Draft and published
 
-A draft is not a published course. For a new paid course, save the content as a draft, set and confirm its first price through **Course prices**, reload the same saved course, and publish only when the content, price and launch timing are agreed. A saved price does not publish the course.
+A draft is not a published course. For a new paid course, save the content as a draft, set and confirm its first price through **Course Prices**, reload the same saved course, and publish only when the content, price and launch timing are agreed. A saved price does not publish the course.
 
 For an already published course, use the same confirmed price process for money changes; do not use the ordinary content-save button to change its price. Follow [Course Prices](/course-prices), and ask the site administrator if the current course status is unclear.
 

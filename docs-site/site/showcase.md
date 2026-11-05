@@ -28,10 +28,10 @@ edges before uploading.
   <figcaption id="showcase-credit-visual">Student Work: the actual picture and credit controls</figcaption>
   <div class="guide-screenshot-images">
     <a href="/guide-screenshots/showcase-picture.png" target="_blank" rel="noopener" style="--screenshot-width:280px" aria-label="Open full-size screenshot: Student Work: Featured image (new tab)"><img src="/guide-screenshots/showcase-picture.png" width="280" height="396" alt="Student Work: Featured image" loading="lazy"></a>
-    <a href="/guide-screenshots/showcase-credit.png" target="_blank" rel="noopener" style="--screenshot-width:280px" aria-label="Open full-size screenshot: Student Work: Registered Student credit selector (new tab)"><img src="/guide-screenshots/showcase-credit.png" width="280" height="294" alt="Student Work: Registered Student credit selector" loading="lazy"></a>
+    <a href="/guide-screenshots/showcase-credit.png" target="_blank" rel="noopener" style="--screenshot-width:280px" aria-label="Open full-size screenshot: Student Work: Registered Student credit selector (new tab)"><img src="/guide-screenshots/showcase-credit.png" width="280" height="433" alt="Student Work: Registered Student credit selector" loading="lazy"></a>
     <a href="/guide-screenshots/showcase-publication.png" target="_blank" rel="noopener" style="--screenshot-width:280px" aria-label="Open full-size screenshot: WordPress: actual publication status and Update controls (new tab)"><img src="/guide-screenshots/showcase-publication.png" width="280" height="219" alt="WordPress: actual publication status and Update controls" loading="lazy"></a>
   </div>
-  <p>The existing Demo Student example is shown. Get permission before publishing the picture or credit; hide the public name credit only when the picture itself may be published. Select a screenshot to open it full size.</p>
+  <p>These real controls include examples from different entries; the new credit chooser has no student selected. Get permission before publishing the picture or credit; hide the public name credit only when the picture itself may be published. Select a screenshot to open it full size.</p>
 </figure>
 
 Upload the picture manually through **Featured Image**, then choose its student from **Registered Student**. The options come from student accounts registered on this website, not a typed name. Account IDs distinguish duplicate display names. The current account display name supplies the public credit; changing it updates the credit on uncached pages.
@@ -44,10 +44,18 @@ Under **Content Hub → Site-Wide Edit → Privacy & Showcase settings**, the si
 
 Visitors can use **Privacy choices** in the footer (or **Manage browser privacy** in Studio settings) to enable or disable external video players. Players start OFF until enabled for that browser. The browser remembers the choice for six months when storage is available. The selection panel shows Essential, External video players, Analytics and Marketing. Only the video preference is optional and connected; unconfigured analytics and marketing rows are inactive. Data-request buttons open emails to Crystal for the visitor to send. They do not automatically submit a request or approve legal wording.
 
-The ten pieces prefixed **Demo —** use the prototype photographs and the registered **Demo Student** credit. They are demonstration content added at the owner’s request, rather than student submissions. They remain published for review by agreement; their launch treatment will be agreed separately.
+The ten pieces prefixed **Demo —** use demonstration photographs and the registered **Demo Student** credit. They are demonstration content added at the owner’s request, rather than student submissions. They remain published for review by agreement; their launch treatment will be agreed separately.
 
 Reuse the sidebar’s existing medium suggestions. Ask the site administrator if a label needs renaming
 across several entries.
+
+<figure class="guide-screenshot" aria-labelledby="showcase-editor-current-visual">
+  <figcaption id="showcase-editor-current-visual">The actual Student Work editor</figcaption>
+  <div class="guide-screenshot-images">
+    <a href="/guide-screenshots/showcase-editor.png" target="_blank" rel="noopener" style="--screenshot-width:1238px" aria-label="Open full-size screenshot: WordPress: actual new showcase editor; blank auto-draft, no content published (new tab)"><img src="/guide-screenshots/showcase-editor.png" width="1238" height="1207" alt="WordPress: actual new showcase editor; blank auto-draft, no content published" loading="lazy"></a>
+  </div>
+  <p>A blank new entry is shown. A photograph, student link, privacy preference and publication state all affect whether the work appears. Select a screenshot to open it full size.</p>
+</figure>
 
 ## Medium builds the filter buttons
 
@@ -71,6 +79,16 @@ is nothing to filter, so it stays hidden.
 newest first.
 
 There is no drag-and-drop here. The number in that box is what decides it.
+
+## Save and check the wall
+
+Save a draft while the photograph, credit or permission is incomplete. Publish the agreed new
+entry, or Update/Save its existing entry, then reopen the public Showcase page. Check the
+picture, credit, medium filter and order. If it is missing, check its publication state,
+photograph, linked student and that student's Showcase preference.
+
+Move the entry to Draft or Trash to withdraw it from the wall. This does not delete the
+student account or automatically remove every public copy of the photograph.
 
 ## While the wall is empty
 

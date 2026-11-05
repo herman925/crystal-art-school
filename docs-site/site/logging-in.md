@@ -11,7 +11,8 @@ Design, plugins, payment-provider settings and other people's accounts stay with
 You arrive in Content Hub after signing in. Only your assigned content appears in editing lists.
 
 If a course or entry is missing, ask the site administrator to check its ownership. Do not create a duplicate
-to get around an access message.
+to get around an access message. Some published demo entries are retained by the site
+administrator for review and are not assigned to you; use the review draft prepared for your session.
 
 <figure class="guide-screenshot" aria-labelledby="content-hub-live-visual">
   <figcaption id="content-hub-live-visual">Your Content Hub</figcaption>

@@ -19,9 +19,14 @@ if (process.env.DOCS_BUILD_WORKER === '1') {
     cpSync(site, source, { recursive: true, filter: path => !path.startsWith(output) })
     const pictures = join(source, 'public', 'guide-screenshots')
     mkdirSync(pictures, { recursive: true })
-    const referenced = new Set(readdirSync(site).filter(name => name.endsWith('.md')).flatMap(name =>
-      [...readFileSync(join(site, name), 'utf8').matchAll(/\/guide-screenshots\/([a-z0-9-]+\.png)/g)].map(match => match[1])))
+    const pages = readdirSync(site).filter(name => name.endsWith('.md')).map(name => join(site, name))
+    if (audience === 'admin') {
+      pages.push(...readdirSync(process.env.DOCS_ADMIN_SOURCE).filter(name => name.endsWith('.md')).map(name => join(process.env.DOCS_ADMIN_SOURCE, name)))
+    }
+    const referenced = new Set(pages.flatMap(path =>
+      [...readFileSync(path, 'utf8').matchAll(/\/guide-screenshots\/([a-z0-9-]+\.png)/g)].map(match => match[1])))
     for (const name of referenced) {
+      if (audience === 'crystal' && name.startsWith('admin-')) throw new Error('Administrator screenshots cannot appear in the client guide')
       const picture = join(process.env.DOCS_SCREENSHOT_SOURCE, name)
       if (!lstatSync(picture).isFile() || lstatSync(picture).isSymbolicLink()) throw new Error('Screenshots must be regular PNG files')
       copyFileSync(picture, join(pictures, name))

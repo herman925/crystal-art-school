@@ -17,8 +17,10 @@ export default defineConfig({
     sidebar: [
       { text: 'Start here', items: [
         { text: 'Choose your task', link: '/' },
+        { text: 'Try your website before launch', link: '/website-review' },
         { text: 'Signing in and out', link: '/logging-in' },
         { text: 'Saving and publishing', link: '/editing-basics' },
+        { text: 'Pictures and files', link: '/pictures-and-files' },
         { text: 'Find the right editor', link: '/what-you-can-edit' }
       ] },
       { text: 'Website pages', items: [
@@ -49,6 +51,7 @@ export default defineConfig({
       ] },
       { text: 'Help and preparation', items: [
         { text: 'If something is not working', link: '/help' },
+        { text: 'Privacy and student permissions', link: '/privacy-and-permissions' },
         { text: 'What stays with the site administrator', link: '/limits' },
         { text: 'Request a menu change', link: '/menu' },
         { text: 'Pages that fill themselves', link: '/archives' },

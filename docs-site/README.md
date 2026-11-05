@@ -16,6 +16,9 @@ backend. Keep these outside the public repository too. Only regular PNG files ar
 into each private audience build; the capture manifest and browser login state are never
 published. Captures show the real controls without changing their labels or contents.
 Recheck screenshots when the backend changes, and keep a private backup outside the webroot.
+Administrator captures use the `admin-` filename prefix and are referenced only by private
+administrator Markdown. The administrator build copies those references; the client build
+rejects them. They must not appear in Crystal's pages, search chunks or screenshot assets.
 
 Two separate builds are produced under `site/.vitepress/dist/`:
 
