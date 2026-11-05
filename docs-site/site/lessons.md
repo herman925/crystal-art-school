@@ -1,6 +1,9 @@
 # Lessons
 
-Start from **Content hub → Manage Courses**, click the course title, and open **Curriculum**. Use the pencil beside a lesson to edit it. Work only on courses assigned to your content account. Save that lesson with its own **Update** button, which appears after you change a field.
+Start from **Content Hub → Manage Courses**, click the course title, and open **Curriculum**. Use the pencil beside a lesson to edit it. Work only on courses assigned to your content account. Save that lesson with its own **Update** button, which appears after you change a field.
+
+Use **Expand All** if the lessons are inside collapsed topics. Point at a lesson row to reveal
+the pencil. For a new lesson, use **+ Lesson** inside the intended topic and enter its name first.
 
 Each lesson has these content controls:
 
@@ -12,9 +15,17 @@ Each lesson has these content controls:
 - **Number of Lessons in This Film** — normally one; use two when one film covers two numbered lessons
 - **Focus, Tools & Techniques and Learning Outcome** — the lesson details shown when its syllabus row is expanded
 
+<figure class="guide-screenshot" aria-labelledby="lesson-overview-current-visual">
+  <figcaption id="lesson-overview-current-visual">The lesson editor in its course context</figcaption>
+  <div class="guide-screenshot-images">
+    <a href="/guide-screenshots/lesson-editor-overview.png" target="_blank" rel="noopener" style="--screenshot-width:1440px" aria-label="Open full-size screenshot: Tutor lesson editor: the current lesson fields and its separate save action (new tab)"><img src="/guide-screenshots/lesson-editor-overview.png" width="1440" height="1100" alt="Tutor lesson editor: the current lesson fields and its separate save action" loading="lazy"></a>
+  </div>
+  <p>This is the actual lesson editor opened from Curriculum. Use its own save for the lesson, then save any separate course changes. Select a screenshot to open it full size.</p>
+</figure>
+
 ## Lesson Descriptions
 
-The deployed correction uses each lesson's own description and cover beneath the video.
+Each lesson's own description and cover appear beneath its video.
 The description appears once. Without a lesson cover, the text uses the full width;
 without lesson text, the description is left out. The course introduction and course
 photographs do not fill these gaps.
@@ -45,7 +56,7 @@ paid materials; do not permanently delete a shared file while another course use
 
 ## Upload a lesson video
 
-**You can upload the film here in WordPress. You do not need a Bunny login or any embed code.** Start from **Content hub → Manage Courses → course → Curriculum**, open the intended lesson, and find **Lesson video**. For a new lesson, enter its name first.
+**You can upload the film here in WordPress. You do not need a Bunny login or any embed code.** Start from **Content Hub → Manage Courses → course → Curriculum**, open the intended lesson, and find **Lesson video**. For a new lesson, enter its name first.
 
 1. Choose **Upload video** and select the original video file on your computer.
 2. Keep this tab open while **Uploading** shows the percentage. The file goes directly to Bunny; it is not added to the ordinary WordPress Media library.
@@ -88,6 +99,9 @@ If you see an expired-session message, reopen the lesson. If the result is uncle
 Paid lesson films use Bunny through this WordPress control. The separate [Free Videos](/free-videos) page keeps its YouTube-link workflow. **Course Highlights Video** is a separate [public preview in Basics](/courses#course-highlights-video-public-preview). Use a film approved for public viewing there.
 
 Access checks and sharing restrictions are maintained by the site administrator. Keep paid films and their video addresses private; a video address is not permission to share the film.
+
+Keep the original film on your own computer/storage. The website's player and current direct-download
+blocks are not a promise that every form of copying or screen recording is prevented.
 
 Students cannot leave comments, questions or notes under a lesson at the moment. That is switched off on purpose.
 

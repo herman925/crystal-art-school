@@ -6,7 +6,7 @@ It does not charge money, create/change an order or issue a refund.
 <figure class="guide-screenshot" aria-labelledby="access-visual">
   <figcaption id="access-visual">The actual Course Access form</figcaption>
   <div class="guide-screenshot-images">
-    <a href="/guide-screenshots/access-form.png" target="_blank" rel="noopener" style="--screenshot-width:810px" aria-label="Open full-size screenshot: Course Access: actual student, course, action and Review change form (new tab)"><img src="/guide-screenshots/access-form.png" width="810" height="251" alt="Course Access: actual student, course, action and Review change form" loading="lazy"></a>
+    <a href="/guide-screenshots/access-form.png" target="_blank" rel="noopener" style="--screenshot-width:1238px" aria-label="Open full-size screenshot: Course Access: actual student, course, action and Review change form (new tab)"><img src="/guide-screenshots/access-form.png" width="1238" height="434" alt="Course Access: actual student, course, action and Review change form" loading="lazy"></a>
   </div>
   <p>Choose the existing student, exact course and Add access or Remove access, then Review change. Review the next screen before confirming. Select a screenshot to open it full size.</p>
 </figure>

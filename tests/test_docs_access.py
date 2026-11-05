@@ -55,6 +55,7 @@ class GuideAccess(unittest.TestCase):
         status, body, _ = fetch(op, self.admin_asset)
         self.assertEqual(status, 404)
         self.assertNotIn(b'CAS_AUDIT_EXPECTED_ADMINS', body)
+        self.assertNotIn(b'Account handover', body)
         status, body, _ = fetch(op, '/?audience=admin')
         self.assertEqual(status, 200)
         self.assertNotIn(b'/admin/handover', body)
@@ -63,7 +64,29 @@ class GuideAccess(unittest.TestCase):
         op = login('herman')
         for path in ['/courses', '/admin/handover', self.admin_asset]:
             self.assertEqual(fetch(op, path)[0], 200)
-        self.assertIn(b'CAS_AUDIT_EXPECTED_ADMINS', fetch(op, '/admin/handover')[1])
+        self.assertIn(b'Account handover', fetch(op, '/admin/handover')[1])
+
+    def test_shared_messages_do_not_name_the_developer(self):
+        status, body, _ = fetch(client(), '/login.php')
+        self.assertEqual(status, 200)
+        self.assertNotIn(b'Herman', body)
+        status, body, _ = fetch(login('crystal'), '/admin/handover')
+        self.assertEqual(status, 403)
+        self.assertIn(b'site administrator', body)
+        self.assertNotIn(b'Herman', body)
+
+    def test_administrator_screenshot_is_not_in_the_reader_edition(self):
+        path = '/guide-screenshots/admin-orders-navigation.png'
+        source = BUILD / 'admin' / path.lstrip('/')
+        self.assertTrue(source.is_file())
+        self.assertFalse((BUILD / 'crystal' / path.lstrip('/')).exists())
+        self.assertEqual(fetch(client(), path)[0], 302)
+        status, body, _ = fetch(login('crystal'), path)
+        self.assertEqual(status, 404)
+        self.assertFalse(body.startswith(b'\x89PNG'))
+        status, body, _ = fetch(login('herman'), path)
+        self.assertEqual(status, 200)
+        self.assertEqual(body, source.read_bytes())
 
     def test_all_resources_are_account_checked_and_not_stored(self):
         op = login('crystal')
@@ -92,6 +115,7 @@ class GuideAccess(unittest.TestCase):
                 status, body, _ = fetch(op, path)
                 self.assertIn(status, [403,404])
                 self.assertNotIn(b'CAS_AUDIT_EXPECTED_ADMINS', body)
+                self.assertNotIn(b'Account handover', body)
                 self.assertNotIn(b'<?php', body)
 
     def test_wrong_account_password_and_external_next_are_refused(self):

@@ -2,9 +2,9 @@
 
 Below the banner, some cards use approved text or photographs and other sections fill themselves from your published courses, artwork and articles. You do not need to copy the same content into several places.
 
-## Start from Content hub
+## Start from Content Hub
 
-Open **Content hub → Home → Edit Home** for the banner, text and photographs. Repeating
+Open **Content Hub → Home → Edit Home** for the banner, text and photographs. Repeating
 content, such as the course-overview questions, uses the related content lists below the form.
 
 | What you change | Where it appears |
@@ -35,7 +35,7 @@ If a photograph changes, tell the site administrator if its written description 
 
 ## Shared contact links
 
-The social and email buttons come from **Content hub → Site-Wide Edit**.
+The social and email buttons come from **Content Hub → Site-Wide Edit**.
 Change the shared value once.
 
 ## Courses and artwork
@@ -66,4 +66,4 @@ In **Edit Home → Student Comment Limit**, choose a number from **1 to 12**, th
 
 Image buttons sit to the right of each preview and the size recommendation is below it. **Reposition** opens a crop preview matching the Home card: the About picture uses its twin-arch mask; Free Videos and TOOLS use their own square card shapes. Drag or adjust the controls, choose **Use This Crop**, then **Save Home**. Cancel does not alter the pending crop.
 
-The prototype’s brushes-and-palette photograph is the TOOLS starting image. **Clear Slot** still removes the optional TOOLS photograph when saved. Repositioning does not alter or delete the original upload. The artwork chooser opens only when you press **Choose Artwork**; following the Gallery Image section link does not open a popup.
+The original brushes-and-palette photograph is the TOOLS starting image. **Clear Slot** still removes the optional TOOLS photograph when saved. Repositioning does not alter or delete the original upload. The artwork chooser opens only when you press **Choose Artwork**; following the Gallery Image section link does not open a popup.

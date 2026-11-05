@@ -2,6 +2,9 @@
 
 Send these to the site administrator as they become ready. You do not need to finish everything at once.
 
+For your practical walkthrough, use [Try your website before launch](/website-review).
+Record unfinished checks and wording/content decisions separately from bugs.
+
 ## Your course content
 
 - Confirm the title and price of each course in one list.
@@ -27,5 +30,9 @@ The site administrator handles the technical setup and verifies payment and emai
 The current demo course, posts and showcase entries remain published for review by agreement.
 They are examples, not finished client content; their launch treatment will be agreed separately.
 
-The launch plan remains card payments in GBP. Registration, receipt delivery and the buying
+The launch plan is card payments and PayPal, with prices in GBP. Registration, receipt delivery and the buying
 journey still need their final opening checks. Reviewing this guide does not open them.
+
+The administrator has tested both payment methods, receipt emails and refunds in their test
+environments. Those results support the next review; they do not establish merchant approval,
+bank payouts, adviser-approved wording or readiness to take a real payment.

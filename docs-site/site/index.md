@@ -3,6 +3,9 @@
 Use this guide when you want to change something on your website. Start with the task
 below; each page tells you where to click, how to save and what to check afterwards.
 
+Starting your review? Follow [Try your website before launch](/website-review). Record what
+you could complete and anything that needs a change; an untested step is not a pass.
+
 ::: info Your editing account
 Sign in to reach **Content Hub**. Your account has the content, course and agreed price/order/access tools described here. Site administration and technical settings stay with the site administrator.
 :::
@@ -25,6 +28,8 @@ start with the WordPress editor; the service dashboards are for managing the rel
 
 | Your task | Open this guide |
 |---|---|
+| Work through the website review | [Review checklist](/website-review) |
+| Choose, replace or remove a picture or file | [Pictures and files](/pictures-and-files) |
 | Change the homepage banner | [Homepage banner](/home-hero) |
 | Change Home's other pictures or words | [Homepage cards](/homepage-cards) |
 | Update your biography or About photographs | [About page](/about-page) |
@@ -38,6 +43,7 @@ start with the WordPress editor; the service dashboards are for managing the rel
 | Write an article or add a free film | [Blog](/blog) · [Free videos](/free-videos) |
 | Change an agreed course price | [Course prices](/course-prices) |
 | Find an order or help a student | [Prices, orders and access](/money-guide) |
+| Understand student credits or a waiting video player | [Privacy and permissions](/privacy-and-permissions) |
 
 ## The routine for most changes
 

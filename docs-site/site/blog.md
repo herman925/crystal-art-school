@@ -3,6 +3,25 @@
 **Content Hub → Blog → Manage Posts → Add New.** This is the freest part of the site — it is meant to be written in,
 not configured.
 
+## Write, save and check an article
+
+1. Enter its title and writing. Use Heading blocks for actual sections, rather than making a paragraph bold.
+2. Choose a suitable **Featured image** and an existing **Category**.
+3. Save a draft while working. Use Preview where offered to check the article before publishing.
+4. Publish when the words and pictures are approved, or use Save for an existing published article.
+5. Open the saved article and Blog list. Check the heading, picture crops, topic, paragraphs and links on a phone too.
+
+If an article should disappear from public lists, move that exact entry to Draft or Trash.
+Removing it from the homepage alone is not a separate selection: Home follows the published-post rule below.
+
+<figure class="guide-screenshot" aria-labelledby="blog-overview-current-visual">
+  <figcaption id="blog-overview-current-visual">The actual article editor</figcaption>
+  <div class="guide-screenshot-images">
+    <a href="/guide-screenshots/blog-editor-overview.png" target="_blank" rel="noopener" style="--screenshot-width:1440px" aria-label="Open full-size screenshot: WordPress: actual new post editor; blank auto-draft, no content published (new tab)"><img src="/guide-screenshots/blog-editor-overview.png" width="1440" height="1100" alt="WordPress: actual new post editor; blank auto-draft, no content published" loading="lazy"></a>
+  </div>
+  <p>An unsaved draft is shown. The title and writing are in the main area; Featured image, Categories and publication are in the editor controls. Select a screenshot to open it full size.</p>
+</figure>
+
 ## The blocks you can use
 
 Paragraph, Heading, Image, List, Quote, Separator, Gallery, Columns, Group and Cover.
@@ -69,7 +88,7 @@ something wide, or something where the middle band carries the picture.
 Worked out from the length of the article. You cannot type it, and it corrects itself when
 you edit.
 
-The estimate includes Chinese and other CJK characters as well as words separated by spaces.
+The estimate includes Chinese characters as well as words separated by spaces.
 
 ## Articles on the homepage
 
@@ -84,8 +103,22 @@ Beside that row is a dark **TOOLS** square. It leads to your articles filed unde
 Open **Content Hub → Blog → More Editing Tasks → Introduction Paragraph under the Blog Heading**.
 Change the paragraph and save. Clearing it removes that paragraph. Articles keep their own
 separate Save/Publish controls.
+<figure class="guide-screenshot" aria-labelledby="blog-intro-current-visual">
+  <figcaption id="blog-intro-current-visual">The Blog introduction has its own editor</figcaption>
+  <div class="guide-screenshot-images">
+    <a href="/guide-screenshots/blog-introduction.png" target="_blank" rel="noopener" style="--screenshot-width:1238px" aria-label="Open full-size screenshot: Blog: actual introduction editor and separate save control (new tab)"><img src="/guide-screenshots/blog-introduction.png" width="1238" height="595" alt="Blog: actual introduction editor and separate save control" loading="lazy"></a>
+  </div>
+  <p>This saves the introduction, separately from individual articles. Select a screenshot to open it full size.</p>
+</figure>
+
 ## Demo Posts
 
 Six posts beginning **Demo —** are labelled layout samples. They show four topic filters: **Watercolour**, **Oil Painting**, **Diary** and **Tools**. These are Categories, not WordPress Tags. Their labelled graphics are not teacher or student artwork. They remain published for review by agreement; do not replace or withdraw them until that is agreed.
 
 The Blog card’s main action opens Post Management. **More Editing Tasks → Introduction Paragraph under the Blog Heading** opens the separate introduction editor. Inner editing forms use the standard WordPress appearance.
+
+## An article has a review notice
+
+An amber review notice means wording still needs approval. Review the proposed words with the
+site administrator before publishing the article or removing that notice. Keep unfinished
+work as a draft; a layout sample or old review note is not approved teaching copy.

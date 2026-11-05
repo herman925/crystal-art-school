@@ -2,10 +2,17 @@
 
 Screenshots show the actual WordPress editing controls. Their pictures and saved values may differ from yours. Select a screenshot to open it full size in a new tab.
 
+Some controls appear only when you point at a row, open a side panel or change a field.
+On a narrow screen, scroll within the editor and expand the entry's details where offered.
+The screenshot illustrates the control; its example content is not an instruction to change that record.
+On a first visit, WordPress may show **Welcome to the editor**. Use **Close** on that panel
+to reach the article or entry; closing the welcome panel does not publish anything.
+
 ## Pages with one Save button
 
 **Edit Home**, **Edit About** and **Site-Wide Edit** each save the fields on that page
 together. For example, **Save Home** also saves slides hidden behind the other slide tabs.
+The artwork chooser's **Save Gallery Image** is a separate save; it does not save unfinished Home text.
 
 After saving, use **View saved page** where offered. It opens the saved website in another
 tab; it does not show work you have not saved.

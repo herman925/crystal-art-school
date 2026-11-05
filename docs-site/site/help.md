@@ -26,5 +26,8 @@ Never include passwords, card details or a confirmation link.
 | No clear result after a money/access confirmation | Stop, check a fresh list without changing it, and send the site administrator the message |
 | A student reports a payment problem | Record their order number and exact message; do not tell them to pay again |
 | A student has not received an email | Ask the site administrator to check delivery; repeating an order/access action is not a way to send mail |
+| A video shows a permission message | Check that browser's **Privacy choices → External video players**, then return to the film |
+| Upload is at 100% but not Ready | Keep the current lesson film; wait for processing and use **Check status** |
 
 For price, coupon or access warnings, see [money and access help](/money-help).
+For the review-session report format, use [Record each result](/website-review#record-each-result).

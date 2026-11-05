@@ -1,6 +1,6 @@
 # The About page
 
-Start from **Content hub → About → Edit About**. The writing and portrait are together on
+Start from **Content Hub → About → Edit About**. The writing and portrait are together on
 one editing page. **About photos** holds the three photograph strips.
 
 ## Your words and your portrait
@@ -77,6 +77,11 @@ strip keeps showing the pictures that are on the site today. Publish one, and th
 switches to yours — so add a set in one go rather than one at a time.
 
 There are three strips and they cannot be added to or renamed. What goes in them is yours.
+
+To add a photograph, open **About Photos → Add New**, enter its descriptive title, set its
+Featured image, choose **Which Set** and give it an **Order**. Save a draft until the intended
+set is ready, then publish the agreed entries and check About. For an existing photograph,
+change that entry and Update. Draft or Trash withdraws the entry without deleting the upload.
 
 ## Certificates and honours
 

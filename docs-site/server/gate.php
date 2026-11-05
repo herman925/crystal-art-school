@@ -47,7 +47,7 @@ if (!docs_is_admin() && preg_match('#^/+admin(?:/|$|\.html)#i', $path)) {
     http_response_code(403);
     header('Content-Type: text/plain; charset=utf-8');
     header('Cache-Control: private, no-store');
-    exit("This section is available to Herman's guide account only.\n");
+    exit("This section is available to the site administrator's guide account only.\n");
 }
 $candidate = $docs_root . $path;
 

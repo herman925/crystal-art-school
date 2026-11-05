@@ -6,7 +6,22 @@
 2. Check the student login and course together.
 3. Read **Order status** and **Payment status** separately.
 
+The filters are **Order number**, **Status**, **From**, **To** and **Course ID**. Choose
+**Filter** to apply them. Use the course's number supplied for the review if you do not know
+its Course ID. The student login appears in the results so you can distinguish students
+with similar display names. No matches can mean the filters are too narrow; clear them
+before assuming an order is missing.
+
 A completed order is not proof that money reached the bank or that an email was delivered.
+Keep the website order number when asking for help; it can differ from a payment provider's reference.
+
+<figure class="guide-screenshot" aria-labelledby="sales-filters-current-visual">
+  <figcaption id="sales-filters-current-visual">Find the right order before changing anything</figcaption>
+  <div class="guide-screenshot-images">
+    <a href="/guide-screenshots/sales-filters.png" target="_blank" rel="noopener" style="--screenshot-width:1238px" aria-label="Open full-size screenshot: Sales: actual order, status, date and Course ID filters and export control (new tab)"><img src="/guide-screenshots/sales-filters.png" width="1238" height="41" alt="Sales: actual order, status, date and Course ID filters and export control" loading="lazy"></a>
+  </div>
+  <p>Apply these filters, then inspect the student, course and separate order/payment states. The screenshot is the real filter bar, not an editable form in this guide. Select a screenshot to open it full size.</p>
+</figure>
 
 ## Change a pending order
 

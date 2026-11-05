@@ -58,6 +58,14 @@ Check these before publishing a painting:
 
 Fill in the agreed details, publish the intended entry, then check its public card and Etsy link.
 
+<figure class="guide-screenshot" aria-labelledby="artwork-editor-current-visual">
+  <figcaption id="artwork-editor-current-visual">The actual artwork editor</figcaption>
+  <div class="guide-screenshot-images">
+    <a href="/guide-screenshots/artwork-editor-overview.png" target="_blank" rel="noopener" style="--screenshot-width:1440px" aria-label="Open full-size screenshot: WordPress: actual new artwork editor; blank auto-draft, no content published (new tab)"><img src="/guide-screenshots/artwork-editor-overview.png" width="1440" height="1100" alt="WordPress: actual new artwork editor; blank auto-draft, no content published" loading="lazy"></a>
+  </div>
+  <p>A blank new entry is shown. Prepare the picture and agreed sale/display details, then use the entry’s own save or publication control. Select a screenshot to open it full size.</p>
+</figure>
+
 ## Photographs
 
 Shoot square-on in even light, and crop to the painting's edges. The grid crops what you

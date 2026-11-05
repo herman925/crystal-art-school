@@ -5,7 +5,7 @@
 <figure class="guide-screenshot" aria-labelledby="coupon-visual">
   <figcaption id="coupon-visual">The actual new-coupon form</figcaption>
   <div class="guide-screenshot-images">
-    <a href="/guide-screenshots/coupon-form.png" target="_blank" rel="noopener" style="--screenshot-width:810px" aria-label="Open full-size screenshot: Coupons: actual new coupon fields and Save coupon button (new tab)"><img src="/guide-screenshots/coupon-form.png" width="810" height="678" alt="Coupons: actual new coupon fields and Save coupon button" loading="lazy"></a>
+    <a href="/guide-screenshots/coupon-form.png" target="_blank" rel="noopener" style="--screenshot-width:1238px" aria-label="Open full-size screenshot: Coupons: actual new coupon fields and Save coupon button (new tab)"><img src="/guide-screenshots/coupon-form.png" width="1238" height="808" alt="Coupons: actual new coupon fields and Save coupon button" loading="lazy"></a>
   </div>
   <p>Check the code, discount type, dates and use limits before Save coupon. A 100% code has its own free-course confirmation. Select a screenshot to open it full size.</p>
 </figure>

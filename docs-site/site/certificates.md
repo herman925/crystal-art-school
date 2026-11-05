@@ -66,7 +66,7 @@ Title or Date changes that dashboard view only; it does not rearrange About.
 <figure class="guide-screenshot" aria-labelledby="certificate-list-screens">
   <figcaption id="certificate-list-screens">The actual Certificates list and Highlight column</figcaption>
   <div class="guide-screenshot-images">
-    <a href="/guide-screenshots/certificate-list.png" target="_blank" rel="noopener" style="--screenshot-width:898px" aria-label="Open full-size screenshot: Certificates: actual list with Year, Order, Highlight and Pin to top controls (new tab)"><img src="/guide-screenshots/certificate-list.png" width="898" height="1023" alt="Certificates: actual list with Year, Order, Highlight and Pin to top controls" loading="lazy"></a>
+    <a href="/guide-screenshots/certificate-list.png" target="_blank" rel="noopener" style="--screenshot-width:1238px" aria-label="Open full-size screenshot: Certificates: actual list with Year, Order, Highlight and Pin to top controls (new tab)"><img src="/guide-screenshots/certificate-list.png" width="1238" height="1063" alt="Certificates: actual list with Year, Order, Highlight and Pin to top controls" loading="lazy"></a>
   </div>
   <p>Pin to top selects the large highlight. Unpin clears it. The existing rows and the previously selected certificate are shown. Select a screenshot to open it full size.</p>
 </figure>

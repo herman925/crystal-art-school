@@ -64,6 +64,6 @@ button:hover{filter:brightness(1.08)}
   <input id="p" name="password" type="password" autocomplete="current-password" required>
   <input type="hidden" name="next" value="<?= htmlspecialchars($next, ENT_QUOTES) ?>">
   <button type="submit">Sign in</button>
-  <p class="foot">Lost your password? Ask Herman — there is no reset email on this site.</p>
+  <p class="foot">Lost your password? Ask the site administrator — there is no reset email on this site.</p>
 </form>
 </body></html>
