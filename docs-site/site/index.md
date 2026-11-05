@@ -7,6 +7,20 @@ below; each page tells you where to click, how to save and what to check afterwa
 Sign in to reach **Content Hub**. Your account has the content, course and agreed price/order/access tools described here. Site administration and technical settings stay with the site administrator.
 :::
 
+## Website and service links
+
+- **Public website:** [crystalau.com](https://crystalau.com/) — the website your visitors and students use.
+- **This guide:** [docs.crystalau.com](https://docs.crystalau.com/) — instructions for updating your website.
+- **WordPress editor:** [crystalau.com/wp-admin/](https://crystalau.com/wp-admin/) — sign in to open Content Hub and edit your content.
+- **Hostinger:** [hpanel.hostinger.com](https://hpanel.hostinger.com/) — hosting for your WordPress website.
+- **Bunny.net:** [dash.bunny.net](https://dash.bunny.net/) — video hosting and delivery.
+- **Elementor:** [my.elementor.com](https://my.elementor.com/) — the website's page-builder account and licence.
+- **PayPal:** [paypal.com/signin](https://www.paypal.com/signin) — sign in to your PayPal business account.
+- **Stripe:** [dashboard.stripe.com](https://dashboard.stripe.com/) — your card-payment account and dashboard.
+
+WordPress, this guide and the external services use separate logins. For everyday content changes,
+start with the WordPress editor; the service dashboards are for managing the relevant accounts.
+
 ## What would you like to do?
 
 | Your task | Open this guide |
