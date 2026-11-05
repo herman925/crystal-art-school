@@ -25,7 +25,7 @@ Editor visits created six blank auto-drafts, including intermediate capture atte
 ## Pass 3: rendered guide, links, images and access
 
 - Both editions build: 33 client HTML pages and 40 administrator HTML pages, including each 404 page.
-- 3,412 internal link/anchor checks: 1,401 client and 2,011 administrator; zero missing links or anchors.
+- 3,414 internal link/anchor checks: 1,402 client and 2,012 administrator; zero missing links or anchors.
 - 132 screenshot uses checked for source PNG byte hashes, declared/natural dimensions and nonempty alternative text. All 63 referenced originals match.
 - 142 rendered page/viewport/theme combinations: all 32 client pages at 1440×1000 and 390×844 in light/dark, plus all seven administrator pages at desktop/light and phone/dark. No blank pages, framework overlays, relevant page-script errors or document horizontal overflow. Four final plain-language edits received 16 targeted reruns.
 - Browser interactions passed for client search, administrator-search exclusion, full-size image viewing, task shortcut anchors, native theme switching, mobile sign-out, resource revocation and same-browser administrator→client switching. Administrator pages/images are available only to the intended edition.
@@ -35,6 +35,10 @@ Editor visits created six blank auto-drafts, including intermediate capture atte
 The in-app Browser runtime/skill was unavailable. Cached Playwright/Chromium ran in an owned bounded container; the guide fixture had no external network, read-only source/toolchain/private-input mounts, an empty allowlisted environment and isolated localhost HTTPS. Real backend capture used a separate bounded browser with only explicit WordPress credentials and the network required for the authorised capture. Held Review services were not used. Headless viewport checks do not constitute physical-device or screen-reader acceptance.
 
 Private evidence includes static/browser/interaction summaries, original-capture metadata, guide render samples, cleanup and site-preservation receipts. Early capture/selector and stale-marker harness failures are retained as intermediate attempts, not application defects or passes.
+
+## Publication reconciliation
+
+The first guarded publication stopped before replacing live content because #261 had concurrently published the client-only website/service links update. Compared all changed page main text: only the approved homepage link section differed; all ten updated live PNGs matched the reviewed originals. Preserved the old release and verified current live baseline, merged #261 into this revision, and retained all eight website/service destinations. Rebased the exact-preimage guard only after the source/content comparison and a fresh unchanged snapshot.
 
 ## Publication and remaining UAT
 
