@@ -41,6 +41,16 @@ typed into Tags goes nowhere.
 automatically, so it is ignored rather than printed as a topic. An article with no real
 category simply shows no topic, which is better than showing a WordPress word.
 
+## Blog Abstract and Developer’s Note
+
+Open **Blog Abstract & Developer’s Note** in the article editor's Post settings.
+**Blog Abstract** is the short summary below the title on ordinary Blog cards. If you leave
+it empty, WordPress uses text from the article. It is the field WordPress calls an excerpt.
+
+**Developer’s Note** sits directly below that field. It is a separate, publicly visible
+amber notice at the top of the full article for corrections awaiting Crystal's approval.
+Clear the note after approval. Save the article to save either field.
+
 ## Headings decide the layout
 
 An article with **Heading** blocks in it is laid out as a guide: a contents list at the top,
