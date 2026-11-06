@@ -8,6 +8,14 @@ Off uses Regular Price and keeps Sale Price for later. On uses the valid lower S
 Apply the setting with the builder's **Save as Draft**, **Update** or **Publish** button, then
 reopen the course to check it. Existing orders and already-created payment sessions are unchanged.
 
+<figure class="guide-screenshot" aria-labelledby="builder-sale-visual">
+  <figcaption id="builder-sale-visual">On sale beside the native course-builder prices</figcaption>
+  <div class="guide-screenshot-images">
+    <a href="/guide-screenshots/builder-sale.png" target="_blank" rel="noopener" style="--screenshot-width:335px" aria-label="Open full-size screenshot: Tutor Course Builder Pricing Model, Regular Price, Sale Price and On sale switch (new tab)"><img src="/guide-screenshots/builder-sale.png" width="335" height="206" alt="Tutor Course Builder with On sale directly below Regular Price and Sale Price" loading="lazy"></a>
+  </div>
+  <p>The example uses a demo course. Use the builder's normal save button to apply the setting. Off keeps the Sale Price for later. Select the screenshot to open it full size.</p>
+</figure>
+
 ## Alternative: the Course Prices screen
 
 **Open Content Hub → Course Prices.** Change paid-course prices here, separately from the
