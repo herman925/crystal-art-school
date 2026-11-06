@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/cas-course-medium.php';
 /**
  * Site header, reproducing the markup the prototype's CSS is written against.
  *

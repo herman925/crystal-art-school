@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/cas-course-medium.php';
 /**
  * W2-1 Sales: one admin screen under the content hub.
  *
