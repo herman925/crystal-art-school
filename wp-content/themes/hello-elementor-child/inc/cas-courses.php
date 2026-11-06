@@ -688,9 +688,8 @@ function cas_render_courses( $atts ) {
 			<?php
 			$i = 0;
 
-			while ( $q->have_posts() ) {
-				$q->the_post();
-				echo cas_course_card( get_the_ID(), $i ); // phpcs:ignore WordPress.Security.EscapeOutput
+			foreach ( $ids as $id ) {
+				echo cas_course_card( $id, $i ); // phpcs:ignore WordPress.Security.EscapeOutput
 				$i++;
 			}
 
