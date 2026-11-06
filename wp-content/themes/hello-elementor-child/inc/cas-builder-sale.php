@@ -13,7 +13,8 @@ function cas_builder_sale_version( $id, $price = null ) {
 
 function cas_builder_sale_value( $id ) {
 	$price = cas_price_current( $id );
-	return wp_json_encode( array( 'on' => '' !== $price['sale'] ? '1' : '0', 'amount' => cas_price_sale_amount( $price ), 'version' => cas_builder_sale_version( $id, $price ) ) );
+	$amount = cas_price_sale_amount( $price );
+	return wp_json_encode( array( 'on' => '' !== $price['sale'] ? '1' : '0', 'amount' => '' === $amount ? '0.00' : $amount, 'version' => cas_builder_sale_version( $id, $price ) ) );
 }
 
 final class CAS_Builder_Sale {
@@ -139,7 +140,8 @@ add_filter( 'tutor_course_details_response', static function ( $data ) {
 		$data['_cas_builder_sale'] = cas_builder_sale_value( $id );
 		$price = cas_price_current( $id );
 		$data['course_pricing']['price'] = $price['regular'];
-		$data['course_pricing']['sale_price'] = cas_price_sale_amount( $price );
+		$amount = cas_price_sale_amount( $price );
+		$data['course_pricing']['sale_price'] = '' === $amount ? '0.00' : $amount;
 	}
 	return $data;
 }, 1002 );
