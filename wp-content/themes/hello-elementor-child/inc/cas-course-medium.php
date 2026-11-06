@@ -58,8 +58,13 @@ function cas_course_preserve_hidden_tags() {
 	if ( ! $post || 'courses' !== $post->post_type || ! current_user_can( 'edit_post', $id ) ) { return; }
 	$tags = wp_get_post_terms( $id, 'course-tag', array( 'fields' => 'ids' ) );
 	if ( is_wp_error( $tags ) ) { wp_send_json( array( 'status_code' => 503, 'message' => 'Course labels could not be checked. Please try again.' ), 503 ); }
-	$_POST['course_tags'] = $tags;
-	$_REQUEST['course_tags'] = $tags;
+	if ( $tags ) {
+		$_POST['course_tags'] = $tags;
+		$_REQUEST['course_tags'] = $tags;
+	} else {
+		// Tutor rejects an explicitly empty array; omission preserves the empty selection.
+		unset( $_POST['course_tags'], $_REQUEST['course_tags'] );
+	}
 }
 add_action( 'wp_ajax_tutor_update_course', 'cas_course_preserve_hidden_tags', 3 );
 
