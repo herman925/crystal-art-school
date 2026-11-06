@@ -6,6 +6,9 @@ class_alias( 'ZeroCheckoutOrder', 'Tutor\Models\OrderModel' );
 $request_nonce = true;
 seed( '2.00', '' );
 verify( cas_price_write_pair( 1, cas_price_proposed( '2', '0', '1' ) ), 'Prepare explicit zero promotion.' );
+builder_post( '1', '2.00', '0' ); unset( $_POST['_cas_builder_sale'] );
+try { CAS_Builder_Sale::start(); throw new RuntimeException( 'Zero promotion accepted without control state' ); }
+catch ( BuilderJSON $e ) { verify( $e->getCode() === 409, 'Legacy saves must not accidentally overwrite a zero promotion.' ); }
 $_POST = array( 'object_ids' => '1', 'order_type' => ZeroCheckoutOrder::TYPE_SINGLE_ORDER,
 	'payment_method' => 'stripe', 'payment_type' => 'automate' );
 cas_zero_sale_checkout_method();
