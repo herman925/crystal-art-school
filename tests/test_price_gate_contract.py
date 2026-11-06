@@ -14,8 +14,8 @@ class PriceGateContract(unittest.TestCase):
         for hook in ["update_post_metadata", "add_post_metadata", "delete_post_metadata"]:
             self.assertIn(f"add_filter( '{hook}', 'cas_price_block_role_write', 10, 3 )", GATE)
 
-    def test_the_block_covers_the_three_price_keys_and_only_courses(self):
-        for key in ["tutor_course_price", "tutor_course_sale_price", "_tutor_course_price_type"]:
+    def test_the_block_covers_price_keys_and_only_courses(self):
+        for key in ["tutor_course_price", "tutor_course_sale_price", "_tutor_course_price_type", "_cas_inactive_sale_price"]:
             self.assertIn(f"'{key}'", GATE)
         self.assertIn("'courses' !== get_post_type", GATE)
 
