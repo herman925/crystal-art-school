@@ -103,3 +103,20 @@ function cas_blog_allowed_block_types( $allowed, $context ) {
 }
 
 add_filter( 'allowed_block_types_all', 'cas_blog_allowed_block_types', 10, 2 );
+
+/** Keep the card summary and its separate public editorial notice together. */
+function cas_blog_enqueue_editor_details() {
+	$screen = get_current_screen();
+	if ( ! $screen || 'post' !== $screen->post_type ) {
+		return;
+	}
+
+	wp_enqueue_script(
+		'cas-blog-editor',
+		get_stylesheet_directory_uri() . '/js/cas-blog-editor.js',
+		array( 'wp-plugins', 'wp-editor', 'wp-element', 'wp-components', 'wp-data', 'wp-dom-ready' ),
+		filemtime( get_stylesheet_directory() . '/js/cas-blog-editor.js' ),
+		true
+	);
+}
+add_action( 'enqueue_block_editor_assets', 'cas_blog_enqueue_editor_details' );

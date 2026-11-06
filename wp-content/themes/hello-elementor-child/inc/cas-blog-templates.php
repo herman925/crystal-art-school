@@ -77,7 +77,7 @@ function cas_blog_register_devnote_meta() {
 		array(
 			'type'              => 'string',
 			'single'            => true,
-			'show_in_rest'      => false,
+			'show_in_rest'      => array( 'schema' => array( 'context' => array( 'edit' ) ) ),
 			'sanitize_callback' => 'sanitize_textarea_field',
 			'auth_callback'     => function () {
 				return current_user_can( 'edit_posts' );
@@ -94,7 +94,8 @@ function cas_blog_add_devnote_meta_box() {
 		'cas_blog_devnote_meta_box',
 		'post',
 		'side',
-		'low'
+		'low',
+		array( '__back_compat_meta_box' => true )
 	);
 }
 add_action( 'add_meta_boxes', 'cas_blog_add_devnote_meta_box' );
