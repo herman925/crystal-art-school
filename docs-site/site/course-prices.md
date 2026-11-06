@@ -25,7 +25,7 @@ ordinary course-content save.
 <figure class="guide-screenshot" aria-labelledby="price-review-visual">
   <figcaption id="price-review-visual">Course Prices: the actual review and confirmation screen</figcaption>
   <div class="guide-screenshot-images">
-    <a href="/guide-screenshots/price-review.png" target="_blank" rel="noopener" style="--screenshot-width:536px" aria-label="Open full-size screenshot: Course Prices: actual Now/New review table and four confirmation boxes; unchanged amounts shown (new tab)"><img src="/guide-screenshots/price-review.png" width="536" height="352" alt="Course Prices: actual Now/New review table and four confirmation boxes; unchanged amounts shown" loading="lazy"></a>
+    <a href="/guide-screenshots/price-review.png" target="_blank" rel="noopener" style="--screenshot-width:598px" aria-label="Open full-size screenshot: Course Prices: Regular, Sale, On sale and Customer price review with four confirmation boxes (new tab)"><img src="/guide-screenshots/price-review.png" width="598" height="613" alt="Course Prices: Regular, Sale, On sale and Customer price review with four confirmation boxes" loading="lazy"></a>
   </div>
   <p>The example uses a demo course. Check Regular, Sale, On sale and Customer price in your own Now / New table before confirming. The confirmation boxes are empty in this screenshot. Select it to open full size.</p>
 </figure>
