@@ -15,6 +15,7 @@ class SalesCsvFormulaSafety(unittest.TestCase):
         script = rf'''
         define('ABSPATH', '/');
         function add_action() {{}}
+        function add_filter() {{}}
         require {str(SALES)!r};
         $cases = array(
             array('=1+1', "'=1+1"),
