@@ -6,7 +6,9 @@
  * for the role at the meta layer, so every save route is covered: the course form, quick edit, bulk
  * edit, the REST API when the request is the role's, and any direct update_post_meta call.
  *
- * The only route to a new price is a two-step confirmation on the Course prices screen:
+ * The native Tutor builder can save prices through cas-builder-sale.php's nonce-backed,
+ * ownership/version-checked transaction. Its gate is scoped to that validated save request.
+ * The alternative Course prices screen retains its two-step confirmation:
  *   1. request: the role gives the new regular and sale prices. The server reads the current prices,
  *      stores a one-time token (10 minutes, that user only) and shows old and new side by side.
  *   2. confirm: the role types the old and new values again. The server checks the token, the typed
