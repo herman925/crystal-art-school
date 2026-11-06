@@ -6,11 +6,36 @@ import socket
 import tempfile
 import time
 import urllib.request
+import sqlite3
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 
 
 class CourseMediumTests(unittest.TestCase):
+    def test_actual_query_excludes_full_partial_and_test_account_history(self):
+        result = subprocess.run(['php', str(ROOT / 'tests/fixtures/popularity-query-harness.php')],
+                                capture_output=True, text=True, timeout=15)
+        self.assertEqual(result.returncode, 0, result.stderr)
+        query = json.loads(result.stdout)['sql']
+        with sqlite3.connect(':memory:') as db:
+            db.executescript('''
+                CREATE TABLE fixture_tutor_orders(id,order_type,order_status,payment_status,total_price,refund_amount,payment_method,transaction_id,payment_payloads,user_id,created_at_gmt);
+                CREATE TABLE fixture_tutor_order_items(order_id,item_id,discount_price,sale_price,regular_price);
+                CREATE TABLE fixture_tutor_ordermeta(id,order_id,meta_key,meta_value);
+                CREATE TABLE fixture_posts(ID,post_type);
+                CREATE TABLE fixture_usermeta(user_id,meta_key,meta_value);
+                INSERT INTO fixture_posts VALUES(1001,'courses');
+            ''')
+            for order in range(1,5):
+                db.execute('INSERT INTO fixture_tutor_orders VALUES(?,?,?,?,?,?,?,?,?,?,?)',
+                           (order,'single_order','completed','paid',20,0,'stripe','pi_test','{}',order,'2026-11-01 12:00:00'))
+                db.execute('INSERT INTO fixture_tutor_order_items VALUES(?,?,?,?,?)',
+                           (order,1001,None,None,20))
+            db.execute("INSERT INTO fixture_tutor_ordermeta VALUES(1,2,'refund','{}')")
+            db.execute("INSERT INTO fixture_tutor_ordermeta VALUES(2,3,'partially-refund','{}')")
+            db.execute("INSERT INTO fixture_usermeta VALUES(4,'_cas_test_account','1')")
+            self.assertEqual([row[0] for row in db.execute(query)], [1])
+
     def test_complete_course_renderer(self):
         result = subprocess.run(
             ['php', '-d', 'zend.assertions=1', '-d', 'assert.exception=1',

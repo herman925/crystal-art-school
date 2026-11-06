@@ -110,7 +110,7 @@ function cas_course_popularity_render( $filters ) {
 		INNER JOIN {$wpdb->posts} p ON p.ID=i.item_id AND p.post_type='courses'
 		WHERE {$where} AND o.order_status='completed' AND o.payment_status='paid' AND o.total_price>0 AND COALESCE(o.refund_amount,0)=0 AND o.order_type='single_order'
 		AND NOT EXISTS (SELECT 1 FROM {$wpdb->usermeta} um WHERE um.user_id=o.user_id AND um.meta_key='_cas_test_account' AND um.meta_value='1')
-		AND NOT EXISTS (SELECT 1 FROM {$wpdb->prefix}tutor_ordermeta rm WHERE rm.order_id=o.id AND rm.meta_key IN ('refund','partial_refund'))", $args
+		AND NOT EXISTS (SELECT 1 FROM {$wpdb->prefix}tutor_ordermeta rm WHERE rm.order_id=o.id AND rm.meta_key IN ('refund','partially-refund'))", $args
 	), ARRAY_A );
 	if ( ! is_array( $rows ) ) { echo '<section class="cas-course-popularity"><h2>Course popularity — live paid purchases</h2><p>Popularity could not be loaded. Please try again or contact the site administrator.</p></section>'; return; }
 	$course_media = array();
