@@ -11,6 +11,14 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 
 
 class CourseMediumTests(unittest.TestCase):
+    def test_complete_course_renderer(self):
+        result = subprocess.run(
+            ['php', '-d', 'zend.assertions=1', '-d', 'assert.exception=1',
+             str(ROOT / 'tests/fixtures/course-render-harness.php')],
+            capture_output=True, text=True, timeout=15,
+        )
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+
     def test_shared_medium_and_purchase_qualification(self):
         for count in ('single', 'multiple'):
             with self.subTest(media=count):
