@@ -144,6 +144,7 @@
 			}
 
 			activeTags();
+			grid.dispatchEvent( new Event( 'cas:catalogue-layout' ) );
 		}
 
 		function sortCells() {
@@ -170,6 +171,7 @@
 			order.forEach( function ( cell ) {
 				grid.appendChild( cell );
 			} );
+			grid.dispatchEvent( new Event( 'cas:catalogue-layout' ) );
 		}
 
 		function setSortActive() {
