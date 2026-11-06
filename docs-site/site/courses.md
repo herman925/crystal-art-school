@@ -1,6 +1,8 @@
 # Courses
 
-**Course content and course prices use separate workflows.** Use the course editor for titles, images, descriptions and lessons. Set or change paid-course prices only through the confirmed Course prices workflow, not the ordinary course-save button. Use [Course Prices](/course-prices).
+Use the course builder for content and pricing. Under **Basics → Pricing Model → Paid**,
+set **Regular Price**, **Sale Price** and **On sale**, then use the builder's save button.
+The separate [Course Prices](/course-prices) screen remains an alternative.
 
 Start from **Content Hub → Manage Courses**. In the course list, click the course title
 to open Tutor's builder. Use **Add course** on the hub for a new draft. Only courses
@@ -20,7 +22,7 @@ assigned to your account can be edited.
 2. Add the course words, cover and gallery photographs, then use **Save as Draft**.
 3. Open **Curriculum** to add the topics and lessons. Each topic groups part of the syllabus.
 4. Add any course-wide files in **Additional → Attachments**. Individual lessons have their own files.
-5. Set and confirm the first price through [Course Prices](/course-prices), then reload the course.
+5. Under **Basics → Pricing Model → Paid**, enter Regular Price and optional Sale Price. Choose **On sale** only when the sale should apply, then save the draft.
 6. Preview and check the intended content, files, price and public preview before publishing separately.
 
 Saving draft content before the first price is set does not make the course free or publish it.
@@ -58,7 +60,7 @@ an undo for a lesson you already saved.
 | **Gallery Photos 1–5** | The five course-page photographs. Photo 1 appears first; clicking a thumbnail changes the large photograph |
 | **Course Subtitle** | The optional line under the course highlights video |
 | **Course Media Label** | The medium shown with the course title, such as Sketching & Watercolour |
-| **Regular price / Sale price** | Course cards and course page; use **Course Prices**. A sale price crosses out the regular one |
+| **Regular Price / Sale Price / On sale** | Course cards and course page. Off uses Regular and remembers Sale; On uses the valid lower Sale |
 | **Difficulty level** | The small chips under the title |
 | **Category** | The tag above the title |
 | **Description** | The paragraph under the course title |
@@ -80,7 +82,10 @@ the site does that.
 
 ## Prices
 
-Use **Course Prices** and its separate review/confirmation step for paid-course amounts; follow [Course Prices](/course-prices). Enter numbers without a currency symbol, and leave Sale empty when no sale is intended.
+Use the price inputs and **On sale** switch in the builder's **Basics** tab. Enter numbers
+without a currency symbol. Off keeps Sale Price for later and uses Regular Price; On needs
+a positive Sale Price below Regular Price. Save the course and reopen it to check the result.
+These are base prices before any coupon or tax adjustment. See [Course Prices](/course-prices).
 
 The agreed course currency is GBP (£). **Currency and cart settings are managed by the site administrator**, not through your content-editing controls. Do not change them in Tutor Settings; ask the site administrator if anything appears wrong.
 
@@ -147,9 +152,13 @@ page — the homepage, About, the gallery, the blog and the free videos.
 
 ## Draft and published
 
-A draft is not a published course. For a new paid course, save the content as a draft, set and confirm its first price through **Course Prices**, reload the same saved course, and publish only when the content, price and launch timing are agreed. A saved price does not publish the course.
+A draft is not a published course. For a new paid course, enter its content and pricing in
+the builder, then use **Save as Draft**. Publish only when content, price and launch timing
+are agreed. Saving a draft price does not publish the course.
 
-For an already published course, use the same confirmed price process for money changes; do not use the ordinary content-save button to change its price. Follow [Course Prices](/course-prices), and ask the site administrator if the current course status is unclear.
+For an already published course, use **Update** to save changes, including the On sale
+setting. Existing orders and already-created payment sessions keep their quoted prices.
+Ask the site administrator if the current course status is unclear.
 
 ## Downloadable notes and reference photographs
 

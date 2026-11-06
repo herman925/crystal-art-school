@@ -25,6 +25,7 @@ function cas_content_editor_load() {
 		'cas-content-display',
 		'cas-content-prose',
 		'cas-price-gate',
+		'cas-builder-sale',
 		'cas-content-builder',
 		'cas-sales',
 		'cas-coupons',

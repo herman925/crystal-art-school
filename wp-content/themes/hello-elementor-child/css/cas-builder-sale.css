@@ -1,0 +1,8 @@
+div:has(> input[name="_cas_builder_sale"]) { display: none; }
+.cas-builder-sale-control { display: flex; align-items: center; justify-content: flex-end; gap: 8px; margin: 10px 0 8px; cursor: pointer; font-size: 14px; }
+.cas-builder-sale-control input[type="checkbox"] { appearance: none; position: relative; width: 38px; height: 22px; min-width: 38px; margin: 0; border: 0; border-radius: 12px; background: #c8cbd2; cursor: pointer; box-shadow: none; }
+.cas-builder-sale-control input[type="checkbox"]::before { display: none; }
+.cas-builder-sale-control input[type="checkbox"]::after { content: ""; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%; background: white; }
+.cas-builder-sale-control input[type="checkbox"]:checked { background: #3858e9; }
+.cas-builder-sale-control input[type="checkbox"]:checked::after { transform: translateX(16px); }
+.cas-builder-sale-control input[type="checkbox"]:focus-visible { outline: 2px solid #1e293b; outline-offset: 3px; }

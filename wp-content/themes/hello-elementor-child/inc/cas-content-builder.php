@@ -54,7 +54,7 @@ function cas_builder_render() {
 	$course->load_course_builder_view();
 	echo '<p class="cas-builder-price-help">';
 	echo '<a href="' . esc_url( admin_url( 'admin.php?page=' . CAS_PRICE_PAGE_SLUG ) ) . '">' . esc_html__( 'Course prices', 'hello-elementor-child' ) . '</a> — ';
-	echo esc_html__( 'Use Set first price before publishing a new course. All later price changes also need confirmation here.', 'hello-elementor-child' );
+	echo esc_html__( 'You can also set Regular Price, Sale Price and On sale in this builder, then use its save button.', 'hello-elementor-child' );
 	echo '</p>';
 }
 
@@ -72,7 +72,7 @@ add_action( 'admin_notices', function () {
 	echo '<input type="hidden" name="action" value="tutor_create_new_draft_course">';
 	wp_nonce_field( tutor()->nonce_action, tutor()->nonce );
 	echo '<p><button type="submit" class="button button-primary">' . esc_html__( 'Add course', 'hello-elementor-child' ) . '</button> ';
-	echo esc_html__( 'Create a draft in the normal Tutor builder, edit its content, then use Course prices → Set first price before publishing.', 'hello-elementor-child' ) . '</p>';
+	echo esc_html__( 'Create a draft in the normal Tutor builder, edit its content and pricing, then save or publish when ready.', 'hello-elementor-child' ) . '</p>';
 	echo '<p role="status" class="cas-builder-feedback"></p></form>';
 	wp_enqueue_script( 'cas-content-builder', get_stylesheet_directory_uri() . '/js/cas-content-builder.js', array(), '2', true );
 }, 30 );
