@@ -179,6 +179,7 @@
 		if ( noRes ) {
 			noRes.style.display = n ? 'none' : 'block';
 		}
+		grid.dispatchEvent( new Event( 'cas:catalogue-layout' ) );
 	}
 
 	function press( scope, chosen ) {
@@ -281,6 +282,7 @@
 				order.forEach( function ( cell ) {
 					grid.appendChild( cell );
 				} );
+				grid.dispatchEvent( new Event( 'cas:catalogue-layout' ) );
 
 				if ( typeof window.CasAnnounce === 'function' && SORT_SAID[ val ] ) {
 					window.CasAnnounce( SORT_SAID[ val ] );

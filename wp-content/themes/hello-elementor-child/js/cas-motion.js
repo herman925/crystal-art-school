@@ -278,12 +278,22 @@
         var fromVars = alt === 1 ? { opacity: 0, x: 54, rotate: 1.5 } : alt === 2 ? { opacity: 0, x: -54, rotate: -1.5 } : { opacity: 0, y: 48, rotate: gi % 2 ? .8 : -.8 };
         g.set(els, fromVars);
         var toVars = { opacity: 1, x: 0, y: 0, rotate: 0, duration: .75, stagger: .08, ease: 'power3.out', overwrite: true, clearProps: 'rotate' };
-        ST.batch(els, {
+        var triggers = ST.batch(els, {
           start: 'top 90%', once: true,
           onEnter: function (batch) { g.to(batch, toVars); }
         });
         var above = els.filter(inView);
         if (above.length) g.to(above, Object.assign({}, toVars, { delay: .4 }));
+
+        /* Sorting/filtering changes positions after these entrance triggers were
+           measured. Settle the cards so moved results cannot stay transparent. */
+        var grid = els[0].closest('.store-grid, .lesson-grid');
+        if (grid) grid.addEventListener('cas:catalogue-layout', function () {
+          triggers.forEach(function (trigger) { trigger.kill(); });
+          g.killTweensOf(els, 'opacity,x,y,rotation');
+          g.set(els, { opacity: 1, x: 0, y: 0, rotation: 0 });
+          ST.refresh();
+        });
       });
 
       /* ============================================================
