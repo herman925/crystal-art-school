@@ -4,7 +4,9 @@
 
 Open **Content Hub → Manage Courses → the course title → Basics**. Under **Pricing Model → Paid**,
 the **On sale** switch sits directly below **Regular Price / Sale Price**.
-Off uses Regular Price and keeps Sale Price for later. On uses the valid lower Sale Price.
+Off uses Regular Price and keeps Sale Price for later. On uses the lower Sale Price.
+**Sale Price 0 with On sale on makes the course free**, with no card or PayPal payment.
+Switch On sale off to restore Regular Price. Blank is not the same as zero.
 Apply the setting with the builder's **Save as Draft**, **Update** or **Publish** button, then
 reopen the course to check it. Existing orders and already-created payment sessions are unchanged.
 
@@ -61,9 +63,9 @@ keep the draft and ask the site administrator; do not set the first price again.
 ## Entering amounts
 
 - Use numbers such as **60** or **60.50**, without £ signs or commas.
-- Regular must be above zero. Sale must be lower than Regular.
-- To stop a sale, switch **On sale** off; the Sale amount stays saved. Turning it back on needs a positive Sale below Regular.
-- Sale can be empty while **On sale** is off. Do not enter 0, a dash or the word “none”.
+- Regular must be above zero. Sale must be lower than Regular; zero is allowed for a free promotion.
+- To stop a sale, switch **On sale** off; the Sale amount stays saved, including zero.
+- Sale can be empty while **On sale** is off. Enter **0** deliberately for a free promotion; do not use a dash or the word “none”.
 - Prices use GBP. Ask the site administrator if a different currency appears.
 
 Confirmations expire after ten minutes. If the current price changed, or a confirmation

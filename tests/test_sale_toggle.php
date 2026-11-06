@@ -25,7 +25,7 @@ function verify( $ok, $message ) {
 }
 function seed( $regular, $sale, $saved = '' ) {
 	$GLOBALS['meta'] = array( '_tutor_course_price_type' => 'paid', 'tutor_course_price' => $regular,
-		'tutor_course_sale_price' => $sale, '_cas_inactive_sale_price' => $saved );
+		'tutor_course_sale_price' => $sale, '_cas_inactive_sale_price' => $saved, '_cas_zero_sale_regular' => '' );
 	$GLOBALS['faults'] = array();
 }
 
@@ -44,7 +44,7 @@ verify( get_post_meta( 1, '_cas_inactive_sale_price' ) === '', 'Active amount mu
 verify( ! cas_price_gate_open(), 'Privileged write window must close.' );
 
 foreach ( array(
-	array( '0', '80', '1' ), array( '100', '', '1' ), array( '100', '0', '1' ),
+	array( '0', '80', '1' ), array( '100', '', '1' ),
 	array( '100', '100', '1' ), array( '100', '101', '1' ), array( '100', '-1', '0' ),
 	array( '100', '80', null ), array( '100', '80', array( '1' ) ), array( array( '100' ), '80', '1' ),
 ) as $invalid ) {
@@ -80,4 +80,24 @@ $meta['_cas_inactive_sale_price'] = '70.00';
 verify( ! cas_price_restore_pair( 1, $old, $off ), 'Rollback must flag a newer foreign value.' );
 verify( $meta['_cas_inactive_sale_price'] === '70.00', 'Rollback must preserve the foreign value.' );
 verify( ! cas_price_gate_open(), 'Write window must also close after rollback.' );
+
+seed( '100', '0' );
+verify( cas_price_current( 1 )['sale'] === '', 'Old zero-valued sale metadata must remain inactive.' );
+$zero = cas_price_proposed( '100', '0', '1' );
+verify( $zero !== null && cas_price_write_pair( 1, $zero ), 'Explicit zero sale must save.' );
+verify( get_post_meta( 1, 'tutor_course_price' ) === '0.00', 'Native checkout must receive a real zero base price.' );
+verify( cas_price_current( 1 )['regular'] === '100.00' && cas_price_current( 1 )['sale'] === '0.00', 'Editor must retain configured regular price and active zero sale.' );
+$zero_off = cas_price_proposed( '100', '0', '0' );
+verify( cas_price_write_pair( 1, $zero_off ), 'Zero sale must turn off normally.' );
+verify( get_post_meta( 1, 'tutor_course_price' ) === '100.00' && cas_price_sale_amount( cas_price_current( 1 ) ) === '0.00', 'Off must restore regular and remember zero.' );
+verify( cas_price_write_pair( 1, $zero ), 'Zero sale must re-enable without retyping.' );
+verify( cas_price_write_pair( 1, cas_price_proposed( '100', '80', '1' ) ), 'Changing a free sale to a positive sale must restore the regular base.' );
+verify( get_post_meta( 1, 'tutor_course_price' ) === '100.00' && cas_price_current( 1 )['sale'] === '80.00', 'Positive sale must leave no zero-price projection.' );
+
+foreach ( array( 'tutor_course_price' => '0.00', 'tutor_course_sale_price' => '0.00', '_cas_zero_sale_regular' => '100.00' ) as $key => $bad ) {
+	seed( '100', '80' ); $old = cas_price_current( 1 ); $faults = array( $key => array( $bad ) );
+	verify( ! cas_price_write_pair( 1, $zero ), 'Partial zero-sale writes must fail verification.' );
+	verify( cas_price_restore_pair( 1, $old, $zero ), 'Partial zero-sale writes must restore safely.' );
+	verify( cas_price_current( 1 ) === $old, 'Partial zero sale must preserve original pricing.' );
+}
 echo "Sale toggle: {$checks} assertions passed.\n";

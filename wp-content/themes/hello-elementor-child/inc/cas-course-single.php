@@ -397,6 +397,12 @@ function cas_render_course_single() {
 	$reg     = (float) ( $price->regular_price ?? 0 );
 	$sale    = (float) ( $price->sale_price ?? 0 );
 	$is_sale = $sale > 0 && $sale < $reg;
+	if ( function_exists( 'cas_price_current' ) && '' !== get_post_meta( $id, '_cas_zero_sale_regular', true ) ) {
+		$configured = cas_price_current( $id );
+		if ( '' !== $configured['zero_sale_regular'] && '0.00' === $configured['sale'] ) {
+			$reg = (float) $configured['regular']; $sale = 0.0; $is_sale = true;
+		}
+	}
 
 	$tag = cas_course_media_label( $id );
 
@@ -496,7 +502,7 @@ function cas_render_course_single() {
 						<?php if ( $enrolled ) : ?>
 							<span class="course-purchased">Purchased &#10003;</span>
 						<?php elseif ( $is_sale ) : ?>
-							<s class="was"><?php echo esc_html( cas_course_price( $reg ) ); ?></s><span class="now"><?php echo esc_html( cas_course_price( $sale ) ); ?></span>
+							<s class="was"><?php echo esc_html( cas_course_price( $reg ) ); ?></s><span class="now"><?php echo esc_html( 0.0 === $sale ? 'Free' : cas_course_price( $sale ) ); ?></span>
 						<?php else : ?>
 							<?php echo esc_html( cas_course_price( $reg ) ); ?>
 						<?php endif; ?>

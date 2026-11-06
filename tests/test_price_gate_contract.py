@@ -49,7 +49,7 @@ class PriceGateContract(unittest.TestCase):
 
     def test_failed_pair_is_verified_rolled_back_and_never_called_saved(self):
         self.assertIn("function cas_price_restore_pair", GATE)
-        self.assertIn("$current[ $field ] === $attempted[ $field ]", GATE)
+        self.assertIn("$current[ $field ] === $attempted_stored[ $field ]", GATE)
         self.assertIn("cas_price_restore_pair( $course_id, $data['old'], $data['new'] )", GATE)
         self.assertIn("'rollback_failed'", GATE)
         self.assertIn("Stop editing and contact Herman immediately.", GATE)
@@ -80,12 +80,12 @@ class PriceGateContract(unittest.TestCase):
         self.assertIn("'cas-price-gate'", LOADER)
 
     def test_paid_only_positive_gate_and_legacy_zero_sale(self):
-        self.assertIn("'type'    => (string) get_post_meta", GATE)
+        self.assertIn("'type' => '_tutor_course_price_type'", GATE)
         self.assertIn("'paid' !== $old['type']", GATE)
         self.assertIn("(float) $regular <= 0", GATE)
-        self.assertIn("(float) $sale <= 0", GATE)
+        self.assertIn("(float) $sale < 0", GATE)
         self.assertIn("(float) $sale >= (float) $regular", GATE)
-        self.assertIn("0.0 === (float) $sale", GATE)
+        self.assertIn("function cas_price_zero_sale_state", GATE)
 
     def test_native_writers_share_the_confirmation_lock(self):
         native = GATE[GATE.index("function cas_price_native_write_lock") : GATE.index("/** Initialisation")]

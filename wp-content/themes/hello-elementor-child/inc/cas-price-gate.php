@@ -19,7 +19,11 @@
  * Historical orders are never touched.
  */
 
-const CAS_PRICE_META_KEYS = array( 'tutor_course_price', 'tutor_course_sale_price', '_tutor_course_price_type', '_cas_inactive_sale_price' );
+const CAS_PRICE_META_KEYS = array(
+	'type' => '_tutor_course_price_type', 'regular' => 'tutor_course_price',
+	'sale' => 'tutor_course_sale_price', 'saved_sale' => '_cas_inactive_sale_price',
+	'zero_sale_regular' => '_cas_zero_sale_regular',
+);
 const CAS_PRICE_TOKEN_TTL = 600;
 const CAS_PRICE_COURSE_LOCK_TTL = 600;
 const CAS_PRICE_PAGE_SLUG = 'cas-course-prices';
@@ -50,19 +54,38 @@ add_filter( 'add_post_metadata', 'cas_price_block_role_write', 10, 3 );
 add_filter( 'delete_post_metadata', 'cas_price_block_role_write', 10, 3 );
 
 /** Current prices, read on the server. Sale is '' when there is no sale. */
-function cas_price_current( $course_id ) {
+function cas_price_stored( $course_id ) {
 	wp_cache_delete( (int) $course_id, 'post_meta' ); // Verify database state, not a snapshot cached before acquiring the lock.
 	$normalise = static function ( $raw ) {
 		$clean = cas_price_clean( $raw );
 		return null === $clean ? (string) $raw : $clean;
 	};
-	$sale = $normalise( get_post_meta( $course_id, 'tutor_course_sale_price', true ) );
-	return array(
-		'type'    => (string) get_post_meta( $course_id, '_tutor_course_price_type', true ),
-		'regular' => $normalise( get_post_meta( $course_id, 'tutor_course_price', true ) ),
-		'sale'    => ( '' !== $sale && is_numeric( $sale ) && 0.0 === (float) $sale ) ? '' : $sale,
-		'saved_sale' => $normalise( get_post_meta( $course_id, '_cas_inactive_sale_price', true ) ),
-	);
+	$stored = array();
+	foreach ( CAS_PRICE_META_KEYS as $field => $key ) {
+		$raw = get_post_meta( $course_id, $key, true );
+		$stored[ $field ] = 'type' === $field ? (string) $raw : $normalise( $raw );
+	}
+	return $stored;
+}
+
+function cas_price_zero_sale_state( $stored ) {
+	return 'paid' === $stored['type'] && '0.00' === $stored['regular'] && '0.00' === $stored['sale']
+		&& is_numeric( $stored['zero_sale_regular'] ) && (float) $stored['zero_sale_regular'] > 0;
+}
+
+/** Keep the configured reference price while Tutor sees a real zero checkout amount. */
+function cas_price_current( $course_id ) {
+	$price = cas_price_stored( $course_id );
+	if ( cas_price_zero_sale_state( $price ) ) { $price['regular'] = $price['zero_sale_regular']; }
+	elseif ( '0.00' === $price['sale'] ) { $price['sale'] = ''; } // Existing zero metadata still means no sale unless explicitly activated.
+	return $price;
+}
+
+function cas_price_storage_for( $price ) {
+	if ( '' !== ( $price['zero_sale_regular'] ?? '' ) && '0.00' === $price['sale'] ) {
+		$price['regular'] = '0.00';
+	}
+	return $price;
 }
 
 /** Tutor's sale field is the active price; the extra field remembers an inactive offer. */
@@ -75,7 +98,7 @@ function cas_price_proposed( $regular_raw, $sale_raw, $on_sale ) {
 	$sale    = cas_price_clean( $sale_raw );
 	if ( ! in_array( $on_sale, array( '0', '1' ), true )
 		|| null === $regular || '' === $regular || (float) $regular <= 0 || null === $sale
-		|| ( '' !== $sale && ( (float) $sale <= 0 || (float) $sale >= (float) $regular ) )
+		|| ( '' !== $sale && ( (float) $sale < 0 || (float) $sale >= (float) $regular ) )
 		|| ( '1' === $on_sale && '' === $sale ) ) {
 		return null;
 	}
@@ -83,6 +106,7 @@ function cas_price_proposed( $regular_raw, $sale_raw, $on_sale ) {
 		'type' => 'paid', 'regular' => $regular,
 		'sale' => '1' === $on_sale ? $sale : '',
 		'saved_sale' => '1' === $on_sale ? '' : $sale,
+		'zero_sale_regular' => '1' === $on_sale && '0.00' === $sale ? $regular : '',
 	);
 }
 
@@ -104,6 +128,23 @@ function cas_price_clean( $raw ) {
 function cas_price_user_may_edit( $course_id ) {
 	return current_user_can( 'manage_cas_content' ) && 'courses' === get_post_type( $course_id ) && current_user_can( 'edit_post', $course_id );
 }
+
+/** An all-free promotion basket must never open a card/PayPal payment session. */
+function cas_zero_sale_checkout_method() {
+	if ( ! function_exists( 'cas_builder_nonce_valid' ) || ! cas_builder_nonce_valid()
+		|| ! class_exists( '\Tutor\Models\OrderModel' )
+		|| ( $_POST['order_type'] ?? '' ) !== \Tutor\Models\OrderModel::TYPE_SINGLE_ORDER ) { return; }
+	$raw = $_POST['object_ids'] ?? null;
+	if ( ! is_string( $raw ) || strlen( $raw ) > 512 ) { return; }
+	$ids = explode( ',', $raw );
+	foreach ( $ids as $id ) {
+		if ( ! ctype_digit( $id ) || (int) $id < 1 || 'courses' !== get_post_type( (int) $id )
+			|| ! cas_price_zero_sale_state( cas_price_stored( (int) $id ) ) ) { return; }
+	}
+	$_POST['payment_method'] = 'free';
+	$_POST['payment_type'] = 'manual';
+}
+add_action( 'tutor_action_tutor_pay_now', 'cas_zero_sale_checkout_method', 1 );
 
 /** Prune expired token and course-lock options whenever a token is atomically claimed. */
 function cas_price_prune_claims() {
@@ -251,7 +292,7 @@ function cas_price_assert_publishable( $id ) {
 	if ( ( ! $builder_price && get_post_meta( $id, CAS_PRICE_PENDING_META, true ) ) || 'paid' !== $price['type']
 		|| null === cas_price_clean( $price['regular'] ) || '' === $price['regular'] || (float) $price['regular'] <= 0
 		|| null === cas_price_clean( $price['sale'] )
-		|| ( '' !== $price['sale'] && ( (float) $price['sale'] <= 0 || (float) $price['sale'] >= (float) $price['regular'] ) ) ) {
+		|| ( '' !== $price['sale'] && ( (float) $price['sale'] < 0 || (float) $price['sale'] >= (float) $price['regular'] ) ) ) {
 		return new WP_Error( 'cas_initial_price_required', 'Use Course prices → Set first price and confirm a positive paid-course price before publishing.', array( 'status' => 409 ) );
 	}
 	return true;
@@ -283,11 +324,10 @@ add_filter( 'wp_insert_post_data', function ( $data, $postarr ) {
 
 /** Write both fields in the privileged window, always close that window, then verify both values. */
 function cas_price_write_pair( $course_id, $pair ) {
+	$stored = cas_price_storage_for( $pair );
 	cas_price_gate_open( true );
 	try {
-		update_post_meta( $course_id, 'tutor_course_price', $pair['regular'] );
-		update_post_meta( $course_id, 'tutor_course_sale_price', $pair['sale'] );
-		update_post_meta( $course_id, '_cas_inactive_sale_price', $pair['saved_sale'] );
+		foreach ( CAS_PRICE_META_KEYS as $field => $key ) { update_post_meta( $course_id, $key, $stored[ $field ] ); }
 	} catch ( Throwable $error ) {
 		return false;
 	} finally {
@@ -298,15 +338,18 @@ function cas_price_write_pair( $course_id, $pair ) {
 
 /** Restore only fields still equal to our attempted values; never overwrite a concurrent third value. */
 function cas_price_restore_pair( $course_id, $old, $attempted ) {
-	$current = cas_price_current( $course_id );
+	$current = cas_price_stored( $course_id );
+	$old_stored = cas_price_storage_for( $old );
+	$attempted_stored = cas_price_storage_for( $attempted );
 	$restore = array();
 	$safe    = true;
-	foreach ( array( 'regular', 'sale', 'saved_sale' ) as $field ) {
-		if ( $current[ $field ] === $old[ $field ] ) {
+	foreach ( CAS_PRICE_META_KEYS as $field => $key ) {
+		if ( 'sale' === $field && '0.00' === $current[ $field ] && '' === $old_stored[ $field ] ) { continue; }
+		if ( $current[ $field ] === $old_stored[ $field ] ) {
 			continue;
 		}
-		if ( $current[ $field ] === $attempted[ $field ] ) {
-			$restore[ $field ] = $old[ $field ];
+		if ( $current[ $field ] === $attempted_stored[ $field ] ) {
+			$restore[ $field ] = $old_stored[ $field ];
 		} else {
 			$safe = false; // A different writer changed this field; do not clobber it.
 		}
@@ -314,15 +357,7 @@ function cas_price_restore_pair( $course_id, $old, $attempted ) {
 	if ( $restore ) {
 		cas_price_gate_open( true );
 		try {
-			if ( isset( $restore['regular'] ) ) {
-				update_post_meta( $course_id, 'tutor_course_price', $restore['regular'] );
-			}
-			if ( isset( $restore['sale'] ) ) {
-				update_post_meta( $course_id, 'tutor_course_sale_price', $restore['sale'] );
-			}
-			if ( isset( $restore['saved_sale'] ) ) {
-				update_post_meta( $course_id, '_cas_inactive_sale_price', $restore['saved_sale'] );
-			}
+			foreach ( $restore as $field => $value ) { update_post_meta( $course_id, CAS_PRICE_META_KEYS[ $field ], $value ); }
 		} catch ( Throwable $error ) {
 			return false;
 		} finally {
@@ -498,7 +533,7 @@ function cas_price_render() {
 		wp_die( esc_html__( 'Not allowed.', 'hello-elementor-child' ), 403 );
 	}
 	$notices = array(
-		'invalid'  => __( 'Enter a positive regular price. A sale amount must be positive and lower than regular; On sale requires that amount. Check the On sale switch and review again.', 'hello-elementor-child' ),
+		'invalid'  => __( 'Enter a positive regular price and a lower sale amount. A zero sale makes the course free while On sale is on; blank is not a sale amount.', 'hello-elementor-child' ),
 		'expired'  => __( 'That confirmation has expired or was already used. Start again.', 'hello-elementor-child' ),
 		'paid_only' => __( 'Only paid courses can use this price screen. Free or unknown course types cannot be converted here.', 'hello-elementor-child' ),
 		'mismatch' => __( 'The typed prices do not match, or the sale setting was not confirmed. Nothing was saved.', 'hello-elementor-child' ),

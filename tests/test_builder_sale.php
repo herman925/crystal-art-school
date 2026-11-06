@@ -61,6 +61,12 @@ verify( ! $wpdb->active && $content === 'new', 'Successful save must commit cont
 reset_builder( false, '1.25' ); builder_post( '1' ); builder_save();
 verify( cas_price_current( 1 )['sale'] === '1.25', 'Normal save must enable the remembered offer.' );
 
+reset_builder( true ); builder_post( '1', '2.00', '0' ); builder_save();
+verify( get_post_meta( 1, 'tutor_course_price' ) === '0.00' && cas_price_current( 1 )['regular'] === '2.00', 'Native builder save must activate free price and retain reference price.' );
+( new ReflectionProperty( 'CAS_Builder_Sale', 'save' ) )->setValue( null, null );
+builder_post( '0', '2.00', '0' ); builder_save();
+verify( get_post_meta( 1, 'tutor_course_price' ) === '2.00' && cas_price_sale_amount( cas_price_current( 1 ) ) === '0.00', 'Native builder Off must restore regular and retain the zero offer.' );
+
 reset_builder( false, '1.25' ); builder_post( '1' ); $meta['tutor_course_price'] = '3.00';
 try { CAS_Builder_Sale::start(); throw new RuntimeException( 'Stale save accepted' ); }
 catch ( BuilderJSON $e ) { verify( $e->getCode() === 409, 'Stale price snapshot must be refused.' ); }
