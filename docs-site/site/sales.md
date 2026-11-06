@@ -61,6 +61,14 @@ cannot be verified, [stop and ask the site administrator](/money-help); do not u
 
 ## Course popularity
 
+<figure class="guide-screenshot">
+  <figcaption>Sales: actual live paid-purchase counts during UAT</figcaption>
+  <div class="guide-screenshot-images">
+    <a href="/guide-screenshots/course-popularity.png" target="_blank" rel="noopener" style="--screenshot-width:1238px" aria-label="Open full-size screenshot: Sales: actual live paid-purchase counts during UAT (new tab)"><img src="/guide-screenshots/course-popularity.png" width="1238" height="412" alt="Sales: actual live paid-purchase counts during UAT" loading="lazy"></a>
+  </div>
+  <p>Select the screenshot to enlarge the actual screen.</p>
+</figure>
+
 Below the order totals, **Course popularity — live paid purchases** shows purchase counts
 **By course** and **By Medium**. It uses the selected From/To dates, Course ID and Order
 number; empty dates mean the last 12 months. The Status filter does not change which

@@ -134,6 +134,22 @@ If a course is missing its photographs, fill the intended slots and check the ca
 
 ## The filters look after themselves
 
+<figure class="guide-screenshot">
+  <figcaption>Course: the actual Medium field, with Watercolour selected</figcaption>
+  <div class="guide-screenshot-images">
+    <a href="/guide-screenshots/course-medium.png" target="_blank" rel="noopener" style="--screenshot-width:305px" aria-label="Open full-size screenshot: Course: the actual Medium field, with Watercolour selected (new tab)"><img src="/guide-screenshots/course-medium.png" width="305" height="157" alt="Course: the actual Medium field, with Watercolour selected" loading="lazy"></a>
+  </div>
+  <p>Select the screenshot to enlarge the actual screen.</p>
+</figure>
+
+<figure class="guide-screenshot">
+  <figcaption>Courses: the same Medium is available in the public filter</figcaption>
+  <div class="guide-screenshot-images">
+    <a href="/guide-screenshots/course-filters.png" target="_blank" rel="noopener" style="--screenshot-width:1440px" aria-label="Open full-size screenshot: Courses: the same Medium is available in the public filter (new tab)"><img src="/guide-screenshots/course-filters.png" width="1440" height="1000" alt="Courses: the same Medium is available in the public filter" loading="lazy"></a>
+  </div>
+  <p>Select the screenshot to enlarge the actual screen.</p>
+</figure>
+
 The Courses page has a column of filter and sort controls down the left. There is nothing to
 set up: every button is built from the courses that are actually published.
 
