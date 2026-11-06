@@ -70,7 +70,7 @@ final class CAS_Bunny_Uploader {
  static function update($id,$values){global $wpdb;if(false===$wpdb->update(self::table(),$values,array('id'=>$id)))self::fail('store','The video change could not be recorded.',503);}
  static function course($course){
   $p=get_post((int)$course);$u=get_current_user_id();
-  return $u && current_user_can('manage_cas_content') && current_user_can('upload_files') && $p && 'courses'===$p->post_type && 'trash'!==$p->post_status
+  return $u && (current_user_can('manage_cas_content') || current_user_can('manage_options')) && current_user_can('upload_files') && $p && 'courses'===$p->post_type && 'trash'!==$p->post_status
    && current_user_can('edit_post',$p->ID) && ((int)$p->post_author===$u || current_user_can('manage_options'));
  }
  static function lesson_course($id){global $wpdb;return (int)$wpdb->get_var($wpdb->prepare("SELECT c.ID FROM {$wpdb->posts} l JOIN {$wpdb->posts} t ON t.ID=l.post_parent AND t.post_type='topics' AND t.post_status<>'trash' JOIN {$wpdb->posts} c ON c.ID=t.post_parent AND c.post_type='courses' AND c.post_status<>'trash' WHERE l.ID=%d AND l.post_type='lesson' AND l.post_status<>'trash'",$id));}
@@ -149,7 +149,7 @@ final class CAS_Bunny_Uploader {
   }
   return $out;
  }
- static function permission($request){return self::enabled() && get_current_user_id() && wp_verify_nonce($request->get_header('X-WP-Nonce'),'wp_rest') && current_user_can('manage_cas_content') && current_user_can('upload_files')?true:self::error('forbidden','Sign in with an authorised content account.',403);}
+ static function permission($request){return self::enabled() && get_current_user_id() && wp_verify_nonce($request->get_header('X-WP-Nonce'),'wp_rest') && (current_user_can('manage_cas_content') || current_user_can('manage_options')) && current_user_can('upload_files')?true:self::error('forbidden','Sign in with an authorised content account.',403);}
  static function routes(){
   foreach(array('contexts','uploads','library','contexts/(?P<id>[a-f0-9]{32})','contexts/(?P<id>[a-f0-9]{32})/selection','uploads/(?P<id>[a-f0-9]{32})','uploads/(?P<id>[a-f0-9]{32})/authorisation','uploads/(?P<id>[a-f0-9]{32})/cancel') as $route){
    $method=in_array($route,array('library','contexts/(?P<id>[a-f0-9]{32})','uploads/(?P<id>[a-f0-9]{32})'),true)?'GET':'POST';

@@ -1,5 +1,15 @@
 # Change a course price
 
+## On sale in the course builder
+
+Open **Content Hub → Manage Courses → the course title → Basics**. Under **Pricing Model → Paid**,
+the **On sale** switch sits directly below **Regular Price / Sale Price**.
+Off uses Regular Price and keeps Sale Price for later. On uses the valid lower Sale Price.
+Apply the setting with the builder's **Save as Draft**, **Update** or **Publish** button, then
+reopen the course to check it. Existing orders and already-created payment sessions are unchanged.
+
+## Alternative: the Course Prices screen
+
 **Open Content Hub → Course Prices.** Change paid-course prices here, separately from the
 ordinary course-content save.
 

@@ -4,7 +4,7 @@ These tools are available in your Content Hub. They are separate because they ch
 
 | Your task | Use | Important difference |
 |---|---|---|
-| Set or change a paid-course price | [Course Prices](/course-prices) | Does not publish a course or change an old order |
+| Set a paid-course price or switch a sale on/off | [Course builder prices](/courses#prices) · [Alternative price screen](/course-prices) | Save as Draft keeps the course unpublished; old orders are unchanged |
 | Offer a discount code | [Coupons](/coupons) | Applies to future eligible checkout; it is not a refund |
 | Find an order or review its status | [Sales](/sales) | An order status is not proof that money arrived |
 | Correct one student's access | [Course Access](/course-access) | Does not take or refund a payment |

@@ -37,7 +37,8 @@ function cas_price_block_role_write( $check, $object_id, $meta_key ) {
 	if ( ( ! in_array( $meta_key, CAS_PRICE_META_KEYS, true ) && CAS_PRICE_PENDING_META !== $meta_key ) || cas_price_gate_open() ) {
 		return $check;
 	}
-	if ( ! cas_content_is_user( get_current_user_id() ) || 'courses' !== get_post_type( (int) $object_id ) ) {
+	$builder = function_exists( 'cas_builder_sale_active' ) && cas_builder_sale_active( $object_id );
+	if ( ( ! cas_content_is_user( get_current_user_id() ) && ! $builder ) || 'courses' !== get_post_type( (int) $object_id ) ) {
 		return $check;
 	}
 	return true;
@@ -243,8 +244,9 @@ function cas_price_assert_publishable( $id ) {
 		return new WP_Error( 'cas_course_forbidden', 'You may only publish your own courses.', array( 'status' => 403 ) );
 	}
 	cas_price_native_write_lock( $id );
-	$price = cas_price_current( $id );
-	if ( get_post_meta( $id, CAS_PRICE_PENDING_META, true ) || 'paid' !== $price['type']
+	$builder_price = function_exists( 'cas_builder_sale_proposed' ) ? cas_builder_sale_proposed( $id ) : null;
+	$price = $builder_price ?: cas_price_current( $id );
+	if ( ( ! $builder_price && get_post_meta( $id, CAS_PRICE_PENDING_META, true ) ) || 'paid' !== $price['type']
 		|| null === cas_price_clean( $price['regular'] ) || '' === $price['regular'] || (float) $price['regular'] <= 0
 		|| null === cas_price_clean( $price['sale'] )
 		|| ( '' !== $price['sale'] && ( (float) $price['sale'] <= 0 || (float) $price['sale'] >= (float) $price['regular'] ) ) ) {
@@ -366,6 +368,9 @@ add_action( 'admin_post_cas_price_request', 'cas_price_request' );
 
 /** Block changed native role prices/type before Tutor's save callback; normal content edits still work. */
 add_action( 'wp_ajax_tutor_update_course', function () {
+	if ( function_exists( 'cas_builder_sale_active' ) && cas_builder_sale_active( absint( $_POST['course_id'] ?? 0 ) ) ) {
+		return; // The native builder's authenticated, version-checked price save handles this request.
+	}
 	if ( ! cas_content_is_user( get_current_user_id() ) ) {
 		return;
 	}
@@ -393,7 +398,7 @@ add_action( 'wp_ajax_tutor_update_course', function () {
 		$type = 'paid'; // Preserve the stored paid/unpriced state; this is not a free-course transition.
 	}
 	if ( $type !== $old['type'] || $regular !== $old['regular'] || $sale !== $old['sale'] ) {
-		wp_send_json( array( 'message' => 'Change prices only through Course prices and its confirmation step.' ), 409 );
+		wp_send_json( array( 'message' => 'Reload the builder to use its saved-price controls, or use Course Prices.' ), 409 );
 	}
 }, -5 );
 
