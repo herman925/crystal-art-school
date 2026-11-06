@@ -28,7 +28,9 @@
    Desktop: prints pinned to a cork board (水松板), loosely overlapping, coloured pins.
    Phone: one vertical strip, taped down. Motion = tiny pendulum physics in JS. */
 /* maple frame around the cork: real wrapper, top-lit bevel + oak grain */
-.pol-frame { padding: 18px; border-radius: 12px;
+#sw-section .filter-rail { z-index: 1; }
+/* Keep artwork hover layers below the sticky filters. */
+.pol-frame { isolation: isolate; padding: 18px; border-radius: 12px;
   /* 55: a darker brown frame. The grain is untouched — only the gradient
      beneath it steps down, so it still reads as the same timber, stained. */
   background-color:#7a5427;

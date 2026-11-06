@@ -619,7 +619,9 @@ function cas_showcase_css( $uri ) {
 /* "instant photo" wall (client-approved concept) —
    Desktop: prints pinned to a cork board (水松板), loosely overlapping, coloured pins.
    Phone: one vertical strip, taped down. Motion = pendulum physics in cas-showcase.js. */
-.pol-frame { padding: 18px; border-radius: 12px;
+#sw-section .filter-rail { z-index: 1; }
+/* Keep artwork hover layers below the sticky filters. */
+.pol-frame { isolation: isolate; padding: 18px; border-radius: 12px;
   background-color:#7a5427;
   background-image: var(--oak-grain), linear-gradient(145deg, #9c6f39 0%, #82582a 32%, #63421d 64%, #472e12 100%);
   background-size: 300px 120px, 100% 100%;
