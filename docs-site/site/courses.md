@@ -1,6 +1,6 @@
 # Courses
 
-Use the course builder for content and pricing. Under **Basics → Pricing Model → Paid**,
+Use the course builder for content and pricing. Under **Course → Pricing Model → Paid**,
 set **Regular Price**, **Sale Price** and **On sale**, then use the builder's save button.
 The separate [Course Prices](/course-prices) screen remains an alternative.
 
@@ -9,28 +9,28 @@ to open Tutor's builder. Use **Add course** on the hub for a new draft. Only cou
 assigned to your account can be edited.
 
 <figure class="guide-screenshot" aria-labelledby="course-list-current-visual">
-  <figcaption id="course-list-current-visual">Find the course before looking for Curriculum</figcaption>
+  <figcaption id="course-list-current-visual">Find the course before looking for Lessons</figcaption>
   <div class="guide-screenshot-images">
-    <a href="/guide-screenshots/course-list.png" target="_blank" rel="noopener" style="--screenshot-width:1238px" aria-label="Open full-size screenshot: Courses: assigned courses and the title link that opens Tutor Basics (new tab)"><img src="/guide-screenshots/course-list.png" width="1238" height="575" alt="Courses: assigned courses and the title link that opens Tutor Basics" loading="lazy"></a>
+    <a href="/guide-screenshots/course-list.png" target="_blank" rel="noopener" style="--screenshot-width:1238px" aria-label="Open full-size screenshot: Courses: assigned courses and the title link that opens Tutor Course (new tab)"><img src="/guide-screenshots/course-list.png" width="1238" height="575" alt="Courses: assigned courses and the title link that opens Tutor Course" loading="lazy"></a>
   </div>
-  <p>The course title opens the builder. The list itself does not contain the Curriculum tab. Select a screenshot to open it full size.</p>
+  <p>The course title opens the builder. The list itself does not contain the Lessons tab. Select a screenshot to open it full size.</p>
 </figure>
 
 ## Start a new course
 
-1. Use **Add course** on Content Hub and enter the title in **Basics**.
+1. Use **Add course** on Content Hub and enter the title in **Course**.
 2. Add the course words, cover and gallery photographs, then use **Save as Draft**.
-3. Open **Curriculum** to add the topics and lessons. Each topic groups part of the syllabus.
-4. Add any course-wide files in **Additional → Attachments**. Individual lessons have their own files.
-5. Under **Basics → Pricing Model → Paid**, enter Regular Price and optional Sale Price. Choose **On sale** only when the sale should apply, then save the draft.
+3. Open **Lessons** to add the topics and lessons. Each topic groups part of the syllabus.
+4. Add any course-wide files in **Outcomes/Materials → Attachments**. Individual lessons have their own files.
+5. Under **Course → Pricing Model → Paid**, enter Regular Price and optional Sale Price. Choose **On sale** only when the sale should apply, then save the draft.
 6. Preview and check the intended content, files, price and public preview before publishing separately.
 
 Saving draft content before the first price is set does not make the course free or publish it.
 If an expected control is missing, keep the draft and send the course name and message to the site administrator.
 
-## Find Curriculum and edit a lesson
+## Find Lessons and edit a lesson
 
-Open the course title from **Manage Courses**, then choose **Curriculum** at the top of Tutor's
+Open the course title from **Manage Courses**, then choose **Lessons** at the top of Tutor's
 builder. Use **Expand All** to see the lessons inside the topics. Point at the intended lesson
 to reveal its edit pencil; use the pencil to open that lesson.
 
@@ -43,12 +43,12 @@ students see before you make another course-level Update. Closing the course edi
 an undo for a lesson you already saved.
 
 <figure class="guide-screenshot" aria-labelledby="curriculum-current-visual">
-  <figcaption id="curriculum-current-visual">Inside Tutor: Basics and Curriculum</figcaption>
+  <figcaption id="curriculum-current-visual">Inside Tutor: Course and Lessons</figcaption>
   <div class="guide-screenshot-images">
-    <a href="/guide-screenshots/course-builder-basics.png" target="_blank" rel="noopener" style="--screenshot-width:1440px" aria-label="Open full-size screenshot: Tutor Basics: current title, Course Card Cover and separate gallery controls (new tab)"><img src="/guide-screenshots/course-builder-basics.png" width="1440" height="1100" alt="Tutor Basics: current title, Course Card Cover and separate gallery controls" loading="lazy"></a>
-    <a href="/guide-screenshots/course-curriculum.png" target="_blank" rel="noopener" style="--screenshot-width:1440px" aria-label="Open full-size screenshot: Tutor Curriculum: topics, lessons and visible edit pencil after pointing at a lesson (new tab)"><img src="/guide-screenshots/course-curriculum.png" width="1440" height="1100" alt="Tutor Curriculum: topics, lessons and visible edit pencil after pointing at a lesson" loading="lazy"></a>
+    <a href="/guide-screenshots/course-builder-basics.png" target="_blank" rel="noopener" style="--screenshot-width:1440px" aria-label="Open full-size screenshot: Tutor Course: current title, Course Card Cover and separate gallery controls (new tab)"><img src="/guide-screenshots/course-builder-basics.png" width="1440" height="1100" alt="Tutor Course: current title, Course Card Cover and separate gallery controls" loading="lazy"></a>
+    <a href="/guide-screenshots/course-curriculum.png" target="_blank" rel="noopener" style="--screenshot-width:1440px" aria-label="Open full-size screenshot: Tutor Lessons: topics, lessons and visible edit pencil after pointing at a lesson (new tab)"><img src="/guide-screenshots/course-curriculum.png" width="1440" height="1100" alt="Tutor Lessons: topics, lessons and visible edit pencil after pointing at a lesson" loading="lazy"></a>
   </div>
-  <p>Choose Curriculum inside the course. Point at a lesson to reveal the edit pencil; course and lesson saves are separate. Select a screenshot to open it full size.</p>
+  <p>Choose Lessons inside the course. Point at a lesson to reveal the edit pencil; course and lesson saves are separate. Select a screenshot to open it full size.</p>
 </figure>
 
 ## What the course fields control
@@ -59,10 +59,9 @@ an undo for a lesson you already saved.
 | **Course Card Cover** | The catalogue card cover. It is also the course page fallback if Gallery Photo 1 is empty |
 | **Gallery Photos 1–5** | The five course-page photographs. Photo 1 appears first; clicking a thumbnail changes the large photograph |
 | **Course Subtitle** | The optional line under the course highlights video |
-| **Course Media Label** | The medium shown with the course title, such as Sketching & Watercolour |
 | **Regular Price / Sale Price / On sale** | Course cards and course page. Off uses Regular and remembers Sale; On uses the valid lower Sale |
 | **Difficulty level** | The small chips under the title |
-| **Category** | The tag above the title |
+| **Medium** | The course label, Courses filter and top navigation; choose the existing media that apply |
 | **Description** | The paragraph under the course title |
 | **What will I learn** | The "By the end of this course" list |
 | **Targeted audience** | The "This course suits" cards |
@@ -82,7 +81,7 @@ the site does that.
 
 ## Prices
 
-Use the price inputs and **On sale** switch in the builder's **Basics** tab. Enter numbers
+Use the price inputs and **On sale** switch in the builder's **Course** tab. Enter numbers
 without a currency symbol. Off keeps Sale Price for later and uses Regular Price; On needs
 a positive Sale Price below Regular Price. Save the course and reopen it to check the result.
 These are base prices before any coupon or tax adjustment. See [Course Prices](/course-prices).
@@ -104,16 +103,16 @@ published courses.
 ## The five course photographs
 
 <figure class="guide-screenshot" aria-labelledby="course-photos-visual">
-  <figcaption id="course-photos-visual">Tutor Basics: the actual cover and gallery fields</figcaption>
+  <figcaption id="course-photos-visual">Tutor Course: the actual cover and gallery fields</figcaption>
   <div class="guide-screenshot-images">
-    <a href="/guide-screenshots/course-cover.png" target="_blank" rel="noopener" style="--screenshot-width:305px" aria-label="Open full-size screenshot: Tutor Basics: actual Course Card Cover field (new tab)"><img src="/guide-screenshots/course-cover.png" width="305" height="24" alt="Tutor Basics: actual Course Card Cover field" loading="lazy"></a>
-    <a href="/guide-screenshots/course-gallery-1.png" target="_blank" rel="noopener" style="--screenshot-width:636px" aria-label="Open full-size screenshot: Tutor Basics: the actual cover and gallery fields (new tab)"><img src="/guide-screenshots/course-gallery-1.png" width="636" height="196" alt="Tutor Basics: the actual cover and gallery fields" loading="lazy"></a>
-    <a href="/guide-screenshots/course-gallery-2.png" target="_blank" rel="noopener" style="--screenshot-width:636px" aria-label="Open full-size screenshot: Tutor Basics: the actual cover and gallery fields (new tab)"><img src="/guide-screenshots/course-gallery-2.png" width="636" height="196" alt="Tutor Basics: the actual cover and gallery fields" loading="lazy"></a>
+    <a href="/guide-screenshots/course-cover.png" target="_blank" rel="noopener" style="--screenshot-width:305px" aria-label="Open full-size screenshot: Tutor Course: actual Course Card Cover field (new tab)"><img src="/guide-screenshots/course-cover.png" width="305" height="24" alt="Tutor Course: actual Course Card Cover field" loading="lazy"></a>
+    <a href="/guide-screenshots/course-gallery-1.png" target="_blank" rel="noopener" style="--screenshot-width:636px" aria-label="Open full-size screenshot: Tutor Course: the actual cover and gallery fields (new tab)"><img src="/guide-screenshots/course-gallery-1.png" width="636" height="196" alt="Tutor Course: the actual cover and gallery fields" loading="lazy"></a>
+    <a href="/guide-screenshots/course-gallery-2.png" target="_blank" rel="noopener" style="--screenshot-width:636px" aria-label="Open full-size screenshot: Tutor Course: the actual cover and gallery fields (new tab)"><img src="/guide-screenshots/course-gallery-2.png" width="636" height="196" alt="Tutor Course: the actual cover and gallery fields" loading="lazy"></a>
   </div>
   <p>Course Card Cover is separate from the course-page photographs. Gallery Photos 1 and 2 are shown here; Photos 3–5 have matching fields below them. A selected image offers Replace Image and Remove; an empty slot offers Choose or Upload Picture. Select a screenshot to open it full size.</p>
 </figure>
 
-Open the course in Tutor's builder. The **Basics** tab has **Gallery Photo 1
+Open the course in Tutor's builder. The **Course** tab has **Gallery Photo 1
 (Initially Shown)** and **Gallery Photos 2–5** below the description. For each slot,
 choose or upload the original photograph, then save the course and reload it to check the
 selection. A selected photograph offers **Replace Image** and **Remove**; an empty slot offers **Choose or Upload Picture**.
@@ -137,7 +136,13 @@ If a course is missing its photographs, fill the intended slots and check the ca
 The Courses page has a column of filter and sort controls down the left. There is nothing to
 set up: every button is built from the courses that are actually published.
 
-A group of filters appears only when there are useful choices to offer. For example, if every published course has the same medium, a medium filter may be omitted. Choose from the available categories; request a new category from the site administrator rather than using category-management settings.
+Medium stays visible even when Watercolour is the only choice. The top navigation and Courses filter use the same media assigned to published courses. Beginners is a Difficulty choice, not a Medium.
+
+Choose Medium in the Course step. There is one field to maintain; the course page label follows it automatically. The old Tags field and Theme filter are hidden. Ask the site administrator if a new Medium is needed.
+
+With up to six media, choose the visible buttons. Longer lists offer **Choose Medium**: search, select or deselect a value, then choose **Done**. **Clear selection** clears Medium only; the page’s **Clear all** clears every filter. The Courses picker selects one medium at a time. Selected values beyond the short list remain visible below the picker button and can be removed there. On a phone, open **Filter courses** first; Escape closes the picker before closing the filter drawer. The top navigation also offers a searchable Medium picker when its list is long.
+
+The navigation heading is **By Medium**. It does not claim that the number of courses in a medium measures popularity. For verified purchase counts, use [Sales](/sales).
 
 The same goes for difficulty, length, price and the sale filter. Fill in a course properly
 and it becomes findable; leave a field empty and the filter for it stays away.
@@ -163,15 +168,15 @@ Ask the site administrator if the current course status is unclear.
 ## Downloadable notes and reference photographs
 
 <figure class="guide-screenshot" aria-labelledby="course-files-visual">
-  <figcaption id="course-files-visual">Tutor Additional: the actual attachment controls</figcaption>
+  <figcaption id="course-files-visual">Tutor Outcomes/Materials: the actual attachment controls</figcaption>
   <div class="guide-screenshot-images">
-    <a href="/guide-screenshots/course-attachments.png" target="_blank" rel="noopener" style="--screenshot-width:305px" aria-label="Open full-size screenshot: Tutor Additional: actual Attachments list and Upload Attachment control; existing demo course shown (new tab)"><img src="/guide-screenshots/course-attachments.png" width="305" height="168" alt="Tutor Additional: actual Attachments list and Upload Attachment control; existing demo course shown" loading="lazy"></a>
+    <a href="/guide-screenshots/course-attachments.png" target="_blank" rel="noopener" style="--screenshot-width:305px" aria-label="Open full-size screenshot: Tutor Outcomes/Materials: actual Attachments list and Upload Attachment control; existing demo course shown (new tab)"><img src="/guide-screenshots/course-attachments.png" width="305" height="168" alt="Tutor Outcomes/Materials: actual Attachments list and Upload Attachment control; existing demo course shown" loading="lazy"></a>
     <a href="/guide-screenshots/course-update.png" target="_blank" rel="noopener" style="--screenshot-width:122px" aria-label="Open full-size screenshot: Tutor: course Update control (new tab)"><img src="/guide-screenshots/course-update.png" width="122" height="40" alt="Tutor: course Update control" loading="lazy"></a>
   </div>
   <p>The existing demo course is shown. Remove an old selection when replacing it, choose the new file, then save the course with Update. Select a screenshot to open it full size.</p>
 </figure>
 
-Use **Additional → Attachments → Upload Attachment** in the course builder. Upload the
+Use **Outcomes/Materials → Attachments → Upload Attachment** in the course builder. Upload the
 file in the Media window, choose **Select**, then save the course with **Update**. Reopen
 the course to check its saved file list. Public course-gallery photographs and paid
 attachments have separate purposes; upload separate copies when the same picture is
@@ -191,18 +196,18 @@ Reopen the saved course and check the intended file list before directing studen
 
 ## Course Highlights Video: public preview
 
-Open **Content Hub → Manage Courses → course → Basics**, then scroll to **Course Highlights Video**. This film is shown on the public course page when the course is published. Visitors can watch it without buying the course, so choose an introduction or taster prepared for public viewing.
+Open **Content Hub → Manage Courses → course → Course**, then scroll to **Course Highlights Video**. This film is shown on the public course page when the course is published. Visitors can watch it without buying the course, so choose an introduction or taster prepared for public viewing.
 
 1. Tick **This film is approved for the public course preview**.
 2. Choose **Upload video** and select the original file, or use **Choose existing** for an approved public highlight. Paid lesson films are kept out of this picker.
 3. Wait through **Uploading → Processing → Ready**, then preview the film and check its duration.
-4. Save the course with **Update**, or **Save as Draft** for a draft. Reopen Basics to check the saved highlight. A draft stays a draft; uploading does not publish it.
+4. Save the course with **Update**, or **Save as Draft** for a draft. Reopen Course to check the saved highlight. A draft stays a draft; uploading does not publish it.
 
 <figure class="guide-screenshot" aria-labelledby="course-highlights-live-visual">
-  <figcaption id="course-highlights-live-visual">Tutor Basics: the actual public highlight controls</figcaption>
+  <figcaption id="course-highlights-live-visual">Tutor Course: the actual public highlight controls</figcaption>
   <div class="guide-screenshot-images">
-    <a href="/guide-screenshots/course-highlights-upload.png" target="_blank" rel="noopener" style="--screenshot-width:636px" aria-label="Open full-size screenshot: Tutor Basics: actual public Course Highlights Video control, approval and saved preview (new tab)"><img src="/guide-screenshots/course-highlights-upload.png" width="636" height="639" alt="Tutor Basics: actual public Course Highlights Video control, approval and saved preview" loading="lazy"></a>
-    <a href="/guide-screenshots/course-highlights-picker.png" target="_blank" rel="noopener" style="--screenshot-width:636px" aria-label="Open full-size screenshot: Tutor Basics: actual approved public-highlight picker, separate from paid lesson films (new tab)"><img src="/guide-screenshots/course-highlights-picker.png" width="636" height="768" alt="Tutor Basics: actual approved public-highlight picker, separate from paid lesson films" loading="lazy"></a>
+    <a href="/guide-screenshots/course-highlights-upload.png" target="_blank" rel="noopener" style="--screenshot-width:636px" aria-label="Open full-size screenshot: Tutor Course: actual public Course Highlights Video control, approval and saved preview (new tab)"><img src="/guide-screenshots/course-highlights-upload.png" width="636" height="639" alt="Tutor Course: actual public Course Highlights Video control, approval and saved preview" loading="lazy"></a>
+    <a href="/guide-screenshots/course-highlights-picker.png" target="_blank" rel="noopener" style="--screenshot-width:636px" aria-label="Open full-size screenshot: Tutor Course: actual approved public-highlight picker, separate from paid lesson films (new tab)"><img src="/guide-screenshots/course-highlights-picker.png" width="636" height="768" alt="Tutor Course: actual approved public-highlight picker, separate from paid lesson films" loading="lazy"></a>
   </div>
   <p>The live Content Editor account is shown. Confirm public-preview use, choose or upload the film, wait for Ready, then save the course. The picker contains approved public highlights. No teaching-content edits were submitted for these captures. Select a screenshot to open it full size.</p>
 </figure>
@@ -213,6 +218,6 @@ The highlight duration is separate from total course runtime. Lesson films still
 
 ## New or replacement lesson films
 
-Open the exact lesson in **Curriculum** and use its **Lesson video → Upload video** control. The film goes to Bunny, and the lesson handles its video reference and duration for you. Wait for **Ready**, preview it, then save that lesson. Follow [Upload a lesson video](/lessons#upload-a-lesson-video) for upload, replacement and recovery steps.
+Open the exact lesson in **Lessons** and use its **Lesson video → Upload video** control. The film goes to Bunny, and the lesson handles its video reference and duration for you. Wait for **Ready**, preview it, then save that lesson. Follow [Upload a lesson video](/lessons#upload-a-lesson-video) for upload, replacement and recovery steps.
 
-Paid lesson films stay out of the ordinary WordPress Media library. You do not need a Bunny login or embed code. Use the separate **Course Highlights Video** control in Basics for a public preview.
+Paid lesson films stay out of the ordinary WordPress Media library. You do not need a Bunny login or embed code. Use the separate **Course Highlights Video** control in Course for a public preview.

@@ -41,13 +41,9 @@ function cas_header_item_is( $item, $slug ) {
 function cas_header_course_drawer() {
 	$base = cas_page_url( 'courses' );
 	$links = array( array( 'All courses', $base, true ) );
-	$terms = get_terms( array( 'taxonomy' => 'course-category', 'hide_empty' => true, 'orderby' => 'count', 'order' => 'DESC' ) );
-	if ( ! is_wp_error( $terms ) ) {
-		foreach ( $terms as $term ) { $links[] = array( $term->name, add_query_arg( 'cat', $term->name, $base ), false ); }
-	}
-	$links[] = array( 'Beginners', add_query_arg( 'cat', 'Beginners', $base ), false );
+	foreach ( cas_course_medium_terms() as $slug => $name ) { $links[] = array( $name, add_query_arg( 'cat', $slug, $base ), false ); }
 	$out = '<button class="nav-caret-btn" type="button" aria-expanded="false" aria-controls="cas-nav-courses" aria-label="Show course categories"><svg class="nav-caret" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 4.5 6 8.5 10 4.5"></path></svg></button>';
-	$out .= '<div class="nav-mega" id="cas-nav-courses"><span class="mega-eyebrow">By medium <em>&middot; most popular first</em></span><div class="mega-cats">';
+	$out .= '<div class="nav-mega" id="cas-nav-courses"><span class="mega-eyebrow">By Medium</span><div class="mega-cats">';
 	foreach ( $links as $link ) { $out .= '<a class="mega-cat' . ( $link[2] ? ' is-all' : '' ) . '" href="' . esc_url( $link[1] ) . '"><span>' . esc_html( $link[0] ) . '</span></a>'; }
 	return $out . '</div></div>';
 }

@@ -795,6 +795,7 @@ function cas_sales_render() {
 	cas_sales_render_filters( $f );
 	cas_sales_render_list( $f );
 	cas_sales_render_totals( $f );
+	cas_course_popularity_render( $f );
 	echo '</div>';
 }
 

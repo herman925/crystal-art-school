@@ -26,7 +26,8 @@ function cas_course_chips( $course_id ) {
 	$level   = get_post_meta( $course_id, '_tutor_course_level', true );
 	$lessons = cas_course_lesson_count( $course_id );
 	$runtime = cas_course_runtime( $course_id );
-	$media   = preg_split( '/\s*[&,\/]\s*/', cas_course_media_label( $course_id ) );
+	$media   = wp_get_post_terms( $course_id, 'course-category', array( 'fields' => 'names' ) );
+	if ( is_wp_error( $media ) ) { $media = array(); }
 
 	return array_values(
 		array_filter(
@@ -41,9 +42,8 @@ function cas_course_chips( $course_id ) {
 }
 
 function cas_course_media_label( $course_id ) {
-	if ( metadata_exists( 'post', $course_id, '_cas_course_tag' ) ) { return (string) get_post_meta( $course_id, '_cas_course_tag', true ); }
 	$terms = wp_get_post_terms( $course_id, 'course-category', array( 'fields' => 'names' ) );
-	return ! is_wp_error( $terms ) && $terms ? $terms[0] : '';
+	return ! is_wp_error( $terms ) ? implode( ' & ', $terms ) : '';
 }
 
 function cas_course_lesson_span( $lesson_id ) {
@@ -139,7 +139,6 @@ add_action( 'tutor_course_builder_footer', function () {
 	if ( ! $id || 'courses' !== get_post_type( $id ) || ! current_user_can( 'edit_post', $id ) ) { return; }
 	$fields = array();
 	$fields[] = array( 'name' => 'post_excerpt', 'type' => 'text', 'label' => 'Course Subtitle', 'defaultValue' => (string) get_post_field( 'post_excerpt', $id ), 'helpText' => 'Optional line below the highlights video, above the description.' );
-	$fields[] = array( 'name' => '_cas_course_tag', 'type' => 'text', 'label' => 'Course Media Label', 'defaultValue' => cas_course_media_label( $id ), 'helpText' => 'For example, Sketching & Watercolour. The page adds the word course; Categories still control catalogue filters.' );
 	foreach ( cas_course_photo_fields() as $key => $label ) {
 		$attachment = (int) get_post_meta( $id, $key, true );
 		$fields[] = array(
