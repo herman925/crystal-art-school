@@ -5,19 +5,21 @@
   const name = '_cas_builder_sale';
   function field() { return document.querySelector('input[name="' + name + '"]'); }
   function value() { try { return JSON.parse(field().value); } catch (_) { return null; } }
-  function bridge(on) {
+  function bridge(on, explicitAmount) {
     const input = field(), state = value();
     if (!input || !state) return;
     state.on = on ? '1' : '0';
     const sale = document.querySelector('input[name="course_sale_price"]');
-    if (sale) state.amount = sale.value;
+    // Tutor can render numeric zero as an empty input; keep the explicit input event's value.
+    if (explicitAmount !== undefined) state.amount = explicitAmount;
+    else if (sale && sale.value !== '') state.amount = sale.value;
     Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set.call(input, JSON.stringify(state));
     input.dispatchEvent(new Event('input', { bubbles: true }));
     input.dispatchEvent(new Event('change', { bubbles: true }));
   }
   document.addEventListener('input', function (event) {
     if (event.target.matches('input[name="course_sale_price"]')) {
-      const state = value(); if (state) bridge(state.on === '1');
+      const state = value(); if (state) bridge(state.on === '1', event.target.value);
     }
   }, true);
   function paint() {
@@ -25,7 +27,7 @@
     const regular = document.querySelector('input[name="course_price"]');
     const state = value();
     if (!sale || !regular || !state) { if (control) control.remove(); return; }
-    if (state.amount !== sale.value) bridge(state.on === '1');
+    if (sale.value !== '' && state.amount !== sale.value) bridge(state.on === '1');
     let row = sale.parentElement;
     while (row && !row.contains(regular)) row = row.parentElement;
     if (!row || row === document.body) return;
