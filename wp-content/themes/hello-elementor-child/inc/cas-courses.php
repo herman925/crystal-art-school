@@ -136,6 +136,12 @@ function cas_course_facets( $course_id ) {
 	$reg     = (float) ( $price->regular_price ?? 0 );
 	$sale    = (float) ( $price->sale_price ?? 0 );
 	$is_sale = $sale > 0 && $sale < $reg;
+	if ( function_exists( 'cas_price_current' ) && '' !== get_post_meta( $course_id, '_cas_zero_sale_regular', true ) ) {
+		$configured = cas_price_current( $course_id );
+		if ( '' !== $configured['zero_sale_regular'] && '0.00' === $configured['sale'] ) {
+			$reg = (float) $configured['regular']; $sale = 0.0; $is_sale = true;
+		}
+	}
 
 	return [
 		'medium'     => cas_course_terms( $course_id, 'course-category' ),
@@ -237,7 +243,7 @@ function cas_course_card( $course_id, $index ) {
 			<span class="level"><?php echo esc_html( implode( ' · ', $meta ) ); ?></span>
 			<span class="price">
 				<?php if ( $f['is_sale'] ) : ?>
-					<s><?php echo esc_html( cas_course_price( $f['regular'] ) ); ?></s> <b class="now"><?php echo esc_html( cas_course_price( $f['now'] ) ); ?></b>
+					<s><?php echo esc_html( cas_course_price( $f['regular'] ) ); ?></s> <b class="now"><?php echo esc_html( 0.0 === (float) $f['now'] ? 'Free' : cas_course_price( $f['now'] ) ); ?></b>
 				<?php else : ?>
 					<?php echo esc_html( cas_course_price( $f['regular'] ) ); ?>
 				<?php endif; ?>

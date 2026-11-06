@@ -9,15 +9,23 @@
     const input = field(), state = value();
     if (!input || !state) return;
     state.on = on ? '1' : '0';
+    const sale = document.querySelector('input[name="course_sale_price"]');
+    if (sale) state.amount = sale.value;
     Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set.call(input, JSON.stringify(state));
     input.dispatchEvent(new Event('input', { bubbles: true }));
     input.dispatchEvent(new Event('change', { bubbles: true }));
   }
+  document.addEventListener('input', function (event) {
+    if (event.target.matches('input[name="course_sale_price"]')) {
+      const state = value(); if (state) bridge(state.on === '1');
+    }
+  }, true);
   function paint() {
     const sale = document.querySelector('input[name="course_sale_price"]');
     const regular = document.querySelector('input[name="course_price"]');
     const state = value();
     if (!sale || !regular || !state) { if (control) control.remove(); return; }
+    if (state.amount !== sale.value) bridge(state.on === '1');
     let row = sale.parentElement;
     while (row && !row.contains(regular)) row = row.parentElement;
     if (!row || row === document.body) return;

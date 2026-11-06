@@ -83,7 +83,8 @@ the site does that.
 
 Use the price inputs and **On sale** switch in the builder's **Course** tab. Enter numbers
 without a currency symbol. Off keeps Sale Price for later and uses Regular Price; On needs
-a positive Sale Price below Regular Price. Save the course and reopen it to check the result.
+a Sale Price below Regular Price. Zero makes the course free while On sale is on; blank
+does not. Switch it off to restore Regular Price. Save the course and reopen it to check the result.
 These are base prices before any coupon or tax adjustment. See [Course Prices](/course-prices).
 
 The agreed course currency is GBP (£). **Currency and cart settings are managed by the site administrator**, not through your content-editing controls. Do not change them in Tutor Settings; ask the site administrator if anything appears wrong.

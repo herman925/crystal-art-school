@@ -13,7 +13,7 @@ function cas_builder_sale_version( $id, $price = null ) {
 
 function cas_builder_sale_value( $id ) {
 	$price = cas_price_current( $id );
-	return wp_json_encode( array( 'on' => '' !== $price['sale'] ? '1' : '0', 'version' => cas_builder_sale_version( $id, $price ) ) );
+	return wp_json_encode( array( 'on' => '' !== $price['sale'] ? '1' : '0', 'amount' => cas_price_sale_amount( $price ), 'version' => cas_builder_sale_version( $id, $price ) ) );
 }
 
 final class CAS_Builder_Sale {
@@ -44,9 +44,9 @@ final class CAS_Builder_Sale {
 		$old = cas_price_current( $id );
 		$regular = cas_price_clean( wp_unslash( $_POST['course_price'] ?? '' ) );
 		$sale = cas_price_clean( wp_unslash( $_POST['course_sale_price'] ?? '' ) );
-		if ( '0.00' === $sale ) { $sale = ''; }
 		if ( ! isset( $_POST['_cas_builder_sale'] ) ) {
-			if ( $old['type'] === 'paid' && $regular === $old['regular'] && $sale === $old['sale'] ) { return; }
+			if ( '0.00' === $sale && '' === $old['zero_sale_regular'] ) { $sale = ''; }
+			if ( '' === $old['zero_sale_regular'] && $old['type'] === 'paid' && $regular === $old['regular'] && $sale === $old['sale'] ) { return; }
 			self::error( 'Reload the course builder to load the On sale control before changing prices.' );
 		}
 		$raw = $_POST['_cas_builder_sale'];
@@ -55,11 +55,15 @@ final class CAS_Builder_Sale {
 			|| ! wp_verify_nonce( $control['version'], 'cas-builder-sale-' . $id . '-' . hash( 'sha256', wp_json_encode( $old ) ) ) ) {
 			self::error( 'The saved price changed. Reload this course before saving again.' );
 		}
-		$new = cas_price_proposed( $regular, $sale, $control['on'] ?? null );
-		if ( ! $new ) { self::error( 'Enter a positive Regular Price and a lower Sale Price. On sale requires a Sale Price.', 400 ); }
+		$amount = cas_price_clean( $control['amount'] ?? null );
+		if ( ! array_key_exists( 'amount', $control ) ) { $amount = $sale; } // Existing open editors retain their prior positive-sale behavior.
+		if ( null === $amount || ( $amount !== $sale && ! ( '' === $amount && '0.00' === $sale ) ) ) { self::error( 'The Sale Price is still updating. Try saving again.', 400 ); }
+		$new = cas_price_proposed( $regular, $amount, $control['on'] ?? null );
+		if ( ! $new ) { self::error( 'Use a positive Regular Price and a lower Sale Price. Zero is free while On sale is on; blank is not a sale amount.', 400 ); }
 		self::$save = array( 'id' => $id, 'old' => $old, 'new' => $new, 'own_tx' => false, 'applied' => false, 'finished' => false );
 		// Keep Tutor's own data preparation consistent with the effective checkout price.
-		$_POST['course_sale_price'] = $new['sale'];
+		$stored = cas_price_storage_for( $new );
+		$_POST['course_sale_price'] = $stored['sale'];
 	}
 
 	static function transaction() {
@@ -133,7 +137,9 @@ add_filter( 'tutor_course_details_response', static function ( $data ) {
 	$id = absint( $data['ID'] ?? 0 );
 	if ( $id && cas_builder_sale_may_edit( $id ) ) {
 		$data['_cas_builder_sale'] = cas_builder_sale_value( $id );
-		$data['course_pricing']['sale_price'] = cas_price_sale_amount( cas_price_current( $id ) );
+		$price = cas_price_current( $id );
+		$data['course_pricing']['price'] = $price['regular'];
+		$data['course_pricing']['sale_price'] = cas_price_sale_amount( $price );
 	}
 	return $data;
 }, 1002 );
