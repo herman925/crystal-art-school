@@ -462,6 +462,7 @@ details.acc-item[open] .acc-ico { transform: rotate(45deg); background: var(--co
 .acc-body { padding: 0 22px 20px; font-size: 14.5px; line-height: 1.65; color: var(--muted); }
 /* #27: see the note on .article — 68ch measured 88 characters per line. */
 .acc-body p, .acc-body li { max-width: 55ch; }
+#faq .acc-body p, #faq .acc-body li { max-width: none; }
 .acc-body p { margin: 0 0 10px; }
 .acc-body p:last-child { margin-bottom: 0; }
 
