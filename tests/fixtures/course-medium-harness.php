@@ -35,6 +35,7 @@ foreach($terms as $slug=>$name){assert(str_contains($rail,'data-val="'.$slug.'"'
 assert(array_values($terms)===(count($terms)===1?['Watercolour']:['Ink & wash','Watercolour']));
 $_POST=['course_id'=>'34','course_tags'=>[999]];$_REQUEST=$_POST;
 cas_course_preserve_hidden_tags();assert($_POST['course_tags']===[7,9]&&$_REQUEST['course_tags']===[7,9]);
+$saved_tags=[];cas_course_preserve_hidden_tags();assert(!isset($_POST['course_tags'])&&!isset($_REQUEST['course_tags']));$saved_tags=[7,9];
 $nonce=false;$_POST['course_tags']=[999];cas_course_preserve_hidden_tags();assert($_POST['course_tags']===[999]);
 $nonce=true;$may_edit=false;cas_course_preserve_hidden_tags();assert($_POST['course_tags']===[999]);$may_edit=true;
 $_POST['course_id']='bad';cas_course_preserve_hidden_tags();assert($_POST['course_tags']===[999]);
