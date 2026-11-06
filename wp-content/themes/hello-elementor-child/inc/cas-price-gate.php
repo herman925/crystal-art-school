@@ -17,7 +17,7 @@
  * Historical orders are never touched.
  */
 
-const CAS_PRICE_META_KEYS = array( 'tutor_course_price', 'tutor_course_sale_price', '_tutor_course_price_type' );
+const CAS_PRICE_META_KEYS = array( 'tutor_course_price', 'tutor_course_sale_price', '_tutor_course_price_type', '_cas_inactive_sale_price' );
 const CAS_PRICE_TOKEN_TTL = 600;
 const CAS_PRICE_COURSE_LOCK_TTL = 600;
 const CAS_PRICE_PAGE_SLUG = 'cas-course-prices';
@@ -58,6 +58,28 @@ function cas_price_current( $course_id ) {
 		'type'    => (string) get_post_meta( $course_id, '_tutor_course_price_type', true ),
 		'regular' => $normalise( get_post_meta( $course_id, 'tutor_course_price', true ) ),
 		'sale'    => ( '' !== $sale && is_numeric( $sale ) && 0.0 === (float) $sale ) ? '' : $sale,
+		'saved_sale' => $normalise( get_post_meta( $course_id, '_cas_inactive_sale_price', true ) ),
+	);
+}
+
+/** Tutor's sale field is the active price; the extra field remembers an inactive offer. */
+function cas_price_sale_amount( $price ) {
+	return '' !== $price['sale'] ? $price['sale'] : ( $price['saved_sale'] ?? '' );
+}
+
+function cas_price_proposed( $regular_raw, $sale_raw, $on_sale ) {
+	$regular = cas_price_clean( $regular_raw );
+	$sale    = cas_price_clean( $sale_raw );
+	if ( ! in_array( $on_sale, array( '0', '1' ), true )
+		|| null === $regular || '' === $regular || (float) $regular <= 0 || null === $sale
+		|| ( '' !== $sale && ( (float) $sale <= 0 || (float) $sale >= (float) $regular ) )
+		|| ( '1' === $on_sale && '' === $sale ) ) {
+		return null;
+	}
+	return array(
+		'type' => 'paid', 'regular' => $regular,
+		'sale' => '1' === $on_sale ? $sale : '',
+		'saved_sale' => '1' === $on_sale ? '' : $sale,
 	);
 }
 
@@ -261,6 +283,7 @@ function cas_price_write_pair( $course_id, $pair ) {
 	try {
 		update_post_meta( $course_id, 'tutor_course_price', $pair['regular'] );
 		update_post_meta( $course_id, 'tutor_course_sale_price', $pair['sale'] );
+		update_post_meta( $course_id, '_cas_inactive_sale_price', $pair['saved_sale'] );
 	} catch ( Throwable $error ) {
 		return false;
 	} finally {
@@ -274,7 +297,7 @@ function cas_price_restore_pair( $course_id, $old, $attempted ) {
 	$current = cas_price_current( $course_id );
 	$restore = array();
 	$safe    = true;
-	foreach ( array( 'regular', 'sale' ) as $field ) {
+	foreach ( array( 'regular', 'sale', 'saved_sale' ) as $field ) {
 		if ( $current[ $field ] === $old[ $field ] ) {
 			continue;
 		}
@@ -292,6 +315,9 @@ function cas_price_restore_pair( $course_id, $old, $attempted ) {
 			}
 			if ( isset( $restore['sale'] ) ) {
 				update_post_meta( $course_id, 'tutor_course_sale_price', $restore['sale'] );
+			}
+			if ( isset( $restore['saved_sale'] ) ) {
+				update_post_meta( $course_id, '_cas_inactive_sale_price', $restore['saved_sale'] );
 			}
 		} catch ( Throwable $error ) {
 			return false;
@@ -314,9 +340,8 @@ function cas_price_request() {
 	if ( ! $course_id || ! cas_price_user_may_edit( $course_id ) ) {
 		wp_die( esc_html__( 'Not allowed.', 'hello-elementor-child' ), 403 );
 	}
-	$regular = cas_price_clean( wp_unslash( $_POST['regular_price'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
-	$sale    = cas_price_clean( wp_unslash( $_POST['sale_price'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
-	if ( null === $regular || '' === $regular || (float) $regular <= 0 || null === $sale || ( '' !== $sale && ( (float) $sale <= 0 || (float) $sale >= (float) $regular ) ) ) {
+	$new = cas_price_proposed( wp_unslash( $_POST['regular_price'] ?? '' ), wp_unslash( $_POST['sale_price'] ?? '' ), wp_unslash( $_POST['on_sale'] ?? null ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+	if ( null === $new ) {
 		cas_price_back( array( 'course_id' => $course_id, 'cas_price_notice' => 'invalid' ) );
 	}
 	$old = cas_price_current( $course_id );
@@ -330,7 +355,7 @@ function cas_price_request() {
 			'user'    => get_current_user_id(),
 			'course'  => $course_id,
 			'old'     => $old,
-			'new'     => array( 'type' => 'paid', 'regular' => $regular, 'sale' => $sale ),
+			'new'     => $new,
 			'expires' => time() + CAS_PRICE_TOKEN_TTL,
 		),
 		CAS_PRICE_TOKEN_TTL
@@ -404,11 +429,11 @@ function cas_price_confirm() {
 		);
 		$expected = array(
 			'old_regular' => $data['old']['regular'],
-			'old_sale'    => $data['old']['sale'],
+			'old_sale'    => cas_price_sale_amount( $data['old'] ),
 			'new_regular' => $data['new']['regular'],
-			'new_sale'    => $data['new']['sale'],
+			'new_sale'    => cas_price_sale_amount( $data['new'] ),
 		);
-		if ( $typed !== $expected ) {
+		if ( $typed !== $expected || '1' !== ( $_POST['confirm_sale_state'] ?? '' ) ) {
 			$notice = 'mismatch';
 		} elseif ( 'paid' !== ( $data['old']['type'] ?? '' ) || 'paid' !== cas_price_current( $course_id )['type'] ) {
 			$notice = 'paid_only';
@@ -418,6 +443,7 @@ function cas_price_confirm() {
 			$line = 'course=' . $course_id
 				. ' regular=' . $data['old']['regular'] . '->' . $data['new']['regular']
 				. ' sale=' . $data['old']['sale'] . '->' . $data['new']['sale'];
+			$line .= ' saved_sale=' . $data['old']['saved_sale'] . '->' . $data['new']['saved_sale'];
 			if ( ! function_exists( 'cas_audit_log' ) || ! cas_audit_log( 'course_price_attempt', $line ) ) {
 				$notice = 'audit';
 			} elseif ( ! cas_price_write_pair( $course_id, $data['new'] ) ) {
@@ -465,14 +491,14 @@ function cas_price_render() {
 		wp_die( esc_html__( 'Not allowed.', 'hello-elementor-child' ), 403 );
 	}
 	$notices = array(
-		'invalid'  => __( 'Enter prices as numbers, for example 58 or 58.50. The sale price must be lower than the regular price, or left empty.', 'hello-elementor-child' ),
+		'invalid'  => __( 'Enter a positive regular price. A sale amount must be positive and lower than regular; On sale requires that amount. Check the On sale switch and review again.', 'hello-elementor-child' ),
 		'expired'  => __( 'That confirmation has expired or was already used. Start again.', 'hello-elementor-child' ),
 		'paid_only' => __( 'Only paid courses can use this price screen. Free or unknown course types cannot be converted here.', 'hello-elementor-child' ),
-		'mismatch' => __( 'The typed prices do not match the change. Nothing was saved.', 'hello-elementor-child' ),
+		'mismatch' => __( 'The typed prices do not match, or the sale setting was not confirmed. Nothing was saved.', 'hello-elementor-child' ),
 		'stale'    => __( 'The price changed since you asked. Nothing was saved; start again.', 'hello-elementor-child' ),
 		'audit'    => __( 'The change could not be recorded in the audit log, so nothing was saved.', 'hello-elementor-child' ),
 		'busy'     => __( 'Another price change for this course is being processed. Start again in a moment.', 'hello-elementor-child' ),
-		'write_failed' => __( 'The price fields did not both save. The previous price pair was restored and verified; nothing new was saved.', 'hello-elementor-child' ),
+		'write_failed' => __( 'The price settings did not all save. The previous settings were restored and verified; nothing new was saved.', 'hello-elementor-child' ),
 		'rollback_failed' => __( 'The price change and its rollback could not be verified. Stop editing and contact Herman immediately.', 'hello-elementor-child' ),
 		'initial_pending' => __( 'The price is saved and verified, but publication is still blocked because the first-price marker could not be cleared. Contact Herman.', 'hello-elementor-child' ),
 		'saved'    => __( 'The price is saved.', 'hello-elementor-child' ),
@@ -493,7 +519,7 @@ function cas_price_render() {
 }
 
 function cas_price_render_list() {
-	echo '<p>' . esc_html__( 'Prices change only here. Enter the new regular price and, if there is a sale, the sale price. You will check the change on the next screen before anything is saved.', 'hello-elementor-child' ) . '</p>';
+	echo '<p>' . esc_html__( 'Set the regular price, an optional sale amount and the On sale switch. Off charges regular and remembers the sale amount; On charges sale. Review and confirm before anything changes.', 'hello-elementor-child' ) . '</p>';
 	foreach ( get_posts( array( 'post_type' => 'courses', 'post_status' => 'any', 'numberposts' => -1, 'orderby' => 'title', 'order' => 'ASC' ) ) as $course ) {
 		if ( ! current_user_can( 'edit_post', $course->ID ) ) {
 			continue;
@@ -506,9 +532,10 @@ function cas_price_render_list() {
 		echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '" style="margin:12px 0;padding:12px;border:1px solid #ccd0d4;background:#fff">';
 		wp_nonce_field( 'cas_price_request' );
 		echo '<input type="hidden" name="action" value="cas_price_request"><input type="hidden" name="course_id" value="' . esc_attr( $course->ID ) . '">';
-		echo '<strong>' . esc_html( $course->post_title ) . '</strong> — ' . esc_html__( 'now', 'hello-elementor-child' ) . ': ' . esc_html( $now['regular'] !== '' ? $now['regular'] : '—' ) . ' / ' . esc_html( $now['sale'] !== '' ? $now['sale'] : '—' );
+		echo '<strong>' . esc_html( $course->post_title ) . '</strong> — ' . esc_html__( 'Customer price now', 'hello-elementor-child' ) . ': ' . esc_html( '' !== $now['sale'] ? $now['sale'] : ( '' !== $now['regular'] ? $now['regular'] : '—' ) );
 		echo ' <label>' . esc_html__( 'Regular', 'hello-elementor-child' ) . ' <input type="text" name="regular_price" value="' . esc_attr( $now['regular'] ) . '" size="8"></label>';
-		echo ' <label>' . esc_html__( 'Sale', 'hello-elementor-child' ) . ' <input type="text" name="sale_price" value="' . esc_attr( $now['sale'] ) . '" size="8"></label>';
+		echo ' <label>' . esc_html__( 'Sale', 'hello-elementor-child' ) . ' <input type="text" name="sale_price" value="' . esc_attr( cas_price_sale_amount( $now ) ) . '" size="8"></label>';
+		echo '<input type="hidden" name="on_sale" value="0"> <label><input type="checkbox" role="switch" name="on_sale" value="1"' . checked( '' !== $now['sale'], true, false ) . '> ' . esc_html__( 'On sale', 'hello-elementor-child' ) . '</label>';
 		echo ' <button class="button" type="submit">' . esc_html( $first ? __( 'Set first price', 'hello-elementor-child' ) : __( 'Review change', 'hello-elementor-child' ) ) . '</button></form>';
 	}
 }
@@ -519,8 +546,14 @@ function cas_price_render_confirm( $token, $data ) {
 	echo '<h2>' . esc_html( get_the_title( $data['course'] ) ) . '</h2>';
 	echo '<table class="widefat striped" style="max-width:520px"><thead><tr><th></th><th>' . esc_html__( 'Now', 'hello-elementor-child' ) . '</th><th>' . esc_html__( 'New', 'hello-elementor-child' ) . '</th></tr></thead><tbody>';
 	echo '<tr><td>' . esc_html__( 'Regular', 'hello-elementor-child' ) . '</td><td>' . esc_html( $old['regular'] ) . '</td><td>' . esc_html( $new['regular'] ) . '</td></tr>';
-	echo '<tr><td>' . esc_html__( 'Sale', 'hello-elementor-child' ) . '</td><td>' . esc_html( $old['sale'] ) . '</td><td>' . esc_html( $new['sale'] ) . '</td></tr></tbody></table>';
-	echo '<p>' . esc_html__( 'To confirm, type the current and the new prices again. Leave the sale empty if there is none.', 'hello-elementor-child' ) . '</p>';
+	echo '<tr><td>' . esc_html__( 'Sale', 'hello-elementor-child' ) . '</td><td>' . esc_html( cas_price_sale_amount( $old ) ) . '</td><td>' . esc_html( cas_price_sale_amount( $new ) ) . '</td></tr>';
+	$old_state = '' !== $old['sale'] ? __( 'On', 'hello-elementor-child' ) : __( 'Off', 'hello-elementor-child' );
+	$new_state = '' !== $new['sale'] ? __( 'On', 'hello-elementor-child' ) : __( 'Off', 'hello-elementor-child' );
+	$old_price = '' !== $old['sale'] ? $old['sale'] : $old['regular'];
+	$new_price = '' !== $new['sale'] ? $new['sale'] : $new['regular'];
+	echo '<tr><td>' . esc_html__( 'On sale', 'hello-elementor-child' ) . '</td><td>' . esc_html( $old_state ) . '</td><td>' . esc_html( $new_state ) . '</td></tr>';
+	echo '<tr><td>' . esc_html__( 'Customer price', 'hello-elementor-child' ) . '</td><td>' . esc_html( $old_price ) . '</td><td>' . esc_html( $new_price ) . '</td></tr></tbody></table>';
+	echo '<p>' . esc_html__( 'Type the current and new Regular and Sale amounts from the table, including a remembered Sale amount when On sale is Off. Leave an amount empty only when its table cell is empty. Customer price is before any coupon or tax adjustment.', 'hello-elementor-child' ) . '</p>';
 	echo '<form method="post" action="' . esc_url( admin_url( 'admin-post.php' ) ) . '">';
 	wp_nonce_field( 'cas_price_confirm' );
 	echo '<input type="hidden" name="action" value="cas_price_confirm"><input type="hidden" name="token" value="' . esc_attr( $token ) . '">';
@@ -528,6 +561,7 @@ function cas_price_render_confirm( $token, $data ) {
 	echo '<label>' . esc_html__( 'Current sale', 'hello-elementor-child' ) . ' <input type="text" name="old_sale" size="8"></label></p>';
 	echo '<p><label>' . esc_html__( 'New regular', 'hello-elementor-child' ) . ' <input type="text" name="new_regular" size="8"></label> ';
 	echo '<label>' . esc_html__( 'New sale', 'hello-elementor-child' ) . ' <input type="text" name="new_sale" size="8"></label></p>';
+	echo '<p><label><input type="checkbox" name="confirm_sale_state" value="1" required> ' . esc_html( sprintf( __( 'I confirm On sale: %1$s → %2$s, and customer price: %3$s → %4$s.', 'hello-elementor-child' ), $old_state, $new_state, $old_price, $new_price ) ) . '</label></p>';
 	echo '<p><button class="button button-primary" type="submit">' . esc_html__( 'Save the new prices', 'hello-elementor-child' ) . '</button></p></form>';
 }
 

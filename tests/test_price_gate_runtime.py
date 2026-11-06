@@ -110,10 +110,11 @@ echo 'cleaned';
         except urllib.error.HTTPError as e:
             return e.code, e.headers.get("Location", "")
 
-    def request_change(self, course, regular, sale=""):
+    def request_change(self, course, regular, sale="", on_sale=None):
         nonce = self.nonce_on("wp-admin/admin.php?page=cas-course-prices")
         status, loc = self.post({"action": "cas_price_request", "_wpnonce": nonce, "_wp_http_referer": "/",
-                                 "course_id": course, "regular_price": regular, "sale_price": sale})
+                                 "course_id": course, "regular_price": regular, "sale_price": sale,
+                                 "on_sale": ("1" if sale else "0") if on_sale is None else on_sale})
         token = urllib.parse.parse_qs(urllib.parse.urlparse(loc).query).get("token", [""])[0]
         if token:
             self.__class__.claims.append(token)
@@ -121,7 +122,7 @@ echo 'cleaned';
 
     def confirm(self, token, typed, faults=None):
         nonce = self.nonce_on(f"wp-admin/admin.php?page=cas-course-prices&token={token}") if token else self.nonce_on("wp-admin/admin.php?page=cas-course-prices")
-        fields = {"action": "cas_price_confirm", "_wpnonce": nonce, "_wp_http_referer": "/", "token": token}
+        fields = {"action": "cas_price_confirm", "_wpnonce": nonce, "_wp_http_referer": "/", "token": token, "confirm_sale_state": "1"}
         fields.update(typed)
         if faults:
             fields["w1_price_faults"] = json.dumps(faults)
