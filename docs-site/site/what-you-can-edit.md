@@ -17,13 +17,13 @@ Start from **Content Hub**. Choose the page you want to change, then its editing
 | Questions and answers | **FAQ** |
 | Student comments | **Testimonials** |
 | Course words, photographs and curriculum | **Manage Courses → course title** |
-| A lesson and its files | **course → Curriculum → lesson's pencil** |
+| A lesson and its files | **course → Lessons → lesson's pencil** |
 | Agreed course prices | **Course Prices** |
 | Coupons, orders or a student's course access | **Coupons**, **Sales** or **Course Access** |
 
 The names in your account may be title-cased, such as **Content Hub** and **Site-Wide Edit**.
 Open **More Editing Tasks** on a Hub card to reveal its less frequent tools. Start from
-**Manage Courses** to reach a course; Curriculum is inside the course builder, not on the course-list screen.
+**Manage Courses** to reach a course; Lessons is inside the course builder, not on the course-list screen.
 
 ## Things that update themselves
 

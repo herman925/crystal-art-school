@@ -143,7 +143,7 @@ function cas_content_hub_cards() {
 			'name'  => 'Courses',
 			'view'  => $courses,
 			'items' => array(
-				cas_content_hub_list_item( 'Course titles, covers, prices, levels, categories and order', 'courses' ),
+				cas_content_hub_list_item( 'Course titles, covers, prices, levels, Medium and order', 'courses' ),
 				$customize( 'Introduction paragraph under the banner', 'cas_page_courses', $courses ),
 				cas_content_hub_list_item( 'Each course page: description, what you will learn, who it is for, what comes with it, and the syllabus', 'courses' ),
 				cas_content_hub_list_item( 'Course photo strip: five photos per course', 'courses' ),

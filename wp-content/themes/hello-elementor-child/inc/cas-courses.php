@@ -17,6 +17,7 @@
  */
 
 defined( 'ABSPATH' ) || exit;
+require_once __DIR__ . '/cas-course-medium.php';
 
 /**
  * Human runtime from the lesson films, rounded like the prototype.
@@ -127,11 +128,8 @@ function cas_course_terms( $course_id, $taxonomy ) {
 /**
  * Everything the card and the filter rail need to know about one course.
  *
- * Only facts Tutor actually stores are in here. There is no medium or theme of our own:
- * medium is Tutor's `course-category`, theme is Tutor's `course-tag`, and length is
- * banded from the runtime Tutor already computes. Adding a facet Tutor does not store
- * would mean inventing the data to fill it, and then inventing it again for every
- * course she adds.
+ * Medium uses Tutor's existing course-category taxonomy. Tags are preserved in
+ * Tutor but have no public facet. Length is banded from actual lesson runtimes.
  */
 function cas_course_facets( $course_id ) {
 	$price   = tutor_utils()->get_raw_course_price( $course_id );
@@ -141,7 +139,6 @@ function cas_course_facets( $course_id ) {
 
 	return [
 		'medium'     => cas_course_terms( $course_id, 'course-category' ),
-		'theme'      => cas_course_terms( $course_id, 'course-tag' ),
 		'difficulty' => (string) get_post_meta( $course_id, '_tutor_course_level', true ),
 		'duration'   => cas_course_duration_bucket( $course_id ),
 		'regular'    => $reg,
@@ -213,7 +210,6 @@ function cas_course_card( $course_id, $index ) {
 		data-id="<?php echo esc_attr( $course_id ); ?>"
 		data-cat="<?php echo esc_attr( $media ? $media[0] : '' ); ?>"
 		data-media="<?php echo esc_attr( implode( '|', $media ) ); ?>"
-		data-theme="<?php echo esc_attr( implode( '|', array_keys( $f['theme'] ) ) ); ?>"
 		data-difficulty="<?php echo esc_attr( $f['difficulty'] ); ?>"
 		data-duration="<?php echo esc_attr( $f['duration'] ); ?>"
 		data-price="<?php echo esc_attr( $f['now'] ); ?>"
@@ -339,24 +335,11 @@ function cas_duration_labels() {
 /**
  * The filter rail, built from the courses actually on the page.
  *
- * A group is offered only where it can change the result: two or more terms, two or more
- * levels, two or more occupied length bands, both sides of the sale switch present, and a
- * price range wider than a single value. Four watercolour courses therefore get no Medium
- * row, because every chip in it would return all four. Where nothing survives, the whole
- * rail is dropped by the caller.
+ * Medium stays visible even with one value so it agrees with the navigation.
+ * Other groups appear only when their values differ across published courses.
  */
 function cas_course_filter_rail( array $rows ) {
 	$groups = '';
-
-	$union = static function ( $key ) use ( $rows ) {
-		$out = [];
-
-		foreach ( $rows as $row ) {
-			$out += $row[ $key ];
-		}
-
-		return $out;
-	};
 
 	$as_options = static function ( array $terms ) {
 		$out = [];
@@ -368,16 +351,10 @@ function cas_course_filter_rail( array $rows ) {
 		return $out;
 	};
 
-	$media = $union( 'medium' );
+	$media = cas_course_medium_terms();
 
-	if ( count( $media ) > 1 ) {
+	if ( count( $media ) > 0 ) {
 		$groups .= cas_filter_group( 'medium', 'Medium', $as_options( $media ) );
-	}
-
-	$theme = $union( 'theme' );
-
-	if ( count( $theme ) > 1 ) {
-		$groups .= cas_filter_group( 'theme', 'Theme', $as_options( $theme ) );
 	}
 
 	$levels = array_values( array_unique( array_filter( wp_list_pluck( $rows, 'difficulty' ) ) ) );
@@ -690,29 +667,15 @@ add_action(
 /* ------------------------------------------------------------------------ */
 
 function cas_render_courses( $atts ) {
-	$atts = shortcode_atts( [ 'per_page' => 24 ], $atts );
-
-	$q = new WP_Query(
-		[
-			'post_type'      => tutor()->course_post_type,
-			'post_status'    => 'publish',
-			'posts_per_page' => (int) $atts['per_page'],
-			'orderby'        => 'menu_order date',
-			'order'          => 'DESC',
-		]
-	);
-
-	$ids  = wp_list_pluck( $q->posts, 'ID' );
+	$ids  = cas_public_course_ids();
 	$rows = [];
 
 	foreach ( $ids as $id ) {
 		$rows[ $id ] = cas_course_facets( $id );
 	}
 
-	/* Sorting one card, or filtering a catalogue whose courses differ in nothing, is a
-	   control that cannot change what is on screen. Both are left out rather than shown
-	   inert, which is why a one-course catalogue has no rail at all. */
-	$rail = count( $rows ) > 1 ? cas_course_sort_panel() . cas_course_filter_rail( $rows ) : '';
+	/* Every published course participates in the shared Medium vocabulary. */
+	$rail = ( count( $rows ) > 1 ? cas_course_sort_panel() : '' ) . cas_course_filter_rail( $rows );
 
 	ob_start();
 

@@ -38,6 +38,7 @@ namespace Tutor\Models {
 namespace {
     define('ABSPATH', '/');
     function add_action() {}
+    function add_filter() {}
     function get_post_status($id) {
         if (isset($GLOBALS['cache'][$id])) { return $GLOBALS['cache'][$id]; }
         foreach ($GLOBALS['rows'] as $row) { if ($row->ID === $id) { return $GLOBALS['cache'][$id] = $row->post_status; } }

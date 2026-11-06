@@ -1,0 +1,20 @@
+.cas-medium-overflow[hidden],.cas-medium-dialog [hidden]{display:none!important}
+.cas-medium-open{margin-top:10px;padding:9px 15px;border:1px solid currentColor;border-radius:22px;background:transparent;color:inherit;font-family:var(--font-cond),sans-serif;font-size:16px;cursor:pointer}
+.cas-medium-current{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.cas-medium-current button{padding:6px 10px;border:1px solid currentColor;border-radius:20px;background:transparent;color:inherit;font:inherit;cursor:pointer}
+.cas-medium-dialog{box-sizing:border-box;width:min(540px,calc(100% - 32px));max-height:85vh;max-height:85dvh;padding:24px;border:1px solid #a1844f;border-radius:18px;background:#eee5d7;color:#2b1d10;font:inherit;overflow:auto}
+body[data-theme="D"] .cas-medium-dialog{background:#27251f;color:#efe6d5}
+.cas-medium-dialog::backdrop{background:rgba(0,0,0,.65)}
+.cas-medium-dialog header,.cas-medium-dialog footer{display:flex;justify-content:space-between;align-items:center;gap:12px}
+.cas-medium-dialog h2{margin:0;font-size:25px}
+.cas-medium-dialog button,.cas-medium-dialog a{color:inherit;font:inherit;cursor:pointer}
+.cas-medium-dialog button{padding:8px 14px;border:1px solid #a1844f;border-radius:20px;background:transparent}
+.cas-medium-dialog .cas-medium-close{border:0;font-size:24px}
+.cas-medium-search{display:block;margin-top:18px;font-size:14px}
+.cas-medium-search input{box-sizing:border-box;display:block;width:100%;margin-top:6px;padding:10px 12px;color:inherit;background:transparent;border:1px solid #a1844f;border-radius:7px;font:inherit}
+.cas-medium-dialog :focus-visible{outline:3px solid #63a6ba;outline-offset:3px}
+.cas-medium-help{font-size:14px;line-height:1.5}
+.cas-medium-selected{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.cas-medium-options{max-height:38vh;max-height:38dvh;overflow-y:auto;overscroll-behavior:contain;margin-bottom:18px}
+.cas-medium-options label,.cas-medium-options a{display:flex;align-items:center;gap:10px;padding:12px 8px;border-bottom:1px solid #a1844f66;overflow-wrap:anywhere;text-decoration:none}
+.cas-medium-options input{width:20px;height:20px;flex-shrink:0;accent-color:#568c9a}

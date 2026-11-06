@@ -89,3 +89,13 @@ or loses its public picture, Home falls back to another published artwork.
 Before a selection is saved, artwork Order supplies the picture. The Gallery page's own
 Newest/Oldest sorting still uses publication dates.
 Until one painting is published, that card does not appear on the homepage at all.
+
+
+## Longer Medium lists
+
+Up to six media appear as buttons. When more are in use, **Choose Medium** opens a
+searchable picker. Gallery allows several selected media; any selected medium can match.
+Use the selected label’s remove button to deselect it, or **Clear selection** to clear
+Medium only. **Done** returns to the Gallery; the page’s **Clear all** resets all filters.
+On a phone, open **Filter artwork** first. The picker uses existing media and does not
+create new labels. With JavaScript unavailable, the full list remains visible.

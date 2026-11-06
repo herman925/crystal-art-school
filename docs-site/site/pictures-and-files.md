@@ -17,7 +17,7 @@ student's unapproved personal details in a filename, title or image description.
 <figure class="guide-screenshot" aria-labelledby="pictures-current-visual">
   <figcaption id="pictures-current-visual">Different picture and file controls have different purposes</figcaption>
   <div class="guide-screenshot-images">
-    <a href="/guide-screenshots/course-cover.png" target="_blank" rel="noopener" style="--screenshot-width:305px" aria-label="Open full-size screenshot: Tutor Basics: actual Course Card Cover picture field (new tab)"><img src="/guide-screenshots/course-cover.png" width="305" height="24" alt="Tutor Basics: actual Course Card Cover picture field" loading="lazy"></a>
+    <a href="/guide-screenshots/course-cover.png" target="_blank" rel="noopener" style="--screenshot-width:305px" aria-label="Open full-size screenshot: Tutor Course: actual Course Card Cover picture field (new tab)"><img src="/guide-screenshots/course-cover.png" width="305" height="24" alt="Tutor Course: actual Course Card Cover picture field" loading="lazy"></a>
     <a href="/guide-screenshots/lesson-files.png" target="_blank" rel="noopener" style="--screenshot-width:305px" aria-label="Open full-size screenshot: Tutor lesson editor: actual Exercise Files and Upload Attachment controls (new tab)"><img src="/guide-screenshots/lesson-files.png" width="305" height="214" alt="Tutor lesson editor: actual Exercise Files and Upload Attachment controls" loading="lazy"></a>
   </div>
   <p>The course cover is a public picture; lesson Exercise Files use a separate attachment control. Uploading or selecting still needs the page or lesson save. Select a screenshot to open it full size.</p>
@@ -37,11 +37,11 @@ usually a better banner source than a portrait. Check text and important detail 
 | You are adding | Use |
 |---|---|
 | A public page, artwork, article or certificate picture | That page's picture slot or Featured image |
-| A public course-gallery photograph | **Basics → Gallery Photos 1–5** |
-| Course-wide notes or reference photographs | **Additional → Attachments** |
+| A public course-gallery photograph | **Course → Gallery Photos 1–5** |
+| Course-wide notes or reference photographs | **Outcomes/Materials → Attachments** |
 | One lesson's exercise files | That lesson's **Exercise Files** |
 | A lesson video file | That lesson's **Lesson video → Upload video** |
-| A public course highlight film | **Basics → Course Highlights Video** |
+| A public course highlight film | **Course → Course Highlights Video** |
 | A free YouTube film | The Free Videos entry's **Video link** |
 
 A public photograph cannot become private just by selecting it as paid material. Upload a

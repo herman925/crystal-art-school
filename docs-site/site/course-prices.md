@@ -2,7 +2,7 @@
 
 ## On sale in the course builder
 
-Open **Content Hub → Manage Courses → the course title → Basics**. Under **Pricing Model → Paid**,
+Open **Content Hub → Manage Courses → the course title → Course**. Under **Pricing Model → Paid**,
 the **On sale** switch sits directly below **Regular Price / Sale Price**.
 Off uses Regular Price and keeps Sale Price for later. On uses the valid lower Sale Price.
 Apply the setting with the builder's **Save as Draft**, **Update** or **Publish** button, then

@@ -4,6 +4,7 @@ if ( PHP_SAPI !== 'cli' || defined( 'ABSPATH' ) ) { throw new RuntimeException( 
 define( 'ABSPATH', __DIR__ );
 $input = json_decode( stream_get_contents( STDIN ), true, 512, JSON_THROW_ON_ERROR );
 function add_filter( ...$args ) {}
+function add_action( ...$args ) {}
 function add_shortcode( ...$args ) {}
 function is_user_logged_in() { return ! empty( $GLOBALS['input']['member'] ); }
 function get_option( $key ) { return 'users_can_register' === $key && ! empty( $GLOBALS['input']['registration'] ); }

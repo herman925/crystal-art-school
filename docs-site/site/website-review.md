@@ -47,7 +47,7 @@ honour without a scan can still show its wording; it has no image to open.
 
 ## 4. Prepare a course and lesson
 
-Open the agreed course. Find **Basics**, **Curriculum** and **Additional**. Identify the
+Open the agreed course. Find **Course**, **Lessons** and **Outcomes/Materials**. Identify the
 **Course Card Cover**, five gallery photographs and separate **Course Highlights Video**.
 Open a lesson with its pencil and check its own title, description, cover and exercise files.
 

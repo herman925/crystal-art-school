@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . '/cas-course-medium.php';
 /**
  * W2-1 Sales: one admin screen under the content hub.
  *
@@ -795,6 +796,7 @@ function cas_sales_render() {
 	cas_sales_render_filters( $f );
 	cas_sales_render_list( $f );
 	cas_sales_render_totals( $f );
+	cas_course_popularity_render( $f );
 	echo '</div>';
 }
 

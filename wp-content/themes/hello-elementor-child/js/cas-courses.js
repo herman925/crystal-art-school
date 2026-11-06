@@ -131,10 +131,6 @@
 			return false;
 		}
 
-		if ( sel.theme && sel.theme !== 'all' && ! carries( cell, 'data-theme', sel.theme ) ) {
-			return false;
-		}
-
 		if ( sel.difficulty && sel.difficulty !== 'all'
 			&& cell.getAttribute( 'data-difficulty' ) !== sel.difficulty ) {
 			return false;
@@ -299,7 +295,7 @@
 		var requestedValue = '';
 		if ( wanted === 'beginners' || wanted === 'beginner' ) { requestedGroup = 'difficulty'; requestedValue = 'beginner'; }
 		else {
-			[ [ 'medium', 'data-media' ], [ 'theme', 'data-theme' ] ].some( function ( pair ) {
+			[ [ 'medium', 'data-media' ] ].some( function ( pair ) {
 				return cells.some( function ( cell ) {
 					var value = ( cell.getAttribute( pair[1] ) || '' ).split( '|' ).find( function ( term ) { return term.toLowerCase() === wanted; } );
 					if ( value ) { requestedGroup = pair[0]; requestedValue = value; return true; }

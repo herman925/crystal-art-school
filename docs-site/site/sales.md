@@ -57,3 +57,21 @@ Monthly/course totals are order reports, not bank-deposit, profit or tax stateme
 
 If a confirmation no longer matches, review the fresh order. If a change or restoration
 cannot be verified, [stop and ask the site administrator](/money-help); do not use another action as a repair.
+
+
+## Course popularity
+
+Below the order totals, **Course popularity — live paid purchases** shows purchase counts
+**By course** and **By Medium**. It uses the selected From/To dates, Course ID and Order
+number; empty dates mean the last 12 months. The Status filter does not change which
+payments qualify for popularity.
+
+Only completed, paid individual-course purchases with verified live Stripe or PayPal
+evidence count. Sandbox/test payments, administrator-marked test accounts, free purchases, recorded refunds and payments
+whose mode cannot be verified are excluded. During UAT, seeing no verified live purchases
+is expected. The page tells you how many paid orders were excluded as test or unverified.
+
+Each course counts once per order. If a course has several media, its purchase counts once
+in each of its current media, so Medium totals can overlap. Renaming or reassigning a
+Medium changes how those courses are grouped. These are purchase counts, not views,
+revenue or bank deposits. Older payments without the necessary evidence remain excluded.
