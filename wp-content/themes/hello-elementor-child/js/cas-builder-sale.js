@@ -28,9 +28,12 @@
     const state = value();
     if (!sale || !regular || !state) { if (control) control.remove(); return; }
     if (sale.value !== '' && state.amount !== sale.value) bridge(state.on === '1');
-    let row = sale.parentElement;
-    while (row && !row.contains(regular)) row = row.parentElement;
+    const paid = document.querySelector('input[name="course_price_type"][value="paid"]');
+    const free = document.querySelector('input[name="course_price_type"][value="free"]');
+    let row = paid && paid.parentElement;
+    while (row && !row.contains(free)) row = row.parentElement;
     if (!row || row === document.body) return;
+    row.classList.add('cas-builder-pricing-choice-row');
     if (!control) {
       control = document.createElement('label');
       control.className = 'cas-builder-sale-control';
@@ -42,7 +45,7 @@
       control.append(toggle, text);
       control.title = 'Use Save as Draft, Update or Publish to apply this setting.';
     }
-    if (control.previousElementSibling !== row) row.insertAdjacentElement('afterend', control);
+    if (control.parentElement !== row) row.appendChild(control);
     control.querySelector('input').checked = state.on === '1';
   }
   function register() {
