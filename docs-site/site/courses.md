@@ -58,6 +58,7 @@ an undo for a lesson you already saved.
 | **Title** | Course card and course page |
 | **Course Card Cover** | The catalogue card cover. It is also the course page fallback if Gallery Photo 1 is empty |
 | **Gallery Photos 1–5** | The five course-page photographs. Photo 1 appears first; clicking a thumbnail changes the large photograph |
+| **Homepage — Lower Course Image** | Optional override for the lower photo in this course's homepage card. Empty follows Gallery Photo 1 |
 | **Course Subtitle** | The optional line under the course highlights video |
 | **Regular Price / Sale Price / On sale** | Course cards and course page. Off uses Regular and remembers Sale; On uses the valid lower Sale |
 | **Difficulty level** | The small chips under the title |
@@ -127,8 +128,14 @@ The thumbnails change the large photograph when clicked; the gallery does not ad
 automatically. Clearing a slot removes its selection without deleting the image from Media.
 Paid lesson references and downloads are separate from these public photographs.
 
-On the homepage card, one of the four small images is picked at random each time the page is
-loaded, so the card keeps changing slightly without you doing anything.
+The top image of the homepage card always uses **Course Card Cover**. The lower image
+defaults to **Gallery Photo 1** and stays the same on reload. In **Course → Homepage — Lower
+Course Image**, choose a public image if you want a different lower photo. You can reuse a
+gallery picture or choose another image from the Media Library. Save with **Update**.
+Use **Remove**, then Update, to follow Gallery Photo 1 again. Changing Gallery Photo 1 then
+changes the default automatically. This choice does not change the five course-page images.
+If neither a usable override nor Gallery Photo 1 is available, the lower slot shows its
+photographs-to-come message.
 
 If a course is missing its photographs, fill the intended slots and check the cards before publishing or advertising it. Ask the site administrator if the pictures or editing controls you expect are unavailable.
 
