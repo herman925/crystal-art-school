@@ -62,7 +62,7 @@ an undo for a lesson you already saved.
 | **Homepage — Custom Image** | Upload or pick an image when the source is Custom; it is separate from the five course-page photos |
 | **Course Subtitle** | The optional line under the course highlights video |
 | **Regular Price / Sale Price / On sale** | Course cards and course page. Off uses Regular and remembers Sale; On uses the valid lower Sale |
-| **Difficulty level** | The small chips under the title |
+| **Difficulty Level** | The course difficulty label and Courses filter; edit it directly above Medium in the Course sidebar |
 | **Medium** | The course label, Courses filter and top navigation; choose the existing media that apply |
 | **Description** | The paragraph under the course title |
 | **What will I learn** | The "By the end of this course" list |
@@ -155,12 +155,18 @@ If a course is missing its photographs, fill the intended slots and check the ca
 
 ## The filters look after themselves
 
+**Difficulty Level** is directly above Medium in the **Course** sidebar. Choose the experience
+level the course is intended for, then use **Save as Draft** or **Update**. Reopen the course
+to check the saved choice. Difficulty and Medium are separate: difficulty describes the
+student's experience, while Medium describes the painting medium, such as Watercolour.
+Other course access and enrollment settings are handled by the site administrator.
+
 <figure class="guide-screenshot">
-  <figcaption>Course: the actual Medium field, with Watercolour selected</figcaption>
+  <figcaption>Course: Difficulty Level above Medium</figcaption>
   <div class="guide-screenshot-images">
-    <a href="/guide-screenshots/course-medium.png" target="_blank" rel="noopener" style="--screenshot-width:305px" aria-label="Open full-size screenshot: Course: the actual Medium field, with Watercolour selected (new tab)"><img src="/guide-screenshots/course-medium.png" width="305" height="157" alt="Course: the actual Medium field, with Watercolour selected" loading="lazy"></a>
+    <a href="/guide-screenshots/course-difficulty-medium.png" target="_blank" rel="noopener" style="--screenshot-width:305px" aria-label="Open full-size screenshot: Course: actual Difficulty Level dropdown above Medium (new tab)"><img src="/guide-screenshots/course-difficulty-medium.png" width="305" height="238" alt="Course: actual Difficulty Level dropdown above Medium" loading="lazy"></a>
   </div>
-  <p>Select the screenshot to enlarge the actual screen.</p>
+  <p>Choose the difficulty for this course and select the media that apply. Select the screenshot to enlarge the actual screen.</p>
 </figure>
 
 <figure class="guide-screenshot">
