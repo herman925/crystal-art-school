@@ -4,6 +4,8 @@ define('ABSPATH',__DIR__);$hooks=[];$meta=[34=>['_cas_course_photo_large'=>10,'_
 function add_action($name,$fn,...$args){$GLOBALS['hooks'][$name][]=$fn;}
 function add_filter($name,$fn,...$args){add_action($name,$fn);}
 function add_shortcode(...$args){}
+function home_url($path){return 'https://example.test'.$path;}
+function do_action($name,...$args){$GLOBALS['events'][]=[$name,$args];}
 class WP_Error{public function __construct(...$args){}}
 function is_wp_error($v){return $v instanceof WP_Error;}
 function get_post_meta($id,$key,$single=true){return $GLOBALS['meta'][$id][$key]??'';}
@@ -52,4 +54,5 @@ $meta[34]['_cas_home_course_image']=10;assert(cas_home_course_photo_id(34)===10,
 $meta[34]['_cas_home_course_image']=40;assert(cas_home_course_photo_id(34)===20,'trashed override falls back');
 $meta[34]['_cas_home_course_image']=30;assert(cas_home_course_photo_id(34)===20,'private override never leaks');
 unset($meta[34]['_cas_course_photo_large']);assert(cas_home_course_photo_id(34)===0,'missing default never substitutes cover or another gallery slot');
+$events=[];cas_home_course_image_changed(1,34,'_cas_home_course_image');assert($events===[['litespeed_purge_url',['https://example.test/']]]);cas_home_course_image_changed(1,34,'unrelated');assert(count($events)===1);
 echo "PASS default, override, native save/reload/remove, cover isolation, gallery isolation and image guards\n";

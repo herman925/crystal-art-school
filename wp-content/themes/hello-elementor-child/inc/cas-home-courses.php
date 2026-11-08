@@ -79,6 +79,16 @@ function cas_home_course_photo_id( $course_id ) {
 	return 0;
 }
 
+/** A saved image choice must be reflected by the cached homepage too. */
+function cas_home_course_image_changed( $meta_id, $course_id, $key ) {
+	if ( 'courses' === get_post_type( $course_id ) && in_array( $key, array( '_cas_home_course_image', '_cas_course_photo_large', '_thumbnail_id' ), true ) ) {
+		do_action( 'litespeed_purge_url', home_url( '/' ) );
+	}
+}
+foreach ( array( 'added_post_meta', 'updated_post_meta', 'deleted_post_meta' ) as $event ) {
+	add_action( $event, 'cas_home_course_image_changed', 10, 3 );
+}
+
 /* ------------------------------------------------------------------
    Markup helpers
    ------------------------------------------------------------------ */
