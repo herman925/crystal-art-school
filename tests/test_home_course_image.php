@@ -50,9 +50,20 @@ $allowed=false;$save(34,['_cas_home_course_image'=>10]);assert($meta===$before);
 $save(34,[]);assert($meta===$before,'omitted field preserves explicit choice');
 $save(34,['_cas_home_course_image'=>null]);assert(!isset($meta[34]['_cas_home_course_image'])&&cas_home_course_photo_id(34)===10,'Remove restores default');
 $meta[34]['_cas_course_photo_large']=20;assert(cas_home_course_photo_id(34)===20,'default follows later Photo 1 changes');
-$meta[34]['_cas_home_course_image']=10;assert(cas_home_course_photo_id(34)===10,'explicit choice remains independent');
+$meta[34]['_cas_home_course_source']='custom';$meta[34]['_cas_home_course_image']=10;assert(cas_home_course_photo_id(34)===10,'explicit choice remains independent');
 $meta[34]['_cas_home_course_image']=40;assert(cas_home_course_photo_id(34)===20,'trashed override falls back');
 $meta[34]['_cas_home_course_image']=30;assert(cas_home_course_photo_id(34)===20,'private override never leaks');
 unset($meta[34]['_cas_course_photo_large']);assert(cas_home_course_photo_id(34)===0,'missing default never substitutes cover or another gallery slot');
+$slots=array_keys(cas_course_photo_fields());foreach($slots as $i=>$slot){$meta[34][$slot]=$i%2?20:10;}
+foreach(range(1,5) as $n){$save(34,['_cas_home_course_source'=>'gallery_'.$n]);assert(cas_home_course_photo_id(34)===($n%2?10:20),'each gallery source follows its own slot');}
+$save(34,['_cas_home_course_source'=>'gallery_3']);$meta[34]['_cas_course_photo_2']=20;assert(cas_home_course_photo_id(34)===20,'slot source follows a later replacement');
+unset($meta[34]['_cas_course_photo_2']);assert(cas_home_course_photo_id(34)===0,'empty selected slot does not substitute a different photo');
+$before=$meta;$save(34,['_cas_home_course_source'=>'bad','_cas_home_course_image'=>20]);assert($meta===$before,'invalid source rejects all writes');
+foreach([[],true,0,'gallery_0','gallery_6',''] as $bad)assert(is_wp_error(cas_home_course_source_param(['_cas_home_course_source'=>$bad])));
+$save(34,['_cas_home_course_source'=>'custom','_cas_home_course_image'=>20]);assert(cas_home_course_photo_id(34)===20);
+$save(34,['_cas_home_course_source'=>'gallery_2']);assert($meta[34]['_cas_home_course_image']===20,'gallery choice retains custom image for later reuse');
+$response=['ID'=>34];foreach($hooks['tutor_course_details_response'] as $filter){$response=$filter($response);}assert($response['_cas_home_course_source']==='gallery_2','native reload restores gallery source');
+$save(34,['_cas_home_course_source'=>'custom','_cas_home_course_image'=>null]);assert(cas_home_course_image_source(34)==='gallery_1','clearing custom returns to default');
+unset($meta[34]['_cas_home_course_source']);$meta[34]['_cas_home_course_image']=20;assert(cas_home_course_image_source(34)==='custom','old explicit custom choice is preserved');
 $events=[];cas_home_course_image_changed(1,34,'_cas_home_course_image');assert($events===[['litespeed_purge_url',['https://example.test/']]]);cas_home_course_image_changed(1,34,'unrelated');assert(count($events)===1);
-echo "PASS default, override, native save/reload/remove, cover isolation, gallery isolation and image guards\n";
+echo "PASS five gallery sources, custom/legacy choices, slot replacement, native save/reload/remove, cover/gallery isolation and image guards\n";

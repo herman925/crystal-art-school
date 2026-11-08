@@ -135,7 +135,33 @@ function cas_course_photo_fields() {
 
 /** Editor-only override; it is not a sixth photograph in the course-page gallery. */
 function cas_course_image_fields() {
-	return array( '_cas_home_course_image' => 'Homepage — Lower Course Image' ) + cas_course_photo_fields();
+	return array( '_cas_home_course_image' => 'Homepage — Custom Image' ) + cas_course_photo_fields();
+}
+
+function cas_home_course_image_sources() {
+	return array( 'gallery_1' => 'Gallery Photo 1 (default)', 'gallery_2' => 'Gallery Photo 2', 'gallery_3' => 'Gallery Photo 3', 'gallery_4' => 'Gallery Photo 4', 'gallery_5' => 'Gallery Photo 5', 'custom' => 'Custom upload / Media Library image' );
+}
+
+function cas_home_course_image_source( $id ) {
+	$source = get_post_meta( $id, '_cas_home_course_source', true );
+	if ( is_string( $source ) && isset( cas_home_course_image_sources()[ $source ] ) ) { return $source; }
+	return '' === $source && (int) get_post_meta( $id, '_cas_home_course_image', true ) ? 'custom' : 'gallery_1';
+}
+
+function cas_home_course_source_param( $params ) {
+	if ( ! array_key_exists( '_cas_home_course_source', $params ) ) { return null; }
+	$source = $params['_cas_home_course_source'];
+	return is_string( $source ) && isset( cas_home_course_image_sources()[ $source ] ) ? $source : new WP_Error( 'cas_home_source', 'Please choose a homepage image source from Gallery Photos 1–5 or Custom image.' );
+}
+
+function cas_save_home_course_source( $id, $params, $ids ) {
+	$source = cas_home_course_source_param( $params );
+	if ( is_wp_error( $source ) ) { return; }
+	if ( null === $source && array_key_exists( '_cas_home_course_image', $ids ) ) {
+		$source = $ids['_cas_home_course_image'] ? 'custom' : ( 'custom' === cas_home_course_image_source( $id ) ? 'gallery_1' : null );
+	}
+	if ( 'custom' === $source && ! (int) get_post_meta( $id, '_cas_home_course_image', true ) ) { $source = 'gallery_1'; }
+	if ( null !== $source ) { update_post_meta( $id, '_cas_home_course_source', $source ); }
 }
 
 /** Native Tutor fields share the gallery slots and optional homepage override with the classic editor. */
@@ -144,6 +170,9 @@ add_action( 'tutor_course_builder_footer', function () {
 	if ( ! $id || 'courses' !== get_post_type( $id ) || ! current_user_can( 'edit_post', $id ) ) { return; }
 	$fields = array();
 	$fields[] = array( 'name' => 'post_excerpt', 'type' => 'text', 'label' => 'Course Subtitle', 'defaultValue' => (string) get_post_field( 'post_excerpt', $id ), 'helpText' => 'Optional line below the highlights video, above the description.' );
+	$options = array();
+	foreach ( cas_home_course_image_sources() as $value => $label ) { $options[] = array( 'value' => $value, 'label' => $label ); }
+	$fields[] = array( 'name' => '_cas_home_course_source', 'type' => 'select', 'label' => 'Homepage — Lower Image Source', 'options' => $options, 'defaultValue' => cas_home_course_image_source( $id ), 'helpText' => 'Choose one of this course’s five gallery slots, or Custom to upload/select a separate image below. A gallery choice follows later replacements of that slot. The top homepage image always uses Course Card Cover. Save with Update.' );
 	foreach ( cas_course_image_fields() as $key => $label ) {
 		$attachment = (int) get_post_meta( $id, $key, true );
 		$fields[] = array(
@@ -151,7 +180,7 @@ add_action( 'tutor_course_builder_footer', function () {
 			'defaultValue' => array( 'id' => $attachment, 'url' => $attachment ? (string) wp_get_attachment_image_url( $attachment, 'large' ) : '' ),
 			'buttonText' => 'Choose or Upload Picture',
 			'helpText' => '_cas_home_course_image' === $key
-				? 'Optional. Leave empty to follow Gallery Photo 1 on the homepage. Choose a public image to override it; Remove returns to Gallery Photo 1. The top homepage image always uses Course Card Cover. Save with Update.'
+				? 'Used only when Lower Image Source is Custom. Upload your own public image or choose from the Media Library. Removing the custom image and saving returns to Gallery Photo 1. Gallery choices do not use this image.'
 				: ( '_cas_course_photo_large' === $key
 				? 'The first photograph shown in the gallery. All five thumbnails can be clicked to change the large image; they do not rotate automatically. Upload original photographs; thumbnails are generated for you. The Course Card Cover is separate. Save with Update.'
 				: 'Clicking this photograph\'s thumbnail displays it as the large gallery image. Upload an original photograph, not a small thumbnail. Save with Update.' ),
@@ -167,6 +196,7 @@ add_action( 'tutor_course_builder_footer', function () {
 
 add_filter( 'tutor_course_details_response', function ( $data ) {
 	$data['_cas_course_tag'] = cas_course_media_label( (int) $data['ID'] );
+	$data['_cas_home_course_source'] = cas_home_course_image_source( (int) $data['ID'] );
 	foreach ( cas_course_image_fields() as $key => $label ) {
 		$id = (int) get_post_meta( (int) $data['ID'], $key, true );
 		$data[ $key ] = array( 'id' => $id, 'url' => $id ? (string) wp_get_attachment_image_url( $id, 'large' ) : '' );
@@ -207,18 +237,21 @@ add_filter( 'tutor_is_error_before_course_update', function ( $error, $params ) 
 		if ( isset( $params[ $key ] ) && ! is_string( $params[ $key ] ) ) { return new WP_Error( 'cas_course_text', 'Course subtitle and media label must be plain text.' ); }
 	}
 	$ids = cas_course_builder_photo_ids( $params );
-	return is_wp_error( $ids ) ? $ids : $error;
+	if ( is_wp_error( $ids ) ) { return $ids; }
+	$source = cas_home_course_source_param( $params );
+	return is_wp_error( $source ) ? $source : $error;
 }, 10, 2 );
 
 add_action( 'tutor_after_prepare_update_post_meta', function ( $id, $params ) {
 	if ( 'courses' !== get_post_type( $id ) || ! current_user_can( 'edit_post', $id )
 		|| ! function_exists( 'cas_builder_nonce_valid' ) || ! cas_builder_nonce_valid() ) { return; }
 	$ids = cas_course_builder_photo_ids( $params );
-	if ( is_wp_error( $ids ) ) { return; }
+	if ( is_wp_error( $ids ) || is_wp_error( cas_home_course_source_param( $params ) ) ) { return; }
 	foreach ( $ids as $key => $attachment ) {
 		if ( $attachment ) { update_post_meta( $id, $key, $attachment ); }
 		else { delete_post_meta( $id, $key ); }
 	}
+	cas_save_home_course_source( $id, $params, $ids );
 	if ( isset( $params['_cas_course_tag'] ) ) { update_post_meta( $id, '_cas_course_tag', sanitize_text_field( wp_unslash( $params['_cas_course_tag'] ) ) ); }
 }, 10, 2 );
 
@@ -232,6 +265,7 @@ add_action(
 	function () {
 		$auth = static function ( $allowed, $key, $id ) { return current_user_can( 'edit_post', $id ); };
 		register_post_meta( 'courses', '_cas_course_tag', array( 'type' => 'string', 'single' => true, 'show_in_rest' => false, 'sanitize_callback' => 'sanitize_text_field', 'auth_callback' => $auth ) );
+		register_post_meta( 'courses', '_cas_home_course_source', array( 'type' => 'string', 'single' => true, 'show_in_rest' => false, 'auth_callback' => $auth ) );
 		foreach ( cas_course_lesson_fields() as $key => $field ) {
 			register_post_meta( 'lesson', $key, array( 'type' => '_cas_lesson_span' === $key ? 'integer' : 'string', 'single' => true, 'show_in_rest' => false, 'auth_callback' => $auth ) );
 		}
@@ -774,6 +808,9 @@ add_action(
 function cas_render_course_photos_meta_box( $post ) {
 	wp_nonce_field( 'cas_save_course_photos', 'cas_course_photos_nonce' );
 	?>
+	<p><label for="cas-home-course-source"><strong>Homepage — Lower Image Source</strong></label><br><select id="cas-home-course-source" name="_cas_home_course_source">
+	<?php foreach ( cas_home_course_image_sources() as $value => $label ) : ?><option value="<?php echo esc_attr( $value ); ?>" <?php selected( cas_home_course_image_source( $post->ID ), $value ); ?>><?php echo esc_html( $label ); ?></option><?php endforeach; ?>
+	</select></p>
 	<p class="description" style="margin-top:0">
 		Five gallery photographs, with Photo 1 shown initially. Clicking any thumbnail
 		changes the large image; the gallery does not rotate automatically. Upload
@@ -788,7 +825,7 @@ function cas_render_course_photos_meta_box( $post ) {
 		?>
 		<div class="cas-photo-slot" data-field="<?php echo esc_attr( $key ); ?>" style="margin:0 0 14px">
 			<strong><?php echo esc_html( $label ); ?></strong>
-			<?php if ( '_cas_home_course_image' === $key ) : ?><p class="description">Leave empty to follow Gallery Photo 1. The top homepage image always uses Course Card Cover.</p><?php endif; ?>
+			<?php if ( '_cas_home_course_image' === $key ) : ?><p class="description">Used only with Custom source. Choose or upload an image; gallery sources use the five slots below.</p><?php endif; ?>
 			<div class="cas-photo-preview" style="margin:6px 0">
 				<?php if ( $src ) : ?>
 					<img src="<?php echo esc_url( $src ); ?>" alt="" style="max-width:100%;height:auto;display:block;border-radius:4px">
@@ -816,7 +853,7 @@ function cas_save_course_photos( $post_id ) {
 		return;
 	}
 	$override = cas_course_builder_photo_ids( array_intersect_key( $_POST, array( '_cas_home_course_image' => true ) ) );
-	if ( is_wp_error( $override ) ) { return; }
+	if ( is_wp_error( $override ) || is_wp_error( cas_home_course_source_param( $_POST ) ) ) { return; }
 
 	foreach ( array_keys( cas_course_photo_fields() ) as $key ) {
 		$att = isset( $_POST[ $key ] ) ? absint( wp_unslash( $_POST[ $key ] ) ) : 0;
@@ -831,6 +868,7 @@ function cas_save_course_photos( $post_id ) {
 		if ( $att ) { update_post_meta( $post_id, $key, $att ); }
 		else { delete_post_meta( $post_id, $key ); }
 	}
+	cas_save_home_course_source( $post_id, $_POST, $override );
 }
 add_action( 'save_post_courses', 'cas_save_course_photos' );
 
