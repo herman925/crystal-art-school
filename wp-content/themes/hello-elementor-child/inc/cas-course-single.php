@@ -194,6 +194,9 @@ add_action( 'tutor_course_builder_footer', function () {
 	wp_localize_script( 'cas-course-builder-photos', 'casCourseLessonFields', $lesson_fields );
 	wp_enqueue_script( 'cas-builder-layout', get_stylesheet_directory_uri() . '/js/cas-builder-layout.js', array( 'cas-course-builder-photos' ), filemtime( $dir . '/js/cas-builder-layout.js' ), true );
 	wp_enqueue_style( 'cas-builder-layout', get_stylesheet_directory_uri() . '/css/cas-builder-layout.css', array(), filemtime( $dir . '/css/cas-builder-layout.css' ) );
+	if ( function_exists( 'cas_content_is_user' ) && cas_content_is_user( get_current_user_id() ) ) {
+		wp_localize_script( 'cas-builder-layout', 'casBuilderDifficulty', array( 'options' => tutor_utils()->course_levels(), 'value' => (string) get_post_meta( $id, '_tutor_course_level', true ) ?: 'all_levels' ) );
+	}
 } );
 
 add_filter( 'tutor_course_details_response', function ( $data ) {

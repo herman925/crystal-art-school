@@ -37,6 +37,11 @@ add_filter( 'tutor_localize_data', function ( $data ) {
 		if ( ! is_array( $data['visibility_control'] ?? null ) ) { $data['visibility_control'] = array(); }
 		if ( ! is_array( $data['visibility_control']['course_builder'] ?? null ) ) { $data['visibility_control']['course_builder'] = array(); }
 		foreach ( array( 'admin', 'instructor' ) as $role ) { $data['visibility_control']['course_builder'][ 'basics_tags_' . $role ] = 'off'; }
+		if ( function_exists( 'cas_content_is_user' ) && cas_content_is_user( get_current_user_id() ) ) {
+			foreach ( array( 'admin', 'instructor' ) as $role ) {
+				foreach ( array( 'general', 'content_drip', 'enrollment' ) as $option ) { $data['visibility_control']['course_builder'][ 'basics_options_' . $option . '_' . $role ] = 'off'; }
+			}
+		}
 	}
 	return $data;
 }, 1100 );
