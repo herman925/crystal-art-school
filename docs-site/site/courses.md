@@ -137,6 +137,14 @@ changes the default automatically. This choice does not change the five course-p
 If neither a usable override nor Gallery Photo 1 is available, the lower slot shows its
 photographs-to-come message.
 
+<figure class="guide-screenshot">
+  <figcaption>Course: the actual lower homepage image picker; empty uses Gallery Photo 1</figcaption>
+  <div class="guide-screenshot-images">
+    <a href="/guide-screenshots/homepage-course-image.png" target="_blank" rel="noopener" style="--screenshot-width:636px" aria-label="Open full-size screenshot: Course: the actual lower homepage image picker; empty uses Gallery Photo 1 (new tab)"><img src="/guide-screenshots/homepage-course-image.png" width="636" height="197" alt="Course: the actual lower homepage image picker; empty uses Gallery Photo 1" loading="lazy"></a>
+  </div>
+  <p>Choose or Upload Picture selects an override. Remove and Update returns to the default.</p>
+</figure>
+
 If a course is missing its photographs, fill the intended slots and check the cards before publishing or advertising it. Ask the site administrator if the pictures or editing controls you expect are unavailable.
 
 ## The filters look after themselves
