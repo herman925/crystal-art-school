@@ -1,6 +1,6 @@
 <?php
 define('ABSPATH', __DIR__);
-$hooks=[]; $may_edit=true; $nonce=true; $saved_tags=[7,9];
+$hooks=[]; $limited=true; $may_edit=true; $nonce=true; $saved_tags=[7,9];
 function add_action($name,$fn,...$rest){$GLOBALS['hooks'][$name][]=$fn;}
 function add_filter($name,$fn,...$rest){add_action($name,$fn);}
 function add_shortcode(...$args){}
@@ -9,6 +9,8 @@ function get_posts($args){$GLOBALS['post_query']=$args;return [34,50];}
 function wp_get_object_terms($ids,$tax,$args){assert($ids===[34,50]);return ($GLOBALS['argv'][1]??'single')==='single'?[(object)['slug'=>'watercolour','name'=>'Watercolour']]:[(object)['slug'=>'watercolour','name'=>'Watercolour'],(object)['slug'=>'ink-wash','name'=>'Ink & wash']];}
 function is_wp_error($value){return false;}
 function current_user_can($cap,...$args){return $GLOBALS['may_edit'];}
+function get_current_user_id(){return 1;}
+function cas_content_is_user($id){return $GLOBALS["limited"];}
 function cas_builder_nonce_valid(){return $GLOBALS['nonce'];}
 function get_post($id){return (object)['post_type'=>'courses'];}
 function wp_get_post_terms($id,$tax,$args){return $tax==='course-tag'?$GLOBALS['saved_tags']:['Ink & wash','Watercolour'];}
@@ -20,6 +22,12 @@ function esc_attr($value){return htmlspecialchars((string)$value,ENT_QUOTES);}
 require dirname(__DIR__,2).'/wp-content/themes/hello-elementor-child/inc/cas-courses.php';
 require dirname(__DIR__,2).'/wp-content/themes/hello-elementor-child/inc/cas-header.php';
 require dirname(__DIR__,2).'/wp-content/themes/hello-elementor-child/inc/cas-course-single.php';
+$localize=$hooks['tutor_localize_data'][0];
+$config=['visibility_control'=>['course_builder'=>['unrelated'=>'on']]];
+$filtered=$localize($config);
+foreach(['admin','instructor'] as $role){foreach(['general','content_drip','enrollment'] as $option){assert($filtered['visibility_control']['course_builder']['basics_options_'.$option.'_'.$role]==='off');}}
+assert($filtered['visibility_control']['course_builder']['unrelated']==='on');
+$limited=false;$filtered=$localize($config);assert(!isset($filtered['visibility_control']['course_builder']['basics_options_general_admin']));$limited=true;
 assert(cas_course_media_label(34)==='Ink & wash & Watercolour');
 $terms=cas_course_medium_terms();
 assert($GLOBALS['post_query']['post_status']==='publish');

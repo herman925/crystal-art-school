@@ -3,9 +3,45 @@
   'use strict';
   const root = document.getElementById('tutor-course-builder');
   if (!root) return;
-  let scheduled = false;
+  let scheduled = false, difficulty, attempts = 0;
+  const config = window.casBuilderDifficulty;
+  function registerDifficulty() {
+    if (!config) return;
+    const basic = window.Tutor && window.Tutor.CourseBuilder && window.Tutor.CourseBuilder.Basic;
+    if (!basic) { if (++attempts < 100) setTimeout(registerDifficulty, 100); return; }
+    root.classList.add('cas-builder-difficulty-enabled');
+    basic.registerField('after_settings', {name: 'course_level', type: 'text', defaultValue: config.value});
+  }
+  function arrangeDifficulty() {
+    if (!config) return;
+    const input = root.querySelector('input[name="course_level"]');
+    const label = Array.from(root.querySelectorAll('label')).find(n => n.textContent.trim() === 'Medium');
+    const medium = label && label.closest('[data-cy="form-field-wrapper"]');
+    if (!input || !medium) { if (difficulty) difficulty.remove(); return; }
+    if (!difficulty) {
+      difficulty = document.createElement('div');
+      difficulty.className = 'cas-builder-difficulty';
+      const label = document.createElement('label');
+      label.htmlFor = 'cas-builder-difficulty'; label.textContent = 'Difficulty Level';
+      const select = document.createElement('select');
+      select.id = label.htmlFor;
+      Object.entries(config.options).forEach(([value, text]) => select.add(new Option(text, value)));
+      select.addEventListener('change', function () {
+        const field = root.querySelector('input[name="course_level"]');
+        if (!field || !Object.prototype.hasOwnProperty.call(config.options, select.value)) return;
+        // Tutor owns the registered field and serializes it with the ordinary course save.
+        Object.getOwnPropertyDescriptor(HTMLInputElement.prototype, 'value').set.call(field, select.value);
+        field.dispatchEvent(new Event('input', {bubbles: true}));
+        field.dispatchEvent(new Event('change', {bubbles: true}));
+      });
+      difficulty.append(label, select);
+    }
+    if (medium.previousElementSibling !== difficulty) medium.before(difficulty);
+    difficulty.querySelector('select').value = input.value;
+  }
   function arrange() {
     scheduled = false;
+    arrangeDifficulty();
     const title = root.querySelector('input[name="post_title"]');
     const subtitle = root.querySelector('input[name="post_excerpt"]');
     const field = subtitle && subtitle.closest('[data-cy="form-field-wrapper"]');
@@ -26,8 +62,9 @@
   const observer = new MutationObserver(function () {
     if (!scheduled) { scheduled = true; setTimeout(arrange, 0); }
   });
-  function start() { observer.observe(root, {childList: true, subtree: true}); arrange(); }
+  function start() { observer.observe(root, {childList: true, subtree: true, attributes: true, attributeFilter: ['value']}); arrange(); }
   window.addEventListener('pagehide', function () { observer.disconnect(); });
   window.addEventListener('pageshow', start);
+  registerDifficulty();
   start();
 }());

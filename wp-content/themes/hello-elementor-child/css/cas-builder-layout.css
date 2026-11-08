@@ -10,3 +10,9 @@
 @container cas-course-fields (min-width: 540px) {
   #tutor-course-builder .cas-builder-gallery-field { grid-column: auto; }
 }
+
+#tutor-course-builder.cas-builder-difficulty-enabled [data-cy="form-field-wrapper"]:has(input[name="course_level"]) { display: none; }
+#tutor-course-builder .cas-builder-difficulty { display: flex; flex-direction: column; gap: 8px; }
+#tutor-course-builder .cas-builder-difficulty label { font-size: 14px; }
+#tutor-course-builder .cas-builder-difficulty select { width: 100%; max-width: none; min-height: 40px; margin: 0; padding: 8px 12px; border: 1px solid #c3c4c7; border-radius: 6px; background-color: white; color: inherit; font: inherit; font-size: 14px; }
+#tutor-course-builder .cas-builder-difficulty select:focus-visible { outline: 2px solid #3e64de; outline-offset: 2px; }
