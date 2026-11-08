@@ -147,7 +147,7 @@ custom choice remains selected when opening the updated editor.
 <figure class="guide-screenshot">
   <figcaption>Course: choose a gallery slot or use a custom upload / Media Library image</figcaption>
   <div class="guide-screenshot-images">
-    <a href="/guide-screenshots/homepage-course-image.png" target="_blank" rel="noopener" style="--screenshot-width:636px" aria-label="Open full-size screenshot: Course: the actual lower homepage image picker; empty uses Gallery Photo 1 (new tab)"><img src="/guide-screenshots/homepage-course-image.png" width="636" height="197" alt="Course: the actual lower homepage image picker; empty uses Gallery Photo 1" loading="lazy"></a>
+    <a href="/guide-screenshots/homepage-course-image.png" target="_blank" rel="noopener" style="--screenshot-width:636px" aria-label="Open full-size screenshot: Course: actual gallery source selector and custom image picker (new tab)"><img src="/guide-screenshots/homepage-course-image.png" width="636" height="284" alt="Course: actual gallery source selector and custom image picker" loading="lazy"></a>
   </div>
   <p>Select a source first. Custom uses the image picker below it; gallery sources follow the corresponding existing photo.</p>
 </figure>
