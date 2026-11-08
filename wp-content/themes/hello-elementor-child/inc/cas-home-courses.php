@@ -67,30 +67,26 @@ function cas_home_course_ids() {
 	return wp_list_pluck( $q->posts, 'ID' );
 }
 
-/**
- * 3.5.2, bottom third: the four small pictures of the course's five-image set, with the
- * main cover excluded.
- *
- * The direction draws from the course detail set minus the large picture, so the four
- * small slots are read by name rather than by trimming the front off cas_course_photos().
- * That helper substitutes the featured image into the large slot when the slot is empty,
- * and trimming its array would then discard a real small picture instead.
- *
- * An attachment deleted from the library leaves its ID behind in the meta, so each one is
- * checked before it is trusted.
- */
-function cas_home_course_photo_pool( $course_id ) {
-	$out = [];
-
-	foreach ( [ '_cas_course_photo_1', '_cas_course_photo_2', '_cas_course_photo_3', '_cas_course_photo_4' ] as $key ) {
+/** The lower homepage photo follows Gallery Photo 1 unless an explicit image is chosen. */
+function cas_home_course_photo_id( $course_id ) {
+	foreach ( array( '_cas_home_course_image', '_cas_course_photo_large' ) as $key ) {
 		$att = (int) get_post_meta( $course_id, $key, true );
-
-		if ( $att && wp_attachment_is_image( $att ) ) {
-			$out[] = $att;
+		if ( $att && wp_attachment_is_image( $att ) && 'trash' !== get_post_status( $att )
+			&& ( ! function_exists( 'cas_private_is' ) || ! cas_private_is( $att ) ) ) {
+			return $att;
 		}
 	}
+	return 0;
+}
 
-	return $out;
+/** A saved image choice must be reflected by the cached homepage too. */
+function cas_home_course_image_changed( $meta_id, $course_id, $key ) {
+	if ( 'courses' === get_post_type( $course_id ) && in_array( $key, array( '_cas_home_course_image', '_cas_course_photo_large', '_thumbnail_id' ), true ) ) {
+		do_action( 'litespeed_purge_url', home_url( '/' ) );
+	}
+}
+foreach ( array( 'added_post_meta', 'updated_post_meta', 'deleted_post_meta' ) as $event ) {
+	add_action( $event, 'cas_home_course_image_changed', 10, 3 );
 }
 
 /* ------------------------------------------------------------------
@@ -145,7 +141,7 @@ function cas_home_course_img( $att_id, $sizes, $priority = 'lazy' ) {
  *
  * 1. Cover  — the course's featured image, static, never a carousel.
  * 2. Banner — media tag, title, price, ADD.
- * 3. Photo  — one picture drawn from the four small course images, with the lesson count
+ * 3. Photo  — the chosen homepage photo (Gallery Photo 1 by default), with the lesson count
  *             and the level over it. No total runtime: 1.4.7 removed it.
  *
  * The cover, the title and the bottom photo are all links to the course. The price and
@@ -172,9 +168,8 @@ function cas_home_course_card( $course_id, $index ) {
 		? cas_home_course_img( $cover_id, $card_sizes, $index > 0 ? 'lazy' : 'high' )
 		: '';
 
-	/* 3.5.2: drawn once per page load, then left alone. No rotation this round. */
-	$pool = cas_home_course_photo_pool( $course_id );
-	$shot = $pool ? cas_home_course_img( $pool[ wp_rand( 0, count( $pool ) - 1 ) ], $card_sizes, 'lazy' ) : '';
+	$photo_id = cas_home_course_photo_id( $course_id );
+	$shot = $photo_id ? cas_home_course_img( $photo_id, $card_sizes, 'lazy' ) : '';
 
 	$cart_svg = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="9" cy="21" r="1.6"></circle><circle cx="19" cy="21" r="1.6"></circle><path d="M2 3h3l2.6 12.6a1.8 1.8 0 0 0 1.8 1.4h8.9a1.8 1.8 0 0 0 1.8-1.4L22 7H6"></path></svg>';
 
