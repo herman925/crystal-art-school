@@ -19,10 +19,10 @@ assigned to your account can be edited.
 ## Start a new course
 
 1. Use **Add course** on Content Hub and enter the title in **Course**.
-2. Add the course words, cover and gallery photographs, then use **Save as Draft**.
+2. Add the optional **Course Subtitle** directly below the title and Course URL, then the description, cover and gallery photographs. Use **Save as Draft**.
 3. Open **Lessons** to add the topics and lessons. Each topic groups part of the syllabus.
 4. Add any course-wide files in **Outcomes/Materials → Attachments**. Individual lessons have their own files.
-5. Under **Course → Pricing Model → Paid**, enter Regular Price and optional Sale Price. Choose **On sale** only when the sale should apply, then save the draft.
+5. Under **Course → Pricing Model → Paid**, enter Regular Price and optional Sale Price. The **On sale** switch is beside **Free / Paid**; turn it on only when the sale should apply, then save the draft.
 6. Preview and check the intended content, files, price and public preview before publishing separately.
 
 Saving draft content before the first price is set does not make the course free or publish it.
@@ -45,7 +45,7 @@ an undo for a lesson you already saved.
 <figure class="guide-screenshot" aria-labelledby="curriculum-current-visual">
   <figcaption id="curriculum-current-visual">Inside Tutor: Course and Lessons</figcaption>
   <div class="guide-screenshot-images">
-    <a href="/guide-screenshots/course-builder-basics.png" target="_blank" rel="noopener" style="--screenshot-width:1440px" aria-label="Open full-size screenshot: Tutor Course: current title, Course Card Cover and separate gallery controls (new tab)"><img src="/guide-screenshots/course-builder-basics.png" width="1440" height="1100" alt="Tutor Course: current title, Course Card Cover and separate gallery controls" loading="lazy"></a>
+    <a href="/guide-screenshots/course-builder-basics.png" target="_blank" rel="noopener" style="--screenshot-width:1440px" aria-label="Open full-size screenshot: Tutor Course: subtitle below the title, Course Card Cover and On sale beside Free / Paid (new tab)"><img src="/guide-screenshots/course-builder-basics.png" width="1440" height="1100" alt="Tutor Course: subtitle below the title, Course Card Cover and On sale beside Free / Paid" loading="lazy"></a>
     <a href="/guide-screenshots/course-curriculum.png" target="_blank" rel="noopener" style="--screenshot-width:1440px" aria-label="Open full-size screenshot: Tutor Lessons: topics, lessons and visible edit pencil after pointing at a lesson (new tab)"><img src="/guide-screenshots/course-curriculum.png" width="1440" height="1100" alt="Tutor Lessons: topics, lessons and visible edit pencil after pointing at a lesson" loading="lazy"></a>
   </div>
   <p>Choose Lessons inside the course. Point at a lesson to reveal the edit pencil; course and lesson saves are separate. Select a screenshot to open it full size.</p>
@@ -109,14 +109,13 @@ published courses.
   <figcaption id="course-photos-visual">Tutor Course: the actual cover and gallery fields</figcaption>
   <div class="guide-screenshot-images">
     <a href="/guide-screenshots/course-cover.png" target="_blank" rel="noopener" style="--screenshot-width:305px" aria-label="Open full-size screenshot: Tutor Course: actual Course Card Cover field (new tab)"><img src="/guide-screenshots/course-cover.png" width="305" height="24" alt="Tutor Course: actual Course Card Cover field" loading="lazy"></a>
-    <a href="/guide-screenshots/course-gallery-1.png" target="_blank" rel="noopener" style="--screenshot-width:636px" aria-label="Open full-size screenshot: Tutor Course: the actual cover and gallery fields (new tab)"><img src="/guide-screenshots/course-gallery-1.png" width="636" height="196" alt="Tutor Course: the actual cover and gallery fields" loading="lazy"></a>
-    <a href="/guide-screenshots/course-gallery-2.png" target="_blank" rel="noopener" style="--screenshot-width:636px" aria-label="Open full-size screenshot: Tutor Course: the actual cover and gallery fields (new tab)"><img src="/guide-screenshots/course-gallery-2.png" width="636" height="196" alt="Tutor Course: the actual cover and gallery fields" loading="lazy"></a>
+    <a href="/guide-screenshots/course-gallery-layout.png" target="_blank" rel="noopener" style="--screenshot-width:636px" aria-label="Open full-size screenshot: Tutor Course: five gallery fields arranged in two columns (new tab)"><img src="/guide-screenshots/course-gallery-layout.png" width="636" height="660" alt="Tutor Course: five gallery fields arranged in two columns" loading="lazy"></a>
   </div>
-  <p>Course Card Cover is separate from the course-page photographs. Gallery Photos 1 and 2 are shown here; Photos 3–5 have matching fields below them. A selected image offers Replace Image and Remove; an empty slot offers Choose or Upload Picture. Select a screenshot to open it full size.</p>
+  <p>Course Card Cover is separate from the course-page photographs. The five gallery slots appear in two columns when the form has enough room, and in one column on a narrow screen. Their numbering sets the photo order. A selected image offers Replace Image and Remove; an empty slot offers Choose or Upload Picture. Select a screenshot to open it full size.</p>
 </figure>
 
 Open the course in Tutor's builder. The **Course** tab has **Gallery Photo 1
-(Initially Shown)** and **Gallery Photos 2–5** below the description. For each slot,
+(Initially Shown)** and **Gallery Photos 2–5** below the homepage image controls. The layout changes with screen width; the five numbered slots stay the same. For each slot,
 choose or upload the original photograph, then save the course and reload it to check the
 selection. A selected photograph offers **Replace Image** and **Remove**; an empty slot offers **Choose or Upload Picture**.
 WordPress generates the smaller image sizes.

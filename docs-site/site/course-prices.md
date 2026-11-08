@@ -3,7 +3,7 @@
 ## On sale in the course builder
 
 Open **Content Hub → Manage Courses → the course title → Course**. Under **Pricing Model → Paid**,
-the **On sale** switch sits directly below **Regular Price / Sale Price**.
+the **On sale** switch sits beside **Free / Paid**, above **Regular Price / Sale Price**. The switch appears when **Paid** is selected.
 Off uses Regular Price and keeps Sale Price for later. On uses the lower Sale Price.
 **Sale Price 0 with On sale on makes the course free**, with no card or PayPal payment.
 Switch On sale off to restore Regular Price. Blank is not the same as zero.
@@ -13,9 +13,9 @@ reopen the course to check it. Existing orders and already-created payment sessi
 <figure class="guide-screenshot" aria-labelledby="builder-sale-visual">
   <figcaption id="builder-sale-visual">On sale beside the native course-builder prices</figcaption>
   <div class="guide-screenshot-images">
-    <a href="/guide-screenshots/builder-sale.png" target="_blank" rel="noopener" style="--screenshot-width:335px" aria-label="Open full-size screenshot: Tutor Course Builder Pricing Model, Regular Price, Sale Price and On sale switch (new tab)"><img src="/guide-screenshots/builder-sale.png" width="335" height="206" alt="Tutor Course Builder with On sale directly below Regular Price and Sale Price" loading="lazy"></a>
+    <a href="/guide-screenshots/builder-sale.png" target="_blank" rel="noopener" style="--screenshot-width:305px" aria-label="Open full-size screenshot: Tutor Course Builder Pricing Model, Regular Price, Sale Price and On sale switch (new tab)"><img src="/guide-screenshots/builder-sale.png" width="305" height="149" alt="Tutor Course Builder with On sale beside Free / Paid above Regular Price and Sale Price" loading="lazy"></a>
   </div>
-  <p>The example uses a demo course. Use the builder's normal save button to apply the setting. Off keeps the Sale Price for later. Select the screenshot to open it full size.</p>
+  <p>Use the builder's normal save button to apply the setting. Off keeps the Sale Price for later. Select the screenshot to open it full size.</p>
 </figure>
 
 ## Alternative: the Course Prices screen
