@@ -192,6 +192,8 @@ add_action( 'tutor_course_builder_footer', function () {
 	$lesson_fields = array();
 	foreach ( cas_course_lesson_fields() as $key => $field ) { $lesson_fields[] = array_merge( array( 'name' => $key ), $field ); }
 	wp_localize_script( 'cas-course-builder-photos', 'casCourseLessonFields', $lesson_fields );
+	wp_enqueue_script( 'cas-builder-layout', get_stylesheet_directory_uri() . '/js/cas-builder-layout.js', array( 'cas-course-builder-photos' ), filemtime( $dir . '/js/cas-builder-layout.js' ), true );
+	wp_enqueue_style( 'cas-builder-layout', get_stylesheet_directory_uri() . '/css/cas-builder-layout.css', array(), filemtime( $dir . '/css/cas-builder-layout.css' ) );
 } );
 
 add_filter( 'tutor_course_details_response', function ( $data ) {

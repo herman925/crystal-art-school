@@ -8,14 +8,16 @@ class Input {
   addEventListener(type, fn) { this.listeners[type] = fn; }
 }
 const field = new Input(), sale = new Input(), regular = new Input();
+const paid = new Input(), free = new Input();
 field.value = JSON.stringify({ on: '0', amount: '', version: 'current' });
 sale.matches = () => true;
 let control, tick, inputEvent;
-const row = { contains: node => node === regular, insertAdjacentElement: (_where, node) => { control = node; node.previousElementSibling = row; } };
+const row = { classList: { add() {} }, contains: node => node === free || node === paid, appendChild: node => { control = node; node.parentElement = row; } };
 sale.parentElement = row;
+paid.parentElement = row; free.parentElement = row;
 const document = {
   body: {},
-  querySelector: selector => selector.includes('_cas_builder_sale') ? field : selector.includes('course_sale_price') ? sale : regular,
+  querySelector: selector => selector.includes('_cas_builder_sale') ? field : selector.includes('course_sale_price') ? sale : selector.includes('value="paid"') ? paid : selector.includes('value="free"') ? free : regular,
   addEventListener: (type, fn) => { if (type === 'input') inputEvent = fn; },
   createElement: tag => tag === 'input' ? new Input() : {
     append(...nodes) { this.children = nodes; },

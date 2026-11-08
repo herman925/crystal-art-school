@@ -1,5 +1,6 @@
 div:has(> input[name="_cas_builder_sale"]) { display: none; }
-.cas-builder-sale-control { display: flex; align-items: center; justify-content: flex-end; gap: 8px; margin: 10px 0 8px; cursor: pointer; font-size: 14px; }
+#tutor-course-builder .cas-builder-pricing-choice-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
+.cas-builder-sale-control { display: inline-flex; align-items: center; gap: 8px; margin: 0; cursor: pointer; font-size: 14px; white-space: nowrap; }
 .cas-builder-sale-control input[type="checkbox"] { appearance: none; position: relative; width: 38px; height: 22px; min-width: 38px; margin: 0; border: 0; border-radius: 12px; background: #c8cbd2; cursor: pointer; box-shadow: none; }
 .cas-builder-sale-control input[type="checkbox"]::before { display: none; }
 .cas-builder-sale-control input[type="checkbox"]::after { content: ""; position: absolute; top: 3px; left: 3px; width: 16px; height: 16px; border-radius: 50%; background: white; }
