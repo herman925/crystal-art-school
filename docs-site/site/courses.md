@@ -58,7 +58,8 @@ an undo for a lesson you already saved.
 | **Title** | Course card and course page |
 | **Course Card Cover** | The catalogue card cover. It is also the course page fallback if Gallery Photo 1 is empty |
 | **Gallery Photos 1–5** | The five course-page photographs. Photo 1 appears first; clicking a thumbnail changes the large photograph |
-| **Homepage — Lower Course Image** | Optional override for the lower photo in this course's homepage card. Empty follows Gallery Photo 1 |
+| **Homepage — Lower Image Source** | Choose Gallery Photo 1–5 or Custom upload / Media Library image for the lower homepage photo. Default is Gallery Photo 1 |
+| **Homepage — Custom Image** | Upload or pick an image when the source is Custom; it is separate from the five course-page photos |
 | **Course Subtitle** | The optional line under the course highlights video |
 | **Regular Price / Sale Price / On sale** | Course cards and course page. Off uses Regular and remembers Sale; On uses the valid lower Sale |
 | **Difficulty level** | The small chips under the title |
@@ -128,21 +129,27 @@ The thumbnails change the large photograph when clicked; the gallery does not ad
 automatically. Clearing a slot removes its selection without deleting the image from Media.
 Paid lesson references and downloads are separate from these public photographs.
 
-The top image of the homepage card always uses **Course Card Cover**. The lower image
-defaults to **Gallery Photo 1** and stays the same on reload. In **Course → Homepage — Lower
-Course Image**, choose a public image if you want a different lower photo. You can reuse a
-gallery picture or choose another image from the Media Library. Save with **Update**.
-Use **Remove**, then Update, to follow Gallery Photo 1 again. Changing Gallery Photo 1 then
-changes the default automatically. This choice does not change the five course-page images.
-If neither a usable override nor Gallery Photo 1 is available, the lower slot shows its
-photographs-to-come message.
+The top homepage image always uses **Course Card Cover**. Under **Course → Homepage —
+Lower Image Source**, choose **Gallery Photo 1 (default)**, **Gallery Photo 2–5**, or
+**Custom upload / Media Library image**. A gallery choice uses that existing slot and
+follows any later replacement of its picture; no extra upload is needed. An empty or
+unavailable selected gallery slot shows the photographs-to-come message.
+
+For your own separate picture, choose **Custom**, then use **Homepage — Custom Image →
+Choose or Upload Picture**. Upload a public image or select an existing one from the
+Media Library. Save the course with **Update**. The five course-page gallery images are
+unchanged. Gallery selections retain the remembered custom image for later reuse.
+
+To restore the default, select **Gallery Photo 1** and Update. Removing the custom image
+while Custom is selected also returns to Gallery Photo 1 when saved. A previously saved
+custom choice remains selected when opening the updated editor.
 
 <figure class="guide-screenshot">
-  <figcaption>Course: the actual lower homepage image picker; empty uses Gallery Photo 1</figcaption>
+  <figcaption>Course: choose a gallery slot or use a custom upload / Media Library image</figcaption>
   <div class="guide-screenshot-images">
     <a href="/guide-screenshots/homepage-course-image.png" target="_blank" rel="noopener" style="--screenshot-width:636px" aria-label="Open full-size screenshot: Course: the actual lower homepage image picker; empty uses Gallery Photo 1 (new tab)"><img src="/guide-screenshots/homepage-course-image.png" width="636" height="197" alt="Course: the actual lower homepage image picker; empty uses Gallery Photo 1" loading="lazy"></a>
   </div>
-  <p>Choose or Upload Picture selects an override. Remove and Update returns to the default.</p>
+  <p>Select a source first. Custom uses the image picker below it; gallery sources follow the corresponding existing photo.</p>
 </figure>
 
 If a course is missing its photographs, fill the intended slots and check the cards before publishing or advertising it. Ask the site administrator if the pictures or editing controls you expect are unavailable.

@@ -69,7 +69,10 @@ function cas_home_course_ids() {
 
 /** The lower homepage photo follows Gallery Photo 1 unless an explicit image is chosen. */
 function cas_home_course_photo_id( $course_id ) {
-	foreach ( array( '_cas_home_course_image', '_cas_course_photo_large' ) as $key ) {
+	$source = function_exists( 'cas_home_course_image_source' ) ? cas_home_course_image_source( $course_id ) : ( get_post_meta( $course_id, '_cas_home_course_image', true ) ? 'custom' : 'gallery_1' );
+	$gallery = array_keys( cas_course_photo_fields() );
+	$keys = 'custom' === $source ? array( '_cas_home_course_image', '_cas_course_photo_large' ) : array( $gallery[ (int) substr( $source, -1 ) - 1 ] );
+	foreach ( $keys as $key ) {
 		$att = (int) get_post_meta( $course_id, $key, true );
 		if ( $att && wp_attachment_is_image( $att ) && 'trash' !== get_post_status( $att )
 			&& ( ! function_exists( 'cas_private_is' ) || ! cas_private_is( $att ) ) ) {
@@ -81,7 +84,7 @@ function cas_home_course_photo_id( $course_id ) {
 
 /** A saved image choice must be reflected by the cached homepage too. */
 function cas_home_course_image_changed( $meta_id, $course_id, $key ) {
-	if ( 'courses' === get_post_type( $course_id ) && in_array( $key, array( '_cas_home_course_image', '_cas_course_photo_large', '_thumbnail_id' ), true ) ) {
+	if ( 'courses' === get_post_type( $course_id ) && in_array( $key, array_merge( array_keys( cas_course_photo_fields() ), array( '_cas_home_course_image', '_cas_home_course_source', '_thumbnail_id' ) ), true ) ) {
 		do_action( 'litespeed_purge_url', home_url( '/' ) );
 	}
 }
