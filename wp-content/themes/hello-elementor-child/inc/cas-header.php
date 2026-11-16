@@ -121,7 +121,7 @@ function cas_render_header() {
 					</a>
 					<?php if ( ! is_user_logged_in() ) : ?>
 						<a class="btn ghost" href="<?php echo esc_url( function_exists( 'cas_account_login_url' ) ? cas_account_login_url() : wp_login_url() ); ?>">Log in</a>
-						<?php if ( get_option( 'users_can_register' ) ) : ?>
+						<?php if ( cas_account_registration_available() ) : ?>
 							<a class="btn primary" href="<?php echo esc_url( ( function_exists( 'cas_account_signup_url' ) ? cas_account_signup_url() : '' ) ?: wp_registration_url() ); ?>">Sign up</a>
 						<?php endif; ?>
 					<?php else : ?>
@@ -144,7 +144,10 @@ function cas_render_header() {
 				<a href="<?php echo esc_url( $studio ); ?>">My studio</a>
 				<a href="<?php echo esc_url( wp_logout_url( home_url( '/' ) ) ); ?>">Log out</a>
 			<?php else : ?>
-				<a href="<?php echo esc_url( function_exists( 'cas_account_login_url' ) ? cas_account_login_url() : wp_login_url() ); ?>"><?php echo get_option( 'users_can_register' ) ? 'Log in / Sign up' : 'Log in'; ?></a>
+				<a href="<?php echo esc_url( function_exists( 'cas_account_login_url' ) ? cas_account_login_url() : wp_login_url() ); ?>">Log in</a>
+				<?php if ( cas_account_registration_available() ) : ?>
+					<a href="<?php echo esc_url( cas_account_signup_url() ); ?>">Create an account</a>
+				<?php endif; ?>
 			<?php endif; ?>
 		</div>
 	</nav>

@@ -82,7 +82,7 @@ function cas_page_url( $slug ) {
  */
 function cas_render_footer_account_column() {
 	$login_url  = function_exists( 'cas_account_login_url' ) ? cas_account_login_url() : wp_login_url();
-	$signup_url = function_exists( 'cas_account_signup_url' ) && get_option( 'users_can_register' ) ? cas_account_signup_url() : '';
+	$signup_url = function_exists( 'cas_account_signup_url' ) && cas_account_registration_available() ? cas_account_signup_url() : '';
 	$cart_url   = function_exists( 'cas_account_cart_url' ) ? cas_account_cart_url() : '';
 
 	ob_start();
