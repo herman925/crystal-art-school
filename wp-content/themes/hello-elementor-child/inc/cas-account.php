@@ -465,9 +465,7 @@ function cas_render_login() {
 	$body = '<div class="auth-stage active cas-account-form">' . $form . '</div>';
 	$foot = '';
 
-	// Only offer the sign-up link when accounts are actually open. Linking to a page
-	// that answers "Access Denied" is worse than not linking at all.
-	if ( get_option( 'users_can_register' ) ) {
+	if ( cas_account_registration_available() ) {
 		$signup = cas_account_signup_url();
 
 		if ( $signup ) {
@@ -859,11 +857,8 @@ add_action( 'tutor_new_user_registered', 'cas_account_skip_tutor_tour' );
 /**
  * Sign up. Tutor's own registration form, in the site's card.
  *
- * `users_can_register` is 0 on this install and turning it on is Herman's decision, not
- * this file's. While it is off, Tutor's own template answers "Oooh! Access Denied — please
- * refer to your system administrator", which is a plugin's error page shown to a customer.
- * The closed state below replaces it with a plain statement and a way onward. Flip the
- * option and the real form appears with no change here.
+ * Invite registration opens this form without opening unrestricted WordPress signup.
+ * When both registration modes are off, show the closed state.
  *
  * @param string|null $inner Tutor's already-rendered form, when the adoption filter has it.
  *
@@ -884,7 +879,7 @@ function cas_render_signup( $inner = null ) {
 		);
 	}
 
-	if ( ! get_option( 'users_can_register' ) ) {
+	if ( ! cas_account_registration_available() ) {
 		$body = '<div class="auth-stage active" style="text-align:center;">'
 			. '<p style="color:var(--muted);margin:0 0 20px;">New accounts are closed at the moment.</p>'
 			. '<a class="btn primary big full" href="' . esc_url( cas_account_courses_url() ) . '">Browse the courses <span class="arr" aria-hidden="true">&#8594;</span></a>'
